@@ -1,5 +1,5 @@
 """
-WSGI config for StatutoTerritorioRT project.
+WSGI config for statuto-territorio-rt project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'StatutoTerritorioRT.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'statuto-territorio-rt.settings')
 
 application = get_wsgi_application()
