@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+
+    {% load static %}
+    {% load i18n %}
+
+    <head>
+
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>{% block head_title %}Statuto Territorio RT{% endblock head_title %}</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
+        <link rel="stylesheet" href="{% static 'base/css/home.css' %}"/>
+
+    </head/>
+
+    <body>
+
+        <!-- container-fluid -->
+        <div class="container-fluid bg-light w-75 h-100 px-2">
+
+            <!-- navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light p-0">
+                <a class="navbar-brand" href="/">
+                    <img class="img-fluid" src="{% static 'img/RT_logo.png' %}" class="d-inline-block align-top" alt="Regione Toscana">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Registration</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav> <!-- end navbar -->
+
+            <!-- start content -->
+            {% block content %}
+
+                <!-- put the content here -->
+
+            {% endblock content %}
+            <!-- end content -->
+
+        </div> <!-- end container-fluid -->
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'js/popper.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    </body>
+
+</html>

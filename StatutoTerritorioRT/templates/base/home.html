@@ -1,0 +1,50 @@
+{% extends "base.html"%}
+{% load static %}
+
+{% block head_title %}{{ block.super }} | Home{% endblock %}
+
+{% block content %}
+
+    <!-- apps-row -->
+    <div class="apps-row row w-auto bg-light mx-0 my-2 justify-content-between">
+        <div class="col-lg-2 text-left border border-danger">
+            <a href="/">
+                <img class="img-fluid" src="{% static 'img/crono_logo.png' %}" alt="CRONO">
+            </a>
+        </div>
+        <div class="col-lg-2 h-100 text-left border border-danger">
+            <a href="/">
+                <img class="img-fluid" src="{% static 'img/minerva_logo.png' %}" alt="MINERVA">
+            </a>
+        </div>
+        <div class="col-lg-2 h-100 text-left border border-danger">
+            <a href="/">
+                <img class="img-fluid" src="{% static 'img/input_logo.png' %}" alt="INPUT">
+            </a>
+        </div>
+        <div class="col-lg-2 h-100 text-left border border-danger">
+            <a href="/">
+                <img class="img-fluid" src="{% static 'img/serapide_logo.png' %}" alt="SERAPIDE">
+            </a>
+        </div>
+    </div> <!-- end apps-row -->
+
+    <!-- statuto-territorio-row -->
+    <div class="statuto-territorio-row row w-auto bg-light border border-danger mx-0 my-2">
+        <div class="col-12 text-left">
+            <a href="/">
+                <img class="img-fluid" src="{% static 'img/statutoterritorio_logo.png' %}" alt="STATUTO DEL TERRITORIO">
+            </a>
+        </div>
+    </div> <!-- end statuto-territorio-row -->
+
+    <!-- opendata-row -->
+    <div class="opendata-row row w-auto bg-light border border-danger mx-0 my-2">
+        <div class="col-12 text-left">
+            <a href="/">
+                <img class="img-fluid" src="{% static 'img/opendata_logo.png' %}" alt="OPEN DATA">
+            </a>
+        </div>
+    </div> <!-- end opendata-row -->
+
+{% endblock content %}
