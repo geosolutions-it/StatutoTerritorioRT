@@ -1,9 +1,20 @@
 #!/usr/bin/env python
+
+#########################################################################
+#
+# Copyright 2018, GeoSolutions Sas.
+# All rights reserved.
+#
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
+#
+#########################################################################
+
 import os
 import sys
 
 if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'statuto-territorio-rt.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'statuto_territorio_rt.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

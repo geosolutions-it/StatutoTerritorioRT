@@ -1,5 +1,3 @@
-#!/bin/sh
-
 #########################################################################
 #
 # Copyright 2018, GeoSolutions Sas.
@@ -10,6 +8,9 @@
 #
 #########################################################################
 
-set -o allexport
-source $1 # .env file
-set +o allexport
+from django.shortcuts import render
+
+# Create your views here.
+
+def homeView(request):
+    return render(request, "base/home.html")

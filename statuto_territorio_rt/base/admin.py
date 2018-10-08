@@ -1,5 +1,3 @@
-#!/bin/sh
-
 #########################################################################
 #
 # Copyright 2018, GeoSolutions Sas.
@@ -10,6 +8,6 @@
 #
 #########################################################################
 
-set -o allexport
-source $1 # .env file
-set +o allexport
+from django.contrib import admin
+
+# Register your models here.

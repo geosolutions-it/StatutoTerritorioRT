@@ -1,5 +1,3 @@
-#!/bin/sh
-
 #########################################################################
 #
 # Copyright 2018, GeoSolutions Sas.
@@ -9,7 +7,3 @@
 # LICENSE file in the root directory of this source tree.
 #
 #########################################################################
-
-set -o allexport
-source $1 # .env file
-set +o allexport
