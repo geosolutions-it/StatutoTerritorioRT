@@ -1,0 +1,10 @@
+.container-fluid {
+    min-height: 100vh;
+}
+a:hover {
+    text-decoration: none;
+    cursor:pointer;
+}
+a {
+    color: inherit;
+}
