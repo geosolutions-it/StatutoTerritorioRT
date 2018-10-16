@@ -27,7 +27,7 @@ class Util(object):
                 return True
             else:
                 return False
-        elif default and type(default) == bool:
+        elif default is not None and type(default) == bool:
             return default
 
     @staticmethod
@@ -38,7 +38,7 @@ class Util(object):
                 return integerNum
             except:
                 pass
-        elif default and type(default) == int:
+        elif default is not None and type(default) == int:
             return default
 
     @staticmethod
@@ -49,7 +49,7 @@ class Util(object):
                 return floatNum
             except:
                 pass
-        elif default and type(default) == float:
+        elif default is not None and type(default) == float:
             return default
 
     @staticmethod
@@ -59,7 +59,7 @@ class Util(object):
                 return [item for item in s.split(separator)]
             except:
                 pass
-        elif default and type(default) == list:
+        elif default is not None and type(default) == list:
             return default
 
 
@@ -67,7 +67,6 @@ class EnvUtil(object):
 
     '''
     This class contains methods to manage enviroment setup
-    Extends Util class
     '''
 
     @staticmethod
@@ -88,7 +87,7 @@ class EnvUtil(object):
         else:
             # str
             v = os.getenv(var, default)
-        if v:
+        if v is not None:
             return v
         else:
             raise ImproperlyConfigured('Set the {0} environment variable'.format(var))
