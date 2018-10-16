@@ -110,3 +110,4 @@ locale.env
 
 # Local test
 .test/
+local.env
