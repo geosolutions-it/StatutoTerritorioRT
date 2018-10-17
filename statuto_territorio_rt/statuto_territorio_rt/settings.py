@@ -47,6 +47,9 @@ ALLOWED_HOSTS = EnvUtil.get_env_var('DJANGO_ALLOWED_HOSTS', list, [], ' ')
 # Application definition
 
 INSTALLED_APPS = [
+    # StatutoTerritorioRT apps
+    'base',
+    'users',
     # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -68,8 +71,6 @@ INSTALLED_APPS = [
     'wagtail.core',
     'modelcluster',
     'taggit',
-    # StatutoTerritorioRT apps
-    'base',
 ]
 
 MIDDLEWARE = [
@@ -118,6 +119,8 @@ DATABASES = {
     )
 }
 
+AUTH_USER_MODEL = 'users.AppUser'
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -138,6 +141,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # WAGTAIL
 WAGTAIL_SITE_NAME = 'Statuto Territorio RT'
+WAGTAIL_USER_EDIT_FORM = 'users.forms.AppUserEditForm'
+WAGTAIL_USER_CREATION_FORM = 'users.forms.AppUserCreationForm'
+WAGTAIL_USER_CUSTOM_FIELDS = ['fiscalCode']
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
