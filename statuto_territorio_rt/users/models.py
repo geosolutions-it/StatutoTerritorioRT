@@ -15,7 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 class AppUser(AbstractUser):
-    fiscalCode = models.CharField(
+    fiscal_code = models.CharField(
         verbose_name=_('codice fiscale'),
         max_length=16,
         validators=[

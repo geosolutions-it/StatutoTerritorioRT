@@ -16,11 +16,11 @@ from wagtail.users.forms import UserEditForm, UserCreationForm
 
 class AppUserEditForm(UserEditForm):
 
-    fiscalCode = forms.CharField(required=True,
+    fiscal_code = forms.CharField(required=True,
                               label=_('Codice Fiscale'))
 
 
 class AppUserCreationForm(UserCreationForm):
 
-    fiscalCode = forms.CharField(required=True,
+    fiscal_code = forms.CharField(required=True,
                               label=_('Codice Fiscale'))

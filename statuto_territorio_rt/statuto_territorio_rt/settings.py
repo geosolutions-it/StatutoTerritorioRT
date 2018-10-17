@@ -143,7 +143,7 @@ AUTH_PASSWORD_VALIDATORS = [
 WAGTAIL_SITE_NAME = 'Statuto Territorio RT'
 WAGTAIL_USER_EDIT_FORM = 'users.forms.AppUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'users.forms.AppUserCreationForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['fiscalCode']
+WAGTAIL_USER_CUSTOM_FIELDS = ['fiscal_code']
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
