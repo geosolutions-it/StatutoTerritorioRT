@@ -8,15 +8,12 @@
 #
 #########################################################################
 
-from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel
+
+from django.urls import path, include
+from .views import registrazionView
 
 
-class Home(Page):
-
-    body = RichTextField(blank=True)
-
-    content_panels = Page.content_panels + [
-        FieldPanel('body', classname="full"),
-    ]
+urlpatterns = [
+    path('registration/', registrazionView, name='registration'),
+    path('', include('django.contrib.auth.urls')),
+]

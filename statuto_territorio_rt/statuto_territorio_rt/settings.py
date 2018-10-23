@@ -71,6 +71,8 @@ INSTALLED_APPS = [
     'wagtail.core',
     'modelcluster',
     'taggit',
+    # Crispy forms
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -104,6 +106,8 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGOUT_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'statuto_territorio_rt.wsgi.application'
 
@@ -144,6 +148,8 @@ WAGTAIL_SITE_NAME = 'Statuto Territorio RT'
 WAGTAIL_USER_EDIT_FORM = 'users.forms.AppUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'users.forms.AppUserCreationForm'
 WAGTAIL_USER_CUSTOM_FIELDS = ['fiscal_code']
+WAGTAIL_FRONTEND_LOGIN_URL = 'users/login'
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'users/login.html'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/

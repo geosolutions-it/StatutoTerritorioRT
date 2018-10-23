@@ -34,21 +34,26 @@ LICENSE file in the root directory of this source tree.
 
             <!-- TOP-NAVBAR -->
             <ul class="top-navbar nav justify-content-between fixed-top">
-                <li class="nav-item align-self-center">
-                    {% if request.user.is_autthenticated %}
-                        <a class="nav-link text-white" href="">
+                <li class="nav-item align-self-center text-white flex-row">
+                    {% if request.user.is_authenticated %}
+                        <a class="nav-link text-white" href="{% url 'logout' %}">
                             <i class="fas fa-user pr-2"></i>
                             <span>{% trans 'Esci' %}</span>
                         </a>
                     {% else %}
-                        <a class="nav-link text-white" href="">
+                        <a class="nav-link text-white d-inline pr-1" href="{% url 'login' %}">
                             <!--<i class="fas fa-user pr-2"></i>-->
-                            <span>{% trans 'Login/Registrazione' %}</span>
+                            <span>{% trans 'Login' %}</span>
+                        </a>
+                        /
+                        <a class="nav-link text-white d-inline pl-1" href="{% url 'registration' %}">
+                            <!--<i class="fas fa-user pr-2"></i>-->
+                            <span>{% trans 'Registration' %}</span>
                         </a>
                     {% endif %}
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white p-0 m-0" href="">
+                    <a class="nav-link text-white p-0 m-0" href="/">
                         <span class="d-none d-lg-inline-block pr-2">Regione Toscana</span>
                         <img src="{% static 'img/RT_logo.png' %}" class="img-fluid rt-logo">
                     </a>
@@ -64,7 +69,7 @@ LICENSE file in the root directory of this source tree.
                     </button>
                 </li>
 
-                {% if request.user.is_autthenticated %}
+                {% if request.user.is_authenticated %}
 
                     <li class="nav-item">
                         <li class="nav-item">
@@ -75,6 +80,11 @@ LICENSE file in the root directory of this source tree.
                             <span class="sidebar-label">
                                 {% trans 'Ruolo' %}: {{ request.user.role }}
                             </span>
+                        </li>
+                        <li class="nav-item pt-2 pt-lg-4">
+                            <a class="nav-link" href="{% url 'password_change' %}">
+                                <small>{% trans 'Cambia password' %}</small>
+                            </a>
                         </li>
                         <li class="nav-item pt-2 pt-lg-5">
                             <span class="sidebar-label text-white text-uppercase">{% trans 'gestione account' %}</span>
@@ -102,6 +112,16 @@ LICENSE file in the root directory of this source tree.
                         </form>
                     </li>
                     <div class="dropdown-divider w-100"></div>
+
+                {% else %}
+
+                    <li class="nav-item">
+                        <li class="nav-item">
+                            <small class="nav-link">
+                                Effettua il login per avere accesso alle funzionalità del sito
+                            </small>
+                        </li>
+                    </li>
 
                 {% endif %}
 
@@ -197,11 +217,11 @@ LICENSE file in the root directory of this source tree.
             // Change content left padding
             function changeContentPadding(w) {
                 if (w <= 60) {
-                    $('.content').css('padding-left', '270px');
-                    $('.footer').css('padding-left', '270px');
+                    $('.content').css('padding-left', 'calc(270px + 2vw)');
+                    $('.footer').css('padding-left', 'calc(270px + 2vw)');
                 } else {
-                    $('.content').css('padding-left', '60px');
-                    $('.footer').css('padding-left', '60px');
+                    $('.content').css('padding-left', 'calc(60px + 2vw)');
+                    $('.footer').css('padding-left', 'calc(60px + 2vw)');
                 }
             }
 

@@ -8,15 +8,12 @@
 #
 #########################################################################
 
-from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel
+
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
+from .models import AppUser
 
 
-class Home(Page):
-
-    body = RichTextField(blank=True)
-
-    content_panels = Page.content_panels + [
-        FieldPanel('body', classname="full"),
-    ]
+admin.site.register(AppUser, UserAdmin)
+admin.site.unregister(Group)

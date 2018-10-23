@@ -31,7 +31,7 @@ a {
     max-height: 80px;
 }
 .content {
-    padding-top: 80px;
+    padding-top: calc(80px + 2vh);
     min-height: calc(100vh - 150px);
 }
 .sidebar {
