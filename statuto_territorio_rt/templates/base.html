@@ -8,6 +8,7 @@ LICENSE file in the root directory of this source tree.
 
 -->
 
+
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 
@@ -116,11 +117,9 @@ LICENSE file in the root directory of this source tree.
                 {% else %}
 
                     <li class="nav-item">
-                        <li class="nav-item">
-                            <small class="nav-link">
-                                Effettua il login per avere accesso alle funzionalità del sito
-                            </small>
-                        </li>
+                        <small class="nav-link pt-2 pt-lg-4">
+                            {% trans 'Effettua il login per avere accesso alle funzionalità del sito' %}
+                        </small>
                     </li>
 
                 {% endif %}

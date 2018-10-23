@@ -35,4 +35,4 @@ def registrazionView(request):
     else:
         form = AppUserCreationForm()
     context = {"form": form}
-    return render(request, 'users/registration.html', context)
+    return render(request, 'registration/registration.html', context)
