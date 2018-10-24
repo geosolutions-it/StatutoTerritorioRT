@@ -14,6 +14,11 @@ from wagtail.admin.edit_handlers import FieldPanel
 
 
 class Home(Page):
+    """
+    Statuto del Territorio RT Homepage.
+    Put desired fields in the content_panels list below to manage
+    the page contents in the Wagtail admin.
+    """
 
     body = RichTextField(blank=True)
 

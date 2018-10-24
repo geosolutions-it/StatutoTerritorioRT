@@ -21,7 +21,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-import pathlib
 
 from django.utils.translation import gettext_lazy as _
 
@@ -50,6 +49,7 @@ INSTALLED_APPS = [
     # StatutoTerritorioRT apps
     'base',
     'users',
+    'shared_model',
     # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -123,7 +123,7 @@ DATABASES = {
     )
 }
 
-AUTH_USER_MODEL = 'users.AppUser'
+AUTH_USER_MODEL = 'shared_model.AppUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

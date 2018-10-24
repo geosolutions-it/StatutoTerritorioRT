@@ -30,5 +30,3 @@ class AppUser(AbstractUser):
     )
 
     REQUIRED_FIELDS = ['fiscal_code', 'email']
-
-

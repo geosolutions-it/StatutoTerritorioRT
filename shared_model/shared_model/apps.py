@@ -9,9 +9,8 @@
 #########################################################################
 
 
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from shared_model.models import AppUser
+from django.apps import AppConfig
 
 
-admin.site.register(AppUser, UserAdmin)
+class ModelConfig(AppConfig):
+    name = 'shared_model'
