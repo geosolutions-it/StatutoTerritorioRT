@@ -8,6 +8,9 @@
 #
 #########################################################################
 
-from django.test import TestCase
 
-# Create your tests here.
+from django.apps import AppConfig
+
+
+class UsersConfig(AppConfig):
+    name = 'strt_users'

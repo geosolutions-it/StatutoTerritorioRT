@@ -93,7 +93,7 @@ class UserMemberiship(models.Model):
     """
 
     code = models.CharField(max_length=50, primary_key=True)
-    group = models.OneToOneField(Group)
+    group = models.OneToOneField(Group, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField(max_length=500, null=True, blank=True)
     user = models.ForeignKey(AppUser, on_delete=models.SET_NULL, null=True)

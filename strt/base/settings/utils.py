@@ -8,6 +8,7 @@
 #
 #########################################################################
 
+
 import os
 from django.core.exceptions import ImproperlyConfigured
 
@@ -64,7 +65,6 @@ class Util(object):
 
 
 class EnvUtil(object):
-
     '''
     This class contains methods to manage enviroment setup
     '''

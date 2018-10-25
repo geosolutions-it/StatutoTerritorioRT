@@ -12,7 +12,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from .forms import AppUserCreationForm
-from shared_model.models import AppUser
+from .models import AppUser
 
 
 def registrazionView(request):

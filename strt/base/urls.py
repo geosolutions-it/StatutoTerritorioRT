@@ -26,7 +26,7 @@ urlpatterns = [
 
 # Users urls
 urlpatterns += [
-    path('users/', include('users.urls')),
+    path('users/', include('strt_users.urls')),
 ]
 
 # Wagtail urls

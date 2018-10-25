@@ -8,4 +8,11 @@
 #
 #########################################################################
 
-# Create your views here.
+
+import os
+from django.core.wsgi import get_wsgi_application
+
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'base.settings.settings')
+
+application = get_wsgi_application()
