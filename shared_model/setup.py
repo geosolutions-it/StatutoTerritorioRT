@@ -24,7 +24,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     license='GNU GENERAL PUBLIC LICENSE',
-    description='A simple Django app to shared_model between apps.',
+    description='A simple Django app to share model between apps.',
     long_description=README,
     url='www.geo-solutions.it',
     author='GeoSolutions Sas',

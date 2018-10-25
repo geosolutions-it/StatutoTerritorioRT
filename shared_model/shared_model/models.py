@@ -37,18 +37,32 @@ class Organization(models.Model):
     code = models.CharField(max_length=50, primary_key=True)
     name = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField(max_length=500, null=True, blank=True)
-    type = models.OneToOneField(OrganizationType, on_delete=models.SET_NULL, null=True)
+    type = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         verbose_name = _('Ente')
         verbose_name_plural = _('Enti')
 
 
+class MemberishipType(models.Model):
+    """
+    User role types
+    """
+
+    code = models.CharField(max_length=50, primary_key=True)
+    name = models.CharField(max_length=255, null=False, blank=False)
+    description = models.TextField(max_length=500, null=True, blank=True)
+    organization = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = _('Tipo di ruolo')
+        verbose_name_plural = _('Tipi di ruolo')
+
+
 class AppUser(AbstractUser):
     """
     Statuto del Territorio Base User.
     Fiscal code is a required/unique extra field.
-    Organization is an optional field.
     """
 
     fiscal_code = models.CharField(
@@ -63,8 +77,6 @@ class AppUser(AbstractUser):
         unique=True,
     )
 
-    # TODO: organization manytomany, proceedings manytomany
-
     REQUIRED_FIELDS = ['fiscal_code', 'email']
 
     class Meta:
@@ -75,93 +87,19 @@ class AppUser(AbstractUser):
         verbose_name_plural = _('Utenti')
 
 
-
-class State(object):
+class UserMemberiship(models.Model):
     """
-    Abstract State Class.
+    User role
     """
 
     code = models.CharField(max_length=50, primary_key=True)
-    name = models.CharField(max_length=255, null=False, blank=False)
+    group = models.OneToOneField(Group)
+    title = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField(max_length=500, null=True, blank=True)
-    start_date = models.DateTimeField(null=False, blank=False)
-    end_date = models.DateTimeField(null=False, blank=False)
-    max_duration = models.IntegerField(null=True, blank=True)
-
-
-class ProceedingsMicroState(State, models.Model):
-    """
-    Proceedings Micro State.
-    A State is defined 'Micro' when a 'micro' proceedings (internal proceedings of a Macro proceedings) is accomplished.
-    A Macro proceedings could has more than one active 'micro' proceedings so more than one active Micro state.
-
-    """
-
-    class Meta:
-        verbose_name = _('Micro stato')
-        verbose_name_plural = _('Micro stati')
-
-
-class ProceedingsMacroState(State, models.Model):
-    """
-    Proceedings Macro State.
-    A State is defined 'Macro' when a 'macro' proceedings has been accomplished
-
-    """
-
-    micro_state = models.ForeignKey(ProceedingsMicroState, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = _('Macro stato')
-        verbose_name_plural = _('Macro stati')
-
-
-class ProceedingsType(models.Model):
-    """
-    Proceedings Type
-    """
-
-    code = models.CharField(max_length=50,  primary_key=True)
-    name = models.CharField(max_length=255, null=False, blank=False)
-    description = models.TextField(max_length=500, null=True, blank=True)
-
-    class Meta:
-        verbose_name = _('Tipo di procedimento')
-        verbose_name_plural = _('Tipi di procedimento')
-
-
-class ProceedingsRegistry(models.Model):
-    """
-    Proceedings Registry (also called 'Anagrafica')
-    """
-
-    id = models.CharField(max_length=50,  primary_key=True)
-    code = models.CharField(max_length=50, primary_key=True)
-    name = models.CharField(max_length=255, null=False, blank=False)
-    description = models.TextField(max_length=500, null=True, blank=True)
-    type = models.OneToOneField(ProceedingsType, on_delete=models.SET_NULL, null=True)
-    RUP = models.OneToOneField(AppUser, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(AppUser, on_delete=models.SET_NULL, null=True)
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True)
-    created_by = models.OneToOneField(AppUser, on_delete=models.SET_NULL, null=True)
-    creation_date = models.DateTimeField(null=False, blank=False)
-    accomplishment_date = models.DateTimeField(null=True, blank=True)
+    type = models.ForeignKey(MemberishipType, on_delete=models.SET_NULL, null=True)
 
     class Meta:
-        verbose_name = _('Anagrafica del piano')
-        verbose_name_plural = _('Anagrafiche dei piani')
-
-
-class Proceedings(models.Model):
-    """
-    Statuto del Territorio Proceedings.
-    """
-
-    macro_state = models.OneToOneField(ProceedingsMacroState, on_delete=models.SET_NULL, null=True)
-    owner = models.OneToOneField(AppUser, on_delete=models.SET_NULL, null=True)
-
-    class Meta:
-        verbose_name = _('Procedimento')
-        verbose_name_plural = _('Procedimenti')
-
-
-
+        verbose_name = _('Ruolo')
+        verbose_name_plural = _('Ruoli')
