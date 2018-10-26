@@ -15,50 +15,6 @@ from django.contrib.auth.models import AbstractUser, Group
 from django.utils.translation import ugettext_lazy as _
 
 
-class OrganizationType(models.Model):
-    """
-    Organizations Type
-    """
-
-    code = models.CharField(max_length=50, primary_key=True)
-    name = models.CharField(max_length=255, null=False, blank=False)
-    description = models.TextField(max_length=500, null=True, blank=True)
-
-    class Meta:
-        verbose_name = _('Tipo di ente')
-        verbose_name_plural = _('Tipi di ente')
-
-
-class Organization(models.Model):
-    """
-    Organizations (also called 'Ente') wich can deal with Statuto Del Territorio
-    """
-
-    code = models.CharField(max_length=50, primary_key=True)
-    name = models.CharField(max_length=255, null=False, blank=False)
-    description = models.TextField(max_length=500, null=True, blank=True)
-    type = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True)
-
-    class Meta:
-        verbose_name = _('Ente')
-        verbose_name_plural = _('Enti')
-
-
-class MemberishipType(models.Model):
-    """
-    User role types
-    """
-
-    code = models.CharField(max_length=50, primary_key=True)
-    name = models.CharField(max_length=255, null=False, blank=False)
-    description = models.TextField(max_length=500, null=True, blank=True)
-    organization = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True)
-
-    class Meta:
-        verbose_name = _('Tipo di ruolo')
-        verbose_name_plural = _('Tipi di ruolo')
-
-
 class AppUser(AbstractUser):
     """
     Statuto del Territorio Base User.
@@ -87,19 +43,75 @@ class AppUser(AbstractUser):
         verbose_name_plural = _('Utenti')
 
 
-class UserMemberiship(models.Model):
+class OrganizationType(models.Model):
     """
-    User role
+    Organizations Type
     """
 
-    code = models.CharField(max_length=50, primary_key=True)
-    group = models.OneToOneField(Group, on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=255, null=False, blank=False)
-    description = models.TextField(max_length=500, null=True, blank=True)
-    user = models.ForeignKey(AppUser, on_delete=models.SET_NULL, null=True)
-    organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True)
-    type = models.ForeignKey(MemberishipType, on_delete=models.SET_NULL, null=True)
+    code = models.CharField(verbose_name=_('codice'), max_length=50, primary_key=True)
+    name = models.CharField(verbose_name=_('nome'), max_length=255, null=False, blank=False)
+    description = models.TextField(verbose_name=_('descrizione'), max_length=500, null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Tipo di ente')
+        verbose_name_plural = _('Tipi di ente')
+
+    def __str__(self):
+        return '{} -  {}'.format(self.code, self.name)
+
+
+class Organization(models.Model):
+    """
+    Organizations (also called 'Ente') wich can deal with Statuto Del Territorio
+    """
+
+    code = models.CharField(verbose_name=_('codice'), max_length=50, primary_key=True)
+    name = models.CharField(verbose_name=_('nome'), max_length=255, null=False, blank=False)
+    description = models.TextField(verbose_name=_('descrizione'), max_length=500, null=True, blank=True)
+    type = models.ForeignKey('OrganizationType', on_delete=models.SET_NULL, null=True)
+    users = models.ManyToManyField('AppUser', through='UserMembership')
+
+    class Meta:
+        verbose_name = _('Ente')
+        verbose_name_plural = _('Enti')
+
+    def __str__(self):
+        return '{} -  {}'.format(self.code, self.name)
+
+
+class MembershipType(models.Model):
+    """
+    Role types
+    """
+
+    code = models.CharField(verbose_name=_('codice'), max_length=50, primary_key=True)
+    name = models.CharField(verbose_name=_('nome'), max_length=255, null=False, blank=False)
+    description = models.TextField(verbose_name=_('descrizione'), max_length=500, null=True, blank=True)
+    organization = models.ManyToManyField('Organization', through='UserMembership', verbose_name=_('Ente'))
+    organization_type = models.ForeignKey('OrganizationType', on_delete=models.SET_NULL, null=True, verbose_name=_('Tipo di ente'))
+
+    class Meta:
+        verbose_name = _('Tipo di ruolo')
+        verbose_name_plural = _('Tipi di ruolo')
+
+    def __str__(self):
+        return '{} -  {}'.format(self.code, self.name)
+
+
+class UserMembership(Group):
+    """
+    Roles
+    """
+
+    code = models.CharField(verbose_name=_('codice'), max_length=50, primary_key=True)
+    description = models.TextField(verbose_name=_('descrizione'), max_length=500, null=True, blank=True)
+    member = models.ForeignKey('AppUser', on_delete=models.SET_NULL, null=True, verbose_name=_('Utente'))
+    membership_type = models.ForeignKey('MembershipType', on_delete=models.SET_NULL, null=True, verbose_name=_('Tipo di ruolo'))
+    organization = models.ForeignKey('Organization', on_delete=models.SET_NULL, null=True, verbose_name=_('Ente'))
 
     class Meta:
         verbose_name = _('Ruolo')
         verbose_name_plural = _('Ruoli')
+
+    def __str__(self):
+        return '{} -  {}'.format(self.code, self.name)
