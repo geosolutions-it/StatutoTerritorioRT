@@ -12,5 +12,5 @@
 from django.apps import AppConfig
 
 
-class PortalConfig(AppConfig):
-    name = 'portal'
+class StrtPortalConfig(AppConfig):
+    name = 'strt_portal'

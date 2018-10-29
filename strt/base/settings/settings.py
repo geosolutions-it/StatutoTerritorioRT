@@ -34,7 +34,7 @@ ALLOWED_HOSTS = EnvUtil.get_env_var('DJANGO_ALLOWED_HOSTS', list, [], ' ')
 INSTALLED_APPS = [
     # StatutoTerritorioRT apps
     'base',
-    'portal',
+    'strt_portal',
     'strt_users',
     # Django apps
     'django.contrib.admin',
