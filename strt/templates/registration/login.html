@@ -1,0 +1,31 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - Login{% endblock head_title %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <form class="" action="{% url 'login' %}" method="POST" novalidate>
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" class="btn btn-secondary my-2 my-lg-4" value="Login">
+                <input type="hidden" name="next" value="/">
+            </form>
+            <p><a href="{% url 'password_reset' %}">Password dimenticata?</a></p>
+        </div>
+    </div>
+
+{% endblock content %}
