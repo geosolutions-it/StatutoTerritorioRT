@@ -24,7 +24,6 @@ LICENSE file in the root directory of this source tree.
         <!-- CSS -->
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
         <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
-        <link rel="stylesheet" href="{% static 'css/all.css' %}"/>
 
     </head>
 
@@ -34,97 +33,51 @@ LICENSE file in the root directory of this source tree.
         <div class="container-fluid">
 
             <!-- TOP-NAVBAR -->
-            <ul class="top-navbar nav justify-content-between fixed-top">
-                <li class="nav-item align-self-center text-white flex-row">
-                    {% if request.user.is_authenticated %}
-                        <a class="nav-link text-white" href="{% url 'logout' %}">
-                            <i class="fas fa-user pr-2"></i>
-                            <span>{% trans 'Esci' %}</span>
-                        </a>
-                    {% else %}
-                        <a class="nav-link text-white d-inline pr-1" href="{% url 'login' %}">
-                            <!--<i class="fas fa-user pr-2"></i>-->
-                            <span>{% trans 'Login' %}</span>
-                        </a>
-                        /
-                        <a class="nav-link text-white d-inline pl-1" href="{% url 'registration' %}">
-                            <!--<i class="fas fa-user pr-2"></i>-->
-                            <span>{% trans 'Registration' %}</span>
-                        </a>
-                    {% endif %}
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white p-0 m-0" href="/">
-                        <span class="d-none d-lg-inline-block pr-2">Regione Toscana</span>
-                        <img src="{% static 'img/RT_logo.png' %}" class="img-fluid rt-logo">
-                    </a>
-                </li>
-            </ul> <!-- end TOP-NAVBAR -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-0">
 
-            <!-- SIDEBAR -->
-            <ul class="nav sidebar flex-column fixed-top">
+                <!-- BRAND -->
+                <a class="navbar-brand p-0" href="/">
+                    <img src="{% static 'img/RT_logo.png' %}" alt="RT Logo"
+                        class="d-inline-block img-fluid rt-logo p-0">
+                    <span class="d-none d-lg-inline-block pl-2">
+                        {% trans 'Portale del Territorio' %}
+                    </span>
+                </a><!-- end BRAND -->
 
-                <li class="hamburger-item nav-item">
-                    <button class="custom-toggler navbar-toggler dropdown-toggle text-white p-0 m-1" type="button">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </li>
+                <!-- TOGGLER BUTTON -->
+                <button class="navbar-toggler m-2" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button><!-- end TOGGLER BUTTON -->
 
-                {% if request.user.is_authenticated %}
-
-                    <li class="nav-item">
+                <!-- NAVBAR COLLPASABLE CONTENT -->
+                <div class="collapse navbar-collapse p-2" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <span class="sidebar-label text-white">{% trans 'Benvenuto' %}</span>
-                            <a class="nav-link">
-                                <span class="font-weight-bold">{{ request.user.username }}</span>
-                            </a>
-                            <span class="sidebar-label">
-                                {% trans 'Ruolo' %}: {{ request.user.role }}
-                            </span>
-                        </li>
-                        <li class="nav-item pt-2 pt-lg-4">
-                            <a class="nav-link" href="{% url 'password_change' %}">
-                                <small>{% trans 'Cambia password' %}</small>
+                            <a class="nav-link app-link" href="{% url 'serapide' %}">
+                                <span>{% trans 'serapide'|upper %}</span>
                             </a>
                         </li>
-                        <li class="nav-item pt-2 pt-lg-5">
-                            <span class="sidebar-label text-white text-uppercase">{% trans 'gestione account' %}</span>
-                            <a class="nav-link">
-                                <span>Todo 1</span>
-                            </a>
-                            <a class="nav-link">
-                                <span>Todo 2</span>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'geoportal' %}">
+                                <span>{% trans 'geoportale'|upper %}</span>
                             </a>
                         </li>
-                    </li>
-                    <div class="dropdown-divider w-100"></div>
-                    <li class="nav-item">
-                        <span class="sidebar-label text-uppercase d-block">{% trans 'pianificazione' %}</span>
-                        <a class="nav-link" href="">{% trans 'inbox' %}</a>
-                    </li>
-                    <div class="dropdown-divider w-100"></div>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">
-                            <i class="far fa-calendar-alt fa-2x pr-2"></i>
-                            <span>{% trans 'Calendario/Scadenze' %}</span>
-                        </a>
-                        <form class="nav-link form-inline sidebar-label pt-2 pr-2">
-                            <input class="form-control" type="search" placeholder="{% trans 'Cerca piano' %}">
-                        </form>
-                    </li>
-                    <div class="dropdown-divider w-100"></div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'opendata' %}">
+                                <span>{% trans 'open data'|upper %}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'glossary' %}">
+                                <span>{% trans 'glossario'|upper %}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div><!-- end NAVBAR COLLPASABLE CONTENT -->
 
-                {% else %}
-
-                    <li class="nav-item">
-                        <small class="nav-link pt-2 pt-lg-4">
-                            {% trans 'Effettua il login per avere accesso alle funzionalità del sito' %}
-                        </small>
-                    </li>
-
-                {% endif %}
-
-            </ul> <!-- end SIDEBAR -->
+            </nav><!-- end TOP-NAVBAR -->
 
             <!-- CONTENT -->
             <div class="content">
@@ -141,7 +94,7 @@ LICENSE file in the root directory of this source tree.
 
             <!-- FOOTER -->
             <div class="footer footer-padding-trans bg-light">
-                <div class="row px-2 px-lg-4 m-0 text-secondary">
+                <div class="row p-0 m-0 text-dark">
                     <div class="col-12 col-lg-2 p-0 m-0 text-uppercase">{% trans 'contatti' %}</div>
                     <div class="col-12 col-lg-2 p-0 m-0">todo ...</div>
                     <div class="col-12 col-lg-2 p-0 m-0 text-uppercase">{% trans 'supporto' %}</div>
@@ -155,76 +108,8 @@ LICENSE file in the root directory of this source tree.
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-        <script src="{% static 'js/popper.js' %}"></script>
+        <script src="{% static 'js/popper.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
-
-        <!-- custom javascript -->
-        <script>
-
-            // Onload function
-            (function($) {
-                var w = $('.sidebar').width();
-                if (w <= 60) {
-                    w = 270;
-                } else {
-                    w = 60;
-                }
-                changeArrowDir(w);
-                showSidebarItems(w);
-                changeContentPadding(w);
-                $('.hamburger-item > button').click(function() {
-                    $('.content').addClass('content-padding-trans');
-                    w = $('.sidebar').width();
-                    resizeSidebar(w);
-                });
-            })($);
-
-            // Resize sidebar
-            function resizeSidebar(w) {
-                showSidebarItems(w);
-                changeArrowDir(w);
-                changeContentPadding(w);
-                if (w <= 60) {
-                    $('.sidebar').innerWidth(270);
-                } else {
-                    $('.sidebar').innerWidth(60);
-                }
-            }
-
-            // Change sidebar hamburger arrow direction
-            function changeArrowDir(w) {
-                if (w <= 60) {
-                    $('.hamburger-item').removeClass('dropright');
-                    $('.hamburger-item').addClass('dropleft');
-                } else {
-                    $('.hamburger-item').removeClass('dropleft');
-                    $('.hamburger-item').addClass('dropright');
-                }
-            }
-
-            // Show/hide sidebar elements
-            function showSidebarItems(w) {
-                if (w <= 60) {
-                    $('.sidebar > .nav-item').show(1000);
-                    $('.sidebar > .dropdown-divider').show(1000);
-                } else {
-                    $('.sidebar > .nav-item').not('.hamburger-item').hide(300);
-                    $('.sidebar > .dropdown-divider').not('.hamburger-item').hide(300);
-                }
-            }
-
-            // Change content left padding
-            function changeContentPadding(w) {
-                if (w <= 60) {
-                    $('.content').css('padding-left', 'calc(270px + 2vw)');
-                    $('.footer').css('padding-left', 'calc(270px + 2vw)');
-                } else {
-                    $('.content').css('padding-left', 'calc(60px + 2vw)');
-                    $('.footer').css('padding-left', 'calc(60px + 2vw)');
-                }
-            }
-
-        </script>
 
     </body>
 
