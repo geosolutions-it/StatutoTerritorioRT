@@ -24,8 +24,9 @@ urlpatterns = [
     path('django-admin/', admin.site.urls),
 ]
 
-# Users urls
+# Apps urls
 urlpatterns += [
+    path('', include('strt_portal.urls')),
     path('users/', include('strt_users.urls')),
 ]
 
