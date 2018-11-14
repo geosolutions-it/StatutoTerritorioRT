@@ -13,6 +13,10 @@
     padding-left: 10vw;
     padding-right: 10vw;
 }
+.navbar {
+    margin-left: 10vw;
+    margin-right: 10vw;
+}
 a:hover {
     text-decoration: none;
     cursor:pointer;
@@ -25,7 +29,8 @@ a {
     height: 80px;
 }
 .content {
-    height: calc(100vh - 150px - 80px);
+    padding-top: 80px;
+    min-height: calc(100vh - 150px - 80px);
 }
 .footer {
     height: 150px;
@@ -75,6 +80,10 @@ button:focus, a:focus {
     .container-fluid {
         padding-left: 2vw;
         padding-right: 2vw;
+    }
+    .navbar {
+        margin-left: 2vw;
+        margin-right: 2vw;
     }
 }
 
