@@ -17,6 +17,15 @@
     margin-left: 10vw;
     margin-right: 10vw;
 }
+.user-nav {
+    margin-top: 60px !important;
+    position: fixed;
+    width: 80vw;
+    height: 60px;
+}
+.user-nav > li {
+    align-self: center;
+}
 a:hover {
     text-decoration: none;
     cursor:pointer;
@@ -26,14 +35,14 @@ a {
     color: inherit;
 }
 .rt-logo {
-    height: 80px;
+    height: 60px;
 }
 .content {
-    padding-top: 80px;
-    min-height: calc(100vh - 150px - 80px);
+    padding-top: 120px;
+    min-height: calc(100vh - 120px);
 }
 .footer {
-    height: 150px;
+    min-height: 120px;
 }
 button:focus, a:focus {
     outline: 0px;
@@ -84,6 +93,9 @@ button:focus, a:focus {
     .navbar {
         margin-left: 2vw;
         margin-right: 2vw;
+    }
+    .user-nav {
+        width: 96vw;
     }
 }
 
