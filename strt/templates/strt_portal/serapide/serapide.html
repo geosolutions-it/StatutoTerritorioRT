@@ -20,7 +20,12 @@ LICENSE file in the root directory of this source tree.
 {% block content %}
 
         <div id="root">
-            TODO: serapide content
+            TODO: serapide
         </div>
-
+        {%  if debug %}
+        <script src="http://localhost:3000/static/js/bundle.js"></script>
+        {% else %}
+        <script id="ms2-api" src="{{ STATIC_URL }}mapstore/dist/ms2-geonode-api.js"></script>
+        {% endif %}
 {% endblock content %}
+

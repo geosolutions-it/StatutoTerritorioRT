@@ -28,7 +28,7 @@ DEBUG = EnvUtil.get_env_var('DJANGO_DEBUG', bool, True)
 
 ALLOWED_HOSTS = EnvUtil.get_env_var('DJANGO_ALLOWED_HOSTS', list, [], ' ')
 
-
+INTERNAL_IPS = EnvUtil.get_env_var('DJANGO_INTERNAL_IPS', list, [], ' ')
 # Application definition
 
 INSTALLED_APPS = [
