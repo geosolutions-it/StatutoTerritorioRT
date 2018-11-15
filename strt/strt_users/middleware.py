@@ -9,12 +9,10 @@
 #########################################################################
 
 
-from django.urls import path, include
-from .views import registrazionView, UsersManagementView
+from .utils import set_current_user
 
 
-urlpatterns = [
-    path('registration/', registrazionView, name='registration'),
-    path('', include('django.contrib.auth.urls')),
-    path('management/', UsersManagementView.as_view(), name='users_management'),
-]
+class CurrentUserMiddleware:
+
+    def process_request(self, request):
+        set_current_user(getattr(request, 'user', None))

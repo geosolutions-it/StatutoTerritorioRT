@@ -75,6 +75,11 @@ MIDDLEWARE = [
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
+MIDDLEWARE_CLASSES = (
+    # Users middleware
+    'strt_users.middleware.CurrentUserMiddleware',
+)
+
 ROOT_URLCONF = 'base.urls'
 
 TEMPLATES = [

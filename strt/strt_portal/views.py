@@ -9,7 +9,6 @@
 #########################################################################
 
 
-from django.views.generic.base import RedirectView
 from django.views.generic.base import TemplateView
 
 

@@ -10,17 +10,17 @@
 
 .container-fluid {
     min-height: 100vh;
-    padding-left: 10vw;
-    padding-right: 10vw;
+    padding-left: 200px;
+    padding-right: 200px;
 }
 .navbar {
-    margin-left: 10vw;
-    margin-right: 10vw;
+    margin-left: 200px;
+    margin-right: 200px;
 }
 .user-nav {
     margin-top: 60px !important;
     position: fixed;
-    width: 80vw;
+    width: calc(100% - 400px);
     height: 60px;
 }
 .user-nav > li {
@@ -31,16 +31,29 @@ a:hover {
     cursor:pointer;
     color: lightgray !important;
 }
+.dropdown-menu {
+    margin-top: 9px;
+}
+.dropdown-item:hover {
+    background-color: inherit;
+    background-image: none;
+}
 a {
     color: inherit;
 }
 .rt-logo {
     height: 60px;
 }
+.user-manage {
+    border-right-style: solid;
+    border-right-width: 1px;
+}
+
 .content {
     padding-top: 120px;
-    min-height: calc(100vh - 120px);
+    min-height: calc(98.5vh - 120px);
 }
+
 .footer {
     min-height: 120px;
 }
@@ -87,15 +100,15 @@ button:focus, a:focus {
 /* Medium devices (tablets, less than 992px) */
 @media (max-width: 991.98px) {
     .container-fluid {
-        padding-left: 2vw;
-        padding-right: 2vw;
+        padding-left: 10px;
+        padding-right: 10px;
     }
     .navbar {
-        margin-left: 2vw;
-        margin-right: 2vw;
+        margin-left: 10px;
+        margin-right: 10px;
     }
     .user-nav {
-        width: 96vw;
+        width: calc(100% - 20px);
     }
 }
 

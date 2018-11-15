@@ -9,12 +9,13 @@
 #########################################################################
 
 
-from django.urls import path, include
-from .views import registrazionView, UsersManagementView
+import threading
 
 
-urlpatterns = [
-    path('registration/', registrazionView, name='registration'),
-    path('', include('django.contrib.auth.urls')),
-    path('management/', UsersManagementView.as_view(), name='users_management'),
-]
+_thread_locals = threading.local()
+
+def set_current_user(user):
+    _thread_locals.user=user
+
+def get_current_user():
+    return getattr(_thread_locals, 'user', None)
