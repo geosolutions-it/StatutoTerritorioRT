@@ -1,5 +1,10 @@
-{% extends "strt_portal/serapide/serapide.html" %}
+{% extends "base.html" %}
 
+{% load static %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'serapide' %}{% endblock head_title %}
 {% block styles %}
 <%
     for (item of htmlWebpackPlugin.files.css) { %><%
@@ -8,8 +13,14 @@
     } %>
 {% endblock styles %}
 
+{% block content %}
+
+        <div id="root">
+            TODO: serapide
+        </div>
+{% endblock content %}
+
 {% block add_script %}
-    <% console.log(htmlWebpackPlugin)%>
     <%for (item of htmlWebpackPlugin.files.js) { %><%
       if (typeof item === 'string' || item instanceof String) { item = { src: item, type: 'text/javascript' } } %>
     <script<% for (key in item) { %> <%= key %>="<%= item[key] %>"<% } %>></script><%

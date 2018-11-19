@@ -16,7 +16,7 @@ from .utils import EnvUtil
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
-REACT_APP_DIR = os.path.join(BASE_DIR, 'serapide-client')
+REACT_APP_DIR = os.path.join(BASE_DIR, 'serapide-client') # serapide-client
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -26,6 +26,7 @@ SECRET_KEY = EnvUtil.get_env_var('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = EnvUtil.get_env_var('DJANGO_DEBUG', bool, True)
+
 
 ALLOWED_HOSTS = EnvUtil.get_env_var('DJANGO_ALLOWED_HOSTS', list, [], ' ')
 
@@ -168,7 +169,7 @@ STATIC_ROOT = EnvUtil.get_env_var(
 )
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    os.path.join(os.path.join(REACT_APP_DIR, 'build'), 'static')
+    os.path.join(os.path.join(REACT_APP_DIR, 'build'), 'static') # serapide-client
 ]
 
 # Media
@@ -179,38 +180,9 @@ MEDIA_ROOT = EnvUtil.get_env_var(
 MEDIA_URL = '/media/'
 
 # CORS_ORIGIN_ALLOW_ALL = True
-
-if DEBUG:
-    # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-    # SECRET_KEY = env('DJANGO_SECRET_KEY', default='P00ompdBzFQcwz2Am33ffFt8V5qHaN55KPOHhczp7O0KEAxjxiolvWQ7gMZIv3Rj')
-    # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-    ALLOWED_HOSTS = [
-        "localhost",
-        "0.0.0.0",
-        "127.0.0.1",
-    ]
-
-    # TEMPLATES
-    # ------------------------------------------------------------------------------
-    # https://docs.djangoproject.com/en/dev/ref/settings/#templates
-    TEMPLATES[0]['OPTIONS']['debug'] = DEBUG  # noqa F405
+INTERNAL_IPS = EnvUtil.get_env_var('DJANGO_INTERNAL_IPS', list, [], ' ')
 
 
-    # django-debug-toolbar
-    # ------------------------------------------------------------------------------
-    # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
-    INSTALLED_APPS += ['debug_toolbar']  # noqa F405
-    # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']  # noqa F405
-    # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
-    DEBUG_TOOLBAR_CONFIG = {
-        'DISABLE_PANELS': [
-            'debug_toolbar.panels.redirects.RedirectsPanel',
-        ],
-        'SHOW_TEMPLATE_CONTEXT': False,
-    }
-    # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
 
-INTERNAL_IPS = EnvUtil.get_env_var('DJANGO_INTERNAL_IPS', list, ['127.0.0.1', '10.0.2.2'], ' ')
 
     
