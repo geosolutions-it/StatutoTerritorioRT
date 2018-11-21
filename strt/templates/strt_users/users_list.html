@@ -45,7 +45,7 @@ LICENSE file in the root directory of this source tree.
                         <td scope="col">{{ mu.email }}</td>
                         <td scope="col">
                             <a class="btn btn-secondary text-light"
-                                href="{#% url 'user_membership_edit' %#}">
+                                href="{% url 'user_update' fiscal_code=mu.fiscal_code %}">
                                 {% trans 'modifica'|capfirst %}
                             </a>
                         </td>

@@ -10,7 +10,7 @@
 
 
 from django.shortcuts import (
-    render, redirect
+    render, redirect, get_object_or_404
 )
 from .forms import AppUserForm, UserMembershipForm
 from .models import AppUser, UserMembership
@@ -82,6 +82,34 @@ def userMembershipRegistrationView(request):
         # Membership_type must be filtered considering the selected organization type
     context = {'form': form}
     return render(request, 'strt_users/user_membership_registration.html', context)
+
+
+def userMembershipUpdateView(request, code):
+    instance = get_object_or_404(UserMembership, code=code)
+    form = UserMembershipForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        form.save()
+        return redirect('users_membership_list')
+    return render(request,
+                  'strt_users/user_membership_registration.html',
+                  {
+                      'form': form,
+                      'action': 'update'
+                  })
+
+
+def userUpdateView(request, fiscal_code):
+    instance = get_object_or_404(AppUser, fiscal_code=fiscal_code)
+    form = AppUserForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        form.save()
+        return redirect('users_list')
+    return render(request,
+                  'strt_users/user_registration.html',
+                  {
+                      'form': form,
+                      'action': 'update'
+                  })
 
 
 def userMembershipDeleteView(request, code):

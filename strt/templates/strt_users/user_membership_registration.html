@@ -29,7 +29,11 @@ LICENSE file in the root directory of this source tree.
             {% csrf_token %}
             {{ form|crispy }}
             <input type="submit" class="btn btn-secondary my-2 my-lg-4"
-                   value="{% trans 'crea ruolo'|capfirst %}">
+                {% if action != 'update' %}
+                    value="{% trans 'crea utente'|capfirst %}"
+                {% else %}
+                    value="{% trans 'aggiorna'|capfirst %}"
+                {% endif %}>
         </form>
 
     </div>
