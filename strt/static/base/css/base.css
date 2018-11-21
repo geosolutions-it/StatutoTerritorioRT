@@ -13,49 +13,54 @@
     padding-left: 200px;
     padding-right: 200px;
 }
+.rt-logo {
+    height: 60px;
+}
+.content {
+    padding-top: 60px;
+    min-height: calc(98.5vh - 120px);
+}
+.sidebar {
+    margin-top: 120px;
+    margin-left: 200px;
+    width: 250px;
+    min-height: calc(100vh - 120px);
+}
+.footer {
+    min-height: 120px;
+}
 .navbar {
     margin-left: 200px;
     margin-right: 200px;
 }
 .user-nav {
     margin-top: 60px !important;
-    position: fixed;
     width: calc(100% - 400px);
     height: 60px;
+    margin-left: 200px;
+    margin-right: 200px;
 }
 .user-nav > li {
     align-self: center;
+}
+.dropdown-menu {
+    margin-top: 9px;
+    position: relative;
+}
+.dropdown-item:hover {
+    background-color: inherit;
+    background-image: none;
+}
+.sidebar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 a:hover {
     text-decoration: none;
     cursor:pointer;
     color: lightgray !important;
 }
-.dropdown-menu {
-    margin-top: 9px;
-}
-.dropdown-item:hover {
-    background-color: inherit;
-    background-image: none;
-}
 a {
     color: inherit;
-}
-.rt-logo {
-    height: 60px;
-}
-.user-manage {
-    border-right-style: solid;
-    border-right-width: 1px;
-}
-
-.content {
-    padding-top: 120px;
-    min-height: calc(98.5vh - 120px);
-}
-
-.footer {
-    min-height: 120px;
 }
 button:focus, a:focus {
     outline: 0px;
@@ -99,20 +104,22 @@ button:focus, a:focus {
 
 /* Medium devices (tablets, less than 992px) */
 @media (max-width: 991.98px) {
+}
+
+/* Large devices (desktops, less than 1200px) */
+@media (max-width: 1199.98px) {
     .container-fluid {
         padding-left: 10px;
         padding-right: 10px;
     }
-    .navbar {
+    .navbar, .user-nav {
         margin-left: 10px;
         margin-right: 10px;
     }
     .user-nav {
         width: calc(100% - 20px);
     }
-}
-
-/* Large devices (desktops, less than 1200px) */
-@media (max-width: 1199.98px) {
-
+    .sidebar {
+        margin-left: 10px;
+    }
 }

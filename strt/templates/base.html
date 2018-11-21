@@ -24,6 +24,7 @@ LICENSE file in the root directory of this source tree.
         <!-- CSS -->
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
         <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
+        {% block head_stylesheet %}{# CSS space #}{% endblock head_stylesheet %}
 
     </head>
 
@@ -51,19 +52,19 @@ LICENSE file in the root directory of this source tree.
                     <span class="navbar-toggler-icon"></span>
                 </button><!-- end TOGGLER BUTTON -->
 
-                <!-- NAVBAR COLLPASABLE CONTENT -->
-                <div class="collapse navbar-collapse p-2" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto">
+                <!-- NAVBAR COLLPSABLE CONTENT -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto pl-2">
                         <li class="nav-item">
-                            <a class="nav-link text-white user-manage mr-2 pr-2" href="{% url 'users_management' %}">
-                                <span>{% trans 'gestione utenti'|capfirst %}</span>
+                            <a class="nav-link text-white" href="{% url 'private_area' %}">
+                                <span>{% trans 'area riservata'|capfirst %}</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'serapide' %}">
-                                <span>{% trans 'serapide'|upper %}</span>
+                        <!--<li class="nav-item">
+                            <a class="nav-link text-white" href="{#% url 'serapide' %#}">
+                                <span>{#% trans 'serapide'|upper %#}</span>
                             </a>
-                        </li>
+                        </li>-->
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'geoportal' %}">
                                 <span>{% trans 'geoportale'|upper %}</span>
@@ -80,20 +81,21 @@ LICENSE file in the root directory of this source tree.
                             </a>
                         </li>
                     </ul>
-                </div><!-- end NAVBAR COLLPASABLE CONTENT -->
+                </div><!-- end NAVBAR COLLPSABLE CONTENT -->
 
             </nav><!-- end TOP-NAVBAR -->
 
             <!-- USER-NAV -->
             {% if request.user.is_authenticated %}
-                <ul class="user-nav nav justify-content-between bg-secondary p-0 m-0">
-                    <li class="nav-item align-content-center p-0 m-0 text-white">
+
+                <ul class="user-nav nav fixed-top justify-content-end bg-secondary p-0">
+                    <!--<li class="nav-item align-content-center p-0 m-0 text-white">
                         <a class="nav-link">
-                            <span>{{ organization.name }}</span>
+                            <span>{# { request.user.organization.name } #}</span>
                         </a>
-                    </li>
+                    </li>-->
                     <li class="nav-item dropdown text-white bg-secondary">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/" role="button"
                            aria-haspopup="true" aria-expanded="false">
                             {{ request.user.get_full_name }}
                         </a>
@@ -109,17 +111,22 @@ LICENSE file in the root directory of this source tree.
                                 {% trans 'impostazioni'|capfirst %}
                             </a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-white" href="{% url 'users_management' %}">
+                                {% trans 'gestione utenti'|capfirst %}
+                            </a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-white" href="{% url 'logout' %}">
                                 {% trans 'logout'|capfirst %}
                             </a>
                         </div>
                     </li>
                 </ul>
+
             {% endif %}
             <!-- end USER-NAV -->
 
             <!-- CONTENT -->
-            <div class="content">
+            <div class="content bg-light">
 
                 <!-- start content block -->
                 {% block content %}
@@ -132,9 +139,9 @@ LICENSE file in the root directory of this source tree.
             </div> <!-- end CONTENT -->
 
             <!-- FOOTER -->
-            <div class="footer footer-padding-trans bg-light">
+            <div class="footer footer-padding-trans bg-light w-100">
                 <div class="row p-0 m-0 text-secondary">
-                    <div class="col-12 col-lg-1 m-0 text-uppercase">{% trans 'contatti' %}</div>
+                    <div class="col-12 col-lg-1 m-0 p-0 text-uppercase">{% trans 'contatti' %}</div>
                     <div class="col-12 col-lg-2 p-lg-0 m-lg-0">
                         <br class="d-none d-lg-inline">
                         <div class="row">

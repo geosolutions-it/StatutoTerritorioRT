@@ -1,0 +1,67 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'gestione utenti'|capfirst %}{% endblock head_title %}
+
+{% block content %}
+
+    <div class="bg-light table-responsive p-2 m-0">
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="row">{% trans 'nome'|upper %}</th>
+                    <th scope="col">{% trans 'cognome'|upper %}</th>
+                    <th scope="col">{% trans 'codice fiscale'|upper %}</th>
+                    <th scope="col">{% trans 'email'|upper %}</th>
+                    <th scope="col">{% trans 'ruolo'|upper %}</th>
+                    <th scope="col">{% trans 'ente'|upper %}</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mum in managed_users_membership %}
+                    <tr>
+                        <td scope="row">{{ mum.member.first_name|capfirst }}</td>
+                        <td scope="col">{{ mum.member.last_name|capfirst }}</td>
+                        <td scope="col">{{ mum.member.fiscal_code|upper }}</td>
+                        <td scope="col">{{ mum.member.email }}</td>
+                        <td scope="col">{{ mum.type|capfirst }}</td>
+                        <td scope="col">{{ mum.organization|capfirst }}</td>
+                        <td scope="col">
+                            <a class="btn btn-secondary text-light"
+                                href="{#% url 'user_membership_edit' %#}">
+                                {% trans 'modifica'|capfirst %}
+                            </a>
+                        </td>
+                        <td scope="col">
+                            <a class="btn btn-secondary text-light"
+                                href="{#% url 'user_membership_remove' %#}">
+                                {% trans 'elimina'|capfirst %}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock content %}
+
