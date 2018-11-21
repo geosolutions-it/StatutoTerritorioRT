@@ -19,7 +19,7 @@ class PrivateAreaView(TemplateView):
 
 class SerapideView(TemplateView):
 
-    template_name = "serapide-client/public/index.html"
+    template_name = "../../serapide-client/build/index.html" # serapide-client
 
 
 class GeoportalView(TemplateView):
