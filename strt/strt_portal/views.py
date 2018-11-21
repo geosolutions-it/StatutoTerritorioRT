@@ -15,7 +15,7 @@ from django.views.generic.base import TemplateView
 
 class SerapideView(TemplateView):
 
-    template_name = "strt_portal/serapide/serapide.html"
+    template_name = "../../serapide-client/build/index.html" # serapide-client
 
 
 class GeoportalView(TemplateView):

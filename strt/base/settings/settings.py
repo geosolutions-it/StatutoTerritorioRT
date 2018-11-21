@@ -16,6 +16,7 @@ from .utils import EnvUtil
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
+REACT_APP_DIR = os.path.join(BASE_DIR, 'serapide-client') # serapide-client
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -25,6 +26,7 @@ SECRET_KEY = EnvUtil.get_env_var('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = EnvUtil.get_env_var('DJANGO_DEBUG', bool, True)
+
 
 ALLOWED_HOSTS = EnvUtil.get_env_var('DJANGO_ALLOWED_HOSTS', list, [], ' ')
 
@@ -80,7 +82,10 @@ ROOT_URLCONF = 'base.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates"),],
+        'DIRS': [
+            os.path.join(BASE_DIR, "templates"),
+            os.path.join(REACT_APP_DIR, 'build'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -164,6 +169,7 @@ STATIC_ROOT = EnvUtil.get_env_var(
 )
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
+    os.path.join(os.path.join(REACT_APP_DIR, 'build'), 'static') # serapide-client
 ]
 
 # Media
@@ -172,3 +178,11 @@ MEDIA_ROOT = EnvUtil.get_env_var(
     default=str(os.path.join(os.path.dirname(BASE_DIR), 'media'))
 )
 MEDIA_URL = '/media/'
+
+# CORS_ORIGIN_ALLOW_ALL = True
+INTERNAL_IPS = EnvUtil.get_env_var('DJANGO_INTERNAL_IPS', list, [], ' ')
+
+
+
+
+    

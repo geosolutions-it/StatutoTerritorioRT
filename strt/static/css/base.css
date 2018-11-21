@@ -25,7 +25,7 @@ a {
     height: 80px;
 }
 .content {
-    height: calc(100vh - 150px - 80px);
+    min-height: calc(100vh - 150px - 80px);
 }
 .footer {
     height: 150px;
