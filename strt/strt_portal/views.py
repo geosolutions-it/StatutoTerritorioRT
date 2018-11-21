@@ -12,9 +12,14 @@
 from django.views.generic.base import TemplateView
 
 
+class PrivateAreaView(TemplateView):
+
+    template_name = "strt_portal/private_area.html"
+
+
 class SerapideView(TemplateView):
 
-    template_name = "strt_portal/serapide/serapide.html"
+    template_name = "serapide-client/public/index.html"
 
 
 class GeoportalView(TemplateView):

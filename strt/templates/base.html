@@ -23,8 +23,8 @@ LICENSE file in the root directory of this source tree.
 
         <!-- CSS -->
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
-        <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
-        {% block head_stylesheet %}{# CSS space #}{% endblock head_stylesheet %}
+        <link rel="stylesheet" href="{% static 'base/css/base.css' %}"/>
+        {% block styles %}{# CSS space #}{% endblock styles %}
 
     </head>
 
@@ -60,11 +60,6 @@ LICENSE file in the root directory of this source tree.
                                 <span>{% trans 'area riservata'|capfirst %}</span>
                             </a>
                         </li>
-                        <!--<li class="nav-item">
-                            <a class="nav-link text-white" href="{#% url 'serapide' %#}">
-                                <span>{#% trans 'serapide'|upper %#}</span>
-                            </a>
-                        </li>-->
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'geoportal' %}">
                                 <span>{% trans 'geoportale'|upper %}</span>
@@ -88,12 +83,14 @@ LICENSE file in the root directory of this source tree.
             <!-- USER-NAV -->
             {% if request.user.is_authenticated %}
 
-                <ul class="user-nav nav fixed-top justify-content-end bg-secondary p-0">
-                    <!--<li class="nav-item align-content-center p-0 m-0 text-white">
-                        <a class="nav-link">
-                            <span>{# { request.user.organization.name } #}</span>
+                <ul class="user-nav nav navbar-secondary fixed-top justify-content-between bg-secondary p-0">
+
+                    <li class="nav-item p-2">
+                        <a class="nav-link" id="sidebar-toggler">
+                            <span class="navbar-toggler-icon sidebar-toggler-icon"></span>
                         </a>
-                    </li>-->
+                    </li>
+
                     <li class="nav-item dropdown text-white bg-secondary">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/" role="button"
                            aria-haspopup="true" aria-expanded="false">
@@ -111,14 +108,42 @@ LICENSE file in the root directory of this source tree.
                                 {% trans 'impostazioni'|capfirst %}
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-white" href="{% url 'users_management' %}">
-                                {% trans 'gestione utenti'|capfirst %}
-                            </a>
-                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-white" href="{% url 'logout' %}">
                                 {% trans 'logout'|capfirst %}
                             </a>
                         </div>
+                    </li>
+
+                </ul>
+
+                <ul class="nav sidebar bg-secondary border-top border-light fixed-top
+                    flex-column text-light" id="accordion">
+                    <li id="headingOne" class="nav-item p-2">
+                        <a data-toggle="collapse" data-target="#collapseOne"
+                           aria-expanded="true" aria-controls="collapseOne">
+                            {% trans 'gestione utenti'|capfirst %}
+                        </a>
+                    </li>
+                    <li id="collapseOne" class="collapse nav-item border-top
+                        border-bottom border-light p-2 pl-3"
+                        aria-labelledby="headingOne" data-parent="#accordion">
+                        <a href="{% url 'users_list' %}" class="d-block pb-2">
+                            {% trans 'lista utenti'|capfirst %}
+                        </a>
+                        <a href="{% url 'users_membership_list' %}" class="d-block pb-2">
+                            {% trans 'lista ruoli'|capfirst %}
+                        </a>
+                        <a href="{% url 'user_registration' %}" class="d-block pb-2">
+                            {% trans 'registra utente'|capfirst %}
+                        </a>
+                        <a href="{% url 'user_membership_registration' %}" class="d-block">
+                            {% trans 'registra ruolo'|capfirst %}
+                        </a>
+                    </li>
+                    <li class="nav-item p-2">
+                        <a href="{% url 'serapide' %}">
+                            {% trans 'serapide'|capfirst %}
+                        </a>
                     </li>
                 </ul>
 
@@ -140,7 +165,7 @@ LICENSE file in the root directory of this source tree.
 
             <!-- FOOTER -->
             <div class="footer footer-padding-trans bg-light w-100">
-                <div class="row p-0 m-0 text-secondary">
+                <div class="row p-2 m-0 text-secondary">
                     <div class="col-12 col-lg-1 m-0 p-0 text-uppercase">{% trans 'contatti' %}</div>
                     <div class="col-12 col-lg-2 p-lg-0 m-lg-0">
                         <br class="d-none d-lg-inline">
@@ -221,10 +246,37 @@ LICENSE file in the root directory of this source tree.
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
         <script>
-            if (!$('.user-nav').length > 0) {
-                $('.content').css('padding-top', '60px');
+
+            // If user-nav is visible (user logged in)
+            if ($('.user-nav').length > 0) {
+                $('.content').css('padding-top', '120px');
+                $('.content').css('padding-left', '250px');
+                $('.footer').css('padding-left', '250px');
+                let ww = $(window).width();
+                if (ww < 1199.98) {
+                    $('.sidebar').hide();
+                    $('.content').css('padding-left', '0px');
+                    $('.footer').css('padding-left', '0px');
+                }
+                $('#sidebar-toggler').click(function() {
+                    if ($('.sidebar').is(':visible')) {
+                        $('.sidebar').fadeOut(500);
+                        $('.content').css('padding-left', '0px');
+                        $('.footer').css('padding-left', '0px');
+                    } else {
+                        $('.sidebar').fadeIn(500);
+                        let sw = $('.sidebar').width();
+                        let spl = $('.sidebar').css('padding-left');
+                        let tot = sw + parseFloat(spl.replace('px',''));
+                        $('.content').css('padding-left', tot + 'px');
+                        $('.footer').css('padding-left', tot + 'px');
+                    }
+                });
             }
+
         </script>
+
+        {% block add_script %}{# JS script space #}{% endblock add_script %}
 
     </body>
 

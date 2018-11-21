@@ -12,11 +12,11 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import (
-    AbstractBaseUser, Group, PermissionsMixin
+    AbstractBaseUser, PermissionsMixin, AbstractUser
 )
 from django.utils.translation import ugettext_lazy as _
 from .managers import AppUserManager
-from .utils import get_current_user
+from django_currentuser.db.models import CurrentUserField
 
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
@@ -41,13 +41,13 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         unique=True, db_index=True, blank=False, null=False,
     )
     first_name = models.CharField(
-        verbose_name=_('nome'), max_length=30, blank=True
+        verbose_name=_('nome'), max_length=30, blank=True, null=True
     )
     last_name = models.CharField(
-        verbose_name=_('cognome'), max_length=150, blank=True
+        verbose_name=_('cognome'), max_length=150, blank=True, null=True
     )
     email = models.EmailField(
-        verbose_name=_('indirizzo email'), blank=True
+        verbose_name=_('indirizzo email'), blank=True, null=True
     )
     is_staff = models.BooleanField(
         _('staff status'),
@@ -68,13 +68,13 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     date_updated = models.DateTimeField(
         verbose_name=_('data ultima modifica'), auto_now=True
     )
-    created_by = models.ForeignKey(
-        verbose_name=_('creato da'), to='self', on_delete=models.CASCADE,
-        null=True, editable=False, related_name='%(class)s_created'
+    created_by = CurrentUserField(
+        verbose_name=_('creato da'), editable=False,
+        related_name='%(class)s_created'
     )
-    updated_by = models.ForeignKey(
-        verbose_name=_('modificato da'), to='self', on_delete=models.CASCADE,
-        null=True, editable=False, related_name='%(class)s_updated'
+    updated_by = CurrentUserField(
+        verbose_name=_('modificato da'), editable=False,
+        related_name='%(class)s_updated'
     )
 
     EMAIL_FIELD = 'email'
@@ -83,7 +83,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     objects = AppUserManager()
 
     def __str__(self):
-        return self.fiscal_code
+        if self.first_name and self.last_name:
+            return f'{self.last_name} {self.first_name}'
+        else:
+            return self.fiscal_code
 
     def get_full_name(self):
         if self.first_name and self.last_name:
@@ -97,20 +100,9 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         else:
             return self.fiscal_code
 
-    def save(self, *args, **kwargs):
-        '''
-        Tracking the user who create/update the model
-        '''
-        user = get_current_user()
-        if user and user.is_authenticated():
-            self.updated_by = user
-            if not self.id:
-                self.created_by = user
-        super(AppUser, self).save(*args, **kwargs)
-
     class Meta:
         ordering = [
-            "date_joined",
+            'date_joined',
         ]
         verbose_name = _('utente')
         verbose_name_plural = _('utenti')
@@ -136,7 +128,7 @@ class OrganizationType(models.Model):
         verbose_name_plural = _('tipi di ente')
 
     def __str__(self):
-        return '{} -  {}'.format(self.code, self.name)
+        return self.name
 
 
 class Organization(models.Model):
@@ -155,7 +147,7 @@ class Organization(models.Model):
     )
     type = models.ForeignKey(
         to='OrganizationType', on_delete=models.CASCADE, verbose_name=_('tipo'),
-        default=None
+        default=None, blank=True, null=True
     )
 
     class Meta:
@@ -163,7 +155,7 @@ class Organization(models.Model):
         verbose_name_plural = _('enti')
 
     def __str__(self):
-        return '{} -  {}'.format(self.code, self.name)
+        return self.name
 
 
 class MembershipType(models.Model):
@@ -182,7 +174,7 @@ class MembershipType(models.Model):
     )
     organization_type = models.ForeignKey(
         to='OrganizationType', on_delete=models.CASCADE, verbose_name=_('tipo di ente'),
-        default=None
+        default=None, blank=True, null=True
     )
 
     class Meta:
@@ -190,36 +182,40 @@ class MembershipType(models.Model):
         verbose_name_plural = _('tipi di ruolo')
 
     def __str__(self):
-        return '{} -  {}'.format(self.code, self.name)
+        return self.name
 
 
-class UserMembership(Group):
+class UserMembership(models.Model):
     """
     Roles
     """
 
-    code = models.CharField(
-        max_length=50, primary_key=True, verbose_name=_('codice')
+    code = models.AutoField(
+        auto_created=True, primary_key=True, serialize=False, verbose_name=_('codice')
+    )
+    name = models.CharField(
+        max_length=255, null=False, blank=False, verbose_name=_('nome')
     )
     description = models.TextField(
         max_length=500, null=True, blank=True, verbose_name=_('descrizione')
     )
     member = models.ForeignKey(
         to='AppUser', on_delete=models.CASCADE, verbose_name=_('utente'),
-        default=None
+        default=None, blank=True, null=True
     )
     organization = models.ForeignKey(
         to='Organization', on_delete=models.CASCADE, verbose_name=_('ente'),
-        default=None
+        default=None, blank=True, null=True
     )
     type = models.ForeignKey(
         to='MembershipType', on_delete=models.CASCADE, verbose_name=_('tipo'),
-        default=None
+        default=None, blank=True, null=True
     )
 
     class Meta:
+        unique_together = ('member', 'organization', 'type')
         verbose_name = _('ruolo')
         verbose_name_plural = _('ruoli')
 
     def __str__(self):
-        return '{} -  {}'.format(self.code, self.name)
+        return self.name

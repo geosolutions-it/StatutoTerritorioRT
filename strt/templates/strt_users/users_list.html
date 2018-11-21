@@ -16,7 +16,7 @@ LICENSE file in the root directory of this source tree.
 {% load wagtailcore_tags %}
 {% load crispy_forms_tags %}
 
-{% block head_title %}{{ block.super }} - {% trans 'lista ruoli'|capfirst %}{% endblock head_title %}
+{% block head_title %}{{ block.super }} - {% trans 'lista utenti'|capfirst %}{% endblock head_title %}
 {% block styles %}
     <link rel="stylesheet" href="{% static 'strt_users/css/users.css' %}"/>
 {% endblock styles %}
@@ -32,21 +32,17 @@ LICENSE file in the root directory of this source tree.
                     <th scope="col">{% trans 'cognome'|upper %}</th>
                     <th scope="col">{% trans 'codice fiscale'|upper %}</th>
                     <th scope="col">{% trans 'email'|upper %}</th>
-                    <th scope="col">{% trans 'ruolo'|upper %}</th>
-                    <th scope="col">{% trans 'ente'|upper %}</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-                {% for mum in managed_users_membership %}
+                {% for mu in managed_users %}
                     <tr>
-                        <td scope="row">{{ mum.member.first_name|capfirst }}</td>
-                        <td scope="col">{{ mum.member.last_name|capfirst }}</td>
-                        <td scope="col">{{ mum.member.fiscal_code|upper }}</td>
-                        <td scope="col">{{ mum.member.email }}</td>
-                        <td scope="col">{{ mum.type|capfirst }}</td>
-                        <td scope="col">{{ mum.organization|capfirst }}</td>
+                        <td scope="row">{{ mu.first_name|capfirst }}</td>
+                        <td scope="col">{{ mu.last_name|capfirst }}</td>
+                        <td scope="col">{{ mu.fiscal_code|upper }}</td>
+                        <td scope="col">{{ mu.email }}</td>
                         <td scope="col">
                             <a class="btn btn-secondary text-light"
                                 href="{#% url 'user_membership_edit' %#}">
@@ -55,7 +51,7 @@ LICENSE file in the root directory of this source tree.
                         </td>
                         <td scope="col">
                             <a class="btn btn-secondary text-light delete-row"
-                               target-href="{% url 'user_membership_delete' code=mum.code %}">
+                               target-href="{% url 'user_delete' fiscal_code=mu.fiscal_code %}">
                                 {% trans 'elimina'|capfirst %}
                             </a>
                         </td>

@@ -18,7 +18,7 @@
 }
 .content {
     padding-top: 60px;
-    min-height: calc(98.5vh - 120px);
+    min-height: calc(100vh - 140px);
 }
 .sidebar {
     margin-top: 120px;
@@ -32,6 +32,12 @@
 .navbar {
     margin-left: 200px;
     margin-right: 200px;
+}
+.nav {
+    z-index: 1 !important;
+}
+.navbar-collapse {
+    z-index: 10 !important;
 }
 .user-nav {
     margin-top: 60px !important;

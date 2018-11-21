@@ -9,13 +9,15 @@
 #########################################################################
 
 
-from django.urls import path, reverse_lazy
+from django.urls import path
 from .views import (
-    SerapideView, GeoportalView, OpendataView, GlossaryView
+    PrivateAreaView, GeoportalView,
+    OpendataView, GlossaryView, SerapideView
 )
 
 
 urlpatterns = [
+    path('private-area/', PrivateAreaView.as_view(), name='private_area'),
     path('serapide/', SerapideView.as_view(), name='serapide'),
     path('geoportal/', GeoportalView.as_view(), name='geoportal'),
     path('opendata/', OpendataView.as_view(), name='opendata'),

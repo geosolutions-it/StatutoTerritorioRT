@@ -28,6 +28,12 @@ class OrganizationTypeModelAdmin(admin.ModelAdmin):
     search_fields = ['name', 'code', 'description']
     list_filter = ['name', 'code', 'description']
 
+@admin.register(UserMembership)
+class UserMembershipModelAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description', 'member', 'organization', 'type']
+    search_fields = ['name', 'description', 'member', 'organization', 'type']
+    list_filter = ['name', 'description', 'member', 'organization', 'type']
+
 @admin.register(MembershipType)
 class MembershipTypeModelAdmin(admin.ModelAdmin):
     list_display = ['name', 'code', 'description', 'organization_type']
@@ -53,5 +59,3 @@ class AppUserAdmin(UserAdmin):
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('fiscal_code', 'first_name', 'last_name', 'email')
     ordering = ('fiscal_code',)
-
-admin.site.register(UserMembership, GroupAdmin)
