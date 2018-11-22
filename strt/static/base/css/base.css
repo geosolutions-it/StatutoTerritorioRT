@@ -1,0 +1,131 @@
+/*
+
+ Copyright 2018, GeoSolutions Sas.
+ All rights reserved.
+
+ This source code is licensed under the BSD-style license found in the
+ LICENSE file in the root directory of this source tree.
+
+*/
+
+.container-fluid {
+    min-height: 100vh;
+    padding-left: 200px;
+    padding-right: 200px;
+}
+.rt-logo {
+    height: 60px;
+}
+.content {
+    padding-top: 60px;
+    min-height: calc(100vh - 140px);
+}
+.sidebar {
+    margin-top: 120px;
+    margin-left: 200px;
+    width: 250px;
+    min-height: calc(100vh - 120px);
+}
+.footer {
+    min-height: 120px;
+}
+.navbar {
+    margin-left: 200px;
+    margin-right: 200px;
+}
+.nav {
+    z-index: 1 !important;
+}
+.navbar-collapse {
+    z-index: 10 !important;
+}
+.user-nav {
+    margin-top: 60px !important;
+    width: calc(100% - 400px);
+    height: 60px;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+.user-nav > li {
+    align-self: center;
+}
+.dropdown-menu {
+    margin-top: 9px;
+    position: relative;
+}
+.dropdown-item:hover {
+    background-color: inherit;
+    background-image: none;
+}
+.sidebar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+a:hover {
+    text-decoration: none;
+    cursor:pointer;
+    color: lightgray !important;
+}
+a {
+    color: inherit;
+}
+button:focus, a:focus {
+    outline: 0px;
+}
+/* Forms */
+.help-block, .help-block > ul > li {
+    font-size: small !important;
+}
+
+/* BOOTSTRAP MEDIA QUERIES */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+
+}
+
+/* Small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) {
+
+}
+
+/* Medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) {
+}
+
+/* Large devices (desktops, less than 1200px) */
+@media (max-width: 1199.98px) {
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .navbar, .user-nav {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .user-nav {
+        width: calc(100% - 20px);
+    }
+    .sidebar {
+        margin-left: 10px;
+    }
+}

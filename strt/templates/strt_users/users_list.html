@@ -1,0 +1,82 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'lista utenti'|capfirst %}{% endblock head_title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'strt_users/css/users.css' %}"/>
+{% endblock styles %}
+
+{% block content %}
+
+    <div class="bg-light table-responsive h-100 p-2 m-0">
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="row">{% trans 'nome'|upper %}</th>
+                    <th scope="col">{% trans 'cognome'|upper %}</th>
+                    <th scope="col">{% trans 'codice fiscale'|upper %}</th>
+                    <th scope="col">{% trans 'email'|upper %}</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mu in managed_users %}
+                    <tr>
+                        <td scope="row">{{ mu.first_name|capfirst }}</td>
+                        <td scope="col">{{ mu.last_name|capfirst }}</td>
+                        <td scope="col">{{ mu.fiscal_code|upper }}</td>
+                        <td scope="col">{{ mu.email }}</td>
+                        <td scope="col">
+                            <a class="btn btn-secondary text-light"
+                                href="{% url 'user_update' fiscal_code=mu.fiscal_code %}">
+                                {% trans 'modifica'|capfirst %}
+                            </a>
+                        </td>
+                        <td scope="col">
+                            <a class="btn btn-secondary text-light delete-row"
+                               target-href="{% url 'user_delete' fiscal_code=mu.fiscal_code %}">
+                                {% trans 'elimina'|capfirst %}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock content %}
+
+{% block add_script %}
+
+    <script>
+
+        $('.delete-row').on('click', function () {
+            if (confirm('Sei sicuro di voler continuare?')) {
+                $(this).attr('href', $(this).attr('target-href'));
+            } else {
+                return false;
+            }
+        })
+
+    </script>
+
+{% endblock add_script %}
+

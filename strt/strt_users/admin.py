@@ -13,40 +13,49 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from .models import (AppUser, Organization, OrganizationType,
                      UserMembership, MembershipType)
-from django.contrib.auth.models import Group, User
+from django.utils.translation import gettext_lazy as _
 
 
+@admin.register(Organization)
 class OrganizationModelAdmin(admin.ModelAdmin):
-    model = Organization
     list_display = ['name', 'code', 'description', 'type']
     search_fields = ['name', 'code', 'description', 'type']
     list_filter = ['name', 'code', 'description', 'type']
 
+@admin.register(OrganizationType)
 class OrganizationTypeModelAdmin(admin.ModelAdmin):
-    model = OrganizationType
     list_display = ['name', 'code', 'description']
     search_fields = ['name', 'code', 'description']
     list_filter = ['name', 'code', 'description']
 
+@admin.register(UserMembership)
+class UserMembershipModelAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description', 'member', 'organization', 'type']
+    search_fields = ['name', 'description', 'member', 'organization', 'type']
+    list_filter = ['name', 'description', 'member', 'organization', 'type']
+
+@admin.register(MembershipType)
 class MembershipTypeModelAdmin(admin.ModelAdmin):
-    model = MembershipType
-    list_display = ['name', 'code', 'description']
-    search_fields = ['name', 'code', 'description']
-    list_filter = ['name', 'code', 'description']
+    list_display = ['name', 'code', 'description', 'organization_type']
+    search_fields = ['name', 'code', 'description', 'organization_type']
+    list_filter = ['name', 'code', 'description', 'organization_type']
 
-# class UserMembershipModelAdmin(admin.ModelAdmin):
-#     model = UserMembership
-#     search_fields = ('code', 'name', 'description')
-#     ordering = ('name', 'code')
-#     filter_horizontal = ('permissions',)
-
-
-# admin.site.unregister(User)
-admin.site.register(AppUser, UserAdmin)
-
-# admin.site.unregister(Group)
-admin.site.register(UserMembership, GroupAdmin)
-
-admin.site.register(Organization, OrganizationModelAdmin)
-admin.site.register(OrganizationType, OrganizationTypeModelAdmin)
-admin.site.register(MembershipType, MembershipTypeModelAdmin)
+@admin.register(AppUser)
+class AppUserAdmin(UserAdmin):
+    fieldsets = (
+        (None, {'fields': ('fiscal_code', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                       'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login',)}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('fiscal_code', 'password1', 'password2'),
+        }),
+    )
+    list_display = ('fiscal_code', 'email', 'first_name', 'last_name', 'is_staff')
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    search_fields = ('fiscal_code', 'first_name', 'last_name', 'email')
+    ordering = ('fiscal_code',)

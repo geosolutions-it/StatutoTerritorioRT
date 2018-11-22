@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'taggit',
     # Crispy forms
     'crispy_forms',
+    # Django-Rules
+    'rules.apps.AutodiscoverRulesConfig',
 ]
 
 MIDDLEWARE = [
@@ -75,6 +77,8 @@ MIDDLEWARE = [
     # Wagtail middleware
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    # Django current user
+    'django_currentuser.middleware.ThreadLocalUserMiddleware',
 ]
 
 ROOT_URLCONF = 'base.urls'
@@ -134,11 +138,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'rules.permissions.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 # WAGTAIL
 WAGTAIL_SITE_NAME = 'Statuto Territorio RT'
-WAGTAIL_USER_EDIT_FORM = 'strt_users.forms.AppUserEditForm'
-WAGTAIL_USER_CREATION_FORM = 'strt_users.forms.AppUserCreationForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['fiscal_code']
 WAGTAIL_FRONTEND_LOGIN_URL = 'users/login'
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'users/login.html'
 

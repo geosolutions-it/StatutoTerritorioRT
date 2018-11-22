@@ -9,8 +9,12 @@
 #########################################################################
 
 
-from django.views.generic.base import RedirectView
 from django.views.generic.base import TemplateView
+
+
+class PrivateAreaView(TemplateView):
+
+    template_name = "strt_portal/private_area.html"
 
 
 class SerapideView(TemplateView):
