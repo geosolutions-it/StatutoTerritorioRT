@@ -61,7 +61,11 @@ body {
   line-height: 1.5;
   color: #212529;
   text-align: left;
+<<<<<<< HEAD
   background-color: #fff; }
+=======
+  background-color: white; }
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
 
 [tabindex="-1"]:focus {
   outline: 0 !important; }
@@ -397,7 +401,11 @@ mark,
 
 .img-thumbnail {
   padding: 0.25rem;
+<<<<<<< HEAD
   background-color: #fff;
+=======
+  background-color: white;
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   max-width: 100%;
@@ -1048,7 +1056,11 @@ pre {
   .table tbody + tbody {
     border-top: 2px solid #dee2e6; }
   .table .table {
+<<<<<<< HEAD
     background-color: #fff; }
+=======
+    background-color: white; }
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
 
 .table-sm th,
 .table-sm td {
@@ -1175,7 +1187,11 @@ pre {
     background-color: rgba(0, 0, 0, 0.075); }
 
 .table .thead-dark th {
+<<<<<<< HEAD
   color: #fff;
+=======
+  color: white;
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
   background-color: #212529;
   border-color: #32383e; }
 
@@ -1185,7 +1201,11 @@ pre {
   border-color: #dee2e6; }
 
 .table-dark {
+<<<<<<< HEAD
   color: #fff;
+=======
+  color: white;
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
   background-color: #212529; }
   .table-dark th,
   .table-dark td,
@@ -1452,7 +1472,11 @@ textarea.form-control {
   background-color: #34ce57; }
 
 .was-validated .custom-control-input:valid:focus ~ .custom-control-label::before, .custom-control-input.is-valid:focus ~ .custom-control-label::before {
+<<<<<<< HEAD
   box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }
+=======
+  box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
 
 .was-validated .custom-file-input:valid ~ .custom-file-label, .custom-file-input.is-valid ~ .custom-file-label {
   border-color: #28a745; }
@@ -1534,7 +1558,11 @@ textarea.form-control {
   background-color: #e4606d; }
 
 .was-validated .custom-control-input:invalid:focus ~ .custom-control-label::before, .custom-control-input.is-invalid:focus ~ .custom-control-label::before {
+<<<<<<< HEAD
   box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }
+=======
+  box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
 
 .was-validated .custom-file-input:invalid ~ .custom-file-label, .custom-file-input.is-invalid ~ .custom-file-label {
   border-color: #dc3545; }
@@ -2470,7 +2498,11 @@ input[type="button"].btn-block {
     color: #fff;
     background-color: #007bff; }
   .custom-control-input:focus ~ .custom-control-label::before {
+<<<<<<< HEAD
     box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+=======
+    box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
   .custom-control-input:active ~ .custom-control-label::before {
     color: #fff;
     background-color: #b3d7ff; }
@@ -2641,11 +2673,19 @@ input[type="button"].btn-block {
   .custom-range:focus {
     outline: none; }
     .custom-range:focus::-webkit-slider-thumb {
+<<<<<<< HEAD
       box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
     .custom-range:focus::-moz-range-thumb {
       box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
     .custom-range:focus::-ms-thumb {
       box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+=======
+      box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+    .custom-range:focus::-moz-range-thumb {
+      box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+    .custom-range:focus::-ms-thumb {
+      box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
   .custom-range::-moz-focus-outer {
     border: 0; }
   .custom-range::-webkit-slider-thumb {
@@ -2765,8 +2805,13 @@ input[type="button"].btn-block {
   .nav-tabs .nav-link.active,
   .nav-tabs .nav-item.show .nav-link {
     color: #495057;
+<<<<<<< HEAD
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff; }
+=======
+    background-color: white;
+    border-color: #dee2e6 #dee2e6 white; }
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
   .nav-tabs .dropdown-menu {
     margin-top: -1px;
     border-top-left-radius: 0;
@@ -6312,6 +6357,7 @@ a.text-dark:hover, a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6; } }
 
+<<<<<<< HEAD
 .content {
   min-height: calc(100vh - 196px);
   padding-left: 60px;
@@ -6564,4 +6610,6 @@ a.text-dark:hover, a.text-dark:focus {
   padding-left: 1.5rem;
   padding-bottom: 0.2rem; }
 
+=======
+>>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
 /*# sourceMappingURL=serapide.css.map */
