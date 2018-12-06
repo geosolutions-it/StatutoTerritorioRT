@@ -11,3 +11,6 @@
 .control-group {
     padding-top: 20px;
 }
+.user-row:hover {
+    cursor:pointer;
+}

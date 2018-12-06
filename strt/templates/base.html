@@ -14,6 +14,7 @@ LICENSE file in the root directory of this source tree.
 
     {% load static %}
     {% load i18n %}
+    {% load rules %}
 
     <head>
 
@@ -34,7 +35,7 @@ LICENSE file in the root directory of this source tree.
         <div class="container-fluid">
 
             <!-- TOP-NAVBAR -->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0 pr-2">
 
                 <!-- BRAND -->
                 <a class="navbar-brand p-0" href="/">
@@ -56,7 +57,10 @@ LICENSE file in the root directory of this source tree.
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto pl-2">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'private_area' %}">
+                            <a class="nav-link text-white" href="{% url 'private_area' %}"
+                               {% if not request.user.is_authenticated %}
+                                    data-toggle="modal" data-target="#exampleModal"
+                               {% endif %}>
                                 <span>{% trans 'area riservata'|capfirst %}</span>
                             </a>
                         </li>
@@ -80,16 +84,63 @@ LICENSE file in the root directory of this source tree.
 
             </nav><!-- end TOP-NAVBAR -->
 
-            <!-- USER-NAV -->
+            <!-- MODAL FORM TODO: remove in produciton -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Autenticazione</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Nome:</label>
+                                    <input type="text" class="form-control" id="user-first-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Cognome:</label>
+                                    <input type="text" class="form-control" id="user-last-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Codice fiscale:</label>
+                                    <input type="text" class="form-control" id="user-fiscal-code">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Ruolo:</label>
+                                    <input type="text" class="form-control" id="user-role">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label d-block">Enti:</label>
+                                    <input type="text" class="form-control d-inline w-75" id="add">
+                                    <input type="button" id="btnAdd" value="+" onclick="addItem()">
+                                    <ul id="organizations" class="pl-0 pt-2">
+                                    </ul>
+                                </div>
+                            </form>
+                            <span class="text-danger" id="errors"><br></span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Chiudi</button>
+                            <button type="sbmit" class="btn btn-primary submit-btn">Avvia</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end MODAL FORM TODO: remove in produciton -->
+
             {% if request.user.is_authenticated %}
 
-                <ul class="user-nav nav navbar-secondary fixed-top justify-content-end bg-secondary p-0">
+                <!-- USER-NAV -->
+                <ul class="user-nav nav navbar-secondary fixed-top justify-content-end bg-secondary p-0 pr-2">
 
 {#                    <li class="nav-item p-2">#}
 {#                        <a class="nav-link" id="sidebar-toggler">#}
 {#                            <span class="navbar-toggler-icon sidebar-toggler-icon"></span>#}
 {#                        </a>#}
 {#                    </li>#}
+
 
                     <li class="nav-item dropdown text-white bg-secondary">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/" role="button"
@@ -112,6 +163,7 @@ LICENSE file in the root directory of this source tree.
                         </div>
                     </li>
 
+                    <!-- SIDEBAR -->
                     <li class="nav-item dropdown text-white bg-secondary">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/" role="button"
                            aria-haspopup="true" aria-expanded="false">
@@ -121,7 +173,7 @@ LICENSE file in the root directory of this source tree.
                             <a class="dropdown-item text-warning pb-1 pb-lg-3" href="/">
                                 {% trans 'ruolo'|upper %}: {{ membership_type.name }}
                             </a>
-                            <a class="dropdown-item text-white" href="/">
+                            <a class="dropdown-item text-white" href="{% url 'users_profile_detail' %}">
                                 {% trans 'profilo'|capfirst %}
                             </a>
                             <div class="dropdown-divider"></div>
@@ -133,9 +185,9 @@ LICENSE file in the root directory of this source tree.
                                 {% trans 'logout'|capfirst %}
                             </a>
                         </div>
-                    </li>
+                    </li><!-- end SIDEBAR -->
 
-                </ul>
+                </ul><!-- end USER-NAV -->
 
 {#                <ul class="nav sidebar bg-secondary border-top border-light fixed-top#}
 {#                    flex-column text-light" id="accordion">#}
@@ -164,7 +216,6 @@ LICENSE file in the root directory of this source tree.
 {#                </ul>#}
 
             {% endif %}
-            <!-- end USER-NAV -->
 
             <!-- CONTENT -->
             <div class="content bg-light">
@@ -260,6 +311,7 @@ LICENSE file in the root directory of this source tree.
         <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'strt_users/js/auth.js' %}"></script>
 
         <script>
 

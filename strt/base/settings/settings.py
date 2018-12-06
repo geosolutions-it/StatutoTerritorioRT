@@ -13,6 +13,7 @@ import os
 from django.utils.translation import gettext_lazy as _
 import dj_database_url
 from .utils import EnvUtil
+from datetime import timedelta
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
@@ -63,6 +64,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     # Django-Rules
     'rules.apps.AutodiscoverRulesConfig',
+    # DRF
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -102,6 +105,7 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_URL = EnvUtil.get_env_var('LOGIN_URL', default='/api/auth/')
 LOGOUT_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'base.wsgi.application'
@@ -139,6 +143,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = (
+    'strt_users.backends.StrtPortalAuthentication',
     'rules.permissions.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -187,8 +192,3 @@ MEDIA_URL = '/media/'
 
 # CORS_ORIGIN_ALLOW_ALL = True
 INTERNAL_IPS = EnvUtil.get_env_var('DJANGO_INTERNAL_IPS', list, [], ' ')
-
-
-
-
-    
