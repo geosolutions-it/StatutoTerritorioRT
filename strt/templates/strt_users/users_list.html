@@ -25,6 +25,8 @@ LICENSE file in the root directory of this source tree.
 
     <div class="bg-light table-responsive h-100 p-2 m-0">
 
+        <h4 class="py-2">{% trans 'utenti gestiti'|upper %}</h4>
+
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -32,6 +34,8 @@ LICENSE file in the root directory of this source tree.
                     <th scope="col">{% trans 'cognome'|upper %}</th>
                     <th scope="col">{% trans 'codice fiscale'|upper %}</th>
                     <th scope="col">{% trans 'email'|upper %}</th>
+                    <th scope="col">{% trans 'data creazione'|upper %}</th>
+                    <th scope="col">{% trans 'data ultima modifica'|upper %}</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                 </tr>
@@ -43,6 +47,8 @@ LICENSE file in the root directory of this source tree.
                         <td scope="col">{{ mu.last_name|capfirst }}</td>
                         <td scope="col">{{ mu.fiscal_code|upper }}</td>
                         <td scope="col">{{ mu.email }}</td>
+                        <td scope="col">{{ mu.date_joined|date:'d-m-y H:i:s' }}</td>
+                        <td scope="col">{{ mu.date_updated|date:'d-m-y H:i:s' }}</td>
                         <td scope="col">
                             <a class="btn btn-secondary text-light"
                                 href="{% url 'user_update' fiscal_code=mu.fiscal_code %}">

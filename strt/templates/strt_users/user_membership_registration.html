@@ -25,18 +25,61 @@ LICENSE file in the root directory of this source tree.
 
     <div class="bg-light h-100 p-2 m-0">
 
-        <form method="POST" novalidate>
+        <h4 class="py-2">{% trans 'assegnazione ruolo'|upper %}</h4>
+
+        <form method="POST" membership-type-data-url="{% url 'membership_type_data' %}"
+            novalidate id="user-membership">
             {% csrf_token %}
             {{ form|crispy }}
             <input type="submit" class="btn btn-secondary my-2 my-lg-4"
-                {% if action != 'update' %}
-                    value="{% trans 'crea utente'|capfirst %}"
-                {% else %}
-                    value="{% trans 'aggiorna'|capfirst %}"
-                {% endif %}>
+            {% if action != 'update' %}
+                value="{% trans 'crea ruolo'|capfirst %}"
+            {% else %}
+                value="{% trans 'aggiorna'|capfirst %}"
+            {% endif %}>
         </form>
 
     </div>
 
 {% endblock content %}
+
+{% block add_script %}
+
+    <script>
+
+        $('#id_organization').change(function () {
+
+            var type_select = $('#id_type');
+
+            type_select.empty();
+            type_select.append('<option value="" selected="">---------</option>')
+
+            var url = $('#user-membership').attr('membership-type-data-url');
+            var org_id = $(this).val();
+
+            $.ajax({
+                url: url,
+                data: {
+                    'selected_org': org_id
+                },
+                dataType: 'json',
+                success: function (data) {
+                    data.forEach( function(m_type) {
+                            $('#id_type').append(
+                                '<option value="'
+                                    .concat(m_type.id)
+                                    .concat('">')
+                                    .concat(m_type.name)
+                                    .concat('</option>')
+                            );
+                        }
+                    );
+                    $('#id_type').attr('disabled', false);
+                }
+            });
+        });
+
+    </script>
+
+{% endblock add_script %}
 

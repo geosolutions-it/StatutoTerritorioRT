@@ -1,0 +1,138 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'profilo utente'|capfirst %}{% endblock head_title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'strt_users/css/users.css' %}"/>
+{% endblock styles %}
+
+{% block content %}
+
+    <div class="bg-light h-100 p-2 m-0">
+
+        <h4 class="py-2">{% trans 'dati utente'|upper %}</h4>
+        <div class="pb-2">
+            <div class="row">
+                <div class="col-1 text-secondary">{% trans 'nome'|capfirst %}:</div>
+                <div class="col-11">{% if current_user.first_name %}{{ current_user.first_name|capfirst }}{% else %}nd{% endif %}</div>
+            </div>
+            <div class="row">
+                <div class="col-1 text-secondary">{% trans 'cognome'|capfirst %}:</div>
+                <div class="col-11">{% if current_user.last_name %}{{ current_user.last_name|capfirst }}{% else %}nd{% endif %}</div>
+            </div>
+            <div class="row">
+                <div class="col-1 text-secondary">{% trans 'codice fiscale'|capfirst %}:</div>
+                <div class="col-11">{{ current_user.fiscal_code|upper }}</div>
+            </div>
+            <div class="row">
+                <div class="col-1 text-secondary">{% trans 'email'|capfirst %}:</div>
+                <div class="col-11">{% if current_user.email %}{{ current_user.email }}{% else %}nd{% endif %}</div>
+            </div>
+            <div class="row">
+                <div class="col-1 text-secondary">{% trans 'ruolo'|capfirst %}:</div>
+                <div class="col-11">
+                    {% for cum in current_user_memberships %}
+                        <div class="row">
+                            <div class="col">{{ cum.name }}</div>
+                        </div>
+                    {% empty %}
+                        nd
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 text-secondary">{% trans 'creato da'|capfirst %}:</div>
+                <div class="col-11">{% if current_user.created_by %}{{ current_user.created_by }}{% else %}nd{% endif %}</div>
+            </div>
+            <div class="row">
+                <div class="col-1 text-secondary">{% trans 'modificato da'|capfirst %}:</div>
+                <div class="col-11">{% if current_user.updated_by %}{{ current_user.updated_by }}{% else %}nd{% endif %}</div>
+            </div>
+            <div class="row">
+                <div class="col-1 text-secondary">{% trans 'data creazione'|capfirst %}:</div>
+                <div class="col-11">{{ current_user.date_joined|date:'d-m-y H:i:s' }}</div>
+            </div>
+            <div class="row">
+                <div class="col-1 text-secondary">{% trans 'ultima modifica'|capfirst %}:</div>
+                <div class="col-11">{{ current_user.date_updated|date:'d-m-y H:i:s' }}</div>
+            </div>
+        </div>
+
+        <h4 class="py-2">{% trans 'utenti gestiti'|upper %}</h4>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="row">{% trans 'nome'|upper %}</th>
+                    <th scope="col">{% trans 'cognome'|upper %}</th>
+                    <th scope="col">{% trans 'codice fiscale'|upper %}</th>
+                    <th scope="col">{% trans 'email'|upper %}</th>
+                    <th scope="col">{% trans 'data creazione'|upper %}</th>
+                    <th scope="col">{% trans 'ultima modifica'|upper %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mu in managed_users %}
+                    <tr data-toggle="collapse" href="#collapse{{ forloop.counter }}" role="button"
+                        aria-expanded="false" aria-controls="collapse{{ forloop.counter }}" class="user-row">
+                        <td scope="row">{{ mu.first_name|capfirst }}</td>
+                        <td scope="col">{{ mu.last_name|capfirst }}</td>
+                        <td scope="col">{{ mu.fiscal_code|upper }}</td>
+                        <td scope="col">{{ mu.email }}</td>
+                        <td scope="col">{{ mu.date_joined|date:'d-m-y H:i:s' }}</td>
+                        <td scope="col">{{ mu.date_updated|date:'d-m-y H:i:s' }}</td>
+                    </tr>
+                    {% for mum in managed_users_memberships %}
+                        {% if mum.member == mu %}
+                            <tr class="collapse text-secondary"
+                                id="collapse{{ forloop.parentloop.counter }}">
+                                <td scope="col" colspan="6">
+                                    {{ mum.name }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock content %}
+
+{% block add_script %}
+
+    <script>
+
+        $('.user-row').each(function() {
+                var roles_id = $(this).attr('aria-controls');
+                if ($('#'.concat(roles_id)).length < 1) {
+                    $(this).after(
+                        '<tr id="'
+                            .concat(roles_id)
+                            .concat('" class="collapse text-secondary">')
+                            .concat('<td scope="col" colspan="6">')
+                            .concat('{% trans 'Nessun ruolo assegnato' %}')
+                            .concat('</td></tr>')
+                    );
+                }
+            }
+        );
+
+    </script>
+
+{% endblock add_script %}

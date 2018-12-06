@@ -9,6 +9,19 @@
 #########################################################################
 
 
+import rules
+
+@rules.predicate
+def can_manage_users(user):
+    return user.is_responsabile_ISIDE or user.is_RUP
+
+
+
+
+
+
+
+
 #########################
 # PREDEFINED PREDICATES #
 # #######################
