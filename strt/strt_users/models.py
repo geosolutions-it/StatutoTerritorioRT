@@ -164,7 +164,7 @@ class MembershipType(models.Model):
     """
 
     code = models.CharField(
-        max_length=50, primary_key=True, verbose_name=_('codice')
+        max_length=50, null=False, blank=False, verbose_name=_('codice')
     )
     name = models.CharField(
         max_length=255, null=False, blank=False, verbose_name=_('nome')
@@ -178,6 +178,7 @@ class MembershipType(models.Model):
     )
 
     class Meta:
+        unique_together = ('code', 'organization_type')
         verbose_name = _('tipo di ruolo')
         verbose_name_plural = _('tipi di ruolo')
 
@@ -210,6 +211,20 @@ class UserMembership(models.Model):
     type = models.ForeignKey(
         to='MembershipType', on_delete=models.CASCADE, verbose_name=_('tipo'),
         default=None, blank=True, null=True
+    )
+    date_joined = models.DateTimeField(
+        verbose_name=_('data creazione'), auto_now_add=True
+    )
+    date_updated = models.DateTimeField(
+        verbose_name=_('data ultima modifica'), auto_now=True
+    )
+    created_by = CurrentUserField(
+        verbose_name=_('creato da'), editable=False,
+        related_name='%(class)s_created'
+    )
+    updated_by = CurrentUserField(
+        verbose_name=_('modificato da'), editable=False,
+        related_name='%(class)s_updated'
     )
 
     class Meta:

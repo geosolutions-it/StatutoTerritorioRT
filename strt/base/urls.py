@@ -10,15 +10,18 @@
 
 
 from django.contrib import admin
-from django.urls import path, re_path, include
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 # Wagatail imports
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.core import urls as wagtail_urls
+# API View
+from api.views import user_auth_view
 
 
+# Dajngo admin
 urlpatterns = [
     path('django-admin/', admin.site.urls),
 ]
@@ -29,13 +32,15 @@ urlpatterns += [
     path('users/', include('strt_users.urls'))
 ]
 
+urlpatterns += [
+    path('api/auth/', user_auth_view, name='user_auth')
+]
+
 # Wagtail urls
 urlpatterns += [
-    re_path(r'^admin/', include(wagtailadmin_urls)),
-    re_path(r'^documents/', include(wagtaildocs_urls)),
-    re_path(r'', include(wagtail_urls)),
-    
-    
+    path('admin/', include(wagtailadmin_urls)),
+    path('documents/', include(wagtaildocs_urls)),
+    path('', include(wagtail_urls)),
 ]
 
 if settings.DEBUG:
