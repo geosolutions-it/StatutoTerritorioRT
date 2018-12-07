@@ -62,10 +62,14 @@ body {
   color: #212529;
   text-align: left;
 <<<<<<< HEAD
+<<<<<<< HEAD
   background-color: #fff; }
 =======
   background-color: white; }
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+  background-color: #fff; }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 [tabindex="-1"]:focus {
   outline: 0 !important; }
@@ -402,10 +406,14 @@ mark,
 .img-thumbnail {
   padding: 0.25rem;
 <<<<<<< HEAD
+<<<<<<< HEAD
   background-color: #fff;
 =======
   background-color: white;
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+  background-color: #fff;
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   max-width: 100%;
@@ -1057,10 +1065,14 @@ pre {
     border-top: 2px solid #dee2e6; }
   .table .table {
 <<<<<<< HEAD
+<<<<<<< HEAD
     background-color: #fff; }
 =======
     background-color: white; }
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+    background-color: #fff; }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 .table-sm th,
 .table-sm td {
@@ -1188,10 +1200,14 @@ pre {
 
 .table .thead-dark th {
 <<<<<<< HEAD
+<<<<<<< HEAD
   color: #fff;
 =======
   color: white;
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+  color: #fff;
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
   background-color: #212529;
   border-color: #32383e; }
 
@@ -1202,10 +1218,14 @@ pre {
 
 .table-dark {
 <<<<<<< HEAD
+<<<<<<< HEAD
   color: #fff;
 =======
   color: white;
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+  color: #fff;
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
   background-color: #212529; }
   .table-dark th,
   .table-dark td,
@@ -1473,10 +1493,14 @@ textarea.form-control {
 
 .was-validated .custom-control-input:valid:focus ~ .custom-control-label::before, .custom-control-input.is-valid:focus ~ .custom-control-label::before {
 <<<<<<< HEAD
+<<<<<<< HEAD
   box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }
 =======
   box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+  box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 .was-validated .custom-file-input:valid ~ .custom-file-label, .custom-file-input.is-valid ~ .custom-file-label {
   border-color: #28a745; }
@@ -1559,10 +1583,14 @@ textarea.form-control {
 
 .was-validated .custom-control-input:invalid:focus ~ .custom-control-label::before, .custom-control-input.is-invalid:focus ~ .custom-control-label::before {
 <<<<<<< HEAD
+<<<<<<< HEAD
   box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }
 =======
   box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+  box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 .was-validated .custom-file-input:invalid ~ .custom-file-label, .custom-file-input.is-invalid ~ .custom-file-label {
   border-color: #dc3545; }
@@ -2499,10 +2527,14 @@ input[type="button"].btn-block {
     background-color: #007bff; }
   .custom-control-input:focus ~ .custom-control-label::before {
 <<<<<<< HEAD
+<<<<<<< HEAD
     box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
 =======
     box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
   .custom-control-input:active ~ .custom-control-label::before {
     color: #fff;
     background-color: #b3d7ff; }
@@ -2674,6 +2706,7 @@ input[type="button"].btn-block {
     outline: none; }
     .custom-range:focus::-webkit-slider-thumb {
 <<<<<<< HEAD
+<<<<<<< HEAD
       box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
     .custom-range:focus::-moz-range-thumb {
       box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
@@ -2681,11 +2714,18 @@ input[type="button"].btn-block {
       box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
 =======
       box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+=======
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
     .custom-range:focus::-moz-range-thumb {
-      box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
     .custom-range:focus::-ms-thumb {
+<<<<<<< HEAD
       box-shadow: 0 0 0 1px white, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
   .custom-range::-moz-focus-outer {
     border: 0; }
   .custom-range::-webkit-slider-thumb {
@@ -2806,12 +2846,17 @@ input[type="button"].btn-block {
   .nav-tabs .nav-item.show .nav-link {
     color: #495057;
 <<<<<<< HEAD
+<<<<<<< HEAD
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff; }
 =======
     background-color: white;
     border-color: #dee2e6 #dee2e6 white; }
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff; }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
   .nav-tabs .dropdown-menu {
     margin-top: -1px;
     border-top-left-radius: 0;
@@ -6358,10 +6403,15 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #dee2e6; } }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 .content {
   min-height: calc(100vh - 196px);
   padding-left: 60px;
   padding-right: 60px; }
+=======
+.content {
+  min-height: calc(100vh - 196px); }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 .rt-logo {
   height: 60px; }
@@ -6400,8 +6450,12 @@ a.text-dark:hover, a.text-dark:focus {
   padding-right: 60px !important; }
 
 .navbar {
+<<<<<<< HEAD
   z-index: 1031;
   padding-right: 60px !important; }
+=======
+  z-index: 1031; }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 .serapide .navbar {
   padding-left: 60px;
@@ -6457,8 +6511,12 @@ a.text-dark:hover, a.text-dark:focus {
 
 @media (max-width: 767.98px) {
   .serapide .navbar-expand-sm.navbar {
+<<<<<<< HEAD
     padding-left: 0px;
     padding-right: 0.5rem !important; } }
+=======
+    padding-left: 0px; } }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 @media (max-width: 767.98px) {
   .serapide .navbar-expand-md.navbar {
@@ -6480,8 +6538,12 @@ a.text-dark:hover, a.text-dark:focus {
 
 @media (max-width: 991.98px) {
   .serapide .navbar-expand-md.navbar {
+<<<<<<< HEAD
     padding-left: 0px;
     padding-right: 0.5rem !important; } }
+=======
+    padding-left: 0px; } }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 @media (max-width: 991.98px) {
   .serapide .navbar-expand-lg.navbar {
@@ -6503,8 +6565,12 @@ a.text-dark:hover, a.text-dark:focus {
 
 @media (max-width: 1199.98px) {
   .serapide .navbar-expand-lg.navbar {
+<<<<<<< HEAD
     padding-left: 0px;
     padding-right: 0.5rem !important; } }
+=======
+    padding-left: 0px; } }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 @media (max-width: 1199.98px) {
   .serapide .navbar-expand-xl.navbar {
@@ -6525,8 +6591,12 @@ a.text-dark:hover, a.text-dark:focus {
     padding-left: 0.2rem; } }
 
 .serapide .navbar-expand-xl.navbar {
+<<<<<<< HEAD
   padding-left: 0px;
   padding-right: 0.5rem !important; }
+=======
+  padding-left: 0px; }
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 
 .serapide .navbar-expand.navbar {
   height: auto; }
@@ -6551,6 +6621,7 @@ a.text-dark:hover, a.text-dark:focus {
   font-size: 1rem;
   padding-left: 0.2rem; }
 
+<<<<<<< HEAD
 @media (max-width: 767.98px) {
   .container-fluid .navbar-expand-sm.navbar {
     padding-right: 0.5rem !important; } }
@@ -6566,6 +6637,8 @@ a.text-dark:hover, a.text-dark:focus {
 .container-fluid .navbar-expand-xl.navbar {
   padding-right: 0.5rem !important; }
 
+=======
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 .serapide .usermenu .dropdown-menu {
   top: calc(100% + 9px);
   background-color: #6b6b6b;
@@ -6596,6 +6669,7 @@ a.text-dark:hover, a.text-dark:focus {
   .serapide .usermenu .dropdown-item button {
     outline-style: none; }
 
+<<<<<<< HEAD
 .serapide .usermenu .dropdown-menu-portal {
   top: calc(100% + 12px); }
 
@@ -6612,4 +6686,6 @@ a.text-dark:hover, a.text-dark:focus {
 
 =======
 >>>>>>> Added theme, is a custom bootstrap theme for both serapide client and django
+=======
+>>>>>>> Added Apollo, react-router, recompose, Serapide navbar, home page
 /*# sourceMappingURL=serapide.css.map */
