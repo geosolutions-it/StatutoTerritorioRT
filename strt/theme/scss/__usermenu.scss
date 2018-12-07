@@ -1,0 +1,38 @@
+.serapide .usermenu {
+    .dropdown-menu {
+        top: calc(100% + 9px);
+        background-color: $bg-serapide;
+        border-radius: 0px;
+        border: 0px;
+        min-width: 300px;
+        padding-bottom: 10rem;
+    }
+    .dropdown-menu-right {
+        right: -0.25rem;
+    }
+    .dropdown-item {
+        width: calc(100% - 3rem);
+        color: $white;
+        padding: 0.8rem 0rem;
+        margin: 0rem 1.5rem;
+        border-bottom: 1px solid ;
+        font-size: 70%;
+        &:hover {
+            color: color-yiq($white);
+            @include gradient-bg($bg-serapide);
+        }
+        &:focus {
+            @include gradient-bg($bg-serapide);
+            border: none;
+        }
+        &.disabled,
+        &:disabled {
+            color: darken($white, 20%);
+            background-color: transparent;
+            // Remove CSS gradients if they're enabled
+        }
+        button {
+            outline-style: none;
+        }
+    }
+}

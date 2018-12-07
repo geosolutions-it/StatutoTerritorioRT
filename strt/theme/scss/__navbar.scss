@@ -1,0 +1,81 @@
+.navbar {
+   z-index: 1031; 
+}
+.serapide {
+    .navbar {
+        padding-left: $portal-header;
+        z-index: 1030; 
+        height: $portal-header;
+    }
+    .link-icon {
+        display: flex;
+        flex-flow: column;
+        -webkit-flex-flow: column;
+        flex: 0 1 auto;
+        -webkit-flex: 0 1 auto;
+        align-items: center;
+        -webkit-align-items: center;
+        padding: 0px;
+    }
+    .link-icon i {
+        font-size: 24px;
+    }
+    .nav-btn-badge {
+        margin-left: 4px;
+        font-size: 60%;
+    }
+    .navbar-dark .navbar-nav .nav-link{
+        color: $white;
+        &.disabled,
+        &:disabled {
+            color: darken($white, 20%);
+        } 
+    }
+    .link-icon-label{
+        font-size: 10px;
+        color: inherit;
+    }
+    .bg-dark {
+        background-color: $bg-serapide !important;
+    }
+    .navbar-expand{
+        @each $breakpoint in map-keys($grid-breakpoints) {
+            $next: breakpoint-next($breakpoint, $grid-breakpoints);
+            $infix: breakpoint-infix($next, $grid-breakpoints);
+            &#{$infix} {
+                @include media-breakpoint-down($breakpoint) {
+                    &.navbar{
+                        height: auto;
+                    }
+                    .link-icon {
+                        flex-flow: row;
+                        -webkit-flex-flow: row;
+                    }
+                    .ml-auto{
+                        align-items: start !important;
+                    }
+                    .vertical-divider-left {
+                        border-left: none;
+                    }
+                    .vertical-divider-right {
+                        border-right: none;
+                    }
+                    .link-icon i {
+                        font-size: 28px;
+                    }
+                    .link-icon-label{
+                        font-size: 1rem;
+                        padding-left: 0.2rem;
+                    }
+                }
+                @if $next != null {
+                    @include media-breakpoint-down($next) {
+                        &.navbar {
+                            padding-left: 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
