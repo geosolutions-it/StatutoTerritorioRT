@@ -1,0 +1,11 @@
+// Local variables
+@import "./__variables";
+
+
+// Bootstrap and its default variables
+@import "node_modules/bootstrap/scss/bootstrap";
+// Use to move under the 
+@import "./__base";
+@import "./__navbar";
+@import "./_usermenu";
+

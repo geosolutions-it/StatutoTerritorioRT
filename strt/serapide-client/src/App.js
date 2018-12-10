@@ -1,28 +1,25 @@
-import React, { Component } from 'react'
-import logo from './logo.svg'
-import './App.css'
+/*
+ * Copyright 2018, GeoSolutions Sas.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+import React from 'react'
+import {ApolloProvider} from 'react-apollo'
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import client from "./apolloclient"
+import Home from './pages/Home'
 
-class App extends Component {
-  render () {
+export default () => {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Serapide Client working!! Change something to see hot reloading
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+        <ApolloProvider client={client}>
+          <Router>
+            <Switch>
+              <Route  path="/" component={Home}/>
+              <Route path="/about" component={()=> (<div>Puppa</div>)}/>
+            </Switch>
+          </Router>
+        </ApolloProvider>
     )
-  }
 }
-
-export default App

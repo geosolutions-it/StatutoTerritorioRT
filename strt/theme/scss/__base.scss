@@ -1,0 +1,29 @@
+.content {
+    min-height: calc(100vh - 196px);
+}
+.rt-logo {
+    height: $portal-header;
+}
+.serapide-top-offset {
+    top: $portal-header;
+}
+.vertical-divider-left {
+    border-left: 1px solid rgba(255,255,255, 0.8);
+}
+.vertical-divider-right {
+    border-right: 1px solid rgba(255,255,255, 0.8);
+}
+.serapide {
+    .pX{
+        @each $breakpoint in map-keys($grid-breakpoints) {
+            $next: breakpoint-next($breakpoint, $grid-breakpoints);
+            $infix: breakpoint-infix($next, $grid-breakpoints);
+            &#{$infix} {
+                @include media-breakpoint-up($next) {
+                    padding-left: $portal-header !important;
+                    padding-right: $portal-header !important;
+                }
+            }
+        }
+    }
+}
