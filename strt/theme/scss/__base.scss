@@ -1,5 +1,7 @@
 .content {
     min-height: calc(100vh - 196px);
+    padding-left: $portal-header;
+    padding-right: $portal-header;
 }
 .rt-logo {
     height: $portal-header;

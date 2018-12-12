@@ -25,9 +25,9 @@ export default toggleControllableState("open", "toggleOpen", false) (({toggleOpe
     </DropdownToggle>
     <DropdownMenu right>
     <DropdownItem className="text-warning text-uppercase" header>{`ruolo: ${user.ruolo || ''}`}</DropdownItem>
-      <DropdownItem>Profilo</DropdownItem>
-      <DropdownItem>Modifica Password</DropdownItem>
-      <DropdownItem>Impostazioni</DropdownItem>
+      <DropdownItem tag="a" href="/users/user-profile/">Profilo</DropdownItem>
+      <DropdownItem tag="a" href="">Impostazioni</DropdownItem>
+      <DropdownItem tag="a" href="/users/logout/">Logout</DropdownItem>
     </DropdownMenu>
   </Dropdown>
 ));

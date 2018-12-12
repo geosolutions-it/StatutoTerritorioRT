@@ -35,4 +35,18 @@
             outline-style: none;
         }
     }
+    .dropdown-menu-portal {
+        top: calc(100% + 12px);
+    }
+    .role {
+        width: calc(100% - 3rem);
+        padding: 0.8rem 0rem;
+        margin: 0rem 1.5rem;
+        font-size: 70%;
+        padding-bottom: 0.8rem;
+    }
+    .role-item {
+        padding-left: 1.5rem;
+        padding-bottom: 0.2rem;
+    }
 }

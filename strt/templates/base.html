@@ -35,7 +35,7 @@ LICENSE file in the root directory of this source tree.
         <div class="container-fluid p-0">
 
             <!-- TOP-NAVBAR -->
-            <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top pl-0 py-0 pr-1">
+            <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top pl-0 py-0">
 
                 <!-- BRAND -->
                 <a class="navbar-brand p-0" href="/">
@@ -57,7 +57,7 @@ LICENSE file in the root directory of this source tree.
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto pl-2">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'private_area' %}"
+                            <a class="nav-link text-white" href="{% url 'serapide' %}"
                                {% if not request.user.is_authenticated %}
                                     data-toggle="modal" data-target="#exampleModal"
                                {% endif %}>
@@ -75,7 +75,7 @@ LICENSE file in the root directory of this source tree.
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'glossary' %}">
+                            <a class="nav-link text-white pr-0" href="{% url 'glossary' %}">
                                 <span>{% trans 'glossario'|upper %}</span>
                             </a>
                         </li>
@@ -83,6 +83,137 @@ LICENSE file in the root directory of this source tree.
                 </div><!-- end NAVBAR COLLPSABLE CONTENT -->
 
             </nav><!-- end TOP-NAVBAR -->
+
+            {% has_perm 'strt_users.can_manage_users' request.user as can_manage_users %}
+            {% if can_manage_users %}
+
+                <!-- USER-NAVBAR -->
+                <div class="serapide" id="user-navbar">
+
+                    <nav class="serapide-top-offset pr-1 navbar navbar-expand-sm navbar-dark bg-dark fixed-top justify-content-end">
+
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                data-target="#userNavbarSupportedContent" aria-controls="userNavbarSupportedContent"
+                                aria-expanded="true" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="userNavbarSupportedContent">
+                            <ul class="ml-auto text-center navbar-nav" id="user-navbar-list">
+
+                                <div class="usermenu text-white dropdown order-last">
+                                    <a aria-haspopup="true" href="" class=" p-0 dropdown-toggle nav-link"
+                                       aria-expanded="false" data-toggle="dropdown">
+                                        <span class="link-icon d-inline-flex flex-row">
+                                            <i class="material-icons text-warning m-1 rounded-circle bg-white">group</i>
+                                            <div class="flex-column align-self-center">
+                                                <div class="link-icon-label ">
+                                                    {% trans 'gestione utenti'|capfirst %}
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </a>
+                                    <div role="menu" aria-hidden="true"
+                                         class="dropdown-menu dropdown-menu-right dropdown-menu-portal">
+                                        <a class="dropdown-item" href="{% url 'users_list' %}">
+                                            {% trans 'lista utenti'|capfirst %}
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'users_membership_list' %}">
+                                            {% trans 'lista ruoli'|capfirst %}
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'user_registration' %}">
+                                            {% trans 'registra utente'|capfirst %}
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'user_membership_registration' %}">
+                                            {% trans 'registra ruolo'|capfirst %}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="usermenu text-white dropdown order-last">
+                                    <a aria-haspopup="true" href="" class=" p-0 dropdown-toggle nav-link"
+                                       data-toggle="dropdown" aria-expanded="false">
+                                        <span class="link-icon d-inline-flex flex-row">
+                                            <i class="material-icons text-warning m-1 rounded-circle bg-white">person</i>
+                                            <div class="flex-column align-self-center">
+                                                <div class="link-icon-label ">
+                                                    {{ request.user.get_full_name }}
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </a>
+                                    <div role="menu" aria-hidden="true"
+                                         class="dropdown-menu dropdown-menu-right dropdown-menu-portal">
+                                        <span class="role text-warning">{% trans 'ruolo'|upper %}:</span>
+                                        {% for m in request.user.memberships %}
+                                            <span class="d-block role role-item text-warning">{{ m.name }}</span>
+                                        {% endfor %}
+                                        <a class="dropdown-item" href="{% url 'users_profile_detail' %}">
+                                            {% trans 'profilo'|capfirst %}
+                                        </a>
+                                        <a class="dropdown-item" href="">
+                                            {% trans 'impostazioni'|capfirst %}
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'logout' %}">
+                                            {% trans 'logout'|capfirst %}
+                                        </a>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+
+                    </nav>
+
+                </div>
+                <!-- USER-NAVBAR -->
+
+            {% endif %}
+
+            <!-- MODAL FORM TODO: remove in produciton -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Autenticazione</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Nome:</label>
+                                    <input type="text" class="form-control" id="user-first-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Cognome:</label>
+                                    <input type="text" class="form-control" id="user-last-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Codice fiscale:</label>
+                                    <input type="text" class="form-control" id="user-fiscal-code">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Ruolo:</label>
+                                    <input type="text" class="form-control" id="user-role">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label d-block">Enti:</label>
+                                    <input type="text" class="form-control d-inline w-75" id="add">
+                                    <input type="button" id="btnAdd" value="+" onclick="addItem()">
+                                    <ul id="organizations" class="pl-0 pt-2">
+                                    </ul>
+                                </div>
+                            </form>
+                            <span class="text-danger" id="errors"><br></span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Chiudi</button>
+                            <button type="sbmit" class="btn btn-primary submit-btn">Avvia</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end MODAL FORM TODO: remove in produciton -->
 
             <!-- CONTENT -->
             <div class="content bg-light">
@@ -183,8 +314,8 @@ LICENSE file in the root directory of this source tree.
         <script>
 
             // If user-nav is visible (user logged in)
-            if ($('.user-nav').length > 0) {
-                $('.content').css('padding-top', '120px');
+            if ($('.serapide').length > 0) {
+                $('.content').css('padding-top', '60px');
                 /*$('.content').css('padding-left', '250px');
                 $('.footer').css('padding-left', '250px');
                 let ww = $(window).width();
@@ -207,6 +338,11 @@ LICENSE file in the root directory of this source tree.
                         $('.footer').css('padding-left', tot + 'px');
                     }
                 });*/
+            }
+
+            if ($('#serapide').length > 0) {
+                $('.content').css('padding-left', '0px');
+                $('.content').css('padding-right', '0px');
             }
 
         </script>
