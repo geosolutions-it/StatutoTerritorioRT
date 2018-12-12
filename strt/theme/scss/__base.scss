@@ -3,11 +3,31 @@
     padding-left: $portal-header;
     padding-right: $portal-header;
 }
-.rt-logo {
-    height: $portal-header;
+/** colori notifiche**/
+.icon-34 {
+    font-size: 34px;
 }
-.serapide-top-offset {
-    top: $portal-header;
+.first {
+    order: -1;
+}
+.urgente {
+    color: $danger;
+}
+.importante {
+    color: $indigo;
+}
+.prossimamente{
+    color: $cyan
+}
+.legenda {
+    i {
+        font-size: 18px;
+    }
+    span {
+        font-size: 60%;
+        width: 100px;
+    }
+    font-size:70%;
 }
 .vertical-divider-left {
     border-left: 1px solid rgba(255,255,255, 0.8);
@@ -15,17 +35,57 @@
 .vertical-divider-right {
     border-right: 1px solid rgba(255,255,255, 0.8);
 }
-.serapide {
-    .pX{
-        @each $breakpoint in map-keys($grid-breakpoints) {
-            $next: breakpoint-next($breakpoint, $grid-breakpoints);
-            $infix: breakpoint-infix($next, $grid-breakpoints);
-            &#{$infix} {
-                @include media-breakpoint-up($next) {
-                    padding-left: $portal-header !important;
-                    padding-right: $portal-header !important;
-                }
+
+.serapide-top-offset {
+    top: $portal-header;
+}
+@at-root .content {
+    min-height: calc(100vh - 196px);
+    padding-bottom: 60px;
+}
+@at-root  .rt-logo {
+    height: $portal-header;
+}
+.pX{
+    @each $breakpoint in map-keys($grid-breakpoints) {
+        $next: breakpoint-next($breakpoint, $grid-breakpoints);
+        $infix: breakpoint-infix($next, $grid-breakpoints);
+        &#{$infix} {
+            @include media-breakpoint-up($next) {
+                padding-left: $portal-header !important;
+                padding-right: $portal-header !important;
             }
         }
     }
+}
+.serapide-content {
+    overflow: scroll;
+}
+.tipo__{
+    &option {
+        font-size: 80%;
+        border-bottom: 1px solid $gray-300;
+            &:hover, &--is-focused {
+                background-color: $gray-400;
+        }
+        &--is-selected {
+            background-color: $gray-200;
+            color: $black;
+        }
+        &:focus{
+            background-color: $gray-200;
+        }
+    }
+    &menu-list {
+        padding-top:0px;
+        padding-bottom:0px;
+    }
+    &control {
+        font-size: 80%;
+        &--is-focused, &:hover {
+            border-color: $gray-300;
+            box-shadow: 0 0 0 1px $gray-700;
+        }
+    }
+
 }

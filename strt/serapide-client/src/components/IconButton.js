@@ -16,10 +16,12 @@ import {
  * Simple btn with icon and label central aligned  
  * 
  **/ 
-export default ({label = "", icon = "", ...props}) => (
+export default ({label = "", icon = "", fontSize= "80%",...props}) => (
     <Button {...props}>
-        <span className="d-flex align-items-center">
-        <i className="material-icons">{icon}</i>{label}</span>
+        <span className="py-2 d-flex align-items-center" style={{fontSize}}>
+            <i className="material-icons">{icon}</i>
+            <span>{label}</span>
+        </span>
     </Button>
 
 )

@@ -40,7 +40,8 @@ export const toggleControllableState = (propName, handlerName, initialValue = fa
             )
         )
 export default {
-        withControllableState 
+        withControllableState,
+        toggleControllableState
 }
 
   

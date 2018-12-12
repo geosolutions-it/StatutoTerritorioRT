@@ -5,7 +5,11 @@
 // Bootstrap and its default variables
 @import "node_modules/bootstrap/scss/bootstrap";
 // Use to move under the 
-@import "./__base";
-@import "./__navbar";
-@import "./__usermenu";
-
+.serapide {
+    @import "./_base";
+    @import "./_navbar";
+    @import "./_usermenu";
+    @import "./_table_piani";
+    @import "./_statoProgress";
+    @import "./_menumessaggi";
+}
