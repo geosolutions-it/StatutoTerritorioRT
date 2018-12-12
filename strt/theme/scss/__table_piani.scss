@@ -1,0 +1,11 @@
+.table th {
+    border-top: none;
+}
+.table thead th {
+    font-size: 80%;
+    font-weight: $font-weight-normal;
+}
+.table td {
+    vertical-align: middle;
+    font-size: 90%;
+}

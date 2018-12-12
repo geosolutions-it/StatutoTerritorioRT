@@ -1,0 +1,36 @@
+.menumessaggi {
+    $offset-menu: 15px;
+    $offset: ($portal-header * 2) + $offset-menu;    
+    .dropdown-menu {
+        overflow-y: scroll;
+        max-height: calc(100vh - #{$offset});
+        top: calc(100% + #{$offset-menu});   
+        border: 0px;
+        min-width: 400px;
+        padding-bottom: 10rem;
+        .material-icons {
+            font-size: 34px;
+        }
+        a {
+            font-size: 60%;
+        }
+    }
+   
+    .message-item {
+        width: calc(100% - 3rem);
+        padding: 0.8rem 0rem;
+        margin: 0rem 1.5rem;
+        border-bottom: 1px solid ;
+        span {
+            :first-child {
+                font-size: 70%;
+            }
+            :nth-child(2) {
+                font-size: 50%;
+            }
+            :last-child {
+            font-size: 60%;
+            }
+        }
+    }
+}
