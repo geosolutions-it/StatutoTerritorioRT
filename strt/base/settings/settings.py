@@ -148,6 +148,13 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+RESPONSABILE_ISIDE_CODES = EnvUtil.get_env_var(
+    'RESPONSABILE_ISIDE_CODES', default=('RI', 'RIC', 'RIR')
+)
+RUP_CODES = EnvUtil.get_env_var(
+    'RUP_CODES', default=('RUP', 'RUPC', 'RUPR')
+)
+
 # WAGTAIL
 WAGTAIL_SITE_NAME = 'Statuto Territorio RT'
 WAGTAIL_FRONTEND_LOGIN_URL = 'users/login'

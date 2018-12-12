@@ -21,7 +21,6 @@ class AppUserManager(BaseUserManager):
         if not fiscal_code:
             raise ValueError(_('Il codice fiscale deve essere inserito'))
         if email:
-            print(email)
             email = self.normalize_email(email)
         user = self.model(fiscal_code=fiscal_code, email=email, **extra_fields)
         if password:

@@ -16,6 +16,7 @@ from .models import (
 )
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 
 UserModel = get_user_model()
@@ -25,18 +26,18 @@ class StrtPortalAuthentication:
 
     def authenticate(self, data):
         with transaction.atomic():
-            if 'user_role' in data and data['user_role'] == 'RI':
+            if 'user_role' in data and data['user_role'] in settings.RESPONSABILE_ISIDE_CODES:
                 # If role is Responsabile ISIDE (RI) the user can be not already registered
                 user, created = UserModel._default_manager.get_or_create(
-                    fiscal_code=data['user_fiscal_code'],
-                    first_name=data['user_first_name'],
-                    last_name=data['user_last_name'],
+                    fiscal_code=data['user_fiscal_code'].strip().upper(),
+                    first_name=data['user_first_name'].strip().title(),
+                    last_name=data['user_last_name'].strip().title()
                 )
             else:
                 # if no role provided then the user must have already been registered
                 try:
                     user = UserModel._default_manager.get_by_natural_key(
-                        data['user_fiscal_code']
+                        data['user_fiscal_code'].strip().title()
                     )
                 except UserModel.DoesNotExist:
                     raise ValidationError(_('L\'utente non risulta censito.'))
@@ -51,15 +52,15 @@ class StrtPortalAuthentication:
                         try:
                             # Organizations must be already registered
                             org = Organization._default_manager.get(
-                                code=organization
+                                code=organization.strip()
                             )
                         except Organization.DoesNotExist:
                             raise ValidationError(_('L\'ente non risulta censito.'))
                         membership_type, created = MembershipType._default_manager.get_or_create(
-                            code='RI',
+                            code=f'RI{org.type.code}',
+                            organization_type=org.type,
                             name=_(f'Responsabile ISIDE {org.type.name}'),
-                            description=_(f'Responsabile ISIDE per l\'ente {org.type.name}'),
-                            organization_type=org.type
+                            description=_(f'Responsabile ISIDE per l\'ente {org.type.name}')
                         )
                         UserMembership._default_manager.get_or_create(
                             name=_(f'Responsabile ISIDE {org.type.name} {org.name}'),
