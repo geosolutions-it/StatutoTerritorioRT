@@ -1,5 +1,6 @@
 .navbar {
-   z-index: 1031; 
+    z-index: 1031;
+    padding-right: $portal-header !important;
 }
 .serapide {
     .navbar {
@@ -72,6 +73,24 @@
                     @include media-breakpoint-down($next) {
                         &.navbar {
                             padding-left: 0px;
+                            padding-right: 0.5rem !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.container-fluid {
+    .navbar-expand{
+        @each $breakpoint in map-keys($grid-breakpoints) {
+            $next: breakpoint-next($breakpoint, $grid-breakpoints);
+            $infix: breakpoint-infix($next, $grid-breakpoints);
+            &#{$infix} {
+                @if $next != null {
+                    @include media-breakpoint-down($next) {
+                        &.navbar {
+                            padding-right: 0.5rem !important;
                         }
                     }
                 }
