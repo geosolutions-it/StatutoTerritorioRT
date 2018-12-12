@@ -5,7 +5,7 @@
 
 - Python versions
 - Install
-- Enviroment setup
+- Environment setup
 - Project setup
 - Wagtail setup
 
@@ -20,19 +20,19 @@
 - Clone the repository:\
 `git clone https://github.com/geosolutions-it/StatutoTerritorioRT.git`
 
-- Create a virtual eniviroment and activate it
+- Create a virtual environment and activate it
 
 - Install requirements with pip:\
 `cd StatutoTerritorioRT/requirements`\
 `pip install -r requirements.txt`
 
 
-## Enviroment setup
+## Environment setup
 
 - Go to the deployment folder:\
-`cd StatutoTerritorioRT/deployments`
+`cd StatutoTerritorioRT/deployment`
 
-- Set your enviroment variables values in a `your_local.env` file (`dev.env` is an example) then run this script:\
+- Set your environment variables values in a `your_local.env` file (`dev.env` is an example) then run this script:\
 `source setenv.sh your_local.env`
 
 
@@ -57,21 +57,20 @@
 
 Setup an HomePage for your project:
 
-- Log in to the Wagtail admin panel (as superuser):
+- Log in to the Wagtail admin panel (as superuser):\
 http://127.0.0.1:8000/admin/
 
-- Delete the existing pages and/or site
+- Delete the existing Pages and Sites
 
-- Add a new page to the Root, insert your contents and promote the page
+- Add a new Page to the Root, insert your contents and publish the Page
 
-- Add a new site with this configuration:
+- Add a new Site with this configuration:
   - `Hostname: localhost`
   - `Port: 8000`
   - `Site name: Statuto del Territorio RT`
-  - `Root page:` the new page created
+  - `Root page:` the new Page created
   - `Is default site: True`
   
-- Save the new site
+- Save the new Site
 
 - Visit http://127.0.0.1:8000/ with your web browser to check the HomePage is visible
-
