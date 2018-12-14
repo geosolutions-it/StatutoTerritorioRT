@@ -9,7 +9,7 @@ LICENSE file in the root directory of this source tree.
 -->
 
 
-{% extends "base.html" %}
+{% extends "strt_portal/private_area.html" %}
 
 {% load static %}
 {% load i18n %}
@@ -23,7 +23,7 @@ LICENSE file in the root directory of this source tree.
 
 {% block content %}
 
-    <div class="bg-light h-100 p-2 m-0">
+    <div class="bg-light h-100 pt-5 m-0">
 
         <h2>{% trans 'dati utente'|capfirst %}</h2>
         <hr class="border-warning border-bottom"></hr>
@@ -52,7 +52,7 @@ LICENSE file in the root directory of this source tree.
                             <div class="col">{{ cum.name }}</div>
                         </div>
                     {% empty %}
-                        nd
+                        n.d.
                     {% endfor %}
                 </div>
             </div>
@@ -108,6 +108,12 @@ LICENSE file in the root directory of this source tree.
                             </tr>
                         {% endif %}
                     {% endfor %}
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">
+                            {% trans 'Nessun utente gestito' %}
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>

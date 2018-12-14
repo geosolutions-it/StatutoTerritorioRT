@@ -17,8 +17,6 @@ from django.conf.urls.static import static
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.core import urls as wagtail_urls
-# API View
-from api.views import user_auth_view
 
 
 # Dajngo admin
@@ -30,10 +28,6 @@ urlpatterns = [
 urlpatterns += [
     path('', include('strt_portal.urls')),
     path('users/', include('strt_users.urls'))
-]
-
-urlpatterns += [
-    path('api/auth/', user_auth_view, name='user_auth')
 ]
 
 # Wagtail urls

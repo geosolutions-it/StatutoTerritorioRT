@@ -35,7 +35,7 @@ LICENSE file in the root directory of this source tree.
         <div class="container-fluid p-0">
 
             <!-- TOP-NAVBAR -->
-            <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top pl-0 py-0">
+            <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top pl-0 py-0 top-navbar">
 
                 <!-- BRAND -->
                 <a class="navbar-brand p-0" href="/">
@@ -57,10 +57,10 @@ LICENSE file in the root directory of this source tree.
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto pl-2">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'serapide' %}"
-                               {% if not request.user.is_authenticated %}
-                                    data-toggle="modal" data-target="#exampleModal"
-                               {% endif %}>
+                            <a class="nav-link text-white" href="{% url 'private_area' %}">
+{#                               {% if not request.user.is_authenticated %}#}
+{#                                    data-toggle="modal" data-target="#exampleModal">#}
+{#                               {% endif %}#}
                                 <span>{% trans 'area riservata'|capfirst %}</span>
                             </a>
                         </li>
@@ -84,91 +84,11 @@ LICENSE file in the root directory of this source tree.
 
             </nav><!-- end TOP-NAVBAR -->
 
-            {% has_perm 'strt_users.can_manage_users' request.user as can_manage_users %}
-            {% if can_manage_users %}
+            {% block user_navbar %}
+                <!-- Here the user toolbar -->
+            {% endblock user_navbar %}
 
-                <!-- USER-NAVBAR -->
-                <div class="serapide" id="user-navbar">
-
-                    <nav class="serapide-top-offset pr-1 navbar navbar-expand-sm navbar-dark bg-dark fixed-top justify-content-end">
-
-                        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                data-target="#userNavbarSupportedContent" aria-controls="userNavbarSupportedContent"
-                                aria-expanded="true" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-
-                        <div class="collapse navbar-collapse" id="userNavbarSupportedContent">
-                            <ul class="ml-auto text-center navbar-nav" id="user-navbar-list">
-
-                                <div class="usermenu text-white dropdown order-last">
-                                    <a aria-haspopup="true" href="" class=" p-0 dropdown-toggle nav-link"
-                                       aria-expanded="false" data-toggle="dropdown">
-                                        <span class="link-icon d-inline-flex flex-row">
-                                            <i class="material-icons text-warning m-1 rounded-circle bg-white">group</i>
-                                            <div class="flex-column align-self-center">
-                                                <div class="link-icon-label ">
-                                                    {% trans 'gestione utenti'|capfirst %}
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </a>
-                                    <div role="menu" aria-hidden="true"
-                                         class="dropdown-menu dropdown-menu-right dropdown-menu-portal">
-                                        <a class="dropdown-item" href="{% url 'users_list' %}">
-                                            {% trans 'lista utenti'|capfirst %}
-                                        </a>
-                                        <a class="dropdown-item" href="{% url 'users_membership_list' %}">
-                                            {% trans 'lista ruoli'|capfirst %}
-                                        </a>
-                                        <a class="dropdown-item" href="{% url 'user_registration' %}">
-                                            {% trans 'registra utente'|capfirst %}
-                                        </a>
-                                        <a class="dropdown-item" href="{% url 'user_membership_registration' %}">
-                                            {% trans 'registra ruolo'|capfirst %}
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="usermenu text-white dropdown order-last">
-                                    <a aria-haspopup="true" href="" class=" p-0 dropdown-toggle nav-link"
-                                       data-toggle="dropdown" aria-expanded="false">
-                                        <span class="link-icon d-inline-flex flex-row">
-                                            <i class="material-icons text-warning m-1 rounded-circle bg-white">person</i>
-                                            <div class="flex-column align-self-center">
-                                                <div class="link-icon-label ">
-                                                    {{ request.user.get_full_name }}
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </a>
-                                    <div role="menu" aria-hidden="true"
-                                         class="dropdown-menu dropdown-menu-right dropdown-menu-portal">
-                                        <span class="role text-warning">{% trans 'ruolo'|upper %}:</span>
-                                        {% for m in request.user.memberships %}
-                                            <span class="d-block role role-item text-warning">{{ m.name }}</span>
-                                        {% endfor %}
-                                        <a class="dropdown-item" href="{% url 'users_profile_detail' %}">
-                                            {% trans 'profilo'|capfirst %}
-                                        </a>
-                                        <a class="dropdown-item" href="">
-                                            {% trans 'impostazioni'|capfirst %}
-                                        </a>
-                                        <a class="dropdown-item" href="{% url 'logout' %}">
-                                            {% trans 'logout'|capfirst %}
-                                        </a>
-                                    </div>
-                                </div>
-                            </ul>
-                        </div>
-
-                    </nav>
-
-                </div>
-                <!-- USER-NAVBAR -->
-
-            {% endif %}
-
-            <!-- MODAL FORM TODO: remove in produciton -->
+            <!-- MODAL FORM TODO: remove in produciton
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -213,7 +133,7 @@ LICENSE file in the root directory of this source tree.
                         </div>
                     </div>
                 </div>
-            </div><!-- end MODAL FORM TODO: remove in produciton -->
+            </div> end MODAL FORM TODO: remove in produciton -->
 
             <!-- CONTENT -->
             <div class="content bg-light">
@@ -309,7 +229,6 @@ LICENSE file in the root directory of this source tree.
         <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
-        <script src="{% static 'strt_users/js/auth.js' %}"></script>
 
         <script>
 

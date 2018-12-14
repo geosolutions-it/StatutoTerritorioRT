@@ -13,18 +13,100 @@ LICENSE file in the root directory of this source tree.
 
 {% load static %}
 {% load i18n %}
-{% load wagtailcore_tags %}
-{% load crispy_forms_tags %}
+{% load rules %}
 
 {% block head_title %}{{ block.super }} - {% trans 'area riservata'|capfirst %}{% endblock head_title %}
 
-{% block content %}
+{% block user_navbar %}
 
-        <div class="h-100 bg-light p-2">
+    <div class="serapide">
 
-            <h1>AREA PRIVATA</h1>
+        <!-- USER-NAVBAR -->
+        <nav class="user-navbar navbar navbar-expand-md navbar-dark bg-serapide-gray fixed-top justify-content-end">
 
-        </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#userNavbarSupportedContent" aria-controls="userNavbarSupportedContent"
+                    aria-expanded="true" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-{% endblock content %}
+            <div class="collapse navbar-collapse" id="userNavbarSupportedContent">
 
+                <ul class="ml-auto text-center navbar-nav" id="user-navbar-list">
+
+                    {% has_perm 'strt_users.can_manage_users' request.user as can_manage_users %}
+                    {% if can_manage_users %}
+
+                        <!-- User management menu -->
+                        <div class="usermenu text-white dropdown order-last">
+                            <a aria-haspopup="true" href="" class="p-0 dropdown-toggle nav-link"
+                               aria-expanded="false" data-toggle="dropdown">
+                                <span class="link-icon d-inline-flex flex-row">
+                                    <i class="material-icons text-warning m-1 rounded-circle bg-white">group</i>
+                                    <div class="flex-column align-self-center">
+                                        <div class="link-icon-label ">
+                                            {% trans 'gestione utenti'|capfirst %}
+                                        </div>
+                                    </div>
+                                </span>
+                            </a>
+                            <div role="menu" aria-hidden="true"
+                                 class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="{% url 'users_list' %}">
+                                    {% trans 'lista utenti'|capfirst %}
+                                </a>
+                                <a class="dropdown-item" href="{% url 'users_membership_list' %}">
+                                    {% trans 'lista ruoli'|capfirst %}
+                                </a>
+                                <a class="dropdown-item" href="{% url 'user_registration' %}">
+                                    {% trans 'registra utente'|capfirst %}
+                                </a>
+                                <a class="dropdown-item" href="{% url 'user_membership_registration' %}">
+                                    {% trans 'registra ruolo'|capfirst %}
+                                </a>
+                            </div>
+                        </div><!-- end User management menu -->
+
+                    {% endif %}
+
+                    <!-- User menu -->
+                    <div class="usermenu text-white dropdown order-last">
+                        <a aria-haspopup="true" href="" class="p-0 dropdown-toggle nav-link"
+                           data-toggle="dropdown" aria-expanded="false">
+                            <span class="link-icon d-inline-flex flex-row">
+                                <i class="material-icons text-warning m-1 rounded-circle bg-white">person</i>
+                                <div class="flex-column align-self-center">
+                                    <div class="link-icon-label ">
+                                        {{ request.user.get_full_name }}
+                                    </div>
+                                </div>
+                            </span>
+                        </a>
+                        <div role="menu" aria-hidden="true"
+                             class="dropdown-menu dropdown-menu-right">
+                            <span class="role text-warning">{% trans 'ruolo'|upper %}:</span>
+                            {% for m in request.user.memberships %}
+                                <span class="d-block role role-item text-warning">{{ m.name }}</span>
+                            {% endfor %}
+                            <a class="dropdown-item" href="{% url 'users_profile_detail' %}">
+                                {% trans 'profilo'|capfirst %}
+                            </a>
+                            <a class="dropdown-item" href="">
+                                {% trans 'impostazioni'|capfirst %}
+                            </a>
+                            <a class="dropdown-item" href="{% url 'logout' %}">
+                                {% trans 'logout'|capfirst %}
+                            </a>
+                        </div>
+                    </div><!-- end User menu -->
+
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- USER-NAVBAR -->
+
+    </div>
+
+{% endblock user_navbar %}

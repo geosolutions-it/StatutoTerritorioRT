@@ -62,10 +62,12 @@ INSTALLED_APPS = [
     'taggit',
     # Crispy forms
     'crispy_forms',
-    # Django-Rules
+    # Rules
     'rules.apps.AutodiscoverRulesConfig',
     # DRF
     'rest_framework',
+    # TEST
+    'strt_tests',
 ]
 
 MIDDLEWARE = [
@@ -148,11 +150,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-RESPONSABILE_ISIDE_CODES = EnvUtil.get_env_var(
-    'RESPONSABILE_ISIDE_CODES', default=('RI', 'RIC', 'RIR')
+RESPONSABILE_ISIDE_CODE = EnvUtil.get_env_var(
+    'RESPONSABILE_ISIDE_CODE', default='RI'
 )
-RUP_CODES = EnvUtil.get_env_var(
-    'RUP_CODES', default=('RUP', 'RUPC', 'RUPR')
+RUP_CODE = EnvUtil.get_env_var(
+    'RUP_CODE', default='RUP'
 )
 
 # WAGTAIL
@@ -177,6 +179,9 @@ LANGUAGES = (
 USE_L10N = True
 
 USE_TZ = True
+
+# CrispyForm template pack
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

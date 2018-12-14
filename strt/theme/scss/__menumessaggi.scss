@@ -1,10 +1,10 @@
 .menumessaggi {
     $offset-menu: 15px;
-    $offset: ($portal-header * 2) + $offset-menu;    
+    $offset: ($portal-header * 2) + $offset-menu;
     .dropdown-menu {
         overflow-y: scroll;
         max-height: calc(100vh - #{$offset});
-        top: calc(100% + #{$offset-menu});   
+        top: calc(100% + #{$offset-menu});
         border: 0px;
         min-width: 400px;
         padding-bottom: 10rem;
