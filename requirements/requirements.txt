@@ -5,3 +5,4 @@ django-currentuser==0.2.3
 django-guardian==1.4.9
 rules==2.0
 wagtail==2.3
+PyJWT==1.6.4
