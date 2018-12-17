@@ -68,6 +68,13 @@ INSTALLED_APPS = [
     'rest_framework',
     # TEST
     'strt_tests',
+	# This will also make the `graphql_schema` management command available
+    'graphene_django',
+
+    # Install the ingredients app
+    'serapide_core',
+    'serapide_core.modello',
+    'serapide_core.api',
 ]
 
 MIDDLEWARE = [
@@ -204,3 +211,11 @@ MEDIA_URL = '/media/'
 
 # CORS_ORIGIN_ALLOW_ALL = True
 INTERNAL_IPS = EnvUtil.get_env_var('DJANGO_INTERNAL_IPS', list, [], ' ')
+
+GRAPHENE = {
+    'SCHEMA': 'serapide_core.schema.schema',
+    'SCHEMA_OUTPUT': 'data/schema.json',  # defaults to schema.json
+    'MIDDLEWARE': [
+        'graphene_django.debug.DjangoDebugMiddleware',
+    ]
+}
