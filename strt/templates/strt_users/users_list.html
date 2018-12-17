@@ -9,7 +9,7 @@ LICENSE file in the root directory of this source tree.
 -->
 
 
-{% extends "base.html" %}
+{% extends "strt_portal/private_area.html" %}
 
 {% load static %}
 {% load i18n %}
@@ -23,7 +23,7 @@ LICENSE file in the root directory of this source tree.
 
 {% block content %}
 
-    <div class="bg-light table-responsive h-100 p-2 m-0">
+    <div class="bg-light table-responsive h-100 pt-5 m-0">
 
         <h2>{% trans 'utenti gestiti'|capfirst %}</h2>
         <hr class="border-warning border-bottom"></hr>
@@ -50,17 +50,23 @@ LICENSE file in the root directory of this source tree.
                         <td scope="col">{{ mu.email }}</td>
                         <td scope="col">{{ mu.date_joined|date:'d-m-y H:i:s' }}</td>
                         <td scope="col">{{ mu.date_updated|date:'d-m-y H:i:s' }}</td>
-                        <td scope="col">
-                            <a class="btn btn-secondary text-light"
+                        <td scope="col" class="p-0 m-0">
+                            <a class="btn text-warning bg-transparent" title="{% trans 'modifica'|capfirst %}"
                                 href="{% url 'user_update' fiscal_code=mu.fiscal_code %}">
-                                {% trans 'modifica'|capfirst %}
+                                <i class="material-icons">edit</i>
                             </a>
                         </td>
-                        <td scope="col">
-                            <a class="btn btn-secondary text-light delete-row"
+                        <td scope="col" class="p-0 m-0">
+                            <a class="btn text-warning bg-transparent delete-row" title="{% trans 'elimina'|capfirst %}"
                                target-href="{% url 'user_delete' fiscal_code=mu.fiscal_code %}">
-                                {% trans 'elimina'|capfirst %}
+                                <i class="material-icons">delete_forever</i>
                             </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8">
+                            {% trans 'Nessun utente gestito' %}
                         </td>
                     </tr>
                 {% endfor %}

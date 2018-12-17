@@ -35,10 +35,6 @@
 .vertical-divider-right {
     border-right: 1px solid rgba(255,255,255, 0.8);
 }
-
-.serapide-top-offset {
-    top: $portal-header;
-}
 @at-root .content {
     min-height: calc(100vh - 196px);
     padding-bottom: 60px;
@@ -88,4 +84,7 @@
         }
     }
 
+}
+a {
+    outline: none;
 }

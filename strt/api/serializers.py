@@ -10,13 +10,7 @@
 
 
 from rest_framework import serializers
-from strt_users.models import MembershipType, AppUser
-
-class AppUserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AppUser
-        fields = '__all__'
+from strt_users.models import MembershipType
 
 
 class MembershipTypeSerializer(serializers.ModelSerializer):

@@ -21,15 +21,15 @@ def is_recognizable(user):
 
 @rules.predicate
 def is_responsabile_ISIDE(user):
-    return all(
-        m.type.code in settings.RESPONSABILE_ISIDE_CODES
+    return any(
+        m.type.code == settings.RESPONSABILE_ISIDE_CODE
         for m in user.memberships
     )
 
 @rules.predicate
 def is_RUP(user):
-    return all(
-        m.type.code in settings.RUP_CODES
+    return any(
+        m.type.code == settings.RUP_CODE
         for m in user.memberships
     )
 

@@ -9,7 +9,7 @@ LICENSE file in the root directory of this source tree.
 -->
 
 
-{% extends "base.html" %}
+{% extends "strt_portal/private_area.html" %}
 
 {% load static %}
 {% load i18n %}
@@ -23,20 +23,23 @@ LICENSE file in the root directory of this source tree.
 
 {% block content %}
 
-    <div class="bg-light h-100 p-2 m-0">
+    <div class="bg-light h-100 pt-5 m-0">
 
         <h2>{% trans 'registazione utente'|capfirst %}</h2>
         <hr class="border-warning border-bottom"></hr>
 
-        <form method="POST" novalidate>
+        <form method="POST" novalidate class="w-50">
             {% csrf_token %}
             {{ form|crispy }}
-            <input type="submit" class="btn btn-secondary my-2 my-lg-4"
+            <button type="submit" class="btn btn-warning my-2 my-lg-4 text-center">
                 {% if action != 'update' %}
-                    value="{% trans 'crea utente'|capfirst %}"
+                    <i class="material-icons align-middle">person_add</i>
+                    <span>{% trans 'crea utente'|capfirst %}</span>
                 {% else %}
-                    value="{% trans 'aggiorna'|capfirst %}"
-                {% endif %}>
+                    <i class="material-icons align-middle">update</i>
+                    <span>{% trans 'aggiorna'|capfirst %}</span>
+                {% endif %}
+            </button>
         </form>
 
     </div>

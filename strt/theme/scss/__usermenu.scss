@@ -1,11 +1,15 @@
 .usermenu {
+    align-self: center;
     .dropdown-menu {
-        top: calc(100% + 9px);
-        background-color: $bg-serapide;
+        top: calc(100% + 12px);
+        background-color: $serapide-gray;
         border-radius: 0px;
         border: 0px;
         min-width: 300px;
         padding-bottom: 10rem;
+        &.focus {
+            outline: 0;
+        }
     }
     .dropdown-menu-right {
         right: -0.25rem;
@@ -19,10 +23,10 @@
         font-size: 70%;
         &:hover {
             color: color-yiq($white);
-            @include gradient-bg($bg-serapide);
+            @include gradient-bg($serapide-gray);
         }
         &:focus {
-            @include gradient-bg($bg-serapide);
+            @include gradient-bg($serapide-gray);
             border: none;
         }
         &.disabled,
@@ -34,9 +38,6 @@
         button {
             outline-style: none;
         }
-    }
-    .dropdown-menu-portal {
-        top: calc(100% + 12px);
     }
     .role {
         width: calc(100% - 3rem);

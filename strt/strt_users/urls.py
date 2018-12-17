@@ -16,12 +16,12 @@ from .views import (
     userDeleteView, userUpdateView, userMembershipUpdateView,
     userProfileDetailView
 )
-from api.views import userMembershipDataView
+from api.views import user_membership_data_view
 
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),
-    path('membership-type-api/', userMembershipDataView, name='membership_type_data'),
+    path('membership-type-api/', user_membership_data_view, name='membership_type_data'),
     path('user-profile/', userProfileDetailView, name='users_profile_detail'),
     path('users-list/', usersListView, name='users_list'),
     path('user-registration/', userRegistrationView, name='user_registration'),

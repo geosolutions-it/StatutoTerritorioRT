@@ -1,0 +1,141 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'test autenticazione utente'|capfirst %}{% endblock head_title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'strt_users/css/users.css' %}"/>
+{% endblock styles %}
+
+{% block content %}
+
+    <div class="bg-light h-100 pt-5 m-0">
+
+        <h2>{% trans 'test autenticazione utente'|capfirst %}</h2>
+        <hr class="border-warning border-bottom"></hr>
+
+        <p>La procedura di autenticazione prevede 3 casistiche per 3 differenti tipologie di utenti:</p>
+        <ol>
+            <li>
+                <p>
+                    Utente con ruolo 'Responsabile ISIDE'
+                    <br>
+                    <small>
+                        Inserire Nome, Cognome, Codice Fiscale, Ruolo ('RI') e uno o più Enti attraverso il pulsante 'Aggiungi ente'.
+                    </small>
+                </p>
+            </li>
+            <li>
+                <p>
+                    Utente creato dal Responsabile ISIDE e operante su SERAPIDE
+                    <br>
+                    <small>
+                        Inserire unicamente il Codice Fiscale.
+                    </small>
+                </p>
+            </li>
+            <li>
+                <p>
+                    Utente temporaneo con permessi specifici su SERAPIDE
+                    <br>
+                    <small>
+                        Inserire unicamente il Codice Identificativo.
+                    </small>
+                </p>
+            </li>
+        </ol>
+
+        <form method="POST" novalidate id="user-membership" class="w-50"
+            membership-type-data-url="{% url 'membership_type_data' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" class="btn btn-secondary my-2 my-lg-4"
+                   value="{% trans 'autentica'|capfirst %}">
+            <input type="button" class="btn btn-warning" id="add-org"
+                   value="{% trans 'aggiungi ente'|capfirst %}">
+            <ul id="orgs" class="pl-0 pt-2">
+            </ul>
+        </form>
+        <span class="text-danger" id="orgs-errors"></span>
+
+    </div>
+
+{% endblock content %}
+
+{% block add_script %}
+
+    <script>
+
+        $('#id_organization').change(function () {
+
+            var type_select = $('#id_type');
+
+            type_select.empty();
+            type_select.append('<option value="" selected="">---------</option>')
+
+            var url = $('#user-membership').attr('membership-type-data-url');
+            var org_id = $(this).val();
+
+            $.ajax({
+                url: url,
+                data: {
+                    'selected_org': org_id
+                },
+                dataType: 'json',
+                success: function (data) {
+                    data.forEach( function(m_type) {
+                            $('#id_type').append(
+                                '<option value="'
+                                    .concat(m_type.id)
+                                    .concat('">')
+                                    .concat(m_type.name)
+                                    .concat('</option>')
+                            );
+                        }
+                    );
+                    $('#id_type').attr('disabled', false);
+                }
+            });
+        });
+
+        $("#add-org").click(function() {
+            $('#orgs-errors').text('');
+            var org = $('#id_organizations option:selected');
+            if (org.val()) {
+                var orgs = $('input[name="hidden_orgs"]').val();
+                $('input[name="hidden_orgs"]').val(
+                    orgs.concat(org.val().concat('-'))
+                );
+                var li = $('<li/>').text(org.text())
+                    .on("click", function() {
+                        $(this).remove();
+                        $('#orgs-errors').text('');
+                    });
+                $('#orgs').prepend(
+                    li.addClass('btn border border-secondary m-1')
+                );
+                $('#id_organizations')[0].selectedIndex = 0;
+            } else {
+                $('#orgs-errors').text('Valori inseriti non validi');
+            }
+        });
+
+
+    </script>
+
+{% endblock add_script %}
+

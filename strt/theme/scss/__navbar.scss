@@ -21,6 +21,10 @@
     }
 }
 
+.user-navbar {
+    top: $portal-header !important;
+}
+
 .navbar {
     padding-left: $portal-header;
     z-index: 1030; 
@@ -44,19 +48,22 @@
     margin-left: 4px;
     font-size: 60%;
 }
-.navbar-dark .navbar-nav .nav-link{
+.user-navbar .navbar-nav .nav-link{
     color: $white;
     &.disabled,
     &:disabled {
         color: darken($white, 20%);
     } 
 }
+.top-navbar a:hover {
+    color: darken($white, 20%) !important;
+}
 .link-icon-label{
     font-size: 10px;
     color: inherit;
 }
-.bg-dark {
-    background-color: $bg-serapide !important;
+.bg-serapide-gray {
+    background-color: $serapide-gray !important;
 }
 .navbar-expand {
     @each $breakpoint in map-keys($grid-breakpoints) {

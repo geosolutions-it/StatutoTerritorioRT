@@ -68,10 +68,10 @@ def userRegistrationView(request):
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             AppUser.objects.create_user(
-                fiscal_code=fiscal_code,
+                fiscal_code=fiscal_code.upper(),
                 email=email,
-                first_name=first_name,
-                last_name=last_name,
+                first_name=first_name.title(),
+                last_name=last_name.title(),
                 is_active=False
             )
             return redirect('users_list')
@@ -136,7 +136,7 @@ def userMembershipUpdateView(request, code):
 
 @login_required
 def userUpdateView(request, fiscal_code):
-    instance = get_object_or_404(AppUser, fiscal_code=fiscal_code)
+    instance = get_object_or_404(AppUser, fiscal_code=fiscal_code.upper())
     form = AppUserForm(request.POST or None, instance=instance)
     if form.is_valid():
         form.save()
@@ -157,5 +157,5 @@ def userMembershipDeleteView(request, code):
 
 @login_required
 def userDeleteView(request, fiscal_code):
-    AppUser.objects.filter(fiscal_code=fiscal_code).delete()
+    AppUser.objects.filter(fiscal_code=fiscal_code.upper()).delete()
     return redirect('users_list')
