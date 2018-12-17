@@ -20,6 +20,7 @@ from django_currentuser.middleware import (
     get_current_authenticated_user
 )
 from django.contrib.auth.decorators import login_required
+from rules.contrib.views import permission_required
 
 
 @login_required
@@ -37,7 +38,7 @@ def userProfileDetailView(request):
     return render(request, 'strt_users/user_profile_detail.html', context)
 
 
-@login_required
+@permission_required('strt_users.can_manage_users')
 def usersListView(request):
     current_user = get_current_authenticated_user()
     managed_users = AppUser.objects.filter(created_by=current_user)
@@ -47,7 +48,7 @@ def usersListView(request):
     return render(request, 'strt_users/users_list.html', context)
 
 
-@login_required
+@permission_required('strt_users.can_manage_users')
 def usersMembershipsListView(request):
     current_user = get_current_authenticated_user()
     managed_users = AppUser.objects.filter(created_by=current_user)
@@ -58,7 +59,7 @@ def usersMembershipsListView(request):
     return render(request, 'strt_users/users_membership_list.html', context)
 
 
-@login_required
+@permission_required('strt_users.can_manage_users')
 def userRegistrationView(request):
     if request.method == "POST":
         form = AppUserForm(request.POST)
@@ -81,7 +82,7 @@ def userRegistrationView(request):
     return render(request, 'strt_users/user_registration.html', context)
 
 
-@login_required
+@permission_required('strt_users.can_manage_users')
 def userMembershipRegistrationView(request):
     if request.method == "POST":
         form = UserMembershipForm(request.POST)
@@ -109,7 +110,7 @@ def userMembershipRegistrationView(request):
     return render(request, 'strt_users/user_membership_registration.html', context)
 
 
-@login_required
+@permission_required('strt_users.can_manage_users')
 def userMembershipUpdateView(request, code):
     instance = get_object_or_404(UserMembership, code=code)
     if request.method == "POST":
@@ -134,7 +135,7 @@ def userMembershipUpdateView(request, code):
     return render(request, 'strt_users/user_membership_registration.html', context)
 
 
-@login_required
+@permission_required('strt_users.can_manage_users')
 def userUpdateView(request, fiscal_code):
     instance = get_object_or_404(AppUser, fiscal_code=fiscal_code.upper())
     form = AppUserForm(request.POST or None, instance=instance)
@@ -149,13 +150,13 @@ def userUpdateView(request, fiscal_code):
                   })
 
 
-@login_required
+@permission_required('strt_users.can_manage_users')
 def userMembershipDeleteView(request, code):
     UserMembership.objects.filter(code=code).delete()
     return redirect('users_membership_list')
 
 
-@login_required
+@permission_required('strt_users.can_manage_users')
 def userDeleteView(request, fiscal_code):
     AppUser.objects.filter(fiscal_code=fiscal_code.upper()).delete()
     return redirect('users_list')

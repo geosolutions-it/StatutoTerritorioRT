@@ -20,6 +20,13 @@ def is_recognizable(user):
            and user.is_authenticated
 
 @rules.predicate
+def is_member(user, user_memberships=None):
+    if user_memberships:
+        return any([mu.member == user for mu in user_memberships])
+    else:
+        return len(list(user.memberships)) > 0
+
+@rules.predicate
 def is_responsabile_ISIDE(user):
     return any(
         m.type.code == settings.RESPONSABILE_ISIDE_CODE
@@ -40,4 +47,8 @@ rules.add_perm(
 rules.add_perm(
     'strt_users.can_access_private_area',
     is_recognizable
+)
+rules.add_perm(
+    'strt_users.can_access_serapide',
+    is_recognizable & is_member
 )
