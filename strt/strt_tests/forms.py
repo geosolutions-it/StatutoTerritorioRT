@@ -46,10 +46,6 @@ class UserAuthenticationForm(forms.Form):
         widget=forms.HiddenInput(),
         required=False
     )
-    id_temporary_user = forms.CharField(
-        label='Codice utente temporaneo',
-        required=False,
-    )
     organizations = forms.ModelChoiceField(
         label='Enti',
         queryset=Organization.objects.all(),

@@ -6,3 +6,5 @@ django-guardian==1.4.9
 rules==2.0
 wagtail==2.3
 PyJWT==1.6.4
+django-model-utils==3.1.2
+graphene-django==2.2.0

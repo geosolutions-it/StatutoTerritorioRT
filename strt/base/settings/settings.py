@@ -17,7 +17,7 @@ from datetime import timedelta
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
-REACT_APP_DIR = os.path.join(BASE_DIR, 'serapide-client') # serapide-client
+REACT_APP_DIR = os.path.join(BASE_DIR, 'serapide_client') # serapide-client
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -114,7 +114,7 @@ TEMPLATES = [
     },
 ]
 
-LOGIN_URL = EnvUtil.get_env_var('LOGIN_URL', default='/api/auth/')
+LOGIN_URL = EnvUtil.get_env_var('LOGIN_URL', default='/private-area/')
 LOGOUT_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'base.wsgi.application'

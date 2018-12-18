@@ -35,8 +35,6 @@ class StrtPortalAuthentication:
 
         with transaction.atomic():
 
-            memberships = []
-
             if payload['fiscal_code']:
 
                 # Responsabile ISIDE user
@@ -67,14 +65,12 @@ class StrtPortalAuthentication:
                             membership_type.name = _(f'Responsabile ISIDE {org.type.name}'),
                             membership_type.description = _(f'Responsabile ISIDE per l\'ente {org.type.name}')
                             membership_type.save()
-                        user_membership, created = UserMembership._default_manager.get_or_create(
+                        UserMembership._default_manager.get_or_create(
                             name=_(f'Responsabile ISIDE {org.type.name} {org.name}'),
                             member=user,
                             organization=org,
                             type=membership_type,
                         )
-                        if user_membership:
-                            memberships.append(user_membership)
 
                 # SERAPIDE user
                 elif not payload['membership_type']:
@@ -89,13 +85,9 @@ class StrtPortalAuthentication:
                 else:
                     raise forms.ValidationError(_('Ruolo non ammesso.'))
 
-            # Temporary SERAPIDE user
-            elif payload['id_temporary_user']: # SERAPIDE temporary user
-                pass
-
             # Errors
             else:
-                raise forms.ValidationError(_('Dati inseriti non congruenti.'))
+                raise forms.ValidationError(_('Campo Codice Fiscale obbligatorio.'))
 
             if user:
                 is_active = getattr(user, 'is_active', None)

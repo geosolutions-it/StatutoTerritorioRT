@@ -58,9 +58,6 @@ LICENSE file in the root directory of this source tree.
                     <ul class="navbar-nav ml-auto pl-2">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'private_area' %}">
-{#                               {% if not request.user.is_authenticated %}#}
-{#                                    data-toggle="modal" data-target="#exampleModal">#}
-{#                               {% endif %}#}
                                 <span>{% trans 'area riservata'|capfirst %}</span>
                             </a>
                         </li>
@@ -87,53 +84,6 @@ LICENSE file in the root directory of this source tree.
             {% block user_navbar %}
                 <!-- Here the user toolbar -->
             {% endblock user_navbar %}
-
-            <!-- MODAL FORM TODO: remove in produciton
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Autenticazione</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="col-form-label">Nome:</label>
-                                    <input type="text" class="form-control" id="user-first-name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Cognome:</label>
-                                    <input type="text" class="form-control" id="user-last-name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Codice fiscale:</label>
-                                    <input type="text" class="form-control" id="user-fiscal-code">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Ruolo:</label>
-                                    <input type="text" class="form-control" id="user-role">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label d-block">Enti:</label>
-                                    <input type="text" class="form-control d-inline w-75" id="add">
-                                    <input type="button" id="btnAdd" value="+" onclick="addItem()">
-                                    <ul id="organizations" class="pl-0 pt-2">
-                                    </ul>
-                                </div>
-                            </form>
-                            <span class="text-danger" id="errors"><br></span>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Chiudi</button>
-                            <button type="sbmit" class="btn btn-primary submit-btn">Avvia</button>
-                        </div>
-                    </div>
-                </div>
-            </div> end MODAL FORM TODO: remove in produciton -->
 
             <!-- CONTENT -->
             <div class="content bg-light">

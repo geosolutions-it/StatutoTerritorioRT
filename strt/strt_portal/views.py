@@ -19,8 +19,9 @@ from django.shortcuts import (
 from django.contrib.auth import authenticate, login
 from django.forms import ValidationError
 from django.conf import settings
-import jwt
 from strt_tests.forms import UserAuthenticationForm
+from rules.contrib.views import permission_required
+import jwt
 
 
 def privateAreaView(request):
@@ -61,9 +62,9 @@ def privateAreaView(request):
     return render(request, 'strt_tests/user_authentication_test.html', context)
 
 
-class SerapideView(TemplateView):
-
-    template_name = "../../serapide-client/build/index.html" # serapide-client
+@permission_required('strt_users.can_access_serapide')
+def serapideView(request):
+    return render(request, 'index.html') # serapide-client
 
 
 class GeoportalView(TemplateView):
