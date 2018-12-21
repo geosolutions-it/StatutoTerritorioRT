@@ -10,10 +10,10 @@
 - Wagtail setup
 
 
-## Python versions
+## Python/Django versions
 
-- Python 3
-
+- Python 3.6+
+- Django 2.0.8+
 
 ## Install
 
@@ -32,9 +32,21 @@
 - Go to the deployment folder:\
 `cd StatutoTerritorioRT/deployment`
 
+- Create the DB if not exists
+```
+sudo -u postgres createuser -P <username>
+
+sudo -u postgres createdb -O <username> <dbname>
+sudo -u postgres psql -d <dbname> -c 'CREATE EXTENSION postgis;'
+sudo -u postgres psql -d <dbname> -c 'GRANT ALL ON geometry_columns TO PUBLIC;';
+sudo -u postgres psql -d <dbname> -c 'GRANT ALL ON spatial_ref_sys TO PUBLIC;';
+sudo -u postgres psql -d <dbname> -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>;'
+```
+
 - Set your environment variables values in a `your_local.env` file (`dev.env` is an example) then run this script:\
 `source setenv.sh your_local.env`
 
+Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 
 ## Project setup
 
@@ -55,7 +67,24 @@
 
 ## Wagtail setup
 
-Setup an HomePage for your project:
+### Prepare the client and theme:
+
+- Go to the Theme folder:
+`cd StatutoTerritorioRT/strt/theme`
+
+- Build the CSS:
+`npm install`
+
+- Go to the Client folder:
+`cd StatutoTerritorioRT/strt/serapide_client`
+
+- Build the Frontend:
+```
+npm install
+npm run build-with-theme
+```
+
+### Setup an HomePage for your project:
 
 - Log in to the Wagtail admin panel (as superuser):\
 http://127.0.0.1:8000/admin/
@@ -70,7 +99,7 @@ http://127.0.0.1:8000/admin/
   - `Site name: Statuto del Territorio RT`
   - `Root page:` the new Page created
   - `Is default site: True`
-  
+
 - Save the new Site
 
 - Visit http://127.0.0.1:8000/ with your web browser to check the HomePage is visible
