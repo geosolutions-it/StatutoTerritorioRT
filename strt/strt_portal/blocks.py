@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #########################################################################
 #
 # Copyright 2018, GeoSolutions Sas.
@@ -7,7 +8,6 @@
 # LICENSE file in the root directory of this source tree.
 #
 #########################################################################
-
 
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.core.blocks import (
@@ -43,10 +43,3 @@ class FirstSectionBlock(BaseBlock):
 
     class Meta:
         template = 'strt_portal/blocks/first_section_block.html'
-
-
-
-
-
-
-

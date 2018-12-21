@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #########################################################################
 #
 # Copyright 2018, GeoSolutions Sas.
@@ -7,7 +8,6 @@
 # LICENSE file in the root directory of this source tree.
 #
 #########################################################################
-
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin

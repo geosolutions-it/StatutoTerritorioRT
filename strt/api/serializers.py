@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #########################################################################
 #
 # Copyright 2018, GeoSolutions Sas.
@@ -8,7 +9,6 @@
 #
 #########################################################################
 
-
 from rest_framework import serializers
 from strt_users.models import MembershipType
 
@@ -18,4 +18,3 @@ class MembershipTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = MembershipType
         fields = '__all__'
-

@@ -9,11 +9,4 @@
 #
 #########################################################################
 
-import pkg_resources
-
-from pkgutil import extend_path
-
-
-__path__ = extend_path(__path__, __name__)  # noqa
-
 default_app_config = "strt_users.apps.UsersConfig"

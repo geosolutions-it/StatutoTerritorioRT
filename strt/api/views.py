@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #########################################################################
 #
 # Copyright 2018, GeoSolutions Sas.
@@ -7,7 +8,6 @@
 # LICENSE file in the root directory of this source tree.
 #
 #########################################################################
-
 
 from .serializers import MembershipTypeSerializer
 from strt_users.models import Organization, MembershipType
