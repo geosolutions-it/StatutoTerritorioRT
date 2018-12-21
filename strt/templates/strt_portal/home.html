@@ -15,12 +15,18 @@ LICENSE file in the root directory of this source tree.
 {% load i18n %}
 {% load wagtailcore_tags %}
 
-{% block head_title %}{{ block.super }} - {% trans 'home' %}{% endblock head_title %}
+{% block head_title %}{{ block.super }} - {% trans 'home'|capfirst %}{% endblock head_title %}
 
 {% block content %}
 
-        <div class="w-100 h-auto p-2">
-            {{ page.body|richtext }}
-        </div>
+    <div class="w-100 h-auto p-0 pt-2 pt-lg-5 m-0">
+
+        {% for block in page.body %}
+            <section class="block-{{ block.block_type }}">
+                {% include_block block %}
+            </section>
+        {% endfor %}
+
+    </div>
 
 {% endblock content %}

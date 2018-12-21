@@ -88,3 +88,27 @@
 a {
     outline: none;
 }
+.big-text {
+    font-size: 5vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    line-height: normal;
+}
+.medium-text {
+    font-size: 2vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    line-height: normal;
+}
+@include media-breakpoint-down(md) {
+    .content {
+        padding-left: 1vw;
+        padding-right: 1vw;
+    }
+    .big-text {
+        font-size: 30px;
+    }
+    .medium-text {
+        font-size: 15px;
+    }
+}

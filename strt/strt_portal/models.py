@@ -9,9 +9,10 @@
 #########################################################################
 
 
+from wagtail.admin.edit_handlers import StreamFieldPanel
+from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel
+from .blocks import FirstSectionBlock
 
 
 class Home(Page):
@@ -21,8 +22,15 @@ class Home(Page):
     the page contents in the Wagtail admin.
     """
 
-    body = RichTextField(blank=True)
+    body = StreamField(
+        [
+            ('First_section', FirstSectionBlock(
+                verbose_name="Fisrt section block",
+                blank=True
+            ))
+        ]
+    )
 
     content_panels = Page.content_panels + [
-        FieldPanel('body', classname="full"),
+        StreamFieldPanel('body'),
     ]

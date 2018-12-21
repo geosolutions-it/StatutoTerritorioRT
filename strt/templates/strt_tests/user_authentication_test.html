@@ -28,7 +28,7 @@ LICENSE file in the root directory of this source tree.
         <h2>{% trans 'test autenticazione utente'|capfirst %}</h2>
         <hr class="border-warning border-bottom"></hr>
 
-        <p>La procedura di autenticazione prevede 3 casistiche per 3 differenti tipologie di utenti:</p>
+        <p>La procedura di autenticazione prevede due casistiche:</p>
         <ol>
             <li>
                 <p>
@@ -44,22 +44,13 @@ LICENSE file in the root directory of this source tree.
                     Utente creato dal Responsabile ISIDE e operante su SERAPIDE
                     <br>
                     <small>
-                        Inserire unicamente il Codice Fiscale.
-                    </small>
-                </p>
-            </li>
-            <li>
-                <p>
-                    Utente temporaneo con permessi specifici su SERAPIDE
-                    <br>
-                    <small>
-                        Inserire unicamente il Codice Identificativo.
+                        Inserire unicamente il Codice Fiscale (l'utente deve essere già stato preventivamente registrato).
                     </small>
                 </p>
             </li>
         </ol>
 
-        <form method="POST" novalidate id="user-membership" class="w-50"
+        <form method="POST" novalidate id="user-membership" class="col-12 col-lg-5"
             membership-type-data-url="{% url 'membership_type_data' %}">
             {% csrf_token %}
             {{ form|crispy }}

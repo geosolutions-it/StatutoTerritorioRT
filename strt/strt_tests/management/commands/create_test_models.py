@@ -19,7 +19,7 @@ from strt_users.models import (
 
 class Command(BaseCommand):
 
-    help = 'Create organizations and organizations types for test'
+    help = 'Create models for tests'
 
     organizations = [
         {

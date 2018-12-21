@@ -27,7 +27,12 @@ import jwt
 def privateAreaView(request):
     current_user = get_current_authenticated_user()
     if current_user:
-        return redirect('serapide')
+        if current_user.has_perm('strt_users.can_access_serapide'):
+            return redirect('serapide')
+        elif current_user.has_perm('strt_users.can_manage_users'):
+            return redirect('users_list')
+        else:
+            return redirect('')
     else:
         # TODO: redirect to RT SSO service endpoint
         if request.method == "POST":
