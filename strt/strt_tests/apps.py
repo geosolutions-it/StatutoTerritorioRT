@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #########################################################################
 #
 # Copyright 2018, GeoSolutions Sas.
@@ -13,4 +14,4 @@ from django.apps import AppConfig
 
 
 class StrtPortalTestConfig(AppConfig):
-    name = 'strt_test'
+    name = 'strt_tests'

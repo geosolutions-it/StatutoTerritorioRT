@@ -10,10 +10,10 @@
 - Wagtail setup
 
 
-## Python versions
+## Python/Django versions
 
-- Python 3
-
+- Python 3.6+
+- Django 2.0.8+
 
 ## Install
 
@@ -67,7 +67,24 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 
 ## Wagtail setup
 
-Setup an HomePage for your project:
+### Prepare the client and theme:
+
+- Go to the Theme folder:
+`cd StatutoTerritorioRT/strt/theme`
+
+- Build the CSS:
+`npm install`
+
+- Go to the Client folder:
+`cd StatutoTerritorioRT/strt/serapide_client`
+
+- Build the Frontend:
+```
+npm install
+npm run build-with-theme
+```
+
+### Setup an HomePage for your project:
 
 - Log in to the Wagtail admin panel (as superuser):\
 http://127.0.0.1:8000/admin/
@@ -82,7 +99,7 @@ http://127.0.0.1:8000/admin/
   - `Site name: Statuto del Territorio RT`
   - `Root page:` the new Page created
   - `Is default site: True`
-  
+
 - Save the new Site
 
 - Visit http://127.0.0.1:8000/ with your web browser to check the HomePage is visible
