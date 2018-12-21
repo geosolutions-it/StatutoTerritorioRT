@@ -28,7 +28,7 @@ LICENSE file in the root directory of this source tree.
         <h2>{% trans 'registazione utente'|capfirst %}</h2>
         <hr class="border-warning border-bottom"></hr>
 
-        <form method="POST" novalidate class="w-50">
+        <form method="POST" novalidate class="col-12 col-lg-5">
             {% csrf_token %}
             {{ form|crispy }}
             <button type="submit" class="btn btn-warning my-2 my-lg-4 text-center">

@@ -35,11 +35,12 @@ class StrtPortalAuthentication:
 
         with transaction.atomic():
 
-            if payload['fiscal_code']:
+            if 'fiscal_code' in payload and payload['fiscal_code']:
 
                 # Responsabile ISIDE user
-                if payload['membership_type'] and \
+                if 'membership_type' in payload and payload['membership_type'] and \
                         payload['membership_type'] == settings.RESPONSABILE_ISIDE_CODE:
+
                     user, created = UserModel._default_manager.get_or_create(
                         fiscal_code=payload['fiscal_code'].strip().upper()
                     )
@@ -73,7 +74,8 @@ class StrtPortalAuthentication:
                         )
 
                 # SERAPIDE user
-                elif not payload['membership_type']:
+                elif 'membership_type' not in payload or not payload['membership_type']:
+
                     try:
                         user = UserModel._default_manager.get_by_natural_key(
                             payload['fiscal_code'].strip().upper()
@@ -82,6 +84,7 @@ class StrtPortalAuthentication:
                             raise forms.ValidationError(_('All\'utente non risulta assegnato nessun ruolo.'))
                     except UserModel.DoesNotExist:
                         raise forms.ValidationError(_('L\'utente non risulta censito.'))
+
                 else:
                     raise forms.ValidationError(_('Ruolo non ammesso.'))
 

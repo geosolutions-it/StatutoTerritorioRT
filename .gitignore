@@ -111,3 +111,6 @@ locale.env
 # Local test
 .test/
 local.env
+
+# Wagtail
+media/

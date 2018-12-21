@@ -29,7 +29,7 @@ LICENSE file in the root directory of this source tree.
         <hr class="border-warning border-bottom"></hr>
 
         <form method="POST" membership-type-data-url="{% url 'membership_type_data' %}"
-            novalidate id="user-membership" class="w-50">
+            novalidate id="user-membership" class="col-12 col-lg-5">
             {% csrf_token %}
             {{ form|crispy }}
             <button type="submit" class="btn btn-warning my-2 my-lg-4 text-center">

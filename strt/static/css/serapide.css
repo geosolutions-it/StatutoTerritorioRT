@@ -6712,4 +6712,25 @@ a.text-dark:hover, a.text-dark:focus {
 a {
   outline: none; }
 
+.big-text {
+  font-size: 5vw;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  line-height: normal; }
+
+.medium-text {
+  font-size: 2vw;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  line-height: normal; }
+
+@media (max-width: 991.98px) {
+  .content {
+    padding-left: 1vw;
+    padding-right: 1vw; }
+  .big-text {
+    font-size: 30px; }
+  .medium-text {
+    font-size: 15px; } }
+
 /*# sourceMappingURL=serapide.css.map */
