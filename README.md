@@ -32,9 +32,21 @@
 - Go to the deployment folder:\
 `cd StatutoTerritorioRT/deployment`
 
+- Create the DB if not exists
+```
+sudo -u postgres createuser -P <username>
+
+sudo -u postgres createdb -O <username> <dbname>
+sudo -u postgres psql -d <dbname> -c 'CREATE EXTENSION postgis;'
+sudo -u postgres psql -d <dbname> -c 'GRANT ALL ON geometry_columns TO PUBLIC;';
+sudo -u postgres psql -d <dbname> -c 'GRANT ALL ON spatial_ref_sys TO PUBLIC;';
+sudo -u postgres psql -d <dbname> -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>;'
+```
+
 - Set your environment variables values in a `your_local.env` file (`dev.env` is an example) then run this script:\
 `source setenv.sh your_local.env`
 
+Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 
 ## Project setup
 
