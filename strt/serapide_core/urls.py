@@ -15,7 +15,7 @@ from django.urls import path
 
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    # path('accounts/', include('django.contrib.auth.urls')),
+    url(r'^serapide/admin/', admin.site.urls),
+    # url(r'^serapide/accounts/', include('django.contrib.auth.urls')),
     url(r'^serapide/', include('serapide_core.api.urls')),
 ]

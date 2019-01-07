@@ -28,12 +28,9 @@ SECRET_KEY = EnvUtil.get_env_var('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = EnvUtil.get_env_var('DJANGO_DEBUG', bool, True)
 
-
 ALLOWED_HOSTS = EnvUtil.get_env_var('DJANGO_ALLOWED_HOSTS', list, [], ' ')
 
-
 # Application definition
-
 INSTALLED_APPS = [
     # StatutoTerritorioRT apps
     'base',
@@ -122,7 +119,6 @@ WSGI_APPLICATION = 'base.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
 DATABASES = {
     'default': dj_database_url.parse(
         EnvUtil.get_env_var('DJANGO_DATABASE_URL',
