@@ -1,0 +1,124 @@
+[
+  {
+    "model": "strt_users.organizationtype",
+    "pk": "C",
+    "fields": {
+      "name": "Comune",
+      "description": null
+    }
+  },
+  {
+    "model": "strt_users.organizationtype",
+    "pk": "R",
+    "fields": {
+      "name": "Regione",
+      "description": null
+    }
+  },
+  {
+    "model": "strt_users.organization",
+    "pk": "FI",
+    "fields": {
+      "name": "Firenze",
+      "description": null,
+      "type": "C"
+    }
+  },
+  {
+    "model": "strt_users.organization",
+    "pk": "LU",
+    "fields": {
+      "name": "Lucca",
+      "description": null,
+      "type": "C"
+    }
+  },
+  {
+    "model": "strt_users.organization",
+    "pk": "PI",
+    "fields": {
+      "name": "Pisa",
+      "description": null,
+      "type": "C"
+    }
+  },
+  {
+    "model": "strt_users.organization",
+    "pk": "RT",
+    "fields": {
+      "name": "Toscana",
+      "description": null,
+      "type": "R"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 1,
+    "fields": {
+      "code": "RUP",
+      "name": "Responsabile Unico del Procedimento",
+      "description": "Responsabile Unico del Procedimento per l'ente Comune",
+      "organization_type": "C"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 2,
+    "fields": {
+      "code": "RUP",
+      "name": "Responsabile Unico del Procedimento",
+      "description": "Responsabile Unico del Procedimento per l'ente Comune",
+      "organization_type": "R"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 3,
+    "fields": {
+      "code": "IVAS",
+      "name": "Ispettore VAS",
+      "description": "Ispettore VAS per l'ente Comune",
+      "organization_type": "R"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 4,
+    "fields": {
+      "code": "IPIT",
+      "name": "Ispettore PIT",
+      "description": "Ispettore PIT per l'ente Comune",
+      "organization_type": "R"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 5,
+    "fields": {
+      "code": "OP",
+      "name": "Operatore",
+      "description": "Operatore per l'ente Comune",
+      "organization_type": "C"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 6,
+    "fields": {
+      "code": "RI",
+      "name": "Responsabile ISIDE",
+      "description": "Responsabile ISIDE per l'ente Comune",
+      "organization_type": "C"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 7,
+    "fields": {
+      "code": "RI",
+      "name": "Responsabile ISIDE",
+      "description": "Responsabile ISIDE per l'ente Comune",
+      "organization_type": "R"
+    }
+  }
+]
