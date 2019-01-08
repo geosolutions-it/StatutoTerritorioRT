@@ -50,13 +50,13 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 
 ## Project setup
 
-- Go to the project management folder:
+- Go to the project management folder:\
 `cd StatutoTerritorioRT/strt`
 
-- Create the DB structure:
+- Create the DB structure:\
 `python manage.py migrate`
 
-- Create a super user:
+- Create a super user:\
 `python manage.py createsuperuser`
 
 - Load default data:
@@ -65,7 +65,7 @@ python manage.py loaddata fixtrues/strt_core.json
 python manage.py loaddata fixtrues/strt_users.json
 ```
 
-- Run the Django development server:
+- Run the Django development server:\
 `python manage.py runserver`
 
 - Visit http://127.0.0.1:8000/ with your web browser
@@ -75,13 +75,13 @@ python manage.py loaddata fixtrues/strt_users.json
 
 ### Prepare the client and theme:
 
-- Go to the Theme folder:
+- Go to the Theme folder:\
 `cd StatutoTerritorioRT/strt/theme`
 
-- Build the CSS:
+- Build the CSS:\
 `npm install`
 
-- Go to the Client folder:
+- Go to the Client folder:\
 `cd StatutoTerritorioRT/strt/serapide_client`
 
 - Build the Frontend:
