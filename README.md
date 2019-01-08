@@ -59,7 +59,7 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 - Create a super user:\
 `python manage.py createsuperuser`
 
-- Load default data:
+- Load default data:\
 ```
 python manage.py loaddata fixtrues/strt_core.json
 python manage.py loaddata fixtrues/strt_users.json
@@ -84,7 +84,7 @@ python manage.py loaddata fixtrues/strt_users.json
 - Go to the Client folder:\
 `cd StatutoTerritorioRT/strt/serapide_client`
 
-- Build the Frontend:
+- Build the Frontend:\
 ```
 npm install
 npm run build-with-theme
