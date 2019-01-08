@@ -50,21 +50,22 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 
 ## Project setup
 
-- Go to the project management folder:\
+- Go to the project management folder:
 `cd StatutoTerritorioRT/strt`
 
-- Create the DB structure:\
+- Create the DB structure:
 `python manage.py migrate`
 
-- Create a super user:\
+- Create a super user:
 `python manage.py createsuperuser`
 
-- Load default data:\
-`python manage.py loaddata fixtrues/strt_core.json`
+- Load default data:
+```
+python manage.py loaddata fixtrues/strt_core.json
+python manage.py loaddata fixtrues/strt_users.json
+```
 
-`python manage.py loaddata fixtrues/strt_users.json`
-
-- Run the Django development server:\
+- Run the Django development server:
 `python manage.py runserver`
 
 - Visit http://127.0.0.1:8000/ with your web browser
@@ -91,7 +92,7 @@ npm run build-with-theme
 
 ### Setup an HomePage for your project:
 
-- Log in to the Wagtail admin panel (as superuser):\
+- Log in to the Wagtail admin panel (as superuser):
 http://127.0.0.1:8000/admin/
 
 - Delete the existing Pages and Sites
