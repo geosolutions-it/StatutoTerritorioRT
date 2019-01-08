@@ -15,11 +15,18 @@ from graphene import InputObjectType, relay
 from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
+
+from strt_users.models import (
+    Organization, OrganizationType
+)
+
 from serapide_core.helpers import get_errors, update_create_instance
 from serapide_core.modello.models import (
     Piano, Fase, FasePianoStorico
 )
-from serapide_core.modello.enums import (TIPOLOGIA_PIANO)
+from serapide_core.modello.enums import (
+    FASE, TIPOLOGIA_PIANO
+)
 
 
 """
@@ -73,8 +80,30 @@ class FasePianoStoricoType(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class EnteTipoNode(DjangoObjectType):
+    class Meta:
+        model = OrganizationType
+        interfaces = (relay.Node, )
+
+
+class EnteNode(DjangoObjectType):
+
+    tipologia_ente = graphene.Field(EnteTipoNode)
+
+    class Meta:
+        model = Organization
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'code': ['exact'],
+            'name': ['exact', 'icontains', 'istartswith'],
+            'description': ['exact', 'icontains'],
+        }
+        interfaces = (relay.Node, )
+
+
 class PianoNode(DjangoObjectType):
 
+    ente = graphene.Field(EnteNode)
     storico_fasi = graphene.List(FasePianoStoricoType)
 
     def resolve_storico_fasi(self, info, **args):
@@ -86,10 +115,9 @@ class PianoNode(DjangoObjectType):
         model = Piano
         # Allow for some more advanced filtering here
         filter_fields = {
-            'nome': ['exact', 'icontains', 'istartswith'],
             'codice': ['exact', 'icontains', 'istartswith'],
-            'identificativo': ['exact', 'icontains', 'istartswith'],
-            'notes': ['exact', 'icontains'],
+            'ente': ['exact'],
+            'descrizione': ['exact', 'icontains'],
             'tipologia': ['exact', 'icontains'],
             'fase': ['exact'],
             'fase__nome': ['exact'],
@@ -115,13 +143,11 @@ class PianoCreateInput(InputObjectType):
     from the interactive graphql console.
     """
 
-    nome = graphene.String(required=True)
     codice = graphene.String(required=True)
-    identificativo = graphene.String(required=True)
     tipologia = graphene.String(required=False)
     url = graphene.String(required=False)
     data_creazione = graphene.types.datetime.DateTime(required=False)
-    notes = graphene.InputField(graphene.List(graphene.String), required=False)
+    descrizione = graphene.InputField(graphene.List(graphene.String), required=False)
     fase = graphene.InputField(FaseCreateInput, required=True)
 
 
@@ -229,9 +255,17 @@ class UploadFile(graphene.ClientIDMutation):
 # ##############################################################################
 # ENUMS
 # ##############################################################################
-class TipologiaPiano(graphene.ObjectType):
+class StrtEnumNode(graphene.ObjectType):
     value= graphene.String()
     label = graphene.String()
+
+
+class FasePiano(StrtEnumNode):
+    pass
+
+
+class TipologiaPiano(StrtEnumNode):
+    pass
 
 
 # ##############################################################################
@@ -239,6 +273,9 @@ class TipologiaPiano(graphene.ObjectType):
 # ##############################################################################
 class Query(object):
     # Models
+    ente = relay.Node.Field(EnteNode)
+    tutti_gli_enti = DjangoFilterConnectionField(EnteNode)
+
     fase = relay.Node.Field(FaseNode)
     tutte_le_fasi = DjangoFilterConnectionField(FaseNode)
 
@@ -246,9 +283,16 @@ class Query(object):
     tutti_i_piani = DjangoFilterConnectionField(PianoNode)
 
     # Enums
+    fase_piano = graphene.List(FasePiano)
     tipologia_piano = graphene.List(TipologiaPiano)
 
-    def resolve_tipologia_piano(self,info):
+    def resolve_fase_piano(self, info):
+        l = []
+        for f in FASE:
+            l.append(FasePiano(f[0], f[1]))
+        return l
+
+    def resolve_tipologia_piano(self, info):
         l = []
         for t in TIPOLOGIA_PIANO:
             l.append(TipologiaPiano(t[0], t[1]))

@@ -59,6 +59,11 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 - Create a super user:\
 `python manage.py createsuperuser`
 
+- Load default data:\
+`python manage.py loaddata fixtrues/strt_core.json`
+
+`python manage.py loaddata fixtrues/strt_users.json`
+
 - Run the Django development server:\
 `python manage.py runserver`
 

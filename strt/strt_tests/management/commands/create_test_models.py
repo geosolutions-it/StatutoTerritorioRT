@@ -114,7 +114,7 @@ class Command(BaseCommand):
 
                 membership_type, created = MembershipType._default_manager.get_or_create(
                     code=mt['code'],
-                    organization_type=mt['org_type']
+                    organization_type=OrganizationType._default_manager.get(code=mt['org_type'])
                 )
                 if created:
                     membership_type.name = mt["name"]

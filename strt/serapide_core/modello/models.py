@@ -15,6 +15,9 @@ from datetime import datetime
 
 import pytz
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
+from strt_users.models import Organization
 
 from .enums import (FASE,
                     TIPOLOGIA_PIANO)
@@ -36,7 +39,7 @@ class Fase(models.Model):
         verbose_name_plural = 'Fasi'
 
     def __str__(self):
-        return 'Fase: {} - {}'.format(self.codice, self.nome)
+        return '{} [{}]'.format(self.codice, self.nome)
 
 
 class Piano(models.Model):
@@ -49,14 +52,16 @@ class Piano(models.Model):
         null=True
     )
 
-    nome = models.CharField(max_length=255, null=False, blank=False)
-    codice = models.CharField(max_length=255, null=False, blank=False)
-    identificativo = models.CharField(max_length=255)
+    codice = models.CharField(
+        max_length=255,
+        null=False,
+        blank=False,
+        unique=True)
     tipologia = models.CharField(
         choices=TIPOLOGIA_PIANO,
         default=TIPOLOGIA_PIANO.unknown,
         max_length=20)
-    notes = models.TextField(null=True, blank=True)
+    descrizione = models.TextField(null=True, blank=True)
     url = models.URLField(null=True, blank=True, default='')
     data_delibera = models.DateTimeField(null=True, blank=True)
     data_creazione = models.DateTimeField(null=True, blank=True)
@@ -68,13 +73,18 @@ class Piano(models.Model):
     fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
     storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
 
+    ente = models.ForeignKey(
+        to=Organization, on_delete=models.CASCADE, verbose_name=_('ente'),
+        default=None, blank=True, null=True
+    )
+
     class Meta:
         db_table = "strt_core_piano"
         verbose_name_plural = 'Piani'
-        unique_together = (('nome', 'codice',),)
+        # unique_together = (('nome', 'codice',),)
 
     def __str__(self):
-        return 'Piano: {} - {}'.format(self.codice, self.nome)
+        return '{} [{}]'.format(self.codice, self.tipologia)
 
     def post_save(self):
         _now = datetime.utcnow().replace(tzinfo=pytz.utc)
