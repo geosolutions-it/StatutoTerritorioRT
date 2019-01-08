@@ -10,6 +10,8 @@
 #########################################################################
 
 import graphene
+import django_filters
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from graphene import InputObjectType, relay
 from graphene_django import DjangoObjectType
@@ -29,45 +31,10 @@ from serapide_core.modello.enums import (
 )
 
 
-"""
-# Custom Filter Set example
-class AnimalNode(DjangoObjectType):
-    class Meta:
-        # Assume you have an Animal model defined with the following fields
-        model = Animal
-        filter_fields = ['name', 'genus', 'is_domesticated']
-        interfaces = (relay.Node, )
-
-
-class AnimalFilter(django_filters.FilterSet):
-    # Do case-insensitive lookups on 'name'
-    name = django_filters.CharFilter(lookup_expr=['iexact'])
-
-    class Meta:
-        model = Animal
-        fields = ['name', 'genus', 'is_domesticated']
-
-    @property
-    def qs(self):
-        # The query context can be found in self.request.
-        # The context argument is passed on as the request argument in a django_filters.FilterSet instance.
-        # You can use this to customize your filters to be context-dependent.
-        # We could modify the AnimalFilter above to pre-filter animals owned by
-        # the authenticated user (set in context.user)
-        return super(AnimalFilter, self).qs.filter(owner=self.request.user)
-
-
-class Query(ObjectType):
-    animal = relay.Node.Field(AnimalNode)
-    # We specify our custom AnimalFilter using the filterset_class param
-    all_animals = DjangoFilterConnectionField(AnimalNode,
-                                              filterset_class=AnimalFilter)
-"""
-
-
 # Graphene will automatically map the Category model's fields onto the CategoryNode.
 # This is configured in the CategoryNode's Meta class (as you can see below)
 class FaseNode(DjangoObjectType):
+
     class Meta:
         model = Fase
         filter_fields = ['codice', 'nome', 'descrizione', 'piani_operativi']
@@ -75,12 +42,14 @@ class FaseNode(DjangoObjectType):
 
 
 class FasePianoStoricoType(DjangoObjectType):
+
     class Meta:
         model = FasePianoStorico
         interfaces = (relay.Node, )
 
 
 class EnteTipoNode(DjangoObjectType):
+
     class Meta:
         model = OrganizationType
         interfaces = (relay.Node, )
@@ -131,7 +100,6 @@ class FaseCreateInput(InputObjectType):
     Class created to accept input data
     from the interactive graphql console.
     """
-
     nome = graphene.String(source='nome', required=True)
     codice = graphene.String(required=True)
     descrizione = graphene.String(required=False)
@@ -142,7 +110,6 @@ class PianoCreateInput(InputObjectType):
     Class created to accept input data
     from the interactive graphql console.
     """
-
     codice = graphene.String(required=True)
     tipologia = graphene.String(required=False)
     url = graphene.String(required=False)
@@ -160,6 +127,12 @@ class CreateFase(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
+        """
+        TODO: Check permissions
+        if not info.context.user.is_authenticated():
+            return Post.objects.none()
+        """
+        print(" ================================ %s " % info.context.user)
         _data = input.get('fase')
         _fase = Fase()
         nuova_fase = update_create_instance(_fase, _data)
@@ -177,6 +150,12 @@ class UpdateFase(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
+        """
+        TODO: Check permissions
+        if not info.context.user.is_authenticated():
+            return Post.objects.none()
+        """
+        print(" ================================ %s " % info.context.user)
         try:
             _instance = Fase.objects.get(codice=input['codice'])
             if _instance:
@@ -196,6 +175,12 @@ class CreatePiano(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
+        """
+        TODO: Check permissions
+        if not info.context.user.is_authenticated():
+            return Post.objects.none()
+        """
+        print(" ================================ %s " % info.context.user)
         _piano_data = input.get('piano_operativo')
         _data = _piano_data.pop('fase')
         _fase = Fase.objects.get(codice=_data['codice'])
@@ -217,6 +202,12 @@ class UpdatePiano(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
+        """
+        TODO: Check permissions
+        if not info.context.user.is_authenticated():
+            return Post.objects.none()
+        """
+        print(" ================================ %s " % info.context.user)
         try:
             _piano = Piano.objects.get(codice=input['codice'])
             if _piano:
@@ -269,18 +260,70 @@ class TipologiaPiano(StrtEnumNode):
 
 
 # ##############################################################################
+# FILTERS
+# ##############################################################################
+class EnteUserMembershipFilter(django_filters.FilterSet):
+    # Do case-insensitive lookups on 'name'
+    name = django_filters.CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = Organization
+        fields = ['name', 'code', 'description']
+
+    @property
+    def qs(self):
+        # The query context can be found in self.request.
+        if self.request.user and self.request.user.is_authenticated():
+            return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
+        else:
+            return super(EnteUserMembershipFilter, self).qs.none()
+
+
+class PianoUserMembershipFilter(django_filters.FilterSet):
+    # Do case-insensitive lookups on 'name'
+    codice = django_filters.CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = Piano
+        fields = '__all__'
+
+    @property
+    def qs(self):
+        # The query context can be found in self.request.
+        _enti = []
+        _memberships = None
+        if self.request.user and self.request.user.is_authenticated():
+            _memberships = self.request.user.memberships
+            if _memberships:
+                for _m in _memberships.all():
+                    if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
+                        # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
+                        _enti = []
+                        break
+                    elif _m.type.code == settings.RUP_CODE:
+                        # RUP_CODE can access to all Piani
+                        _enti = Organization.objects.values_list('code', flat=True)
+                        break
+                    else:
+                        _enti.append(_m.organization.code)
+        return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti)
+
+
+# ##############################################################################
 # QUERIES
 # ##############################################################################
 class Query(object):
     # Models
-    ente = relay.Node.Field(EnteNode)
-    tutti_gli_enti = DjangoFilterConnectionField(EnteNode)
+    # ente = relay.Node.Field(EnteNode)
+    enti = DjangoFilterConnectionField(EnteNode,
+                                       filterset_class=EnteUserMembershipFilter)
 
-    fase = relay.Node.Field(FaseNode)
-    tutte_le_fasi = DjangoFilterConnectionField(FaseNode)
+    # fase = relay.Node.Field(FaseNode)
+    fasi = DjangoFilterConnectionField(FaseNode)
 
-    piano = relay.Node.Field(PianoNode)
-    tutti_i_piani = DjangoFilterConnectionField(PianoNode)
+    # piano = relay.Node.Field(PianoNode)
+    piani = DjangoFilterConnectionField(PianoNode,
+                                        filterset_class=PianoUserMembershipFilter)
 
     # Enums
     fase_piano = graphene.List(FasePiano)
@@ -300,18 +343,6 @@ class Query(object):
 
     # Debug
     debug = graphene.Field(DjangoDebug, name='__debug')
-
-    """
-    # Example Auth
-    my_posts = DjangoFilterConnectionField(PostNode)
-
-    def resolve_my_posts(self, info):
-        # context will reference to the Django request
-        if not info.context.user.is_authenticated():
-            return Post.objects.none()
-        else:
-            return Post.objects.filter(owner=info.context.user)
-    """
 
 
 # ##############################################################################
