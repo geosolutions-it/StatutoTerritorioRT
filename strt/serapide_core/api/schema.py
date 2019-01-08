@@ -13,6 +13,7 @@ import graphene
 import django_filters
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 from graphene import InputObjectType, relay
 from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
@@ -22,7 +23,9 @@ from strt_users.models import (
     Organization, OrganizationType
 )
 
-from serapide_core.helpers import get_errors, update_create_instance
+from serapide_core.helpers import (
+    get_errors, update_create_instance, is_RUP
+)
 from serapide_core.modello.models import (
     Piano, Fase, FasePianoStorico
 )
@@ -127,16 +130,13 @@ class CreateFase(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        """
-        TODO: Check permissions
-        if not info.context.user.is_authenticated():
-            return Post.objects.none()
-        """
-        print(" ================================ %s " % info.context.user)
-        _data = input.get('fase')
-        _fase = Fase()
-        nuova_fase = update_create_instance(_fase, _data)
-        return cls(nuova_fase=nuova_fase)
+        if info.context.user and info.context.user.is_authenticated() and info.context.user.is_superuser:
+            _data = input.get('fase')
+            _fase = Fase()
+            nuova_fase = update_create_instance(_fase, _data)
+            return cls(nuova_fase=nuova_fase)
+        else:
+            return cls(nuova_fase=None, errors=[_("Forbidden")])
 
 
 class UpdateFase(relay.ClientIDMutation):
@@ -150,20 +150,17 @@ class UpdateFase(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        """
-        TODO: Check permissions
-        if not info.context.user.is_authenticated():
-            return Post.objects.none()
-        """
-        print(" ================================ %s " % info.context.user)
-        try:
-            _instance = Fase.objects.get(codice=input['codice'])
-            if _instance:
-                _data = input.get('fase')
-                fase_aggiornata = update_create_instance(_instance, _data)
-                return cls(fase_aggiornata=fase_aggiornata)
-        except ValidationError as e:
-            return cls(fase_aggiornata=None, errors=get_errors(e))
+        if info.context.user and info.context.user.is_authenticated() and info.context.user.is_superuser:
+            try:
+                _instance = Fase.objects.get(codice=input['codice'])
+                if _instance:
+                    _data = input.get('fase')
+                    fase_aggiornata = update_create_instance(_instance, _data)
+                    return cls(fase_aggiornata=fase_aggiornata)
+            except ValidationError as e:
+                return cls(fase_aggiornata=None, errors=get_errors(e))
+        else:
+            return cls(fase_aggiornata=None, errors=[_("Forbidden")])
 
 
 class CreatePiano(relay.ClientIDMutation):
@@ -175,20 +172,16 @@ class CreatePiano(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        """
-        TODO: Check permissions
-        if not info.context.user.is_authenticated():
-            return Post.objects.none()
-        """
-        print(" ================================ %s " % info.context.user)
-        _piano_data = input.get('piano_operativo')
-        _data = _piano_data.pop('fase')
-        _fase = Fase.objects.get(codice=_data['codice'])
-        _piano_data['fase'] = _fase
-        _piano = Piano()
-        nuovo_piano = update_create_instance(_piano, _piano_data)
-
-        return cls(nuovo_piano=nuovo_piano)
+        if is_RUP(info.context.user):
+            _piano_data = input.get('piano_operativo')
+            _data = _piano_data.pop('fase')
+            _fase = Fase.objects.get(codice=_data['codice'])
+            _piano_data['fase'] = _fase
+            _piano = Piano()
+            nuovo_piano = update_create_instance(_piano, _piano_data)
+            return cls(nuovo_piano=nuovo_piano)
+        else:
+            return cls(nuovo_piano=None, errors=[_("Forbidden")])
 
 
 class UpdatePiano(relay.ClientIDMutation):
@@ -202,23 +195,20 @@ class UpdatePiano(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        """
-        TODO: Check permissions
-        if not info.context.user.is_authenticated():
-            return Post.objects.none()
-        """
-        print(" ================================ %s " % info.context.user)
-        try:
-            _piano = Piano.objects.get(codice=input['codice'])
-            if _piano:
-                _piano_data = input.get('piano_operativo')
-                _data = _piano_data.pop('fase')
-                _fase = Fase.objects.get(codice=_data['codice'])
-                _piano.fase = _fase
-                piano_aggiornato = update_create_instance(_piano, _piano_data)
-                return cls(piano_aggiornato=piano_aggiornato)
-        except ValidationError as e:
-            return cls(piano_aggiornato=None, errors=get_errors(e))
+        if is_RUP(info.context.user):
+            try:
+                _piano = Piano.objects.get(codice=input['codice'])
+                if _piano:
+                    _piano_data = input.get('piano_operativo')
+                    _data = _piano_data.pop('fase')
+                    _fase = Fase.objects.get(codice=_data['codice'])
+                    _piano.fase = _fase
+                    piano_aggiornato = update_create_instance(_piano, _piano_data)
+                    return cls(piano_aggiornato=piano_aggiornato)
+            except ValidationError as e:
+                return cls(piano_aggiornato=None, errors=get_errors(e))
+        else:
+            return cls(piano_aggiornato=None, errors=[_("Forbidden")])
 
 
 """
@@ -273,7 +263,7 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
     @property
     def qs(self):
         # The query context can be found in self.request.
-        if self.request.user and self.request.user.is_authenticated():
+        if self.request.user and self.request.user.is_authenticated:
             return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
         else:
             return super(EnteUserMembershipFilter, self).qs.none()
@@ -292,7 +282,7 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
         # The query context can be found in self.request.
         _enti = []
         _memberships = None
-        if self.request.user and self.request.user.is_authenticated():
+        if self.request.user and self.request.user.is_authenticated:
             _memberships = self.request.user.memberships
             if _memberships:
                 for _m in _memberships.all():

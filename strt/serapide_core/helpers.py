@@ -11,7 +11,18 @@
 
 """Script defined to create helper functions for graphql schema."""
 
+from django.conf import settings
 from graphql_relay.node.node import from_global_id
+
+
+def is_RUP(user):
+    if user and user.is_authenticated():
+        _memberships = user.memberships
+        if _memberships:
+            for _m in _memberships.all():
+                if _m.type.code == settings.RUP_CODE:
+                    return True
+    return False
 
 
 def get_object(object_name, relayId, otherwise=None):
