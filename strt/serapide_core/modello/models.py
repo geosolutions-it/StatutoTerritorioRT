@@ -16,26 +16,27 @@ from datetime import datetime
 import pytz
 from django.db import models
 
-from .enums import (STATUS,
+from .enums import (FASE,
                     TIPOLOGIA_PIANO)
 
 
 log = logging.getLogger(__name__)
 
 
-class Stato(models.Model):
+class Fase(models.Model):
     codice = models.CharField(max_length=255, primary_key=True)
     nome = models.CharField(
-        choices=STATUS,
-        default=STATUS.draft,
+        choices=FASE,
+        default=FASE.draft,
         max_length=20)
     descrizione = models.TextField(null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = 'Stati'
+        db_table = "strt_core_fase"
+        verbose_name_plural = 'Fasi'
 
     def __str__(self):
-        return 'Stato: {} - {}'.format(self.codice, self.nome)
+        return 'Fase: {} - {}'.format(self.codice, self.nome)
 
 
 class Piano(models.Model):
@@ -57,16 +58,18 @@ class Piano(models.Model):
         max_length=20)
     notes = models.TextField(null=True, blank=True)
     url = models.URLField(null=True, blank=True, default='')
+    data_delibera = models.DateTimeField(null=True, blank=True)
     data_creazione = models.DateTimeField(null=True, blank=True)
     data_accettazione = models.DateTimeField(null=True, blank=True)
     data_avvio = models.DateTimeField(null=True, blank=True)
     data_approvazione = models.DateTimeField(null=True, blank=True)
     last_update = models.DateTimeField(null=True, blank=True)
 
-    stato = models.ForeignKey(Stato, related_name='piani_operativi', on_delete=models.CASCADE)
-    storico_stati = models.ManyToManyField(Stato, through='StatoPianoStorico')
+    fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
+    storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
 
     class Meta:
+        db_table = "strt_core_piano"
         verbose_name_plural = 'Piani'
         unique_together = (('nome', 'codice',),)
 
@@ -75,24 +78,27 @@ class Piano(models.Model):
 
     def post_save(self):
         _now = datetime.utcnow().replace(tzinfo=pytz.utc)
-        _full_hist = list(self.storico_stati.all())
+        _full_hist = list(self.storico_fasi.all())
         _prev_state = _full_hist[len(_full_hist) - 1] if len(_full_hist) > 0 else None
-        if self.stato:
-            if not _prev_state or _prev_state.codice != self.stato.codice:
-                _state_hist = StatoPianoStorico()
+        if self.fase:
+            if not _prev_state or _prev_state.codice != self.fase.codice:
+                _state_hist = FasePianoStorico()
                 _state_hist.piano = self
-                _state_hist.stato = self.stato
+                _state_hist.fase = self.fase
                 _state_hist.data_apertura = _now
                 _state_hist.save()
 
                 if _prev_state:
-                    _state_hist = StatoPianoStorico.objects.filter(piano=self, stato=_prev_state).first()
+                    _state_hist = FasePianoStorico.objects.filter(piano=self, fase=_prev_state).first()
                     _state_hist.data_chiusura = _now
                     _state_hist.save()
 
 
-class StatoPianoStorico(models.Model):
+class FasePianoStorico(models.Model):
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
-    stato = models.ForeignKey(Stato, on_delete=models.CASCADE)
+    fase = models.ForeignKey(Fase, on_delete=models.CASCADE)
     data_apertura = models.DateTimeField()
     data_chiusura = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "strt_core_piano_storico_fasi"

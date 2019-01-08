@@ -11,8 +11,8 @@
 
 from django.contrib import admin
 
-from .models import Piano, Stato
+from .models import Piano, Fase
 
 
-admin.site.register(Stato)
+admin.site.register(Fase)
 admin.site.register(Piano)

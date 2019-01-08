@@ -18,7 +18,7 @@ A list of choices for the rating system in the
 `SERAPIDE CORE` model:
 """
 
-STATUS = Choices(
+FASE = Choices(
         ('unknown', _('UNKNOWN')),
         ('draft', _('DRAFT')),
         ('inserito', _('INSERITO')),
@@ -31,5 +31,6 @@ STATUS = Choices(
 TIPOLOGIA_PIANO = Choices(
         ('unknown', _('UNKNOWN')),
         ('operativo', _('OPERATIVO')),
-        ('strutturale', _('STRUTTURALE'))
+        ('strutturale', _('STRUTTURALE')),
+        ('variante', _('VARIANTE')),
     )

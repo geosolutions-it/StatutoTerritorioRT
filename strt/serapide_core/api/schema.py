@@ -17,8 +17,9 @@ from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from serapide_core.helpers import get_errors, update_create_instance
 from serapide_core.modello.models import (
-    Piano, Stato, StatoPianoStorico
+    Piano, Fase, FasePianoStorico
 )
+from serapide_core.modello.enums import (TIPOLOGIA_PIANO)
 
 
 """
@@ -59,26 +60,26 @@ class Query(ObjectType):
 
 # Graphene will automatically map the Category model's fields onto the CategoryNode.
 # This is configured in the CategoryNode's Meta class (as you can see below)
-class StatoNode(DjangoObjectType):
+class FaseNode(DjangoObjectType):
     class Meta:
-        model = Stato
+        model = Fase
         filter_fields = ['codice', 'nome', 'descrizione', 'piani_operativi']
         interfaces = (relay.Node, )
 
 
-class StatoPianoStoricoType(DjangoObjectType):
+class FasePianoStoricoType(DjangoObjectType):
     class Meta:
-        model = StatoPianoStorico
+        model = FasePianoStorico
         interfaces = (relay.Node, )
 
 
 class PianoNode(DjangoObjectType):
 
-    storico_stati = graphene.List(StatoPianoStoricoType)
+    storico_fasi = graphene.List(FasePianoStoricoType)
 
-    def resolve_storico_stati(self, info, **args):
+    def resolve_storico_fasi(self, info, **args):
         # Warning this is not currently paginated
-        _hist = StatoPianoStorico.objects.filter(piano=self)
+        _hist = FasePianoStorico.objects.filter(piano=self)
         return list(_hist)
 
     class Meta:
@@ -90,14 +91,14 @@ class PianoNode(DjangoObjectType):
             'identificativo': ['exact', 'icontains', 'istartswith'],
             'notes': ['exact', 'icontains'],
             'tipologia': ['exact', 'icontains'],
-            'stato': ['exact'],
-            'stato__nome': ['exact'],
-            'stato__codice': ['exact'],
+            'fase': ['exact'],
+            'fase__nome': ['exact'],
+            'fase__codice': ['exact'],
         }
         interfaces = (relay.Node, )
 
 
-class StatoCreateInput(InputObjectType):
+class FaseCreateInput(InputObjectType):
     """
     Class created to accept input data
     from the interactive graphql console.
@@ -121,43 +122,43 @@ class PianoCreateInput(InputObjectType):
     url = graphene.String(required=False)
     data_creazione = graphene.types.datetime.DateTime(required=False)
     notes = graphene.InputField(graphene.List(graphene.String), required=False)
-    stato = graphene.InputField(StatoCreateInput, required=True)
+    fase = graphene.InputField(FaseCreateInput, required=True)
 
 
-class CreateStato(relay.ClientIDMutation):
+class CreateFase(relay.ClientIDMutation):
 
     class Input:
-        stato = graphene.Argument(StatoCreateInput)
+        fase = graphene.Argument(FaseCreateInput)
 
-    nuovo_stato = graphene.Field(StatoNode)
+    nuova_fase = graphene.Field(FaseNode)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        _data = input.get('stato')
-        _stato = Stato()
-        nuovo_stato = update_create_instance(_stato, _data)
-        return cls(nuovo_stato=nuovo_stato)
+        _data = input.get('fase')
+        _fase = Fase()
+        nuova_fase = update_create_instance(_fase, _data)
+        return cls(nuova_fase=nuova_fase)
 
 
-class UpdateStato(relay.ClientIDMutation):
+class UpdateFase(relay.ClientIDMutation):
 
     class Input:
-        stato = graphene.Argument(StatoCreateInput)
+        fase = graphene.Argument(FaseCreateInput)
         codice = graphene.String(required=True)
 
     errors = graphene.List(graphene.String)
-    stato_aggiornato = graphene.Field(StatoNode)
+    fase_aggiornata = graphene.Field(FaseNode)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         try:
-            _instance = Stato.objects.get(codice=input['codice'])
+            _instance = Fase.objects.get(codice=input['codice'])
             if _instance:
-                _data = input.get('stato')
-                stato_aggiornato = update_create_instance(_instance, _data)
-                return cls(stato_aggiornato=stato_aggiornato)
+                _data = input.get('fase')
+                fase_aggiornata = update_create_instance(_instance, _data)
+                return cls(fase_aggiornata=fase_aggiornata)
         except ValidationError as e:
-            return cls(stato_aggiornato=None, errors=get_errors(e))
+            return cls(fase_aggiornata=None, errors=get_errors(e))
 
 
 class CreatePiano(relay.ClientIDMutation):
@@ -170,9 +171,9 @@ class CreatePiano(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         _piano_data = input.get('piano_operativo')
-        _data = _piano_data.pop('stato')
-        _stato = Stato.objects.get(codice=_data['codice'])
-        _piano_data['stato'] = _stato
+        _data = _piano_data.pop('fase')
+        _fase = Fase.objects.get(codice=_data['codice'])
+        _piano_data['fase'] = _fase
         _piano = Piano()
         nuovo_piano = update_create_instance(_piano, _piano_data)
 
@@ -194,13 +195,13 @@ class UpdatePiano(relay.ClientIDMutation):
             _piano = Piano.objects.get(codice=input['codice'])
             if _piano:
                 _piano_data = input.get('piano_operativo')
-                _data = _piano_data.pop('stato')
-                _stato = Stato.objects.get(codice=_data['codice'])
-                _piano.stato = _stato
+                _data = _piano_data.pop('fase')
+                _fase = Fase.objects.get(codice=_data['codice'])
+                _piano.fase = _fase
                 piano_aggiornato = update_create_instance(_piano, _piano_data)
                 return cls(piano_aggiornato=piano_aggiornato)
         except ValidationError as e:
-            return cls(stato_aggiornato=None, errors=get_errors(e))
+            return cls(piano_aggiornato=None, errors=get_errors(e))
 
 
 """
@@ -225,17 +226,35 @@ class UploadFile(graphene.ClientIDMutation):
         return UploadFile(success=True)
 """
 
+# ##############################################################################
+# ENUMS
+# ##############################################################################
+class TipologiaPiano(graphene.ObjectType):
+    value= graphene.String()
+    label = graphene.String()
+
 
 # ##############################################################################
 # QUERIES
 # ##############################################################################
 class Query(object):
-    stato = relay.Node.Field(StatoNode)
-    tutti_gli_stati = DjangoFilterConnectionField(StatoNode)
+    # Models
+    fase = relay.Node.Field(FaseNode)
+    tutte_le_fasi = DjangoFilterConnectionField(FaseNode)
 
     piano = relay.Node.Field(PianoNode)
     tutti_i_piani = DjangoFilterConnectionField(PianoNode)
 
+    # Enums
+    tipologia_piano = graphene.List(TipologiaPiano)
+
+    def resolve_tipologia_piano(self,info):
+        l = []
+        for t in TIPOLOGIA_PIANO:
+            l.append(TipologiaPiano(t[0], t[1]))
+        return l
+
+    # Debug
     debug = graphene.Field(DjangoDebug, name='__debug')
 
     """
@@ -255,7 +274,7 @@ class Query(object):
 # MUTATIONS
 # ##############################################################################
 class Mutation(object):
-    create_stato = CreateStato.Field()
-    update_stato = UpdateStato.Field()
+    create_fase = CreateFase.Field()
+    update_fase = UpdateFase.Field()
     create_piano = CreatePiano.Field()
     update_piano = UpdatePiano.Field()
