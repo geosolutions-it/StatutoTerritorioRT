@@ -23,6 +23,7 @@ const user = {
     organizzazione: "Comune di Scandicci",
     ruolo: "rup"
 }
+const notifiche = []
 const messaggi = [{
     id: 1,
     data: "13/12/2018",
@@ -37,4 +38,4 @@ const messaggi = [{
     testo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas volutpat, lectus ac finibus dictum, lorem odio convallis nisi, vel rhoncus lorem ante nec tellus. Duis auctor pretium felis, vitae vestibulum quam blandit ut."
 }]
 
-export {piani, user, messaggi}
+export {piani, user, messaggi, notifiche}
