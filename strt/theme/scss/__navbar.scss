@@ -63,7 +63,7 @@
     color: inherit;
 }
 .bg-serapide-gray {
-    background-color: $serapide-gray !important;
+    background-color: $serapide-grey !important;
 }
 .navbar-expand {
     @each $breakpoint in map-keys($grid-breakpoints) {

@@ -2,6 +2,7 @@
     min-height: calc(100vh - 196px);
     padding-left: $portal-header;
     padding-right: $portal-header;
+    padding-bottom: $portal-header;
 }
 /** colori notifiche**/
 .icon-34 {
@@ -34,10 +35,6 @@
 }
 .vertical-divider-right {
     border-right: 1px solid rgba(255,255,255, 0.8);
-}
-@at-root .content {
-    min-height: calc(100vh - 196px);
-    padding-bottom: 60px;
 }
 @at-root  .rt-logo {
     height: $portal-header;
@@ -89,19 +86,65 @@
 }
 a {
     outline: none;
+    &:hover {
+        text-decoration: none !important;
+    }
 }
 .big-text {
-    font-size: 5vw;
-    padding-left: 5vw;
-    padding-right: 5vw;
-    line-height: normal;
+    font-size: 100px;
+    font-weight: 700;
+    line-height: 100px;
 }
 .medium-text {
-    font-size: 2vw;
-    padding-left: 5vw;
-    padding-right: 5vw;
-    line-height: normal;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 48px;
 }
+.wrap-text {
+    word-wrap: break-word;
+}
+#home {
+    font-family: "Helvetica Neue";
+}
+.first-section-row {
+    padding-left: 120px;
+    padding-right: 120px;
+}
+.second-section-row {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+.third-section-row {
+    padding-left: 80px;
+    padding-right: 80px;
+}
+.section-row {
+    padding-left: 60px;
+    padding-right: 60px;
+}
+.icon-col {
+    border-right: 8px solid yellow;
+}
+.home-icon {
+    font-size: 48px;
+}
+.bg-pink {
+    background-color: #e1e1e1;
+}
+.bg-serapide-grey {
+    background-color: $serapide-grey;
+}
+.open-panel-btn {
+    position: absolute;
+    right: 20px;
+    bottom: 15px;
+}
+.close-panel-btn {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+}
+
 @include media-breakpoint-down(md) {
     .content {
         padding-left: 1vw;
@@ -121,4 +164,8 @@ a {
     .Toastify__toast {
         border-radius: 8px;
     }
+}
+.section-row {
+    padding-left: 0px;
+    padding-right: 0px;
 }

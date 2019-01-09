@@ -217,6 +217,10 @@ class CreatePiano(relay.ClientIDMutation):
             else:
                 _fase = Fase.objects.get(codice='FP255')
             _piano_data['fase'] = _fase
+            # Descrizione (O)
+            if 'descrizione' in _piano_data:
+                _data = _piano_data.pop('descrizione')
+                _piano_data['descrizione'] = _data[0]
             _piano = Piano()
             nuovo_piano = update_create_instance(_piano, _piano_data)
             return cls(nuovo_piano=nuovo_piano)
@@ -240,14 +244,25 @@ class UpdatePiano(relay.ClientIDMutation):
                 _piano = Piano.objects.get(codice=input['codice'])
                 if _piano:
                     _piano_data = input.get('piano_operativo')
+                    if 'codice' in _piano_data:
+                        _piano_data.pop('codice')
+                        # This cannot be changed
+                    if 'data_creazione' in _piano_data:
+                        _piano_data.pop('data_creazione')
+                        # This cannot be changed
                     # Ente (M)
-                    _data = _piano_data.pop('ente')
-                    _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
-                    _piano_data['ente'] = _ente
-                    # Fase (M)
-                    _data = _piano_data.pop('fase')
-                    _fase = Fase.objects.get(codice=_data['codice'])
-                    _piano.fase = _fase
+                    if 'ente' in _piano_data:
+                        _piano_data.pop('ente')
+                        # This cannot be changed
+                    # Fase (O)
+                    if 'fase' in _piano_data:
+                        _data = _piano_data.pop('fase')
+                        _fase = Fase.objects.get(codice=_data['codice'])
+                        _piano.fase = _fase
+                    # Descrizione (O)
+                    if 'descrizione' in _piano_data:
+                        _data = _piano_data.pop('descrizione')
+                        _piano.descrizione = _data[0]
                     piano_aggiornato = update_create_instance(_piano, _piano_data)
                     return cls(piano_aggiornato=piano_aggiornato)
             except ValidationError as e:

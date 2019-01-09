@@ -182,36 +182,12 @@ LICENSE file in the root directory of this source tree.
 
         <script>
 
-            // If user-nav is visible (user logged in)
             if ($('.serapide').length > 0) {
                 $('.content').css('padding-top', '60px');
-                /*$('.content').css('padding-left', '250px');
-                $('.footer').css('padding-left', '250px');
-                let ww = $(window).width();
-                if (ww < 1199.98) {
-                    $('.sidebar').hide();
-                    $('.content').css('padding-left', '0px');
-                    $('.footer').css('padding-left', '0px');
-                }
-                $('#sidebar-toggler').click(function() {
-                    if ($('.sidebar').is(':visible')) {
-                        $('.sidebar').fadeOut(500);
-                        $('.content').css('padding-left', '0px');
-                        $('.footer').css('padding-left', '0px');
-                    } else {
-                        $('.sidebar').fadeIn(500);
-                        let sw = $('.sidebar').width();
-                        let spl = $('.sidebar').css('padding-left');
-                        let tot = sw + parseFloat(spl.replace('px',''));
-                        $('.content').css('padding-left', tot + 'px');
-                        $('.footer').css('padding-left', tot + 'px');
-                    }
-                });*/
             }
-
-            if ($('#serapide').length > 0) {
-                $('.content').css('padding-left', '0px');
-                $('.content').css('padding-right', '0px');
+            if ($('#home').length > 0) {
+                $('.content').css('padding', '0px');
+                $('.content').css('padding-top', '60px');
             }
 
         </script>

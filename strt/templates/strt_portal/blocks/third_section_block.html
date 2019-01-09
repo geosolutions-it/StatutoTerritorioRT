@@ -1,0 +1,32 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+
+<div class="row m-0 py-3 py-lg-5 third-section-row">
+
+    <div class="col-12 col-lg-5">
+        {% image self.image fill-800x800 class="img-fluid" %}
+    </div>
+    <div class="col-12 col-lg-7">
+        <p class="font-weight-bold wrap-text">
+            {{ self.subtitle }}
+        </p>
+        <p class="medium-text wrap-text">
+            {{ self.title }}
+        </p>
+        <p class="wrap-text">
+            {{ self.text }}
+        </p>
+    </div>
+
+</div>
