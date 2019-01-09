@@ -62,6 +62,17 @@ class EnteTipoNode(DjangoObjectType):
 class EnteNode(DjangoObjectType):
 
     tipologia_ente = graphene.Field(EnteTipoNode)
+    role = graphene.List(graphene.String)
+
+    def resolve_role(self, info, **args):
+        roles = []
+        if info.context.user and info.context.user.is_authenticated:
+            _memberships = info.context.user.memberships
+            if _memberships:
+                for _m in _memberships:
+                    if _m.organization.code == self.code:
+                        roles.append(_m.type.code)
+        return roles
 
     class Meta:
         model = Organization
@@ -142,7 +153,7 @@ class CreateFase(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        if info.context.user and info.context.user.is_authenticated() and info.context.user.is_superuser:
+        if info.context.user and info.context.user.is_authenticated and info.context.user.is_superuser:
             _data = input.get('fase')
             _fase = Fase()
             nuova_fase = update_create_instance(_fase, _data)
@@ -162,7 +173,7 @@ class UpdateFase(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        if info.context.user and info.context.user.is_authenticated() and info.context.user.is_superuser:
+        if info.context.user and info.context.user.is_authenticated and info.context.user.is_superuser:
             try:
                 _instance = Fase.objects.get(codice=input['codice'])
                 if _instance:
@@ -293,7 +304,7 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
 
     class Meta:
         model = Organization
-        fields = ['name', 'code', 'description']
+        fields = ['name', 'code', 'description', ]
 
     @property
     def qs(self):
