@@ -1,7 +1,8 @@
 import ApolloClient from 'apollo-boost'
+const getCookie = name => document.cookie.split(';').filter(el => el.startsWith("csrftoken")).map(el => el.split("=").pop()).pop()
 
 const client = new ApolloClient({
-    uri: "https://9y6kr9rmkr.sse.codesandbox.io"
-})
-
+    uri: "/serapide/graphql",
+    credentials: 'same-origin',
+    headers: {"X-CSRFToken": getCookie('csrftoken')}})
 export default client
