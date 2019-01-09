@@ -257,9 +257,8 @@ class UpdatePiano(relay.ClientIDMutation):
                         # This cannot be changed
                     # Fase (O)
                     if 'fase' in _piano_data:
-                        _data = _piano_data.pop('fase')
-                        _fase = Fase.objects.get(codice=_data['codice'])
-                        _piano.fase = _fase
+                        _piano_data.pop('fase')
+                        # This cannot be changed
                     # Descrizione (O)
                     if 'descrizione' in _piano_data:
                         _data = _piano_data.pop('descrizione')
@@ -319,7 +318,7 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
 
     class Meta:
         model = Organization
-        fields = ['name', 'code', 'description', ]
+        fields = ['name', 'code', 'description', 'usermembership', ]
 
     @property
     def qs(self):
