@@ -9,20 +9,17 @@ LICENSE file in the root directory of this source tree.
 -->
 
 
-{% load wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 
-<div class="row m-0 m-0">
+<div class="row m-0 pb-3 pb-lg-5 first-section-row">
 
     <div class="col-12 col-lg-6">
-        <p class="big-text">
+        <p class="big-text wrap-text">
             {{ self.title }}
         </p>
-        <p class="medium-text">
+        <p class="medium-text wrap-text">
             {{ self.subtitle }}
-        </p>
-        <p>
-            {{ self.text }}
         </p>
     </div>
     <div class="col-12 col-lg-6">

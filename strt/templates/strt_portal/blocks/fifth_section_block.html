@@ -1,0 +1,39 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+
+<div class="row m-0 section-row border border-secondary">
+
+    <div class="col-12 col-lg-5 justify-content-center p-3 p-lg-5">
+        <div class="p-3 p-lg-5">
+            {% image self.image fill-800x800 class="img-fluid" %}
+        </div>
+    </div>
+    <div class="col-12 col-lg-7 justify-content-between p-3 p-lg-5">
+        <p class="big-text wrap-text py-3">
+            {{ self.title }}
+        </p>
+        <p class="medium-text wrap-text pb-2">
+            {{ self.subtitle }}
+        </p>
+        <p class="wrap-text">
+            {{ self.text }}
+        </p>
+        <div class="my-5">
+            <a href="" class="bg-secondary p-3 text-white">
+                {{ self.button_text }}
+            </a>
+        </div>
+    </div>
+
+</div>

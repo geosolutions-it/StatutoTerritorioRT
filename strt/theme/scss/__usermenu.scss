@@ -2,7 +2,7 @@
     align-self: center;
     .dropdown-menu {
         top: calc(100% + 12px);
-        background-color: $serapide-gray;
+        background-color: $serapide-grey;
         border-radius: 0px;
         border: 0px;
         min-width: 300px;
@@ -23,10 +23,10 @@
         font-size: 70%;
         &:hover {
             color: color-yiq($white);
-            @include gradient-bg($serapide-gray);
+            @include gradient-bg($serapide-grey);
         }
         &:focus {
-            @include gradient-bg($serapide-gray);
+            @include gradient-bg($serapide-grey);
             border: none;
         }
         &.disabled,
