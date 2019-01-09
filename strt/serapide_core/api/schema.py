@@ -9,6 +9,7 @@
 #
 #########################################################################
 
+import datetime
 import graphene
 import django_filters
 from django.conf import settings
@@ -103,9 +104,18 @@ class FaseCreateInput(InputObjectType):
     Class created to accept input data
     from the interactive graphql console.
     """
-    nome = graphene.String(source='nome', required=True)
+    nome = graphene.String(source='nome', required=False)
     codice = graphene.String(required=True)
     descrizione = graphene.String(required=False)
+
+
+class EnteCreateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    name = graphene.String(source='name', required=False)
+    code = graphene.String(required=True)
 
 
 class PianoCreateInput(InputObjectType):
@@ -113,12 +123,14 @@ class PianoCreateInput(InputObjectType):
     Class created to accept input data
     from the interactive graphql console.
     """
-    codice = graphene.String(required=True)
-    tipologia = graphene.String(required=False)
+    ente = graphene.InputField(EnteCreateInput, required=True)
+    tipologia = graphene.String(required=True)
+
+    codice = graphene.String(required=False)
     url = graphene.String(required=False)
     data_creazione = graphene.types.datetime.DateTime(required=False)
     descrizione = graphene.InputField(graphene.List(graphene.String), required=False)
-    fase = graphene.InputField(FaseCreateInput, required=True)
+    fase = graphene.InputField(FaseCreateInput, required=False)
 
 
 class CreateFase(relay.ClientIDMutation):
@@ -174,8 +186,26 @@ class CreatePiano(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         if is_RUP(info.context.user):
             _piano_data = input.get('piano_operativo')
-            _data = _piano_data.pop('fase')
-            _fase = Fase.objects.get(codice=_data['codice'])
+            # Ente (M)
+            _data = _piano_data.pop('ente')
+            _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
+            _piano_data['ente'] = _ente
+            # Codice (M)
+            if 'codice' in _piano_data:
+                _data = _piano_data.pop('codice')
+                _codice = _data
+            else:
+                _year = str(datetime.date.today().year)[2:]
+                _month = datetime.date.today().month
+                _piano_id = Piano.objects.filter(ente=_ente).count() + 1
+                _codice = '%s%02d%02d%05d' % (_ente.code, int(_year), _month, _piano_id)
+            _piano_data['codice'] = _codice
+            # Fase (O)
+            if 'fase' in _piano_data:
+                _data = _piano_data.pop('fase')
+                _fase = Fase.objects.get(codice=_data['codice'])
+            else:
+                _fase = Fase.objects.get(codice='FP255')
             _piano_data['fase'] = _fase
             _piano = Piano()
             nuovo_piano = update_create_instance(_piano, _piano_data)
@@ -200,6 +230,11 @@ class UpdatePiano(relay.ClientIDMutation):
                 _piano = Piano.objects.get(codice=input['codice'])
                 if _piano:
                     _piano_data = input.get('piano_operativo')
+                    # Ente (M)
+                    _data = _piano_data.pop('ente')
+                    _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
+                    _piano_data['ente'] = _ente
+                    # Fase (M)
                     _data = _piano_data.pop('fase')
                     _fase = Fase.objects.get(codice=_data['codice'])
                     _piano.fase = _fase
@@ -290,10 +325,10 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
                         # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
                         _enti = []
                         break
-                    elif _m.type.code == settings.RUP_CODE:
-                        # RUP_CODE can access to all Piani
-                        _enti = Organization.objects.values_list('code', flat=True)
-                        break
+                    # elif _m.type.code == settings.RUP_CODE:
+                    #     # RUP_CODE can access to all Piani
+                    #     _enti = Organization.objects.values_list('code', flat=True)
+                    #     break
                     else:
                         _enti.append(_m.organization.code)
         return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti)

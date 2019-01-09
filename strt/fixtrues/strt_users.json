@@ -67,7 +67,7 @@
     "fields": {
       "code": "RUP",
       "name": "Responsabile Unico del Procedimento",
-      "description": "Responsabile Unico del Procedimento per l'ente Comune",
+      "description": "Responsabile Unico del Procedimento per l'ente Regione",
       "organization_type": "R"
     }
   },
@@ -87,7 +87,7 @@
     "fields": {
       "code": "IPIT",
       "name": "Ispettore PIT",
-      "description": "Ispettore PIT per l'ente Comune",
+      "description": "Ispettore PIT per l'ente Regione",
       "organization_type": "R"
     }
   },

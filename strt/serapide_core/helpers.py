@@ -16,7 +16,7 @@ from graphql_relay.node.node import from_global_id
 
 
 def is_RUP(user):
-    if user and user.is_authenticated():
+    if user and user.is_authenticated:
         _memberships = user.memberships
         if _memberships:
             for _m in _memberships.all():
