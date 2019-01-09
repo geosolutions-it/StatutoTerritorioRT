@@ -13,14 +13,17 @@ import {
 
 
 /**
- * Simple btn with icon and label central aligned  
+ * Simple btn with icon, label central aligned  and spinner on the right
  * 
  **/ 
-export default ({label = "", icon = "", fontSize= "80%",...props}) => (
+export default ({label = "", icon = "", fontSize= "80%", spinnerClass = "spinner-border spinner-border-sm ml-2", isLoading = false, ...props}) => (
     <Button {...props}>
         <span className="py-2 d-flex align-items-center" style={{fontSize}}>
             <i className="material-icons">{icon}</i>
             <span>{label}</span>
+            {isLoading && (<div className={spinnerClass} role="status">
+                <span className="sr-only">Loading...</span>
+            </div>)}
         </span>
     </Button>
 
