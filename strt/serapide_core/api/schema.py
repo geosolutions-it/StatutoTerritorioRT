@@ -73,7 +73,6 @@ class EnteNode(DjangoObjectType):
                     if _m.organization.code == self.code:
                         roles.append(_m.type.code)
         return roles
-
     class Meta:
         model = Organization
         # Allow for some more advanced filtering here
@@ -349,8 +348,7 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
                 for _m in _memberships.all():
                     if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
                         # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
-                        _enti = []
-                        break
+                        continue
                     # elif _m.type.code == settings.RUP_CODE:
                     #     # RUP_CODE can access to all Piani
                     #     _enti = Organization.objects.values_list('code', flat=True)

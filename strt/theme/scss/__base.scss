@@ -54,7 +54,7 @@
 .serapide-content {
     overflow: scroll;
 }
-.tipo__{
+.serapide {.tipo__{
     &option {
         font-size: 80%;
         border-bottom: 1px solid $gray-300;
@@ -70,6 +70,7 @@
         }
     }
     &menu-list {
+        text-transform: capitalize;
         padding-top:0px;
         padding-bottom:0px;
     }
@@ -81,6 +82,7 @@
         }
     }
 
+}
 }
 a {
     outline: none;
@@ -154,8 +156,16 @@ a {
     .medium-text {
         font-size: 15px;
     }
-    .section-row {
-        padding-left: 0px;
-        padding-right: 0px;
+}
+.serapide {
+    .flex-eql {
+        flex: 1 1 0%;
     }
+    .Toastify__toast {
+        border-radius: 8px;
+    }
+}
+.section-row {
+    padding-left: 0px;
+    padding-right: 0px;
 }
