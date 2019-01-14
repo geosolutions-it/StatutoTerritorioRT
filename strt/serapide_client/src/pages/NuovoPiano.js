@@ -56,7 +56,7 @@ const enhancer = compose(withStateHandlers( ({}),
         selectTipo: () => value => ({tipo: value}),
         selectEnte: () => value => ({ente: value})
     }),
-    withPropsOnChange(["isLoading", "isSaving","enti", "ente", "tipiPiano", "tipo"], ({enti = [], tipiPiano= [], tipo, ...rest}) => {
+    withPropsOnChange(["isLoading", "isSaving", "enti", "ente", "tipiPiano", "tipo"], ({enti = [], tipiPiano= [], tipo, ...rest}) => {
         return{
         ente: enti.length === 1 && enti[0], tipo: !tipo && tipiPiano.length > 0 ? tipiPiano[0] : tipo, ...rest
     }})

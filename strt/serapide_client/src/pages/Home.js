@@ -6,14 +6,60 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import Button from '../components/IconButton'
+
 
 import TabellaPiani from '../components/TabellaPiani'
 import TabellaMessaggi from '../components/TabellaMessaggi'
+import Button from '../components/IconButton'
 import {defaultProps} from 'recompose'
-import {piani, user, messaggi}  from '../resources'
 
-export default defaultProps({piani, user, messaggi})((props) => {
+import gql from "graphql-tag";
+
+import {Query} from "react-apollo"; 
+import {toast} from 'react-toastify';
+
+import {user, messaggi}  from '../resources'
+
+// eslint-disable-next-line
+const GET_PIANI = gql`
+query getPiani($faseCodice: String){
+    piani(fase_Codice: $faseCodice){
+        edges{
+            node{
+              codice
+              tipo: tipologia
+              descrizione
+              lastUpdate
+              fase{
+                nome
+                codice
+                descrizione
+              }
+            }
+          }
+        }
+}
+`
+const Piani = () => (
+        <Query query={GET_PIANI}>
+            {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
+                if (error) {
+                    toast.error(error.message,  {autoClose: true})
+                }
+                return (<TabellaPiani title="piani in corso" piani={edges}></TabellaPiani>)
+            }}
+        </Query>)
+const PianiArchiviati = () => (
+    <Query query={GET_PIANI}>
+        {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
+            if (error) {
+                toast.error(error.message,  {autoClose: true})
+            }
+            return (<TabellaPiani title="piani in corso" piani={edges}></TabellaPiani>)
+        }}
+    </Query>)
+
+export default defaultProps({user, messaggi})((props) => {
     return (
         <React.Fragment>
             <div className="serapide-content pt-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
@@ -31,7 +77,7 @@ export default defaultProps({piani, user, messaggi})((props) => {
                 </div>
                 
                 <h5 className="py-5">I MIEI PIANI</h5>
-                <TabellaPiani title="piani in corso" piani={props.piani}></TabellaPiani>
+                <Piani></Piani>
                 <span className="legenda">LEGENDA NOTIFICHE</span>
                 <div className="mr-4 pt-2 pb-5 d-flex flex-row justify-content-start legenda">
                     <i className="material-icons mr-1 urgente">notification_important</i><span >Notifiche urgenti per le quali è richiesta un'azione</span>
@@ -41,7 +87,7 @@ export default defaultProps({piani, user, messaggi})((props) => {
                 <h6 className="py-5">MESSAGGI </h6>
                 <TabellaMessaggi messaggi={props.messaggi}></TabellaMessaggi>
                 <a href="#/messaggi" className="mr-4 pt-4 pb-5 d-flex flex-row justify-content-end nav-link text-dark"><i className="material-icons mr-2">email</i><span>Tutti i messaggi</span></a>
-                <TabellaPiani title="archivio piani" piani={props.piani}></TabellaPiani>
+                <PianiArchiviati></PianiArchiviati>
                 <a href="#/archivio" className="mr-4 pt-4 pb-5 d-flex flex-row justify-content-end nav-link text-dark"><i className="material-icons mr-2">view_list</i><span>Vai all'archivio piani</span></a>
             </div>
         </React.Fragment>)

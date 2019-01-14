@@ -8,21 +8,22 @@
 import React from 'react'
 import { UncontrolledTooltip } from 'reactstrap'
 import shortid from "shortid"
-const getActive = (stato, currentStato) => stato === currentStato ? "active" : ''
+const getActive = (stato, currentStato  = "" ) => stato === currentStato.toLowerCase() ? "active" : ''
 
 
-export default ({stato = "avvio"}) => {
+export default ({stato: {nome = "Unknown", codice, descrizione}}) => {
+    console.log(nome);
     const id =  `_${shortid.generate()}`
     return (
         <span className="stato-progress">
-            <i id={id} className={`material-icons text-warning ${stato}`}>room</i>
-            <ul>
+            <i id={id} className={`material-icons ${nome.toLowerCase()}`}>room</i>
+            <ul className={`_${nome.toLowerCase()}`}>
                 <li></li>
-                <li id="_avvio" className={getActive("avvio", stato)}></li>
-                <li id="_adozione" className={getActive("adozione", stato)}></li>
-                <li id="_approvazione" className={getActive("approvazione", stato)}></li>
-                <li id="_pubblicazione" className={getActive("pubblicazione", stato)}></li>
-                <UncontrolledTooltip placement="top" target={id} ><span className="text-capitalize">{stato}</span></UncontrolledTooltip>
+                <li id="_avvio" className={getActive("avvio", nome)}></li>
+                <li id="_adozione" className={getActive("adozione", nome)}></li>
+                <li id="_approvazione" className={getActive("approvazione", nome)}></li>
+                <li id="_pubblicazione" className={getActive("pubblicazione", nome)}></li>
+                <UncontrolledTooltip placement="top" target={id} ><span className="text-capitalize">{nome.toLowerCase()}</span></UncontrolledTooltip>
             </ul>
         </span>)
     }
