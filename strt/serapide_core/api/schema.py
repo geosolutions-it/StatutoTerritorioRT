@@ -102,9 +102,6 @@ class PianoNode(DjangoObjectType):
             'ente': ['exact'],
             'descrizione': ['exact', 'icontains'],
             'tipologia': ['exact', 'icontains'],
-            'fase': ['exact'],
-            'fase__nome': ['exact'],
-            'fase__codice': ['exact'],
         }
         interfaces = (relay.Node, )
 
@@ -331,6 +328,7 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
 class PianoUserMembershipFilter(django_filters.FilterSet):
     # Do case-insensitive lookups on 'name'
     codice = django_filters.CharFilter(lookup_expr='iexact')
+    fase__codice = django_filters.CharFilter(lookup_expr='iexact')
 
     class Meta:
         model = Piano
