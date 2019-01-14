@@ -6,8 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import Button from '../components/IconButton'
-import SelectTipo from '../components/SelectTipo'
+// import Button from '../components/IconButton'
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import {get} from "lodash";

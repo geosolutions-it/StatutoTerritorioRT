@@ -11,6 +11,9 @@
 .first {
     order: -1;
 }
+.nessuna {
+    color: $success;
+}
 .urgente {
     color: $danger;
 }

@@ -27,7 +27,7 @@ export default () => {
          <ToastContainer/>
             <Router>
               <Switch>
-                <Route  path="/anagrafica/" component={Anagrafica}/>
+                <Route  path="/anagrafica/:code" component={Anagrafica}/>
                 <Route  path="/nuovo_piano/" component={NuovoPiano}/>             
                 <Route  path="/" component={Home}/>
               </Switch>
