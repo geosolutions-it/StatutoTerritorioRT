@@ -19,27 +19,9 @@ import {Query} from "react-apollo";
 import {toast} from 'react-toastify';
 
 import {user, messaggi}  from '../resources'
+import {GET_PIANI} from '../queries'
 
-// eslint-disable-next-line
-const GET_PIANI = gql`
-query getPiani($faseCodice: String){
-    piani(fase_Codice: $faseCodice){
-        edges{
-            node{
-              codice
-              tipo: tipologia
-              descrizione
-              lastUpdate
-              fase{
-                nome
-                codice
-                descrizione
-              }
-            }
-          }
-        }
-}
-`
+
 const Piani = () => (
         <Query query={GET_PIANI}>
             {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
