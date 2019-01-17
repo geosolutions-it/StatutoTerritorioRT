@@ -19,6 +19,7 @@ from graphene import InputObjectType, relay
 from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
+from graphene_file_upload.scalars import Upload
 
 from strt_users.models import (
     Organization, OrganizationType
@@ -34,6 +35,10 @@ from serapide_core.modello.enums import (
     FASE, TIPOLOGIA_PIANO
 )
 
+
+# ############################################################################ #
+# INPUTS                                                                       #
+# ############################################################################ #
 
 # Graphene will automatically map the Category model's fields onto the CategoryNode.
 # This is configured in the CategoryNode's Meta class (as you can see below)
@@ -140,6 +145,111 @@ class PianoCreateInput(InputObjectType):
     fase = graphene.InputField(FaseCreateInput, required=False)
 
 
+# ##############################################################################
+# ENUMS
+# ##############################################################################
+class StrtEnumNode(graphene.ObjectType):
+    value= graphene.String()
+    label = graphene.String()
+
+
+class FasePiano(StrtEnumNode):
+    pass
+
+
+class TipologiaPiano(StrtEnumNode):
+    pass
+
+
+# ##############################################################################
+# FILTERS
+# ##############################################################################
+class EnteUserMembershipFilter(django_filters.FilterSet):
+    # Do case-insensitive lookups on 'name'
+    name = django_filters.CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = Organization
+        fields = ['name', 'code', 'description', 'usermembership', ]
+
+    @property
+    def qs(self):
+        # The query context can be found in self.request.
+        if self.request.user and self.request.user.is_authenticated:
+            return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
+        else:
+            return super(EnteUserMembershipFilter, self).qs.none()
+
+
+class PianoUserMembershipFilter(django_filters.FilterSet):
+    # Do case-insensitive lookups on 'name'
+    codice = django_filters.CharFilter(lookup_expr='iexact')
+    fase__codice = django_filters.CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = Piano
+        fields = '__all__'
+
+    @property
+    def qs(self):
+        # The query context can be found in self.request.
+        _enti = []
+        _memberships = None
+        if self.request.user and self.request.user.is_authenticated:
+            _memberships = self.request.user.memberships
+            if _memberships:
+                for _m in _memberships.all():
+                    if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
+                        # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
+                        continue
+                    # elif _m.type.code == settings.RUP_CODE:
+                    #     # RUP_CODE can access to all Piani
+                    #     _enti = Organization.objects.values_list('code', flat=True)
+                    #     break
+                    else:
+                        _enti.append(_m.organization.code)
+        return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti)
+
+
+# ##############################################################################
+# QUERIES
+# ##############################################################################
+class Query(object):
+    # Models
+    # ente = relay.Node.Field(EnteNode)
+    enti = DjangoFilterConnectionField(EnteNode,
+                                       filterset_class=EnteUserMembershipFilter)
+
+    # fase = relay.Node.Field(FaseNode)
+    fasi = DjangoFilterConnectionField(FaseNode)
+
+    # piano = relay.Node.Field(PianoNode)
+    piani = DjangoFilterConnectionField(PianoNode,
+                                        filterset_class=PianoUserMembershipFilter)
+
+    # Enums
+    fase_piano = graphene.List(FasePiano)
+    tipologia_piano = graphene.List(TipologiaPiano)
+
+    def resolve_fase_piano(self, info):
+        l = []
+        for f in FASE:
+            l.append(FasePiano(f[0], f[1]))
+        return l
+
+    def resolve_tipologia_piano(self, info):
+        l = []
+        for t in TIPOLOGIA_PIANO:
+            l.append(TipologiaPiano(t[0], t[1]))
+        return l
+
+    # Debug
+    debug = graphene.Field(DjangoDebug, name='__debug')
+
+
+# ##############################################################################
+# MUTATIONS
+# ##############################################################################
 class CreateFase(relay.ClientIDMutation):
 
     class Input:
@@ -269,133 +379,35 @@ class UpdatePiano(relay.ClientIDMutation):
 
 """
 # EXAMPLE FILE UPLOAD
-class UploadFile(graphene.ClientIDMutation):
-     class Input:
-         pass
-         # nothing needed for uploading file
+from graphene_file_upload.scalars import Upload
 
-     # your return fields
-     success = graphene.String()
+class UploadMutation(graphene.Mutation):
+    class Arguments:
+        file = Upload(required=True)
 
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, **input):
-        # When using it in Django, context will be the request
-        files = info.context.FILES
-        # Or, if used in Flask, context will be the flask global request
-        # files = context.files
+    success = graphene.Boolean()
 
-        # do something with files
+    def mutate(self, info, file, **kwargs):
+        # do something with your file
 
-        return UploadFile(success=True)
+        return UploadMutation(success=True)
 """
+class UploadFile(graphene.Mutation):
+    class Arguments:
+        file = Upload(required=True)
 
-# ##############################################################################
-# ENUMS
-# ##############################################################################
-class StrtEnumNode(graphene.ObjectType):
-    value= graphene.String()
-    label = graphene.String()
+    success = graphene.Boolean()
 
-
-class FasePiano(StrtEnumNode):
-    pass
-
-
-class TipologiaPiano(StrtEnumNode):
-    pass
+    def mutate(self, info, file, **kwargs):
+        # do something with your file
+        print(file)
+        return UploadFile(success=True)
 
 
-# ##############################################################################
-# FILTERS
-# ##############################################################################
-class EnteUserMembershipFilter(django_filters.FilterSet):
-    # Do case-insensitive lookups on 'name'
-    name = django_filters.CharFilter(lookup_expr='iexact')
-
-    class Meta:
-        model = Organization
-        fields = ['name', 'code', 'description', 'usermembership', ]
-
-    @property
-    def qs(self):
-        # The query context can be found in self.request.
-        if self.request.user and self.request.user.is_authenticated:
-            return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
-        else:
-            return super(EnteUserMembershipFilter, self).qs.none()
-
-
-class PianoUserMembershipFilter(django_filters.FilterSet):
-    # Do case-insensitive lookups on 'name'
-    codice = django_filters.CharFilter(lookup_expr='iexact')
-    fase__codice = django_filters.CharFilter(lookup_expr='iexact')
-
-    class Meta:
-        model = Piano
-        fields = '__all__'
-
-    @property
-    def qs(self):
-        # The query context can be found in self.request.
-        _enti = []
-        _memberships = None
-        if self.request.user and self.request.user.is_authenticated:
-            _memberships = self.request.user.memberships
-            if _memberships:
-                for _m in _memberships.all():
-                    if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
-                        # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
-                        continue
-                    # elif _m.type.code == settings.RUP_CODE:
-                    #     # RUP_CODE can access to all Piani
-                    #     _enti = Organization.objects.values_list('code', flat=True)
-                    #     break
-                    else:
-                        _enti.append(_m.organization.code)
-        return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti)
-
-
-# ##############################################################################
-# QUERIES
-# ##############################################################################
-class Query(object):
-    # Models
-    # ente = relay.Node.Field(EnteNode)
-    enti = DjangoFilterConnectionField(EnteNode,
-                                       filterset_class=EnteUserMembershipFilter)
-
-    # fase = relay.Node.Field(FaseNode)
-    fasi = DjangoFilterConnectionField(FaseNode)
-
-    # piano = relay.Node.Field(PianoNode)
-    piani = DjangoFilterConnectionField(PianoNode,
-                                        filterset_class=PianoUserMembershipFilter)
-
-    # Enums
-    fase_piano = graphene.List(FasePiano)
-    tipologia_piano = graphene.List(TipologiaPiano)
-
-    def resolve_fase_piano(self, info):
-        l = []
-        for f in FASE:
-            l.append(FasePiano(f[0], f[1]))
-        return l
-
-    def resolve_tipologia_piano(self, info):
-        l = []
-        for t in TIPOLOGIA_PIANO:
-            l.append(TipologiaPiano(t[0], t[1]))
-        return l
-
-    # Debug
-    debug = graphene.Field(DjangoDebug, name='__debug')
-
-
-# ##############################################################################
-# MUTATIONS
-# ##############################################################################
+# ############################################################################ #
 class Mutation(object):
     create_fase = CreateFase.Field()
     update_fase = UpdateFase.Field()
     create_piano = CreatePiano.Field()
     update_piano = UpdatePiano.Field()
+    upload = UploadFile.Field()
