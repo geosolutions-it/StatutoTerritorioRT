@@ -10,10 +10,9 @@
 #########################################################################
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from graphene_django.views import GraphQLView
-
+from graphene_file_upload.django import FileUploadGraphQLView
 
 class PrivateGraphQLView(LoginRequiredMixin,
-                         GraphQLView):
+                         FileUploadGraphQLView):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
