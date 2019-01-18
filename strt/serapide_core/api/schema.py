@@ -9,12 +9,19 @@
 #
 #########################################################################
 
+import os
 import datetime
 import graphene
 import django_filters
+
 from django.conf import settings
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 from graphene import InputObjectType, relay
 from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
@@ -408,10 +415,15 @@ class UploadFile(graphene.Mutation):
         print("codice_piano: %s " % input['codice_piano'])
         _test_var = info.context.POST.get('test', default=None)
         print(_test_var)
-        from django.core.files.uploadedfile import InMemoryUploadedFile
         if type(file) == InMemoryUploadedFile:
             _file_name = str(file)
-            # print(file.read())
+            _file_path = '{}'.format(_file_name)
+            print(" ----------> " + _file_path)
+            with default_storage.open(_file_path, 'wb+') as _destination:
+                for _chunk in file.chunks():
+                    _destination.write(_chunk)
+            _file_path = os.path.join(settings.MEDIA_ROOT, _file_path)
+            print(_file_path)
             return UploadFile(resource_id=_file_name, success=True)
         else:
             return UploadFile(resource_id=None, success=False)
