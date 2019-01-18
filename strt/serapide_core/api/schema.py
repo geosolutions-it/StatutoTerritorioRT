@@ -378,30 +378,43 @@ class UpdatePiano(relay.ClientIDMutation):
 
 
 """
-# EXAMPLE FILE UPLOAD
-from graphene_file_upload.scalars import Upload
+How to use this mutation
+- send a POST multi-part form with Content-Type: application/graphql
+- params:
+  1. operations: {"query":"mutation UploadFile($file: Upload!, $piano: String!,
+                                            $file_type: String!, $file_dim: String!) {
+                              upload(file: $file, codicePiano: $piano, tipoFile: $file_type, dimensioneFile: $file_dim) {
+                                  resourceId,
+                                  success }}",
+                        "variables": { "file": null, "piano":"1234","file_type":"****","file_dim":"***Kb"} }
 
-class UploadMutation(graphene.Mutation):
-    class Arguments:
-        file = Upload(required=True)
-
-    success = graphene.Boolean()
-
-    def mutate(self, info, file, **kwargs):
-        # do something with your file
-
-        return UploadMutation(success=True)
+  2. map: {"0":["variables.file"]}
+  3. 0: <binary data>
+  4. <other POST params if needed>
 """
 class UploadFile(graphene.Mutation):
     class Arguments:
+        codice_piano = graphene.String(required=True)
+        tipo_file = graphene.String(required=True)
+        dimensione_file = graphene.String(required=True)
         file = Upload(required=True)
 
+    resource_id = graphene.String()
     success = graphene.Boolean()
 
-    def mutate(self, info, file, **kwargs):
+    def mutate(self, info, file, **input):
         # do something with your file
-        print(file)
-        return UploadFile(success=True)
+        _user = info.context.user
+        print("codice_piano: %s " % input['codice_piano'])
+        _test_var = info.context.POST.get('test', default=None)
+        print(_test_var)
+        from django.core.files.uploadedfile import InMemoryUploadedFile
+        if type(file) == InMemoryUploadedFile:
+            _file_name = str(file)
+            # print(file.read())
+            return UploadFile(resource_id=_file_name, success=True)
+        else:
+            return UploadFile(resource_id=None, success=False)
 
 
 # ############################################################################ #
