@@ -42,6 +42,49 @@ class Fase(models.Model):
         return '{} [{}]'.format(self.codice, self.nome)
 
 
+class Risorsa(models.Model):
+    """
+    Model storing *ptrs to every Piano resource (File) uploaded by users...
+    """
+
+    """
+    Every "Piano" in the serapide_core application has a unique uuid
+    """
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    nome = models.TextField(null=False, blank=False)
+    file = models.FileField(max_length=500, upload_to='uploads/%Y/%m/%d/')
+    tipo = models.TextField(null=False, blank=False)
+    dimensione = models.DecimalField(
+        null=False,
+        blank=False,
+        max_digits=19,
+        decimal_places=10,
+        default=0.0)
+    descrizione = models.TextField(null=True, blank=True)
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    last_update = models.DateTimeField(auto_now=True, blank=True)
+
+    fase = models.ForeignKey(Fase, on_delete=models.CASCADE)
+
+    @classmethod
+    def create(cls, nome, file, tipo, dimensione, fase):
+        _file = cls(nome=nome, file=file, tipo=tipo, dimensione=dimensione, fase=fase)
+        # do something with the book
+        return _file
+
+    class Meta:
+        db_table = "strt_core_risorsa"
+        verbose_name_plural = 'Risorse'
+
+    def __str__(self):
+        return '{} [{}]'.format(self.nome, self.uuid)
+
+
 class Piano(models.Model):
     """
     Every "Piano" in the serapide_core application has a unique uuid
@@ -64,14 +107,15 @@ class Piano(models.Model):
     descrizione = models.TextField(null=True, blank=True)
     url = models.URLField(null=True, blank=True, default='')
     data_delibera = models.DateTimeField(null=True, blank=True)
-    data_creazione = models.DateTimeField(null=True, blank=True)
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     data_accettazione = models.DateTimeField(null=True, blank=True)
     data_avvio = models.DateTimeField(null=True, blank=True)
     data_approvazione = models.DateTimeField(null=True, blank=True)
-    last_update = models.DateTimeField(null=True, blank=True)
+    last_update = models.DateTimeField(auto_now=True, blank=True)
 
     fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
     storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
+    risorse = models.ManyToManyField(Risorsa, through='RisorsePiano')
 
     ente = models.ForeignKey(
         to=Organization, on_delete=models.CASCADE, verbose_name=_('ente'),
@@ -84,7 +128,7 @@ class Piano(models.Model):
         # unique_together = (('nome', 'codice',),)
 
     def __str__(self):
-        return '{} [{}]'.format(self.codice, self.tipologia)
+        return '{} - {} [{}]'.format(self.codice, self.tipologia, self.uuid)
 
     def post_save(self):
         _now = datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -112,3 +156,11 @@ class FasePianoStorico(models.Model):
 
     class Meta:
         db_table = "strt_core_piano_storico_fasi"
+
+
+class RisorsePiano(models.Model):
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_piano_risorse"
