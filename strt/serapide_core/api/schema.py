@@ -10,8 +10,10 @@
 #########################################################################
 
 import os
+import logging
 import datetime
 import graphene
+import traceback
 import django_filters
 
 from django.conf import settings
@@ -20,7 +22,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from django.core.files.storage import default_storage
-from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.files.uploadedfile import (TemporaryUploadedFile, InMemoryUploadedFile)
 
 from graphene import InputObjectType, relay
 from graphene_django import DjangoObjectType
@@ -36,12 +38,13 @@ from serapide_core.helpers import (
     get_errors, update_create_instance, is_RUP
 )
 from serapide_core.modello.models import (
-    Piano, Fase, FasePianoStorico
+    Piano, Fase, Risorsa, FasePianoStorico, RisorsePiano
 )
 from serapide_core.modello.enums import (
     FASE, TIPOLOGIA_PIANO
 )
 
+logger = logging.getLogger(__name__)
 
 # ############################################################################ #
 # INPUTS                                                                       #
@@ -61,6 +64,33 @@ class FasePianoStoricoType(DjangoObjectType):
 
     class Meta:
         model = FasePianoStorico
+        interfaces = (relay.Node, )
+
+
+class RisorsaNode(DjangoObjectType):
+
+    class Meta:
+        model = Risorsa
+        filter_fields = ['uuid',
+                         'nome',
+                         'tipo',
+                         'dimensione',
+                         'descrizione',
+                         'data_creazione',
+                         'last_update',
+                         'fase__codice',
+                         'piano__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorsePianoType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorsePiano
+        filter_fields = ['risorsa__fase__codice',
+                         'piano__codice']
         interfaces = (relay.Node, )
 
 
@@ -100,6 +130,7 @@ class PianoNode(DjangoObjectType):
 
     ente = graphene.Field(EnteNode)
     storico_fasi = graphene.List(FasePianoStoricoType)
+    risorsa = DjangoFilterConnectionField(RisorsePianoType)
 
     def resolve_storico_fasi(self, info, **args):
         # Warning this is not currently paginated
@@ -223,14 +254,13 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
 # ##############################################################################
 class Query(object):
     # Models
-    # ente = relay.Node.Field(EnteNode)
     enti = DjangoFilterConnectionField(EnteNode,
                                        filterset_class=EnteUserMembershipFilter)
 
-    # fase = relay.Node.Field(FaseNode)
     fasi = DjangoFilterConnectionField(FaseNode)
 
-    # piano = relay.Node.Field(PianoNode)
+    risorse = DjangoFilterConnectionField(RisorsaNode)
+
     piani = DjangoFilterConnectionField(PianoNode,
                                         filterset_class=PianoUserMembershipFilter)
 
@@ -410,23 +440,51 @@ class UploadFile(graphene.Mutation):
     success = graphene.Boolean()
 
     def mutate(self, info, file, **input):
-        # do something with your file
-        _user = info.context.user
-        print("codice_piano: %s " % input['codice_piano'])
-        _test_var = info.context.POST.get('test', default=None)
-        print(_test_var)
-        if type(file) == InMemoryUploadedFile:
-            _file_name = str(file)
-            _file_path = '{}'.format(_file_name)
-            print(" ----------> " + _file_path)
-            with default_storage.open(_file_path, 'wb+') as _destination:
-                for _chunk in file.chunks():
-                    _destination.write(_chunk)
-            _file_path = os.path.join(settings.MEDIA_ROOT, _file_path)
-            print(_file_path)
-            return UploadFile(resource_id=_file_name, success=True)
-        else:
-            return UploadFile(resource_id=None, success=False)
+        if info.context.user and info.context.user.is_authenticated:
+            # Fetching input arguments
+            _codice_piano = input['codice_piano']
+            _tipo_file = input['tipo_file']
+            _dimensione_file = input['dimensione_file']
+
+            try:
+                # Validating 'Piano'
+                _piano = Piano.objects.get(codice=_codice_piano)
+
+                # Ensuring Media Folder exists and is writable
+                _base_media_folder = os.path.join(settings.MEDIA_ROOT, _codice_piano)
+                if not os.path.exists(_base_media_folder):
+                    os.makedirs(_base_media_folder)
+
+                if os.path.exists(_base_media_folder) and _piano is not None and \
+                    type(file) in (TemporaryUploadedFile, InMemoryUploadedFile):
+                    _file_name = str(file)
+                    _file_path = '{}/{}'.format(_codice_piano, _file_name)
+
+                    _risorsa = None
+                    with default_storage.open(_file_path, 'wb+') as _destination:
+                        for _chunk in file.chunks():
+                            _destination.write(_chunk)
+                        # Attaching uploaded File to Piano
+                        _risorsa = Risorsa.create(
+                            _file_name,
+                            _destination,
+                            _tipo_file,
+                            _dimensione_file,
+                            _piano.fase)
+                        _risorsa.save()
+
+                        if _risorsa:
+                            RisorsePiano(piano=_piano, risorsa=_risorsa).save()
+
+                    _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
+
+                    return UploadFile(resource_id=_file_name, success=True)
+            except:
+                tb = traceback.format_exc()
+                logger.error(tb)
+
+        # Something went wrong
+        return UploadFile(resource_id=None, success=False)
 
 
 # ############################################################################ #
