@@ -42,15 +42,20 @@ const getInput = ({node: {code: eCode} = {}} = {}, {value} = {}) => ({
                     }
             }
         }})
-        
+
 //Add newly created piano to piani list
 const updateCache = (cache, { data: {createPiano : {nuovoPiano: node}}  = {}} = {}) => {
-        const { piani = {}} = cache.readQuery({ query: GET_PIANI })
-        const type = `${node.__typename}Edge`
-        cache.writeQuery({
-            query: GET_PIANI,
-            data: { piani: piani.edges.concat([{__typeName: type, node}]) }
-    })
+        try {
+            const { piani = {}} = cache.readQuery({ query: GET_PIANI }) || {}     // se la query non è stata eseguita va in errore
+            const type = `${node.__typename}Edge`
+            piani.edges = piani.edges.concat([{__typename: type, node}]) 
+            cache.writeQuery({
+                query: GET_PIANI,
+                data: { piani}
+            })
+        } catch (e) {
+            console.log("Query piani non inizializzata")
+        }
   }
 const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti, ente, selectEnte, tipiPiano}) => {
             return (
@@ -90,7 +95,7 @@ export default () => (
                 toast.error(errorQuery.message,  {autoClose: true})
             }
         return (
-            <Mutation mutation={CREA_PIANO} onCompleted={() => window.location.href="#/anagrafica"} update={updateCache}>
+            <Mutation mutation={CREA_PIANO} onCompleted={({createPiano: {nuovoPiano}} = {}) => window.location.href=`#/anagrafica/${nuovoPiano.codice}`} update={updateCache}>
                 {(creaPiano, { loading: isSaving, error: mutationError , ...rest}) => {
                 if (mutationError) {
                     toast.error(mutationError.message)

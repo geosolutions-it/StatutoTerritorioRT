@@ -18,7 +18,7 @@ import {
  **/ 
 export default ({label = "", icon = "", fontSize= "80%", spinnerClass = "spinner-border spinner-border-sm ml-2", isLoading = false, ...props}) => (
     <Button {...props}>
-        <span className="py-2 d-flex align-items-center" style={{fontSize}}>
+        <span className="py-2 d-flex align-items-center justify-content-around" style={{fontSize}}>
             <i className="material-icons">{icon}</i>
             <span>{label}</span>
             {isLoading && (<div className={spinnerClass} role="status">

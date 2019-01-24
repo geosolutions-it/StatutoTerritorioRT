@@ -13,8 +13,6 @@ import TabellaMessaggi from '../components/TabellaMessaggi'
 import Button from '../components/IconButton'
 import {defaultProps} from 'recompose'
 
-import gql from "graphql-tag";
-
 import {Query} from "react-apollo"; 
 import {toast} from 'react-toastify';
 

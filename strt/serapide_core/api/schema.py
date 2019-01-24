@@ -419,11 +419,11 @@ How to use this mutation
 - send a POST multi-part form with Content-Type: application/graphql
 - params:
   1. operations: {"query":"mutation UploadFile($file: Upload!, $piano: String!,
-                                            $file_type: String!, $file_dim: String!) {
-                              upload(file: $file, codicePiano: $piano, tipoFile: $file_type, dimensioneFile: $file_dim) {
+                                            $file_type: String!) {
+                              upload(file: $file, codicePiano: $piano, tipoFile: $file_type) {
                                   resourceId,
                                   success }}",
-                        "variables": { "file": null, "piano":"1234","file_type":"****","file_dim":"***Kb"} }
+                        "variables": { "file": null, "piano":"1234","file_type":"****"} }
 
   2. map: {"0":["variables.file"]}
   3. 0: <binary data>
@@ -433,10 +433,9 @@ class UploadFile(graphene.Mutation):
     class Arguments:
         codice_piano = graphene.String(required=True)
         tipo_file = graphene.String(required=True)
-        dimensione_file = graphene.String(required=True)
         file = Upload(required=True)
 
-    resource_id = graphene.String()
+    risorse = graphene.List(RisorsaNode)
     success = graphene.Boolean()
 
     def mutate(self, info, file, **input):
@@ -444,48 +443,67 @@ class UploadFile(graphene.Mutation):
             # Fetching input arguments
             _codice_piano = input['codice_piano']
             _tipo_file = input['tipo_file']
-            _dimensione_file = input['dimensione_file']
-
+            
             try:
                 # Validating 'Piano'
                 _piano = Piano.objects.get(codice=_codice_piano)
-
                 # Ensuring Media Folder exists and is writable
                 _base_media_folder = os.path.join(settings.MEDIA_ROOT, _codice_piano)
                 if not os.path.exists(_base_media_folder):
                     os.makedirs(_base_media_folder)
+                if not isinstance(file, list):
+                    file = [file]
+                resources = []
+                for f in file:
+                    _dimensione_file = f.size / 1024 # size in KB
+                    if os.path.exists(_base_media_folder) and _piano is not None and \
+                    type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
+                        _file_name = str(f)
+                        _file_path = '{}/{}'.format(_codice_piano, _file_name)
+                        _risorsa = None
 
-                if os.path.exists(_base_media_folder) and _piano is not None and \
-                    type(file) in (TemporaryUploadedFile, InMemoryUploadedFile):
-                    _file_name = str(file)
-                    _file_path = '{}/{}'.format(_codice_piano, _file_name)
+                        with default_storage.open(_file_path, 'wb+') as _destination:
+                            for _chunk in f.chunks():
+                                _destination.write(_chunk)
+                            # Attaching uploaded File to Piano
+                            _risorsa = Risorsa.create(
+                                _file_name,
+                                _destination,
+                                _tipo_file,
+                                _dimensione_file,
+                                _piano.fase)
+                            _risorsa.save()
+                            if _risorsa:
+                                RisorsePiano(piano=_piano, risorsa=_risorsa).save()
+                            resources.append(_risorsa)
+                        _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
 
-                    _risorsa = None
-                    with default_storage.open(_file_path, 'wb+') as _destination:
-                        for _chunk in file.chunks():
-                            _destination.write(_chunk)
-                        # Attaching uploaded File to Piano
-                        _risorsa = Risorsa.create(
-                            _file_name,
-                            _destination,
-                            _tipo_file,
-                            _dimensione_file,
-                            _piano.fase)
-                        _risorsa.save()
-
-                        if _risorsa:
-                            RisorsePiano(piano=_piano, risorsa=_risorsa).save()
-
-                    _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
-
-                    return UploadFile(resource_id=_file_name, success=True)
+                return UploadFile(risorse=resources, success=True)
             except:
                 tb = traceback.format_exc()
                 logger.error(tb)
 
         # Something went wrong
-        return UploadFile(resource_id=None, success=False)
+        return UploadFile(success=False)
 
+class DeleteRisorsa(graphene.Mutation):
+    class Arguments:
+        
+        risorsa_id = graphene.ID(required=True)
+    
+    success = graphene.Boolean()  
+    def mutate(self, info, **input):
+        if info.context.user and info.context.user.is_authenticated:
+            # Fetching input arguments
+            _id = input['risorsa_id']
+            # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            try:
+                _risorsa = Risorsa.objects.filter(uuid=_id).delete()
+                return DeleteRisorsa(success=True)
+            except:
+                tb = traceback.format_exc()
+                logger.error(tb)
+        return DeleteRisorsa(success=False)
 
 # ############################################################################ #
 class Mutation(object):
@@ -494,3 +512,4 @@ class Mutation(object):
     create_piano = CreatePiano.Field()
     update_piano = UpdatePiano.Field()
     upload = UploadFile.Field()
+    delete_risorsa = DeleteRisorsa.Field()

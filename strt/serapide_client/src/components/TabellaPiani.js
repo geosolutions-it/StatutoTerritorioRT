@@ -9,7 +9,7 @@ import React from 'react'
 import { Table } from 'reactstrap'
 import StatoProgress from './StatoProgress'
 const {Fragment} = React;
-
+const goToAnagrafica = (codice) => window.location.href=`#/anagrafica/${codice}`
 export default ({title, piani = []}) => (
     <Fragment>
         <h6 className="pb-3 text-uppercase">{title}</h6>
@@ -35,7 +35,7 @@ export default ({title, piani = []}) => (
                         <td className="text-center text-capitalize">{tipo}</td>
                         <td className="text-center">{lastUpdate}</td>
                         <td className="text-center">{codice}</td>
-                        <td className="text-center"><i className="material-icons text-warning">assignment</i></td>
+                        <td className="text-center" style={{cursor: "pointer"}} onClick={() => goToAnagrafica(codice)}><i className="material-icons text-warning">assignment</i></td>
                         <td>
                             <StatoProgress stato={fase}></StatoProgress>
                         </td>
