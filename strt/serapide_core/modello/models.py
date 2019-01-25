@@ -122,8 +122,8 @@ class Piano(models.Model):
         default=None, blank=True, null=True
     )
 
-    rup = models.ForeignKey(
-        to=AppUser, on_delete=models.CASCADE, verbose_name=_('rup'),
+    ruolo = models.ForeignKey(
+        to=AppUser, on_delete=models.CASCADE, verbose_name=_('ruolo'),
         default=None, blank=True, null=True
     )
 
