@@ -122,8 +122,8 @@ class Piano(models.Model):
         default=None, blank=True, null=True
     )
 
-    ruolo = models.ForeignKey(
-        to=AppUser, on_delete=models.CASCADE, verbose_name=_('ruolo'),
+    user = models.ForeignKey(
+        to=AppUser, on_delete=models.CASCADE, verbose_name=_('user'),
         default=None, blank=True, null=True
     )
 

@@ -142,7 +142,7 @@ class EnteNode(DjangoObjectType):
 
 class PianoNode(DjangoObjectType):
 
-    ruolo = graphene.Field(AppUserNode)
+    user = graphene.Field(AppUserNode)
     ente = graphene.Field(EnteNode)
     storico_fasi = graphene.List(FasePianoStoricoType)
     risorsa = DjangoFilterConnectionField(RisorsePianoType)
