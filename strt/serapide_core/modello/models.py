@@ -17,7 +17,7 @@ import pytz
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from strt_users.models import Organization
+from strt_users.models import AppUser, Organization
 
 from .enums import (FASE,
                     TIPOLOGIA_PIANO)
@@ -119,6 +119,11 @@ class Piano(models.Model):
 
     ente = models.ForeignKey(
         to=Organization, on_delete=models.CASCADE, verbose_name=_('ente'),
+        default=None, blank=True, null=True
+    )
+
+    rup = models.ForeignKey(
+        to=AppUser, on_delete=models.CASCADE, verbose_name=_('rup'),
         default=None, blank=True, null=True
     )
 
