@@ -380,6 +380,7 @@ class CreatePiano(relay.ClientIDMutation):
             if 'descrizione' in _piano_data:
                 _data = _piano_data.pop('descrizione')
                 _piano_data['descrizione'] = _data[0]
+            _piano_data['user'] = info.context.user
             _piano = Piano()
             nuovo_piano = update_create_instance(_piano, _piano_data)
             return cls(nuovo_piano=nuovo_piano)
