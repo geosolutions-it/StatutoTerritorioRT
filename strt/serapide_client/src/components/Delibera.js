@@ -25,7 +25,6 @@ class Delibera extends React.PureComponent {
             this.setState(() => ({file: undefined}))
         }
     }
-    // Non funziona non updata la cache prima o poi voglio sistemarlo a non rifare la query
     updateCache = (cache, { data: {upload : {success, risorse}}  = {}} = {}) => {
         const {codice} = this.props
         if (success) {
@@ -35,14 +34,24 @@ class Delibera extends React.PureComponent {
             piani.edges[0].node.risorse.edges = edges
             cache.writeQuery({
                             query: GET_PIANI,
-                            data: { piani: {...piani, edges}},
+                            data: { piani},
+                            variables: {codice}
+                        })
+            this.removeFile()
+        }
+    }
+    updateResource = (cache, { data: {deleteRisorsa : {success}}  = {}} = {}) => {
+        const {codice, delibera} = this.props
+        if (success) {
+            let { piani ={}} = cache.readQuery({ query: GET_PIANI, variables: {codice}}) || {}
+            const edges = piani.edges[0].node.risorse.edges.filter(({node: {uuid}}) => uuid !== delibera.uuid)
+            piani.edges[0].node.risorse.edges = edges
+            cache.writeQuery({
+                            query: GET_PIANI,
+                            data: { piani},
                             variables: {codice}
                         })
         }
-    }
-    refetchQueries = () => {
-        const {codice} = this.props
-        return [{query: GET_PIANI, variables: {codice}}]
     }
     removeFile = () => {
         if(this.state && this.state.file) {
@@ -52,17 +61,17 @@ class Delibera extends React.PureComponent {
     render() {
         const {file} = this.state || {}
         const {delibera, codice} = this.props
-        return  delibera ? (<Resource mutation={DELETE_RISORSA} refetchQueries={this.refetchQueries} resource={delibera}/>) : (
-            <div className="d-flex justify-content-between border-top border-bottom align-items-center">
+        return  delibera ? (<Resource update={this.updateResource}mutation={DELETE_RISORSA} refetchQueries={this.refetchQueries} resource={delibera}/>) : (
+            <div style={{minHeight: "3.813rem"}}className="d-flex justify-content-between border-top border-bottom align-items-center">
                 <FileLoader
-                    onCompleted={this.removeFile}
                     mutation={FILE_UPLOAD}
                     file={file}
                     placeholder="Delibera Comunale (obbligatoria)"
                     variables={{codice, tipo: "delibera" }}
-                    refetchQueries={this.refetchQueries}
+                    update={this.updateCache}
                 />
                 <FileChooser 
+                    disableBtn={!!file}
                     multiple={false}
                     fileType="application/pdf"
                     onFilesChange={this.onFilesChange}

@@ -10,11 +10,11 @@ import {Mutation} from  "react-apollo"
 import { toast } from 'react-toastify'
 import FileLoader from "./FileLoader"
 
-export default ({mutation, refatchQueries, update, variables, file, placeholder, ...mutationProps}) => (
+export default ({mutation, refatchQueries, update, variables, file, placeholder, onAbort, ...mutationProps}) => (
             <Mutation mutation={mutation} refetchQueries={refatchQueries} update={update} {...mutationProps}>
                     {(upload, m_props) => {
                         const {error, data: {upload: res} = {}, loading} = m_props
-                        const hasError = !loading && ((res && !res.success) || error )
+                        const hasError = !loading && ((res && !res.success) || !!error )
                         if (error && !loading) {
                             toast.error(error.message,  {autoClose: true})
                         }else if(!loading && res && !res.success) {
@@ -28,7 +28,8 @@ export default ({mutation, refatchQueries, update, variables, file, placeholder,
                                 placeholder={placeholder}
                                 upload={upload}
                                 variables={variables}
-                                error={hasError}/>)
+                                error={hasError}
+                                onAbort={onAbort}/>)
                     }}
                 </Mutation>
 )

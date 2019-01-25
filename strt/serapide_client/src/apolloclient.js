@@ -11,8 +11,6 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 });
 
 
-
-
 const _axios = axios.create({xsrfCookieName: 'csrftoken',xsrfHeaderName: "X-CSRFToken"})
 
 

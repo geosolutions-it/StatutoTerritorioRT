@@ -491,7 +491,8 @@ class DeleteRisorsa(graphene.Mutation):
         
         risorsa_id = graphene.ID(required=True)
     
-    success = graphene.Boolean()  
+    success = graphene.Boolean()
+    uuid =  graphene.ID()
     def mutate(self, info, **input):
         if info.context.user and info.context.user.is_authenticated:
             # Fetching input arguments
@@ -499,7 +500,7 @@ class DeleteRisorsa(graphene.Mutation):
             # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _risorsa = Risorsa.objects.filter(uuid=_id).delete()
-                return DeleteRisorsa(success=True)
+                return DeleteRisorsa(success=True, uuid=_id)
             except:
                 tb = traceback.format_exc()
                 logger.error(tb)

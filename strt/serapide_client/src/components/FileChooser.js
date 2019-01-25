@@ -21,7 +21,8 @@ class FileChooser extends React.Component {
       onFilesChange: PropTypes.func,
       fileType: PropTypes.string,
       multiple: PropTypes.bool,
-      showBtn: PropTypes.bool
+      showBtn: PropTypes.bool,
+      disableBtn: PropTypes.bool
     }
     static defaultProps = {
       
@@ -73,10 +74,10 @@ class FileChooser extends React.Component {
       </Dropzone>
     )
     render() {
-      const {modal, sz, isOpen, toggleOpen, showBtn} = this.props
+      const {modal, sz, isOpen, toggleOpen, showBtn, disableBtn} = this.props
       const open = toggleOpen ? isOpen : this.state.isOpen
       if(modal && !open && showBtn) {
-        return (<Button color="warning" onClick={this.toggleOpen}>Upload</Button>)
+        return (<Button disabled={disableBtn} color="warning" onClick={this.toggleOpen}>Upload</Button>)
       }
       const comp = this.renderChooser()
      return modal ? (

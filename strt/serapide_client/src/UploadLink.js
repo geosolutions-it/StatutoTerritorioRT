@@ -38,8 +38,8 @@ async function axiosFetch (axios, input, init = {}) {
     data: init.body instanceof FormData ? init.body : String(init.body),
     headers: lowerCasedHeaders,
     validateStatus: () => true,
-    onUploadProgress: init.uploadProgres
-    
+    onUploadProgress: init.uploadProgres,
+    cancelToken: init.cancelToken
   };
 
   const result = await axios.request(config);
@@ -64,7 +64,7 @@ export function buildAxiosFetch (axios) {
 }
 
 
-const CancelToken = axios.CancelToken;
+
 /**
  * GraphQL request `fetch` options.
  * @kind typedef
@@ -108,7 +108,8 @@ export const createUploadLink = ({
   fetchOptions,
   credentials,
   headers,
-  includeExtensions
+  includeExtensions,
+  a
 } = {}) => {
   const linkConfig = {
     http: { includeExtensions },
@@ -162,24 +163,26 @@ export const createUploadLink = ({
       options.body = form
     } else options.body = payload
     // Sets cancel token
-    const source = CancelToken.source()
-    options.token = source.token
-
-    // Set uploadprogres
-    if (options.body instanceof FormData && context.uploadProgress) 
-        options.uploadProgres = (progressEvent) => {
-          const {loaded, isTrusted, total} = progressEvent
-          if (isTrusted && context.uploadProgress) {
-            setInterval(() => {
-              context.uploadProgress(options.key,{loaded, total})}, 500)
-          }
-        }
+    
 
     return new Observable(observer => {
       // Allow aborting fetch, if supported.
       const { controller, signal } = createSignalIfSupported()
       if (controller) options.signal = signal
-
+      const source = axios.CancelToken.source()
+      options.cancelToken = source.token
+      const abort = () => {
+        source.cancel("Operation canceled")
+        context.uploadProgress = null
+      }
+      // Set uploadprogres
+    if (files.size > 0 && options.body instanceof FormData && context.uploadProgress) 
+    options.uploadProgres = (progressEvent) => {
+      const {loaded, isTrusted, total} = progressEvent
+      if (isTrusted && context.uploadProgress) {
+        context.uploadProgress({loaded, total}, abort)
+    }}
+    
       linkFetch(uri, options)
         .then(response => {
           // Forward the response on the context.
@@ -188,11 +191,9 @@ export const createUploadLink = ({
         })
         .then(parseAndCheckHttpResponse(operation))
         .then(result => {
-          setInterval(() => {observer.next(result)
-            context.uploadProgress = null
-            observer.complete()}, 1000)
-            
-          
+            observer.next(result)
+            //context.uploadProgress = null
+            observer.complete()
         })
         .catch(error => {
             context.uploadProgress = null
@@ -206,7 +207,9 @@ export const createUploadLink = ({
 
           observer.error(error)
         })
-
+        
+    
+    
       // Cleanup function.
       return () => {
         // Abort fetch.

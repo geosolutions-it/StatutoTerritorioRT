@@ -35,14 +35,11 @@ class UploadFiles extends React.PureComponent {
     }
     getRisorse = () => (
         this.props.risorse.map((res) => (
-            <Resource refetchQueries={this.refetchQueries} key={res.uuid} resource={res}/>))
+            <Resource update={this.updateResource} key={res.uuid} resource={res}/>))
             )
-    removeFile = ({upload: {success, risorse}}) => {
-        if(success) {
-            const {nome} = risorse[0] || {}
-            const files = this.state.files.filter(file => file.name !== nome);
-            this.setState(() => ({files}))
-        }        
+    removeFile = (nome= "") => {
+        const files = this.state.files.filter(file => file.name !== nome);
+        this.setState(() => ({files}))
     }
     getLoader = () => {
         const {files = []} = this.state || {}
@@ -50,17 +47,41 @@ class UploadFiles extends React.PureComponent {
         return files.map((file) => (
             <FileLoader
                 key={file.name}
-                onCompleted={this.removeFile}
-                refetchQueries={this.refetchQueries}
+                update={this.updateCache}
                 mutation={FILE_UPLOAD}
                 file={file}
                 placeholder={placeholder}
                 variables={variables}
+                onAbort={this.removeFile}
             />))
     } 
-    refetchQueries = () => {
-        const {variables} = this.props
-        return [{query: GET_PIANI, variables}]
+    updateCache = (cache, { data: {upload : {success, risorse}}  = {}} = {}) => {
+        const {codice} = this.props.variables
+        if (success) {
+            const __typename = "RisorsaNodeEdge" 
+            let { piani ={}} = cache.readQuery({ query: GET_PIANI, variables: {codice}}) || {}
+            const edges = piani.edges[0].node.risorse.edges.concat(risorse.map(node => ({__typename, node})))
+            piani.edges[0].node.risorse.edges = edges
+            cache.writeQuery({
+                            query: GET_PIANI,
+                            data: { piani},
+                            variables: {codice}
+                        })
+            this.removeFile(risorse[0].nome)
+        }
+    }
+    updateResource = (cache, { data: {deleteRisorsa : {success, uuid: rid}}  = {}} = {}) => {
+        const {codice} = this.props.variables
+        if (success) {
+            let { piani ={}} = cache.readQuery({ query: GET_PIANI, variables: {codice}}) || {}
+            const edges = piani.edges[0].node.risorse.edges.filter(({node: {uuid}}) => uuid !== rid)
+            piani.edges[0].node.risorse.edges = edges
+            cache.writeQuery({
+                            query: GET_PIANI,
+                            data: { piani},
+                            variables: {codice}
+                        })
+        }
     }
     render() {
         return  (

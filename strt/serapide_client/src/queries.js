@@ -99,6 +99,7 @@ export const DELETE_RISORSA = gql`
 mutation($id: ID!) {
     deleteRisorsa(risorsaId: $id){
         success
+        uuid
     }
 }
 `
