@@ -1,0 +1,95 @@
+
+.dropzone {
+    padding: 0.5rem;
+    border-width: 1px;
+    border-color: $gray-400;
+    border-style: dashed;
+    border-radius: 5px;
+    background-color: $white;
+    flex-direction: column;
+    
+    .material-icons{
+        font-size: 4rem;
+        color: $warning;
+    }
+    .btn {
+        background-color: $warning;
+        border-color: $warning;
+    }
+    .title {
+        color: $gray-600;
+        font-size: 1.5rem;
+    }
+    .sub-title {
+        color: $gray-600;
+        font-size: 1rem;
+    }
+    .btn, .btn-sm{
+        font-size: 1.25rem;
+    }
+    
+    &.lg{
+        padding: 1rem;
+        min-width: 29rem;
+        .title {
+            font-size: 2rem;
+        }
+        .sub-title {
+            color: $gray-600;
+            font-size: 1.5rem;
+        }
+        .material-icons{
+            font-size: 8rem;
+        }
+        .btn-lg{
+            font-size: 1.75rem;
+        }
+    }
+    &.isAccept{
+        border-style: solid;
+        border-color: $success;
+    }
+    &.isRejected {
+        .material-icons{
+            color: $danger
+        }
+        .btn {
+            background-color: $danger;
+            border-color: $danger;
+        }
+        border-style: solid;
+        border-color: $danger;
+    }
+}
+
+.resource, .file-loader{
+    padding: map-get($spacers, 2);
+    .material-icons, .prog {
+        font-size: 1.6rem;
+    }
+    .spinner-grow {
+        width: 2.6rem;
+        height: 2.6rem;
+    }
+
+}
+.resource {
+    border-top: $border-width solid $border-color;
+    border-bottom: $border-width solid $border-color;
+}
+
+.multiple-upload > div:first-of-type {
+    border-top: $border-width solid $border-color !important;
+}
+.multiple-upload > div {
+    border-bottom: $border-width solid $border-color !important;
+}
+.multiple-upload  {
+    .resource {
+        border-top: none;
+        border-bottom: none;
+    }    
+}
+.file-loader{
+    flex: 2 1 100%;
+}

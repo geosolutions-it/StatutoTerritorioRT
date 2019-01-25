@@ -10,9 +10,7 @@ import { UncontrolledTooltip } from 'reactstrap'
 import shortid from "shortid"
 const getActive = (stato, currentStato  = "" ) => stato === currentStato.toLowerCase() ? "active" : ''
 
-
 export default ({stato: {nome = "Unknown", codice, descrizione}}) => {
-    console.log(nome);
     const id =  `_${shortid.generate()}`
     return (
         <span className="stato-progress">

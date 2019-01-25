@@ -9,44 +9,12 @@ import React from 'react'
 import Button from '../components/IconButton'
 import {withPropsOnChange, withStateHandlers, compose} from 'recompose'
 import SelectTipo from '../components/SelectTipo'
-import gql from "graphql-tag";
+
 import { Mutation, Query} from "react-apollo";
 import EnteSelector from "../components/EnteSelector"
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'
+import {CREA_PIANO, CREA_PIANO_PAGE, GET_PIANI} from '../queries'
 
-const CREA_PIANO_PAGE = gql`
-query CreaPianoPage{
-    enti{
-        edges{
-            node{
-                name
-                code
-                role
-                type{
-                    tipo: name
-                }
-            }
-        }
-    }
-    tipologiaPiano{
-        value
-        label
-      }
-}
-`
-const CREA_PIANO= gql`mutation CreatePiano($input: CreatePianoInput!) {
-    createPiano(input: $input) {
-        nuovoPiano {
-            ente {
-            code
-            }
-            codice
-            tipologia
-            dataCreazione
-      }
-    }
-  }
-`
 
 /** 
  * TODO:: Manca la gestione errore 
@@ -74,6 +42,21 @@ const getInput = ({node: {code: eCode} = {}} = {}, {value} = {}) => ({
                     }
             }
         }})
+
+//Add newly created piano to piani list
+const updateCache = (cache, { data: {createPiano : {nuovoPiano: node}}  = {}} = {}) => {
+        try {
+            const { piani = {}} = cache.readQuery({ query: GET_PIANI }) || {}     // se la query non è stata eseguita va in errore
+            const type = `${node.__typename}Edge`
+            piani.edges = piani.edges.concat([{__typename: type, node}]) 
+            cache.writeQuery({
+                query: GET_PIANI,
+                data: { piani}
+            })
+        } catch (e) {
+            console.log("Query piani non inizializzata")
+        }
+  }
 const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti, ente, selectEnte, tipiPiano}) => {
             return (
                 <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll d-flex">
@@ -112,7 +95,7 @@ export default () => (
                 toast.error(errorQuery.message,  {autoClose: true})
             }
         return (
-            <Mutation mutation={CREA_PIANO} onCompleted={() => window.location.href="#/anagrafica"}>
+            <Mutation mutation={CREA_PIANO} onCompleted={({createPiano: {nuovoPiano}} = {}) => window.location.href=`#/anagrafica/${nuovoPiano.codice}`} update={updateCache}>
                 {(creaPiano, { loading: isSaving, error: mutationError , ...rest}) => {
                 if (mutationError) {
                     toast.error(mutationError.message)

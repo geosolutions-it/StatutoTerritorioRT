@@ -1,0 +1,18 @@
+{
+    "__schema": {
+        "types": [
+            {
+                "kind": "INTERFACE",
+                "name": "Node",
+                "possibleTypes":[
+                    {"name": "EnteNode"},
+                    {"name": "EnteTipoNode"},
+                    {"name": "PianoNode"},
+                    {"name": "FaseNode"},
+                    {"name": "RisorsaNode"},
+                    {"name": "RisorsePianoType"},
+                    {"name": "FasePianoStoricoType"}
+                ]
+            }]
+        }
+}
