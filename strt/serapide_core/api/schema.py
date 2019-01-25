@@ -443,7 +443,7 @@ class UploadFile(graphene.Mutation):
             # Fetching input arguments
             _codice_piano = input['codice_piano']
             _tipo_file = input['tipo_file']
-            
+
             try:
                 # Validating 'Piano'
                 _piano = Piano.objects.get(codice=_codice_piano)
@@ -457,26 +457,28 @@ class UploadFile(graphene.Mutation):
                 for f in file:
                     _dimensione_file = f.size / 1024 # size in KB
                     if os.path.exists(_base_media_folder) and _piano is not None and \
-                    type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
-                        _file_name = str(f)
-                        _file_path = '{}/{}'.format(_codice_piano, _file_name)
-                        _risorsa = None
+                        type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
+                            _file_name = str(f)
+                            _file_path = '{}/{}'.format(_codice_piano, _file_name)
+                            _risorsa = None
 
-                        with default_storage.open(_file_path, 'wb+') as _destination:
-                            for _chunk in f.chunks():
-                                _destination.write(_chunk)
-                            # Attaching uploaded File to Piano
-                            _risorsa = Risorsa.create(
-                                _file_name,
-                                _destination,
-                                _tipo_file,
-                                _dimensione_file,
-                                _piano.fase)
-                            _risorsa.save()
-                            if _risorsa:
-                                RisorsePiano(piano=_piano, risorsa=_risorsa).save()
-                            resources.append(_risorsa)
-                        _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
+                            with default_storage.open(_file_path, 'wb+') as _destination:
+                                for _chunk in f.chunks():
+                                    _destination.write(_chunk)
+                                # Attaching uploaded File to Piano
+                                _risorsa = Risorsa.create(
+                                    _file_name,
+                                    _destination,
+                                    _tipo_file,
+                                    _dimensione_file,
+                                    _piano.fase)
+                                _risorsa.save()
+                                if _risorsa:
+                                    RisorsePiano(piano=_piano, risorsa=_risorsa).save()
+                                resources.append(_risorsa)
+                            _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
+                            # Remove original uploaded/temporary file
+                            os.remove(_destination.name)
 
                 return UploadFile(risorse=resources, success=True)
             except:
@@ -488,9 +490,8 @@ class UploadFile(graphene.Mutation):
 
 class DeleteRisorsa(graphene.Mutation):
     class Arguments:
-        
         risorsa_id = graphene.ID(required=True)
-    
+
     success = graphene.Boolean()
     uuid =  graphene.ID()
     def mutate(self, info, **input):
@@ -499,11 +500,22 @@ class DeleteRisorsa(graphene.Mutation):
             _id = input['risorsa_id']
             # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
-                _risorsa = Risorsa.objects.filter(uuid=_id).delete()
+                _risorse = Risorsa.objects.filter(uuid=_id)
+                """
+                Deletes file from filesystem
+                when corresponding `MediaFile` object is deleted.
+                """
+                for _risorsa in _risorse:
+                    if _risorsa.file:
+                        if os.path.isfile(_risorsa.file.path) and os.path.exists(_risorsa.file.path):
+                            os.remove(_risorsa.file.path)
+                    _risorsa.delete()
+
                 return DeleteRisorsa(success=True, uuid=_id)
             except:
                 tb = traceback.format_exc()
                 logger.error(tb)
+
         return DeleteRisorsa(success=False)
 
 # ############################################################################ #
