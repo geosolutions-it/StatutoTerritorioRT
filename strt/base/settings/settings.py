@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     # Wagtail apps
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -65,7 +66,7 @@ INSTALLED_APPS = [
     'rest_framework',
     # TEST
     'strt_tests',
-	# This will also make the `graphql_schema` management command available
+    # This will also make the `graphql_schema` management command available
     'graphene_django',
 
     # Install the ingredients app
