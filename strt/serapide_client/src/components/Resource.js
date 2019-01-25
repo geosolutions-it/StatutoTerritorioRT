@@ -6,11 +6,23 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-// Manca gestione errore nel caso che venga rimosso il file ma non dovrebbe andare qui
+import { toast } from 'react-toastify'
+import Confirm from './ConfirmToast'
 
 const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : null
 export default ({resource: { nome, uuid, tipo, dimensione}, icon = "picture_as_pdf", codice, isLoading , isLocked = false, onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
+    let toastId
     const deleteResource = () => onDeleteResource({ variables: { id: uuid, codice}})
+    const confirm = () => {
+        if(!toast.isActive(toastId)) {
+        toastId = toast.warn(<Confirm confirm={deleteResource} id={uuid} />, {
+            autoClose: true,
+            draggable: true,
+            // hook will be called whent the component unmount
+            onClose: ( ) => {toastId = null}
+          });
+        }
+    }
     return  (
         <div className="resource d-flex justify-content-between align-items-center">
             <div className="d-flex">
@@ -27,7 +39,7 @@ export default ({resource: { nome, uuid, tipo, dimensione}, icon = "picture_as_p
                 {isLocked ? (
                     <i className="material-icons text-warning">lock</i>
                 ) : (
-                    <i className="material-icons text-danger" onClick={deleteResource} style={{cursor: 'pointer'}}>cancel</i>
+                    <i className="material-icons text-danger" onClick={confirm} style={{cursor: 'pointer'}}>cancel</i>
                 ) }
             </div>
         </div>)
