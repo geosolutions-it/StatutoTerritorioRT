@@ -31,7 +31,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphene_file_upload.scalars import Upload
 
 from strt_users.models import (
-    Organization, OrganizationType
+    AppUser, Organization, OrganizationType
 )
 
 from serapide_core.helpers import (
@@ -101,6 +101,20 @@ class EnteTipoNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class AppUserNode(DjangoObjectType):
+
+    class Meta:
+        model = AppUser
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'fiscal_code': ['exact'],
+            'first_name': ['exact', 'icontains', 'istartswith'],
+            'last_name': ['exact', 'icontains', 'istartswith'],
+            'email': ['exact'],
+        }
+        exclude_fields = ('password', 'is_staff', 'is_active', 'is_superuser', 'last_login' )
+        interfaces = (relay.Node, )
+
 class EnteNode(DjangoObjectType):
 
     tipologia_ente = graphene.Field(EnteTipoNode)
@@ -128,6 +142,7 @@ class EnteNode(DjangoObjectType):
 
 class PianoNode(DjangoObjectType):
 
+    user = graphene.Field(AppUserNode)
     ente = graphene.Field(EnteNode)
     storico_fasi = graphene.List(FasePianoStoricoType)
     risorsa = DjangoFilterConnectionField(RisorsePianoType)
