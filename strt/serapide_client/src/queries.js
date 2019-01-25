@@ -1,5 +1,14 @@
 import gql from "graphql-tag";
 /** Fragment sheare field between queries */
+const UserFragment = gql`
+fragment User on AppUserNode {
+        firstName
+        lastName
+}
+`
+
+
+
 const RisorsaFragment = gql`
 fragment Risorsa on RisorsaNode {
     nome
@@ -26,6 +35,9 @@ fragment Piano on PianoNode {
         codice
         descrizione
     }
+    user{
+        ...User
+    }
     risorse{
         edges{
           node{
@@ -35,6 +47,7 @@ fragment Piano on PianoNode {
       }
 }
 ${RisorsaFragment}
+${UserFragment}
 ` 
 
 /** queries */

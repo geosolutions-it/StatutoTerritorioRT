@@ -28,7 +28,7 @@ export default ({title, piani = []}) => (
                 </tr>
             </thead>
             <tbody>
-                {piani.map(({node: {notifica = "nessuna", descrizione, tipo, lastUpdate, codice, fase = {}, rup}} = {}) => (
+                {piani.map(({node: {notifica = "nessuna", descrizione, tipo, lastUpdate, codice, fase = {}, user= {}}} = {}) => (
                     <tr key={codice}>
                         <td className="text-center"><i className={`material-icons ${notifica}`}>notification_important</i></td>
                         <td style={{maxWidth: 350}}>{descrizione}</td>
@@ -39,7 +39,7 @@ export default ({title, piani = []}) => (
                         <td>
                             <StatoProgress stato={fase}></StatoProgress>
                         </td>
-                        <td className="text-justify text-center">{rup}</td>
+                        <td className="text-justify text-center">{user && `${user.firstName} ${user.lastName}`}</td>
                         <td className="text-center"><i className="material-icons text-warning">play_circle_filled</i></td>
                     </tr>))}
                 </tbody>

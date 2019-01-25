@@ -13,10 +13,19 @@ import {FILE_UPLOAD, GET_PIANI, DELETE_RISORSA} from "../queries"
 import Resource from './EnhancedResource'
 
 
-class Delibera extends React.PureComponent {
+class SingleFile extends React.PureComponent {
     static propTypes = {
-           delibera: PropTypes.object,
-           codice: PropTypes.string
+        risorsa: PropTypes.object,
+        placeholder: PropTypes.string,
+        variables: PropTypes.object,
+        fileType: PropTypes.string,
+        isLocked: PropTypes.bool
+    }
+    static defaultProps = {
+        placeholder: "",
+        variables: {},
+        fileType: "application/pdf",
+        isLocked: true
     } 
     onFilesChange = (files = []) => {
         if (files[0]) {
@@ -26,7 +35,7 @@ class Delibera extends React.PureComponent {
         }
     }
     updateCache = (cache, { data: {upload : {success, risorse}}  = {}} = {}) => {
-        const {codice} = this.props
+        const {codice} = this.props.variables
         if (success) {
             const __typename = "RisorsaNodeEdge" 
             let { piani ={}} = cache.readQuery({ query: GET_PIANI, variables: {codice}}) || {}
@@ -41,10 +50,10 @@ class Delibera extends React.PureComponent {
         }
     }
     updateResource = (cache, { data: {deleteRisorsa : {success}}  = {}} = {}) => {
-        const {codice, delibera} = this.props
+        const {variables: {codice} = {}, risorsa} = this.props
         if (success) {
             let { piani ={}} = cache.readQuery({ query: GET_PIANI, variables: {codice}}) || {}
-            const edges = piani.edges[0].node.risorse.edges.filter(({node: {uuid}}) => uuid !== delibera.uuid)
+            const edges = piani.edges[0].node.risorse.edges.filter(({node: {uuid}}) => uuid !== risorsa.uuid)
             piani.edges[0].node.risorse.edges = edges
             cache.writeQuery({
                             query: GET_PIANI,
@@ -60,24 +69,27 @@ class Delibera extends React.PureComponent {
     }
     render() {
         const {file} = this.state || {}
-        const {delibera, codice} = this.props
-        return  delibera ? (<Resource update={this.updateResource}mutation={DELETE_RISORSA} refetchQueries={this.refetchQueries} resource={delibera}/>) : (
-            <div style={{minHeight: "3.813rem"}}className="d-flex justify-content-between border-top border-bottom align-items-center">
+        const {risorsa, variables, placeholder, isLocked} = this.props
+        return  risorsa ? (<Resource update={this.updateResource} mutation={DELETE_RISORSA} resource={risorsa} isLocked={isLocked}/>) : (
+            <div style={{minHeight: "3.813rem"}} className="d-flex justify-content-between border-top border-bottom align-items-center">
                 <FileLoader
                     mutation={FILE_UPLOAD}
                     file={file}
-                    placeholder="Delibera Comunale (obbligatoria)"
-                    variables={{codice, tipo: "delibera" }}
+                    placeholder={placeholder}
+                    variables={variables}
                     update={this.updateCache}
+                    onAbort={this.removeFile}
+                    renderChooser={(loading) => (
+                        <FileChooser 
+                            disableBtn={!!loading}
+                            multiple={false}
+                            fileType="application/pdf"
+                            onFilesChange={this.onFilesChange}
+                            modal
+                            showBtn
+                            sz="lg"/>)}
                 />
-                <FileChooser 
-                    disableBtn={!!file}
-                    multiple={false}
-                    fileType="application/pdf"
-                    onFilesChange={this.onFilesChange}
-                    modal
-                    showBtn
-                    sz="lg"/>
+                
             </div>
             )
     }
@@ -86,4 +98,4 @@ class Delibera extends React.PureComponent {
     }
 }
 
-export default Delibera
+export default SingleFile

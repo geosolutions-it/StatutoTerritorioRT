@@ -29,7 +29,7 @@ const UI = ({placeholder, isLoading, progress, icon = "picture_as_pdf", onCancel
                                 <i className="material-icons text-danger" onClick={onCancel}style={{cursor: 'pointer'}}>cancel</i>
                                 </div>)
                 }
-                {error && !isLoading && (<Button color="danger" onClick={onRetry}>Riprova</Button>)}
+                {error && file.name && !isLoading && (<Button color="danger" onClick={onRetry}>Riprova</Button>)}
             </div>
 
 )

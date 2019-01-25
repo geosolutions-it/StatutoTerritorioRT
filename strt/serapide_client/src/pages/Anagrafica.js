@@ -15,7 +15,7 @@ import {GET_PIANI} from "../queries"
 import {compose, withStateHandlers} from 'recompose'
 import DateSelector from "../components/DateSelector"
 import {Input} from 'reactstrap'
-import Delibera from '../components/Delibera'
+import Delibera from '../components/UploadSingleFile'
 import UploadFiles from '../components/UploadFiles'
 
 
@@ -64,10 +64,10 @@ export default enhancer(({match: {params: {code} = {}} = {}, selectDataDelibera,
                                 </div>
                                 <span className="pt-5">DELIBERA COMUNALE</span>
                                 <span className="pb-2 font-weight-light">Caricare delibera comunale, formato obbligatorio pdf</span>
-                                <Delibera codice={codice} delibera={delibera}/>
+                                <Delibera placeholder="Delibera Comunale (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={false}/>
                                 <span className="pt-5">ALTRI DOCUMENTI</span>
                                 <span className="font-weight-light">Caricare eventuali allegati trascinando i files nel riquadro, formato obbligatorio pdf</span>
-                                <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_liberi" }}/>
+                                <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_liberi" }} isLocked={false}/>
                             </div>   
                         </div>
                     </div>

@@ -17,13 +17,15 @@ class UploadFiles extends React.PureComponent {
         placeholder: PropTypes.string,
         variables: PropTypes.object,
         fileType: PropTypes.string,
-        risorse: PropTypes.array
+        risorse: PropTypes.array,
+        isLocked: PropTypes.bool
     }
     static defaultProps = {
         placeholder: "",
         variables: {},
         fileType: "application/pdf",
-        risorse: []
+        risorse: [],
+        isLocked: true
     }
     onFilesChange = (files = []) => {
         console.log("files_changed")
@@ -33,15 +35,15 @@ class UploadFiles extends React.PureComponent {
             this.setState(() => ({files: undefined}))
         }
     }
-    getRisorse = () => (
+    renderRisorse = () => (
         this.props.risorse.map((res) => (
-            <Resource update={this.updateResource} key={res.uuid} resource={res}/>))
+            <Resource update={this.updateResource} key={res.uuid} resource={res} isLocked={this.props.isLocked}/>))
             )
     removeFile = (nome= "") => {
         const files = this.state.files.filter(file => file.name !== nome);
         this.setState(() => ({files}))
     }
-    getLoader = () => {
+    renderLoader = () => {
         const {files = []} = this.state || {}
         const {variables, placeholder} = this.props
         return files.map((file) => (
@@ -87,8 +89,8 @@ class UploadFiles extends React.PureComponent {
         return  (
             <React.Fragment>
                <div className="multiple-upload mt-3 pb-2 d-flex flex-column justify-content-between"> 
-               {this.getRisorse()}
-               {this.getLoader()}
+               {this.renderRisorse()}
+               {this.renderLoader()}
                </div>
                <div className="align-self-start"> 
                 <FileChooser 
