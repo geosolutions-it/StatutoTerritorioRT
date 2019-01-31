@@ -234,8 +234,14 @@ class ProceduraVASCreateInput(InputObjectType):
     piano = graphene.InputField(PianoCreateInput, required=True)
     tipologia = graphene.String(required=True)
 
-    data_creazione = graphene.types.datetime.DateTime(required=False)
     note = graphene.InputField(graphene.List(graphene.String), required=False)
+    data_creazione = graphene.types.datetime.DateTime(required=False)
+    data_verifica = graphene.types.datetime.DateTime(required=False)
+    data_procedimento = graphene.types.datetime.DateTime(required=False)
+    data_approvazione = graphene.types.datetime.DateTime(required=False)
+    verifica_effettuata = graphene.Boolean(required=False)
+    procedimento_effettuato = graphene.Boolean(required=False)
+    non_necessaria = graphene.Boolean(required=False)
 
 
 # ##############################################################################
@@ -686,7 +692,7 @@ class UploadRisorsaVAS(graphene.Mutation):
             _tipo_file = input['tipo_file']
 
             try:
-                # Validating 'Piano'
+                # Validating 'Procedura VAS'
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
                 # Ensuring Media Folder exists and is writable
                 _base_media_folder = os.path.join(settings.MEDIA_ROOT, _uuid_vas)
@@ -739,4 +745,5 @@ class Mutation(object):
     upload = UploadFile.Field()
     delete_risorsa = DeleteRisorsa.Field()
     create_procedura_vas = CreateProceduraVAS.Field()
+    update_procedura_vas = UpdateProceduraVAS.Field()
     upload_risorsa_vas = UploadRisorsaVAS.Field()
