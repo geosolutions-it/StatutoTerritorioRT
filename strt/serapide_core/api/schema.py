@@ -712,7 +712,7 @@ class UploadRisorsaVAS(graphene.Mutation):
                                     _destination,
                                     _tipo_file,
                                     _dimensione_file,
-                                    _procedura_vas.fase)
+                                    _procedura_vas.piano.fase)
                                 _risorsa.save()
                                 if _risorsa:
                                     RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
