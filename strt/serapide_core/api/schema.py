@@ -38,10 +38,11 @@ from serapide_core.helpers import (
     get_errors, update_create_instance, is_RUP
 )
 from serapide_core.modello.models import (
-    Piano, Fase, Risorsa, FasePianoStorico, RisorsePiano
+    Piano, Fase, Risorsa, FasePianoStorico, RisorsePiano,
+    ProceduraVAS, RisorseVas
 )
 from serapide_core.modello.enums import (
-    FASE, TIPOLOGIA_PIANO
+    FASE, TIPOLOGIA_PIANO, TIPOLOGIA_VAS
 )
 
 logger = logging.getLogger(__name__)
@@ -91,6 +92,16 @@ class RisorsePianoType(DjangoObjectType):
         model = RisorsePiano
         filter_fields = ['risorsa__fase__codice',
                          'piano__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorseVASType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorseVas
+        filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
 
@@ -164,6 +175,23 @@ class PianoNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class ProceduraVASNode(DjangoObjectType):
+
+    ente = graphene.Field(EnteNode)
+    piano = graphene.Field(PianoNode)
+    risorsa = DjangoFilterConnectionField(RisorseVASType)
+
+    class Meta:
+        model = ProceduraVAS
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'ente': ['exact'],
+            'note': ['exact', 'icontains'],
+            'tipologia': ['exact', 'icontains'],
+        }
+        interfaces = (relay.Node, )
+
+
 class FaseCreateInput(InputObjectType):
     """
     Class created to accept input data
@@ -198,6 +226,18 @@ class PianoCreateInput(InputObjectType):
     fase = graphene.InputField(FaseCreateInput, required=False)
 
 
+class ProceduraVASCreateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    piano = graphene.InputField(PianoCreateInput, required=True)
+    tipologia = graphene.String(required=True)
+
+    data_creazione = graphene.types.datetime.DateTime(required=False)
+    note = graphene.InputField(graphene.List(graphene.String), required=False)
+
+
 # ##############################################################################
 # ENUMS
 # ##############################################################################
@@ -211,6 +251,10 @@ class FasePiano(StrtEnumNode):
 
 
 class TipologiaPiano(StrtEnumNode):
+    pass
+
+
+class TipologiaVAS(StrtEnumNode):
     pass
 
 
@@ -279,9 +323,12 @@ class Query(object):
     piani = DjangoFilterConnectionField(PianoNode,
                                         filterset_class=PianoUserMembershipFilter)
 
+    procedure_vas = DjangoFilterConnectionField(ProceduraVASNode)
+
     # Enums
     fase_piano = graphene.List(FasePiano)
     tipologia_piano = graphene.List(TipologiaPiano)
+    tipologia_vas = graphene.List(TipologiaVAS)
 
     def resolve_fase_piano(self, info):
         l = []
@@ -293,6 +340,12 @@ class Query(object):
         l = []
         for t in TIPOLOGIA_PIANO:
             l.append(TipologiaPiano(t[0], t[1]))
+        return l
+
+    def resolve_tipologia_vas(self, info):
+        l = []
+        for t in TIPOLOGIA_VAS:
+            l.append(TipologiaVAS(t[0], t[1]))
         return l
 
     # Debug
@@ -430,6 +483,87 @@ class UpdatePiano(relay.ClientIDMutation):
             return cls(piano_aggiornato=None, errors=[_("Forbidden")])
 
 
+class CreateProceduraVAS(relay.ClientIDMutation):
+
+    class Input:
+        procedura_vas = graphene.Argument(ProceduraVASCreateInput)
+
+    nuova_procedura_vas = graphene.Field(ProceduraVASNode)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        if info.context.user and info.context.user.is_authenticated:
+            try:
+                _procedura_vas_data = input.get('procedura_vas')
+
+                # Piano (M)
+                _data = _procedura_vas_data.pop('piano')
+                _piano = Piano.objects.get(codice=_data['codice'])
+                _procedura_vas_data['piano'] = _piano
+                # Ente (M)
+                if 'ente' in _procedura_vas_data:
+                    _data = _procedura_vas_data.pop('ente')
+                    _ente = Organization.objects.get(code=_data['code'])
+                    _procedura_vas_data['ente'] = _ente
+                else:
+                    _procedura_vas_data['ente'] = _piano.ente
+                # Note (O)
+                if 'note' in _procedura_vas_data:
+                    _data = _procedura_vas_data.pop('note')
+                    _procedura_vas_data['note'] = _data[0]
+                _procedura_vas = ProceduraVAS()
+                nuova_procedura_vas = update_create_instance(_procedura_vas, _procedura_vas_data)
+                return cls(nuova_procedura_vas=nuova_procedura_vas)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return cls(nuova_procedura_vas=None, errors=get_errors(e))
+        else:
+            return cls(nuova_procedura_vas=None, errors=[_("Forbidden")])
+
+
+class UpdateProceduraVAS(relay.ClientIDMutation):
+
+    class Input:
+        procedura_vas = graphene.Argument(ProceduraVASCreateInput)
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        if info.context.user and info.context.user.is_authenticated:
+            try:
+                _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+                if _procedura_vas:
+                    _procedura_vas_data = input.get('procedura_vas')
+                    if 'uuid' in _procedura_vas_data:
+                        _procedura_vas_data.pop('uuid')
+                        # This cannot be changed
+                    if 'data_creazione' in _procedura_vas_data:
+                        _procedura_vas_data.pop('data_creazione')
+                        # This cannot be changed
+                    # Ente (M)
+                    if 'ente' in _procedura_vas_data:
+                        _procedura_vas_data.pop('ente')
+                        # This cannot be changed
+                    # Piano (M)
+                    if 'piano' in _procedura_vas_data:
+                        _procedura_vas_data.pop('piano')
+                        # This cannot be changed
+                    # Note (O)
+                    if 'note' in _procedura_vas_data:
+                        _data = _procedura_vas_data.pop('note')
+                        _procedura_vas.note = _data[0]
+                    procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
+                    return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
+            except ValidationError as e:
+                return cls(procedura_vas_aggiornata=None, errors=get_errors(e))
+        else:
+            return cls(procedura_vas_aggiornata=None, errors=[_("Forbidden")])
+
+
 """
 How to use this mutation
 - send a POST multi-part form with Content-Type: application/graphql
@@ -497,12 +631,13 @@ class UploadFile(graphene.Mutation):
                             os.remove(_destination.name)
 
                 return UploadFile(risorse=resources, success=True)
-            except:
+            except BaseException:
                 tb = traceback.format_exc()
                 logger.error(tb)
 
         # Something went wrong
         return UploadFile(success=False)
+
 
 class DeleteRisorsa(graphene.Mutation):
     class Arguments:
@@ -528,11 +663,72 @@ class DeleteRisorsa(graphene.Mutation):
                     _risorsa.delete()
 
                 return DeleteRisorsa(success=True, uuid=_id)
-            except:
+            except BaseException:
                 tb = traceback.format_exc()
                 logger.error(tb)
 
         return DeleteRisorsa(success=False)
+
+
+class UploadRisorsaVAS(graphene.Mutation):
+    class Arguments:
+        uuid = graphene.String(required=True)
+        tipo_file = graphene.String(required=True)
+        file = Upload(required=True)
+
+    risorse = graphene.List(RisorsaNode)
+    success = graphene.Boolean()
+
+    def mutate(self, info, file, **input):
+        if info.context.user and info.context.user.is_authenticated:
+            # Fetching input arguments
+            _uuid_vas = input['codice_piano']
+            _tipo_file = input['tipo_file']
+
+            try:
+                # Validating 'Piano'
+                _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
+                # Ensuring Media Folder exists and is writable
+                _base_media_folder = os.path.join(settings.MEDIA_ROOT, _uuid_vas)
+                if not os.path.exists(_base_media_folder):
+                    os.makedirs(_base_media_folder)
+                if not isinstance(file, list):
+                    file = [file]
+                resources = []
+                for f in file:
+                    _dimensione_file = f.size / 1024 # size in KB
+                    if os.path.exists(_base_media_folder) and _procedura_vas is not None and \
+                        type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
+                            _file_name = str(f)
+                            _file_path = '{}/{}'.format(_uuid_vas, _file_name)
+                            _risorsa = None
+
+                            with default_storage.open(_file_path, 'wb+') as _destination:
+                                for _chunk in f.chunks():
+                                    _destination.write(_chunk)
+                                # Attaching uploaded File to Piano
+                                _risorsa = Risorsa.create(
+                                    _file_name,
+                                    _destination,
+                                    _tipo_file,
+                                    _dimensione_file,
+                                    _procedura_vas.fase)
+                                _risorsa.save()
+                                if _risorsa:
+                                    RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
+                                resources.append(_risorsa)
+                            _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
+                            # Remove original uploaded/temporary file
+                            os.remove(_destination.name)
+
+                return UploadRisorsaVAS(risorse=resources, success=True)
+            except BaseException:
+                tb = traceback.format_exc()
+                logger.error(tb)
+
+        # Something went wrong
+        return UploadRisorsaVAS(success=False)
+
 
 # ############################################################################ #
 class Mutation(object):
@@ -542,3 +738,5 @@ class Mutation(object):
     update_piano = UpdatePiano.Field()
     upload = UploadFile.Field()
     delete_risorsa = DeleteRisorsa.Field()
+    create_procedura_vas = CreateProceduraVAS.Field()
+    upload_risorsa_vas = UploadRisorsaVAS.Field()

@@ -34,3 +34,11 @@ TIPOLOGIA_PIANO = Choices(
         ('strutturale', _('STRUTTURALE')),
         ('variante', _('VARIANTE')),
     )
+
+TIPOLOGIA_VAS = Choices(
+        ('unknown', _('UNKNOWN')),
+        ('semplificata', _('SEMPLIFICATA')),
+        ('verifica', _('VERIFICA')),
+        ('procedimento', _('PROCEDIMENTO')),
+        ('non_necessaria', _('NON_NECESSARIA')),
+    )
