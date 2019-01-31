@@ -682,7 +682,7 @@ class UploadRisorsaVAS(graphene.Mutation):
     def mutate(self, info, file, **input):
         if info.context.user and info.context.user.is_authenticated:
             # Fetching input arguments
-            _uuid_vas = input['codice_piano']
+            _uuid_vas = input['uuid']
             _tipo_file = input['tipo_file']
 
             try:
