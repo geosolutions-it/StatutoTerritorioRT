@@ -30,6 +30,8 @@ from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_file_upload.scalars import Upload
 
+from graphql_extensions.exceptions import GraphQLError
+
 from strt_users.models import (
     AppUser, Organization, OrganizationType
 )
@@ -374,13 +376,18 @@ class CreateFase(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        if info.context.user and info.context.user.is_authenticated and info.context.user.is_superuser:
-            _data = input.get('fase')
-            _fase = Fase()
-            nuova_fase = update_create_instance(_fase, _data)
-            return cls(nuova_fase=nuova_fase)
-        else:
-            return cls(nuova_fase=None, errors=[_("Forbidden")])
+        try:
+            if info.context.user and info.context.user.is_authenticated and info.context.user.is_superuser:
+                _data = input.get('fase')
+                _fase = Fase()
+                nuova_fase = update_create_instance(_fase, _data)
+                return cls(nuova_fase=nuova_fase)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class UpdateFase(relay.ClientIDMutation):
@@ -394,17 +401,22 @@ class UpdateFase(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        if info.context.user and info.context.user.is_authenticated and info.context.user.is_superuser:
-            try:
-                _instance = Fase.objects.get(codice=input['codice'])
-                if _instance:
-                    _data = input.get('fase')
-                    fase_aggiornata = update_create_instance(_instance, _data)
-                    return cls(fase_aggiornata=fase_aggiornata)
-            except ValidationError as e:
-                return cls(fase_aggiornata=None, errors=get_errors(e))
-        else:
-            return cls(fase_aggiornata=None, errors=[_("Forbidden")])
+        try:
+            if info.context.user and info.context.user.is_authenticated and info.context.user.is_superuser:
+                try:
+                    _instance = Fase.objects.get(codice=input['codice'])
+                    if _instance:
+                        _data = input.get('fase')
+                        fase_aggiornata = update_create_instance(_instance, _data)
+                        return cls(fase_aggiornata=fase_aggiornata)
+                except ValidationError as e:
+                    return cls(fase_aggiornata=None, errors=get_errors(e))
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class CreatePiano(relay.ClientIDMutation):
@@ -416,44 +428,49 @@ class CreatePiano(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        if is_RUP(info.context.user):
-            _piano_data = input.get('piano_operativo')
-            # Ente (M)
-            _data = _piano_data.pop('ente')
-            _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
-            _piano_data['ente'] = _ente
-            # Codice (M)
-            if 'codice' in _piano_data:
-                _data = _piano_data.pop('codice')
-                _codice = _data
+        try:
+            if is_RUP(info.context.user):
+                _piano_data = input.get('piano_operativo')
+                # Ente (M)
+                _data = _piano_data.pop('ente')
+                _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
+                _piano_data['ente'] = _ente
+                # Codice (M)
+                if 'codice' in _piano_data:
+                    _data = _piano_data.pop('codice')
+                    _codice = _data
+                else:
+                    _year = str(datetime.date.today().year)[2:]
+                    _month = datetime.date.today().month
+                    _piano_id = Piano.objects.filter(ente=_ente).count() + 1
+                    _codice = '%s%02d%02d%05d' % (_ente.code, int(_year), _month, _piano_id)
+                _piano_data['codice'] = _codice
+                # Fase (O)
+                if 'fase' in _piano_data:
+                    _data = _piano_data.pop('fase')
+                    _fase = Fase.objects.get(codice=_data['codice'])
+                else:
+                    _fase = Fase.objects.get(codice='FP255')
+                _piano_data['fase'] = _fase
+                # Descrizione (O)
+                if 'descrizione' in _piano_data:
+                    _data = _piano_data.pop('descrizione')
+                    _piano_data['descrizione'] = _data[0]
+                _piano_data['user'] = info.context.user
+                _piano = Piano()
+                nuovo_piano = update_create_instance(_piano, _piano_data)
+                _procedura_vas = ProceduraVAS()
+                _procedura_vas.piano = nuovo_piano
+                _procedura_vas.ente = nuovo_piano.ente
+                _procedura_vas.tipologia = TIPOLOGIA_VAS.semplificata
+                _procedura_vas.save()
+                return cls(nuovo_piano=nuovo_piano)
             else:
-                _year = str(datetime.date.today().year)[2:]
-                _month = datetime.date.today().month
-                _piano_id = Piano.objects.filter(ente=_ente).count() + 1
-                _codice = '%s%02d%02d%05d' % (_ente.code, int(_year), _month, _piano_id)
-            _piano_data['codice'] = _codice
-            # Fase (O)
-            if 'fase' in _piano_data:
-                _data = _piano_data.pop('fase')
-                _fase = Fase.objects.get(codice=_data['codice'])
-            else:
-                _fase = Fase.objects.get(codice='FP255')
-            _piano_data['fase'] = _fase
-            # Descrizione (O)
-            if 'descrizione' in _piano_data:
-                _data = _piano_data.pop('descrizione')
-                _piano_data['descrizione'] = _data[0]
-            _piano_data['user'] = info.context.user
-            _piano = Piano()
-            nuovo_piano = update_create_instance(_piano, _piano_data)
-            _procedura_vas = ProceduraVAS()
-            _procedura_vas.piano = nuovo_piano
-            _procedura_vas.ente = nuovo_piano.ente
-            _procedura_vas.tipologia = TIPOLOGIA_VAS.semplificata
-            _procedura_vas.save()
-            return cls(nuovo_piano=nuovo_piano)
-        else:
-            return cls(nuovo_piano=None, errors=[_("Forbidden")])
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class UpdatePiano(relay.ClientIDMutation):
@@ -496,10 +513,12 @@ class UpdatePiano(relay.ClientIDMutation):
                         _piano.descrizione = _data[0]
                     piano_aggiornato = update_create_instance(_piano, _piano_data)
                     return cls(piano_aggiornato=piano_aggiornato)
-            except ValidationError as e:
-                return cls(piano_aggiornato=None, errors=get_errors(e))
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
-            return cls(piano_aggiornato=None, errors=[_("Forbidden")])
+            return GraphQLError(_("Forbidden"), code=403)
 
 
 class CreateProceduraVAS(relay.ClientIDMutation):
@@ -536,9 +555,9 @@ class CreateProceduraVAS(relay.ClientIDMutation):
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
-                return cls(nuova_procedura_vas=None, errors=get_errors(e))
+                return GraphQLError(e, code=500)
         else:
-            return cls(nuova_procedura_vas=None, errors=[_("Forbidden")])
+            return GraphQLError(_("Forbidden"), code=403)
 
 
 class UpdateProceduraVAS(relay.ClientIDMutation):
@@ -582,10 +601,12 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                         _procedura_vas.note = _data[0]
                     procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
                     return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
-            except ValidationError as e:
-                return cls(procedura_vas_aggiornata=None, errors=get_errors(e))
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
-            return cls(procedura_vas_aggiornata=None, errors=[_("Forbidden")])
+            return GraphQLError(_("Forbidden"), code=403)
 
 
 """
@@ -653,11 +674,11 @@ class UploadFile(graphene.Mutation):
                             _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
                             # Remove original uploaded/temporary file
                             os.remove(_destination.name)
-
                 return UploadFile(risorse=resources, success=True)
-            except BaseException:
+            except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
+                return GraphQLError(e, code=500)
 
         # Something went wrong
         return UploadFile(success=False)
@@ -687,9 +708,10 @@ class DeleteRisorsa(graphene.Mutation):
                     _risorsa.delete()
 
                 return DeleteRisorsa(success=True, uuid=_id)
-            except BaseException:
+            except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
+                return GraphQLError(e, code=500)
 
         return DeleteRisorsa(success=False)
 
@@ -746,9 +768,10 @@ class UploadRisorsaVAS(graphene.Mutation):
                             os.remove(_destination.name)
 
                 return UploadRisorsaVAS(risorse=resources, success=True)
-            except BaseException:
+            except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
+                return GraphQLError(e, code=500)
 
         # Something went wrong
         return UploadRisorsaVAS(success=False)
