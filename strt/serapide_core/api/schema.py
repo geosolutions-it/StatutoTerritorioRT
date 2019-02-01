@@ -47,6 +47,26 @@ from serapide_core.modello.enums import (
 
 logger = logging.getLogger(__name__)
 
+
+# ##############################################################################
+# ENUMS
+# ##############################################################################
+class StrtEnumNode(graphene.ObjectType):
+    value= graphene.String()
+    label = graphene.String()
+
+
+class FasePiano(StrtEnumNode):
+    pass
+
+
+class TipologiaPiano(StrtEnumNode):
+    pass
+
+
+class TipologiaVAS(StrtEnumNode):
+    pass
+
 # ############################################################################ #
 # INPUTS                                                                       #
 # ############################################################################ #
@@ -151,34 +171,9 @@ class EnteNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
-class PianoNode(DjangoObjectType):
-
-    user = graphene.Field(AppUserNode)
-    ente = graphene.Field(EnteNode)
-    storico_fasi = graphene.List(FasePianoStoricoType)
-    risorsa = DjangoFilterConnectionField(RisorsePianoType)
-
-    def resolve_storico_fasi(self, info, **args):
-        # Warning this is not currently paginated
-        _hist = FasePianoStorico.objects.filter(piano=self)
-        return list(_hist)
-
-    class Meta:
-        model = Piano
-        # Allow for some more advanced filtering here
-        filter_fields = {
-            'codice': ['exact', 'icontains', 'istartswith'],
-            'ente': ['exact'],
-            'descrizione': ['exact', 'icontains'],
-            'tipologia': ['exact', 'icontains'],
-        }
-        interfaces = (relay.Node, )
-
-
 class ProceduraVASNode(DjangoObjectType):
 
     ente = graphene.Field(EnteNode)
-    piano = graphene.Field(PianoNode)
     risorsa = DjangoFilterConnectionField(RisorseVASType)
 
     class Meta:
@@ -187,6 +182,35 @@ class ProceduraVASNode(DjangoObjectType):
         filter_fields = {
             'ente': ['exact'],
             'note': ['exact', 'icontains'],
+            'tipologia': ['exact', 'icontains'],
+        }
+        interfaces = (relay.Node, )
+
+
+class PianoNode(DjangoObjectType):
+
+    user = graphene.Field(AppUserNode)
+    ente = graphene.Field(EnteNode)
+    storico_fasi = graphene.List(FasePianoStoricoType)
+    risorsa = DjangoFilterConnectionField(RisorsePianoType)
+    procedura_vas = graphene.Field(ProceduraVASNode)
+
+    def resolve_storico_fasi(self, info, **args):
+        # Warning this is not currently paginated
+        _hist = FasePianoStorico.objects.filter(piano=self)
+        return list(_hist)
+
+    def resolve_procedura_vas(self, info, **args):
+        _vas = ProceduraVAS.objects.get(piano=self)
+        return _vas
+
+    class Meta:
+        model = Piano
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'codice': ['exact', 'icontains', 'istartswith'],
+            'ente': ['exact'],
+            'descrizione': ['exact', 'icontains'],
             'tipologia': ['exact', 'icontains'],
         }
         interfaces = (relay.Node, )
@@ -242,26 +266,6 @@ class ProceduraVASCreateInput(InputObjectType):
     verifica_effettuata = graphene.Boolean(required=False)
     procedimento_effettuato = graphene.Boolean(required=False)
     non_necessaria = graphene.Boolean(required=False)
-
-
-# ##############################################################################
-# ENUMS
-# ##############################################################################
-class StrtEnumNode(graphene.ObjectType):
-    value= graphene.String()
-    label = graphene.String()
-
-
-class FasePiano(StrtEnumNode):
-    pass
-
-
-class TipologiaPiano(StrtEnumNode):
-    pass
-
-
-class TipologiaVAS(StrtEnumNode):
-    pass
 
 
 # ##############################################################################
@@ -442,6 +446,11 @@ class CreatePiano(relay.ClientIDMutation):
             _piano_data['user'] = info.context.user
             _piano = Piano()
             nuovo_piano = update_create_instance(_piano, _piano_data)
+            _procedura_vas = ProceduraVAS()
+            _procedura_vas.piano = nuovo_piano
+            _procedura_vas.ente = nuovo_piano.ente
+            _procedura_vas.tipologia = TIPOLOGIA_VAS.semplificata
+            _procedura_vas.save()
             return cls(nuovo_piano=nuovo_piano)
         else:
             return cls(nuovo_piano=None, errors=[_("Forbidden")])
@@ -476,6 +485,10 @@ class UpdatePiano(relay.ClientIDMutation):
                     # Fase (O)
                     if 'fase' in _piano_data:
                         _piano_data.pop('fase')
+                        # This cannot be changed
+                    # Tipologia (O)
+                    if 'tipologia' in _piano_data:
+                        _piano_data.pop('tipologia')
                         # This cannot be changed
                     # Descrizione (O)
                     if 'descrizione' in _piano_data:
@@ -558,6 +571,11 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                     if 'piano' in _procedura_vas_data:
                         _procedura_vas_data.pop('piano')
                         # This cannot be changed
+                    # Tipologia (O)
+                    if 'tipologia' in _procedura_vas_data:
+                        _tipologia = _procedura_vas_data.pop('tipologia')
+                        if _tipologia and _tipologia in TIPOLOGIA_VAS:
+                            _procedura_vas_data['tipologia'] = _tipologia
                     # Note (O)
                     if 'note' in _procedura_vas_data:
                         _data = _procedura_vas_data.pop('note')
