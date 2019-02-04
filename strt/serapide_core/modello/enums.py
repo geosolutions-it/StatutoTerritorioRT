@@ -28,6 +28,13 @@ FASE = Choices(
         ('pubblicazione', _('PUBBLICAZIONE')),
     )
 
+TIPOLOGIA_CONTATTO = Choices(
+        ('unknown', _('UNKNOWN')),
+        ('generico', _('GENERICO')),
+        ('acvas', _('AUT_COMP_VAS')),
+        ('sca', _('SOGGETTO_SCA')),
+    )
+
 TIPOLOGIA_PIANO = Choices(
         ('unknown', _('UNKNOWN')),
         ('operativo', _('OPERATIVO')),

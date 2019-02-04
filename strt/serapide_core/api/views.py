@@ -36,16 +36,21 @@ class HTTPErrorAwareMixin:
             )
         else:
             result, status_code = self.get_response(request, data, show_graphiql)
-        _res = json.loads(result)
-        if 'errors' in _res and _res['errors'] and len(_res['errors']) > 0:
+        _res = json.loads(result) if result else None
+        if _res and 'errors' in _res and _res['errors'] and len(_res['errors']) > 0:
             _error = _res['errors'][0]
-            e = HttpError(HttpResponse(status=_error['code'], content_type='application/json'), _error['message'])
+            _code = 500 if _error['code'] == 'error' else int(_error['code'])
+            e = HttpError(HttpResponse(status=_code, content_type='application/json'), _error['message'])
             response = e.response
             # response.content = self.json_encode(request, {'errors': [self.format_error(e)]})
             response.content = self.json_encode(request, _res)
             return response
-
-        return super().dispatch(request, *args, **kwargs)
+        if result and status_code:
+            return HttpResponse(
+                status=status_code, content=result, content_type="application/json"
+            )
+        else:
+            return super().dispatch(request, *args, **kwargs)
 
 
 class PrivateGraphQLView(HTTPErrorAwareMixin,

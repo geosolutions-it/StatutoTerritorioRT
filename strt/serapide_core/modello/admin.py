@@ -13,6 +13,7 @@ from django.contrib import admin
 
 from .models import (Fase,
                      Risorsa,
+                     Contatto,
                      Piano, RisorsePiano,
                      ProceduraVAS, RisorseVas)
 
@@ -34,5 +35,6 @@ class ProceduraVASAdmin(admin.ModelAdmin):
 
 admin.site.register(Fase)
 admin.site.register(Risorsa)
+admin.site.register(Contatto)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
