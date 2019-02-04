@@ -30,10 +30,13 @@ log = logging.getLogger(__name__)
 
 class Fase(models.Model):
     codice = models.CharField(max_length=255, primary_key=True)
+
     nome = models.CharField(
         choices=FASE,
         default=FASE.draft,
-        max_length=20)
+        max_length=20
+    )
+
     descrizione = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -61,12 +64,15 @@ class Risorsa(models.Model):
     nome = models.TextField(null=False, blank=False)
     file = models.FileField(max_length=500, upload_to='uploads/%Y/%m/%d/')
     tipo = models.TextField(null=False, blank=False)
+
     dimensione = models.DecimalField(
         null=False,
         blank=False,
         max_digits=19,
         decimal_places=10,
-        default=0.0)
+        default=0.0
+    )
+
     descrizione = models.TextField(null=True, blank=True)
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     last_update = models.DateTimeField(auto_now=True, blank=True)
@@ -98,16 +104,23 @@ class Contatto(models.Model):
     nome = models.CharField(
         max_length=255,
         null=False,
-        blank=False)
+        blank=False
+    )
+
     tipologia = models.CharField(
         choices=TIPOLOGIA_CONTATTO,
         default=TIPOLOGIA_CONTATTO.unknown,
-        max_length=20)
+        max_length=20
+    )
+
     email = models.EmailField(null=False, blank=False)
 
     ente = models.ForeignKey(
-        to=Organization, on_delete=models.CASCADE, verbose_name=_('ente'),
-        null=False, blank=False
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        null=False,
+        blank=False
     )
 
     class Meta:
@@ -134,7 +147,7 @@ class Piano(models.Model):
         blank=False,
         unique=True
     )
-    
+
     tipologia = models.CharField(
         choices=TIPOLOGIA_PIANO,
         default=TIPOLOGIA_PIANO.unknown,
@@ -248,7 +261,9 @@ class ProceduraVAS(models.Model):
     tipologia = models.CharField(
         choices=TIPOLOGIA_VAS,
         default=TIPOLOGIA_VAS.unknown,
-        max_length=20)
+        max_length=20
+    )
+
     note = models.TextField(null=True, blank=True)
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     data_verifica = models.DateTimeField(null=True, blank=True)
@@ -263,8 +278,12 @@ class ProceduraVAS(models.Model):
     risorse = models.ManyToManyField(Risorsa, through='RisorseVas')
 
     ente = models.ForeignKey(
-        to=Organization, on_delete=models.CASCADE, verbose_name=_('ente'),
-        default=None, blank=True, null=True
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
     )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
@@ -292,6 +311,9 @@ class AutoritaCompetenteVAS(models.Model):
     class Meta:
         db_table = "strt_core_autorita_competente"
 
+    def __str__(self):
+        return '{} <---> {}'.format(self.piano.codice, self.autorita_competente.email)
+
 
 class SoggettiSCA(models.Model):
     soggetto_sca= models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
@@ -299,3 +321,6 @@ class SoggettiSCA(models.Model):
 
     class Meta:
         db_table = "strt_core_soggetti_sca"
+
+    def __str__(self):
+        return '{} <---> {}'.format(self.piano.codice, self.soggetto_sca.email)
