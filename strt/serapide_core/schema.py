@@ -12,6 +12,8 @@
 import graphene
 import serapide_core.api.schema
 
+from graphene_django_extras import all_directives
+
 
 class Query(serapide_core.api.schema.Query, graphene.ObjectType):
     # This class will inherit from multiple Queries
@@ -28,4 +30,5 @@ class Mutation(serapide_core.api.schema.Mutation, graphene.ObjectType):
 schema = graphene.Schema(
     query=Query,
     mutation=Mutation,
+    directives=all_directives,
 )

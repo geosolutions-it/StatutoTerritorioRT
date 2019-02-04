@@ -75,22 +75,6 @@ INSTALLED_APPS = [
     'serapide_core.api',
 ]
 
-MIDDLEWARE = [
-    # Django middleware
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Wagtail middleware
-    'wagtail.core.middleware.SiteMiddleware',
-    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
-    # Django current user
-    'django_currentuser.middleware.ThreadLocalUserMiddleware',
-]
-
 ROOT_URLCONF = 'base.urls'
 
 TEMPLATES = [
@@ -210,9 +194,35 @@ MEDIA_URL = '/media/'
 INTERNAL_IPS = EnvUtil.get_env_var('DJANGO_INTERNAL_IPS', list, [], ' ')
 
 GRAPHENE = {
+    'SCHEMA_INDENT': 2,
     'SCHEMA': 'serapide_core.schema.schema',
     'SCHEMA_OUTPUT': 'data/schema.json',  # defaults to schema.json
     'MIDDLEWARE': [
         'graphene_django.debug.DjangoDebugMiddleware',
+        'graphene_django_extras.ExtraGraphQLDirectiveMiddleware',
     ]
 }
+
+GRAPHENE_DJANGO_EXTRAS = {
+    'DEFAULT_PAGINATION_CLASS': 'graphene_django_extras.paginations.LimitOffsetGraphqlPagination',
+    'DEFAULT_PAGE_SIZE': 20,
+    'MAX_PAGE_SIZE': 50,
+    'CACHE_ACTIVE': True,
+    'CACHE_TIMEOUT': 300    # seconds
+}
+
+MIDDLEWARE = [
+    # Django middleware
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Wagtail middleware
+    'wagtail.core.middleware.SiteMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    # Django current user
+    'django_currentuser.middleware.ThreadLocalUserMiddleware',
+]

@@ -30,6 +30,8 @@ from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_file_upload.scalars import Upload
 
+# from graphene_django_extras import DjangoObjectType
+
 from graphql_extensions.exceptions import GraphQLError
 
 from strt_users.models import (
@@ -37,14 +39,14 @@ from strt_users.models import (
 )
 
 from serapide_core.helpers import (
-    get_errors, update_create_instance, is_RUP
+    get_errors, update_create_instance, is_RUP,
 )
 from serapide_core.modello.models import (
     Piano, Fase, Risorsa, FasePianoStorico, RisorsePiano,
-    ProceduraVAS, RisorseVas
+    ProceduraVAS, RisorseVas,
 )
 from serapide_core.modello.enums import (
-    FASE, TIPOLOGIA_PIANO, TIPOLOGIA_VAS
+    FASE, TIPOLOGIA_PIANO, TIPOLOGIA_VAS,
 )
 
 logger = logging.getLogger(__name__)
@@ -203,7 +205,11 @@ class PianoNode(DjangoObjectType):
         return list(_hist)
 
     def resolve_procedura_vas(self, info, **args):
-        _vas = ProceduraVAS.objects.get(piano=self)
+        _vas = None
+        try:
+            _vas = ProceduraVAS.objects.get(piano=self)
+        except BaseException:
+            pass
         return _vas
 
     class Meta:
@@ -252,14 +258,27 @@ class PianoCreateInput(InputObjectType):
     fase = graphene.InputField(FaseCreateInput, required=False)
 
 
+class PianoUpdateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    url = graphene.String(required=False)
+    data_delibera = graphene.types.datetime.DateTime(required=False)
+    data_accettazione = graphene.types.datetime.DateTime(required=False)
+    data_avvio = graphene.types.datetime.DateTime(required=False)
+    data_approvazione = graphene.types.datetime.DateTime(required=False)
+    descrizione = graphene.InputField(graphene.List(graphene.String), required=False)
+
+
 class ProceduraVASCreateInput(InputObjectType):
     """
     Class created to accept input data
     from the interactive graphql console.
     """
-    piano = graphene.InputField(PianoCreateInput, required=True)
     tipologia = graphene.String(required=True)
 
+    piano = graphene.InputField(PianoUpdateInput, required=False)
     note = graphene.InputField(graphene.List(graphene.String), required=False)
     data_creazione = graphene.types.datetime.DateTime(required=False)
     data_verifica = graphene.types.datetime.DateTime(required=False)
@@ -476,7 +495,7 @@ class CreatePiano(relay.ClientIDMutation):
 class UpdatePiano(relay.ClientIDMutation):
 
     class Input:
-        piano_operativo = graphene.Argument(PianoCreateInput)
+        piano_operativo = graphene.Argument(PianoUpdateInput)
         codice = graphene.String(required=True)
 
     errors = graphene.List(graphene.String)
@@ -525,6 +544,7 @@ class CreateProceduraVAS(relay.ClientIDMutation):
 
     class Input:
         procedura_vas = graphene.Argument(ProceduraVASCreateInput)
+        codice_piano = graphene.String(required=True)
 
     nuova_procedura_vas = graphene.Field(ProceduraVASNode)
 
@@ -534,22 +554,19 @@ class CreateProceduraVAS(relay.ClientIDMutation):
             try:
                 _procedura_vas_data = input.get('procedura_vas')
 
-                # Piano (M)
-                _data = _procedura_vas_data.pop('piano')
-                _piano = Piano.objects.get(codice=_data['codice'])
+                # ProceduraVAS (M)
+                _piano = Piano.objects.get(codice=input['codice_piano'])
                 _procedura_vas_data['piano'] = _piano
                 # Ente (M)
-                if 'ente' in _procedura_vas_data:
-                    _data = _procedura_vas_data.pop('ente')
-                    _ente = Organization.objects.get(code=_data['code'])
-                    _procedura_vas_data['ente'] = _ente
-                else:
-                    _procedura_vas_data['ente'] = _piano.ente
+                _procedura_vas_data['ente'] = _piano.ente
                 # Note (O)
                 if 'note' in _procedura_vas_data:
                     _data = _procedura_vas_data.pop('note')
                     _procedura_vas_data['note'] = _data[0]
                 _procedura_vas = ProceduraVAS()
+                _procedura_vas.piano = _piano
+                _procedura_vas_data['id'] = _procedura_vas.id
+                _procedura_vas_data['uuid'] = _procedura_vas.uuid
                 nuova_procedura_vas = update_create_instance(_procedura_vas, _procedura_vas_data)
                 return cls(nuova_procedura_vas=nuova_procedura_vas)
             except BaseException as e:

@@ -20,6 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 from strt_users.models import AppUser, Organization
 
 from .enums import (FASE,
+                    TIPOLOGIA_CONTATTO,
                     TIPOLOGIA_PIANO,
                     TIPOLOGIA_VAS)
 
@@ -86,6 +87,37 @@ class Risorsa(models.Model):
         return '{} [{}]'.format(self.nome, self.uuid)
 
 
+class Contatto(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    nome = models.CharField(
+        max_length=255,
+        null=False,
+        blank=False)
+    tipologia = models.CharField(
+        choices=TIPOLOGIA_CONTATTO,
+        default=TIPOLOGIA_CONTATTO.unknown,
+        max_length=20)
+    email = models.EmailField(null=False, blank=False)
+
+    ente = models.ForeignKey(
+        to=Organization, on_delete=models.CASCADE, verbose_name=_('ente'),
+        null=False, blank=False
+    )
+
+    class Meta:
+        db_table = "strt_core_contatto"
+        verbose_name_plural = 'Contatti'
+
+    def __str__(self):
+        return '{} <{}> - {} [{}] - {}'.format(self.nome, self.email, self.ente, self.uuid, TIPOLOGIA_CONTATTO[self.tipologia])
+
+
 class Piano(models.Model):
     """
     Every "Piano" in the serapide_core application has a unique uuid
@@ -100,11 +132,15 @@ class Piano(models.Model):
         max_length=255,
         null=False,
         blank=False,
-        unique=True)
+        unique=True
+    )
+    
     tipologia = models.CharField(
         choices=TIPOLOGIA_PIANO,
         default=TIPOLOGIA_PIANO.unknown,
-        max_length=20)
+        max_length=20
+    )
+
     descrizione = models.TextField(null=True, blank=True)
     url = models.URLField(null=True, blank=True, default='')
     data_delibera = models.DateTimeField(null=True, blank=True)
@@ -118,14 +154,43 @@ class Piano(models.Model):
     storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
     risorse = models.ManyToManyField(Risorsa, through='RisorsePiano')
 
+    autorita_competente_vas = models.ManyToManyField(
+        Contatto,
+        related_name='autorita_competente_vas',
+        through='AutoritaCompetenteVAS'
+    )
+
+    soggetti_sca = models.ManyToManyField(
+        Contatto,
+        related_name='soggetti_sca',
+        through='SoggettiSCA'
+    )
+
+    soggetto_proponente = models.ForeignKey(
+        to=Contatto,
+        on_delete=models.DO_NOTHING,
+        verbose_name=_('soggetto proponente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
     ente = models.ForeignKey(
-        to=Organization, on_delete=models.CASCADE, verbose_name=_('ente'),
-        default=None, blank=True, null=True
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
     )
 
     user = models.ForeignKey(
-        to=AppUser, on_delete=models.CASCADE, verbose_name=_('user'),
-        default=None, blank=True, null=True
+        to=AppUser,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+        default=None,
+        blank=True,
+        null=True
     )
 
     class Meta:
@@ -134,7 +199,7 @@ class Piano(models.Model):
         # unique_together = (('nome', 'codice',),)
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.codice, self.tipologia, self.uuid)
+        return '{} - {} [{}]'.format(self.codice, TIPOLOGIA_PIANO[self.tipologia], self.uuid)
 
     def post_save(self):
         _now = datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -209,7 +274,7 @@ class ProceduraVAS(models.Model):
         verbose_name_plural = 'Procedure VAS'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.tipologia, self.uuid)
+        return '{} - {} [{}]'.format(self.piano.codice, TIPOLOGIA_VAS[self.tipologia], self.uuid)
 
 
 class RisorseVas(models.Model):
@@ -218,3 +283,19 @@ class RisorseVas(models.Model):
 
     class Meta:
         db_table = "strt_core_vas_risorse"
+
+
+class AutoritaCompetenteVAS(models.Model):
+    autorita_competente = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = "strt_core_autorita_competente"
+
+
+class SoggettiSCA(models.Model):
+    soggetto_sca= models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = "strt_core_soggetti_sca"
