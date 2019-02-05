@@ -15,7 +15,8 @@ from .models import (Fase,
                      Risorsa,
                      Contatto,
                      Piano, RisorsePiano,
-                     ProceduraVAS, RisorseVas)
+                     ProceduraVAS, RisorseVas,
+                     AutoritaCompetenteVAS, SoggettiSCA)
 
 class RisorsePianoInline(admin.TabularInline):
     model = RisorsePiano
@@ -25,8 +26,16 @@ class RisorseVasInline(admin.TabularInline):
     model = RisorseVas
 
 
+class AutoritaCompetenteVASInline(admin.TabularInline):
+    model = AutoritaCompetenteVAS
+
+
+class SoggettiSCAInline(admin.TabularInline):
+    model = SoggettiSCA
+
+
 class PianoAdmin(admin.ModelAdmin):
-    inlines = [RisorsePianoInline, ]
+    inlines = [RisorsePianoInline, AutoritaCompetenteVASInline, SoggettiSCAInline]
 
 
 class ProceduraVASAdmin(admin.ModelAdmin):

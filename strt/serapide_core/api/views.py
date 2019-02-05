@@ -39,7 +39,7 @@ class HTTPErrorAwareMixin:
         _res = json.loads(result) if result else None
         if _res and 'errors' in _res and _res['errors'] and len(_res['errors']) > 0:
             _error = _res['errors'][0]
-            _code = 500 if _error['code'] == 'error' else int(_error['code'])
+            _code = 400 if _error['code'] == 'error' else int(_error['code'])
             e = HttpError(HttpResponse(status=_code, content_type='application/json'), _error['message'])
             response = e.response
             # response.content = self.json_encode(request, {'errors': [self.format_error(e)]})
