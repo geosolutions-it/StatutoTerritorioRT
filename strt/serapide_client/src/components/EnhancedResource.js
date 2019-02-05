@@ -21,7 +21,7 @@ export default ({ resource, codice, isLocked, mutation = DELETE_RISORSA, ...muta
                             toast.error("Impossibile eliminare la risorsa ",  {autoClose: true})
                         }
                         return (
-                            <Risorsa isLoading={loading} onDeleteResource={deleteResource} resource={resource} codice={codice} isLocked={false}/>)
+                            <Risorsa isLoading={loading} onDeleteResource={deleteResource} resource={resource} codice={codice} isLocked={isLocked}/>)
                     }}
             </Mutation>
 )

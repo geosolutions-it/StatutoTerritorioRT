@@ -107,12 +107,31 @@ export const CREA_PIANO= gql`mutation CreatePiano($input: CreatePianoInput!) {
   }
   ${PianoFragment}
 `
+export const UPDATE_PIANO = gql`
+mutation UpdatePiano($input: UpdatePianoInput!) {
+    updatePiano(input: $input) {
+        pianoAggiornato {
+            ...Piano
+        }
+    }
+}
+${PianoFragment}
+`
 
 export const DELETE_RISORSA = gql`
 mutation($id: ID!) {
     deleteRisorsa(risorsaId: $id){
         success
         uuid
+    }
+}
+`
+export const GET_VAS_AUTHORITIES = gql`
+query getAuth{
+    authorities @client
+    {
+        value
+    label   
     }
 }
 `
