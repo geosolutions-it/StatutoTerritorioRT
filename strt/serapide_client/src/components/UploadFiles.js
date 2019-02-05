@@ -18,14 +18,16 @@ class UploadFiles extends React.PureComponent {
         variables: PropTypes.object,
         fileType: PropTypes.string,
         risorse: PropTypes.array,
-        isLocked: PropTypes.bool
+        isLocked: PropTypes.bool,
+        disabled: PropTypes.bool
     }
     static defaultProps = {
         placeholder: "",
         variables: {},
         fileType: "application/pdf",
         risorse: [],
-        isLocked: true
+        isLocked: true,
+        disabled: false
     }
     onFilesChange = (files = []) => {
         console.log("files_changed")

@@ -302,6 +302,7 @@ class PianoCreateInput(InputObjectType):
     codice = graphene.String(required=False)
     url = graphene.String(required=False)
     data_creazione = graphene.types.datetime.DateTime(required=False)
+    data_delibera = graphene.types.datetime.DateTime(required=False)
     descrizione = graphene.InputField(graphene.List(graphene.String), required=False)
     fase = graphene.InputField(FaseCreateInput, required=False)
 
@@ -836,7 +837,7 @@ class UploadFile(graphene.Mutation):
         tipo_file = graphene.String(required=True)
         file = Upload(required=True)
 
-    risorse = graphene.List(RisorsaNode)
+    piano_aggiornato = graphene.Field(PianoNode)
     success = graphene.Boolean()
 
     def mutate(self, info, file, **input):
@@ -880,7 +881,7 @@ class UploadFile(graphene.Mutation):
                             _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
                             # Remove original uploaded/temporary file
                             os.remove(_destination.name)
-                return UploadFile(risorse=resources, success=True)
+                return UploadFile(piano_aggiornato=_piano, success=True)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -894,33 +895,72 @@ class DeleteRisorsa(graphene.Mutation):
 
     class Arguments:
         risorsa_id = graphene.ID(required=True)
+        codice_piano = graphene.String(required=True)
 
     success = graphene.Boolean()
-    uuid =  graphene.ID()
+    piano_aggiornato = graphene.Field(PianoNode)
+
     def mutate(self, info, **input):
         if info.context.user and info.context.user.is_authenticated:
             # Fetching input arguments
             _id = input['risorsa_id']
+            _codice_piano = input['codice_piano']
             # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
-                _risorse = Risorsa.objects.filter(uuid=_id)
+                _piano = Piano.objects.get(codice=_codice_piano)
+                _risorsa = Risorsa.objects.get(uuid=_id)
                 """
                 Deletes file from filesystem
                 when corresponding `MediaFile` object is deleted.
                 """
-                for _risorsa in _risorse:
-                    if _risorsa.file:
-                        if os.path.isfile(_risorsa.file.path) and os.path.exists(_risorsa.file.path):
-                            os.remove(_risorsa.file.path)
-                    _risorsa.delete()
+                
+                if _risorsa.file:
+                    if os.path.isfile(_risorsa.file.path) and os.path.exists(_risorsa.file.path):
+                        os.remove(_risorsa.file.path)
+                _risorsa.delete()
 
-                return DeleteRisorsa(success=True, uuid=_id)
+                return DeleteRisorsa(success=True, piano_aggiornato=_piano)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
                 return GraphQLError(e, code=500)
 
         return DeleteRisorsa(success=False)
+
+class DeleteRisorsaVAS(graphene.Mutation):
+    class Arguments:
+        risorsa_id = graphene.ID(required=True)
+        uuid = graphene.String(required=True)
+
+    success = graphene.Boolean()
+    procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
+
+    def mutate(self, info, **input):
+        if info.context.user and info.context.user.is_authenticated:
+            # Fetching input arguments
+            _id = input['risorsa_id']
+            _uuid_vas = input['uuid']
+            # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            try:
+                _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                """
+                Deletes file from filesystem
+                when corresponding `MediaFile` object is deleted.
+                """
+                
+                if _risorsa.file:
+                    if os.path.isfile(_risorsa.file.path) and os.path.exists(_risorsa.file.path):
+                        os.remove(_risorsa.file.path)
+                _risorsa.delete()
+
+                return DeleteRisorsaVAS(success=True, procedura_vas_aggiornata=_procedura_vas)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        return DeleteRisorsaVAS(success=False)   
 
 
 class UploadRisorsaVAS(graphene.Mutation):
@@ -929,8 +969,8 @@ class UploadRisorsaVAS(graphene.Mutation):
         tipo_file = graphene.String(required=True)
         file = Upload(required=True)
 
-    risorse = graphene.List(RisorsaNode)
     success = graphene.Boolean()
+    procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
     def mutate(self, info, file, **input):
         if info.context.user and info.context.user.is_authenticated:
@@ -974,7 +1014,7 @@ class UploadRisorsaVAS(graphene.Mutation):
                             # Remove original uploaded/temporary file
                             os.remove(_destination.name)
 
-                return UploadRisorsaVAS(risorse=resources, success=True)
+                return UploadRisorsaVAS(success=True, procedura_vas_aggiornata=_procedura_vas)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -995,5 +1035,6 @@ class Mutation(object):
     create_procedura_vas = CreateProceduraVAS.Field()
     update_procedura_vas = UpdateProceduraVAS.Field()
     upload_risorsa_vas = UploadRisorsaVAS.Field()
+    delete_risorsa_vas = DeleteRisorsaVAS.Field()
     create_contatto = CreateContatto.Field()
     delete_contatto = DeleteContatto.Field()

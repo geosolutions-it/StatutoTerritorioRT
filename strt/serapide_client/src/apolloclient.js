@@ -3,6 +3,7 @@ import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemo
 import { onError } from 'apollo-link-error'
 import { ApolloLink } from 'apollo-link'
 import { createUploadLink, buildAxiosFetch } from './UploadLink'
+import { withClientState } from 'apollo-link-state';
 import axios from 'axios'
 import introspectionQueryResultData from './fragmentTypes.json';
 
@@ -12,10 +13,10 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 
 
 const _axios = axios.create({xsrfCookieName: 'csrftoken',xsrfHeaderName: "X-CSRFToken"})
-
+const cache = new InMemoryCache({fragmentMatcher})
 
 const client = new ApolloClient({
-    cache: new InMemoryCache({fragmentMatcher}),
+    
     link:  ApolloLink.from([
         onError(({ graphQLErrors, networkError }) => {
             if (graphQLErrors)
@@ -26,11 +27,31 @@ const client = new ApolloClient({
                 )
             if (networkError) console.log(`[Network error]: ${networkError}`)
       }),
+      withClientState({
+        defaults: {
+            authorities: [
+              {value: 0, label: "Commisione del paesaggio integrata", __typename: 'Authority'},
+              {value: 1, label: "Città Metropolitana di Firenze",__typename: 'Authority'},
+              {value: 2, label: "Nucleo VIA-VAS",__typename: 'Authority'},
+              {value: 3, label: "Settore Ambiente",__typename: 'Authority'}
+            ]},
+            resolvers: {},
+            typeDefs: `
+                type Authority {
+                    value: Int!
+                    label: String!
+                }
+                type Query {
+                    visibilityFilter: String
+                    authorities: [Authority]
+                }`,
+            cache }),
     createUploadLink({
             uri: "/serapide/graphql",
             credentials: 'same-origin',
             fetch: buildAxiosFetch(_axios)
-    })])
+    })]),
+    cache
   });
 
 export default client

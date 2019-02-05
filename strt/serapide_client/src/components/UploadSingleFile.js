@@ -19,13 +19,15 @@ class SingleFile extends React.PureComponent {
         placeholder: PropTypes.string,
         variables: PropTypes.object,
         fileType: PropTypes.string,
-        isLocked: PropTypes.bool
+        isLocked: PropTypes.bool,
+        disabled: PropTypes.bool
     }
     static defaultProps = {
         placeholder: "",
         variables: {},
         fileType: "application/pdf",
-        isLocked: true
+        isLocked: true,
+        disabled: false
     } 
     onFilesChange = (files = []) => {
         if (files[0]) {
@@ -69,7 +71,7 @@ class SingleFile extends React.PureComponent {
     }
     render() {
         const {file} = this.state || {}
-        const {risorsa, variables, placeholder, isLocked} = this.props
+        const {risorsa, variables, placeholder, isLocked, disabled} = this.props
         return  risorsa ? (<Resource update={this.updateResource} mutation={DELETE_RISORSA} resource={risorsa} isLocked={isLocked}/>) : (
             <div style={{minHeight: "3.813rem"}} className="d-flex justify-content-between border-top border-bottom align-items-center">
                 <FileLoader
@@ -81,7 +83,7 @@ class SingleFile extends React.PureComponent {
                     onAbort={this.removeFile}
                     renderChooser={(loading) => (
                         <FileChooser 
-                            disableBtn={!!loading}
+                            disableBtn={    disabled || !!loading}
                             multiple={false}
                             fileType="application/pdf"
                             onFilesChange={this.onFilesChange}
