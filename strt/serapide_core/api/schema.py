@@ -863,7 +863,8 @@ class UploadBaseBase(graphene.Mutation):
                         os.remove(_destination.name)
         return resources
 
-    def mutate(self, info, file, **input):
+    @classmethod
+    def mutate(cls, root, info, file, **input):
         pass
 
 
@@ -872,7 +873,8 @@ class UploadFile(UploadBaseBase):
     piano_aggiornato = graphene.Field(PianoNode)
     success = graphene.Boolean()
 
-    def mutate(self, info, file, **input):
+    @classmethod
+    def mutate(cls, root, info, file, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _codice_piano = input['codice']
@@ -907,7 +909,8 @@ class UploadRisorsaVAS(UploadBaseBase):
     success = graphene.Boolean()
     procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
-    def mutate(self, info, file, **input):
+    @classmethod
+    def mutate(cls, root, info, file, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _uuid_vas = input['codice']
@@ -960,7 +963,8 @@ class DeleteRisorsaBase(graphene.Mutation):
             logger.error(tb)
             return False
 
-    def mutate(self, info, **input):
+    @classmethod
+    def mutate(cls, root, info, **input):
         pass
 
 
@@ -969,7 +973,8 @@ class DeleteRisorsa(DeleteRisorsaBase):
     success = graphene.Boolean()
     piano_aggiornato = graphene.Field(PianoNode)
 
-    def mutate(self, info, **input):
+    @classmethod
+    def mutate(cls, root, info, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']
@@ -995,7 +1000,7 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
     procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
     @classmethod
-    def mutate(self, info, **input):
+    def mutate(cls, root, info, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']
