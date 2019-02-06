@@ -10,6 +10,7 @@
 #########################################################################
 
 import os
+import rules
 import logging
 import datetime
 import graphene
@@ -55,6 +56,7 @@ from serapide_core.modello.models import (
 )
 from serapide_core.modello.enums import (
     FASE,
+    FASE_NEXT,
     TIPOLOGIA_VAS,
     TIPOLOGIA_PIANO,
     TIPOLOGIA_CONTATTO,
@@ -489,11 +491,12 @@ class CreateFase(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         try:
-            if info.context.user and info.context.user.is_authenticated and info.context.user.is_superuser:
-                _data = input.get('fase')
-                _fase = Fase()
-                nuova_fase = update_create_instance(_fase, _data)
-                return cls(nuova_fase=nuova_fase)
+            if info.context.user and \
+                rules.test_rule('strt_users.is_superuser', info.context.user):
+                    _data = input.get('fase')
+                    _fase = Fase()
+                    nuova_fase = update_create_instance(_fase, _data)
+                    return cls(nuova_fase=nuova_fase)
             else:
                 return GraphQLError(_("Forbidden"), code=403)
         except BaseException as e:
@@ -514,15 +517,16 @@ class UpdateFase(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         try:
-            if info.context.user and info.context.user.is_authenticated and info.context.user.is_superuser:
-                try:
-                    _instance = Fase.objects.get(codice=input['codice'])
-                    if _instance:
-                        _data = input.get('fase')
-                        fase_aggiornata = update_create_instance(_instance, _data)
-                        return cls(fase_aggiornata=fase_aggiornata)
-                except ValidationError as e:
-                    return cls(fase_aggiornata=None, errors=get_errors(e))
+            if info.context.user and \
+                rules.test_rule('strt_users.is_superuser', info.context.user):
+                    try:
+                        _instance = Fase.objects.get(codice=input['codice'])
+                        if _instance:
+                            _data = input.get('fase')
+                            fase_aggiornata = update_create_instance(_instance, _data)
+                            return cls(fase_aggiornata=fase_aggiornata)
+                    except ValidationError as e:
+                        return cls(fase_aggiornata=None, errors=get_errors(e))
             else:
                 return GraphQLError(_("Forbidden"), code=403)
         except BaseException as e:
@@ -541,13 +545,14 @@ class CreateContatto(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         try:
-            if is_RUP(info.context.user):
-                _data = input.get('contatto')
-                # Ente (M)
-                if 'ente' in _data:
-                    _ente = _data.pop('ente')
-                    _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
-                    _data['ente'] = _ente
+            _data = input.get('contatto')
+            # Ente (M)
+            if 'ente' in _data:
+                _ente = _data.pop('ente')
+                _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
+                _data['ente'] = _ente
+
+            if rules.test_rule('strt_users.is_RUP_of', info.context.user, _data['ente']):
                 # Tipologia (M)
                 if 'tipologia' in _data:
                     _tipologia = _data.pop('tipologia')
@@ -599,12 +604,12 @@ class CreatePiano(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         try:
-            if is_RUP(info.context.user):
-                _piano_data = input.get('piano_operativo')
-                # Ente (M)
-                _data = _piano_data.pop('ente')
-                _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
-                _piano_data['ente'] = _ente
+            _piano_data = input.get('piano_operativo')
+            # Ente (M)
+            _data = _piano_data.pop('ente')
+            _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
+            _piano_data['ente'] = _ente
+            if rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente):
                 # Codice (M)
                 if 'codice' in _piano_data:
                     _data = _piano_data.pop('codice')
@@ -654,73 +659,72 @@ class UpdatePiano(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        if is_RUP(info.context.user):
+        _piano = Piano.objects.get(codice=input['codice'])
+        _piano_data = input.get('piano_operativo')
+        if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                _piano = Piano.objects.get(codice=input['codice'])
-                if _piano:
-                    _piano_data = input.get('piano_operativo')
-                    if 'codice' in _piano_data:
-                        _piano_data.pop('codice')
-                        # This cannot be changed
-                    if 'data_creazione' in _piano_data:
-                        _piano_data.pop('data_creazione')
-                        # This cannot be changed
-                    # Ente (M)
-                    if 'ente' in _piano_data:
-                        _piano_data.pop('ente')
-                        # This cannot be changed
-                    # Fase (O)
-                    if 'fase' in _piano_data:
-                        _piano_data.pop('fase')
-                        # This cannot be changed
-                    # Tipologia (O)
-                    if 'tipologia' in _piano_data:
-                        _piano_data.pop('tipologia')
-                        # This cannot be changed
-                    # Descrizione (O)
-                    if 'descrizione' in _piano_data:
-                        _data = _piano_data.pop('descrizione')
-                        _piano.descrizione = _data[0]
-                    # SoggettoProponente (O)
-                    if 'soggetto_proponente_uuid' in _piano_data:
-                        _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
-                        if len(_soggetto_proponente_uuid) > 0:
-                            _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
-                            _piano.soggetto_proponente = _soggetto_proponente
-                        else:
-                            _piano.soggetto_proponente = None
-                    if 'autorita_competente_vas' in _piano_data:
-                        _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
-                        if len(_autorita_competente_vas) > 0:
-                            _autorita_competenti = []
-                            for _contatto_uuid in _autorita_competente_vas:
-                                _autorita_competenti.append(AutoritaCompetenteVAS(
-                                    piano=_piano,
-                                    autorita_competente=Contatto.objects.get(uuid=_contatto_uuid)
-                                    )
+                if 'codice' in _piano_data:
+                    _piano_data.pop('codice')
+                    # This cannot be changed
+                if 'data_creazione' in _piano_data:
+                    _piano_data.pop('data_creazione')
+                    # This cannot be changed
+                # Ente (M)
+                if 'ente' in _piano_data:
+                    _piano_data.pop('ente')
+                    # This cannot be changed
+                # Fase (O)
+                if 'fase' in _piano_data:
+                    _piano_data.pop('fase')
+                    # This cannot be changed
+                # Tipologia (O)
+                if 'tipologia' in _piano_data:
+                    _piano_data.pop('tipologia')
+                    # This cannot be changed
+                # Descrizione (O)
+                if 'descrizione' in _piano_data:
+                    _data = _piano_data.pop('descrizione')
+                    _piano.descrizione = _data[0]
+                # SoggettoProponente (O)
+                if 'soggetto_proponente_uuid' in _piano_data:
+                    _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
+                    if len(_soggetto_proponente_uuid) > 0:
+                        _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
+                        _piano.soggetto_proponente = _soggetto_proponente
+                    else:
+                        _piano.soggetto_proponente = None
+                if 'autorita_competente_vas' in _piano_data:
+                    _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
+                    if len(_autorita_competente_vas) > 0:
+                        _autorita_competenti = []
+                        for _contatto_uuid in _autorita_competente_vas:
+                            _autorita_competenti.append(AutoritaCompetenteVAS(
+                                piano=_piano,
+                                autorita_competente=Contatto.objects.get(uuid=_contatto_uuid)
                                 )
-                            _piano.autorita_competente_vas.clear()
-                            for _ac in _autorita_competenti:
-                                _ac.save()
-                        else:
-                            _piano.autorita_competente_vas.all().delete()
-                    if 'soggetti_sca' in _piano_data:
-                        _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
-                        if len(_soggetti_sca_uuid) > 0:
-                            _soggetti_sca = []
-                            for _contatto_uuid in _soggetti_sca_uuid:
-                                _soggetti_sca.append(SoggettiSCA(
-                                    piano=_piano,
-                                    soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid)
-                                    )
+                            )
+                        _piano.autorita_competente_vas.clear()
+                        for _ac in _autorita_competenti:
+                            _ac.save()
+                    else:
+                        _piano.autorita_competente_vas.all().delete()
+                if 'soggetti_sca' in _piano_data:
+                    _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
+                    if len(_soggetti_sca_uuid) > 0:
+                        _soggetti_sca = []
+                        for _contatto_uuid in _soggetti_sca_uuid:
+                            _soggetti_sca.append(SoggettiSCA(
+                                piano=_piano,
+                                soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid)
                                 )
-                            _piano.soggetti_sca.clear()
-                            for _sca in _soggetti_sca:
-                                _sca.save()
-                        else:
-                            _piano.soggetti_sca.all().delete()
-                    piano_aggiornato = update_create_instance(_piano, _piano_data)
-                    return cls(piano_aggiornato=piano_aggiornato)
+                            )
+                        _piano.soggetti_sca.clear()
+                        for _sca in _soggetti_sca:
+                            _sca.save()
+                    else:
+                        _piano.soggetti_sca.all().delete()
+                piano_aggiornato = update_create_instance(_piano, _piano_data)
+                return cls(piano_aggiornato=piano_aggiornato)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -739,12 +743,11 @@ class CreateProceduraVAS(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        if info.context.user and info.context.user.is_authenticated:
+        _piano = Piano.objects.get(codice=input['codice_piano'])
+        _procedura_vas_data = input.get('procedura_vas')
+        if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                _procedura_vas_data = input.get('procedura_vas')
-
                 # ProceduraVAS (M)
-                _piano = Piano.objects.get(codice=input['codice_piano'])
                 _procedura_vas_data['piano'] = _piano
                 # Ente (M)
                 _procedura_vas_data['ente'] = _piano.ente
@@ -777,36 +780,35 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        if info.context.user and info.context.user.is_authenticated:
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _procedura_vas_data = input.get('procedura_vas')
+        if 'piano' in _procedura_vas_data:
+            # This cannot be changed
+            _procedura_vas_data.pop('piano')
+        _piano = _procedura_vas.piano
+        if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
-                if _procedura_vas:
-                    _procedura_vas_data = input.get('procedura_vas')
-                    if 'uuid' in _procedura_vas_data:
-                        _procedura_vas_data.pop('uuid')
-                        # This cannot be changed
-                    if 'data_creazione' in _procedura_vas_data:
-                        _procedura_vas_data.pop('data_creazione')
-                        # This cannot be changed
-                    # Ente (M)
-                    if 'ente' in _procedura_vas_data:
-                        _procedura_vas_data.pop('ente')
-                        # This cannot be changed
-                    # Piano (M)
-                    if 'piano' in _procedura_vas_data:
-                        _procedura_vas_data.pop('piano')
-                        # This cannot be changed
-                    # Tipologia (O)
-                    if 'tipologia' in _procedura_vas_data:
-                        _tipologia = _procedura_vas_data.pop('tipologia')
-                        if _tipologia and _tipologia in TIPOLOGIA_VAS:
-                            _procedura_vas_data['tipologia'] = _tipologia
-                    # Note (O)
-                    if 'note' in _procedura_vas_data:
-                        _data = _procedura_vas_data.pop('note')
-                        _procedura_vas.note = _data[0]
-                    procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
-                    return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
+                if 'uuid' in _procedura_vas_data:
+                    _procedura_vas_data.pop('uuid')
+                    # This cannot be changed
+                if 'data_creazione' in _procedura_vas_data:
+                    _procedura_vas_data.pop('data_creazione')
+                    # This cannot be changed
+                # Ente (M)
+                if 'ente' in _procedura_vas_data:
+                    _procedura_vas_data.pop('ente')
+                    # This cannot be changed
+                # Tipologia (O)
+                if 'tipologia' in _procedura_vas_data:
+                    _tipologia = _procedura_vas_data.pop('tipologia')
+                    if _tipologia and _tipologia in TIPOLOGIA_VAS:
+                        _procedura_vas_data['tipologia'] = _tipologia
+                # Note (O)
+                if 'note' in _procedura_vas_data:
+                    _data = _procedura_vas_data.pop('note')
+                    _procedura_vas.note = _data[0]
+                procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
+                return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -815,22 +817,45 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             return GraphQLError(_("Forbidden"), code=403)
 
 
-"""
-How to use this mutation
-- send a POST multi-part form with Content-Type: application/graphql
-- params:
-  1. operations: {"query":"mutation UploadFile($file: Upload!, $piano: String!,
-                                            $file_type: String!) {
-                              upload(file: $file, codicePiano: $piano, tipoFile: $file_type) {
-                                  resourceId,
-                                  success }}",
-                        "variables": { "file": null, "piano":"1234","file_type":"****"} }
+# ############################################################################ #
+# Upload 'Risorse' Mutations
+# ############################################################################ #
+class UploadBaseMixIn(object):
 
-  2. map: {"0":["variables.file"]}
-  3. 0: <binary data>
-  4. <other POST params if needed>
-"""
-class UploadFile(graphene.Mutation):
+    def handle_uploaded_data(self, file, media_prefix, fase, tipo_file=None):
+        # Ensuring Media Folder exists and is writable
+        _base_media_folder = os.path.join(settings.MEDIA_ROOT, media_prefix)
+        if not os.path.exists(_base_media_folder):
+            os.makedirs(_base_media_folder)
+        if not isinstance(file, list):
+            file = [file]
+        resources = []
+        for f in file:
+            _dimensione_file = f.size / 1024 # size in KB
+            if os.path.exists(_base_media_folder) and \
+                type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
+                    _file_name = str(f)
+                    _file_path = '{}/{}'.format(media_prefix, _file_name)
+                    _risorsa = None
+
+                    with default_storage.open(_file_path, 'wb+') as _destination:
+                        for _chunk in f.chunks():
+                            _destination.write(_chunk)
+                        _risorsa = Risorsa.create(
+                            _file_name,
+                            _destination,
+                            tipo_file,
+                            _dimensione_file,
+                            fase)
+                        _risorsa.save()
+                        resources.append(_risorsa)
+                        _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
+                        # Remove original uploaded/temporary file
+                        os.remove(_destination.name)
+        return resources
+
+
+class UploadFile(UploadBaseMixIn, graphene.Mutation):
 
     class Arguments:
         codice_piano = graphene.String(required=True)
@@ -841,7 +866,7 @@ class UploadFile(graphene.Mutation):
     success = graphene.Boolean()
 
     def mutate(self, info, file, **input):
-        if info.context.user and info.context.user.is_authenticated:
+        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _codice_piano = input['codice_piano']
             _tipo_file = input['tipo_file']
@@ -849,39 +874,13 @@ class UploadFile(graphene.Mutation):
             try:
                 # Validating 'Piano'
                 _piano = Piano.objects.get(codice=_codice_piano)
-                # Ensuring Media Folder exists and is writable
-                _base_media_folder = os.path.join(settings.MEDIA_ROOT, _codice_piano)
-                if not os.path.exists(_base_media_folder):
-                    os.makedirs(_base_media_folder)
-                if not isinstance(file, list):
-                    file = [file]
-                resources = []
-                for f in file:
-                    _dimensione_file = f.size / 1024 # size in KB
-                    if os.path.exists(_base_media_folder) and _piano is not None and \
-                        type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
-                            _file_name = str(f)
-                            _file_path = '{}/{}'.format(_codice_piano, _file_name)
-                            _risorsa = None
-
-                            with default_storage.open(_file_path, 'wb+') as _destination:
-                                for _chunk in f.chunks():
-                                    _destination.write(_chunk)
-                                # Attaching uploaded File to Piano
-                                _risorsa = Risorsa.create(
-                                    _file_name,
-                                    _destination,
-                                    _tipo_file,
-                                    _dimensione_file,
-                                    _piano.fase)
-                                _risorsa.save()
-                                if _risorsa:
-                                    RisorsePiano(piano=_piano, risorsa=_risorsa).save()
-                                resources.append(_risorsa)
-                            _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
-                            # Remove original uploaded/temporary file
-                            os.remove(_destination.name)
-                return UploadFile(piano_aggiornato=_piano, success=True)
+                _resources = self.handle_uploaded_data(file, _codice_piano, _piano.fase, _tipo_file)
+                _success = False
+                if _resources and len(_resources) > 0:
+                    _success = True
+                    for _risorsa in _resources:
+                        RisorsePiano(piano=_piano, risorsa=_risorsa).save()
+                return UploadFile(piano_aggiornato=_piano, success=_success)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -891,79 +890,8 @@ class UploadFile(graphene.Mutation):
         return UploadFile(success=False)
 
 
-class DeleteRisorsa(graphene.Mutation):
+class UploadRisorsaVAS(UploadBaseMixIn, graphene.Mutation):
 
-    class Arguments:
-        risorsa_id = graphene.ID(required=True)
-        codice_piano = graphene.String(required=True)
-
-    success = graphene.Boolean()
-    piano_aggiornato = graphene.Field(PianoNode)
-
-    def mutate(self, info, **input):
-        if info.context.user and info.context.user.is_authenticated:
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _codice_piano = input['codice_piano']
-            # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _piano = Piano.objects.get(codice=_codice_piano)
-                _risorsa = Risorsa.objects.get(uuid=_id)
-                """
-                Deletes file from filesystem
-                when corresponding `MediaFile` object is deleted.
-                """
-                
-                if _risorsa.file:
-                    if os.path.isfile(_risorsa.file.path) and os.path.exists(_risorsa.file.path):
-                        os.remove(_risorsa.file.path)
-                _risorsa.delete()
-
-                return DeleteRisorsa(success=True, piano_aggiornato=_piano)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-
-        return DeleteRisorsa(success=False)
-
-class DeleteRisorsaVAS(graphene.Mutation):
-    class Arguments:
-        risorsa_id = graphene.ID(required=True)
-        uuid = graphene.String(required=True)
-
-    success = graphene.Boolean()
-    procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
-
-    def mutate(self, info, **input):
-        if info.context.user and info.context.user.is_authenticated:
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_vas = input['uuid']
-            # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                _risorsa = Risorsa.objects.get(uuid=_id)
-                """
-                Deletes file from filesystem
-                when corresponding `MediaFile` object is deleted.
-                """
-                
-                if _risorsa.file:
-                    if os.path.isfile(_risorsa.file.path) and os.path.exists(_risorsa.file.path):
-                        os.remove(_risorsa.file.path)
-                _risorsa.delete()
-
-                return DeleteRisorsaVAS(success=True, procedura_vas_aggiornata=_procedura_vas)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-
-        return DeleteRisorsaVAS(success=False)   
-
-
-class UploadRisorsaVAS(graphene.Mutation):
     class Arguments:
         uuid = graphene.String(required=True)
         tipo_file = graphene.String(required=True)
@@ -973,7 +901,7 @@ class UploadRisorsaVAS(graphene.Mutation):
     procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
     def mutate(self, info, file, **input):
-        if info.context.user and info.context.user.is_authenticated:
+        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _uuid_vas = input['uuid']
             _tipo_file = input['tipo_file']
@@ -981,40 +909,13 @@ class UploadRisorsaVAS(graphene.Mutation):
             try:
                 # Validating 'Procedura VAS'
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                # Ensuring Media Folder exists and is writable
-                _base_media_folder = os.path.join(settings.MEDIA_ROOT, _uuid_vas)
-                if not os.path.exists(_base_media_folder):
-                    os.makedirs(_base_media_folder)
-                if not isinstance(file, list):
-                    file = [file]
-                resources = []
-                for f in file:
-                    _dimensione_file = f.size / 1024 # size in KB
-                    if os.path.exists(_base_media_folder) and _procedura_vas is not None and \
-                        type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
-                            _file_name = str(f)
-                            _file_path = '{}/{}'.format(_uuid_vas, _file_name)
-                            _risorsa = None
-
-                            with default_storage.open(_file_path, 'wb+') as _destination:
-                                for _chunk in f.chunks():
-                                    _destination.write(_chunk)
-                                # Attaching uploaded File to Piano
-                                _risorsa = Risorsa.create(
-                                    _file_name,
-                                    _destination,
-                                    _tipo_file,
-                                    _dimensione_file,
-                                    _procedura_vas.piano.fase)
-                                _risorsa.save()
-                                if _risorsa:
-                                    RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
-                                resources.append(_risorsa)
-                            _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
-                            # Remove original uploaded/temporary file
-                            os.remove(_destination.name)
-
-                return UploadRisorsaVAS(success=True, procedura_vas_aggiornata=_procedura_vas)
+                _resources = self.handle_uploaded_data(file, _uuid_vas, _procedura_vas.piano.fase, _tipo_file)
+                _success = False
+                if _resources and len(_resources) > 0:
+                    _success = True
+                    for _risorsa in _resources:
+                        RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
+                return UploadRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -1024,17 +925,139 @@ class UploadRisorsaVAS(graphene.Mutation):
         return UploadRisorsaVAS(success=False)
 
 
+class DeleteRisorsaMixIn(object):
+
+    def handle_downloaded_data(self, risorsa):
+        """
+        Deletes file from filesystem
+        when corresponding `MediaFile` object is deleted.
+        """
+        try:
+            if risorsa.file:
+                if os.path.isfile(risorsa.file.path) and os.path.exists(risorsa.file.path):
+                    os.remove(risorsa.file.path)
+            risorsa.delete()
+            return True
+        except BaseException:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return False
+
+
+class DeleteRisorsa(DeleteRisorsaMixIn, graphene.Mutation):
+
+    class Arguments:
+        risorsa_id = graphene.ID(required=True)
+        codice_piano = graphene.String(required=True)
+
+    success = graphene.Boolean()
+    piano_aggiornato = graphene.Field(PianoNode)
+
+    def mutate(self, info, **input):
+        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _id = input['risorsa_id']
+            _codice_piano = input['codice_piano']
+            # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            try:
+                _piano = Piano.objects.get(codice=_codice_piano)
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = self.handle_downloaded_data(_risorsa)
+                return DeleteRisorsa(piano_aggiornato=_piano, success=_success)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        return DeleteRisorsa(success=False)
+
+
+class DeleteRisorsaVAS(DeleteRisorsaMixIn, graphene.Mutation):
+
+    class Arguments:
+        risorsa_id = graphene.ID(required=True)
+        uuid = graphene.String(required=True)
+
+    success = graphene.Boolean()
+    procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
+
+    def mutate(self, info, **input):
+        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _id = input['risorsa_id']
+            _uuid_vas = input['uuid']
+            # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            try:
+                _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = self.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        return DeleteRisorsaVAS(success=False)
+
+
+# ############################################################################ #
+# Management Passaggio di Stato Piano
+# ############################################################################ #
+class PromozionePiano(graphene.Mutation):
+
+    class Arguments:
+        codice_piano = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    piano_aggiornato = graphene.Field(PianoNode)
+
+    @classmethod
+    def get_next_phase(cls, fase):
+        return FASE_NEXT[fase.nome]
+
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _piano = Piano.objects.get(codice=input['codice_piano'])
+        if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+            try:
+                _next_fase = cls.get_next_phase(_piano.fase)
+                if rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=_next_fase), _piano):
+                    _piano.fase = Fase.objects.get(nome=_next_fase)
+                    _piano.save()
+
+                    return PromozionePiano(piano_aggiornato=_piano, errors=[])
+                else:
+                    return GraphQLError(_("Not Allowed"), code=405)
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+# ############################################################################ #
+# Default Mutation Proxy
 # ############################################################################ #
 class Mutation(object):
+
     create_fase = CreateFase.Field()
     update_fase = UpdateFase.Field()
+
     create_piano = CreatePiano.Field()
     update_piano = UpdatePiano.Field()
-    upload = UploadFile.Field()
-    delete_risorsa = DeleteRisorsa.Field()
+
     create_procedura_vas = CreateProceduraVAS.Field()
     update_procedura_vas = UpdateProceduraVAS.Field()
-    upload_risorsa_vas = UploadRisorsaVAS.Field()
-    delete_risorsa_vas = DeleteRisorsaVAS.Field()
+
     create_contatto = CreateContatto.Field()
     delete_contatto = DeleteContatto.Field()
+
+    upload = UploadFile.Field()
+    delete_risorsa = DeleteRisorsa.Field()
+
+    upload_risorsa_vas = UploadRisorsaVAS.Field()
+    delete_risorsa_vas = DeleteRisorsaVAS.Field()
+
+    promozione_piano = PromozionePiano.Field()

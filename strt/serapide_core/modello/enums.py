@@ -21,12 +21,22 @@ A list of choices for the rating system in the
 FASE = Choices(
         ('unknown', _('UNKNOWN')),
         ('draft', _('DRAFT')),
-        ('inserito', _('INSERITO')),
+        ('anagrafica', _('ANAGRAFICA')),
         ('avvio', _('AVVIO')),
         ('adozione', _('ADOZIONE')),
         ('approvazione', _('APPROVAZIONE')),
         ('pubblicazione', _('PUBBLICAZIONE')),
     )
+
+FASE_NEXT = {
+    'unknown': None,
+    'draft': FASE.anagrafica,
+    'anagrafica': FASE.avvio,
+    'avvio': FASE.adozione,
+    'adozione': FASE.approvazione,
+    'approvazione': FASE.pubblicazione,
+    'pubblicazione': None
+}
 
 TIPOLOGIA_CONTATTO = Choices(
         ('unknown', _('UNKNOWN')),
