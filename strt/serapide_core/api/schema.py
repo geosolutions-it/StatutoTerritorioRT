@@ -72,6 +72,7 @@ logger = logging.getLogger(__name__)
 # ENUMS
 # ##############################################################################
 class StrtEnumNode(graphene.ObjectType):
+
     value= graphene.String()
     label = graphene.String()
 
@@ -225,7 +226,7 @@ class ContattoNode(DjangoObjectType):
         filter_fields = {
             'nome': ['exact', 'icontains'],
             'email': ['exact'],
-            'tipologia': ['exact', 'icontains'],
+            'tipologia': ['exact'],
             'ente': ['exact'],
             'piano__codice': ['exact'],
         }
@@ -384,7 +385,7 @@ class EnteContattoMembershipFilter(django_filters.FilterSet):
 
     class Meta:
         model = Contatto
-        fields = ['name', 'email', 'ente', ]
+        fields = ['name', 'email', 'ente', 'tipologia', ]
 
     @property
     def qs(self):
@@ -863,7 +864,8 @@ class UploadBaseBase(graphene.Mutation):
                         os.remove(_destination.name)
         return resources
 
-    def mutate(self, info, file, **input):
+    @classmethod
+    def mutate(cls, root, info, file, **input):
         pass
 
 
@@ -871,8 +873,10 @@ class UploadFile(UploadBaseBase):
 
     piano_aggiornato = graphene.Field(PianoNode)
     success = graphene.Boolean()
+    file_name = graphene.String()
 
-    def mutate(self, info, file, **input):
+    @classmethod
+    def mutate(cls, root, info, file, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _codice_piano = input['codice']
@@ -892,7 +896,7 @@ class UploadFile(UploadBaseBase):
                     _success = True
                     for _risorsa in _resources:
                         RisorsePiano(piano=_piano, risorsa=_risorsa).save()
-                return UploadFile(piano_aggiornato=_piano, success=_success)
+                return UploadFile(piano_aggiornato=_piano, success=_success,file_name=_resources[0].nome)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -907,7 +911,8 @@ class UploadRisorsaVAS(UploadBaseBase):
     success = graphene.Boolean()
     procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
-    def mutate(self, info, file, **input):
+    @classmethod
+    def mutate(cls, root, info, file, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _uuid_vas = input['codice']
@@ -960,7 +965,8 @@ class DeleteRisorsaBase(graphene.Mutation):
             logger.error(tb)
             return False
 
-    def mutate(self, info, **input):
+    @classmethod
+    def mutate(cls, root, info, **input):
         pass
 
 
@@ -969,7 +975,8 @@ class DeleteRisorsa(DeleteRisorsaBase):
     success = graphene.Boolean()
     piano_aggiornato = graphene.Field(PianoNode)
 
-    def mutate(self, info, **input):
+    @classmethod
+    def mutate(cls, root, info, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']
@@ -995,7 +1002,7 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
     procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
     @classmethod
-    def mutate(self, info, **input):
+    def mutate(cls, root, info, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']

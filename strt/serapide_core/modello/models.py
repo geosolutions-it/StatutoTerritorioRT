@@ -15,6 +15,8 @@ from datetime import datetime
 
 import pytz
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import pre_delete
 from django.utils.translation import ugettext_lazy as _
 
 from strt_users.models import AppUser, Organization
@@ -325,3 +327,14 @@ class SoggettiSCA(models.Model):
 
     def __str__(self):
         return '{} <---> {}'.format(self.piano.codice, self.soggetto_sca.email)
+
+
+@receiver(pre_delete, sender=Piano)
+def delete_contacts(sender, instance, **kwargs):
+    AutoritaCompetenteVAS.objects.filter(piano=instance).delete()
+    SoggettiSCA.objects.filter(piano=instance).delete()
+    instance.risorse.all().delete()
+    RisorsePiano.objects.filter(piano=instance).delete()
+    for _vas in ProceduraVAS.objects.filter(piano=instance):
+        _vas.risorse.all().delete()
+        RisorseVas.objects.filter(procedura_vas=_vas).delete()

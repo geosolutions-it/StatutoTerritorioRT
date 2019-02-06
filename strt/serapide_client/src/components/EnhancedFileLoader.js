@@ -11,7 +11,8 @@ import { toast } from 'react-toastify'
 import FileLoader from "./FileLoader"
 
 
-const showError = (error, onError) => {
+const showError = (error) => {
+    console.log(error);
     if (error && error.message.indexOf("Operation canceled") === -1) {
         toast.error(error.message,  {autoClose: true})
     }

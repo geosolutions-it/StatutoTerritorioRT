@@ -7269,9 +7269,11 @@ a.text-dark:hover, a.text-dark:focus {
       font-size: 8rem; }
     .serapide .dropzone.lg .btn-lg, .serapide .dropzone.lg .btn-group-lg > .btn {
       font-size: 1.75rem; }
-  .serapide .dropzone.isAccept {
+  .serapide .dropzone.isAccept:focus {
     border-style: solid;
     border-color: #28a745; }
+  .serapide .dropzone.isAccept {
+    border-style: solid; }
   .serapide .dropzone.isRejected {
     border-style: solid;
     border-color: #dc3545; }
@@ -7305,6 +7307,19 @@ a.text-dark:hover, a.text-dark:focus {
 
 .serapide .file-loader {
   flex: 2 1 100%; }
+
+.serapide .strt-switch .custom-control-label.checked:before {
+  color: #fff;
+  border-color: #ffc107;
+  background-color: #ffc107; }
+
+.serapide .strt-switch .custom-control-label.checked:after {
+  background-color: #fff;
+  -webkit-transform: translateX(0.75rem);
+  transform: translateX(0.75rem); }
+
+.serapide .vas-switch {
+  max-width: 350px; }
 
 .content {
   min-height: calc(100vh - 196px);

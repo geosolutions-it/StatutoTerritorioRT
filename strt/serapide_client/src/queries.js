@@ -2,13 +2,13 @@ import gql from "graphql-tag";
 /** Fragment sheare field between queries */
 const UserFragment = gql`
 fragment User on AppUserNode {
-        firstName
-        lastName
+    id
+    email
+    fiscalCode
+    firstName
+    lastName
 }
 `
-
-
-
 const RisorsaFragment = gql`
 fragment Risorsa on RisorsaNode {
     nome
@@ -17,12 +17,34 @@ fragment Risorsa on RisorsaNode {
     dimensione
 }
 `
+const VASFragment = gql`
+fragment VAS on ProceduraVASNode {
+        uuid
+        tipologia
+        piano {
+            codice
+        }
+        risorse{
+            edges{
+              node{
+                ...Risorsa 
+              }
+            }
+        }
+}
+${RisorsaFragment}
+`
 const PianoFragment = gql`
 fragment Piano on PianoNode {
     codice
     tipo: tipologia
     descrizione
     lastUpdate
+    dataDelibera
+    dataCreazione
+    dataAccettazione
+    dataAvvio
+    dataApprovazione
     ente {
             code
             name
@@ -85,19 +107,48 @@ query getPiani($faseCodice: String, $codice: String){
     ${PianoFragment}
 `
 
+export const GET_VAS = gql`
+query getVas($codice: String!) {
+    procedureVas(piano_Codice: $codice) {
+        edges{
+          node{
+            ...VAS 
+            }
+            
+        }
+    }
+}
+${VASFragment}
+`
 // MUTATION
-
+// Upload a generic risources
 export const FILE_UPLOAD = gql`
 mutation($file: Upload!, $codice: String!, $tipo: String!) {
-    upload(file: $file, codicePiano: $codice, tipoFile: $tipo) {
-      success,
-      risorse {
-          ...Risorsa
+    upload(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      pianoAggiornato {
+        ...Piano
+    }
+      fileName
+    }
+  }
+  ${PianoFragment}
+`
+// Upload a vas resources
+export const VAS_FILE_UPLOAD = gql`
+mutation($file: Upload!, $codice: String!, $tipo: String!) {
+    uploadRisorsaVas(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      proceduraVasAggiornata {
+          ...VAS
       }
     }
   }
-  ${RisorsaFragment}
+  ${VASFragment}
 `
+
+
+
 export const CREA_PIANO= gql`mutation CreatePiano($input: CreatePianoInput!) {
     createPiano(input: $input) {
         nuovoPiano {
@@ -118,13 +169,38 @@ mutation UpdatePiano($input: UpdatePianoInput!) {
 ${PianoFragment}
 `
 
-export const DELETE_RISORSA = gql`
-mutation($id: ID!) {
-    deleteRisorsa(risorsaId: $id){
-        success
-        uuid
+export const UPDATE_VAS = gql`
+mutation UpdateProceduraVas($input: UpdateProceduraVASInput!) {
+    updateProceduraVas(input: $input) {
+        proceduraVasAggiornata {
+            ...VAS
+        }
     }
 }
+${VASFragment}
+`
+
+export const DELETE_RISORSA = gql`
+mutation($id: ID!, $codice: String!) {
+    deleteRisorsa(risorsaId: $id, codice: $codice){
+        success
+        pianoAggiornato {
+            ...Piano
+        }
+    }
+}
+${PianoFragment}
+`
+export const DELETE_RISORSA_VAS = gql`
+mutation($id: ID!, $codice: String!) {
+    deleteRisorsaVas(risorsaId: $id, codice: $codice){
+        success
+        proceduraVasAggiornata {
+            ...VAS
+        }
+    }
+}
+${VASFragment}
 `
 export const GET_VAS_AUTHORITIES = gql`
 query getAuth{
