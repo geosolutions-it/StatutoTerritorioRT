@@ -125,19 +125,20 @@ ${VASFragment}
 export const FILE_UPLOAD = gql`
 mutation($file: Upload!, $codice: String!, $tipo: String!) {
     upload(file: $file, codice: $codice, tipoFile: $tipo) {
-      success,
-      risorse {
-          ...Risorsa
-      }
+      success
+      pianoAggiornato {
+        ...Piano
+    }
+      fileName
     }
   }
-  ${RisorsaFragment}
+  ${PianoFragment}
 `
 // Upload a vas resources
 export const VAS_FILE_UPLOAD = gql`
 mutation($file: Upload!, $codice: String!, $tipo: String!) {
     uploadRisorsaVas(file: $file, codice: $codice, tipoFile: $tipo) {
-      success,
+      success
       proceduraVasAggiornata {
           ...VAS
       }

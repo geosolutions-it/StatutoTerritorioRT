@@ -872,6 +872,7 @@ class UploadFile(UploadBaseBase):
 
     piano_aggiornato = graphene.Field(PianoNode)
     success = graphene.Boolean()
+    file_name = graphene.String()
 
     @classmethod
     def mutate(cls, root, info, file, **input):
@@ -894,7 +895,7 @@ class UploadFile(UploadBaseBase):
                     _success = True
                     for _risorsa in _resources:
                         RisorsePiano(piano=_piano, risorsa=_risorsa).save()
-                return UploadFile(piano_aggiornato=_piano, success=_success)
+                return UploadFile(piano_aggiornato=_piano, success=_success,file_name=_resources[0].nome)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)

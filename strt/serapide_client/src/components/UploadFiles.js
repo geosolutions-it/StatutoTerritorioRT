@@ -9,7 +9,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FileChooser from "./FileChooser"
 import FileLoader from "./EnhancedFileLoader"
-import {FILE_UPLOAD, GET_PIANI} from "../queries"
+import {FILE_UPLOAD, DELETE_RISORSA} from "../queries"
 import Resource from './EnhancedResource'
 
 class UploadFiles extends React.PureComponent {
@@ -19,7 +19,10 @@ class UploadFiles extends React.PureComponent {
         fileType: PropTypes.string,
         risorse: PropTypes.array,
         isLocked: PropTypes.bool,
-        disabled: PropTypes.bool
+        disabled: PropTypes.bool,
+        mutation: PropTypes.object,
+        resourceMutation: PropTypes.object,
+        getSuccess: PropTypes.func
     }
     static defaultProps = {
         placeholder: "",
@@ -27,20 +30,30 @@ class UploadFiles extends React.PureComponent {
         fileType: "application/pdf",
         risorse: [],
         isLocked: true,
-        disabled: false
+        disabled: false,
+        mutation: FILE_UPLOAD,
+        resourceMutation: DELETE_RISORSA,
+        getSuccess: ({upload: {success}}) => success
     }
     onFilesChange = (files = []) => {
-        console.log("files_changed")
         if (files.length > 0) {
             this.setState(() => ({files}))
         }else {
             this.setState(() => ({files: undefined}))
         }
     }
-    renderRisorse = () => (
-        this.props.risorse.map((res) => (
-            <Resource update={this.updateResource} key={res.uuid} resource={res} isLocked={this.props.isLocked}/>))
+    updateCache = (cache, { data} = {}) => {
+        if (this.props.getSuccess(data)) {
+            const {upload: {fileName} } = data
+            this.removeFile(fileName)
+        }
+    }
+    renderRisorse = () => {
+        const {variables, resourceMutation, isLocked} = this.props
+        return (this.props.risorse.map((res) => (
+            <Resource codice={variables.codice} mutation={resourceMutation} key={res.uuid} resource={res} isLocked={isLocked}/>))
             )
+        }
     removeFile = (nome= "") => {
         const files = this.state.files.filter(file => file.name !== nome);
         this.setState(() => ({files}))
