@@ -26,15 +26,6 @@ from ..modello.models import ProceduraVAS
 
 
 # ############################################################################ #
-# User
-# ############################################################################ #
-rules.add_rule(
-    'strt_core.api.can_access_private_area',
-    is_recognizable
-)
-
-
-# ############################################################################ #
 # User <--> Piano
 # ############################################################################ #
 @rules.predicate
@@ -43,12 +34,6 @@ def can_access_piano(user, piano):
         m.organization == piano.ente
         for m in user.memberships
     )
-
-
-rules.add_rule(
-    'strt_core.api.can_edit_piano',
-    is_RUP & can_access_piano
-)
 
 
 # ############################################################################ #
@@ -90,17 +75,56 @@ def has_procedura_vas(piano):
     return ProceduraVAS.objects.filter(piano=piano).count() == 1
 
 
-rules.add_rule(
-    'strt_core.api.fase_anagrafica_completa',
-    is_draft & has_data_delibera & has_description & \
-        has_delibera_comunale & has_soggetto_proponente & \
-            has_procedura_vas
-)
-
-
 # ############################################################################ #
 # Procedura VAS
 # ############################################################################ #
 @rules.predicate
-def procedura_vas_is_valid(piano):
+def procedura_vas_is_valid(piano, procedura_vas):
+    if procedura_vas.piano == piano:
+        if procedura_vas.fase == FASE.draft:
+            if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
+                if procedura_vas.risorse.filter(tipo='vas_semplificata').count() == 1 and \
+                    procedura_vas.risorse.get(tipo='vas_semplificata').dimensione > 0 and \
+                        procedura_vas.risorse.get(tipo='vas_semplificata').file and \
+                            os.path.exists(procedura_vas.risorse.get(tipo='vas_semplificata').file.path):
+                                return True
+                return False
+            elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
+                if procedura_vas.risorse.filter(tipo='vas_verifica').count() > 0:
+                    return procedura_vas.risorse.filter(tipo='vas_verifica').count() > 0 and \
+                        all(
+                            r.dimensione > 0 and r.file and os.path.exists(r.file.path)
+                            for r in procedura_vas.risorse.filter(tipo='vas_verifica')
+                        )
+                return False
+            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
+                return (
+                    piano.autorita_competente_vas.count() > 0 and \
+                        piano.soggetti_sca.count() > 0
+                )
+            elif procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+                return True
+            else:
+                return False
     return False
+
+
+# ############################################################################ #
+# RULES
+# ############################################################################ #
+rules.add_rule(
+    'strt_core.api.can_access_private_area',
+    is_recognizable
+)
+
+rules.add_rule(
+    'strt_core.api.can_edit_piano',
+    is_RUP & can_access_piano
+)
+
+rules.add_rule(
+    'strt_core.api.fase_anagrafica_completa',
+    is_draft & has_data_delibera & has_description & \
+        has_delibera_comunale & has_soggetto_proponente & \
+            has_procedura_vas & procedura_vas_is_valid
+)

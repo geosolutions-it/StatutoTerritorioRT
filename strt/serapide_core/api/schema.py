@@ -1042,12 +1042,12 @@ class PromozionePiano(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
+        _procedura_vas = ProceduraVAS.objects.get(piano=piano)
         if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 _next_fase = cls.get_next_phase(_piano.fase)
-                if rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=_next_fase), _piano):
+                if rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=_next_fase), _piano, _procedura_vas):
                     _piano.fase = Fase.objects.get(nome=_next_fase)
-                    _procedura_vas = ProceduraVAS.objects.get(piano=piano)
                     _procedura_vas.fase = _piano.fase
 
                     _piano.save()
