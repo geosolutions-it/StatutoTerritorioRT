@@ -948,6 +948,9 @@ class DeleteRisorsaBase(graphene.Mutation):
             logger.error(tb)
             return False
 
+    def mutate(self, info, file, **input):
+        pass
+
 
 class DeleteRisorsa(DeleteRisorsaBase):
 
