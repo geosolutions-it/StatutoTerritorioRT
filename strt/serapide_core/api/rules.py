@@ -22,6 +22,8 @@ from ..modello.enums import (FASE,
                              TIPOLOGIA_PIANO,
                              TIPOLOGIA_VAS)
 
+from ..modello.models import ProceduraVAS
+
 
 # ############################################################################ #
 # User
@@ -83,10 +85,16 @@ def has_soggetto_proponente(piano):
     return piano.soggetto_proponente is not None
 
 
+@rules.predicate
+def has_procedura_vas(piano):
+    return ProceduraVAS.objects.filter(piano=piano).count() == 1
+
+
 rules.add_rule(
     'strt_core.api.fase_anagrafica_completa',
     is_draft & has_data_delibera & has_description & \
-        has_delibera_comunale & has_soggetto_proponente
+        has_delibera_comunale & has_soggetto_proponente & \
+            has_procedura_vas
 )
 
 
