@@ -826,7 +826,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 class UploadBaseBase(graphene.Mutation):
 
     class Arguments:
-        codice_piano = graphene.String(required=True)
+        codice = graphene.String(required=True)
         tipo_file = graphene.String(required=True)
         file = Upload(required=True)
 
@@ -874,7 +874,7 @@ class UploadFile(UploadBaseBase):
     def mutate(self, info, file, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
-            _codice_piano = input['codice_piano']
+            _codice_piano = input['codice']
             _tipo_file = input['tipo_file']
 
             try:
@@ -904,7 +904,7 @@ class UploadRisorsaVAS(UploadBaseBase):
     def mutate(self, info, file, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
-            _uuid_vas = input['uuid']
+            _uuid_vas = input['codice']
             _tipo_file = input['tipo_file']
 
             try:
@@ -930,7 +930,7 @@ class DeleteRisorsaBase(graphene.Mutation):
 
     class Arguments:
         risorsa_id = graphene.ID(required=True)
-        codice_piano = graphene.String(required=True)
+        codice = graphene.String(required=True)
 
     def handle_downloaded_data(self, risorsa):
         """
@@ -961,7 +961,7 @@ class DeleteRisorsa(DeleteRisorsaBase):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']
-            _codice_piano = input['codice_piano']
+            _codice_piano = input['codice']
             # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _piano = Piano.objects.get(codice=_codice_piano)
@@ -987,7 +987,7 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']
-            _uuid_vas = input['uuid']
+            _uuid_vas = input['codice']
             # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
