@@ -823,7 +823,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 # ############################################################################ #
 # Upload 'Risorse' Mutations
 # ############################################################################ #
-class UploadBaseMixIn(graphene.Mutation):
+class UploadBaseBase(graphene.Mutation):
 
     class Arguments:
         codice_piano = graphene.String(required=True)
@@ -862,8 +862,11 @@ class UploadBaseMixIn(graphene.Mutation):
                         os.remove(_destination.name)
         return resources
 
+    def mutate(self, info, file, **input):
+        pass
 
-class UploadFile(UploadBaseMixIn):
+
+class UploadFile(UploadBaseBase):
 
     piano_aggiornato = graphene.Field(PianoNode)
     success = graphene.Boolean()
@@ -893,7 +896,7 @@ class UploadFile(UploadBaseMixIn):
         return GraphQLError(_("Not Allowed"), code=405)
 
 
-class UploadRisorsaVAS(UploadBaseMixIn):
+class UploadRisorsaVAS(UploadBaseBase):
 
     success = graphene.Boolean()
     procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
@@ -923,7 +926,7 @@ class UploadRisorsaVAS(UploadBaseMixIn):
         return GraphQLError(_("Not Allowed"), code=405)
 
 
-class DeleteRisorsaMixIn(graphene.Mutation):
+class DeleteRisorsaBase(graphene.Mutation):
 
     class Arguments:
         risorsa_id = graphene.ID(required=True)
@@ -946,7 +949,7 @@ class DeleteRisorsaMixIn(graphene.Mutation):
             return False
 
 
-class DeleteRisorsa(DeleteRisorsaMixIn):
+class DeleteRisorsa(DeleteRisorsaBase):
 
     success = graphene.Boolean()
     piano_aggiornato = graphene.Field(PianoNode)
@@ -971,7 +974,7 @@ class DeleteRisorsa(DeleteRisorsaMixIn):
         return GraphQLError(_("Not Allowed"), code=405)
 
 
-class DeleteRisorsaVAS(DeleteRisorsaMixIn, graphene.Mutation):
+class DeleteRisorsaVAS(DeleteRisorsaBase):
 
     success = graphene.Boolean()
     procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
