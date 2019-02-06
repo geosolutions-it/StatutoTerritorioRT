@@ -14,16 +14,31 @@ import {getEnteLabel, getEnteLabelID} from "../utils"
 import {GET_PIANI, UPDATE_PIANO} from "../queries"
 import {compose, withStateHandlers} from 'recompose'
 import {EnhancedDateSelector} from "../components/DateSelector"
-import {Input} from 'reactstrap'
+
 import Delibera from '../components/UploadSingleFile'
 import UploadFiles from '../components/UploadFiles'
 import VAS from '../components/VAS'
+import EnhanchedInput from '../components/EnhancedInput'
 
-const enhancer = compose(withStateHandlers( ({}),
-    {
-        selectDataDelibera: () => value => ({dataDelibera: value})
-    }))
-export default enhancer(({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {
+
+
+const getDescrizioneInput = (codice) => (val) => ({
+    variables: {
+        input: { 
+            pianoOperativo: {
+            descrizione: val}, 
+        codice}
+    }})
+
+const getDataDeliberaInput = (codice) => (val) => ({
+    variables: {
+        input: { 
+            pianoOperativo: {
+            dataDelibera: val.toISOString()}, 
+        codice}
+    }})
+
+export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {
 
     return (<Query query={GET_PIANI} variables={{codice: code}}>
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
@@ -40,12 +55,12 @@ export default enhancer(({match: {params: {code} = {}} = {}, selectDataDelibera,
                 toast.error(`Impossobile trovare il piano: ${code}`,  {autoClose: true})
                 return <div></div>
             }
-            const {node: {ente, risorse : {edges: resources = []} = {}, tipo = "", codice = ""} = {}} = edges[0] || {}
+            const {node: {ente, risorse : {edges: resources = []} = {}, tipo = "", codice = "", dataDelibera, descrizione} = {}} = edges[0] || {}
             
             const {node: delibera} = resources.filter(({node: n}) => n.tipo === "delibera").pop() || {};
-            const optionals = resources.filter(({node: n}) => n.tipo === "delibera_liberi").map(({node}) => (node) ) || {};
-            const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
-            const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
+            const optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || {};
+            // const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
+            // const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
             return(
             <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
                     <div className="d-flex flex-column ">
@@ -58,20 +73,21 @@ export default enhancer(({match: {params: {code} = {}} = {}, selectDataDelibera,
                                 <span className="pt-5">{getEnteLabelID(ente)}</span>
                                 <div className="d-flex pt-5 align-items-center">
                                     <span className="pr-2">DELIBERA DEL</span>
-                                    <EnhancedDateSelector mutation={UPDATE_PIANO} getInput={(val) => ({variables: {input: { pianoOperativo: {dataDelibera: val.toISOString(),  ente: {"code": "FI"}, tipologia: tipo}, codice}}})}/>
+                                    <EnhancedDateSelector selected={dataDelibera ? new Date(dataDelibera) : undefined} mutation={UPDATE_PIANO} getInput={getDataDeliberaInput(codice)}/>
                                 </div>
                                 <div className="d-flex pt-5 align-items-center ">
                                     <span className="pr-2">DESCRIZIONE</span>
-                                    <Input type="textarea" name="text" id="deliberText" />
+                                    <EnhanchedInput value={descrizione} mutation={UPDATE_PIANO} getInput={getDescrizioneInput(codice)}></EnhanchedInput>
+                                    
                                 </div>
                                 <span className="pt-5">DELIBERA COMUNALE</span>
                                 <span className="pb-2 font-weight-light">Caricare delibera comunale, formato obbligatorio pdf</span>
                                 <Delibera placeholder="Delibera Comunale (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={false}/>
                                 <span className="pt-5">ALTRI DOCUMENTI</span>
                                 <span className="font-weight-light">Caricare eventuali allegati trascinando i files nel riquadro, formato obbligatorio pdf</span>
-                                <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_liberi" }} isLocked={false}/>
+                                <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_opts" }} isLocked={false}/>
                                 <div style={{borderBottom: "2px dashed"}} className="mt-5 text-warning" ></div>
-                                <VAS codice={codice} semplificata={semplificata} verifica={verifica}></VAS>
+                                <VAS codice={codice} ></VAS>
                             </div>
                             
                         </div>
@@ -80,4 +96,4 @@ export default enhancer(({match: {params: {code} = {}} = {}, selectDataDelibera,
             </div>)}
         }
     </Query>)
-    })
+    }

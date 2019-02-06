@@ -20,14 +20,21 @@ class SingleFile extends React.PureComponent {
         variables: PropTypes.object,
         fileType: PropTypes.string,
         isLocked: PropTypes.bool,
-        disabled: PropTypes.bool
+        disabled: PropTypes.bool,
+        mutation: PropTypes.object,
+        resourceMutation: PropTypes.object,
+        getSuccess: PropTypes.func
     }
     static defaultProps = {
         placeholder: "",
         variables: {},
         fileType: "application/pdf",
         isLocked: true,
-        disabled: false
+        disabled: false,
+        mutation: FILE_UPLOAD,
+        resourceMutation: DELETE_RISORSA,
+        getSuccess: ({upload: {success}}) => success
+        
     } 
     onFilesChange = (files = []) => {
         if (files[0]) {
@@ -36,32 +43,9 @@ class SingleFile extends React.PureComponent {
             this.setState(() => ({file: undefined}))
         }
     }
-    updateCache = (cache, { data: {upload : {success, risorse}}  = {}} = {}) => {
-        const {codice} = this.props.variables
-        if (success) {
-            const __typename = "RisorsaNodeEdge" 
-            let { piani ={}} = cache.readQuery({ query: GET_PIANI, variables: {codice}}) || {}
-            const edges = piani.edges[0].node.risorse.edges.concat(risorse.map(node => ({__typename, node})))
-            piani.edges[0].node.risorse.edges = edges
-            cache.writeQuery({
-                            query: GET_PIANI,
-                            data: { piani},
-                            variables: {codice}
-                        })
+    updateCache = (cache, { data} = {}) => {
+        if (this.props.getSuccess(data)) {
             this.removeFile()
-        }
-    }
-    updateResource = (cache, { data: {deleteRisorsa : {success}}  = {}} = {}) => {
-        const {variables: {codice} = {}, risorsa} = this.props
-        if (success) {
-            let { piani ={}} = cache.readQuery({ query: GET_PIANI, variables: {codice}}) || {}
-            const edges = piani.edges[0].node.risorse.edges.filter(({node: {uuid}}) => uuid !== risorsa.uuid)
-            piani.edges[0].node.risorse.edges = edges
-            cache.writeQuery({
-                            query: GET_PIANI,
-                            data: { piani},
-                            variables: {codice}
-                        })
         }
     }
     removeFile = () => {
@@ -70,12 +54,14 @@ class SingleFile extends React.PureComponent {
         }
     }
     render() {
+        
         const {file} = this.state || {}
-        const {risorsa, variables, placeholder, isLocked, disabled} = this.props
-        return  risorsa ? (<Resource update={this.updateResource} mutation={DELETE_RISORSA} resource={risorsa} isLocked={isLocked}/>) : (
+        const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation, ownerID} = this.props
+        console.log(mutation, resourceMutation)
+        return  risorsa ? (<Resource codice={variables.codice} mutation={resourceMutation} resource={risorsa} isLocked={isLocked}/>) : (
             <div style={{minHeight: "3.813rem"}} className="d-flex justify-content-between border-top border-bottom align-items-center">
                 <FileLoader
-                    mutation={FILE_UPLOAD}
+                    mutation={mutation}
                     file={file}
                     placeholder={placeholder}
                     variables={variables}

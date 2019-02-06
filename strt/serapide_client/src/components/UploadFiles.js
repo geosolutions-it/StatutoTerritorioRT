@@ -58,34 +58,6 @@ class UploadFiles extends React.PureComponent {
                 variables={variables}
                 onAbort={this.removeFile}
             />))
-    } 
-    updateCache = (cache, { data: {upload : {success, risorse}}  = {}} = {}) => {
-        const {codice} = this.props.variables
-        if (success) {
-            const __typename = "RisorsaNodeEdge" 
-            let { piani ={}} = cache.readQuery({ query: GET_PIANI, variables: {codice}}) || {}
-            const edges = piani.edges[0].node.risorse.edges.concat(risorse.map(node => ({__typename, node})))
-            piani.edges[0].node.risorse.edges = edges
-            cache.writeQuery({
-                            query: GET_PIANI,
-                            data: { piani},
-                            variables: {codice}
-                        })
-            this.removeFile(risorse[0].nome)
-        }
-    }
-    updateResource = (cache, { data: {deleteRisorsa : {success, uuid: rid}}  = {}} = {}) => {
-        const {codice} = this.props.variables
-        if (success) {
-            let { piani ={}} = cache.readQuery({ query: GET_PIANI, variables: {codice}}) || {}
-            const edges = piani.edges[0].node.risorse.edges.filter(({node: {uuid}}) => uuid !== rid)
-            piani.edges[0].node.risorse.edges = edges
-            cache.writeQuery({
-                            query: GET_PIANI,
-                            data: { piani},
-                            variables: {codice}
-                        })
-        }
     }
     render() {
         return  (

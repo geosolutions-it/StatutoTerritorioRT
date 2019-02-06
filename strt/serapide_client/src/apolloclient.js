@@ -1,5 +1,5 @@
 import { ApolloClient } from 'apollo-client'
-import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
+import { InMemoryCache, IntrospectionFragmentMatcher , defaultDataIdFromObject} from 'apollo-cache-inmemory'
 import { onError } from 'apollo-link-error'
 import { ApolloLink } from 'apollo-link'
 import { createUploadLink, buildAxiosFetch } from './UploadLink'
@@ -13,7 +13,17 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 
 
 const _axios = axios.create({xsrfCookieName: 'csrftoken',xsrfHeaderName: "X-CSRFToken"})
-const cache = new InMemoryCache({fragmentMatcher})
+const cache = new InMemoryCache({fragmentMatcher,
+        dataIdFromObject: object => {
+            console.log(object)
+          switch (object.__typename) {
+            case 'PianoNode': return object.codice; // use `key` as the primary key
+            case 'ProceduraVASNode': return object.uuid;
+            case 'RisorsaNode': return object.uuid;
+            default: return defaultDataIdFromObject(object); // fall back to default handling
+          }
+        }
+      })
 
 const client = new ApolloClient({
     
