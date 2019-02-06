@@ -29,6 +29,7 @@ log = logging.getLogger(__name__)
 
 
 class Fase(models.Model):
+
     codice = models.CharField(max_length=255, primary_key=True)
 
     nome = models.CharField(

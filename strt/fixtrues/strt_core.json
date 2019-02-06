@@ -11,8 +11,8 @@
     "model": "modello.fase",
     "pk": "FP001",
     "fields": {
-      "nome": "inserito",
-      "descrizione": "Inserito"
+      "nome": "anagrafica",
+      "descrizione": "anagrafica"
     }
   },
   {
