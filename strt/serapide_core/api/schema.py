@@ -23,7 +23,10 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from django.core.files.storage import default_storage
-from django.core.files.uploadedfile import (TemporaryUploadedFile, InMemoryUploadedFile)
+from django.core.files.uploadedfile import (
+    TemporaryUploadedFile,
+    InMemoryUploadedFile
+)
 
 from graphene import InputObjectType, relay
 from graphene_django import DjangoObjectType
@@ -822,7 +825,8 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 # ############################################################################ #
 class UploadBaseMixIn(object):
 
-    def handle_uploaded_data(self, file, media_prefix, fase, tipo_file=None):
+    @classmethod
+    def handle_uploaded_data(cls, file, media_prefix, fase, tipo_file=None):
         # Ensuring Media Folder exists and is writable
         _base_media_folder = os.path.join(settings.MEDIA_ROOT, media_prefix)
         if not os.path.exists(_base_media_folder):
@@ -865,7 +869,8 @@ class UploadFile(UploadBaseMixIn, graphene.Mutation):
     piano_aggiornato = graphene.Field(PianoNode)
     success = graphene.Boolean()
 
-    def mutate(self, info, file, **input):
+    @classmethod
+    def mutate(cls, info, file, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _codice_piano = input['codice_piano']
@@ -874,7 +879,7 @@ class UploadFile(UploadBaseMixIn, graphene.Mutation):
             try:
                 # Validating 'Piano'
                 _piano = Piano.objects.get(codice=_codice_piano)
-                _resources = self.handle_uploaded_data(file, _codice_piano, _piano.fase, _tipo_file)
+                _resources = cls.handle_uploaded_data(file, _codice_piano, _piano.fase, _tipo_file)
                 _success = False
                 if _resources and len(_resources) > 0:
                     _success = True
@@ -887,7 +892,7 @@ class UploadFile(UploadBaseMixIn, graphene.Mutation):
                 return GraphQLError(e, code=500)
 
         # Something went wrong
-        return UploadFile(success=False)
+        return GraphQLError(_("Not Allowed"), code=405)
 
 
 class UploadRisorsaVAS(UploadBaseMixIn, graphene.Mutation):
@@ -900,7 +905,8 @@ class UploadRisorsaVAS(UploadBaseMixIn, graphene.Mutation):
     success = graphene.Boolean()
     procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
-    def mutate(self, info, file, **input):
+    @classmethod
+    def mutate(cls, info, file, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _uuid_vas = input['uuid']
@@ -909,7 +915,7 @@ class UploadRisorsaVAS(UploadBaseMixIn, graphene.Mutation):
             try:
                 # Validating 'Procedura VAS'
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                _resources = self.handle_uploaded_data(file, _uuid_vas, _procedura_vas.piano.fase, _tipo_file)
+                _resources = cls.handle_uploaded_data(file, _uuid_vas, _procedura_vas.piano.fase, _tipo_file)
                 _success = False
                 if _resources and len(_resources) > 0:
                     _success = True
@@ -922,12 +928,13 @@ class UploadRisorsaVAS(UploadBaseMixIn, graphene.Mutation):
                 return GraphQLError(e, code=500)
 
         # Something went wrong
-        return UploadRisorsaVAS(success=False)
+        return GraphQLError(_("Not Allowed"), code=405)
 
 
 class DeleteRisorsaMixIn(object):
 
-    def handle_downloaded_data(self, risorsa):
+    @classmethod
+    def handle_downloaded_data(cls, risorsa):
         """
         Deletes file from filesystem
         when corresponding `MediaFile` object is deleted.
@@ -953,7 +960,8 @@ class DeleteRisorsa(DeleteRisorsaMixIn, graphene.Mutation):
     success = graphene.Boolean()
     piano_aggiornato = graphene.Field(PianoNode)
 
-    def mutate(self, info, **input):
+    @classmethod
+    def mutate(cls, info, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']
@@ -962,14 +970,15 @@ class DeleteRisorsa(DeleteRisorsaMixIn, graphene.Mutation):
             try:
                 _piano = Piano.objects.get(codice=_codice_piano)
                 _risorsa = Risorsa.objects.get(uuid=_id)
-                _success = self.handle_downloaded_data(_risorsa)
+                _success = cls.handle_downloaded_data(_risorsa)
                 return DeleteRisorsa(piano_aggiornato=_piano, success=_success)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
                 return GraphQLError(e, code=500)
 
-        return DeleteRisorsa(success=False)
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
 
 
 class DeleteRisorsaVAS(DeleteRisorsaMixIn, graphene.Mutation):
@@ -981,7 +990,8 @@ class DeleteRisorsaVAS(DeleteRisorsaMixIn, graphene.Mutation):
     success = graphene.Boolean()
     procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
-    def mutate(self, info, **input):
+    @classmethod
+    def mutate(cls, info, **input):
         if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']
@@ -990,14 +1000,15 @@ class DeleteRisorsaVAS(DeleteRisorsaMixIn, graphene.Mutation):
             try:
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
                 _risorsa = Risorsa.objects.get(uuid=_id)
-                _success = self.handle_downloaded_data(_risorsa)
+                _success = cls.handle_downloaded_data(_risorsa)
                 return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
                 return GraphQLError(e, code=500)
 
-        return DeleteRisorsaVAS(success=False)
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
 
 
 # ############################################################################ #
@@ -1010,6 +1021,7 @@ class PromozionePiano(graphene.Mutation):
 
     errors = graphene.List(graphene.String)
     piano_aggiornato = graphene.Field(PianoNode)
+    procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
     @classmethod
     def get_next_phase(cls, fase):
@@ -1024,9 +1036,17 @@ class PromozionePiano(graphene.Mutation):
                 _next_fase = cls.get_next_phase(_piano.fase)
                 if rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=_next_fase), _piano):
                     _piano.fase = Fase.objects.get(nome=_next_fase)
-                    _piano.save()
+                    _procedura_vas = ProceduraVAS.objects.get(piano=piano)
+                    _procedura_vas.fase = _piano.fase
 
-                    return PromozionePiano(piano_aggiornato=_piano, errors=[])
+                    _piano.save()
+                    _procedura_vas.save()
+
+                    return PromozionePiano(
+                        piano_aggiornato=_piano,
+                        procedura_vas_aggiornata=_procedura_vas,
+                        errors=[]
+                    )
                 else:
                     return GraphQLError(_("Not Allowed"), code=405)
             except BaseException as e:
