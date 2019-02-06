@@ -72,6 +72,7 @@ logger = logging.getLogger(__name__)
 # ENUMS
 # ##############################################################################
 class StrtEnumNode(graphene.ObjectType):
+
     value= graphene.String()
     label = graphene.String()
 
@@ -225,7 +226,7 @@ class ContattoNode(DjangoObjectType):
         filter_fields = {
             'nome': ['exact', 'icontains'],
             'email': ['exact'],
-            'tipologia': ['exact', 'icontains'],
+            'tipologia': ['exact'],
             'ente': ['exact'],
             'piano__codice': ['exact'],
         }
@@ -384,7 +385,7 @@ class EnteContattoMembershipFilter(django_filters.FilterSet):
 
     class Meta:
         model = Contatto
-        fields = ['name', 'email', 'ente', ]
+        fields = ['name', 'email', 'ente', 'tipologia', ]
 
     @property
     def qs(self):
