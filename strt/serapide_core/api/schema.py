@@ -699,7 +699,7 @@ class UpdatePiano(relay.ClientIDMutation):
                         _piano.soggetto_proponente = None
                 if 'autorita_competente_vas' in _piano_data:
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
-                    if len(_autorita_competente_vas) > 0:
+                    if _autorita_competente_vas and len(_autorita_competente_vas) > 0:
                         _autorita_competenti = []
                         for _contatto_uuid in _autorita_competente_vas:
                             _autorita_competenti.append(AutoritaCompetenteVAS(
@@ -711,10 +711,10 @@ class UpdatePiano(relay.ClientIDMutation):
                         for _ac in _autorita_competenti:
                             _ac.save()
                     else:
-                        _piano.autorita_competente_vas.all().delete()
+                        _piano.autorita_competente_vas.clear()
                 if 'soggetti_sca' in _piano_data:
                     _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
-                    if len(_soggetti_sca_uuid) > 0:
+                    if _soggetti_sca_uuid and len(_soggetti_sca_uuid) > 0:
                         _soggetti_sca = []
                         for _contatto_uuid in _soggetti_sca_uuid:
                             _soggetti_sca.append(SoggettiSCA(
@@ -726,7 +726,7 @@ class UpdatePiano(relay.ClientIDMutation):
                         for _sca in _soggetti_sca:
                             _sca.save()
                     else:
-                        _piano.soggetti_sca.all().delete()
+                        _piano.soggetti_sca.clear()
                 piano_aggiornato = update_create_instance(_piano, _piano_data)
                 return cls(piano_aggiornato=piano_aggiornato)
             except BaseException as e:
