@@ -24,7 +24,7 @@ class UserMembershipDataView(APIView):
             filter(pk=selected_org).values_list('type')
         m_types = MembershipType.objects.filter(
             organization_type__in=organizations_types
-        ).exclude(code=settings.RESPONSABILE_ISIDE_CODE)
+        ).exclude(code=settings.RESPONSABILE_ISIDE_CODE).exclude(code=settings.RUP_CODE)
         serialized_m_types = MembershipTypeSerializer(m_types, many=True)
         return Response(serialized_m_types.data)
 
