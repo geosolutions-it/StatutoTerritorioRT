@@ -885,18 +885,21 @@ class UploadFile(UploadBaseBase):
             try:
                 # Validating 'Piano'
                 _piano = Piano.objects.get(codice=_codice_piano)
-                _resources = UploadBaseBase.handle_uploaded_data(
-                    file,
-                    _codice_piano,
-                    _piano.fase,
-                    _tipo_file
-                )
-                _success = False
-                if _resources and len(_resources) > 0:
-                    _success = True
-                    for _risorsa in _resources:
-                        RisorsePiano(piano=_piano, risorsa=_risorsa).save()
-                return UploadFile(piano_aggiornato=_piano, success=_success,file_name=_resources[0].nome)
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+                    _resources = UploadBaseBase.handle_uploaded_data(
+                        file,
+                        _codice_piano,
+                        _piano.fase,
+                        _tipo_file
+                    )
+                    _success = False
+                    if _resources and len(_resources) > 0:
+                        _success = True
+                        for _risorsa in _resources:
+                            RisorsePiano(piano=_piano, risorsa=_risorsa).save()
+                    return UploadFile(piano_aggiornato=_piano, success=_success,file_name=_resources[0].nome)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -921,18 +924,21 @@ class UploadRisorsaVAS(UploadBaseBase):
             try:
                 # Validating 'Procedura VAS'
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                _resources = UploadBaseBase.handle_uploaded_data(
-                    file,
-                    _uuid_vas,
-                    _procedura_vas.piano.fase,
-                    _tipo_file
-                )
-                _success = False
-                if _resources and len(_resources) > 0:
-                    _success = True
-                    for _risorsa in _resources:
-                        RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
-                return UploadRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+                    _resources = UploadBaseBase.handle_uploaded_data(
+                        file,
+                        _uuid_vas,
+                        _procedura_vas.piano.fase,
+                        _tipo_file
+                    )
+                    _success = False
+                    if _resources and len(_resources) > 0:
+                        _success = True
+                        for _risorsa in _resources:
+                            RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
+                    return UploadRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -984,9 +990,12 @@ class DeleteRisorsa(DeleteRisorsaBase):
             # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _piano = Piano.objects.get(codice=_codice_piano)
-                _risorsa = Risorsa.objects.get(uuid=_id)
-                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                return DeleteRisorsa(piano_aggiornato=_piano, success=_success)
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+                    _risorsa = Risorsa.objects.get(uuid=_id)
+                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                    return DeleteRisorsa(piano_aggiornato=_piano, success=_success)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
@@ -1010,9 +1019,12 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
             # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                _risorsa = Risorsa.objects.get(uuid=_id)
-                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+                    _risorsa = Risorsa.objects.get(uuid=_id)
+                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                    return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
