@@ -63,6 +63,7 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
   ```
   python manage.py loaddata fixtrues/strt_core.json
   python manage.py loaddata fixtrues/strt_users.json
+  python manage.py loaddata fixtrues/strt_homepage.json
   ```
 
 - Run the Django development server:\
