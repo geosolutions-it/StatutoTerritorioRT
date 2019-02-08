@@ -692,7 +692,7 @@ class UpdatePiano(relay.ClientIDMutation):
                 # SoggettoProponente (O)
                 if 'soggetto_proponente_uuid' in _piano_data:
                     _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
-                    if len(_soggetto_proponente_uuid) > 0:
+                    if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
                         _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
                         _piano.soggetto_proponente = _soggetto_proponente
                     else:
@@ -1044,7 +1044,6 @@ class PromozionePiano(graphene.Mutation):
 
     errors = graphene.List(graphene.String)
     piano_aggiornato = graphene.Field(PianoNode)
-    procedura_vas_aggiornata = graphene.Field(ProceduraVASNode)
 
     @classmethod
     def get_next_phase(cls, fase):
@@ -1054,20 +1053,16 @@ class PromozionePiano(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
-        _procedura_vas = ProceduraVAS.objects.get(piano=piano)
+        _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
         if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 _next_fase = cls.get_next_phase(_piano.fase)
                 if rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=_next_fase), _piano, _procedura_vas):
                     _piano.fase = Fase.objects.get(nome=_next_fase)
-                    _procedura_vas.fase = _piano.fase
-
                     _piano.save()
-                    _procedura_vas.save()
 
                     return PromozionePiano(
                         piano_aggiornato=_piano,
-                        procedura_vas_aggiornata=_procedura_vas,
                         errors=[]
                     )
                 else:
