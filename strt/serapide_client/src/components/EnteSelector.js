@@ -29,4 +29,4 @@ const Comuni = ({ value, onChange = () => {}, className, enti, isLoading = false
                 isLoading={isLoading}>
             </Select>)
 
-export default branch(({enti= [], value}) => !value, renderComponent(Comuni), renderComponent(Comune))((() => null))
+export default branch(({enti= [], value, showSelected = true}) => !value || !showSelected, renderComponent(Comuni), renderComponent(Comune))((() => null))

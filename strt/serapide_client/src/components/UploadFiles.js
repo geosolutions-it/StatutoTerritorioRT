@@ -80,7 +80,9 @@ class UploadFiles extends React.PureComponent {
                {this.renderLoader()}
                </div>
                <div className="align-self-start"> 
-                <FileChooser 
+                <FileChooser
+                    isLocked={this.props.isLocked}
+                    disabled={this.props.isLocked} 
                     fileType={this.props.fileType}
                     multiple={true}
                     onFilesChange={this.onFilesChange}

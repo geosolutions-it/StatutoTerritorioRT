@@ -36,7 +36,7 @@ const showError = (error, onError) => {
 export default (props) => (<DatePicker customInput={<CustomInput />} {...props}/>) 
 
 // Pass a mutation an update function if needed, the getInput
-export const EnhancedDateSelector = ({mutation, update, selected, getInput = _getInput, ...mutationProps}) => {
+export const EnhancedDateSelector = ({mutation, update, selected, disabled, getInput = _getInput, ...mutationProps}) => {
     return (
         <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
             {(onChange, m_props) => {
@@ -44,7 +44,7 @@ export const EnhancedDateSelector = ({mutation, update, selected, getInput = _ge
                     onChange(getInput(val))
                 }
                 return (
-                    <DatePicker selected={selected} customInput={<CustomInput />} onChange={saveDate}/>
+                    <DatePicker disabled={disabled} selected={selected} customInput={<CustomInput />} onChange={saveDate}/>
                 )
             }}
         </Mutation>)

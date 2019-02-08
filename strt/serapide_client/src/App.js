@@ -11,7 +11,7 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import client from "./apolloclient"
 import Home from './pages/Home'
 import NuovoPiano from './pages/NuovoPiano'
-import Anagrafica from './pages/Anagrafica'
+import CreaAnagrafica from './pages/CreaAnagrafica'
 import Injector from './components/Injector'
 import NavBar from './components/NavigationBar'
 import {messaggi} from './resources'
@@ -27,7 +27,7 @@ export default () => {
          <ToastContainer/>
             <Router>
               <Switch>
-                <Route  path="/anagrafica/:code" component={Anagrafica}/>
+                <Route  path="/crea_anagrafica/:code" component={CreaAnagrafica}/>
                 <Route  path="/nuovo_piano/" component={NuovoPiano}/>             
                 <Route  path="/" component={Home}/>
               </Switch>

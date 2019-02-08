@@ -17,12 +17,35 @@ fragment Risorsa on RisorsaNode {
     dimensione
 }
 `
+const AUT_VASFragment = gql`
+fragment AUT_VAS on ContattoNode{
+        nome
+        uuid
+}
+`
 const VASFragment = gql`
 fragment VAS on ProceduraVASNode {
         uuid
         tipologia
         piano {
             codice
+            autoritaCompetenteVas{
+                edges{
+                  node{
+                    ...AUT_VAS
+                  }
+                }
+            }
+            soggettiSca {
+                edges{
+                    node{
+                        ...AUT_VAS
+                    }
+                }
+            }
+            soggettoProponente {
+              ...AUT_VAS
+            }
         }
         risorse{
             edges{
@@ -33,7 +56,10 @@ fragment VAS on ProceduraVASNode {
         }
 }
 ${RisorsaFragment}
+${AUT_VASFragment}
 `
+
+
 const PianoFragment = gql`
 fragment Piano on PianoNode {
     codice
@@ -67,10 +93,42 @@ fragment Piano on PianoNode {
           }
         }
       }
+    autoritaCompetenteVas{
+        edges{
+          node{
+            ...AUT_VAS
+          }
+        }
+    }
+    soggettiSca{
+        edges{
+          node{
+            ...AUT_VAS
+          }
+        }
+    }
+    soggettoProponente {
+      ...AUT_VAS
+    }
 }
 ${RisorsaFragment}
 ${UserFragment}
+${AUT_VASFragment}
 ` 
+export const GET_ENTI = gql`
+query {
+    enti{
+        edges{
+            node{
+                name
+                code
+                type{
+                    tipo: name
+                }
+            }
+        }
+    }
+}`
 
 /** queries */
 export const CREA_PIANO_PAGE = gql`
@@ -119,6 +177,19 @@ query getVas($codice: String!) {
     }
 }
 ${VASFragment}
+`
+
+export const GET_CONTATTI = gql`
+query getContatti($tipo: String){
+    contatti(tipologia: $tipo) {
+      edges {
+        node{
+          nome
+          uuid
+        }
+      }
+    }
+  }
 `
 // MUTATION
 // Upload a generic risources
@@ -202,6 +273,31 @@ mutation($id: ID!, $codice: String!) {
 }
 ${VASFragment}
 `
+
+export const CREATE_CONTATTO = gql`
+mutation CreaContatto($input: CreateContattoInput!){
+  createContatto(input: $input){
+    nuovoContatto{
+      uuid
+      nome
+    }
+  }
+	
+}
+`
+export const PROMUOVI_PIANO = gql`
+mutation PromozionePiano($codice: String!){
+  promozionePiano(codicePiano: $codice){
+    pianoAggiornato {
+      ...Piano
+  }
+  }
+}
+${PianoFragment}
+`
+
+// LOCAL STATE
+// example of local state query
 export const GET_VAS_AUTHORITIES = gql`
 query getAuth{
     authorities @client

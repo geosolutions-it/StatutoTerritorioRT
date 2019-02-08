@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 
 import {Query} from "react-apollo"
 import {getEnteLabel, getEnteLabelID} from "../utils"
-import {GET_PIANI, UPDATE_PIANO} from "../queries"
+import {GET_PIANI, UPDATE_PIANO, GET_VAS} from "../queries"
 import {compose, withStateHandlers} from 'recompose'
 import {EnhancedDateSelector} from "../components/DateSelector"
 
@@ -19,6 +19,7 @@ import Delibera from '../components/UploadSingleFile'
 import UploadFiles from '../components/UploadFiles'
 import VAS from '../components/VAS'
 import EnhanchedInput from '../components/EnhancedInput'
+import Button from '../components/IconButton'
 
 
 
@@ -38,8 +39,10 @@ const getDataDeliberaInput = (codice) => (val) => ({
         codice}
     }})
 
-export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {
+const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera && delibera && descrizione.length > 0
 
+
+export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {
     return (<Query query={GET_PIANI} variables={{codice: code}}>
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
             if(loading){
@@ -55,12 +58,11 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                 toast.error(`Impossobile trovare il piano: ${code}`,  {autoClose: true})
                 return <div></div>
             }
-            const {node: {ente, risorse : {edges: resources = []} = {}, tipo = "", codice = "", dataDelibera, descrizione} = {}} = edges[0] || {}
-            
+            const {node: {ente, fase: {nome: faseNome}, risorse : {edges: resources = []} = {}, tipo = "", codice = "", dataDelibera, descrizione} = {}} = edges[0] || {}
+            const locked = faseNome !== "DRAFT"
             const {node: delibera} = resources.filter(({node: n}) => n.tipo === "delibera").pop() || {};
             const optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || {};
-            // const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
-            // const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
+            
             return(
             <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
                     <div className="d-flex flex-column ">
@@ -73,21 +75,21 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                                 <span className="pt-5">{getEnteLabelID(ente)}</span>
                                 <div className="d-flex pt-5 align-items-center">
                                     <span className="pr-2">DELIBERA DEL</span>
-                                    <EnhancedDateSelector selected={dataDelibera ? new Date(dataDelibera) : undefined} mutation={UPDATE_PIANO} getInput={getDataDeliberaInput(codice)}/>
+                                    <EnhancedDateSelector disabled={locked} selected={dataDelibera ? new Date(dataDelibera) : undefined} mutation={UPDATE_PIANO} getInput={getDataDeliberaInput(codice)}/>
                                 </div>
                                 <div className="d-flex pt-5 align-items-center ">
                                     <span className="pr-2">DESCRIZIONE</span>
-                                    <EnhanchedInput value={descrizione} mutation={UPDATE_PIANO} getInput={getDescrizioneInput(codice)}></EnhanchedInput>
+                                    <EnhanchedInput disabled={locked} value={descrizione} mutation={UPDATE_PIANO} getInput={getDescrizioneInput(codice)}></EnhanchedInput>
                                     
                                 </div>
                                 <span className="pt-5">DELIBERA COMUNALE</span>
                                 <span className="pb-2 font-weight-light">Caricare delibera comunale, formato obbligatorio pdf</span>
-                                <Delibera placeholder="Delibera Comunale (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={false}/>
+                                <Delibera placeholder="Delibera Comunale (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={locked}/>
                                 <span className="pt-5">ALTRI DOCUMENTI</span>
                                 <span className="font-weight-light">Caricare eventuali allegati trascinando i files nel riquadro, formato obbligatorio pdf</span>
-                                <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_opts" }} isLocked={false}/>
+                                <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_opts" }} isLocked={locked}/>
                                 <div style={{borderBottom: "2px dashed"}} className="mt-5 text-warning" ></div>
-                                <VAS codice={codice} ></VAS>
+                                <VAS codice={codice} canUpdate={canCommit(dataDelibera, delibera, descrizione)} isLocked={locked}></VAS>
                             </div>
                             
                         </div>

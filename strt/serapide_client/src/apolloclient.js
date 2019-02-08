@@ -13,13 +13,15 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 
 
 const _axios = axios.create({xsrfCookieName: 'csrftoken',xsrfHeaderName: "X-CSRFToken"})
+
+
 const cache = new InMemoryCache({fragmentMatcher,
         dataIdFromObject: object => {
-            console.log(object)
           switch (object.__typename) {
             case 'PianoNode': return object.codice; // use `key` as the primary key
             case 'ProceduraVASNode': return object.uuid;
             case 'RisorsaNode': return object.uuid;
+            case 'ContattoNode': return object.uuid;
             default: return defaultDataIdFromObject(object); // fall back to default handling
           }
         }
@@ -38,13 +40,7 @@ const client = new ApolloClient({
             if (networkError) console.log(`[Network error]: ${networkError}`)
       }),
       withClientState({
-        defaults: {
-            authorities: [
-              {value: 0, label: "Commisione del paesaggio integrata", __typename: 'Authority'},
-              {value: 1, label: "Città Metropolitana di Firenze",__typename: 'Authority'},
-              {value: 2, label: "Nucleo VIA-VAS",__typename: 'Authority'},
-              {value: 3, label: "Settore Ambiente",__typename: 'Authority'}
-            ]},
+        defaults: {},
             resolvers: {},
             typeDefs: `
                 type Authority {

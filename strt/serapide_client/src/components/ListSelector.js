@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import {Modal, ModalBody, ModalHeader, ListGroup, ListGroupItem} from 'reactstrap'
+import {Modal, ModalBody, ModalHeader, ListGroup, ListGroupItem, ModalFooter} from 'reactstrap'
 import {toggleControllableState} from '../enhancers/utils'
 import {Query} from 'react-apollo'
 import {toast} from 'react-toastify'
@@ -23,15 +23,11 @@ const ListItem = ({option: {value, label} = {}, selected = false, onClick}) => (
         </span>
     </ListGroupItem>)
 
-
-
-
-
-const ListSelector = enhancer(({label, selected = [], isOpen, toggleOpen, onChange = () => {}, btn, items = [], getOption = ({value, label}) => ({value, label})}) => {
+const ListSelector = enhancer(({size, children, label, selected = [], isOpen, toggleOpen, onChange = () => {}, btn, items = [], getOption = ({value, label}) => ({value, label})}) => {
     return (
     <React.Fragment>
            {btn && btn(toggleOpen)}
-            <Modal isOpen={isOpen} toggle={toggleOpen} wrapClassName="serapide" autoFocus={true}>
+            <Modal size={size} isOpen={isOpen} toggle={toggleOpen} wrapClassName="serapide" autoFocus={true}>
                 <ModalHeader>{label}</ModalHeader>
                 <ModalBody> 
                     <ListGroup>
@@ -40,18 +36,23 @@ const ListSelector = enhancer(({label, selected = [], isOpen, toggleOpen, onChan
                             return <ListItem key={opt.value} option={opt} onClick={onChange} selected={selected.indexOf(opt.value) !== -1} ></ListItem>
                         })}
                     </ListGroup>
+                    {children}
                 </ModalBody>
+            
+                
             </Modal>
     </React.Fragment>
     )}
 )
 export default ListSelector
 
+const _getList = (data) => {
+    return[]
+}
 
-export const EnhancedListSelector = ({query, getList = (data) => (Object.values(data || {})[0]) , ...props}) => (
-    <Query query={query}>
+export const EnhancedListSelector = ({query, variables, getList = _getList , ...props}) => (
+    <Query query={query} variables={variables}>
         {({loading, data, error}) => {
-            console.log(loading, data, error)
                 if (error) {
                     toast.error(error.message,  {autoClose: true})
                 }
