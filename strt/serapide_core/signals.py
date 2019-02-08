@@ -9,13 +9,13 @@
 #
 #########################################################################
 
-from django.conf.urls import include, url
-from django.contrib import admin
-from django.urls import path
+from .notifications_helper import send_now_notification
 
 
-urlpatterns = [
-    # url(r'^serapide/admin/', admin.site.urls),
-    # url(r'^serapide/accounts/', include('django.contrib.auth.urls')),
-    url(r'^serapide/', include('serapide_core.api.urls')),
-]
+def message_sent_notification(sender, **kwargs):
+    if 'message' in kwargs:
+        message = kwargs['message']
+        thread = kwargs['thread']
+        reply = kwargs['reply']
+        users = list(thread.users.all())
+        send_now_notification(users, "message_sent", {"from_user": message.sender})

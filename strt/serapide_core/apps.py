@@ -9,19 +9,29 @@
 #
 #########################################################################
 
-from django.apps import AppConfig as BaseAppConfig
 from django.utils.translation import ugettext_lazy as _
 
+from .notifications_helper import NotificationsAppConfigBase
 
-class AppConfig(BaseAppConfig):
+
+def run_setup_hooks(*args, **kwargs):
+    from pinax.messages.signals import message_sent
+    from .signals import message_sent_notification
+
+    message_sent.connect(message_sent_notification)
+
+
+class AppConfig(NotificationsAppConfigBase):
 
     name = "serapide_core"
     label = "serapide_core"
     verbose_name = _("Django SERAPIDE - Core")
 
+    NOTIFICATIONS = (
+        ("message_sent", _("Message Sent"), _("Message Sent"),),
+    )
+
     def ready(self):
         """Connect relevant signals to their corresponding handlers"""
-        """
-            NO SIGNALS DEFINED YET
-        """
         super(AppConfig, self).ready()
+        run_setup_hooks()

@@ -81,7 +81,7 @@ def has_procedura_vas(piano):
 @rules.predicate
 def procedura_vas_is_valid(piano, procedura_vas):
     if procedura_vas.piano == piano:
-        if procedura_vas.fase == FASE.draft:
+        if piano.fase.nome == FASE.draft:
             if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
                 if procedura_vas.risorse.filter(tipo='vas_semplificata').count() == 1 and \
                     procedura_vas.risorse.get(tipo='vas_semplificata').dimensione > 0 and \
@@ -112,6 +112,14 @@ def procedura_vas_is_valid(piano, procedura_vas):
 # ############################################################################ #
 # RULES
 # ############################################################################ #
+
+"""
+- TODO:
+    . Add "notifications" on change fase operations
+    . Add backend consistency rules-checks accordingly to the fase, e.g.:
+        * Date, Description, Delibera ... cannot be changed after "DRAFT" fase
+        ...
+"""
 rules.add_rule(
     'strt_core.api.can_access_private_area',
     is_recognizable

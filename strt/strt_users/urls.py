@@ -9,7 +9,8 @@
 #
 #########################################################################
 
-from django.urls import path, include
+from django.urls import path
+from django.conf.urls import include, url
 from .views import (
     userMembershipRegistrationView, usersMembershipsListView,
     userMembershipDeleteView, userRegistrationView, usersListView,
@@ -31,4 +32,6 @@ urlpatterns = [
     path('user-membership-registration/', userMembershipRegistrationView, name='user_membership_registration'),
     path('user-membership-delete/<code>/', userMembershipDeleteView, name='user_membership_delete'),
     path('user-membership-update/<code>/', userMembershipUpdateView, name='user_membership_update'),
+    url('messages/', include('pinax.messages.urls', namespace='pinax_messages'), name='messages'),
+    url('notifications/', include('pinax.notifications.urls', namespace='pinax_notifications'), name='notifications'),
 ]

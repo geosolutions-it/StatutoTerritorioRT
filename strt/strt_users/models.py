@@ -9,6 +9,9 @@
 #
 #########################################################################
 
+import os
+import binascii
+
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import (
@@ -114,6 +117,26 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         ]
         verbose_name = _('utente')
         verbose_name_plural = _('utenti')
+
+
+class Token(models.Model):
+    """
+    An access token that is associated with a user.  This is essentially the same as the token model from Django REST Framework
+    """
+    key = models.CharField(max_length=40, primary_key=True)
+    user = models.OneToOneField(AppUser, related_name="token", on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.key:
+            self.key = self.generate_key()
+        return super(Token, self).save(*args, **kwargs)
+
+    def generate_key(self):
+        return binascii.hexlify(os.urandom(20)).decode()
+
+    def __unicode__(self):
+        return self.key
 
 
 class OrganizationType(models.Model):

@@ -11,7 +11,8 @@
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
-from .models import (AppUser, Organization, OrganizationType,
+from .models import (AppUser, Token,
+                     Organization, OrganizationType,
                      UserMembership, MembershipType)
 from django.utils.translation import gettext_lazy as _
 
@@ -22,11 +23,13 @@ class OrganizationModelAdmin(admin.ModelAdmin):
     search_fields = ['name', 'code', 'description', 'type']
     list_filter = ['name', 'code', 'description', 'type']
 
+
 @admin.register(OrganizationType)
 class OrganizationTypeModelAdmin(admin.ModelAdmin):
     list_display = ['name', 'code', 'description']
     search_fields = ['name', 'code', 'description']
     list_filter = ['name', 'code', 'description']
+
 
 @admin.register(UserMembership)
 class UserMembershipModelAdmin(admin.ModelAdmin):
@@ -34,11 +37,13 @@ class UserMembershipModelAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'member', 'organization', 'type']
     list_filter = ['name', 'description', 'member', 'organization', 'type']
 
+
 @admin.register(MembershipType)
 class MembershipTypeModelAdmin(admin.ModelAdmin):
     list_display = ['name', 'code', 'description', 'organization_type']
     search_fields = ['name', 'code', 'description', 'organization_type']
     list_filter = ['name', 'code', 'description', 'organization_type']
+
 
 @admin.register(AppUser)
 class AppUserAdmin(UserAdmin):
@@ -59,3 +64,10 @@ class AppUserAdmin(UserAdmin):
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('fiscal_code', 'first_name', 'last_name', 'email')
     ordering = ('fiscal_code',)
+
+
+@admin.register(Token)
+class TokenModelAdmin(admin.ModelAdmin):
+    list_display = ['key', 'user', 'created']
+    search_fields = ['key', 'user', 'created']
+    list_filter = ['key', 'user', 'created']
