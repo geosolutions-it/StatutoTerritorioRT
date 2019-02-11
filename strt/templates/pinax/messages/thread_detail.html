@@ -1,0 +1,56 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "strt_portal/private_area.html" %}
+​
+{% load static %}
+{% load i18n %}
+{% load bootstrap %}
+{% load fontawesome %}
+{% load wagtailcore_tags %}
+{% load crispy_forms_tags %}
+{% load pinax_messages_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'message detail'|capfirst %}{% endblock head_title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'strt_users/css/users.css' %}"/>
+    {% fontawesome_stylesheet %}
+{% endblock styles %}
+
+{% block content %}
+<div class="pinax-messages-thread-detail-container">
+    <h2 class="with-actions">
+        {{ thread.subject }}
+        <a class="button" href="{% url "pinax_messages:thread_delete" thread.pk %}">Delete Thread</a>
+    </h2>
+
+    <section class="thread-messages">
+        {% for message in thread.messages.all %}
+            <div class="thread-message">
+                <div class="message-byline">
+                    <div class="message-from">{{ message.sender.username }}</div>
+                    <div class="message-sent">{{ message.sent_at }}</div>
+                </div>
+                <div class="message-content">{{ message.content|urlize|linebreaks }}</div>
+            </div>
+        {% endfor %}
+    </section>
+
+    <form class="comment-form" action="{% url "pinax_messages:thread_detail" thread.pk %}" method="post">
+        {% csrf_token %}
+        {{ form|bootstrap }}
+        <div class="form-actions">
+            <a href="{% url "pinax_messages:inbox" %}" class="cancel">Cancel</a>
+            <button>Send</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

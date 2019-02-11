@@ -1,0 +1,73 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "strt_portal/private_area.html" %}
+​
+{% load static %}
+{% load i18n %}
+{% load bootstrap %}
+{% load fontawesome %}
+{% load wagtailcore_tags %}
+{% load crispy_forms_tags %}
+{% load pinax_messages_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'notifications settings'|capfirst %}{% endblock head_title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'strt_users/css/users.css' %}"/>
+    {% fontawesome_stylesheet %}
+{% endblock styles %}
+
+{% block content %}
+
+    {% url "account_settings" as email_url %}
+    {% if not request.user.email %}
+        {% blocktrans %}
+        <div class="no-verified-email">
+            <span>Note</span>:
+            You do not have a verified email address to which notices can be sent. <a href="{{ email_url }}">Add one</a> now.
+        </div>
+        {% endblocktrans %}
+    {% endif %}
+
+    <form method="post" action=".">
+        {% csrf_token %}
+        <legend>{% trans "Notification Settings" %}</legend>
+        <table class="notice-settings">
+            <tr>
+                <th>{% trans "Notification Type" %}</th>
+                {% for header in notice_settings.column_headers %}
+                    <th class="setting-header">
+                        {{ header.title }}
+                    </th>
+                {% endfor %}
+            </tr>
+            {% for row in notice_settings.rows %}
+                <tr class="setting-row">
+                    <td>
+                        <strong>{{ row.notice_type.display }}</strong><br/>
+                        <span class="notice-type-description">
+                            {{ row.notice_type.description }}
+                        </span>
+                    </td>
+                    {% for cell in row.cells %}
+                        <td class="setting">
+                            <input type="checkbox" name="{{ cell.0 }}" {% if cell.1 %}checked="yes"{% endif %} />
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+
+        <div class="form-actions">
+            <button>{% trans "Change" %}</button>
+        </div>
+    </form>
+{% endblock %}

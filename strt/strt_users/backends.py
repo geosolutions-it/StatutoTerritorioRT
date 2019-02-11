@@ -9,15 +9,17 @@
 #
 #########################################################################
 
-from django.contrib.auth import get_user_model
-from .models import (
-    Organization, UserMembership, MembershipType
-)
-from django.db import transaction
-from django import forms
-from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 import jwt
+
+from django import forms
+from django.conf import settings
+from django.db import transaction
+from django.contrib.auth import get_user_model
+from django.utils.translation import ugettext_lazy as _
+
+from .models import (
+    Token, Organization, UserMembership, MembershipType
+)
 
 
 UserModel = get_user_model()
@@ -25,8 +27,23 @@ UserModel = get_user_model()
 
 class StrtPortalAuthentication:
 
-    def authenticate(self, encoded_jwt):
+    def authenticate(self, encoded_jwt, token=None):
 
+        if token:
+            """
+            Try to find a user with the given token
+            """
+            try:
+                t = Token.objects.get(key=token)
+
+                if self.user_can_authenticate(t.user):
+                    return t.user
+            except Token.DoesNotExist:
+                return None
+
+        """
+        Fall back to default behavior
+        """
         payload = jwt.decode(
             jwt=encoded_jwt,
             key=settings.SECRET_KEY,
@@ -34,9 +51,7 @@ class StrtPortalAuthentication:
         )
 
         with transaction.atomic():
-
             if 'fiscal_code' in payload and payload['fiscal_code']:
-
                 # Responsabile ISIDE user
                 if 'membership_type' in payload and payload['membership_type'] and \
                         payload['membership_type'] == settings.RESPONSABILE_ISIDE_CODE:
@@ -75,7 +90,6 @@ class StrtPortalAuthentication:
 
                 # SERAPIDE user
                 elif 'membership_type' not in payload or not payload['membership_type']:
-
                     try:
                         user = UserModel._default_manager.get_by_natural_key(
                             payload['fiscal_code'].strip().upper()
