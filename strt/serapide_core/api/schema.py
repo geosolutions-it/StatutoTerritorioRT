@@ -28,6 +28,8 @@ from django.core.files.uploadedfile import (
     InMemoryUploadedFile
 )
 
+from pinax.messages.models import Thread, Message
+
 from graphene import InputObjectType, relay
 from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
@@ -114,6 +116,23 @@ class FasePianoStoricoType(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class UserThreadType(DjangoObjectType):
+
+    class Meta:
+        model = Thread
+        filter_fields = ['subject', 'users', ]
+        interfaces = (relay.Node, )
+
+
+class UserMessageType(DjangoObjectType):
+
+    thread = graphene.Field(UserThreadType)
+
+    class Meta:
+        model = Message
+        interfaces = (relay.Node, )
+
+
 class RisorsaNode(DjangoObjectType):
 
     class Meta:
@@ -160,6 +179,18 @@ class EnteTipoNode(DjangoObjectType):
 
 class AppUserNode(DjangoObjectType):
 
+    unread_threads_count = graphene.String()
+    unread_messages = graphene.List(UserMessageType)
+
+    def resolve_unread_threads_count(self, info, **args):
+        return Thread.unread(self).count()
+
+    def resolve_unread_messages(self, info, **args):
+        unread_messages = []
+        for _t in Thread.unread(self).order_by('subject'):
+            unread_messages.append(_t.latest_message)
+        return unread_messages
+
     class Meta:
         model = AppUser
         # Allow for some more advanced filtering here
@@ -180,7 +211,7 @@ class EnteNode(DjangoObjectType):
 
     def resolve_role(self, info, **args):
         roles = []
-        if info.context.user and info.context.user.is_authenticated:
+        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             _memberships = info.context.user.memberships
             if _memberships:
                 for _m in _memberships:
@@ -360,6 +391,29 @@ class ProceduraVASUpdateInput(InputObjectType):
 # ##############################################################################
 # FILTERS
 # ##############################################################################
+class UserMembershipFilter(django_filters.FilterSet):
+
+    # Do case-insensitive lookups on 'name'
+    name = django_filters.CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = AppUser
+        exclude = ['password', 'is_staff', 'is_active', 'is_superuser', 'last_login' ]
+
+    @property
+    def qs(self):
+        # The query context can be found in self.request.
+        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
+            return super(UserMembershipFilter, self).qs.filter(id=self.request.user.id).distinct()
+            # if is_RUP(self.request.user):
+            #     # return super(UserMembershipFilter, self).qs.filter(usermembership__member=self.request.user).distinct()
+            #     return super(UserMembershipFilter, self).qs.all()
+            # else:
+            #     return super(UserMembershipFilter, self).qs.filter(id=self.request.user.id).distinct()
+        else:
+            return super(UserMembershipFilter, self).qs.none()
+
+
 class EnteUserMembershipFilter(django_filters.FilterSet):
 
     # Do case-insensitive lookups on 'name'
@@ -372,7 +426,7 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
     @property
     def qs(self):
         # The query context can be found in self.request.
-        if self.request.user and self.request.user.is_authenticated:
+        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
             return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
         else:
             return super(EnteUserMembershipFilter, self).qs.none()
@@ -390,7 +444,7 @@ class EnteContattoMembershipFilter(django_filters.FilterSet):
     @property
     def qs(self):
         # The query context can be found in self.request.
-        if self.request.user and self.request.user.is_authenticated:
+        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
             return super(EnteContattoMembershipFilter, self).qs.filter(ente__usermembership__member=self.request.user)
         else:
             return super(EnteContattoMembershipFilter, self).qs.none()
@@ -411,7 +465,7 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
         # The query context can be found in self.request.
         _enti = []
         _memberships = None
-        if self.request.user and self.request.user.is_authenticated:
+        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
             _memberships = self.request.user.memberships
             if _memberships:
                 for _m in _memberships.all():
@@ -433,6 +487,9 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
 class Query(object):
 
     # Models
+    utenti = DjangoFilterConnectionField(AppUserNode,
+                                         filterset_class=UserMembershipFilter)
+
     enti = DjangoFilterConnectionField(EnteNode,
                                        filterset_class=EnteUserMembershipFilter)
 

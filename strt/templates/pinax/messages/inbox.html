@@ -1,0 +1,57 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "strt_portal/private_area.html" %}
+​
+{% load static %}
+{% load i18n %}
+{% load bootstrap %}
+{% load fontawesome %}
+{% load wagtailcore_tags %}
+{% load crispy_forms_tags %}
+{% load pinax_messages_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'messages'|capfirst %}{% endblock head_title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'strt_users/css/users.css' %}"/>
+    {% fontawesome_stylesheet %}
+{% endblock styles %}
+
+{% block content %}
+<div class="pinax-messages-inbox-container">
+    <h2 class="with-actions">
+        Inbox
+    </h2>
+    {% with user|unread_thread_count as user_unread %}
+    <a href="{% url 'pinax_messages:inbox' %}"><i class="fa fa-envelope"></i> {% trans "Unread Messages" %}: {{ user_unread }}</a>
+    {% endwith %}
+    <a class="button" href="{% url "pinax_messages:message_create" %}">
+        <i class="fa fa-envelope"></i>
+        New Message
+    </a>
+
+    <section class="mailbox">
+        {% for thread in threads %}
+            <div class="thread {% if thread|unread:user %}unread{% endif %}">
+                <a href="{{thread.get_absolute_url}}">
+                    <div class="participants">{{ thread.users.all|join:", " }}</div>
+                    <div class="latest-message">
+                        <p class="subject">{{ thread.subject }}</p>
+                        <p class="content">{{ thread.latest_message.content }}</p>
+                    </div>
+                </a>
+            </div>
+        {% empty %}
+            <div class="no-messages">You have no messages.</div>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

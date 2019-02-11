@@ -113,6 +113,14 @@ def procedura_vas_is_valid(piano, procedura_vas):
 # ############################################################################ #
 # RULES
 # ############################################################################ #
+
+"""
+- TODO:
+    . Add "notifications" on change fase operations
+    . Add backend consistency rules-checks accordingly to the fase, e.g.:
+        * Date, Description, Delibera ... cannot be changed after "DRAFT" fase
+        ...
+"""
 rules.add_rule(
     'strt_core.api.can_access_private_area',
     is_recognizable

@@ -1,0 +1,45 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "strt_portal/private_area.html" %}
+​
+{% load static %}
+{% load i18n %}
+{% load bootstrap %}
+{% load fontawesome %}
+{% load wagtailcore_tags %}
+{% load crispy_forms_tags %}
+{% load pinax_messages_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'confirm delete'|capfirst %}{% endblock head_title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'strt_users/css/users.css' %}"/>
+    {% fontawesome_stylesheet %}
+{% endblock styles %}
+
+{% block content %}
+<div class="pinax-messages-delete-container">
+    <h2>{{ thread.subject }}</h2>
+
+    {% url "pinax_messages:thread_delete" thread.pk as post_url %}
+
+    <div class="delete-warning" role="alert">
+        {% trans "Are you sure you want to delete this thread?" %}
+    </div>
+
+    <form action="{{ post_url }}" method="POST">
+        {% csrf_token %}
+        <div class="form-actions">
+            <a href="{% url "pinax_messages:inbox" %}" class="cancel">{% trans "Cancel" %}</a>
+            <button>{% trans "Delete" %}</button>
+        </div>
+    </form>
+{% endblock %}

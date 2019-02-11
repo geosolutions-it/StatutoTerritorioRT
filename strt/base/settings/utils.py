@@ -77,7 +77,7 @@ class EnvUtil(object):
             v = Util.str_to_boolean(os.getenv(var), default)
         elif type == int:
             # int
-            v = Util.str_to_int(os.getenv(var), default)
+            v = Util.str_to_integer(os.getenv(var), default)
         elif type == float:
             # float
             v = Util.str_to_float(os.getenv(var), default)
