@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import {Modal, ModalBody, ModalHeader, ListGroup, ListGroupItem, ModalFooter} from 'reactstrap'
+import {Modal, ModalBody, ModalHeader, ListGroup, ListGroupItem} from 'reactstrap'
 import {toggleControllableState} from '../enhancers/utils'
 import {Query} from 'react-apollo'
 import {toast} from 'react-toastify'

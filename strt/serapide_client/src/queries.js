@@ -15,6 +15,7 @@ fragment Risorsa on RisorsaNode {
     uuid
     tipo
     dimensione
+    downloadUrl
 }
 `
 const AUT_VASFragment = gql`

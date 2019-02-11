@@ -16,9 +16,11 @@ const _getInput = (val) => { return {variables: {input: {data: val.toISOString()
 
 class CustomInput extends React.PureComponent {
     render () {
-        const {onClick, value} = this.props 
+        const {onClick, value, disabled, readOnly} = this.props 
             return (
                 <Button 
+                    disabled={disabled}
+                    className={`${readOnly && 'read-only'}`}
                     style={{minWidth: 170}}
                     label={value || "Seleziona Data"}
                     color="warning"
@@ -36,7 +38,7 @@ const showError = (error, onError) => {
 export default (props) => (<DatePicker customInput={<CustomInput />} {...props}/>) 
 
 // Pass a mutation an update function if needed, the getInput
-export const EnhancedDateSelector = ({mutation, update, selected, disabled, getInput = _getInput, ...mutationProps}) => {
+export const EnhancedDateSelector = ({isLocked, mutation, update, selected, disabled, getInput = _getInput, ...mutationProps}) => {
     return (
         <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
             {(onChange, m_props) => {
@@ -44,7 +46,7 @@ export const EnhancedDateSelector = ({mutation, update, selected, disabled, getI
                     onChange(getInput(val))
                 }
                 return (
-                    <DatePicker disabled={disabled} selected={selected} customInput={<CustomInput />} onChange={saveDate}/>
+                    <DatePicker readOnly={isLocked} disabled={disabled} selected={selected} customInput={<CustomInput />} onChange={saveDate}/>
                 )
             }}
         </Mutation>)

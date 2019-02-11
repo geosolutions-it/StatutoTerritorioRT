@@ -77,9 +77,9 @@ export default ({codice, canUpdate, isLocked}) => {
             return(
             <React.Fragment>
                 <span className="pt-4">PROCEDIMENTO VAS</span>
-                <span className="pt-2">NOTA : Le opzioni sono escludenti. Se viene selezionata la richiesta della VAS semplificata
+                {!isLocked && (<span className="pt-2">NOTA : Le opzioni sono escludenti. Se viene selezionata la richiesta della VAS semplificata
                     è richiesto l’upload della Relazione Motivata; se viene selezionata la Richiesta di Verifica VAS è richiesto
-                    l’upload del documento preliminare di verifica; se si seleziona il Procedimento Vas si decide di seguire il procedimento VAS esteso.</span>
+            l’upload del documento preliminare di verifica; se si seleziona il Procedimento Vas si decide di seguire il procedimento VAS esteso.</span>)}
                 <EnhancedSwitch isLocked={isLocked} getInput={getVasTypeInput(uuid)} mutation={UPDATE_VAS} value="semplificata" checked={tipologia === "SEMPLIFICATA"}  label="RICHIESTA VAS SEMPLIFICATA" className="mt-3 vas-EnhancedSwitch justify-content-between">
                     {(checked) =>
                         <FileUpload getSuccess={getSuccess}  mutation={VAS_FILE_UPLOAD} resourceMutation={DELETE_RISORSA_VAS} disabled={!checked} isLocked={!checked || isLocked} risorsa={semplificata} placeholder="Relazione motivata per VAS semplificata" variables={{codice: uuid, tipo: "vas_semplificata" }}/>
@@ -100,7 +100,7 @@ export default ({codice, canUpdate, isLocked}) => {
                 </EnhancedSwitch>
                 <div className="d-flex mt-4 justify-content-between mb-3">
                     <div style={{minWidth: "33%"}}>
-                        <Mutation mutation={UPDATE_PIANO} onError={showError}>
+                        { !isLocked ? (<Mutation mutation={UPDATE_PIANO} onError={showError}>
                         {(onChange) => {
                                 const changed = (val) => {
                                     let soggettoProponenteUuid = val;
@@ -125,14 +125,14 @@ export default ({codice, canUpdate, isLocked}) => {
                                 <AddContact className="mt-2" tipologia="generico"></AddContact>
                                 </EnhancedListSelector>)}
                             }
-                            </Mutation>
+                        </Mutation>) : (<span>SOGGETTO PROPONENTE</span>) }
                             {sP && sP.nome && (<div className="d-flex pt-3" key={sP.uuid}>
                                     <i className="material-icons text-warning">bookmark</i>
                                     {sP.nome}
                             </div>)}
                         </div>
                     <div style={{minWidth: "33%"}}>
-                    <Mutation mutation={UPDATE_PIANO} onError={showError}>
+                    { !isLocked ? (<Mutation mutation={UPDATE_PIANO} onError={showError}>
                         {(onChange) => {
                             const changed = (val) => {
                                 onChange({variables:{ input:{ 
@@ -153,14 +153,14 @@ export default ({codice, canUpdate, isLocked}) => {
                                     <AddContact className="mt-2" tipologia="acvas"></AddContact>
                                     </EnhancedListSelector>)}
                         }
-                        </Mutation>
+                        </Mutation>) : (<span>AUTORITA’ COMPETENTE VAS</span>) }
                         {aut.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pt-3" key={uuid}>
                                  <i className="material-icons text-warning">bookmark</i>
                                  {nome}
                         </div>))}
                     </div>
                     <div style={{minWidth: "33%"}}>
-                    <Mutation mutation={UPDATE_PIANO} onError={showError}>
+                    { !isLocked ? ( <Mutation mutation={UPDATE_PIANO} onError={showError}>
                     {(onChange) => {
                             const changed = (val) => {
                                 let nscas = []
@@ -187,7 +187,7 @@ export default ({codice, canUpdate, isLocked}) => {
                             <AddContact className="mt-2" tipologia="sca"></AddContact>
                             </EnhancedListSelector>)}
                         }
-                        </Mutation>
+                        </Mutation>) : (<span>SOGGETTI COMPETENTI IN MATERIA AMBIENALE</span>) }
                         {sca.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pt-3" key={uuid}>
                                  <i className="material-icons text-warning">bookmark</i>
                                  {nome}

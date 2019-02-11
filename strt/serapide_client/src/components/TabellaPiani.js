@@ -12,6 +12,8 @@ const {Fragment} = React;
 const goToAnagrafica = (codice, {nome} = {}) => {
     if(nome === "DRAFT"){
          window.location.href=`#/crea_anagrafica/${codice}`
+        }else {
+            window.location.href=`#/anagrafica/${codice}`
         }
 }
 export default ({title, piani = []}) => (
@@ -39,7 +41,7 @@ export default ({title, piani = []}) => (
                         <td className="text-center text-capitalize">{tipo}</td>
                         <td className="text-center">{lastUpdate}</td>
                         <td className="text-center">{codice}</td>
-                        <td className="text-center" style={{cursor: fase.nome !== "DRAFT" ? "not-allowed" : "pointer"}} onClick={() => goToAnagrafica(codice, fase)}><i className="material-icons text-warning">assignment</i></td>
+                        <td className="text-center" style={{cursor: "pointer"}} onClick={() => goToAnagrafica(codice, fase)}><i className="material-icons text-warning">assignment</i></td>
                         <td>
                             <StatoProgress stato={fase}></StatoProgress>
                         </td>

@@ -16,16 +16,17 @@ const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)},
             toggleSwitch(!checked, value)
         }
     }
-    return (
+    return !isLocked || checked ? (
         <React.Fragment>
-            <div key={value}  className={classeNames('strt-switch','d-flex', 'direction-column', className)}>
+            <div key={value}  className={classeNames('strt-switch','d-flex', 'direction-column', className, {"mt-3": isLocked})}>
                 <span className="pr-3">{label}</span>
+                {!isLocked && (
                 <div  className="switch-label custom-control custom-switch">
                     <label  onClick={toggle} style={{cursor: isLocked ? 'not-allowed' : 'pointer'}} className={classeNames('custom-control-label', {checked})}></label>
-                </div>  
+                </div> ) } 
             </div>
             {children(checked)}
-        </React.Fragment>)
+        </React.Fragment>) : null
     }
 export default Switch
 

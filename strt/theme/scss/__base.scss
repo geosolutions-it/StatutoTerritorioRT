@@ -194,3 +194,9 @@ a {
         color: $gray-400;
     }
 }
+
+.serapide {
+    button.read-only.btn {
+        cursor: not-allowed
+    }
+}
