@@ -17,6 +17,8 @@ import graphene
 import traceback
 import django_filters
 
+from urllib.parse import urljoin
+
 from django.conf import settings
 
 from django.core.exceptions import ValidationError
@@ -134,6 +136,12 @@ class UserMessageType(DjangoObjectType):
 
 
 class RisorsaNode(DjangoObjectType):
+
+    download_url = graphene.String()
+
+    def resolve_download_url(self, info, **args):
+        _url = str(self.file)
+        return urljoin(settings.SITE_URL, _url[_url.index('media/'):])
 
     class Meta:
         model = Risorsa
