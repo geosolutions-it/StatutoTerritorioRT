@@ -56,8 +56,7 @@ class SingleFile extends React.PureComponent {
     render() {
         
         const {file} = this.state || {}
-        const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation, ownerID} = this.props
-        console.log(mutation, resourceMutation)
+        const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation} = this.props
         return  risorsa ? (<Resource codice={variables.codice} mutation={resourceMutation} resource={risorsa} isLocked={isLocked}/>) : (
             <div style={{minHeight: "3.813rem"}} className="d-flex justify-content-between border-top border-bottom align-items-center">
                 <FileLoader
@@ -69,7 +68,7 @@ class SingleFile extends React.PureComponent {
                     onAbort={this.removeFile}
                     renderChooser={(loading) => (
                         <FileChooser 
-                            disableBtn={    disabled || !!loading}
+                            isLocked={disabled || !!loading || isLocked}
                             multiple={false}
                             fileType="application/pdf"
                             onFilesChange={this.onFilesChange}

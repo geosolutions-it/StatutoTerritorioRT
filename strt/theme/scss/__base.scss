@@ -57,7 +57,12 @@
 .serapide-content {
     overflow: scroll;
 }
-.serapide {.tipo__{
+.serapide {
+    .pointer{
+        cursor: pointer;
+    }
+    .tipo__{
+    
     &option {
         font-size: 80%;
         border-bottom: 1px solid $gray-300;
@@ -171,4 +176,27 @@ a {
 .section-row {
     padding-left: 0px;
     padding-right: 0px;
+}
+
+.add-contact {
+    .ente-sel {
+        min-width: 200px
+    }
+    .form-control {
+        width: auto;
+        min-width: 200px
+    }
+    i{
+        cursor: pointer
+    }
+    i.disabled {
+        cursor: not-allowed;
+        color: $gray-400;
+    }
+}
+
+.serapide {
+    button.read-only.btn {
+        cursor: not-allowed
+    }
 }

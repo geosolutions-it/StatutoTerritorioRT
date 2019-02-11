@@ -22,10 +22,9 @@ class FileChooser extends React.Component {
       fileType: PropTypes.string,
       multiple: PropTypes.bool,
       showBtn: PropTypes.bool,
-      disableBtn: PropTypes.bool
+      isLocked: PropTypes.bool
     }
     static defaultProps = {
-      
       sz: "sm",
       modal: false,
       isOpen: false,
@@ -53,7 +52,8 @@ class FileChooser extends React.Component {
     getTitle = () => this.props.multiple ? "Trascina i Files qui" : "Trascina il File qui"
     getLabel = () => this.props.multiple ? "Seleziona i Files" : "Seleziona il File"
     renderChooser = () => (
-      <Dropzone onDrop={this.onDrop} accept={this.props.fileType} multiple={this.props.multiple}>
+      
+      <Dropzone disabled={this.props.isLocked} onDrop={this.onDrop} accept={this.props.fileType} multiple={this.props.multiple}>
         {({getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject,rejectedFiles = [],acceptedFiles =[]}) => {
           return (
             <div 
@@ -74,11 +74,12 @@ class FileChooser extends React.Component {
       </Dropzone>
     )
     render() {
-      const {modal, sz, isOpen, toggleOpen, showBtn, disableBtn} = this.props
+      const {modal, sz, isOpen, toggleOpen, showBtn, isLocked} = this.props
       const open = toggleOpen ? isOpen : this.state.isOpen
       if(modal && !open && showBtn) {
-        return (<Button disabled={disableBtn} color="warning" onClick={this.toggleOpen}>Upload</Button>)
+        return (<Button disabled={isLocked} color="warning" onClick={this.toggleOpen}>Upload</Button>)
       }
+      console.log(this.props.isLocked)
       const comp = this.renderChooser()
      return modal ? (
       <Modal toggle={this.toggleOpen} isOpen={open} centered size={`${sz === 'lg' ? 'md' : 'sm'}`} wrapClassName="serapide" autoFocus={true}>

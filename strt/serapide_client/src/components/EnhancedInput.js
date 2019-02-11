@@ -2,7 +2,6 @@
 
 import React from 'react'
 import {Input} from 'reactstrap'
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
 import {Mutation} from  "react-apollo"
 import { toast } from 'react-toastify'
@@ -20,7 +19,7 @@ const showError = (error, onError) => {
 }
 
 
-export default  ({mutation, value, update, selected, getInput = (val) => { return {variables: {input: {descrizione: val}}}}, ...mutationProps}) => {
+export default  ({disabled, mutation, value, update, selected, getInput = (val) => { return {variables: {input: {descrizione: val}}}}, ...mutationProps}) => {
     return (
         <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
             {(onChange, m_props) => {
@@ -29,7 +28,7 @@ export default  ({mutation, value, update, selected, getInput = (val) => { retur
                     debounced(onChange, getInput, value)
                 }
                 return (
-                <Input onChange={saveInput} type="textarea" name="text" defaultValue={value}/>
+                <Input disabled={disabled} onChange={saveInput} type="textarea" name="text" defaultValue={value}/>
                 )
             }}
         </Mutation>)
