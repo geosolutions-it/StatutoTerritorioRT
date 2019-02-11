@@ -103,7 +103,6 @@ def procedura_vas_is_valid(piano, procedura_vas):
                         piano.soggetti_sca.count() > 0
                 )
             elif procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
-                print("NON NECESSARIA")
                 return True
             else:
                 return False
