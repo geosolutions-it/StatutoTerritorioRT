@@ -120,5 +120,45 @@
       "description": "Responsabile ISIDE per l'ente Comune",
       "organization_type": "R"
     }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 8,
+    "fields": {
+      "code": "RO",
+      "name": "Read-Only",
+      "description": "Read-Only Users per l'ente Comune",
+      "organization_type": "C"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 9,
+    "fields": {
+      "code": "RO",
+      "name": "Read-Only",
+      "description": "Read-Only Users per l'ente Regione",
+      "organization_type": "R"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 10,
+    "fields": {
+      "code": "TMP",
+      "name": "Temporary",
+      "description": "Temporary Users per l'ente Comune",
+      "organization_type": "C"
+    }
+  },
+  {
+    "model": "strt_users.membershiptype",
+    "pk": 11,
+    "fields": {
+      "code": "TMP",
+      "name": "Temporary",
+      "description": "Temporary Users per l'ente Regione",
+      "organization_type": "R"
+    }
   }
 ]

@@ -16,10 +16,13 @@ from datetime import datetime
 import pytz
 from django.db import models
 from django.dispatch import receiver
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_delete, post_delete
 from django.utils.translation import ugettext_lazy as _
 
-from strt_users.models import AppUser, Organization
+from strt_users.models import (
+    AppUser,
+    Organization,
+)
 
 from .enums import (FASE,
                     TIPOLOGIA_CONTATTO,
@@ -336,6 +339,12 @@ class SoggettiSCA(models.Model):
 
     def __str__(self):
         return '{} <---> {}'.format(self.piano.codice, self.soggetto_sca.email)
+
+
+@receiver(post_delete, sender=Contatto)
+def delete_roles_and_users(sender, instance, **kwargs):
+    if instance.user is not None:
+        instance.user.delete()
 
 
 @receiver(pre_delete, sender=Piano)

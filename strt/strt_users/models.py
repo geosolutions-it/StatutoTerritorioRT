@@ -121,7 +121,8 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
 class Token(models.Model):
     """
-    An access token that is associated with a user.  This is essentially the same as the token model from Django REST Framework
+    An access token that is associated with a user.
+    This is essentially the same as the token model from Django REST Framework
     """
     key = models.CharField(max_length=40, primary_key=True)
     user = models.OneToOneField(AppUser, related_name="token", on_delete=models.CASCADE)

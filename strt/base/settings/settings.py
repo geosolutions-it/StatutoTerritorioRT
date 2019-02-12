@@ -75,8 +75,9 @@ NOTIFICATIONS_ENABLED = EnvUtil.get_env_var('NOTIFICATIONS_ENABLED', type=bool, 
 NOTIFICATIONS_MODULE = EnvUtil.get_env_var("NOTIFICATIONS_MODULE", default='pinax.notifications')
 
 if EMAIL_ENABLE:
+    # (media_id, backend, spam_sensitivity)
     PINAX_NOTIFICATIONS_BACKENDS = [
-        ('email', 'pinax.notifications.backends.email.EmailBackend'),
+        ('email', 'pinax.notifications.backends.email.EmailBackend', 0),
     ]
 PINAX_NOTIFICATIONS_HOOKSET = "pinax.notifications.hooks.DefaultHookSet"
 
@@ -196,6 +197,8 @@ AUTHENTICATION_BACKENDS = (
 
 RUP_CODE = EnvUtil.get_env_var('RUP_CODE', default='RUP')
 RESPONSABILE_ISIDE_CODE = EnvUtil.get_env_var('RESPONSABILE_ISIDE_CODE', default='RI')
+TEMP_USER_CODE = EnvUtil.get_env_var('TEMP_USER_CODE', default='TMP')
+READ_ONLY_USER_CODE = EnvUtil.get_env_var('READ_ONLY_USER_CODE', default='RO')
 DEFAULT_MUNICIPALITY = EnvUtil.get_env_var('DEFAULT_MUNICIPALITY', default='Firenze')
 
 # Internationalization

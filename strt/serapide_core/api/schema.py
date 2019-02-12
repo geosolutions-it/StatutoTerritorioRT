@@ -45,12 +45,17 @@ from strt_users.models import (
     AppUser,
     Organization,
     OrganizationType,
+    MembershipType,
+    UserMembership,
 )
 
 from serapide_core.helpers import (
     is_RUP,
     get_errors,
     update_create_instance,
+)
+from serapide_core.signals import (
+    piano_phase_changed,
 )
 from serapide_core.modello.models import (
     Fase,
@@ -649,6 +654,9 @@ class CreateContatto(relay.ClientIDMutation):
                 nuovo_contatto = update_create_instance(_contatto, _data)
 
                 if nuovo_contatto.user is None:
+                    # ####
+                    # Creating a Temporary User to be associate to this 'Contatto'
+                    # ###
                     first_name = nuovo_contatto.nome.split(' ')[0] if len(nuovo_contatto.nome.split(' ')) > 0 else nuovo_contatto.nome
                     last_name = nuovo_contatto.nome.split(' ')[1] if len(nuovo_contatto.nome.split(' ')) > 1 else nuovo_contatto.nome
                     fiscal_code = codicefiscale.encode(
@@ -669,6 +677,21 @@ class CreateContatto(relay.ClientIDMutation):
                             'is_active': True
                         }
                     )
+
+                    _new_role_type = MembershipType.objects.get(
+                        code=settings.TEMP_USER_CODE,
+                        organization_type=nuovo_contatto.ente.type
+                    )
+                    _new_role_name = '%s-%s-membership' % (fiscal_code, nuovo_contatto.ente.code)
+                    _new_role, created = UserMembership.objects.get_or_create(
+                        name=_new_role_name,
+                        defaults={
+                            'member': nuovo_contatto.user,
+                            'organization': nuovo_contatto.ente,
+                            'type': _new_role_type
+                        }
+                    )
+                    _new_role.save()
                     nuovo_contatto.save()
                 return cls(nuovo_contatto=nuovo_contatto)
             else:
@@ -1165,10 +1188,8 @@ class PromozionePiano(graphene.Mutation):
                 _next_fase = cls.get_next_phase(_piano.fase)
                 if rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=_next_fase), _piano, _procedura_vas):
                     _piano.fase = Fase.objects.get(nome=_next_fase)
-                    _piano.save()
-
-                    from .signals import piano_phase_changed
                     piano_phase_changed.send(sender=Piano, user=info.context.user, piano=_piano)
+                    _piano.save()
 
                     return PromozionePiano(
                         piano_aggiornato=_piano,
