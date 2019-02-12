@@ -489,6 +489,8 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
 
 class ProceduraVASMembershipFilter(django_filters.FilterSet):
 
+    piano__codice = django_filters.CharFilter(lookup_expr='iexact')
+
     class Meta:
         model = ProceduraVAS
         fields = '__all__'
