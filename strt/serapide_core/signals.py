@@ -9,13 +9,49 @@
 #
 #########################################################################
 
+from django.dispatch import Signal
+
 from .notifications_helper import send_now_notification
 
 
+# ############################################################################ #
+# Signals
+# ############################################################################ #
+"""
+e.g:
+    message_sent = Signal(providing_args=["message", "thread", "reply"])
+    ...
+    message_sent.send(sender=cls, message=msg, thread=thread, reply=True)
+"""
+piano_phase_changed = Signal(providing_args=["user", "piano", ])
+
+
+# ############################################################################ #
+# Signal Handlers
+# ############################################################################ #
 def message_sent_notification(sender, **kwargs):
+
     if 'message' in kwargs:
         message = kwargs['message']
         thread = kwargs['thread']
         reply = kwargs['reply']
-        users = list(thread.users.all())
-        send_now_notification(users, "message_sent", {"from_user": message.sender})
+        users = [u for u in thread.users.all() if u != message.sender]
+
+        send_now_notification(users,
+                              "message_sent",
+                              {
+                                "from_user": message.sender,
+                                "message": message,
+                                "thread": thread,
+                                "reply": reply
+                              })
+
+
+def piano_phase_changed_notification(sender, **kwargs):
+
+    if 'piano' in kwargs:
+        from_user = kwargs['user']
+        piano = kwargs['piano']
+
+        users = []
+        

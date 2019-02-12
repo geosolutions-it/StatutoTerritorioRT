@@ -126,6 +126,15 @@ class Contatto(models.Model):
         blank=False
     )
 
+    user = models.ForeignKey(
+        to=AppUser,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
     class Meta:
         db_table = "strt_core_contatto"
         verbose_name_plural = 'Contatti'

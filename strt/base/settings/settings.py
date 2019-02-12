@@ -196,6 +196,7 @@ AUTHENTICATION_BACKENDS = (
 
 RUP_CODE = EnvUtil.get_env_var('RUP_CODE', default='RUP')
 RESPONSABILE_ISIDE_CODE = EnvUtil.get_env_var('RESPONSABILE_ISIDE_CODE', default='RI')
+DEFAULT_MUNICIPALITY = EnvUtil.get_env_var('DEFAULT_MUNICIPALITY', default='Firenze')
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
