@@ -18,6 +18,7 @@ import traceback
 import django_filters
 
 from urllib.parse import urljoin
+from codicefiscale import codicefiscale
 
 from django.conf import settings
 
@@ -480,13 +481,29 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
                     if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
                         # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
                         continue
-                    # elif _m.type.code == settings.RUP_CODE:
-                    #     # RUP_CODE can access to all Piani
-                    #     _enti = Organization.objects.values_list('code', flat=True)
-                    #     break
                     else:
                         _enti.append(_m.organization.code)
+
         return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti)
+
+
+class ProceduraVASMembershipFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = ProceduraVAS
+        fields = '__all__'
+
+    @property
+    def qs(self):
+        # The query context can be found in self.request.
+        _enti = []
+        _memberships = None
+        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
+            _memberships = self.request.user.memberships
+            if _memberships:
+                _enti = [_m.organization.code for _m in _memberships.all()]
+
+        return super(ProceduraVASMembershipFilter, self).qs.filter(ente__code__in=_enti)
 
 
 # ##############################################################################
@@ -495,20 +512,19 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
 class Query(object):
 
     # Models
+    fasi = DjangoFilterConnectionField(FaseNode)
+
     utenti = DjangoFilterConnectionField(AppUserNode,
                                          filterset_class=UserMembershipFilter)
 
     enti = DjangoFilterConnectionField(EnteNode,
                                        filterset_class=EnteUserMembershipFilter)
 
-    fasi = DjangoFilterConnectionField(FaseNode)
-
-    risorse = DjangoFilterConnectionField(RisorsaNode)
-
     piani = DjangoFilterConnectionField(PianoNode,
                                         filterset_class=PianoUserMembershipFilter)
 
-    procedure_vas = DjangoFilterConnectionField(ProceduraVASNode)
+    procedure_vas = DjangoFilterConnectionField(ProceduraVASNode,
+                                                filterset_class=ProceduraVASMembershipFilter)
 
     contatti = DjangoFilterConnectionField(ContattoNode,
                                            filterset_class=EnteContattoMembershipFilter)
@@ -629,6 +645,29 @@ class CreateContatto(relay.ClientIDMutation):
                         _data['tipologia'] = _tipologia
                 _contatto = Contatto()
                 nuovo_contatto = update_create_instance(_contatto, _data)
+
+                if nuovo_contatto.user is None:
+                    first_name = nuovo_contatto.nome.split(' ')[0] if len(nuovo_contatto.nome.split(' ')) > 0 else nuovo_contatto.nome
+                    last_name = nuovo_contatto.nome.split(' ')[1] if len(nuovo_contatto.nome.split(' ')) > 1 else nuovo_contatto.nome
+                    fiscal_code = codicefiscale.encode(
+                        surname=last_name,
+                        name=first_name,
+                        sex='M',
+                        birthdate=f"{datetime.datetime.now():%m/%d/%Y}",
+                        birthplace=nuovo_contatto.ente.name if nuovo_contatto.ente.type.code == 'C' else settings.DEFAULT_MUNICIPALITY
+                    )
+
+                    nuovo_contatto.user, created = AppUser.objects.get_or_create(
+                        fiscal_code=fiscal_code,
+                        defaults={
+                            'first_name': first_name,
+                            'last_name': last_name,
+                            'email': nuovo_contatto.email,
+                            'is_staff': False,
+                            'is_active': True
+                        }
+                    )
+                    nuovo_contatto.save()
                 return cls(nuovo_contatto=nuovo_contatto)
             else:
                 return GraphQLError(_("Forbidden"), code=403)
@@ -1125,6 +1164,9 @@ class PromozionePiano(graphene.Mutation):
                 if rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=_next_fase), _piano, _procedura_vas):
                     _piano.fase = Fase.objects.get(nome=_next_fase)
                     _piano.save()
+
+                    from .signals import piano_phase_changed
+                    piano_phase_changed.send(sender=Piano, user=info.context.user, piano=_piano)
 
                     return PromozionePiano(
                         piano_aggiornato=_piano,

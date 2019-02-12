@@ -7390,6 +7390,9 @@ a.text-dark:hover, a.text-dark:focus {
 .serapide-content {
   overflow: scroll; }
 
+.serapide .pointer {
+  cursor: pointer; }
+
 .serapide .tipo__option {
   font-size: 80%;
   border-bottom: 1px solid #dee2e6; }
@@ -7489,5 +7492,22 @@ a {
 .section-row {
   padding-left: 0px;
   padding-right: 0px; }
+
+.add-contact .ente-sel {
+  min-width: 200px; }
+
+.add-contact .form-control {
+  width: auto;
+  min-width: 200px; }
+
+.add-contact i {
+  cursor: pointer; }
+
+.add-contact i.disabled {
+  cursor: not-allowed;
+  color: #ced4da; }
+
+.serapide button.read-only.btn {
+  cursor: not-allowed; }
 
 /*# sourceMappingURL=serapide.css.map */
