@@ -54,4 +54,20 @@ def piano_phase_changed_notification(sender, **kwargs):
         piano = kwargs['piano']
 
         users = []
-        
+        if piano.soggetto_proponente:
+            users.append(piano.soggetto_proponente.user)
+
+        if piano.autorita_competente_vas:
+            for _c in piano.autorita_competente_vas.all():
+                users.append(_c.user)
+
+        if piano.soggetti_sca:
+            for _c in piano.soggetti_sca.all():
+                users.append(_c.user)
+
+        send_now_notification(users,
+                              "piano_phase_changed",
+                              {
+                                "user": from_user,
+                                "piano": piano
+                              })
