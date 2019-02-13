@@ -489,7 +489,11 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
                     else:
                         _enti.append(_m.organization.code)
 
-        return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti)
+        token = self.request.session.get('token', None)
+        if token:
+            return super(PianoUserMembershipFilter, self).qs.none()
+        else:
+            return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti)
 
 
 class ProceduraVASMembershipFilter(django_filters.FilterSet):

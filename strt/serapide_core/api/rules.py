@@ -41,7 +41,7 @@ rules.add_rule(
 
 rules.add_rule(
     'strt_core.api.can_edit_piano',
-    is_RUP & user.can_access_piano
+    user.can_access_piano & is_RUP
 )
 
 rules.add_rule(

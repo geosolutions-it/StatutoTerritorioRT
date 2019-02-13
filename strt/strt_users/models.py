@@ -10,16 +10,23 @@
 #########################################################################
 
 import os
+import logging
 import binascii
+import traceback
 
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, AbstractUser
 )
+from django.contrib.auth.signals import user_logged_in, user_logged_out
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from .managers import AppUserManager
 from django_currentuser.db.models import CurrentUserField
+
+from .managers import AppUserManager
+
+logger = logging.getLogger(__name__)
 
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
@@ -127,6 +134,7 @@ class Token(models.Model):
     key = models.CharField(max_length=40, primary_key=True)
     user = models.OneToOneField(AppUser, related_name="token", on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
+    expires = models.DateTimeField()
 
     def save(self, *args, **kwargs):
         if not self.key:
@@ -135,6 +143,15 @@ class Token(models.Model):
 
     def generate_key(self):
         return binascii.hexlify(os.urandom(20)).decode()
+
+    def is_expired(self):
+        """
+        Check token expiration with timezone awareness
+        """
+        if not self.expires:
+            return True
+
+        return timezone.now() >= self.expires
 
     def __unicode__(self):
         return self.key
@@ -266,3 +283,32 @@ class UserMembership(models.Model):
 
     def __str__(self):
         return self.name
+
+
+def do_login(sender, user, request, **kwargs):
+    if user and user.is_authenticated:
+        token = None
+        try:
+            token = request.GET.get('token', None)
+
+            if token is None:
+                auth_header = request.META.get('HTTP_AUTHORIZATION', b'').split()
+                if auth_header and auth_header[0].lower() == b'token':
+                    if len(auth_header) == 2:
+                        token = auth_header[1]
+        except BaseException:
+            tb = traceback.format_exc()
+            logger.debug(tb)
+
+        if token:
+            request.session['token'] = token
+
+
+def do_logout(sender, user, request, **kwargs):
+    if 'token' in request.session:
+        del request.session['access_token']
+        request.session.modified = True
+
+
+user_logged_in.connect(do_login)
+user_logged_out.connect(do_logout)
