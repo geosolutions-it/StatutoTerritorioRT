@@ -644,7 +644,7 @@ class CreateContatto(relay.ClientIDMutation):
                 _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
                 _data['ente'] = _ente
 
-            if rules.test_rule('strt_users.is_RUP_of', info.context.user, _data['ente']):
+            if info.context.user and rules.test_rule('strt_users.is_RUP_of', info.context.user, _data['ente']):
                 # Tipologia (M)
                 if 'tipologia' in _data:
                     _tipologia = _data.pop('tipologia')
@@ -711,18 +711,19 @@ class DeleteContatto(graphene.Mutation):
     uuid =  graphene.ID()
 
     def mutate(self, info, **input):
-        if is_RUP(info.context.user):
-            # Fetching input arguments
-            _id = input['uuid']
-            try:
-                _contatto = Contatto.objects.get(uuid=_id)
-                _contatto.delete()
+        if info.context.user and rules.test_rule('strt_users.can_access_private_area', info.context.user) and \
+            is_RUP(info.context.user):
+                # Fetching input arguments
+                _id = input['uuid']
+                try:
+                    _contatto = Contatto.objects.get(uuid=_id)
+                    _contatto.delete()
 
-                return DeleteContatto(success=True, uuid=_id)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+                    return DeleteContatto(success=True, uuid=_id)
+                except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
 
         return DeleteContatto(success=False)
 
@@ -742,7 +743,7 @@ class CreatePiano(relay.ClientIDMutation):
             _data = _piano_data.pop('ente')
             _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
             _piano_data['ente'] = _ente
-            if rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente):
+            if info.context.user and rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente):
                 # Codice (M)
                 if 'codice' in _piano_data:
                     _data = _piano_data.pop('codice')
@@ -794,13 +795,27 @@ class UpdatePiano(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
         _piano_data = input.get('piano_operativo')
-        if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
+                # Codice Piano (M)
                 if 'codice' in _piano_data:
                     _piano_data.pop('codice')
                     # This cannot be changed
+                # Data Accettazione (M)
                 if 'data_creazione' in _piano_data:
                     _piano_data.pop('data_creazione')
+                    # This cannot be changed
+                # Data Accettazione (O)
+                if 'data_accettazione' in _piano_data:
+                    _piano_data.pop('data_accettazione')
+                    # This cannot be changed
+                # Data Avvio (O)
+                if 'data_avvio' in _piano_data:
+                    _piano_data.pop('data_avvio')
+                    # This cannot be changed
+                # Data Approvazione (O)
+                if 'data_approvazione' in _piano_data:
+                    _piano_data.pop('data_approvazione')
                     # This cannot be changed
                 # Ente (M)
                 if 'ente' in _piano_data:
@@ -814,48 +829,67 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'tipologia' in _piano_data:
                     _piano_data.pop('tipologia')
                     # This cannot be changed
+
+                # ############################################################ #
+                # Editable fields - consistency checks
+                # ############################################################ #
                 # Descrizione (O)
                 if 'descrizione' in _piano_data:
                     _data = _piano_data.pop('descrizione')
-                    _piano.descrizione = _data[0]
-                # SoggettoProponente (O)
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        _piano.descrizione = _data[0]
+
+                # Data Delibera (O)
+                if 'data_delibera' in _piano_data:
+                    if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        _piano_data.pop('data_delibera')
+                        # This cannot be changed
+
+                # Soggetto Proponente (O)
                 if 'soggetto_proponente_uuid' in _piano_data:
                     _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
-                    if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
-                        _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
-                        _piano.soggetto_proponente = _soggetto_proponente
-                    else:
-                        _piano.soggetto_proponente = None
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
+                            _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
+                            _piano.soggetto_proponente = _soggetto_proponente
+                        else:
+                            _piano.soggetto_proponente = None
+
+                # Autorità Competente VAS (O)
                 if 'autorita_competente_vas' in _piano_data:
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
-                    if _autorita_competente_vas and len(_autorita_competente_vas) > 0:
-                        _autorita_competenti = []
-                        for _contatto_uuid in _autorita_competente_vas:
-                            _autorita_competenti.append(AutoritaCompetenteVAS(
-                                piano=_piano,
-                                autorita_competente=Contatto.objects.get(uuid=_contatto_uuid)
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        if _autorita_competente_vas and len(_autorita_competente_vas) > 0:
+                            _autorita_competenti = []
+                            for _contatto_uuid in _autorita_competente_vas:
+                                _autorita_competenti.append(AutoritaCompetenteVAS(
+                                    piano=_piano,
+                                    autorita_competente=Contatto.objects.get(uuid=_contatto_uuid)
+                                    )
                                 )
-                            )
-                        _piano.autorita_competente_vas.clear()
-                        for _ac in _autorita_competenti:
-                            _ac.save()
-                    else:
-                        _piano.autorita_competente_vas.clear()
+                            _piano.autorita_competente_vas.clear()
+                            for _ac in _autorita_competenti:
+                                _ac.save()
+                        else:
+                            _piano.autorita_competente_vas.clear()
+
+                # Soggetti SCA (O)
                 if 'soggetti_sca' in _piano_data:
                     _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
-                    if _soggetti_sca_uuid and len(_soggetti_sca_uuid) > 0:
-                        _soggetti_sca = []
-                        for _contatto_uuid in _soggetti_sca_uuid:
-                            _soggetti_sca.append(SoggettiSCA(
-                                piano=_piano,
-                                soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid)
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        if _soggetti_sca_uuid and len(_soggetti_sca_uuid) > 0:
+                            _soggetti_sca = []
+                            for _contatto_uuid in _soggetti_sca_uuid:
+                                _soggetti_sca.append(SoggettiSCA(
+                                    piano=_piano,
+                                    soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid)
+                                    )
                                 )
-                            )
-                        _piano.soggetti_sca.clear()
-                        for _sca in _soggetti_sca:
-                            _sca.save()
-                    else:
-                        _piano.soggetti_sca.clear()
+                            _piano.soggetti_sca.clear()
+                            for _sca in _soggetti_sca:
+                                _sca.save()
+                        else:
+                            _piano.soggetti_sca.clear()
                 piano_aggiornato = update_create_instance(_piano, _piano_data)
                 return cls(piano_aggiornato=piano_aggiornato)
             except BaseException as e:
@@ -878,7 +912,7 @@ class CreateProceduraVAS(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas_data = input.get('procedura_vas')
-        if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 # ProceduraVAS (M)
                 _procedura_vas_data['piano'] = _piano
@@ -919,7 +953,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # This cannot be changed
             _procedura_vas_data.pop('piano')
         _piano = _procedura_vas.piano
-        if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 if 'uuid' in _procedura_vas_data:
                     _procedura_vas_data.pop('uuid')
@@ -1006,7 +1040,7 @@ class UploadFile(UploadBaseBase):
 
     @classmethod
     def mutate(cls, root, info, file, **input):
-        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _codice_piano = input['codice']
             _tipo_file = input['tipo_file']
@@ -1045,7 +1079,7 @@ class UploadRisorsaVAS(UploadBaseBase):
 
     @classmethod
     def mutate(cls, root, info, file, **input):
-        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _uuid_vas = input['codice']
             _tipo_file = input['tipo_file']
@@ -1112,7 +1146,7 @@ class DeleteRisorsa(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']
             _codice_piano = input['codice']
@@ -1141,7 +1175,7 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
             # Fetching input arguments
             _id = input['risorsa_id']
             _uuid_vas = input['codice']
@@ -1183,7 +1217,7 @@ class PromozionePiano(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
-        if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 _next_fase = cls.get_next_phase(_piano.fase)
                 if rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=_next_fase), _piano, _procedura_vas):

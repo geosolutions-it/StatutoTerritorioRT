@@ -79,5 +79,5 @@ rules.add_rule(
 
 rules.add_rule(
     'strt_users.is_RUP_of',
-    is_RUP & is_member_of
+    is_recognizable & is_RUP & is_member_of
 )
