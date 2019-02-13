@@ -23,6 +23,7 @@ from codicefiscale import codicefiscale
 from django.conf import settings
 
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from django.core.files.storage import default_storage
@@ -47,6 +48,7 @@ from strt_users.models import (
     OrganizationType,
     MembershipType,
     UserMembership,
+    Token,
 )
 
 from serapide_core.helpers import (
@@ -66,6 +68,7 @@ from serapide_core.modello.models import (
     FasePianoStorico,
     RisorsePiano, RisorseVas,
     AutoritaCompetenteVAS, SoggettiSCA,
+    PianoAuthTokens,
 )
 from serapide_core.modello.enums import (
     FASE,
@@ -491,7 +494,8 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
 
         token = self.request.session.get('token', None)
         if token:
-            return super(PianoUserMembershipFilter, self).qs.none()
+            _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
+            return super(PianoUserMembershipFilter, self).qs.filter(codice__in=_allowed_pianos)
         else:
             return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti)
 
@@ -695,6 +699,7 @@ class CreateContatto(relay.ClientIDMutation):
                             'type': _new_role_type
                         }
                     )
+
                     _new_role.save()
                     nuovo_contatto.save()
                 return cls(nuovo_contatto=nuovo_contatto)
@@ -795,6 +800,43 @@ class UpdatePiano(relay.ClientIDMutation):
     errors = graphene.List(graphene.String)
     piano_aggiornato = graphene.Field(PianoNode)
 
+    @staticmethod
+    def make_token_expiration(days=365):
+        _expire_days = getattr(settings, 'TOKEN_EXPIRE_DAYS', days)
+        _expire_time = datetime.datetime.now(timezone.get_current_timezone())
+        _expire_delta = datetime.timedelta(days=_expire_days)
+        return _expire_time + _expire_delta
+
+    @staticmethod
+    def get_or_create_token(user, piano):
+        _allowed_tokens = Token.objects.filter(user=user)
+        _auth_token = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
+        if not _auth_token:
+            _token_key = Token.generate_key()
+            _new_token, created = Token.objects.get_or_create(
+                key=_token_key,
+                defaults={
+                    'user': user,
+                    'expires': UpdatePiano.make_token_expiration()
+                }
+            )
+
+            _auth_token, created = PianoAuthTokens.objects.get_or_create(
+                piano=piano,
+                token=_new_token
+            )
+
+            _new_token.save()
+            _auth_token.save()
+
+    @staticmethod
+    def delete_token(user, piano):
+        _allowed_tokens = Token.objects.filter(user=user)
+        _auth_tokens = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
+        for _at in _auth_tokens:
+            _at.token.delete()
+        _auth_tokens.delete()
+
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
@@ -853,47 +895,59 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'soggetto_proponente_uuid' in _piano_data:
                     _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        if _piano.soggetto_proponente:
+                            UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
+                            _piano.soggetto_proponente = None
+
                         if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
                             _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
+                            UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano)
                             _piano.soggetto_proponente = _soggetto_proponente
-                        else:
-                            _piano.soggetto_proponente = None
 
                 # Autorità Competente VAS (O)
                 if 'autorita_competente_vas' in _piano_data:
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-                        if _autorita_competente_vas and len(_autorita_competente_vas) > 0:
-                            _autorita_competenti = []
-                            for _contatto_uuid in _autorita_competente_vas:
-                                _autorita_competenti.append(AutoritaCompetenteVAS(
-                                    piano=_piano,
-                                    autorita_competente=Contatto.objects.get(uuid=_contatto_uuid)
+                        if _autorita_competente_vas:
+                            for _ac in _piano.autorita_competente_vas.all():
+                                UpdatePiano.delete_token(_ac.user, _piano)
+                            _piano.autorita_competente_vas.clear()
+
+                            if len(_autorita_competente_vas) > 0:
+                                _autorita_competenti = []
+                                for _contatto_uuid in _autorita_competente_vas:
+                                    _autorita_competenti.append(AutoritaCompetenteVAS(
+                                        piano=_piano,
+                                        autorita_competente=Contatto.objects.get(uuid=_contatto_uuid)
+                                        )
                                     )
-                                )
-                            _piano.autorita_competente_vas.clear()
-                            for _ac in _autorita_competenti:
-                                _ac.save()
-                        else:
-                            _piano.autorita_competente_vas.clear()
+
+                                for _ac in _autorita_competenti:
+                                    UpdatePiano.get_or_create_token(_ac.autorita_competente.user, _piano)
+                                    _ac.save()
 
                 # Soggetti SCA (O)
                 if 'soggetti_sca' in _piano_data:
                     _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-                        if _soggetti_sca_uuid and len(_soggetti_sca_uuid) > 0:
-                            _soggetti_sca = []
-                            for _contatto_uuid in _soggetti_sca_uuid:
-                                _soggetti_sca.append(SoggettiSCA(
-                                    piano=_piano,
-                                    soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid)
+                        if _soggetti_sca_uuid:
+                            for _sca in _piano.soggetti_sca.all():
+                                UpdatePiano.delete_token(_sca.user, _piano)
+                            _piano.soggetti_sca.clear()
+
+                            if len(_soggetti_sca_uuid) > 0:
+                                _soggetti_sca = []
+                                for _contatto_uuid in _soggetti_sca_uuid:
+                                    _soggetti_sca.append(SoggettiSCA(
+                                        piano=_piano,
+                                        soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid)
+                                        )
                                     )
-                                )
-                            _piano.soggetti_sca.clear()
-                            for _sca in _soggetti_sca:
-                                _sca.save()
-                        else:
-                            _piano.soggetti_sca.clear()
+
+                                for _sca in _soggetti_sca:
+                                    UpdatePiano.get_or_create_token(_sca.soggetto_sca.user, _piano)
+                                    _sca.save()
+
                 piano_aggiornato = update_create_instance(_piano, _piano_data)
                 return cls(piano_aggiornato=piano_aggiornato)
             except BaseException as e:

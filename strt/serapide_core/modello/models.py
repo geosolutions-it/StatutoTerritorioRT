@@ -22,6 +22,7 @@ from django.utils.translation import ugettext_lazy as _
 from strt_users.models import (
     AppUser,
     Organization,
+    Token,
 )
 
 from .enums import (FASE,
@@ -341,6 +342,21 @@ class SoggettiSCA(models.Model):
         return '{} <---> {}'.format(self.piano.codice, self.soggetto_sca.email)
 
 
+class PianoAuthTokens(models.Model):
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+    token = models.ForeignKey(Token, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_piano_auth_tokens"
+        unique_together = ('piano', 'token')
+
+    def __str__(self):
+        return '{} <---> {}'.format(self.piano.codice, self.token.key)
+
+
+# ############################################################################ #
+# Model Signals
+# ############################################################################ #
 @receiver(post_delete, sender=Contatto)
 def delete_roles_and_users(sender, instance, **kwargs):
     if instance.user is not None:
