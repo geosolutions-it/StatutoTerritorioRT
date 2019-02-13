@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='token',
             name='expires',
-            field=models.DateTimeField(default=timezone.now),
+            field=models.DateTimeField(default=django.utils.timezone.now),
             preserve_default=False,
         ),
     ]
