@@ -36,7 +36,7 @@ class StrtPortalAuthentication:
             try:
                 t = Token.objects.get(key=token)
 
-                if self.user_can_authenticate(t.user):
+                if not t.is_expired() and self.user_can_authenticate(t.user):
                     return t.user
             except Token.DoesNotExist:
                 return None
