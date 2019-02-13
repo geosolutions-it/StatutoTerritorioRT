@@ -18,9 +18,9 @@ from strt_users.rules import (
 )
 
 from .auth import (
-    user,
-    piano,
-    vas
+    user as user_rules,
+    piano as piano_rules,
+    vas as vas_rules
 )
 
 
@@ -41,17 +41,17 @@ rules.add_rule(
 
 rules.add_rule(
     'strt_core.api.can_edit_piano',
-    user.can_access_piano & is_RUP
+    user_rules.can_access_piano & is_RUP
 )
 
 rules.add_rule(
     'strt_core.api.can_update_piano',
-    user.can_access_piano & piano.is_draft
+    user_rules.can_access_piano & piano_rules.is_draft
 )
 
 rules.add_rule(
     'strt_core.api.fase_anagrafica_completa',
-    piano.is_draft & piano.has_data_delibera & piano.has_description & \
-        piano.has_delibera_comunale & piano.has_soggetto_proponente & \
-            piano.has_procedura_vas & vas.procedura_vas_is_valid
+    piano_rules.is_draft & piano_rules.has_data_delibera & piano_rules.has_description & \
+        piano_rules.has_delibera_comunale & piano_rules.has_soggetto_proponente & \
+            piano_rules.has_procedura_vas & vas_rules.procedura_vas_is_valid
 )

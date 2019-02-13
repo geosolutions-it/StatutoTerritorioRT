@@ -132,7 +132,7 @@ class Token(models.Model):
     This is essentially the same as the token model from Django REST Framework
     """
     key = models.CharField(max_length=40, primary_key=True)
-    user = models.OneToOneField(AppUser, related_name="token", on_delete=models.CASCADE)
+    user = models.ForeignKey(AppUser, related_name="token", on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     expires = models.DateTimeField()
 
@@ -141,7 +141,8 @@ class Token(models.Model):
             self.key = self.generate_key()
         return super(Token, self).save(*args, **kwargs)
 
-    def generate_key(self):
+    @classmethod
+    def generate_key(cls):
         return binascii.hexlify(os.urandom(20)).decode()
 
     def is_expired(self):
@@ -285,6 +286,9 @@ class UserMembership(models.Model):
         return self.name
 
 
+# ############################################################################ #
+# Model Signals
+# ############################################################################ #
 def do_login(sender, user, request, **kwargs):
     if user and user.is_authenticated:
         token = None
@@ -306,7 +310,7 @@ def do_login(sender, user, request, **kwargs):
 
 def do_logout(sender, user, request, **kwargs):
     if 'token' in request.session:
-        del request.session['access_token']
+        del request.session['token']
         request.session.modified = True
 
 

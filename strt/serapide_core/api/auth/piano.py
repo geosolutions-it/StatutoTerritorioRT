@@ -20,7 +20,7 @@ from serapide_core.modello.models import ProceduraVAS
 # Piano
 # ############################################################################ #
 @rules.predicate
-def is_draft(piano):
+def is_draft(user, piano):
     return piano.fase.nome == FASE.draft
 
 

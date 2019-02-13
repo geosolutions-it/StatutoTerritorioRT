@@ -195,6 +195,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+TOKEN_EXPIRE_DAYS = 60
+
 RUP_CODE = EnvUtil.get_env_var('RUP_CODE', default='RUP')
 RESPONSABILE_ISIDE_CODE = EnvUtil.get_env_var('RESPONSABILE_ISIDE_CODE', default='RI')
 TEMP_USER_CODE = EnvUtil.get_env_var('TEMP_USER_CODE', default='TMP')

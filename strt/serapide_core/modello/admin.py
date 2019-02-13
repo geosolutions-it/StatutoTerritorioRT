@@ -11,12 +11,16 @@
 
 from django.contrib import admin
 
-from .models import (Fase,
-                     Risorsa,
-                     Contatto,
-                     Piano, RisorsePiano,
-                     ProceduraVAS, RisorseVas,
-                     AutoritaCompetenteVAS, SoggettiSCA)
+from .models import (
+    Fase,
+    Risorsa,
+    Contatto,
+    Piano, RisorsePiano,
+    ProceduraVAS, RisorseVas,
+    AutoritaCompetenteVAS, SoggettiSCA,
+    PianoAuthTokens,
+)
+
 
 class RisorsePianoInline(admin.TabularInline):
     model = RisorsePiano
@@ -34,8 +38,15 @@ class SoggettiSCAInline(admin.TabularInline):
     model = SoggettiSCA
 
 
+class TokensInline(admin.TabularInline):
+    model = PianoAuthTokens
+
+
 class PianoAdmin(admin.ModelAdmin):
-    inlines = [RisorsePianoInline, AutoritaCompetenteVASInline, SoggettiSCAInline]
+    inlines = [RisorsePianoInline,
+               AutoritaCompetenteVASInline,
+               SoggettiSCAInline,
+               TokensInline, ]
 
 
 class ProceduraVASAdmin(admin.ModelAdmin):
