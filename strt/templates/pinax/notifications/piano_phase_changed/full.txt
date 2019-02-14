@@ -1,0 +1,9 @@
+{% autoescape off %}{% load i18n %}Gentile {{ recipient }},
+Le notifichiamo che il piano {{ piano.tipologia }} "{{ piano.codice }}" è stato promosso alla fase "{{ piano.fase.descrizione }}" dall'utente {{ user }}.
+
+{% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:
+{{ default_http_protocol }}://{{ current_site }}?token={{ t.key }}
+
+ATTENZIONE: Il token di accesso a lei assegnato, è personalizzato ed ha validità fino a data: {{ t.expires }}.
+Conservare il token di accesso segreto e non condividere il link generato con alcuno.{% endif %}{% endfor %}
+{% endautoescape %}

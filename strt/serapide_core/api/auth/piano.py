@@ -13,15 +13,20 @@ import os
 import rules
 
 from serapide_core.modello.enums import FASE
-from serapide_core.modello.models import ProceduraVAS
+from serapide_core.modello.models import Piano, ProceduraVAS
 
 
 # ############################################################################ #
 # Piano
 # ############################################################################ #
 @rules.predicate
-def is_draft(user, piano):
-    return piano.fase.nome == FASE.draft
+def is_draft(user, obj):
+    if isinstance(obj, Piano):
+        return obj.fase.nome == FASE.draft
+    elif isinstance(obj, ProceduraVAS):
+        return obj.piano.fase.nome == FASE.draft
+    else:
+        return False
 
 
 @rules.predicate
