@@ -10,7 +10,7 @@
 #########################################################################
 
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.admin import UserAdmin
 from .models import (AppUser, Token,
                      Organization, OrganizationType,
                      UserMembership, MembershipType)

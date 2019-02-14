@@ -37,7 +37,7 @@ class Util(object):
             try:
                 integerNum = int(float(s))
                 return integerNum
-            except:
+            except BaseException:
                 pass
         elif default is not None and type(default) == int:
             return default
@@ -48,7 +48,7 @@ class Util(object):
             try:
                 floatNum = float(s)
                 return floatNum
-            except:
+            except BaseException:
                 pass
         elif default is not None and type(default) == float:
             return default
@@ -58,7 +58,7 @@ class Util(object):
         if s:
             try:
                 return [item for item in s.split(separator)]
-            except:
+            except BaseException:
                 pass
         elif default is not None and type(default) == list:
             return default

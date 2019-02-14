@@ -12,8 +12,6 @@
 from django.http import HttpResponseBadRequest
 from django.contrib import auth
 
-from strt_users.models import Token
-
 
 class TokenMiddleware(object):
     """

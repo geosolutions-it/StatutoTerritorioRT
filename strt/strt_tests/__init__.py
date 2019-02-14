@@ -9,8 +9,6 @@
 #
 #########################################################################
 
-import pkg_resources
-
 from pkgutil import extend_path
 
 

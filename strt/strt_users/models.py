@@ -94,13 +94,13 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         if self.first_name and self.last_name:
-            return f'{self.last_name.title()} {self.first_name.title()}'
+            return f'{self.last_name.title()} {self.first_name.title()}'  # noqa
         else:
             return self.fiscal_code.upper()
 
     def get_full_name(self):
         if self.first_name and self.last_name:
-            return f'{self.last_name.title()} {self.first_name.title()}'
+            return f'{self.last_name.title()} {self.first_name.title()}'  # noqa
         else:
             return self.fiscal_code.upper()
 

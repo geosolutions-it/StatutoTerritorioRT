@@ -144,7 +144,8 @@ class Contatto(models.Model):
         verbose_name_plural = 'Contatti'
 
     def __str__(self):
-        return '{} <{}> - {} [{}] - {}'.format(self.nome, self.email, self.ente, self.uuid, TIPOLOGIA_CONTATTO[self.tipologia])
+        return '{} <{}> - {} [{}] - {}'.format(
+            self.nome, self.email, self.ente, self.uuid, TIPOLOGIA_CONTATTO[self.tipologia])
 
 
 class Piano(models.Model):
@@ -332,7 +333,7 @@ class AutoritaCompetenteVAS(models.Model):
 
 
 class SoggettiSCA(models.Model):
-    soggetto_sca= models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+    soggetto_sca = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
 
     class Meta:

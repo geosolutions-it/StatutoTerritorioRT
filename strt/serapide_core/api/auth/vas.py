@@ -29,21 +29,21 @@ def procedura_vas_is_valid(piano, procedura_vas):
                 if procedura_vas.risorse.filter(tipo='vas_semplificata').count() == 1 and \
                     procedura_vas.risorse.get(tipo='vas_semplificata').dimensione > 0 and \
                         procedura_vas.risorse.get(tipo='vas_semplificata').file and \
-                            os.path.exists(procedura_vas.risorse.get(tipo='vas_semplificata').file.path):
-                                return True
+                        os.path.exists(procedura_vas.risorse.get(tipo='vas_semplificata').file.path):
+                            return True
                 return False
             elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
                 if procedura_vas.risorse.filter(tipo='vas_verifica').count() > 0:
                     return procedura_vas.risorse.filter(tipo='vas_verifica').count() > 0 and \
-                        all(
-                            r.dimensione > 0 and r.file and os.path.exists(r.file.path)
-                            for r in procedura_vas.risorse.filter(tipo='vas_verifica')
-                        )
+                    all(
+                        r.dimensione > 0 and r.file and os.path.exists(r.file.path)
+                        for r in procedura_vas.risorse.filter(tipo='vas_verifica')
+                    )
                 return False
             elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
                 return (
-                    piano.autorita_competente_vas.count() > 0 and \
-                        piano.soggetti_sca.count() > 0
+                    piano.autorita_competente_vas.count() > 0 and
+                    piano.soggetti_sca.count() > 0
                 )
             elif procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
                 return True
