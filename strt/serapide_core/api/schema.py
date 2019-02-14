@@ -673,8 +673,8 @@ class CreateContatto(relay.ClientIDMutation):
                         surname=last_name,
                         name=first_name,
                         sex='M',
-                        birthdate=f"{datetime.datetime.now():%m/%d/%Y}",  # noqa
-                        birthplace=nuovo_contatto.ente.name if nuovo_contatto.ente.type.code == 'C' \
+                        birthdate=datetime.datetime.now().strftime('%m/%d/%Y'),
+                        birthplace=nuovo_contatto.ente.name if nuovo_contatto.ente.type.code == 'C'
                             else settings.DEFAULT_MUNICIPALITY
                     )
 
@@ -1081,7 +1081,7 @@ class UploadBaseBase(graphene.Mutation):
                         fase)
                     _risorsa.save()
                     resources.append(_risorsa)
-                    _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
+                    # _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
                     # Remove original uploaded/temporary file
                     os.remove(_destination.name)
         return resources

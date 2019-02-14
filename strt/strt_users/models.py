@@ -17,7 +17,7 @@ import traceback
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import (
-    AbstractBaseUser, PermissionsMixin, AbstractUser
+    AbstractBaseUser, PermissionsMixin
 )
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.utils import timezone
@@ -94,13 +94,13 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         if self.first_name and self.last_name:
-            return f'{self.last_name.title()} {self.first_name.title()}'  # noqa
+            return "{} {}".format(self.last_name.title(), self.first_name.title())
         else:
             return self.fiscal_code.upper()
 
     def get_full_name(self):
         if self.first_name and self.last_name:
-            return f'{self.last_name.title()} {self.first_name.title()}'  # noqa
+            return "{} {}".format(self.last_name.title(), self.first_name.title())
         else:
             return self.fiscal_code.upper()
 
