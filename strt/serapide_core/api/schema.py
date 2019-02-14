@@ -681,8 +681,8 @@ class CreateContatto(relay.ClientIDMutation):
                     nuovo_contatto.user, created = AppUser.objects.get_or_create(
                         fiscal_code=fiscal_code,
                         defaults={
-                            'first_name': first_name,
-                            'last_name': last_name,
+                            'first_name': nuovo_contatto.nome,
+                            'last_name': None,
                             'email': nuovo_contatto.email,
                             'is_staff': False,
                             'is_active': True
@@ -844,7 +844,9 @@ class UpdatePiano(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
         _piano_data = input.get('piano_operativo')
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
             try:
                 # Codice Piano (M)
                 if 'codice' in _piano_data:
@@ -971,7 +973,9 @@ class CreateProceduraVAS(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas_data = input.get('procedura_vas')
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
             try:
                 # ProceduraVAS (M)
                 _procedura_vas_data['piano'] = _piano
@@ -1012,7 +1016,9 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # This cannot be changed
             _procedura_vas_data.pop('piano')
         _piano = _procedura_vas.piano
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
             try:
                 if 'uuid' in _procedura_vas_data:
                     _procedura_vas_data.pop('uuid')
@@ -1107,7 +1113,8 @@ class UploadFile(UploadBaseBase):
             try:
                 # Validating 'Piano'
                 _piano = Piano.objects.get(codice=_codice_piano)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
                     _resources = UploadBaseBase.handle_uploaded_data(
                         file,
                         _codice_piano,
@@ -1146,7 +1153,8 @@ class UploadRisorsaVAS(UploadBaseBase):
             try:
                 # Validating 'Procedura VAS'
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano) and \
+                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _procedura_vas.piano):
                     _resources = UploadBaseBase.handle_uploaded_data(
                         file,
                         _uuid_vas,
@@ -1212,7 +1220,8 @@ class DeleteRisorsa(DeleteRisorsaBase):
             # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _piano = Piano.objects.get(codice=_codice_piano)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsa(piano_aggiornato=_piano, success=_success)
@@ -1241,7 +1250,8 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
             # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano) and \
+                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _procedura_vas.piano):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
