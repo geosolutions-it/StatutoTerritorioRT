@@ -13,7 +13,13 @@ from django.test import TestCase
 from django.contrib.auth import authenticate
 from django.forms import ValidationError
 from django.conf import settings
-from strt_users.models import *
+from strt_users.models import (
+    AppUser,
+    Organization,
+    OrganizationType,
+    MembershipType,
+    UserMembership
+)
 import jwt
 
 
@@ -152,7 +158,7 @@ class UsersAuthenticationTests(TestCase):
             )
             if created:
                 membership_type.name = mt["name"]
-                membership_type.description = f'{mt["name"]} per l\'ente {org_type.name}'  # noqa
+                membership_type.description = "{} per l'ente {}".format(mt["name"], org_type.name)
                 membership_type.save()
         AppUser.objects.create(
             fiscal_code=cls.inactive_SERAPIDE_user_data['fiscal_code']

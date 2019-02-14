@@ -71,18 +71,18 @@ class StrtPortalAuthentication:
                             )
                         except Organization.DoesNotExist:
                             raise forms.ValidationError(
-                                _(f'L\'ente {o["organization"].strip()} non risulta censito.')  # noqa
+                                _("L'ente {} non risulta censito.".format(o["organization"].strip()))
                             )
                         membership_type, created = MembershipType._default_manager.get_or_create(
                             code=settings.RESPONSABILE_ISIDE_CODE,
                             organization_type=org.type
                         )
                         if created:
-                            membership_type.name = _(f'Responsabile ISIDE {org.type.name}'),
-                            membership_type.description = _(f'Responsabile ISIDE per l\'ente {org.type.name}')
+                            membership_type.name = _("Responsabile ISIDE {}".format(org.type.name)),
+                            membership_type.description = _("Responsabile ISIDE per l'ente {}".format(org.type.name))
                             membership_type.save()
                         UserMembership._default_manager.get_or_create(
-                            name=_(f'Responsabile ISIDE {org.type.name} {org.name}'),
+                            name=_("Responsabile ISIDE {} {}".format(org.type.name, org.name)),
                             member=user,
                             organization=org,
                             type=membership_type,
