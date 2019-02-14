@@ -17,6 +17,10 @@
 
 ## Install
 
+- Create a suitable virtualenv, e.g.:\
+`mkvirtualenv --python=/usr/bin/python3 strt`\
+`sudo apt install python3-rtree`
+
 - Clone the repository:\
 `git clone https://github.com/geosolutions-it/StatutoTerritorioRT.git`
 
