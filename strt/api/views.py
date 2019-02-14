@@ -28,4 +28,5 @@ class UserMembershipDataView(APIView):
         serialized_m_types = MembershipTypeSerializer(m_types, many=True)
         return Response(serialized_m_types.data)
 
+
 user_membership_data_view = UserMembershipDataView.as_view()

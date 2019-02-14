@@ -152,7 +152,7 @@ class UsersAuthenticationTests(TestCase):
             )
             if created:
                 membership_type.name = mt["name"]
-                membership_type.description = f'{mt["name"]} per l\'ente {org_type.name}'
+                membership_type.description = f'{mt["name"]} per l\'ente {org_type.name}'  # noqa
                 membership_type.save()
         AppUser.objects.create(
             fiscal_code=cls.inactive_SERAPIDE_user_data['fiscal_code']

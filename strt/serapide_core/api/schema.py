@@ -86,7 +86,7 @@ logger = logging.getLogger(__name__)
 # ##############################################################################
 class StrtEnumNode(graphene.ObjectType):
 
-    value= graphene.String()
+    value = graphene.String()
     label = graphene.String()
 
 
@@ -217,7 +217,7 @@ class AppUserNode(DjangoObjectType):
             'last_name': ['exact', 'icontains', 'istartswith'],
             'email': ['exact'],
         }
-        exclude_fields = ('password', 'is_staff', 'is_active', 'is_superuser', 'last_login' )
+        exclude_fields = ('password', 'is_staff', 'is_active', 'is_superuser', 'last_login')
         interfaces = (relay.Node, )
 
 
@@ -415,7 +415,7 @@ class UserMembershipFilter(django_filters.FilterSet):
 
     class Meta:
         model = AppUser
-        exclude = ['password', 'is_staff', 'is_active', 'is_superuser', 'last_login' ]
+        exclude = ['password', 'is_staff', 'is_active', 'is_superuser', 'last_login']
 
     @property
     def qs(self):
@@ -423,10 +423,10 @@ class UserMembershipFilter(django_filters.FilterSet):
         if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
             return super(UserMembershipFilter, self).qs.filter(id=self.request.user.id).distinct()
             # if is_RUP(self.request.user):
-            #     # return super(UserMembershipFilter, self).qs.filter(usermembership__member=self.request.user).distinct()
-            #     return super(UserMembershipFilter, self).qs.all()
+            #  return super(UserMembershipFilter, self).qs.filter(usermembership__member=self.request.user).distinct()
+            #  return super(UserMembershipFilter, self).qs.all()
             # else:
-            #     return super(UserMembershipFilter, self).qs.filter(id=self.request.user.id).distinct()
+            #  return super(UserMembershipFilter, self).qs.filter(id=self.request.user.id).distinct()
         else:
             return super(UserMembershipFilter, self).qs.none()
 
@@ -551,28 +551,28 @@ class Query(object):
     tipologia_contatto = graphene.List(TipologiaContatto)
 
     def resolve_fase_piano(self, info):
-        l = []
-        for f in FASE:
-            l.append(FasePiano(f[0], f[1]))
-        return l
+        _l = []
+        for _f in FASE:
+            _l.append(FasePiano(_f[0], _f[1]))
+        return _l
 
     def resolve_tipologia_vas(self, info):
-        l = []
-        for t in TIPOLOGIA_VAS:
-            l.append(TipologiaVAS(t[0], t[1]))
-        return l
+        _l = []
+        for _t in TIPOLOGIA_VAS:
+            _l.append(TipologiaVAS(_t[0], _t[1]))
+        return _l
 
     def resolve_tipologia_piano(self, info):
-        l = []
-        for t in TIPOLOGIA_PIANO:
-            l.append(TipologiaPiano(t[0], t[1]))
-        return l
+        _l = []
+        for _t in TIPOLOGIA_PIANO:
+            _l.append(TipologiaPiano(_t[0], _t[1]))
+        return _l
 
     def resolve_tipologia_contatto(self, info):
-        l = []
-        for t in TIPOLOGIA_CONTATTO:
-            l.append(TipologiaContatto(t[0], t[1]))
-        return l
+        _l = []
+        for _t in TIPOLOGIA_CONTATTO:
+            _l.append(TipologiaContatto(_t[0], _t[1]))
+        return _l
 
     # Debug
     debug = graphene.Field(DjangoDebug, name='__debug')
@@ -592,11 +592,11 @@ class CreateFase(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         try:
             if info.context.user and \
-                rules.test_rule('strt_users.is_superuser', info.context.user):
-                    _data = input.get('fase')
-                    _fase = Fase()
-                    nuova_fase = update_create_instance(_fase, _data)
-                    return cls(nuova_fase=nuova_fase)
+            rules.test_rule('strt_users.is_superuser', info.context.user):
+                _data = input.get('fase')
+                _fase = Fase()
+                nuova_fase = update_create_instance(_fase, _data)
+                return cls(nuova_fase=nuova_fase)
             else:
                 return GraphQLError(_("Forbidden"), code=403)
         except BaseException as e:
@@ -618,15 +618,15 @@ class UpdateFase(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         try:
             if info.context.user and \
-                rules.test_rule('strt_users.is_superuser', info.context.user):
-                    try:
-                        _instance = Fase.objects.get(codice=input['codice'])
-                        if _instance:
-                            _data = input.get('fase')
-                            fase_aggiornata = update_create_instance(_instance, _data)
-                            return cls(fase_aggiornata=fase_aggiornata)
-                    except ValidationError as e:
-                        return cls(fase_aggiornata=None, errors=get_errors(e))
+            rules.test_rule('strt_users.is_superuser', info.context.user):
+                try:
+                    _instance = Fase.objects.get(codice=input['codice'])
+                    if _instance:
+                        _data = input.get('fase')
+                        fase_aggiornata = update_create_instance(_instance, _data)
+                        return cls(fase_aggiornata=fase_aggiornata)
+                except ValidationError as e:
+                    return cls(fase_aggiornata=None, errors=get_errors(e))
             else:
                 return GraphQLError(_("Forbidden"), code=403)
         except BaseException as e:
@@ -665,14 +665,17 @@ class CreateContatto(relay.ClientIDMutation):
                     # ####
                     # Creating a Temporary User to be associate to this 'Contatto'
                     # ###
-                    first_name = nuovo_contatto.nome.split(' ')[0] if len(nuovo_contatto.nome.split(' ')) > 0 else nuovo_contatto.nome
-                    last_name = nuovo_contatto.nome.split(' ')[1] if len(nuovo_contatto.nome.split(' ')) > 1 else nuovo_contatto.nome
+                    first_name = nuovo_contatto.nome.split(' ')[0] if len(nuovo_contatto.nome.split(' ')) > 0 \
+                        else nuovo_contatto.nome
+                    last_name = nuovo_contatto.nome.split(' ')[1] if len(nuovo_contatto.nome.split(' ')) > 1 \
+                        else nuovo_contatto.nome
                     fiscal_code = codicefiscale.encode(
                         surname=last_name,
                         name=first_name,
                         sex='M',
-                        birthdate=f"{datetime.datetime.now():%m/%d/%Y}",
-                        birthplace=nuovo_contatto.ente.name if nuovo_contatto.ente.type.code == 'C' else settings.DEFAULT_MUNICIPALITY
+                        birthdate=f"{datetime.datetime.now():%m/%d/%Y}",  # noqa
+                        birthplace=nuovo_contatto.ente.name if nuovo_contatto.ente.type.code == 'C' \
+                            else settings.DEFAULT_MUNICIPALITY
                     )
 
                     nuovo_contatto.user, created = AppUser.objects.get_or_create(
@@ -717,22 +720,22 @@ class DeleteContatto(graphene.Mutation):
         uuid = graphene.ID(required=True)
 
     success = graphene.Boolean()
-    uuid =  graphene.ID()
+    uuid = graphene.ID()
 
     def mutate(self, info, **input):
         if info.context.user and rules.test_rule('strt_users.can_access_private_area', info.context.user) and \
-            is_RUP(info.context.user):
-                # Fetching input arguments
-                _id = input['uuid']
-                try:
-                    _contatto = Contatto.objects.get(uuid=_id)
-                    _contatto.delete()
+        is_RUP(info.context.user):
+            # Fetching input arguments
+            _id = input['uuid']
+            try:
+                _contatto = Contatto.objects.get(uuid=_id)
+                _contatto.delete()
 
-                    return DeleteContatto(success=True, uuid=_id)
-                except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                return DeleteContatto(success=True, uuid=_id)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
 
         return DeleteContatto(success=False)
 
@@ -918,8 +921,7 @@ class UpdatePiano(relay.ClientIDMutation):
                                 for _contatto_uuid in _autorita_competente_vas:
                                     _autorita_competenti.append(AutoritaCompetenteVAS(
                                         piano=_piano,
-                                        autorita_competente=Contatto.objects.get(uuid=_contatto_uuid)
-                                        )
+                                        autorita_competente=Contatto.objects.get(uuid=_contatto_uuid))
                                     )
 
                                 for _ac in _autorita_competenti:
@@ -940,8 +942,7 @@ class UpdatePiano(relay.ClientIDMutation):
                                 for _contatto_uuid in _soggetti_sca_uuid:
                                     _soggetti_sca.append(SoggettiSCA(
                                         piano=_piano,
-                                        soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid)
-                                        )
+                                        soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid))
                                     )
 
                                 for _sca in _soggetti_sca:
@@ -1062,27 +1063,27 @@ class UploadBaseBase(graphene.Mutation):
             file = [file]
         resources = []
         for f in file:
-            _dimensione_file = f.size / 1024 # size in KB
+            _dimensione_file = f.size / 1024  # size in KB
             if os.path.exists(_base_media_folder) and \
-                type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
-                    _file_name = str(f)
-                    _file_path = '{}/{}'.format(media_prefix, _file_name)
-                    _risorsa = None
+            type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
+                _file_name = str(f)
+                _file_path = '{}/{}'.format(media_prefix, _file_name)
+                _risorsa = None
 
-                    with default_storage.open(_file_path, 'wb+') as _destination:
-                        for _chunk in f.chunks():
-                            _destination.write(_chunk)
-                        _risorsa = Risorsa.create(
-                            _file_name,
-                            _destination,
-                            tipo_file,
-                            _dimensione_file,
-                            fase)
-                        _risorsa.save()
-                        resources.append(_risorsa)
-                        _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
-                        # Remove original uploaded/temporary file
-                        os.remove(_destination.name)
+                with default_storage.open(_file_path, 'wb+') as _destination:
+                    for _chunk in f.chunks():
+                        _destination.write(_chunk)
+                    _risorsa = Risorsa.create(
+                        _file_name,
+                        _destination,
+                        tipo_file,
+                        _dimensione_file,
+                        fase)
+                    _risorsa.save()
+                    resources.append(_risorsa)
+                    _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
+                    # Remove original uploaded/temporary file
+                    os.remove(_destination.name)
         return resources
 
     @classmethod
@@ -1118,7 +1119,7 @@ class UploadFile(UploadBaseBase):
                         _success = True
                         for _risorsa in _resources:
                             RisorsePiano(piano=_piano, risorsa=_risorsa).save()
-                    return UploadFile(piano_aggiornato=_piano, success=_success,file_name=_resources[0].nome)
+                    return UploadFile(piano_aggiornato=_piano, success=_success, file_name=_resources[0].nome)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
@@ -1270,7 +1271,6 @@ class PromozionePiano(graphene.Mutation):
     def get_next_phase(cls, fase):
         return FASE_NEXT[fase.nome]
 
-
     @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
@@ -1278,7 +1278,10 @@ class PromozionePiano(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 _next_fase = cls.get_next_phase(_piano.fase)
-                if rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=_next_fase), _piano, _procedura_vas):
+                if rules.test_rule('strt_core.api.fase_{next}_completa'.format(
+                                   next=_next_fase),
+                                   _piano,
+                                   _procedura_vas):
                     _piano.fase = Fase.objects.get(nome=_next_fase)
                     piano_phase_changed.send(sender=Piano, user=info.context.user, piano=_piano)
                     _piano.save()

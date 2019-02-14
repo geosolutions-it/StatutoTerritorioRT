@@ -118,7 +118,7 @@ class Command(BaseCommand):
                 )
                 if created:
                     membership_type.name = mt["name"]
-                    membership_type.description = f'{mt["name"]} per l\'ente {org_type.name}'
+                    membership_type.description = f'{mt["name"]} per l\'ente {org_type.name}'  # noqa
                     membership_type.save()
 
         except Exception as e:

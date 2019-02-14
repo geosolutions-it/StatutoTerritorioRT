@@ -92,7 +92,7 @@ def userMembershipRegistrationView(request):
             organization = form.cleaned_data['organization']
             type = form.cleaned_data['type']
             UserMembership.objects.create(
-                name=f'{type} {organization}',
+                name=f'{type} {organization}',  # noqa
                 description=description,
                 member=member,
                 organization=organization,

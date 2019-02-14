@@ -71,7 +71,7 @@ class StrtPortalAuthentication:
                             )
                         except Organization.DoesNotExist:
                             raise forms.ValidationError(
-                                _(f'L\'ente {o["organization"].strip()} non risulta censito.')
+                                _(f'L\'ente {o["organization"].strip()} non risulta censito.')  # noqa
                             )
                         membership_type, created = MembershipType._default_manager.get_or_create(
                             code=settings.RESPONSABILE_ISIDE_CODE,

@@ -16,6 +16,8 @@ from django.apps import AppConfig
 from django.conf import settings
 from django.db.models import signals
 
+from .tasks import send_queued_notifications
+
 E = getattr(settings, 'NOTIFICATIONS_ENABLED', False)
 M = getattr(settings, 'NOTIFICATIONS_MODULE', None)
 notifications = None

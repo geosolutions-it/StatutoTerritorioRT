@@ -69,7 +69,7 @@ def privateAreaView(request):
 
 @permission_required('strt_users.can_access_serapide')
 def serapideView(request):
-    return render(request, 'index.html') # serapide-client
+    return render(request, 'index.html')  # serapide-client
 
 
 class GeoportalView(TemplateView):
