@@ -51,10 +51,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         unique=True, db_index=True, blank=False, null=False,
     )
     first_name = models.CharField(
-        verbose_name=_('nome'), max_length=30, blank=True, null=True
+        verbose_name=_('nome'), max_length=255, blank=True, null=True
     )
     last_name = models.CharField(
-        verbose_name=_('cognome'), max_length=150, blank=True, null=True
+        verbose_name=_('cognome'), max_length=255, blank=True, null=True
     )
     email = models.EmailField(
         verbose_name=_('indirizzo email'), blank=True, null=True
@@ -93,8 +93,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     objects = AppUserManager()
 
     def __str__(self):
-        if self.first_name and self.last_name:
-            return "{} {}".format(self.last_name.title(), self.first_name.title())
+        if self.first_name or self.last_name:
+            first_name = self.first_name.title() if self.first_name.title() else ''
+            last_name = self.last_name.title() if self.last_name else ''
+            return "{} {}".format(first_name, last_name)
         else:
             return self.fiscal_code.upper()
 
