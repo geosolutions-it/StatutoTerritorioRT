@@ -94,8 +94,8 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         if self.first_name or self.last_name:
-            first_name = self.first_name.title() if self.first_name.title() else ''
-            last_name = self.last_name.title() if self.last_name else ''
+            first_name = self.first_name if self.first_name else ''
+            last_name = self.last_name if self.last_name else ''
             return "{} {}".format(first_name, last_name)
         else:
             return self.fiscal_code.upper()
