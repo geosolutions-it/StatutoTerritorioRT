@@ -1,174 +1,174 @@
 [
 {
     "model": "wagtailimages.rendition",
-    "pk": 1,
+    "pk": 23,
     "fields": {
         "filter_spec": "max-165x165",
-        "file": "images/RT_piani_grigi_5XmdmNV.max-165x165.png",
-        "width": 165,
-        "height": 131,
-        "focal_point_key": "",
-        "image": 1
-    }
-},
-{
-    "model": "wagtailimages.rendition",
-    "pk": 2,
-    "fields": {
-        "filter_spec": "max-165x165",
-        "file": "images/RT_giallo_M4csnoQ.max-165x165.png",
+        "file": "images/RT_yellow_YCCkWp3.max-165x165.png",
         "width": 152,
         "height": 165,
         "focal_point_key": "",
-        "image": 2
+        "image": 13
     }
 },
 {
     "model": "wagtailimages.rendition",
-    "pk": 3,
+    "pk": 24,
     "fields": {
         "filter_spec": "max-165x165",
-        "file": "images/geoportale_BwpTT87.max-165x165.png",
+        "file": "images/RT_piani_JkrgVvZ.max-165x165.png",
+        "width": 165,
+        "height": 134,
+        "focal_point_key": "",
+        "image": 14
+    }
+},
+{
+    "model": "wagtailimages.rendition",
+    "pk": 25,
+    "fields": {
+        "filter_spec": "max-165x165",
+        "file": "images/geoportale_j2jhQ62.max-165x165.png",
         "width": 165,
         "height": 129,
         "focal_point_key": "",
-        "image": 3
+        "image": 15
     }
 },
 {
     "model": "wagtailimages.rendition",
-    "pk": 4,
-    "fields": {
-        "filter_spec": "max-165x165",
-        "file": "images/opendata_nipuieA.max-165x165.png",
-        "width": 165,
-        "height": 133,
-        "focal_point_key": "",
-        "image": 4
-    }
-},
-{
-    "model": "wagtailimages.rendition",
-    "pk": 5,
+    "pk": 27,
     "fields": {
         "filter_spec": "fill-800x800",
-        "file": "images/RT_giallo_M4csnoQ.2e16d0ba.fill-800x800.png",
+        "file": "images/RT_yellow_YCCkWp3.2e16d0ba.fill-800x800.png",
         "width": 602,
         "height": 603,
         "focal_point_key": "2e16d0ba",
-        "image": 2
+        "image": 13
     }
 },
 {
     "model": "wagtailimages.rendition",
-    "pk": 6,
+    "pk": 28,
     "fields": {
         "filter_spec": "fill-800x800",
-        "file": "images/RT_piani_grigi_5XmdmNV.2e16d0ba.fill-800x800.png",
-        "width": 339,
-        "height": 338,
+        "file": "images/RT_piani_JkrgVvZ.2e16d0ba.fill-800x800.png",
+        "width": 459,
+        "height": 459,
         "focal_point_key": "2e16d0ba",
-        "image": 1
+        "image": 14
     }
 },
 {
     "model": "wagtailimages.rendition",
-    "pk": 7,
+    "pk": 29,
     "fields": {
         "filter_spec": "fill-800x800",
-        "file": "images/geoportale_BwpTT87.2e16d0ba.fill-800x800.png",
+        "file": "images/geoportale_j2jhQ62.2e16d0ba.fill-800x800.png",
         "width": 300,
         "height": 300,
         "focal_point_key": "2e16d0ba",
-        "image": 3
+        "image": 15
     }
 },
 {
     "model": "wagtailimages.rendition",
-    "pk": 8,
+    "pk": 37,
+    "fields": {
+        "filter_spec": "max-165x165",
+        "file": "images/opendata_DD2EKv3.max-165x165.png",
+        "width": 165,
+        "height": 133,
+        "focal_point_key": "",
+        "image": 18
+    }
+},
+{
+    "model": "wagtailimages.rendition",
+    "pk": 38,
     "fields": {
         "filter_spec": "fill-600x600",
-        "file": "images/opendata_nipuieA.2e16d0ba.fill-600x600.png",
+        "file": "images/opendata_DD2EKv3.2e16d0ba.fill-600x600.png",
         "width": 253,
         "height": 252,
         "focal_point_key": "2e16d0ba",
-        "image": 4
+        "image": 18
     }
 },
 {
     "model": "wagtailimages.image",
-    "pk": 1,
+    "pk": 13,
     "fields": {
         "collection": 1,
-        "title": "RT_piani_grigi.png",
-        "file": "original_images/RT_piani_grigi_5XmdmNV.png",
-        "width": 425,
-        "height": 338,
-        "created_at": "2019-02-07T11:30:45.071Z",
-        "uploaded_by_user": null,
-        "focal_point_x": null,
-        "focal_point_y": null,
-        "focal_point_width": null,
-        "focal_point_height": null,
-        "file_size": 21867,
-        "file_hash": "a8e8ca5a10b388a5f780738af1ccd750d6dd3888"
-    }
-},
-{
-    "model": "wagtailimages.image",
-    "pk": 2,
-    "fields": {
-        "collection": 1,
-        "title": "RT_giallo.png",
-        "file": "original_images/RT_giallo_M4csnoQ.png",
+        "title": "RT_yellow.png",
+        "file": "original_images/RT_yellow_YCCkWp3.png",
         "width": 602,
         "height": 653,
-        "created_at": "2019-02-07T11:30:45.071Z",
-        "uploaded_by_user": null,
+        "created_at": "2019-02-15T13:56:42.155Z",
+        "uploaded_by_user": 1,
         "focal_point_x": null,
         "focal_point_y": null,
         "focal_point_width": null,
         "focal_point_height": null,
-        "file_size": 24933,
-        "file_hash": "bd6e724be4e854b3b18890df72f60ab95e78280b"
+        "file_size": 35996,
+        "file_hash": "b117ad406a054720ff873b8ec722196a9f587707"
     }
 },
 {
     "model": "wagtailimages.image",
-    "pk": 3,
+    "pk": 14,
+    "fields": {
+        "collection": 1,
+        "title": "RT_piani.png",
+        "file": "original_images/RT_piani_JkrgVvZ.png",
+        "width": 563,
+        "height": 459,
+        "created_at": "2019-02-15T13:57:01.170Z",
+        "uploaded_by_user": 1,
+        "focal_point_x": null,
+        "focal_point_y": null,
+        "focal_point_width": null,
+        "focal_point_height": null,
+        "file_size": 40698,
+        "file_hash": "0b198cee637a2efb044f973d39a7ae4c995c58f7"
+    }
+},
+{
+    "model": "wagtailimages.image",
+    "pk": 15,
     "fields": {
         "collection": 1,
         "title": "geoportale.png",
-        "file": "original_images/geoportale_BwpTT87.png",
+        "file": "original_images/geoportale_j2jhQ62.png",
         "width": 382,
         "height": 300,
-        "created_at": "2019-02-07T11:30:45.071Z",
-        "uploaded_by_user": null,
+        "created_at": "2019-02-15T13:57:23.102Z",
+        "uploaded_by_user": 1,
         "focal_point_x": null,
         "focal_point_y": null,
         "focal_point_width": null,
         "focal_point_height": null,
-        "file_size": 36387,
-        "file_hash": "c882170e63a652921cae76febdc0fff81ac2964d"
+        "file_size": 26176,
+        "file_hash": "b89e59491eb00577566f1d0e5cd85f2155455fb9"
     }
 },
 {
     "model": "wagtailimages.image",
-    "pk": 4,
+    "pk": 18,
     "fields": {
         "collection": 1,
         "title": "opendata.png",
-        "file": "original_images/opendata_nipuieA.png",
+        "file": "original_images/opendata_DD2EKv3.png",
         "width": 311,
         "height": 252,
-        "created_at": "2019-02-07T11:30:45.071Z",
-        "uploaded_by_user": null,
+        "created_at": "2019-02-15T14:22:13.815Z",
+        "uploaded_by_user": 1,
         "focal_point_x": null,
         "focal_point_y": null,
         "focal_point_width": null,
         "focal_point_height": null,
-        "file_size": 11364,
-        "file_hash": "96e81ba23bffee6d9c8ce3c49ec4e49fbc7f4d54"
+        "file_size": 21937,
+        "file_hash": "ccd8aa1a3d3a8925d04d5a4a231d808b7489b61e"
     }
 },
 {
@@ -196,7 +196,7 @@
     "model": "strt_portal.home",
     "pk": 2,
     "fields": {
-        "body": "[{\"type\": \"First_section\", \"value\": {\"title\": \"Pianificare il Territorio\", \"subtitle\": \"Strumenti per la pianificazione territoriale Open Data e informazioni geografiche\", \"text\": \"\", \"image\": 2, \"button_text\": \"\"}, \"id\": \"f217a722-ebc2-4b70-a31d-8b08f975a05e\"}, {\"type\": \"Second_section\", \"value\": {\"first_column\": {\"title\": \"PIANIFICAZIONE TERRITORIALE\", \"subtitle\": \"Strumenti Operativi\", \"text\": \"\", \"image\": null, \"button_text\": \"\"}, \"second_column\": {\"title\": \"STATUTO DEL TERRITORIO\", \"subtitle\": \"Geoportale\", \"text\": \"\", \"image\": null, \"button_text\": \"\"}, \"third_column\": {\"title\": \"OPEN DATA\", \"subtitle\": \"Catalogo dei Dati\", \"text\": \"\", \"image\": null, \"button_text\": \"\"}}, \"id\": \"03987b77-bc93-4d97-bb44-0611ec26e181\"}, {\"type\": \"Third_section\", \"value\": {\"title\": \"La pianificazione\", \"subtitle\": \"Infrastruttura Dati Territoriali e Geoportale dello Statuto del Territorio\", \"text\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"image\": 1, \"button_text\": \"\"}, \"id\": \"69d2bc1f-7d7f-49ff-aeb6-31777108b90f\"}, {\"type\": \"Fourth_section\", \"value\": {\"title\": \"Utenti e Strumenti\", \"first_box\": {\"title\": \"PUBBLICA AMMINISTRAZIONE\", \"subtitle\": \"Una piattaforma collaborativa per la pianificazione e il monitoraggio del territorio\", \"text\": \"Regione, Comuni, Altri Enti\", \"image\": null, \"button_text\": \"PER SAPERNE DI PIU'\", \"short_description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"detailed_description\": \"\", \"left_detailed_content\": \"<p><b>Gestire i Piani</b></p><ul><li>Crea nuovo Piano</li><li>Avvia il procedimento</li><li>Compila il piano, verifica la conformit\\u00e0</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li></ul>\", \"right_detailed_content\": \"<p>Analizzare e Monitorare</p><ul><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li></ul>\"}, \"second_box\": {\"title\": \"PROFESSIONISTI\", \"subtitle\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\", \"text\": \"\", \"image\": null, \"button_text\": \"PER SAPERNE DI PIU'\", \"short_description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"detailed_description\": \"\", \"left_detailed_content\": \"<p></p>\", \"right_detailed_content\": \"<p></p>\"}, \"third_box\": {\"title\": \"CITTADINI\", \"subtitle\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\", \"text\": \"\", \"image\": null, \"button_text\": \"PER SAPERNE DI PIU'\", \"short_description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"detailed_description\": \"\", \"left_detailed_content\": \"<p></p>\", \"right_detailed_content\": \"<p></p>\"}, \"fourth_box\": {\"title\": \"IMPRESE\", \"subtitle\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\", \"text\": \"\", \"image\": null, \"button_text\": \"PER SAPERNE DI PIU'\", \"short_description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"detailed_description\": \"\", \"left_detailed_content\": \"<p></p>\", \"right_detailed_content\": \"<p></p>\"}}, \"id\": \"3a0c1f79-b6b9-47c7-8d84-e35dec53b62d\"}, {\"type\": \"Fifth_section\", \"value\": {\"title\": \"Geoportale\", \"subtitle\": \"Statuto del Territorio\", \"text\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"image\": 3, \"button_text\": \"VAI AL GEOPORTALE\"}, \"id\": \"a45679c1-fbdc-4fc1-adca-85dcbd5e0e16\"}, {\"type\": \"Sixth_section\", \"value\": {\"title\": \"Open Data\", \"subtitle\": \"Catalogo dei Dati Territoriali\", \"text\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"image\": 4, \"button_text\": \"VAI AL CATALOGO DEI DATI SUL SITO OPEN DATA TOSCANA\"}, \"id\": \"1245552d-f91b-444a-8a47-00d7ecc838b3\"}]"
+        "body": "[{\"type\": \"First_section\", \"value\": {\"title\": \"Pianificare il Territorio\", \"subtitle\": \"Strumenti per la pianificazione territoriale Open Data e informazioni geografiche\", \"text\": \"\", \"image\": 13, \"button_text\": \"\"}, \"id\": \"f217a722-ebc2-4b70-a31d-8b08f975a05e\"}, {\"type\": \"Second_section\", \"value\": {\"first_column\": {\"title\": \"PIANIFICAZIONE TERRITORIALE\", \"subtitle\": \"Strumenti Operativi\", \"text\": \"\", \"image\": null, \"button_text\": \"\"}, \"second_column\": {\"title\": \"STATUTO DEL TERRITORIO\", \"subtitle\": \"Geoportale\", \"text\": \"\", \"image\": null, \"button_text\": \"\"}, \"third_column\": {\"title\": \"OPEN DATA\", \"subtitle\": \"Catalogo dei Dati\", \"text\": \"\", \"image\": null, \"button_text\": \"\"}}, \"id\": \"03987b77-bc93-4d97-bb44-0611ec26e181\"}, {\"type\": \"Third_section\", \"value\": {\"title\": \"La pianificazione\", \"subtitle\": \"Infrastruttura Dati Territoriali e Geoportale dello Statuto del Territorio\", \"text\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"image\": 14, \"button_text\": \"\"}, \"id\": \"69d2bc1f-7d7f-49ff-aeb6-31777108b90f\"}, {\"type\": \"Fourth_section\", \"value\": {\"title\": \"Utenti e Strumenti\", \"first_box\": {\"title\": \"PUBBLICA AMMINISTRAZIONE\", \"subtitle\": \"Una piattaforma collaborativa per la pianificazione e il monitoraggio del territorio\", \"text\": \"Regione, Comuni, Altri Enti\", \"image\": null, \"button_text\": \"PER SAPERNE DI PIU'\", \"short_description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"detailed_description\": \"\", \"left_detailed_content\": \"<p><b>Gestire i Piani</b></p><ul><li>Crea nuovo Piano</li><li>Avvia il procedimento</li><li>Compila il piano, verifica la conformit\\u00e0</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li></ul>\", \"right_detailed_content\": \"<p><b>Analizzare e Monitorare</b></p><ul><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li><li>Lorem Ipsum Dolor</li></ul>\"}, \"second_box\": {\"title\": \"PROFESSIONISTI\", \"subtitle\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\", \"text\": \"\", \"image\": null, \"button_text\": \"PER SAPERNE DI PIU'\", \"short_description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"detailed_description\": \"\", \"left_detailed_content\": \"<p></p>\", \"right_detailed_content\": \"<p></p>\"}, \"third_box\": {\"title\": \"CITTADINI\", \"subtitle\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\", \"text\": \"\", \"image\": null, \"button_text\": \"PER SAPERNE DI PIU'\", \"short_description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"detailed_description\": \"\", \"left_detailed_content\": \"<p></p>\", \"right_detailed_content\": \"<p></p>\"}, \"fourth_box\": {\"title\": \"IMPRESE\", \"subtitle\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\", \"text\": \"\", \"image\": null, \"button_text\": \"PER SAPERNE DI PIU'\", \"short_description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"detailed_description\": \"\", \"left_detailed_content\": \"<p></p>\", \"right_detailed_content\": \"<p></p>\"}}, \"id\": \"3a0c1f79-b6b9-47c7-8d84-e35dec53b62d\"}, {\"type\": \"Fifth_section\", \"value\": {\"title\": \"Geoportale\", \"subtitle\": \"Statuto del Territorio\", \"text\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"image\": 15, \"button_text\": \"VAI AL GEOPORTALE\"}, \"id\": \"a45679c1-fbdc-4fc1-adca-85dcbd5e0e16\"}, {\"type\": \"Sixth_section\", \"value\": {\"title\": \"Open Data\", \"subtitle\": \"Catalogo dei Dati Territoriali\", \"text\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\", \"image\": 18, \"button_text\": \"VAI AL CATALOGO DEI DATI SUL SITO OPEN DATA TOSCANA\"}, \"id\": \"1245552d-f91b-444a-8a47-00d7ecc838b3\"}]"
     }
 },
 {
