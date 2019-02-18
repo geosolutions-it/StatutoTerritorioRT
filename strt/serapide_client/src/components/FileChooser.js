@@ -79,7 +79,6 @@ class FileChooser extends React.Component {
       if(modal && !open && showBtn) {
         return (<Button disabled={isLocked} color="warning" onClick={this.toggleOpen}>Upload</Button>)
       }
-      console.log(this.props.isLocked)
       const comp = this.renderChooser()
      return modal ? (
       <Modal toggle={this.toggleOpen} isOpen={open} centered size={`${sz === 'lg' ? 'md' : 'sm'}`} wrapClassName="serapide" autoFocus={true}>

@@ -30,11 +30,10 @@ const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
 
-const showError = (error, onError) => {
+const showError = (error) => {
     toast.error(error.message,  {autoClose: true})
 }
 const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifica) => {
-    console.log(tipologia, sP, auths, scas, semplificata, verifica)
     switch (tipologia.toLowerCase()) {
         case "semplificata":
         return semplificata && auths.length > 0 && !!sP
@@ -51,7 +50,7 @@ const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifi
 
 export default ({codice, canUpdate, isLocked}) => {
     return (
-        <Query query={GET_VAS} variables={{codice}}>
+        <Query query={GET_VAS} variables={{codice}} onError={showError}>
             {({loading, data: {procedureVas: {edges = []} = []} = {}}) => {
                 if(loading){
                     return (
@@ -64,7 +63,7 @@ export default ({codice, canUpdate, isLocked}) => {
                     </div>)
             }
             
-            const {node: {uuid, tipologia, piano: {soggettoProponente: sP, codice, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca =[]} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = edges[0] || {}
+            const {node: {uuid, tipologia, piano: {soggettoProponente: sP, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca =[]} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = edges[0] || {}
             const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
             const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
             const disableSCA = tipologia === "SEMPLIFICATA" || tipologia === "NON_NECESSARIA"

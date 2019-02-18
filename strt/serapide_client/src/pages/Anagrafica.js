@@ -28,10 +28,10 @@ const getDataDeliberaInput = (codice) => (val) => ({
         codice}
     }})
 
-const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera && delibera && descrizione.length > 0
+const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera && delibera && descrizione && descrizione.length > 0
 
 
-export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {
+export default ({match: {params: {code} = {}} = {}, ...props}) => {
     return (<Query query={GET_PIANI} variables={{codice: code}}>
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
             if(loading){
@@ -51,13 +51,13 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
             const locked = faseNome !== "DRAFT"
             const {node: delibera} = resources.filter(({node: n}) => n.tipo === "delibera").pop() || {};
             const optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || {};
-            
+            if(!locked) {
+                window.location.href=`#/crea_anagrafica/${code}`
+            }
             return(
-            <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
-                    <div className="d-flex flex-column ">
                         <div className="pb-4 pt-3 d-flex flex-row">
                             <i className="material-icons text-warning icon-34">assignment</i>
-                            <i className="material-icons text-warning">locked</i>
+                            <i style={{maxWidth: 26}} className="material-icons text-warning">locked</i>
                             <div className="d-flex flex-column flex-fill">
                                 <h3 className="mb-0">ANAGRAFICA</h3>
                                 <span className="pt-5">{getEnteLabelID(ente)}</span>
@@ -74,9 +74,8 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                             </div>
                             
                         </div>
-                    </div>
                    
-            </div>)}
+            )}
         }
     </Query>)
     }

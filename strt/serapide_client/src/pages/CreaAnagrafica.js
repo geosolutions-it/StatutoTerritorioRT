@@ -38,7 +38,7 @@ const getDataDeliberaInput = (codice) => (val) => ({
         codice}
     }})
 
-const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera && delibera && descrizione.length > 0
+const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera && delibera && descrizione && descrizione.length > 0
 
 
 export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {
@@ -61,7 +61,9 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
             const locked = faseNome !== "DRAFT"
             const {node: delibera} = resources.filter(({node: n}) => n.tipo === "delibera").pop() || {};
             const optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || {};
-            
+            if(locked) {
+                window.location.href=`#/pino/${code}/anagrafica`
+            }
             return(
             <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
                     <div className="d-flex flex-column ">
