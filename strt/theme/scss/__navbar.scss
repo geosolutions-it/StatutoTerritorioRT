@@ -73,6 +73,7 @@
             @include media-breakpoint-down($breakpoint) {
                 &.navbar{
                     height: auto;
+                    min-height:$portal-header;
                 }
                 .link-icon {
                     flex-flow: row;

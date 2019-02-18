@@ -54,7 +54,7 @@ const updateCache = (cache, { data: {createPiano : {nuovoPiano: node}}  = {}} = 
                 data: { piani}
             })
         } catch (e) {
-            console.log("Query piani non inizializzata")
+            console.warn("Query piani non inizializzata")
         }
   }
 const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti, ente, selectEnte, tipiPiano}) => {
@@ -95,7 +95,7 @@ export default () => (
                 toast.error(errorQuery.message,  {autoClose: true})
             }
         return (
-            <Mutation mutation={CREA_PIANO} onCompleted={({createPiano: {nuovoPiano}} = {}) => window.location.href=`#/anagrafica/${nuovoPiano.codice}`} update={updateCache}>
+            <Mutation mutation={CREA_PIANO} onCompleted={({createPiano: {nuovoPiano}} = {}) => window.location.href=`#/crea_anagrafica/${nuovoPiano.codice}`} update={updateCache}>
                 {(creaPiano, { loading: isSaving, error: mutationError , ...rest}) => {
                 if (mutationError) {
                     toast.error(mutationError.message)

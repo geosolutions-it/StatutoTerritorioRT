@@ -1,12 +1,21 @@
 .content {
     min-height: calc(100vh - 196px);
-    padding-left: $portal-header;
-    padding-right: $portal-header;
-    padding-bottom: $portal-header;
+    // padding-bottom: $portal-header;
+    padding-top: $portal-header;
+
 }
 /** colori notifiche**/
 .icon-34 {
     font-size: 34px;
+}
+.icon-16 {
+    font-size: 16px;
+}
+.icon-14 {
+    font-size: 14px;
+}
+.icon-12 {
+    font-size: 12px;
 }
 .first {
     order: -1;
@@ -58,6 +67,7 @@
     overflow: scroll;
 }
 .serapide {
+    width: 100%;
     .pointer{
         cursor: pointer;
     }
@@ -151,9 +161,8 @@ a {
 }
 
 @include media-breakpoint-down(md) {
-    .content {
-        padding-left: 1vw;
-        padding-right: 1vw;
+    .content{
+        padding-top: $portal-header - 4;
     }
     .big-text {
         font-size: 30px;

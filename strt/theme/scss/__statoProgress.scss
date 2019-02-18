@@ -18,6 +18,9 @@ $space-between: ($stato-progress-width - 40) /4;
        transform: translateX(($stato-progress-width * -0.5) + 4);
        color: $warning;    
       }
+    i.draft{
+      color: $gray-400;
+    }
     width: $stato-progress-width;
     flex-direction: column;
     display: inline-flex;

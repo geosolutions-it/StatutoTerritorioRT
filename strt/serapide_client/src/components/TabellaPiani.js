@@ -13,8 +13,11 @@ const goToAnagrafica = (codice, {nome} = {}) => {
     if(nome === "DRAFT"){
          window.location.href=`#/crea_anagrafica/${codice}`
         }else {
-            window.location.href=`#/anagrafica/${codice}`
+            window.location.href=`#/piano/${codice}/anagrafica`
         }
+}
+const goToPiano = (codice) => {
+        window.location.href=`#/piano/${codice}`
 }
 export default ({title, piani = []}) => (
     <Fragment>
@@ -46,7 +49,7 @@ export default ({title, piani = []}) => (
                             <StatoProgress stato={fase}></StatoProgress>
                         </td>
                         <td className="text-justify text-center">{user && `${user.firstName} ${user.lastName}`}</td>
-                        <td className="text-center"><i className="material-icons text-warning">play_circle_filled</i></td>
+                        <td className="text-center" style={{cursor: "pointer"}} onClick={() => goToPiano(codice)}><i className="material-icons text-warning">play_circle_filled</i></td>
                     </tr>))}
                 </tbody>
             </Table>
