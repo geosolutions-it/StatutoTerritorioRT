@@ -128,7 +128,12 @@ class FasePianoStoricoType(DjangoObjectType):
 
 
 class UserThreadType(DjangoObjectType):
+    
+    absolute_url = graphene.String()
 
+    def resolve_absolute_url(self, info, **args):
+        return self.get_absolute_url()
+    
     class Meta:
         model = Thread
         filter_fields = ['subject', 'users', ]

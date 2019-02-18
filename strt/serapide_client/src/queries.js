@@ -153,6 +153,37 @@ query CreaPianoPage{
 }
 `
 
+export const GET_UTENTE = gql`
+query{
+  utenti {
+    edges {
+      node {
+        fiscalCode,
+        firstName,
+        lastName,
+        dateJoined,
+        email,
+        unreadThreadsCount,
+        unreadMessages {
+          thread {
+            id,
+            subject,
+            absoluteUrl
+          },
+          sender {
+            email
+            firstName
+            lastName
+          },
+          sentAt,
+          content
+        }
+      }
+    }
+  }
+}`
+
+
 export const GET_PIANI = gql`
 query getPiani($faseCodice: String, $codice: String){
     piani(fase_Codice: $faseCodice, codice: $codice){

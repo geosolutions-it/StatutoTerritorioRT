@@ -15,25 +15,35 @@ import CreaAnagrafica from './pages/CreaAnagrafica'
 import Piano from './pages/Piano'
 import Injector from './components/Injector'
 import NavBar from './components/NavigationBar'
-import {messaggi} from './resources'
+
 import  {ToastContainer} from 'react-toastify'
+import {Query} from 'react-apollo'
 import '../node_modules/react-toastify/dist/ReactToastify.min.css'
+import {GET_UTENTE} from "./queries"
 
 export default () => {
-    return (
-        <ApolloProvider client={client}>
-         <Injector el="user-navbar-list">
-           <NavBar messaggi={messaggi}/>
-         </Injector>
-         <ToastContainer/>
-            <Router>
-              <Switch>
-                <Route  path="/piano/:code" component={Piano}/>
-                <Route  path="/crea_anagrafica/:code" component={CreaAnagrafica}/>
-                <Route  path="/nuovo_piano/" component={NuovoPiano}/>             
-                <Route  path="/" component={Home}/>
-              </Switch>
-            </Router>
-        </ApolloProvider>
+return (
+    <ApolloProvider client={client}>
+        <ToastContainer/>
+        <Query query={GET_UTENTE} pollInterval={20000}>
+        {({loading, data: {utenti: {edges= []} = {}} = {}, error}) => {
+            const {node: utente = {}} = edges[0] || {}
+            return(
+                <React.Fragment>
+                  <Injector el="user-navbar-list">
+                      <NavBar messaggi={utente.unreadMessages}/>
+                  </Injector>
+                  <Router>
+                      <Switch>
+                          <Route  path="/piano/:code" render={(props) => <Piano utente={utente} {...props}/>} />
+                          <Route  path="/crea_anagrafica/:code" component={CreaAnagrafica}/>
+                          <Route  path="/nuovo_piano/" component={NuovoPiano}/>             
+                          <Route  path="/" render={(props) => <Home utente={utente} {...props}/>}/>
+                      </Switch>
+                  </Router>
+                </React.Fragment>)
+        }}
+        </Query>
+      </ApolloProvider>
     )
 }
