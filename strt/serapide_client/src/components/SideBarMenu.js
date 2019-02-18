@@ -31,7 +31,7 @@ export default enhancer(({piano = {}, expanded, url, active, toggleOpen}) => (
                 <MenuItem href={`#${url}/adozione`} active={active === "/adozione"} title="ADOZIONE" icon="assignment" expanded={expanded}/>
                 <MenuItem href={`#${url}/approvazione`} active={active === "/approvazione"} title="APPROVAZIONE" icon="check_circle" expanded={expanded}/>
                 <MenuItem href={`#${url}/pubblicazione`} active={active === "/pubblicazione"} title="PUBBLICAZIONE" icon="assignment" expanded={expanded}/>
-                <MenuItem href={`#${url}/notifiche`} active={active === "/notifiche"} title="NOTIFICHE" icon="email" expanded={expanded}>
+                <MenuItem href="/users/messages/inbox/" active={active === "/messaggi"} title="MESSAGGI" icon="email" expanded={expanded}>
                     <Badge color="light">1</Badge>
                 </MenuItem>
                 <MenuItem href={`#${url}/avvisi`} active={active === "/avvisi"} title="ALERT" icon="notification_important" iconColor="text-danger" expanded={expanded}>

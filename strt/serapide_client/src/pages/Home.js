@@ -11,12 +11,10 @@ import React from 'react'
 import TabellaPiani from '../components/TabellaPiani'
 import TabellaMessaggi from '../components/TabellaMessaggi'
 import Button from '../components/IconButton'
-import {defaultProps} from 'recompose'
 
 import {Query} from "react-apollo"; 
 import {toast} from 'react-toastify';
 
-import {user, messaggi}  from '../resources'
 import {GET_PIANI} from '../queries'
 
 
@@ -29,17 +27,17 @@ const Piani = () => (
                 return (<TabellaPiani title="piani in corso" piani={edges}></TabellaPiani>)
             }}
         </Query>)
-const PianiArchiviati = () => (
-    <Query query={GET_PIANI}>
-        {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
-            if (error) {
-                toast.error(error.message,  {autoClose: true})
-            }
-            return (<TabellaPiani title="piani in corso" piani={edges}></TabellaPiani>)
-        }}
-    </Query>)
+// const PianiArchiviati = () => (
+//     <Query query={GET_PIANI}>
+//         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
+//             if (error) {
+//                 toast.error(error.message,  {autoClose: true})
+//             }
+//             return (<TabellaPiani title="piani in corso" piani={edges}></TabellaPiani>)
+//         }}
+//     </Query>)
 
-export default defaultProps({user, messaggi})((props) => {
+export default ({utente, ...props}) => {
     return (
         <React.Fragment>
             <div className="serapide-content pt-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
@@ -48,8 +46,7 @@ export default defaultProps({user, messaggi})((props) => {
                 <hr className="border-warning border-bottom"></hr>
                 <div className="py-4 d-flex flex-row">
                     <div className="d-flex flex-column ">
-                        <h2>{props.user.nome}</h2>
-                        <p>{props.user.organizzazione}</p>
+                        <h2>{`${utente.firstName} ${utente.lastName}`}</h2>
                     </div>
                     <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="warning" icon="note_add" label="Crea nuovo piano"></Button>
                     <div className="px-sm-4"></div>
@@ -65,10 +62,10 @@ export default defaultProps({user, messaggi})((props) => {
                     <i className="material-icons mr-1 prossimamente">notification_important</i><span >Notifiche urgenti per le quali è richiesta un'azione</span>
                 </div>
                 <h6 className="py-5">MESSAGGI </h6>
-                <TabellaMessaggi messaggi={props.messaggi}></TabellaMessaggi>
-                <a href="#/messaggi" className="mr-4 pt-4 pb-5 d-flex flex-row justify-content-end nav-link text-dark"><i className="material-icons mr-2">email</i><span>Tutti i messaggi</span></a>
-                <PianiArchiviati></PianiArchiviati>
-                <a href="#/archivio" className="mr-4 pt-4 pb-5 d-flex flex-row justify-content-end nav-link text-dark"><i className="material-icons mr-2">view_list</i><span>Vai all'archivio piani</span></a>
+                <TabellaMessaggi messaggi={utente.unreadMessages}></TabellaMessaggi>
+                <a href="/users/messages/inbox/" className="mr-4 pt-4 pb-5 d-flex flex-row justify-content-end nav-link text-dark"><i className="material-icons mr-2">email</i><span>Tutti i messaggi</span></a>
+                {/* <PianiArchiviati></PianiArchiviati>
+                <a href="#/archivio" className="mr-4 pt-4 pb-5 d-flex flex-row justify-content-end nav-link text-dark"><i className="material-icons mr-2">view_list</i><span>Vai all'archivio piani</span></a> */}
             </div>
         </React.Fragment>)
-    })
+    }

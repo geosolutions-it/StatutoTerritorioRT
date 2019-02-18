@@ -8,6 +8,7 @@
 import React from 'react'
 import { Table } from 'reactstrap'
 import StatoProgress from './StatoProgress'
+import {formatDate} from '../utils'
 const {Fragment} = React;
 const goToAnagrafica = (codice, {nome} = {}) => {
     if(nome === "DRAFT"){
@@ -42,7 +43,7 @@ export default ({title, piani = []}) => (
                         <td className="text-center"><i className={`material-icons ${notifica}`}>notification_important</i></td>
                         <td style={{maxWidth: 350}}>{descrizione}</td>
                         <td className="text-center text-capitalize">{tipo}</td>
-                        <td className="text-center">{lastUpdate}</td>
+                        <td className="text-center">{formatDate(lastUpdate)}</td>
                         <td className="text-center">{codice}</td>
                         <td className="text-center" style={{cursor: "pointer"}} onClick={() => goToAnagrafica(codice, fase)}><i className="material-icons text-warning">assignment</i></td>
                         <td>
