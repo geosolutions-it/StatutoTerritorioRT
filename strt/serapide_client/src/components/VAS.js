@@ -63,7 +63,7 @@ export default ({codice, canUpdate, isLocked}) => {
                     </div>)
             }
             
-            const {node: {uuid, tipologia, piano: {soggettoProponente: sP, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca =[]} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = edges[0] || {}
+            const {node: {uuid, tipologia, piano: {soggettoProponente: sP, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = edges[0] || {}
             const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
             const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
             const disableSCA = tipologia === "SEMPLIFICATA" || tipologia === "NON_NECESSARIA"

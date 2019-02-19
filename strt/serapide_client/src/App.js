@@ -9,7 +9,7 @@ import React from 'react'
 import {ApolloProvider} from 'react-apollo'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import client from "./apolloclient"
-import Home from './pages/Home'
+import Dashboard from './pages/Dashboard'
 import NuovoPiano from './pages/NuovoPiano'
 import CreaAnagrafica from './pages/CreaAnagrafica'
 import Piano from './pages/Piano'
@@ -38,7 +38,7 @@ return (
                           <Route  path="/piano/:code" render={(props) => <Piano utente={utente} {...props}/>} />
                           <Route  path="/crea_anagrafica/:code" component={CreaAnagrafica}/>
                           <Route  path="/nuovo_piano/" component={NuovoPiano}/>             
-                          <Route  path="/" render={(props) => <Home utente={utente} {...props}/>}/>
+                          <Route  path="/" render={(props) => <Dashboard utente={utente} {...props}/>}/>
                       </Switch>
                   </Router>
                 </React.Fragment>)
