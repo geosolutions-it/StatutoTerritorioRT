@@ -24,6 +24,7 @@ from serapide_core.modello.enums import (
 @rules.predicate
 def procedura_vas_is_valid(piano, procedura_vas):
     if procedura_vas.piano == piano:
+        # Perform checks specifically for the current "Fase"
         if piano.fase.nome == FASE.draft:
             if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
                 if procedura_vas.risorse.filter(tipo='vas_semplificata').count() == 1 and \

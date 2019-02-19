@@ -311,16 +311,16 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["console"], "level": "INFO", },
+            "handlers": ["console"], "level": "ERROR", },
         "celery": {
             "handlers": ["console"], "level": "ERROR", },
         "strt_tests": {
             "handlers": ["console"], "level": "DEBUG", },
         "strt_portal": {
-            "handlers": ["console"], "level": "DEBUG", },
+            "handlers": ["console"], "level": "ERROR", },
         "strt_users": {
-            "handlers": ["console"], "level": "DEBUG", },
+            "handlers": ["console"], "level": "ERROR", },
         "serapide_core": {
-            "handlers": ["console"], "level": "DEBUG", },
+            "handlers": ["console"], "level": "ERROR", },
     },
 }
