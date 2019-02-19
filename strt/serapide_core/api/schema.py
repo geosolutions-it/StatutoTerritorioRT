@@ -496,7 +496,8 @@ class EnteContattoMembershipFilter(django_filters.FilterSet):
             if is_RUP(self.request.user):
                 return super(EnteContattoMembershipFilter, self).qs.all()
             else:
-                return super(EnteContattoMembershipFilter, self).qs.filter(ente__usermembership__member=self.request.user)
+                return super(EnteContattoMembershipFilter, self).qs.filter(
+                    ente__usermembership__member=self.request.user)
         else:
             return super(EnteContattoMembershipFilter, self).qs.none()
 
@@ -689,7 +690,7 @@ class CreateContatto(relay.ClientIDMutation):
                     _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
                 _data['ente'] = _ente
 
-            if info.context.user and rules.test_rule('strt_users.can_access_private_area', info.context.user):
+            if info.context.user and not info.context.user.is_anonymous:
 
                 # Tipologia (M)
                 if 'tipologia' in _data:
@@ -763,6 +764,7 @@ class DeleteContatto(graphene.Mutation):
     def mutate(self, info, **input):
         if info.context.user and rules.test_rule('strt_users.can_access_private_area', info.context.user) and \
         is_RUP(info.context.user):
+
             # Fetching input arguments
             _id = input['uuid']
             try:
