@@ -62,19 +62,25 @@ from serapide_core.signals import (
 from serapide_core.modello.models import (
     Fase,
     Piano,
+    Azione,
     Risorsa,
     Contatto,
+    AzioniPiano,
     ProceduraVAS,
+    PianoAuthTokens,
     FasePianoStorico,
     RisorsePiano, RisorseVas,
     AutoritaCompetenteVAS, SoggettiSCA,
-    PianoAuthTokens,
 )
 from serapide_core.modello.enums import (
     FASE,
+    AZIONI,
     FASE_NEXT,
+    STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_PIANO,
+    # TIPOLOGIA_ATTORE,
+    TIPOLOGIA_AZIONE,
     TIPOLOGIA_CONTATTO,
 )
 
@@ -128,12 +134,12 @@ class FasePianoStoricoType(DjangoObjectType):
 
 
 class UserThreadType(DjangoObjectType):
-    
+
     absolute_url = graphene.String()
 
     def resolve_absolute_url(self, info, **args):
         return self.get_absolute_url()
-    
+
     class Meta:
         model = Thread
         filter_fields = ['subject', 'users', ]
@@ -146,6 +152,18 @@ class UserMessageType(DjangoObjectType):
 
     class Meta:
         model = Message
+        interfaces = (relay.Node, )
+
+
+class AzioneNode(DjangoObjectType):
+
+    class Meta:
+        model = Azione
+        filter_fields = ['uuid',
+                         'tipologia',
+                         'attore',
+                         'stato',
+                         'data']
         interfaces = (relay.Node, )
 
 
@@ -294,6 +312,11 @@ class PianoNode(DjangoObjectType):
     risorsa = DjangoFilterConnectionField(RisorsePianoType)
     procedura_vas = graphene.Field(ProceduraVASNode)
     soggetto_proponente = graphene.Field(ContattoNode)
+    alerts_count = graphene.String()
+
+    def resolve_alerts_count(self, info, **args):
+        _alert_states = [STATO_AZIONE.attesa, STATO_AZIONE.necessaria]
+        return self.azioni.filter(stato__in=_alert_states).count()
 
     def resolve_storico_fasi(self, info, **args):
         # Warning this is not currently paginated
@@ -761,6 +784,7 @@ class CreatePiano(relay.ClientIDMutation):
             _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
             _piano_data['ente'] = _ente
             if info.context.user and rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente):
+
                 # Codice (M)
                 if 'codice' in _piano_data:
                     _data = _piano_data.pop('codice')
@@ -771,6 +795,7 @@ class CreatePiano(relay.ClientIDMutation):
                     _piano_id = Piano.objects.filter(ente=_ente).count() + 1
                     _codice = '%s%02d%02d%05d' % (_ente.code, int(_year), _month, _piano_id)
                 _piano_data['codice'] = _codice
+
                 # Fase (O)
                 if 'fase' in _piano_data:
                     _data = _piano_data.pop('fase')
@@ -778,18 +803,37 @@ class CreatePiano(relay.ClientIDMutation):
                 else:
                     _fase = Fase.objects.get(codice='FP255')
                 _piano_data['fase'] = _fase
+
                 # Descrizione (O)
                 if 'descrizione' in _piano_data:
                     _data = _piano_data.pop('descrizione')
                     _piano_data['descrizione'] = _data[0]
                 _piano_data['user'] = info.context.user
                 _piano = Piano()
-                nuovo_piano = update_create_instance(_piano, _piano_data)
+
+                # Inizializzazione Azioni del Piano
+                _azioni_piano = []
+                for _a in AZIONI[_fase.nome]:
+                    _azione = Azione(
+                        tipologia=_a["tipologia"],
+                        attore=_a["attore"]
+                    )
+                    _azioni_piano.append(_azione)
+
+                # Inizializzazione Procedura VAS
                 _procedura_vas = ProceduraVAS()
-                _procedura_vas.piano = nuovo_piano
-                _procedura_vas.ente = nuovo_piano.ente
+                _procedura_vas.ente = _piano.ente
                 _procedura_vas.tipologia = TIPOLOGIA_VAS.semplificata
+
+                nuovo_piano = update_create_instance(_piano, _piano_data)
+                _procedura_vas.piano = nuovo_piano
                 _procedura_vas.save()
+                for _ap in _azioni_piano:
+                    _ap.save()
+                    AzioniPiano.objects.get_or_create(azione=_ap, piano=nuovo_piano)
+                _creato = nuovo_piano.azioni.get(tipologia=TIPOLOGIA_AZIONE.creato_piano)
+                _creato.stato = STATO_AZIONE.nessuna
+                _creato.save()
                 return cls(nuovo_piano=nuovo_piano)
             else:
                 return GraphQLError(_("Forbidden"), code=403)
@@ -857,30 +901,37 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'codice' in _piano_data:
                     _piano_data.pop('codice')
                     # This cannot be changed
+
                 # Data Accettazione (M)
                 if 'data_creazione' in _piano_data:
                     _piano_data.pop('data_creazione')
                     # This cannot be changed
+
                 # Data Accettazione (O)
                 if 'data_accettazione' in _piano_data:
                     _piano_data.pop('data_accettazione')
                     # This cannot be changed
+
                 # Data Avvio (O)
                 if 'data_avvio' in _piano_data:
                     _piano_data.pop('data_avvio')
                     # This cannot be changed
+
                 # Data Approvazione (O)
                 if 'data_approvazione' in _piano_data:
                     _piano_data.pop('data_approvazione')
                     # This cannot be changed
+
                 # Ente (M)
                 if 'ente' in _piano_data:
                     _piano_data.pop('ente')
                     # This cannot be changed
+
                 # Fase (O)
                 if 'fase' in _piano_data:
                     _piano_data.pop('fase')
                     # This cannot be changed
+
                 # Tipologia (O)
                 if 'tipologia' in _piano_data:
                     _piano_data.pop('tipologia')
@@ -1028,23 +1079,35 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                 if 'uuid' in _procedura_vas_data:
                     _procedura_vas_data.pop('uuid')
                     # This cannot be changed
+
                 if 'data_creazione' in _procedura_vas_data:
                     _procedura_vas_data.pop('data_creazione')
                     # This cannot be changed
+
                 # Ente (M)
                 if 'ente' in _procedura_vas_data:
                     _procedura_vas_data.pop('ente')
                     # This cannot be changed
+
                 # Tipologia (O)
                 if 'tipologia' in _procedura_vas_data:
                     _tipologia = _procedura_vas_data.pop('tipologia')
                     if _tipologia and _tipologia in TIPOLOGIA_VAS:
                         _procedura_vas_data['tipologia'] = _tipologia
+
                 # Note (O)
                 if 'note' in _procedura_vas_data:
                     _data = _procedura_vas_data.pop('note')
                     _procedura_vas.note = _data[0]
                 procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
+                _verifica_vas = _piano.azioni.get(tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas)
+                if procedura_vas_aggiornata.tipologia == TIPOLOGIA_VAS.verifica:
+                    _verifica_vas.stato = STATO_AZIONE.attesa
+                elif procedura_vas_aggiornata.tipologia == TIPOLOGIA_VAS.non_necessaria:
+                    _verifica_vas.stato = STATO_AZIONE.nessuna
+                else:
+                    _verifica_vas.stato = STATO_AZIONE.necessaria
+                _verifica_vas.save()
                 return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
             except BaseException as e:
                 tb = traceback.format_exc()

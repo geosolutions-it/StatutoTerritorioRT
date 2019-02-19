@@ -26,9 +26,13 @@ from strt_users.models import (
 )
 
 from .enums import (FASE,
-                    TIPOLOGIA_CONTATTO,
+                    STATO_AZIONE,
+                    TIPOLOGIA_VAS,
                     TIPOLOGIA_PIANO,
-                    TIPOLOGIA_VAS)
+                    TIPOLOGIA_ATTORE,
+                    TIPOLOGIA_AZIONE,
+                    TIPOLOGIA_CONTATTO
+                    )
 
 
 log = logging.getLogger(__name__)
@@ -148,6 +152,42 @@ class Contatto(models.Model):
             self.nome, self.email, self.ente, self.uuid, TIPOLOGIA_CONTATTO[self.tipologia])
 
 
+class Azione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    tipologia = models.CharField(
+        choices=TIPOLOGIA_AZIONE,
+        default=TIPOLOGIA_AZIONE.unknown,
+        max_length=80
+    )
+
+    attore = models.CharField(
+        choices=TIPOLOGIA_ATTORE,
+        default=TIPOLOGIA_ATTORE.unknown,
+        max_length=80
+    )
+
+    stato = models.CharField(
+        choices=STATO_AZIONE,
+        default=STATO_AZIONE.unknown,
+        max_length=20
+    )
+
+    data = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "strt_core_azione"
+        verbose_name_plural = 'Azioni'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.attore, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
+
+
 class Piano(models.Model):
     """
     Every "Piano" in the serapide_core application has a unique uuid
@@ -168,7 +208,7 @@ class Piano(models.Model):
     tipologia = models.CharField(
         choices=TIPOLOGIA_PIANO,
         default=TIPOLOGIA_PIANO.unknown,
-        max_length=20
+        max_length=80
     )
 
     descrizione = models.TextField(null=True, blank=True)
@@ -183,6 +223,7 @@ class Piano(models.Model):
     fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
     storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
     risorse = models.ManyToManyField(Risorsa, through='RisorsePiano')
+    azioni = models.ManyToManyField(Azione, through='AzioniPiano')
 
     autorita_competente_vas = models.ManyToManyField(
         Contatto,
@@ -265,6 +306,14 @@ class RisorsePiano(models.Model):
 
     class Meta:
         db_table = "strt_core_piano_risorse"
+
+
+class AzioniPiano(models.Model):
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+    azione = models.ForeignKey(Azione, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_piano_azioni"
 
 
 class ProceduraVAS(models.Model):
@@ -365,7 +414,7 @@ def delete_roles_and_users(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Piano)
-def delete_contacts(sender, instance, **kwargs):
+def delete_piano_associations(sender, instance, **kwargs):
     AutoritaCompetenteVAS.objects.filter(piano=instance).delete()
     SoggettiSCA.objects.filter(piano=instance).delete()
     instance.risorse.all().delete()
@@ -373,3 +422,5 @@ def delete_contacts(sender, instance, **kwargs):
     for _vas in ProceduraVAS.objects.filter(piano=instance):
         _vas.risorse.all().delete()
         RisorseVas.objects.filter(procedura_vas=_vas).delete()
+    for _a in AzioniPiano.objects.filter(piano=instance):
+        _a.azione.delete()
