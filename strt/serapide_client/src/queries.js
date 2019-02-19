@@ -7,6 +7,7 @@ fragment User on AppUserNode {
     fiscalCode
     firstName
     lastName
+    dateJoined
 }
 `
 const RisorsaFragment = gql`
@@ -72,6 +73,15 @@ fragment Piano on PianoNode {
     dataAccettazione
     dataAvvio
     dataApprovazione
+    alertsCount
+    azioni {
+        edges {
+            node {
+                tipologia
+                stato
+            }
+        }
+    }
     ente {
             code
             name
@@ -158,30 +168,27 @@ query{
   utenti {
     edges {
       node {
-        fiscalCode,
-        firstName,
-        lastName,
-        dateJoined,
-        email,
-        unreadThreadsCount,
+        ...User
+        unreadThreadsCount
         unreadMessages {
           thread {
-            id,
-            subject,
+            id
+            subject
             absoluteUrl
-          },
+          }
           sender {
             email
             firstName
             lastName
-          },
-          sentAt,
+          }
+          sentAt
           content
         }
       }
     }
   }
-}`
+}
+${UserFragment}`
 
 
 export const GET_PIANI = gql`
