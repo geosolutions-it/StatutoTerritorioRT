@@ -833,9 +833,11 @@ class CreatePiano(relay.ClientIDMutation):
                     _ap.save()
                     AzioniPiano.objects.get_or_create(azione=_ap, piano=nuovo_piano)
 
-                _creato = nuovo_piano.azioni.get(tipologia=TIPOLOGIA_AZIONE.creato_piano)
-                _creato.stato = STATO_AZIONE.nessuna
-                _creato.save()
+                _creato = nuovo_piano.azioni.find(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
+                if _creato:
+                    _creato.stato = STATO_AZIONE.nessuna
+                    _creato.data = datetime.datetime.now()
+                    _creato.save()
 
                 return cls(nuovo_piano=nuovo_piano)
             else:
