@@ -689,7 +689,8 @@ class CreateContatto(relay.ClientIDMutation):
                     _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
                 _data['ente'] = _ente
 
-            if info.context.user and rules.test_rule('strt_users.is_RUP_of', info.context.user, _data['ente']):
+            if info.context.user and rules.test_rule('strt_users.can_access_private_area', info.context.user):
+
                 # Tipologia (M)
                 if 'tipologia' in _data:
                     _tipologia = _data.pop('tipologia')
