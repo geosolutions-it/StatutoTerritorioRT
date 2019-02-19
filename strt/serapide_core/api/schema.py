@@ -472,7 +472,10 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
     def qs(self):
         # The query context can be found in self.request.
         if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
-            return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
+            if is_RUP(self.request.user):
+                return super(EnteUserMembershipFilter, self).qs.all()
+            else:
+                return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
         else:
             return super(EnteUserMembershipFilter, self).qs.none()
 
@@ -490,7 +493,10 @@ class EnteContattoMembershipFilter(django_filters.FilterSet):
     def qs(self):
         # The query context can be found in self.request.
         if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
-            return super(EnteContattoMembershipFilter, self).qs.filter(ente__usermembership__member=self.request.user)
+            if is_RUP(self.request.user):
+                return super(EnteContattoMembershipFilter, self).qs.all()
+            else:
+                return super(EnteContattoMembershipFilter, self).qs.filter(ente__usermembership__member=self.request.user)
         else:
             return super(EnteContattoMembershipFilter, self).qs.none()
 
