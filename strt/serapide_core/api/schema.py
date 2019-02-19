@@ -822,18 +822,21 @@ class CreatePiano(relay.ClientIDMutation):
 
                 # Inizializzazione Procedura VAS
                 _procedura_vas = ProceduraVAS()
-                _procedura_vas.ente = _piano.ente
                 _procedura_vas.tipologia = TIPOLOGIA_VAS.semplificata
 
                 nuovo_piano = update_create_instance(_piano, _piano_data)
                 _procedura_vas.piano = nuovo_piano
+                _procedura_vas.ente = nuovo_piano.ente
                 _procedura_vas.save()
+
                 for _ap in _azioni_piano:
                     _ap.save()
                     AzioniPiano.objects.get_or_create(azione=_ap, piano=nuovo_piano)
+
                 _creato = nuovo_piano.azioni.get(tipologia=TIPOLOGIA_AZIONE.creato_piano)
                 _creato.stato = STATO_AZIONE.nessuna
                 _creato.save()
+
                 return cls(nuovo_piano=nuovo_piano)
             else:
                 return GraphQLError(_("Forbidden"), code=403)
@@ -1100,14 +1103,6 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                     _data = _procedura_vas_data.pop('note')
                     _procedura_vas.note = _data[0]
                 procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
-                _verifica_vas = _piano.azioni.get(tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas)
-                if procedura_vas_aggiornata.tipologia == TIPOLOGIA_VAS.verifica:
-                    _verifica_vas.stato = STATO_AZIONE.attesa
-                elif procedura_vas_aggiornata.tipologia == TIPOLOGIA_VAS.non_necessaria:
-                    _verifica_vas.stato = STATO_AZIONE.nessuna
-                else:
-                    _verifica_vas.stato = STATO_AZIONE.necessaria
-                _verifica_vas.save()
                 return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
             except BaseException as e:
                 tb = traceback.format_exc()
@@ -1285,7 +1280,7 @@ class DeleteRisorsa(DeleteRisorsaBase):
             # Fetching input arguments
             _id = input['risorsa_id']
             _codice_piano = input['codice']
-            # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _piano = Piano.objects.get(codice=_codice_piano)
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
@@ -1315,7 +1310,7 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
             # Fetching input arguments
             _id = input['risorsa_id']
             _uuid_vas = input['codice']
-            # TODO:: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano) and \
@@ -1350,6 +1345,41 @@ class PromozionePiano(graphene.Mutation):
         return FASE_NEXT[fase.nome]
 
     @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        for _a in piano.azioni.all():
+            _a.stato = STATO_AZIONE.nessuna
+            _a.data = datetime.datetime.now()
+            _a.save()
+
+        # - Attach Actions Templates for the Next "Fase"
+        for _a in AZIONI[fase.nome]:
+            _azione = Azione(
+                tipologia=_a["tipologia"],
+                attore=_a["attore"],
+                stato=STATO_AZIONE.necessaria
+            )
+            _azione.save()
+            AzioniPiano.objects.get_or_create(azione=_azione, piano=piano)
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _verifica_vas = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.parere_verifica_vas).first()
+            if _verifica_vas:
+                if procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+                    _verifica_vas.stato = STATO_AZIONE.nessuna
+                else:
+                    _verifica_vas.stato = STATO_AZIONE.attesa
+                _verifica_vas.save()
+        elif fase.nome == FASE.avvio:
+            _genio_civile = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
+            if _genio_civile:
+                _genio_civile.stato = STATO_AZIONE.attesa
+                _genio_civile.save()
+
+    @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
@@ -1360,9 +1390,11 @@ class PromozionePiano(graphene.Mutation):
                                    next=_next_fase),
                                    _piano,
                                    _procedura_vas):
-                    _piano.fase = Fase.objects.get(nome=_next_fase)
+                    _piano.fase = _fase = Fase.objects.get(nome=_next_fase)
                     piano_phase_changed.send(sender=Piano, user=info.context.user, piano=_piano)
                     _piano.save()
+
+                    cls.update_actions_for_phase(_fase, _piano, _procedura_vas)
 
                     return PromozionePiano(
                         piano_aggiornato=_piano,

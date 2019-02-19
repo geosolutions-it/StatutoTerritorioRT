@@ -91,7 +91,7 @@ AZIONI = {
             "attore": TIPOLOGIA_ATTORE.comune
         }
     ],
-    FASE.avvio: [
+    FASE.anagrafica: [
         {
             "tipologia": TIPOLOGIA_AZIONE.parere_verifica_vas,
             "attore": TIPOLOGIA_ATTORE.ac
@@ -101,7 +101,7 @@ AZIONI = {
             "attore": TIPOLOGIA_ATTORE.comune
         }
     ],
-    FASE.adozione: [
+    FASE.avvio: [
         {
             "tipologia": TIPOLOGIA_AZIONE.formazione_del_piano,
             "attore": TIPOLOGIA_ATTORE.comune

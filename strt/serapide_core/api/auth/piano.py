@@ -12,7 +12,7 @@
 import os
 import rules
 
-from serapide_core.modello.enums import FASE
+from serapide_core.modello.enums import FASE, STATO_AZIONE
 from serapide_core.modello.models import Piano, ProceduraVAS
 
 
@@ -58,3 +58,8 @@ def has_soggetto_proponente(piano):
 @rules.predicate
 def has_procedura_vas(piano):
     return ProceduraVAS.objects.filter(piano=piano).count() == 1
+
+@rules.predicate
+def has_pending_alerts(piano):
+    _alert_states = [STATO_AZIONE.attesa, STATO_AZIONE.necessaria]
+    return piano.azioni.filter(stato__in=_alert_states).count() > 0

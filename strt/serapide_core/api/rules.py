@@ -51,6 +51,7 @@ rules.add_rule(
 
 rules.add_rule(
     'strt_core.api.fase_anagrafica_completa',
+    ~piano_rules.has_pending_alerts &
     piano_rules.is_draft & piano_rules.has_data_delibera & piano_rules.has_description &
     piano_rules.has_delibera_comunale & piano_rules.has_soggetto_proponente &
     piano_rules.has_procedura_vas & vas_rules.procedura_vas_is_valid
