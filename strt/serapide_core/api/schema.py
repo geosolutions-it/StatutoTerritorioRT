@@ -79,7 +79,7 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_PIANO,
-    TIPOLOGIA_ATTORE,
+    # TIPOLOGIA_ATTORE,
     TIPOLOGIA_AZIONE,
     TIPOLOGIA_CONTATTO,
 )
@@ -134,7 +134,7 @@ class FasePianoStoricoType(DjangoObjectType):
 
 
 class UserThreadType(DjangoObjectType):
-    
+
     absolute_url = graphene.String()
 
     def resolve_absolute_url(self, info, **args):
@@ -312,6 +312,11 @@ class PianoNode(DjangoObjectType):
     risorsa = DjangoFilterConnectionField(RisorsePianoType)
     procedura_vas = graphene.Field(ProceduraVASNode)
     soggetto_proponente = graphene.Field(ContattoNode)
+    alerts_count = graphene.String()
+
+    def resolve_alerts_count(self, info, **args):
+        _alert_states = [STATO_AZIONE.attesa, STATO_AZIONE.necessaria]
+        return self.azioni.filter(stato__in=_alert_states).count()
 
     def resolve_storico_fasi(self, info, **args):
         # Warning this is not currently paginated

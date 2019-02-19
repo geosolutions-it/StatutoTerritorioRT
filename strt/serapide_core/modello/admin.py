@@ -13,7 +13,7 @@ from django.contrib import admin
 
 from .models import (
     Fase,
-    Risorsa,
+    # Risorsa,
     Contatto,
     Azione, AzioniPiano,
     Piano, RisorsePiano,
