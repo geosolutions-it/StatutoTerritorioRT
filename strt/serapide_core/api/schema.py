@@ -683,7 +683,10 @@ class CreateContatto(relay.ClientIDMutation):
             # Ente (M)
             if 'ente' in _data:
                 _ente = _data.pop('ente')
-                _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
+                if is_RUP(info.context.user):
+                    _ente = Organization.objects.get(code=_ente['code'])
+                else:
+                    _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
                 _data['ente'] = _ente
 
             if info.context.user and rules.test_rule('strt_users.is_RUP_of', info.context.user, _data['ente']):
