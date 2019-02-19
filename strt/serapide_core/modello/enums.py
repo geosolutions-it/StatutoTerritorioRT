@@ -13,11 +13,6 @@ from model_utils import Choices
 from django.utils.translation import gettext as _
 
 
-"""
-A list of choices for the rating system in the
-`SERAPIDE CORE` model:
-"""
-
 FASE = Choices(
         ('unknown', _('UNKNOWN')),
         ('draft', _('DRAFT')),
@@ -59,3 +54,61 @@ TIPOLOGIA_VAS = Choices(
         ('procedimento', _('PROCEDIMENTO')),
         ('non_necessaria', _('NON_NECESSARIA')),
     )
+
+STATO_AZIONE = Choices(
+        ('unknown', _('UNKNOWN')),
+        ('nessuna', _('NESSUNA')),
+        ('attesa', _('ATTESA')),
+        ('necessaria', _('NECESSARIA')),
+    )
+
+TIPOLOGIA_AZIONE = Choices(
+        ('unknown', _('UNKNOWN')),
+        ('creato_piano', _('Creato Piano')),
+        ('parere_verifica_vas', _('Parere Verifica VAS')),
+        ('richiesta_verifica_vas', _('Richiesta Verifica VAS')),
+        ('avvio_procedimento', _('Avvio Procedimento')),
+        ('formazione_del_piano', _('Formazione del Piano')),
+        ('protocollo_genio_civile', _('Protocollo Genio Civile')),
+    )
+
+TIPOLOGIA_ATTORE = Choices(
+        ('unknown', _('UNKNOWN')),
+        ('comune', _('Comune')),
+        ('ac', _('AC')),
+        ('sca', _('SCA')),
+        ('genio_civile', _('Genio Civile')),
+    )
+
+AZIONI = {
+    FASE.draft: [
+        {
+            "tipologia": TIPOLOGIA_AZIONE.creato_piano,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
+        {
+            "tipologia": TIPOLOGIA_AZIONE.richiesta_verifica_vas,
+            "attore": TIPOLOGIA_ATTORE.comune
+        }
+    ],
+    FASE.avvio: [
+        {
+            "tipologia": TIPOLOGIA_AZIONE.parere_verifica_vas,
+            "attore": TIPOLOGIA_ATTORE.ac
+        },
+        {
+            "tipologia": TIPOLOGIA_AZIONE.avvio_procedimento,
+            "attore": TIPOLOGIA_ATTORE.comune
+        }
+    ],
+    FASE.adozione: [
+        {
+            "tipologia": TIPOLOGIA_AZIONE.formazione_del_piano,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
+        {
+            "tipologia": TIPOLOGIA_AZIONE.protocollo_genio_civile,
+            "attore": TIPOLOGIA_ATTORE.genio_civile
+        }
+    ]
+}
