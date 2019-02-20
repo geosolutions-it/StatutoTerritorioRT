@@ -6933,21 +6933,24 @@ a.text-dark:hover, a.text-dark:focus {
   font-size: 90%; }
 
 .serapide .stato-progress {
-  width: 100px;
+  width: 120px;
   flex-direction: column;
   display: inline-flex;
   align-items: center;
   line-height: 0px; }
+  .serapide .stato-progress .anagrafica {
+    transform: translateX(-44.8px); }
   .serapide .stato-progress .avvio {
-    transform: translateX(-34px); }
+    transform: translateX(-22.4px); }
   .serapide .stato-progress .adozione {
-    transform: translateX(-11.5px); }
+    transform: translateX(0px); }
   .serapide .stato-progress .approvazione {
-    transform: translateX(11.5px); }
+    transform: translateX(22.4px); }
   .serapide .stato-progress .pubblicazione {
-    transform: translateX(34px); }
+    transform: translateX(44.8px); }
   .serapide .stato-progress i {
-    transform: translateX(-46px);
+    font-size: 24px;
+    transform: translateX(-56px);
     color: #ffc107; }
   .serapide .stato-progress i.draft {
     color: #ced4da; }
@@ -6960,17 +6963,33 @@ a.text-dark:hover, a.text-dark:focus {
     font-size: 100%;
     font: inherit;
     vertical-align: baseline; }
-  .serapide .stato-progress ._avvio li, .serapide .stato-progress ._adozione li, .serapide .stato-progress ._approvazione li, .serapide .stato-progress ._pubblicazione li {
+  .serapide .stato-progress ._anagrafica li {
     background-color: #ffc107; }
-    .serapide .stato-progress ._avvio li:before, .serapide .stato-progress ._adozione li:before, .serapide .stato-progress ._approvazione li:before, .serapide .stato-progress ._pubblicazione li:before {
+    .serapide .stato-progress ._anagrafica li:before {
+      background-color: #ffc107; }
+  .serapide .stato-progress ._avvio li {
+    background-color: #ffc107; }
+    .serapide .stato-progress ._avvio li:before {
+      background-color: #ffc107; }
+  .serapide .stato-progress ._adozione li {
+    background-color: #ffc107; }
+    .serapide .stato-progress ._adozione li:before {
+      background-color: #ffc107; }
+  .serapide .stato-progress ._approvazione li {
+    background-color: #ffc107; }
+    .serapide .stato-progress ._approvazione li:before {
+      background-color: #ffc107; }
+  .serapide .stato-progress ._pubblicazione li {
+    background-color: #ffc107; }
+    .serapide .stato-progress ._pubblicazione li:before {
       background-color: #ffc107; }
   .serapide .stato-progress li {
     width: 8px;
     height: 8px;
     text-align: center;
     line-height: 1em;
-    border-radius: 5px;
-    margin: 0 0 0 15px;
+    border-radius: 4px;
+    margin: 0 0 0 14.4px;
     display: inline-block;
     color: #fff;
     background-color: #ced4da;
@@ -6981,8 +7000,8 @@ a.text-dark:hover, a.text-dark:focus {
       background-color: #ced4da;
       position: absolute;
       top: 2px;
-      left: -15px;
-      width: 15px;
+      left: -14.4px;
+      width: 14.4px;
       height: 4px;
       z-index: 0; }
   .serapide .stato-progress li:first-child {
@@ -6993,10 +7012,109 @@ a.text-dark:hover, a.text-dark:focus {
     display: none; }
   .serapide .stato-progress .active {
     background: #ffc107; }
+  .serapide .stato-progress ._draft .active {
+    background: #ced4da; }
   .serapide .stato-progress .active ~ li {
     background: #ced4da; }
   .serapide .stato-progress .active ~ li::before {
     background: #ced4da; }
+  .serapide .stato-progress .current-fase {
+    padding-top: 10px;
+    font-size: 1rem; }
+  .serapide .stato-progress .current-fase.draft {
+    display: none; }
+
+.serapide .stato-progress-xxl {
+  width: 300px;
+  flex-direction: column;
+  display: inline-flex;
+  align-items: center;
+  line-height: 0px; }
+  .serapide .stato-progress-xxl .anagrafica {
+    transform: translateX(-114.4px); }
+  .serapide .stato-progress-xxl .avvio {
+    transform: translateX(-57.2px); }
+  .serapide .stato-progress-xxl .adozione {
+    transform: translateX(0px); }
+  .serapide .stato-progress-xxl .approvazione {
+    transform: translateX(57.2px); }
+  .serapide .stato-progress-xxl .pubblicazione {
+    transform: translateX(114.4px); }
+  .serapide .stato-progress-xxl i {
+    font-size: 80px;
+    transform: translateX(-143px);
+    color: #ffc107; }
+  .serapide .stato-progress-xxl i.draft {
+    color: #ced4da; }
+  .serapide .stato-progress-xxl ul {
+    list-style: none;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline; }
+  .serapide .stato-progress-xxl ._anagrafica li {
+    background-color: #ffc107; }
+    .serapide .stato-progress-xxl ._anagrafica li:before {
+      background-color: #ffc107; }
+  .serapide .stato-progress-xxl ._avvio li {
+    background-color: #ffc107; }
+    .serapide .stato-progress-xxl ._avvio li:before {
+      background-color: #ffc107; }
+  .serapide .stato-progress-xxl ._adozione li {
+    background-color: #ffc107; }
+    .serapide .stato-progress-xxl ._adozione li:before {
+      background-color: #ffc107; }
+  .serapide .stato-progress-xxl ._approvazione li {
+    background-color: #ffc107; }
+    .serapide .stato-progress-xxl ._approvazione li:before {
+      background-color: #ffc107; }
+  .serapide .stato-progress-xxl ._pubblicazione li {
+    background-color: #ffc107; }
+    .serapide .stato-progress-xxl ._pubblicazione li:before {
+      background-color: #ffc107; }
+  .serapide .stato-progress-xxl li {
+    width: 14px;
+    height: 14px;
+    text-align: center;
+    line-height: 1em;
+    border-radius: 7px;
+    margin: 0 0 0 43.2px;
+    display: inline-block;
+    color: #fff;
+    background-color: #ced4da;
+    position: relative;
+    z-index: 1; }
+    .serapide .stato-progress-xxl li:before {
+      content: '';
+      background-color: #ced4da;
+      position: absolute;
+      top: 3.5px;
+      left: -43.2px;
+      width: 43.2px;
+      height: 7px;
+      z-index: 0; }
+  .serapide .stato-progress-xxl li:first-child {
+    margin-left: 0px; }
+  .serapide .stato-progress-xxl li:last-child {
+    margin-right: 0px; }
+  .serapide .stato-progress-xxl li:first-child::before {
+    display: none; }
+  .serapide .stato-progress-xxl .active {
+    background: #ffc107; }
+  .serapide .stato-progress-xxl ._draft .active {
+    background: #ced4da; }
+  .serapide .stato-progress-xxl .active ~ li {
+    background: #ced4da; }
+  .serapide .stato-progress-xxl .active ~ li::before {
+    background: #ced4da; }
+  .serapide .stato-progress-xxl .current-fase {
+    padding-top: 10px;
+    font-size: 1rem; }
+  .serapide .stato-progress-xxl .current-fase.draft {
+    display: none; }
 
 .navbar {
   z-index: 1031;
