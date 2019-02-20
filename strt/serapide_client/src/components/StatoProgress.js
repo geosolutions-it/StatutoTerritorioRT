@@ -19,7 +19,7 @@ export default ({stato: {nome = "Unknown", codice}, className= "stato-progress",
             <i id={id} className={`material-icons ${activeFase}`}>room</i>
             <ul className={`_${activeFase} _icons`}>
                 {fasi.map((fase, idx) => (<li key={`_${fase}`} id={`_${fase}`} className={classNames({active: activeFase === fase})}/>))}
-                {!legend && <UncontrolledTooltip placement="top" target={id} ><span className="text-capitalize">{nome.toLowerCase()}</span></UncontrolledTooltip>}
+                {!legend && <UncontrolledTooltip placement="top" target={id} ><span className="text-capitalize">{activeFase.toLowerCase()}</span></UncontrolledTooltip>}
             </ul>
             {legend && (
                 <React.Fragment>

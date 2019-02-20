@@ -55,7 +55,7 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                 window.location.href=`#/crea_anagrafica/${code}`
             }
             return(
-                        <div className="pb-4 pt-3 d-flex flex-row">
+                        <div className="pb-4 pt-5 d-flex flex-row">
                             <i className="material-icons text-warning icon-34">assignment</i>
                             <i style={{maxWidth: 26}} className="material-icons text-warning">locked</i>
                             <div className="d-flex flex-column flex-fill">
