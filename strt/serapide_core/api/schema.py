@@ -876,7 +876,7 @@ class CreatePiano(relay.ClientIDMutation):
 
                 _creato = nuovo_piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
                 if _creato:
-                    _creato.stato = STATO_AZIONE.necessaria
+                    _creato.stato = STATO_AZIONE.attesa
                     _creato.save()
 
                 return cls(nuovo_piano=nuovo_piano)
