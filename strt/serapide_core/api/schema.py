@@ -1014,10 +1014,10 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'autorita_competente_vas' in _piano_data:
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        _piano.autorita_competente_vas.clear()
                         if _autorita_competente_vas:
                             for _ac in _piano.autorita_competente_vas.all():
                                 UpdatePiano.delete_token(_ac.user, _piano)
-                            _piano.autorita_competente_vas.clear()
 
                             if len(_autorita_competente_vas) > 0:
                                 _autorita_competenti = []
@@ -1035,10 +1035,10 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'soggetti_sca' in _piano_data:
                     _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        _piano.soggetti_sca.clear()
                         if _soggetti_sca_uuid:
                             for _sca in _piano.soggetti_sca.all():
                                 UpdatePiano.delete_token(_sca.user, _piano)
-                            _piano.soggetti_sca.clear()
 
                             if len(_soggetti_sca_uuid) > 0:
                                 _soggetti_sca = []
