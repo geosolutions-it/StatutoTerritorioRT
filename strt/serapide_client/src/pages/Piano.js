@@ -22,7 +22,7 @@ import Home from "./Home"
 const getActive = (url = "", pathname = "") => {
     return pathname.replace(url, "")
 }
-export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {},  ...props}) => {
+export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
     const activeLocation = getActive(url, pathname)
     return (<Query query={GET_PIANI} variables={{codice: code}}>
 
@@ -44,7 +44,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
             return(
             <React.Fragment>
                 <Injector el="serapide-sidebar">
-                    <SideBar url={url} piano={piano} active={activeLocation}></SideBar>
+                    <SideBar url={url} piano={piano} active={activeLocation} unreadMessages={utente.unreadThreadsCount}></SideBar>
                 </Injector>
                 <div className="serapide-content pt-5 pb-5 pX-lg px-4 serapide-top-offset position-relative overflow-x-scroll">
                     <div className="d-flex flex-column ">

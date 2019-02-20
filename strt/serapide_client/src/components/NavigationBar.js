@@ -15,7 +15,7 @@ import Messaggi from './MenuMessaggi'
 import {toggleControllableState} from '../enhancers/utils'
 
 
-export default toggleControllableState("isOpen", "toggle", false) (({isOpen= false, toggle = () =>{}, user = {}, messaggi = [], notifiche = []}) => (
+export default toggleControllableState("isOpen", "toggle", false) (({isOpen= false, toggle = () =>{}, user = {}, messaggi = [], alertsCount = 0}) => (
             <React.Fragment>
               <NavItem className="first">
                 <LinkWithIcon className="vertical-divider-left" icon="find_in_page" label="Ricerca" link="./#/search"></LinkWithIcon>
@@ -30,7 +30,7 @@ export default toggleControllableState("isOpen", "toggle", false) (({isOpen= fal
                 <LinkWithIcon className="vertical-divider-right" icon="today" label="Calendario"></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
-                <LinkWithIcon icon="notification_important" iconColor="text-danger" withBadge badge="10" label="Alert"></LinkWithIcon>
+                <LinkWithIcon icon="notification_important" iconColor="text-danger" withBadge badge={alertsCount} label="Alert"></LinkWithIcon>
               </NavItem>
               <Messaggi className="first" messaggi={messaggi}></Messaggi>
             </React.Fragment>

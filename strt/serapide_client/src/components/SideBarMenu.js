@@ -11,7 +11,7 @@ import {Badge} from 'reactstrap'
 import {toggleControllableState} from '../enhancers/utils'
 const enhancer = toggleControllableState("expanded", "toggleOpen", true)
 
-export default enhancer(({piano = {}, expanded, url, active, toggleOpen}) => (
+export default enhancer(({piano = {}, expanded, url, active, toggleOpen, unreadMessages = 0}) => (
     <React.Fragment>
         {expanded ? (
             <div className="sidebar-header">
@@ -32,10 +32,10 @@ export default enhancer(({piano = {}, expanded, url, active, toggleOpen}) => (
                 <MenuItem href={`#${url}/approvazione`} active={active === "/approvazione"} title="APPROVAZIONE" icon="check_circle" expanded={expanded}/>
                 <MenuItem href={`#${url}/pubblicazione`} active={active === "/pubblicazione"} title="PUBBLICAZIONE" icon="assignment" expanded={expanded}/>
                 <MenuItem href="/users/messages/inbox/" active={active === "/messaggi"} title="MESSAGGI" icon="email" expanded={expanded}>
-                    <Badge color="light">1</Badge>
+                    <Badge color="light">{unreadMessages}</Badge>
                 </MenuItem>
                 <MenuItem href={`#${url}/avvisi`} active={active === "/avvisi"} title="ALERT" icon="notification_important" iconColor="text-danger" expanded={expanded}>
-                    <Badge color="light">2</Badge>
+                    <Badge color="light">{piano.alertsCount || "0"}</Badge>
                 </MenuItem>
                 
             </ul>

@@ -46,7 +46,7 @@ export default ({utente, ...props}) => {
                 <hr className="border-warning border-bottom"></hr>
                 <div className="py-4 d-flex flex-row">
                     <div className="d-flex flex-column ">
-                        <h2>{`${utente.firstName} ${utente.lastName}`}</h2>
+                        <h2>{`${utente.firstName || ""} ${utente.lastName || ""}`}</h2>
                     </div>
                     <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="warning" icon="note_add" label="Crea nuovo piano"></Button>
                     <div className="px-sm-4"></div>
