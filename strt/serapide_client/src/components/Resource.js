@@ -36,7 +36,11 @@ export default ({resource: { nome, uuid, tipo, dimensione, downloadUrl}, icon = 
                 {isLoading && (<div className="spinner-grow text-warning" role="status">
                     <span className="sr-only">Loading...</span>                
                 </div>)}
-                <i className="material-icons text-warning">check_circle</i>
+                {downloadUrl ? (
+                <a className="text-dark d-flex" href={downloadUrl} download={nome}>
+                    <i className="material-icons text-warning pointer">{isLocked ? "cloud_download" : "check_circle"}</i></a>) :
+                (<i className="material-icons text-warning pointer">{isLocked ? "cloud_download" : "check_circle"}</i>)}
+                
                 {isLocked ? (
                     <i className="material-icons text-warning">lock</i>
                 ) : (
