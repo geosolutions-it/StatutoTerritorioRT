@@ -59,6 +59,7 @@ def has_soggetto_proponente(piano):
 def has_procedura_vas(piano):
     return ProceduraVAS.objects.filter(piano=piano).count() == 1
 
+
 @rules.predicate
 def has_pending_alerts(piano):
     _alert_states = [STATO_AZIONE.attesa, STATO_AZIONE.necessaria]

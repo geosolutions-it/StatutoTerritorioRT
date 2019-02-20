@@ -472,7 +472,10 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
     def qs(self):
         # The query context can be found in self.request.
         if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
-            return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
+            if is_RUP(self.request.user):
+                return super(EnteUserMembershipFilter, self).qs.all()
+            else:
+                return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
         else:
             return super(EnteUserMembershipFilter, self).qs.none()
 
@@ -490,7 +493,11 @@ class EnteContattoMembershipFilter(django_filters.FilterSet):
     def qs(self):
         # The query context can be found in self.request.
         if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
-            return super(EnteContattoMembershipFilter, self).qs.filter(ente__usermembership__member=self.request.user)
+            if is_RUP(self.request.user):
+                return super(EnteContattoMembershipFilter, self).qs.all()
+            else:
+                return super(EnteContattoMembershipFilter, self).qs.filter(
+                    ente__usermembership__member=self.request.user)
         else:
             return super(EnteContattoMembershipFilter, self).qs.none()
 
@@ -677,10 +684,14 @@ class CreateContatto(relay.ClientIDMutation):
             # Ente (M)
             if 'ente' in _data:
                 _ente = _data.pop('ente')
-                _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
+                if is_RUP(info.context.user):
+                    _ente = Organization.objects.get(code=_ente['code'])
+                else:
+                    _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
                 _data['ente'] = _ente
 
-            if info.context.user and rules.test_rule('strt_users.is_RUP_of', info.context.user, _data['ente']):
+            if info.context.user and not info.context.user.is_anonymous:
+
                 # Tipologia (M)
                 if 'tipologia' in _data:
                     _tipologia = _data.pop('tipologia')
@@ -753,6 +764,7 @@ class DeleteContatto(graphene.Mutation):
     def mutate(self, info, **input):
         if info.context.user and rules.test_rule('strt_users.can_access_private_area', info.context.user) and \
         is_RUP(info.context.user):
+
             # Fetching input arguments
             _id = input['uuid']
             try:
@@ -833,9 +845,11 @@ class CreatePiano(relay.ClientIDMutation):
                     _ap.save()
                     AzioniPiano.objects.get_or_create(azione=_ap, piano=nuovo_piano)
 
-                _creato = nuovo_piano.azioni.get(tipologia=TIPOLOGIA_AZIONE.creato_piano)
-                _creato.stato = STATO_AZIONE.nessuna
-                _creato.save()
+                _creato = nuovo_piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
+                if _creato:
+                    _creato.stato = STATO_AZIONE.nessuna
+                    _creato.data = datetime.datetime.now()
+                    _creato.save()
 
                 return cls(nuovo_piano=nuovo_piano)
             else:
