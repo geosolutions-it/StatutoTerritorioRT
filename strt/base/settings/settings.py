@@ -202,6 +202,7 @@ RESPONSABILE_ISIDE_CODE = EnvUtil.get_env_var('RESPONSABILE_ISIDE_CODE', default
 TEMP_USER_CODE = EnvUtil.get_env_var('TEMP_USER_CODE', default='TMP')
 READ_ONLY_USER_CODE = EnvUtil.get_env_var('READ_ONLY_USER_CODE', default='RO')
 DEFAULT_MUNICIPALITY = EnvUtil.get_env_var('DEFAULT_MUNICIPALITY', default='Firenze')
+VERIFICA_VAS_EXPIRE_DAYS = EnvUtil.get_env_var('VERIFICA_VAS_EXPIRE_DAYS', type=int, default=60)
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
