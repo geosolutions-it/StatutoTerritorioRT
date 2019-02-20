@@ -219,8 +219,37 @@ class EnteTipoNode(DjangoObjectType):
 
 class AppUserNode(DjangoObjectType):
 
+    alerts_count = graphene.String()
     unread_threads_count = graphene.String()
     unread_messages = graphene.List(UserMessageType)
+
+    def resolve_alerts_count(self, info, **args):
+        _alerts_count = 0
+
+        _pianos = []
+        _enti = []
+        _memberships = None
+        _memberships = self.memberships
+        if _memberships:
+            for _m in _memberships.all():
+                if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
+                    # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
+                    continue
+                else:
+                    _enti.append(_m.organization.code)
+
+        token = info.context.session.get('token', None)
+        if token:
+            _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
+            _pianos = [_p for _p in Piano.objects.filter(codice__in=_allowed_pianos)]
+        else:
+            _pianos = [_p for _p in Piano.objects.filter(ente__code__in=_enti)]
+
+        _alert_states = [STATO_AZIONE.attesa, STATO_AZIONE.necessaria]
+        for _p in _pianos:
+            _alerts_count += _p.azioni.filter(stato__in=_alert_states).count()
+
+        return _alerts_count
 
     def resolve_unread_threads_count(self, info, **args):
         return Thread.unread(self).count()
