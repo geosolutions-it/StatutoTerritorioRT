@@ -25,7 +25,7 @@ $fasi: (
   i.draft{
     color: $gray-400;
   }
-  width: $stato-progress-width;
+  min-width: $stato-progress-width;
   flex-direction: column;
   display: inline-flex;
   align-items: center;
@@ -38,20 +38,34 @@ $fasi: (
         border: 0;
         font-size: 100%;
         font: inherit;
-        vertical-align: baseline;
+    }
+    ul._labels{
+      padding-top:10px;
+      display: inline;
+      .label_draft {
+        display: none;
+      }
+      li{
+        font-size: 10px;
+        width: $space-between;
+        text-align: center;
+        white-space: nowrap;
+        text-overflow: ellipsis;    
+        text-transform: capitalize;
+
+      }
     }
     @each $fase in map-keys($fasi) {
-      ._#{$fase}{
-        
+      ._#{$fase}._icons{          
           li {
-          background-color: $warning; 
+              background-color: $warning; 
           &:before {
-            background-color: $warning;
-          }
-        }  
+            background-color: $warning;  
+          } 
+        } 
       }
-      
     }
+    ._icons {
       li{
         width: $dim;
         height: $dim;
@@ -102,6 +116,7 @@ $fasi: (
   .active ~ li::before {
     background: $gray-400;
   }
+}
   
   .current-fase{
     padding-top: 10px;
@@ -120,5 +135,5 @@ $fasi: (
 }
 
 .stato-progress-xxl {
-  @include statoProgress(14px, 300px, 5, 80px)
+  @include statoProgress(18px, 400px, 5, 80px)
 }
