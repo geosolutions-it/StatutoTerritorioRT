@@ -876,8 +876,7 @@ class CreatePiano(relay.ClientIDMutation):
 
                 _creato = nuovo_piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
                 if _creato:
-                    _creato.stato = STATO_AZIONE.nessuna
-                    _creato.data = datetime.datetime.now()
+                    _creato.stato = STATO_AZIONE.necessaria
                     _creato.save()
 
                 return cls(nuovo_piano=nuovo_piano)
@@ -1409,13 +1408,24 @@ class PromozionePiano(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
+
+            _creato = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
+            if _creato:
+                _creato.stato = STATO_AZIONE.nessuna
+                _creato.data = datetime.datetime.now()
+                _creato.save()
+
             _verifica_vas = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.parere_verifica_vas).first()
             if _verifica_vas:
                 if procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
                     _verifica_vas.stato = STATO_AZIONE.nessuna
                 else:
                     _verifica_vas.stato = STATO_AZIONE.attesa
+                    _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
+                    _verifica_vas.data = datetime.datetime.now() + \
+                    datetime.timedelta(days=_verifica_vas_expire_days)
                 _verifica_vas.save()
+
         elif fase.nome == FASE.avvio:
             _genio_civile = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
             if _genio_civile:
