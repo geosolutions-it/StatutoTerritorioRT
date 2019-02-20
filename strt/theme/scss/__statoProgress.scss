@@ -1,32 +1,36 @@
-$stato-progress-width: 100px;
-$space-between: ($stato-progress-width - 40) /4;
-.stato-progress{
-    .avvio {
-        transform:  translateX(($space-between * -2) - 4);
+
+$fasi: (
+  anagrafica: -2,
+  avvio: -1,
+  adozione: 0,
+  approvazione: 1,
+  pubblicazione: 2
+);
+
+
+@mixin statoProgress($dim, $stato-progress-width, $nFasi, $font-size: 24px){
+  $space-between: ($stato-progress-width - (($dim * 1.2) * $nFasi)) / $nFasi;
+  
+  @each $fase in map-keys($fasi) {
+    $val: map-get($fasi, $fase);
+    .#{$fase}{
+      transform:  translateX(($space-between * $val) + ($dim * $val));
     }
-    .adozione {
-        transform:  translateX(($space-between / -2) - 4);
+  }
+  i {
+      font-size: $font-size;
+      transform: translateX(($stato-progress-width * -0.5) + ($dim/2)); // di deafult va sul primo
+      color: $warning;    
     }
-    .approvazione {
-        transform:  translateX(($space-between / 2) + 4);
-    }
-    .pubblicazione {
-        transform:  translateX(($space-between * 2) + 4);
-        
-    }
-    i {
-       transform: translateX(($stato-progress-width * -0.5) + 4);
-       color: $warning;    
-      }
-    i.draft{
-      color: $gray-400;
-    }
-    width: $stato-progress-width;
-    flex-direction: column;
-    display: inline-flex;
-    align-items: center;
-    line-height: 0px;
-    ul {
+  i.draft{
+    color: $gray-400;
+  }
+  width: $stato-progress-width;
+  flex-direction: column;
+  display: inline-flex;
+  align-items: center;
+  line-height: 0px;
+    ul{
         list-style: none;
         display: block;
         margin: 0;
@@ -36,20 +40,24 @@ $space-between: ($stato-progress-width - 40) /4;
         font: inherit;
         vertical-align: baseline;
     }
-    ._avvio, ._adozione, ._approvazione, ._pubblicazione {
-      li {
-        background-color: $warning; 
-        &:before {
-        background-color: $warning;
+    @each $fase in map-keys($fasi) {
+      ._#{$fase}{
+        
+          li {
+          background-color: $warning; 
+          &:before {
+            background-color: $warning;
+          }
+        }  
       }
+      
     }
-    }
-    li {
-        width: 8px;
-        height: 8px;
+      li{
+        width: $dim;
+        height: $dim;
         text-align: center;
         line-height: 1em;
-        border-radius: 5px;
+        border-radius: $dim / 2;
         margin: 0 0 0 $space-between;
         display: inline-block;
         color: $white;
@@ -60,10 +68,10 @@ $space-between: ($stato-progress-width - 40) /4;
           content: '';
           background-color: $gray-400; 
           position: absolute;
-          top: 2px;
+          top: $dim / 4;
           left: -$space-between;
           width: $space-between;
-          height: 4px;
+          height: $dim / 2 ;
           z-index: 0;
         }
     }
@@ -79,11 +87,14 @@ $space-between: ($stato-progress-width - 40) /4;
   li:first-child::before {
     display: none;
   }
-  
   .active {
     background: $warning;
   }
-  
+  ._draft {
+    .active {
+    background: $gray-400;
+  }
+}
   .active ~ li {
     background: $gray-400;
   }
@@ -91,4 +102,23 @@ $space-between: ($stato-progress-width - 40) /4;
   .active ~ li::before {
     background: $gray-400;
   }
+  
+  .current-fase{
+    padding-top: 10px;
+    font-size: 1rem;
+  }
+  .current-fase.draft{
+    display: none;
+  }
+}
+
+
+
+.stato-progress {
+  @include statoProgress(8px, 120px, 5, 24px)
+  
+}
+
+.stato-progress-xxl {
+  @include statoProgress(14px, 300px, 5, 80px)
 }
