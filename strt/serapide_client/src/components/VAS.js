@@ -137,8 +137,9 @@ export default enhancer(({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
                     { !isLocked ? (<Mutation mutation={UPDATE_PIANO} onError={showError}>
                         {(onChange) => {
                             const changed = (val) => {
+                                const autoritaCompetenteVas = auths.indexOf(val) !== -1 ? [] : [val]
                                 onChange({variables:{ input:{ 
-                                            pianoOperativo: { autoritaCompetenteVas: [val]}, codice}
+                                            pianoOperativo: { autoritaCompetenteVas}, codice}
                                     }})
                             }
                             return (
