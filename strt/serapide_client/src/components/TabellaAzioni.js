@@ -21,7 +21,7 @@ export default ({azioni = [], className}) => {
                     <td className="text-center"><i className={`material-icons ${getActionIconColor(stato)}`}>{getActionIcon(stato)}</i></td>
                     <td className="text-center text-capitalize">{tipologia.toLowerCase().split("_").join(" ")}</td>
                     <td className="text-center">{attore}</td>
-                    <td className="text-center">{stato === "ATTESA" && <i className="material-icons text-warning">notification_important</i>} {data && formatDate(data)}</td>
+                    <td className="text-center">{stato === "ATTESA" && <i className="material-icons text-warning">notifications_activex\</i>} {data && formatDate(data)}</td>
                     <td className="text-center">{actionHasBtn(attore) && <Button size="sm" color="warning">VAS</Button>}</td>
                     {getAction(stato) &&<td className="text-center" style={{cursor: "pointer"}}><i className="material-icons text-warning">play_circle_filled</i></td>}
                 </tr>))}
