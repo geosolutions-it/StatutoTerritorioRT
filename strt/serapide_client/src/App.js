@@ -31,7 +31,7 @@ return (
             return(
                 <React.Fragment>
                   <Injector el="user-navbar-list">
-                      <NavBar messaggi={utente.unreadMessages}/>
+                      <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}/>
                   </Injector>
                   <Router>
                       <Switch>

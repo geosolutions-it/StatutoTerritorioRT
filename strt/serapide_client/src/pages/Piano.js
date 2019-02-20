@@ -8,7 +8,7 @@
 import React from 'react'
 
 import { toast } from 'react-toastify'
-import { Route} from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
 import {Query} from "react-apollo"
 import Anagrafica from './Anagrafica'
 import {getEnteLabel, getPianoLabel} from "../utils"
@@ -18,10 +18,11 @@ import SideBar from '../components/SideBarMenu'
 import StatoProgress from '../components/StatoProgress'
 import Home from "./Home"
 
+
 const getActive = (url = "", pathname = "") => {
     return pathname.replace(url, "")
 }
-export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {},  ...props}) => {
+export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
     const activeLocation = getActive(url, pathname)
     return (<Query query={GET_PIANI} variables={{codice: code}}>
 
@@ -43,21 +44,22 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
             return(
             <React.Fragment>
                 <Injector el="serapide-sidebar">
-                    <SideBar url={url} piano={piano} active={activeLocation}></SideBar>
+                    <SideBar url={url} piano={piano} active={activeLocation} unreadMessages={utente.unreadThreadsCount}></SideBar>
                 </Injector>
-                <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
+                <div className="serapide-content pt-5 pb-5 pX-lg px-4 serapide-top-offset position-relative overflow-x-scroll">
                     <div className="d-flex flex-column ">
                         <div className="d-flex justify-content-between align-items-center ">
-                            <div>
+                            <div className="pr-3">
                                 <h4 className="text-uppercase">{getEnteLabel(piano.ente)}</h4>  
                                 <h2 className="mb-0 text-capitalize">{`${getPianoLabel(piano.tipo)} ${code}`}</h2>  
-                                <h5 className="text-capitalize">{getPianoLabel.descrizione}</h5>  
+                                <h5 className="text-capitalize">{piano.descrizione}</h5>  
                             </div>
                             <StatoProgress className="stato-progress-xxl" stato={piano.fase} legend></StatoProgress>
                         </div>
-                        <Route  path={`${path}/anagrafica`} component={Anagrafica}/>
-                        <Route  path={`${path}`} component={Home}/>
-                        
+                        <Switch>
+                            <Route  path={`${path}/anagrafica`} component={Anagrafica}/>
+                            <Route  path={`${path}`} component={Home}/>
+                        </Switch>
                         
                             
                     </div>

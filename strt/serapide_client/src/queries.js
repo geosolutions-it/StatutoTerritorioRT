@@ -8,6 +8,7 @@ fragment User on AppUserNode {
     firstName
     lastName
     dateJoined
+    alertsCount
 }
 `
 const RisorsaFragment = gql`

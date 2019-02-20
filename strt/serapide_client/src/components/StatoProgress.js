@@ -23,8 +23,9 @@ export default ({stato: {nome = "Unknown", codice}, className= "stato-progress",
             </ul>
             {legend && (
                 <React.Fragment>
-                <span className={classNames("current-fase", "text-capitalize", activeFase)}>{activeFase}</span>
-                {fasi.map((fase) => (<UncontrolledTooltip key={`_${fase}`} placement="bottom" target={`_${fase}`} ><span className="text-capitalize">{fase}</span></UncontrolledTooltip>))}
+                 <ul className={`_${activeFase} _labels`}>
+                    {fasi.map((fase, idx) => (<li key={`label_${fase}`} id={`label_${fase}`} className={classNames(`label_${fase}`, fase)}>{fase}</li>))}
+                 </ul>    
                 </React.Fragment>)}
         </span>)
     }

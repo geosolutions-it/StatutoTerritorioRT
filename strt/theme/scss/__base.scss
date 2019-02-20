@@ -57,14 +57,14 @@
         $infix: breakpoint-infix($next, $grid-breakpoints);
         &#{$infix} {
             @include media-breakpoint-up($next) {
-                padding-left: $portal-header !important;
-                padding-right: $portal-header !important;
+                padding-left: $portal-header * 2  !important;
+                padding-right: $portal-header * 2 !important;
             }
         }
     }
 }
 .serapide-content {
-    overflow: scroll;
+    
 }
 .serapide {
     width: 100%;

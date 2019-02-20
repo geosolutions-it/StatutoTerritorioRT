@@ -27,7 +27,9 @@ LICENSE file in the root directory of this source tree.
 
 {% block content %}
 
+<div class="serapide-content pt-3 pX-lg px-4 ">
     {% url "account_settings" as email_url %}
+    
     {% if not request.user.email %}
         {% blocktrans %}
         <div class="no-verified-email">
@@ -70,4 +72,6 @@ LICENSE file in the root directory of this source tree.
             <button>{% trans "Change" %}</button>
         </div>
     </form>
+</div>
+
 {% endblock %}
