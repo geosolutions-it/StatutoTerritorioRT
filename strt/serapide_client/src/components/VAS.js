@@ -15,8 +15,9 @@ import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD, DELETE_RISORSA_VAS, UPDATE_VAS, 
 import { Query, Mutation} from 'react-apollo';
 import { toast } from 'react-toastify'
 import AddContact from '../components/AddContact'
-import Confirm from '../components/ConfirmToast'
 
+import {toggleControllableState} from '../enhancers/utils'
+import {Modal, ModalBody, ModalHeader} from 'reactstrap'
 const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 const getVasTypeInput = (uuid) => (tipologia) => ({
     variables: {
@@ -48,7 +49,9 @@ const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifi
     }
 }
 
-export default ({codice, canUpdate, isLocked}) => {
+const enhancer = toggleControllableState("isOpen", "toggleOpen", false)
+
+export default enhancer(({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
             {({loading, data: {procedureVas: {edges = []} = []} = {}}) => {
@@ -119,7 +122,7 @@ export default ({codice, canUpdate, isLocked}) => {
                                     label="DEFINISCI SOGGETTO PROPONENTE"
                                     size="lg"
                                     onChange={changed}
-                                    btn={(toggleOpen) => (<Button disabled={isLocked} onClick={toggleOpen} className="my-auto text-uppercase" color="warning" icon="add_circle" label="SOGGETTO PROPONENTE"></Button>)}
+                                    btn={(toggleOpen) => (<Button fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="my-auto text-uppercase" color="warning" icon="add_circle" label="SOGGETTO PROPONENTE"></Button>)}
                                 >
                                 <AddContact className="mt-2" tipologia="generico"></AddContact>
                                 </EnhancedListSelector>)}
@@ -134,8 +137,9 @@ export default ({codice, canUpdate, isLocked}) => {
                     { !isLocked ? (<Mutation mutation={UPDATE_PIANO} onError={showError}>
                         {(onChange) => {
                             const changed = (val) => {
+                                const autoritaCompetenteVas = auths.indexOf(val) !== -1 ? [] : [val]
                                 onChange({variables:{ input:{ 
-                                            pianoOperativo: { autoritaCompetenteVas: [val]}, codice}
+                                            pianoOperativo: { autoritaCompetenteVas}, codice}
                                     }})
                             }
                             return (
@@ -147,7 +151,7 @@ export default ({codice, canUpdate, isLocked}) => {
                                     variables={{tipo: "acvas"}}
                                     size="lg"
                                     label="SELEZIONA AUTORITA’ COMPETENTE VAS"
-                                    btn={(toggleOpen) => (<Button  disabled={isLocked} onClick={toggleOpen} className="text-uppercase" color="warning" icon="add_circle" label="IDENTIFICA L’AUTORITA’ COMPETENTE VAS (AC)"/>)}
+                                    btn={(toggleOpen) => (<Button  fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="text-uppercase" color="warning" icon="add_circle" label="AUTORITA’ COMPETENTE VAS (AC)"/>)}
                                     >
                                     <AddContact className="mt-2" tipologia="acvas"></AddContact>
                                     </EnhancedListSelector>)}
@@ -181,7 +185,7 @@ export default ({codice, canUpdate, isLocked}) => {
                                 label="DEFINISCI SCA"
                                 size="lg"
                                 onChange={changed}
-                                btn={(toggleOpen) => (<Button onClick={toggleOpen} className="my-auto text-uppercase" disabled={disableSCA || isLocked} color="warning" icon="add_circle" label="IDENTIFICA SOGGETTI COMPETENTI IN MATERIA AMBIENTALE (SCA)"></Button>)}
+                                btn={(toggleOpen) => (<Button fontSize="60%" onClick={toggleOpen} className="my-auto text-uppercase" disabled={disableSCA || isLocked} color="warning" icon="add_circle" label="SOGGETTI COMPETENTI IN MATERIA AMBIENTALE (SCA)"></Button>)}
                             >
                             <AddContact className="mt-2" tipologia="sca"></AddContact>
                             </EnhancedListSelector>)}
@@ -193,24 +197,31 @@ export default ({codice, canUpdate, isLocked}) => {
                         </div>))}
                     </div>
                 </div>
-                {!isLocked && (<div className="d-flex  justify-content-center">
+                {!isLocked && (<div className="d-flex pt-5  justify-content-end">
                     <Mutation mutation={PROMUOVI_PIANO} onError={showError}>
                     {(onConfirm, {loading}) => {
-                        let toastId
                         const updatePiano = (code) => {onConfirm({variables: {codice: code}})}
-                        const confirm = () => {
-                            if(!toast.isActive(toastId)) {
-                            toastId = toast.warn(<Confirm confirm={updatePiano} id={codice} label="Confermi invio Anagrafica?" />, {
-                                autoClose: true,
-                                draggable: true,
-                                onClose: ( ) => {toastId = null}
-                              });
-                            }
-                        }
-                      return (<Button isLoading={loading} onClick={confirm} className="my-auto text-uppercase" disabled={!canCommit} color="warning"  label="SALVA ED INVIA"></Button>)
+                      return (
+                        <React.Fragment>
+                            <Button isLoading={loading} onClick={toggleOpen} className="my-auto text-uppercase" disabled={!canCommit} color="warning"  label="SALVA ED INVIA"></Button>
+                            {isOpen && (
+                                <Modal isOpen={isOpen} centered size="md" wrapClassName="serapide" autoFocus={true}>
+                                    <ModalHeader className="d-flex justify-content-center"><i className="material-icons text-warning icon-34">notifications_active</i></ModalHeader>
+                                    <ModalBody className="d-flex justify-content-center flex-column pt-0 px-5 pb-5  align-items-center justify-item-center">
+                                        
+                                        <h4>STAI PER INVIARE I DOCUMENTI</h4>
+                                        <h4> AL SISTEMA</h4>
+                                        <div style={{minWidth: 200}} className="pt-5 d-flex justify-content-around">
+                                            <Button label="ANNULLA" color="warning" disabled={loading}  onClick={toggleOpen}></Button>
+                                            <Button label="SALVA" isLoading={loading} disabled={loading} color="warning" onClick={() => {updatePiano(codice)}}></Button>
+                                        </div>
+                                    </ModalBody>
+                                </Modal>)}
+                        </React.Fragment>)
                     }}
                     </Mutation>
                 </div>)}
+                
             </React.Fragment>)}}
          </Query>)
-        }
+        })

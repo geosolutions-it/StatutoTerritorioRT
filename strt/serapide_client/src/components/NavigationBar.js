@@ -30,7 +30,7 @@ export default toggleControllableState("isOpen", "toggle", false) (({isOpen= fal
                 <LinkWithIcon className="vertical-divider-right" icon="today" label="Calendario"></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
-                <LinkWithIcon icon="notification_important" iconColor="text-danger" withBadge badge={alertsCount} label="Alert"></LinkWithIcon>
+                <LinkWithIcon  link="./#/" icon="notification_important" iconColor="text-danger" withBadge badge={alertsCount} label="Alert"></LinkWithIcon>
               </NavItem>
               <Messaggi className="first" messaggi={messaggi}></Messaggi>
             </React.Fragment>

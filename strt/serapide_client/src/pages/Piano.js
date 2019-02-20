@@ -41,24 +41,28 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 return <div></div>
             }
             const {node: piano = {}} = edges[0] || {}
+            const {edges: azioni} = piano.azioni || {}
+            console.log(piano, azioni, piano.azioni)
             return(
             <React.Fragment>
                 <Injector el="serapide-sidebar">
                     <SideBar url={url} piano={piano} active={activeLocation} unreadMessages={utente.unreadThreadsCount}></SideBar>
                 </Injector>
-                <div className="serapide-content pt-5 pb-5 pX-lg px-4 serapide-top-offset position-relative overflow-x-scroll">
+                <div className="serapide-content pt-5 pb-5 pX-lg px-4 serapide-top-offset position-relative">
                     <div className="d-flex flex-column ">
                         <div className="d-flex justify-content-between align-items-center ">
                             <div className="pr-3">
                                 <h4 className="text-uppercase">{getEnteLabel(piano.ente)}</h4>  
                                 <h2 className="mb-0 text-capitalize">{`${getPianoLabel(piano.tipo)} ${code}`}</h2>  
-                                <h5 className="text-capitalize">{piano.descrizione}</h5>  
+                                <div className="pr-4">{piano.descrizione}</div>  
                             </div>
                             <StatoProgress className="stato-progress-xxl" stato={piano.fase} legend></StatoProgress>
                         </div>
                         <Switch>
                             <Route  path={`${path}/anagrafica`} component={Anagrafica}/>
-                            <Route  path={`${path}`} component={Home}/>
+                            <Route  path={`${path}`}>
+                                <Home azioni={azioni}></Home>
+                            </Route>
                         </Switch>
                         
                             

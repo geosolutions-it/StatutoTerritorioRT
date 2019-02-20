@@ -80,6 +80,9 @@ fragment Piano on PianoNode {
             node {
                 tipologia
                 stato
+              	attore
+              	data
+              	uuid
             }
         }
     }
