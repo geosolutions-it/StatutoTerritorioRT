@@ -559,9 +559,9 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
         token = self.request.session.get('token', None)
         if token:
             _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
-            return super(PianoUserMembershipFilter, self).qs.filter(codice__in=_allowed_pianos).order_by('-last_update'):
+            return super(PianoUserMembershipFilter, self).qs.filter(codice__in=_allowed_pianos).order_by('-last_update')
         else:
-            return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti).order_by('-last_update'):
+            return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti).order_by('-last_update')
 
 
 class ProceduraVASMembershipFilter(django_filters.FilterSet):
