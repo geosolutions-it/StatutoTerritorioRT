@@ -118,6 +118,14 @@ class TipologiaContatto(StrtEnumNode):
 
 # Graphene will automatically map the Category model's fields onto the CategoryNode.
 # This is configured in the CategoryNode's Meta class (as you can see below)
+class RoleNode(DjangoObjectType):
+
+    class Meta:
+        model = UserMembership
+        filter_fields = '__all__'
+        interfaces = (relay.Node, )
+
+
 class FaseNode(DjangoObjectType):
 
     class Meta:
@@ -219,9 +227,14 @@ class EnteTipoNode(DjangoObjectType):
 
 class AppUserNode(DjangoObjectType):
 
+    role = graphene.Field(RoleNode)
     alerts_count = graphene.String()
     unread_threads_count = graphene.String()
     unread_messages = graphene.List(UserMessageType)
+
+    def resolve_role(self, info, **args):
+        _org = info.context.session.get('organization', None)
+        return self.memberships.get(organization__code=_org)
 
     def resolve_alerts_count(self, info, **args):
         _alerts_count = 0

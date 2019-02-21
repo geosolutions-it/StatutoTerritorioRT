@@ -56,10 +56,6 @@ LICENSE file in the root directory of this source tree.
             {{ form|crispy }}
             <input type="submit" class="btn btn-secondary my-2 my-lg-4"
                    value="{% trans 'autentica'|capfirst %}">
-            <input type="button" class="btn btn-warning" id="add-org"
-                   value="{% trans 'aggiungi ente'|capfirst %}">
-            <ul id="orgs" class="pl-0 pt-2">
-            </ul>
         </form>
         <span class="text-danger" id="orgs-errors"></span>
 
@@ -103,14 +99,12 @@ LICENSE file in the root directory of this source tree.
             });
         });
 
-        $("#add-org").click(function() {
+        $("#user-membership").submit(function() {
             $('#orgs-errors').text('');
             var org = $('#id_organizations option:selected');
             if (org.val()) {
                 var orgs = $('input[name="hidden_orgs"]').val();
-                $('input[name="hidden_orgs"]').val(
-                    orgs.concat(org.val().concat('-'))
-                );
+                $('input[name="hidden_orgs"]').val(org.val());
                 var li = $('<li/>').text(org.text())
                     .on("click", function() {
                         $(this).remove();
@@ -121,12 +115,10 @@ LICENSE file in the root directory of this source tree.
                 );
                 $('#id_organizations')[0].selectedIndex = 0;
             } else {
+                $('input[name="hidden_orgs"]').val('');
                 $('#orgs-errors').text('Valori inseriti non validi');
             }
         });
-
-
     </script>
 
 {% endblock add_script %}
-

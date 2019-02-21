@@ -41,38 +41,48 @@ class StrtPortalAuthentication:
             except Token.DoesNotExist:
                 return None
 
-        """
-        Fall back to default behavior
-        """
-        payload = jwt.decode(
-            jwt=encoded_jwt,
-            key=settings.SECRET_KEY,
-            algorithms='HS256'
-        )
+        if encoded_jwt:
+            """
+            Fall back to default behavior
+            """
+            payload = jwt.decode(
+                jwt=encoded_jwt,
+                key=settings.SECRET_KEY,
+                algorithms='HS256'
+            )
 
-        with transaction.atomic():
-            if 'fiscal_code' in payload and payload['fiscal_code']:
-                # Responsabile ISIDE user
-                if 'membership_type' in payload and payload['membership_type'] and \
-                        payload['membership_type'] == settings.RESPONSABILE_ISIDE_CODE:
+            with transaction.atomic():
 
-                    user, created = UserModel._default_manager.get_or_create(
-                        fiscal_code=payload['fiscal_code'].strip().upper()
+                if len(payload['organizations']) != 1:
+                    raise forms.ValidationError(_('Ente obbligatorio.'))
+
+                _organization = payload['organizations'].pop()['organization'].strip()
+
+                org = None
+                try:
+                    # Organizations must be already registered
+                    org = Organization._default_manager.get(
+                        code=_organization
                     )
-                    if created:
-                        user.first_name = payload['first_name'].strip().title()
-                        user.last_name = payload['last_name'].strip().title()
-                        user.save()
-                    for o in payload['organizations']:
-                        try:
-                            # Organizations must be already registered
-                            org = Organization._default_manager.get(
-                                code=o['organization'].strip()
-                            )
-                        except Organization.DoesNotExist:
-                            raise forms.ValidationError(
-                                _("L'ente {} non risulta censito.".format(o["organization"].strip()))
-                            )
+                except Organization.DoesNotExist:
+                    raise forms.ValidationError(
+                        _("L'ente {} non risulta censito.".format(_organization))
+                    )
+
+                if 'fiscal_code' in payload and payload['fiscal_code']:
+
+                    # Responsabile ISIDE user
+                    if 'membership_type' in payload and payload['membership_type'] and \
+                            payload['membership_type'] == settings.RESPONSABILE_ISIDE_CODE:
+
+                        user, created = UserModel._default_manager.get_or_create(
+                            fiscal_code=payload['fiscal_code'].strip().upper()
+                        )
+                        if created:
+                            user.first_name = payload['first_name'].strip().title()
+                            user.last_name = payload['last_name'].strip().title()
+                            user.save()
+
                         membership_type, created = MembershipType._default_manager.get_or_create(
                             code=settings.RESPONSABILE_ISIDE_CODE,
                             organization_type=org.type
@@ -88,31 +98,31 @@ class StrtPortalAuthentication:
                             type=membership_type,
                         )
 
-                # SERAPIDE user
-                elif 'membership_type' not in payload or not payload['membership_type']:
-                    try:
-                        user = UserModel._default_manager.get_by_natural_key(
-                            payload['fiscal_code'].strip().upper()
-                        )
-                        if not user.memberships:
-                            raise forms.ValidationError(_('All\'utente non risulta assegnato nessun ruolo.'))
-                    except UserModel.DoesNotExist:
-                        raise forms.ValidationError(_('L\'utente non risulta censito.'))
+                    # SERAPIDE user
+                    elif 'membership_type' not in payload or not payload['membership_type']:
+                        try:
+                            user = UserModel._default_manager.get_by_natural_key(
+                                payload['fiscal_code'].strip().upper()
+                            )
+                            if not user.memberships or not user.memberships.filter(organization=org):
+                                raise forms.ValidationError(_('All\'utente non risulta assegnato nessun ruolo.'))
+                        except UserModel.DoesNotExist:
+                            raise forms.ValidationError(_('L\'utente non risulta censito.'))
 
+                    else:
+                        raise forms.ValidationError(_('Ruolo non ammesso.'))
+
+                # Errors
                 else:
-                    raise forms.ValidationError(_('Ruolo non ammesso.'))
+                    raise forms.ValidationError(_('Campo Codice Fiscale obbligatorio.'))
 
-            # Errors
-            else:
-                raise forms.ValidationError(_('Campo Codice Fiscale obbligatorio.'))
-
-            if user:
-                is_active = getattr(user, 'is_active', None)
-                if not is_active:
-                    # If user is recognized inactive it will be activated at the first access
-                    user.is_active = True
-                    user.save()
-                return user
+                if user:
+                    is_active = getattr(user, 'is_active', None)
+                    if not is_active:
+                        # If user is recognized inactive it will be activated at the first access
+                        user.is_active = True
+                        user.save()
+                    return user
 
     def user_can_authenticate(self, user):
         is_active = getattr(user, 'is_active', None)

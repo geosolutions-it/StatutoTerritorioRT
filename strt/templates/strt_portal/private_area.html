@@ -32,6 +32,7 @@ LICENSE file in the root directory of this source tree.
 
             <div class="collapse navbar-collapse" id="userNavbarSupportedContent">
 
+                <h2>{% for m in request.user.memberships %}{% if m.organization.code == request.session.organization %}<span class="d-block role role-item text-warning">{{ m.description|default_if_none:m.type }}</span>{% endif %}{% endfor %}</h2>
                 <ul class="ml-auto text-center navbar-nav" id="user-navbar-list">
 
                     {% has_perm 'strt_users.can_manage_users' request.user as can_manage_users %}
@@ -84,10 +85,12 @@ LICENSE file in the root directory of this source tree.
                         </a>
                         <div role="menu" aria-hidden="true"
                              class="dropdown-menu dropdown-menu-right">
-                            <span class="role text-warning">{% trans 'ruolo'|upper %}:</span>
+                            <!-- <span class="role text-warning">{% trans 'ruolo'|upper %}:</span>
                             {% for m in request.user.memberships %}
-                                <span class="d-block role role-item text-warning">{{ m.name }}</span>
-                            {% endfor %}
+                                {% if m.organization.code == request.session.organization %}
+                                <span class="d-block role role-item text-warning">{{ m.description|default_if_none:m.type }}</span>
+                                {% endif %}
+                            {% endfor %} -->
                             <a class="dropdown-item" href="{% url 'users_profile_detail' %}">
                                 {% trans 'profilo'|capfirst %}
                             </a>
