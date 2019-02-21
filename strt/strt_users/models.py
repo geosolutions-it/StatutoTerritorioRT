@@ -311,9 +311,13 @@ def do_login(sender, user, request, **kwargs):
 
 
 def do_logout(sender, user, request, **kwargs):
+    if 'organization' in request.session:
+        del request.session['organization']
+
     if 'token' in request.session:
         del request.session['token']
-        request.session.modified = True
+
+    request.session.modified = True
 
 
 user_logged_in.connect(do_login)

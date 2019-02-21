@@ -9,19 +9,26 @@
 #
 #########################################################################
 
+import jwt
+
+from django.conf import settings
+
+from django import forms
+from django.forms import ValidationError
 from django.views.generic.base import TemplateView
+from django.contrib.auth import authenticate, login
+from django.utils.translation import ugettext_lazy as _
+
+from strt_tests.forms import UserAuthenticationForm
+from rules.contrib.views import permission_required
+
 from django_currentuser.middleware import (
     get_current_authenticated_user
 )
 from django.shortcuts import (
     render, redirect
 )
-from django.contrib.auth import authenticate, login
-from django.forms import ValidationError
-from django.conf import settings
-from strt_tests.forms import UserAuthenticationForm
-from rules.contrib.views import permission_required
-import jwt
+from strt_users.models import Organization
 
 
 def privateAreaView(request):
@@ -54,10 +61,25 @@ def privateAreaView(request):
                     key=settings.SECRET_KEY,
                     algorithm='HS256'
                 )
+
                 try:
                     user = authenticate(encoded_jwt)
-                    if user:
+                    _organization = orgs.pop()['organization'].strip()
+                    organization = None
+                    try:
+                        # Organizations must be already registered
+                        organization = Organization._default_manager.get(
+                            code=_organization
+                        )
+                    except Organization.DoesNotExist:
+                        ve = forms.ValidationError(
+                            _("L'ente {} non risulta censito.".format(_organization))
+                        )
+                        form.add_error(None, ve)
+
+                    if user and organization:
                         login(request, user)
+                        request.session['organization'] = organization.code
                         return redirect('serapide')
                 except ValidationError as ve:
                     form.add_error(None, ve)

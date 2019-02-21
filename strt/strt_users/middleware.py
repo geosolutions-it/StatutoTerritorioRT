@@ -9,8 +9,10 @@
 #
 #########################################################################
 
-from django.http import HttpResponseBadRequest
 from django.contrib import auth
+from django.http import HttpResponseBadRequest
+
+from serapide_core.modello.models import PianoAuthTokens
 
 
 class TokenMiddleware(object):
@@ -36,8 +38,11 @@ class TokenMiddleware(object):
 
         if token:
             user = auth.authenticate(token=token)
-            if user:
+            _allowed_pianos = [_pt.piano for _pt in PianoAuthTokens.objects.filter(token__key=token)]
+            if user and _allowed_pianos and len(_allowed_pianos) > 0:
                 request.user = request._cached_user = user
+                organization = _allowed_pianos[0].ente
+                request.session['organization'] = organization.code
                 auth.login(request, user)
 
         # ------------------------
