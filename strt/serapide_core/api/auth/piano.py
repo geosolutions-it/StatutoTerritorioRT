@@ -63,4 +63,4 @@ def has_procedura_vas(piano):
 @rules.predicate
 def has_pending_alerts(piano):
     _alert_states = [STATO_AZIONE.necessaria]
-    return piano.azioni.filter(stato__in=_alert_states).count() > 0
+    return piano.azioni.filter(stato__in=_alert_states).count() > 1
