@@ -1396,7 +1396,7 @@ class PromozionePiano(graphene.Mutation):
         # - Complete Current Actions
         _order = 0
         for _a in piano.azioni.all():
-            _a.stato = STATO_AZIONE.nessuna
+            # _a.stato = STATO_AZIONE.nessuna
             _a.data = datetime.datetime.now(timezone.get_current_timezone())
             _a.save()
             _order += 1
@@ -1437,6 +1437,7 @@ class PromozionePiano(graphene.Mutation):
                 _verifica_vas.save()
 
         elif fase.nome == FASE.avvio:
+
             _genio_civile = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
             if _genio_civile:
                 _genio_civile.stato = STATO_AZIONE.attesa
