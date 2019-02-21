@@ -42,7 +42,6 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
             }
             const {node: piano = {}} = edges[0] || {}
             const {edges: azioni} = piano.azioni || {}
-            console.log(piano, azioni, piano.azioni)
             return(
             <React.Fragment>
                 <Injector el="serapide-sidebar">
