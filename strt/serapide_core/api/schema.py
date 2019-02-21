@@ -741,7 +741,7 @@ class CreateContatto(relay.ClientIDMutation):
                         surname=last_name,
                         name=first_name,
                         sex='M',
-                        birthdate=datetime.datetime.now().strftime('%m/%d/%Y'),
+                        birthdate=datetime.datetime.now(timezone.get_current_timezone()).strftime('%m/%d/%Y'),
                         birthplace=nuovo_contatto.ente.name if nuovo_contatto.ente.type.code == 'C'
                             else settings.DEFAULT_MUNICIPALITY
                     )
@@ -853,13 +853,16 @@ class CreatePiano(relay.ClientIDMutation):
                 _piano = Piano()
 
                 # Inizializzazione Azioni del Piano
+                _order = 0
                 _azioni_piano = []
                 for _a in AZIONI[_fase.nome]:
                     _azione = Azione(
                         tipologia=_a["tipologia"],
-                        attore=_a["attore"]
+                        attore=_a["attore"],
+                        order=_order
                     )
                     _azioni_piano.append(_azione)
+                    _order += 1
 
                 # Inizializzazione Procedura VAS
                 _procedura_vas = ProceduraVAS()
@@ -1391,19 +1394,23 @@ class PromozionePiano(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
+        _order = 0
         for _a in piano.azioni.all():
             _a.stato = STATO_AZIONE.nessuna
-            _a.data = datetime.datetime.now()
+            _a.data = datetime.datetime.now(timezone.get_current_timezone())
             _a.save()
+            _order += 1
 
         # - Attach Actions Templates for the Next "Fase"
         for _a in AZIONI[fase.nome]:
             _azione = Azione(
                 tipologia=_a["tipologia"],
                 attore=_a["attore"],
+                order=_order,
                 stato=STATO_AZIONE.necessaria
             )
             _azione.save()
+            _order += 1
             AzioniPiano.objects.get_or_create(azione=_azione, piano=piano)
 
         # - Update Action state accordingly
@@ -1412,7 +1419,7 @@ class PromozionePiano(graphene.Mutation):
             _creato = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
             if _creato:
                 _creato.stato = STATO_AZIONE.nessuna
-                _creato.data = datetime.datetime.now()
+                _creato.data = datetime.datetime.now(timezone.get_current_timezone())
                 _creato.save()
 
             _verifica_vas = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.parere_verifica_vas).first()
@@ -1422,7 +1429,7 @@ class PromozionePiano(graphene.Mutation):
                 else:
                     _verifica_vas.stato = STATO_AZIONE.attesa
                     _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
-                    _verifica_vas.data = datetime.datetime.now() + \
+                    _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
                     datetime.timedelta(days=_verifica_vas_expire_days)
                 _verifica_vas.save()
 

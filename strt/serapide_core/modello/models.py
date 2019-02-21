@@ -180,6 +180,8 @@ class Azione(models.Model):
 
     data = models.DateTimeField(null=True, blank=True)
 
+    order = models.PositiveIntegerField(default=0)
+
     class Meta:
         db_table = "strt_core_azione"
         verbose_name_plural = 'Azioni'
