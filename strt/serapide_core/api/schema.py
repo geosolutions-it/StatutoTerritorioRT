@@ -559,9 +559,9 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
         token = self.request.session.get('token', None)
         if token:
             _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
-            return super(PianoUserMembershipFilter, self).qs.filter(codice__in=_allowed_pianos)
+            return super(PianoUserMembershipFilter, self).qs.filter(codice__in=_allowed_pianos).order_by('-last_update'):
         else:
-            return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti)
+            return super(PianoUserMembershipFilter, self).qs.filter(ente__code__in=_enti).order_by('-last_update'):
 
 
 class ProceduraVASMembershipFilter(django_filters.FilterSet):
@@ -879,7 +879,7 @@ class CreatePiano(relay.ClientIDMutation):
 
                 _creato = nuovo_piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
                 if _creato:
-                    _creato.stato = STATO_AZIONE.attesa
+                    _creato.stato = STATO_AZIONE.necessaria
                     _creato.save()
 
                 return cls(nuovo_piano=nuovo_piano)
@@ -1417,6 +1417,9 @@ class PromozionePiano(graphene.Mutation):
         if fase.nome == FASE.anagrafica:
 
             _creato = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
+            if _creato.stato != STATO_AZIONE.necessaria:
+                raise Exception("Stato Inconsistente!")
+
             if _creato:
                 _creato.stato = STATO_AZIONE.nessuna
                 _creato.data = datetime.datetime.now(timezone.get_current_timezone())
