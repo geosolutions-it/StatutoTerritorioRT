@@ -78,6 +78,7 @@ fragment Piano on PianoNode {
     azioni {
         edges {
             node {
+                order
                 tipologia
                 stato
               	attore
