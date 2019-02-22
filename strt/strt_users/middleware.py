@@ -9,9 +9,14 @@
 #
 #########################################################################
 
-from django.contrib import auth
-from django.http import HttpResponseBadRequest
+# from django.conf import settings
 
+from django.contrib import auth
+# from django.urls import reverse
+from django.contrib.auth import logout
+from django.http import HttpResponseBadRequest  # HttpResponseRedirect
+
+from strt_users.models import Token, Organization
 from serapide_core.modello.models import PianoAuthTokens
 
 
@@ -53,3 +58,51 @@ class TokenMiddleware(object):
         # the view is called.
 
         return response
+
+
+class SessionControlMiddleware(object):
+        """
+        Middleware that checks if session variables have been correctly set.
+        """
+        def __init__(self, get_response):
+            self.get_response = get_response
+            # One-time configuration and initialization.
+
+        def __call__(self, request):
+            if not request.user.is_authenticated or \
+            not request.user.is_active or \
+            request.user.is_anonymous:
+                self.redirect_to_login(request)
+            else:
+                token = request.session['token'] if 'token' in request.session else None
+                if token:
+                    _t = Token.objects.get(key=token)
+                    if _t.is_expired():
+                        self.redirect_to_login(request)
+
+                organization = request.session['organization'] if 'organization' in request.session else None
+                if not organization:
+                    return self.redirect_to_login(request)
+                else:
+                    try:
+                        Organization.objects.get(code=organization)
+                    except BaseException:
+                        self.redirect_to_login(request)
+
+            # ------------------------
+            response = self.get_response(request)
+            # ------------------------
+
+            # Code to be executed for each request/response after
+            # the view is called.
+
+            return response
+
+        def redirect_to_login(self, request):
+            logout(request)
+            # redirect_to = getattr(settings, 'LOGIN_FRONTEND_URL', reverse('user_registration'))
+            # return HttpResponseRedirect(
+            #     '{login_path}?next={request_path}'.format(
+            #         login_path=redirect_to,
+            #         request_path=request.path))
+            # return HttpResponseRedirect('{login_path}'.format(login_path=redirect_to))
