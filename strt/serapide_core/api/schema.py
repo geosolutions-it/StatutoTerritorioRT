@@ -612,6 +612,13 @@ class ProceduraVASMembershipFilter(django_filters.FilterSet):
             if _memberships:
                 _enti = [_m.organization.code for _m in _memberships.all()]
 
+        token = self.request.session.get('token', None)
+        if token:
+            _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
+            _pianos = [_p for _p in Piano.objects.filter(codice__in=_allowed_pianos)]
+            for _p in _pianos:
+                _enti.append(_p.ente.code)
+
         return super(ProceduraVASMembershipFilter, self).qs.filter(ente__code__in=_enti)
 
 
