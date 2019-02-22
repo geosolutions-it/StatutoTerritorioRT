@@ -56,8 +56,8 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
             }
             return(
                         <div className="pb-4 pt-5 d-flex flex-row">
-                            <i className="material-icons text-warning icon-34">assignment</i>
-                            <i style={{maxWidth: 26}} className="material-icons text-warning">locked</i>
+                            <i className="material-icons text-serapide icon-34">assignment</i>
+                            <i style={{maxWidth: 26}} className="material-icons text-serapide">locked</i>
                             <div className="d-flex flex-column flex-fill">
                                 <h3 className="mb-0">ANAGRAFICA</h3>
                                 <span className="pt-5">{getEnteLabelID(ente)}</span>
@@ -69,7 +69,7 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                                 <Delibera placeholder="Delibera Comunale (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={locked}/>
                                 <span className="pt-5">ALTRI DOCUMENTI</span>
                                 <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_opts" }} isLocked={locked}/>
-                                <div style={{borderBottom: "2px dashed"}} className="mt-5 text-warning" ></div>
+                                <div style={{borderBottom: "2px dashed"}} className="mt-5 text-serapide" ></div>
                                 <VAS codice={codice} canUpdate={canCommit(dataDelibera, delibera, descrizione)} isLocked={locked}></VAS>
                             </div>
                             

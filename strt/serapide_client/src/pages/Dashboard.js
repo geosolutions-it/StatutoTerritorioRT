@@ -11,7 +11,6 @@ import React from 'react'
 import TabellaPiani from '../components/TabellaPiani'
 import TabellaMessaggi from '../components/TabellaMessaggi'
 import Button from '../components/IconButton'
-
 import {Query} from "react-apollo"; 
 import {toast} from 'react-toastify';
 
@@ -43,23 +42,21 @@ export default ({utente, ...props}) => {
             <div className="serapide-content pt-5 pX-lg px-4 serapide-top-offset position-relative overflow-x-scroll">
                 <h1>Portale del territorio</h1>
                 <h2>Strumenti per la formazione e gestione dei piani</h2>
-                <hr className="border-warning border-bottom"></hr>
+                <hr className="border-serapide border-bottom"></hr>
                 <div className="py-4 d-flex flex-row">
                     <div className="d-flex flex-column ">
                         <h2>{`${utente.firstName || ""} ${utente.lastName || ""}`}</h2>
                     </div>
-                    <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="warning" icon="note_add" label="Crea nuovo piano"></Button>
+                    <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="serapide" icon="note_add" label="Crea nuovo piano"></Button>
                     <div className="px-sm-4"></div>
-                    <Button size='md' tag="a" href="./#/archivio" className="my-auto text-uppercase" color="warning" icon="view_list" label="archivio piani"></Button>
+                    <Button size='md' tag="a" href="./#/archivio" className="my-auto text-uppercase" color="serapide" icon="view_list" label="archivio piani"></Button>
                 </div>
                 
                 <h5 className="py-5">I MIEI PIANI</h5>
                 <Piani></Piani>
                 <span className="legenda">LEGENDA NOTIFICHE</span>
                 <div className="mr-4 pt-2 pb-5 d-flex flex-row justify-content-start legenda">
-                    <i className="material-icons mr-1 urgente">notification_important</i><span >Notifiche urgenti per le quali è richiesta un'azione</span>
-                    <i className="material-icons mr-1 importante">notification_important</i><span >Notifiche importanti per le quali è richiesta un'azione</span>
-                    <i className="material-icons mr-1 prossimamente">notification_important</i><span >Notifiche urgenti per le quali è richiesta un'azione</span>
+                    <i className="material-icons mr-1 urgente">notification_important</i><span>Il piano ha della azioni necessarie o in attesa</span>
                 </div>
                 <h6 className="py-5">MESSAGGI </h6>
                 <TabellaMessaggi messaggi={utente.unreadMessages}></TabellaMessaggi>

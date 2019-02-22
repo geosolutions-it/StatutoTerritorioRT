@@ -10,11 +10,6 @@
     
     .material-icons{
         font-size: 4rem;
-        color: $warning;
-    }
-    .btn {
-        background-color: $warning;
-        border-color: $warning;
     }
     .title {
         color: $gray-600;
@@ -96,23 +91,5 @@
 }
 .file-loader{
     flex: 2 1 100%;
-}
-
-.strt-switch{
-    .custom-control-label.checked:before
-    {
-        color: #fff;
-        border-color: $warning;
-        background-color: $warning
-    }
-    .custom-control-label.checked:after{
-        background-color: #fff;
-        -webkit-transform: translateX(.75rem);
-        transform: translateX(.75rem);
-    }
-}
-
-.vas-switch {
-    max-width: 350px;
 }
 

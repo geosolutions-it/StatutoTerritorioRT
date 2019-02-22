@@ -18,7 +18,7 @@ const enhancer = toggleControllableState("isOpen", "toggleOpen", false)
 const ListItem = ({option: {value, label} = {}, selected = false, onClick}) => (
     <ListGroupItem  onClick={() => onClick(value)}>
         <span className="d-flex justify-content-start">
-            <i className={classNames('material-icons',{"text-warning": selected})}>{selected ?  'radio_button_checked' : 'radio_button_unchecked'}</i>
+            <i className={classNames('material-icons',{"text-serapide": selected})}>{selected ?  'radio_button_checked' : 'radio_button_unchecked'}</i>
             <span className="pl-2">{label}</span>
         </span>
     </ListGroupItem>)

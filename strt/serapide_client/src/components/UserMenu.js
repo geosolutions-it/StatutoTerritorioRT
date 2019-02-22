@@ -16,14 +16,14 @@ export default ({disabled, user= {}}) => (
     <UncontrolledDropdown className="usermenu text-white" inNavbar>
     <DropdownToggle  className={`${disabled ? "disabled" : ""} p-0`} nav caret disabled={disabled}>
             <span className="link-icon d-inline-flex flex-row">
-                <i className="material-icons text-warning m-1 rounded-circle bg-white">person</i>
+                <i className="material-icons text-serapide m-1 rounded-circle bg-white">person</i>
                 <div className="flex-column align-self-center">
                   <div className="link-icon-label ">{user.nome}</div>
                 </div> 
             </span>
     </DropdownToggle>
     <DropdownMenu right>
-    <DropdownItem className="text-warning text-uppercase" header>{`ruolo: ${user.ruolo || ''}`}</DropdownItem>
+    <DropdownItem className="text-serapide text-uppercase" header>{`ruolo: ${user.ruolo || ''}`}</DropdownItem>
       <DropdownItem tag="a" href="/users/user-profile/">Profilo</DropdownItem>
       <DropdownItem tag="a" href="">Impostazioni</DropdownItem>
       <DropdownItem tag="a" href="/users/logout/">Logout</DropdownItem>

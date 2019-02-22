@@ -20,7 +20,7 @@ $fasi: (
   i {
       font-size: $font-size;
       transform: translateX(($stato-progress-width * -0.5) + ($dim/2)); // di deafult va sul primo
-      color: $warning;    
+   
     }
   i.draft{
     color: $gray-400;
@@ -55,16 +55,6 @@ $fasi: (
 
       }
     }
-    @each $fase in map-keys($fasi) {
-      ._#{$fase}._icons{          
-          li {
-              background-color: $warning; 
-          &:before {
-            background-color: $warning;  
-          } 
-        } 
-      }
-    }
     ._icons {
       li{
         width: $dim;
@@ -79,9 +69,9 @@ $fasi: (
         position: relative;
         z-index: 1;
         &:before {
-          content: '';
-          background-color: $gray-400; 
+          content: ''; 
           position: absolute;
+          background-color: inherit;
           top: $dim / 4;
           left: -$space-between;
           width: $space-between;
@@ -100,21 +90,6 @@ $fasi: (
   }
   li:first-child::before {
     display: none;
-  }
-  .active {
-    background: $warning;
-  }
-  ._draft {
-    .active {
-    background: $gray-400;
-  }
-}
-  .active ~ li {
-    background: $gray-400;
-  }
-  
-  .active ~ li::before {
-    background: $gray-400;
   }
 }
   

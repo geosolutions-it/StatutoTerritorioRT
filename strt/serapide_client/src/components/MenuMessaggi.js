@@ -16,12 +16,12 @@ import {formatDate} from '../utils'
 export default ({disabled, messaggi= []}) => (
     <UncontrolledDropdown tag="li" className="first menumessaggi text-white" inNavbar>
         <DropdownToggle tag="span">
-            <LinkWithIcon className="vertical-divider-right" icon="email" iconColor="text-warning" withBadge badge={messaggi.length} label="Messaggi"></LinkWithIcon>
+            <LinkWithIcon className="vertical-divider-right" icon="email" iconColor="text-serapide" withBadge badge={messaggi.length} label="Messaggi"></LinkWithIcon>
         </DropdownToggle>
         <DropdownMenu right className="shadow">
             {messaggi.map(({sentAt, content, thread: {id, absoluteUrl, subject} = {}, sender: {email, firstName, lastName} = {}})=> (
                     <div key={id} className="d-flex message-item pointer" onClick={() => window.location.href = absoluteUrl}>
-                        <i className="material-icons text-warning">fiber_manual_record</i>
+                        <i className="material-icons text-serapide">fiber_manual_record</i>
                         <span className="d-inline-flex flex-column">
                                 <span className="text-nowrap">{`${firstName} ${lastName}`}</span>
                                 <span className="text-nowrap text-uppercase">{email}</span>

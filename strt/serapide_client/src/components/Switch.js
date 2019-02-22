@@ -22,7 +22,7 @@ const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)},
                 <span className="pr-3">{label}</span>
                 {!isLocked && (
                 <div  className="switch-label custom-control custom-switch">
-                    <label  onClick={toggle} style={{cursor: isLocked ? 'not-allowed' : 'pointer'}} className={classeNames('custom-control-label', {checked})}></label>
+                    <label  onClick={toggle} style={{cursor: isLocked ? 'not-allowed' : 'pointer'}} className={classeNames('custom-control-label', {"border-serapide bg-serapide": checked, checked})}></label>
                 </div> ) } 
             </div>
             {children(checked)}

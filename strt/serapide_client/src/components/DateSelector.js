@@ -23,7 +23,7 @@ class CustomInput extends React.PureComponent {
                     className={`${readOnly && 'read-only'}`}
                     style={{minWidth: 170}}
                     label={value || "Seleziona Data"}
-                    color="warning"
+                    color="serapide"
                     icon="date_range"
                     onClick={onClick}>          
                 </Button>

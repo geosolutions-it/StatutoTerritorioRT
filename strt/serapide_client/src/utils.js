@@ -20,7 +20,7 @@ export const getActionIconColor = (stato) => {
     switch (stato) {
         case "NECESSARIA":
         case "ATTESA":
-            return "text-warning"
+            return "text-serapide"
         default:
             return ""
     }
@@ -40,4 +40,12 @@ export const getAction = (stato) => {
         default:
             return false
     }
+}
+export const getThemeClass = (contactType = "", orgCode = "") => {
+    if(contactType.length > 0) {
+        return `ruolo-${contactType}`
+    }else if(orgCode.length > 0) {
+        return `ruolo-${orgCode}`
+    }
+
 }

@@ -1,3 +1,32 @@
+
+// Crea colori di base per app serapide text, btn, bg, border
+// di default si usa il warning per il comune, 
+// si possono creare varianti, usanto una classe wrapper per il tipo
+
+@mixin serapide-color ($color){
+    @include text-emphasis-variant(".text-serapide", $color );
+    @include bg-variant(".bg-serapide", $color);
+    @include bg-gradient-variant(".bg-gradient-serapide", $color);
+    .btn-serapide{
+        @include button-variant($color, $color);
+    }
+    .border-serapide {
+        border-color: $color !important;
+    }  
+}
+
+@include serapide-color($warning);
+
+.ruolo-R {
+    @include serapide-color(#09D7F2);
+}
+.ruolo-SOGGETTO_SCA {
+    @include serapide-color(#FA2AB3);
+}
+.ruolo-AUT_COMP_VAS {
+    @include serapide-color(#44F5D3);
+}
+
 .content {
     min-height: calc(100vh - 196px);
     // padding-bottom: $portal-header;

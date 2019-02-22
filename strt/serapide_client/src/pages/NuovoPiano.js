@@ -63,7 +63,7 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                         <div className="d-flex flex-column flex-eql ">
                             <h4 className="text-uppercase">{getEnteLabel(ente)}</h4>  
                             <div className="pb-4 pt-3 d-flex flex-row">
-                                <i className="material-icons text-warning icon-34 pr-4 ">assignment</i>
+                                <i className="material-icons text-serapide icon-34 pr-4 ">assignment</i>
                                 <div className="d-flex flex-column ">
                                     <h3 className="mb-0">CREA NUOVO PIANO</h3>
                                     {enti && (<EnteSelector className="pt-5" enti={enti} onChange={selectEnte} isLoading={isLoading} value={ente}></EnteSelector>)}
@@ -73,7 +73,7 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                                     <Button disabled={!canSubmit(ente, isLoading, tipo, isSaving)} onClick={() => creaPiano(getInput(ente, tipo))}
                                         size='md' tag="a" href="./#/nuovo_piano" 
                                         className="mt-5 flex-column d-flex ext-uppercase align-items-center" 
-                                        color="warning" label="CREA PIANO" isLoading={isSaving}>
+                                        color="serapide" label="CREA PIANO" isLoading={isSaving}>
                                     </Button>
                                 </div>   
                             </div>
