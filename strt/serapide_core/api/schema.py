@@ -120,6 +120,11 @@ class TipologiaContatto(StrtEnumNode):
 # This is configured in the CategoryNode's Meta class (as you can see below)
 class RoleNode(DjangoObjectType):
 
+    type = graphene.String()
+
+    def resolve_type(self, info, **args):
+        return self.type.code
+
     class Meta:
         model = UserMembership
         filter_fields = '__all__'
@@ -231,10 +236,15 @@ class AppUserNode(DjangoObjectType):
     alerts_count = graphene.String()
     unread_threads_count = graphene.String()
     unread_messages = graphene.List(UserMessageType)
+    contact_type = graphene.String()
 
     def resolve_role(self, info, **args):
         _org = info.context.session.get('organization', None)
-        return self.memberships.get(organization__code=_org)
+        token = info.context.session.get('token', None)
+        if token:
+            return self.memberships.all().first()
+        else:
+            return self.memberships.get(organization__code=_org)
 
     def resolve_alerts_count(self, info, **args):
         _alerts_count = 0
@@ -272,6 +282,13 @@ class AppUserNode(DjangoObjectType):
         for _t in Thread.unread(self).order_by('subject'):
             unread_messages.append(_t.latest_message)
         return unread_messages
+
+    def resolve_contact_type(self, info, **args):
+        contact_type = ""
+        contact = Contatto.objects.filter(user=self).first()
+        if contact:
+            contact_type = TIPOLOGIA_CONTATTO[contact.tipologia]
+        return contact_type
 
     class Meta:
         model = AppUser
