@@ -9,10 +9,10 @@ import React from 'react';
 import {
     Badge } from 'reactstrap';
 
-export default ({link, icon = "", iconColor = "",  label = "", className="", withBadge = false, badge = ""}) => {
+export default ({disabled = false, link, icon = "", iconColor = "",  label = "", className="", withBadge = false, badge = ""}) => {
     const El = link ? "a" : "span";
     return (
-            <El className={`${className} link-icon nav-link`} href={link}>
+            <El className={`${className} link-icon nav-link`} href={!disabled ? link : "" }>
             {withBadge ? ( 
                 <span className="d-inline-flex align-items-center">
                     <i className={`material-icons ${iconColor}`}>{icon}</i>

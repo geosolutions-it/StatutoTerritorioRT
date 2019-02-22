@@ -30,7 +30,7 @@ return (
         <Query query={GET_UTENTE} pollInterval={20000}>
         {({loading, data: {utenti: {edges= []} = {}} = {}, error}) => {
             const {node: utente = {}} = edges[0] || {}
-            const {contactType, role: {organization : {type: {code} = {}} = {}} = {} } = utente || {}
+            const {type, contactType, role: {organization : {type: {code} = {}} = {}} = {} } = utente || {}
             const themeClass = getThemeClass(contactType, code)
             if (loading) return (
                 <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
@@ -44,7 +44,7 @@ return (
                 <React.Fragment>
                  <ThemeInjector themeClass={themeClass}/>
                   <Injector el="user-navbar-list">
-                      <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}/>
+                      <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}  roleType={type}/>
                   </Injector>
                   <Router>
                       <Switch>

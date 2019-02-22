@@ -37,6 +37,7 @@ const Piani = () => (
 //     </Query>)
 
 export default ({utente, ...props}) => {
+    const {role: {type} = {}} = utente || {}
     return (
         <React.Fragment>
             <div className="serapide-content pt-5 pX-lg px-4 serapide-top-offset position-relative overflow-x-scroll">
@@ -47,9 +48,7 @@ export default ({utente, ...props}) => {
                     <div className="d-flex flex-column ">
                         <h2>{`${utente.firstName || ""} ${utente.lastName || ""}`}</h2>
                     </div>
-                    <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="serapide" icon="note_add" label="Crea nuovo piano"></Button>
-                    <div className="px-sm-4"></div>
-                    <Button size='md' tag="a" href="./#/archivio" className="my-auto text-uppercase" color="serapide" icon="view_list" label="archivio piani"></Button>
+                    {type === "RUP" && <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="serapide" icon="note_add" label="Crea nuovo piano"></Button>}
                 </div>
                 
                 <h5 className="py-5">I MIEI PIANI</h5>

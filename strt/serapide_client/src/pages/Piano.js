@@ -11,6 +11,7 @@ import { toast } from 'react-toastify'
 import { Route, Switch} from 'react-router-dom';
 import {Query} from "react-apollo"
 import Anagrafica from './Anagrafica'
+import Formazione from './Formazione'
 import {getEnteLabel, getPianoLabel} from "../utils"
 import {GET_PIANI} from "../queries"
 import Injector from '../components/Injector'
@@ -59,6 +60,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                         </div>
                         <Switch>
                             <Route  path={`${path}/anagrafica`} component={Anagrafica}/>
+                            <Route  path={`${path}/formazione`} component={Formazione}/>
                             <Route  path={`${path}`}>
                                 <Home azioni={azioni}></Home>
                             </Route>

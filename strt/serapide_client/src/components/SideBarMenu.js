@@ -26,11 +26,13 @@ export default enhancer(({piano = {}, expanded, url, active, toggleOpen, unreadM
             <ul className="list-group">
                 <MenuItem href={`#${url}`} active={active === ""} title="HOME PIANO" icon="home" expanded={expanded}/>
                 <MenuItem href={`#${url}/anagrafica`} active={active === "/anagrafica"} title="ANAGRAFICA" icon="assignment" expanded={expanded}/>
-                <MenuItem href={`#${url}/avvio`} active={active === "/avvio"} title="AVVIO" subtitle="Avvio del Procedimento" icon="dashboard" expanded={expanded}/>
                 <MenuItem href={`#${url}/formazione`} active={active === "/formazione"} title="FORMAZIONE PIANO" subtitle="Accesso agli strumenti" icon="build" expanded={expanded}/>
-                <MenuItem href={`#${url}/adozione`} active={active === "/adozione"} title="ADOZIONE" icon="assignment" expanded={expanded}/>
-                <MenuItem href={`#${url}/approvazione`} active={active === "/approvazione"} title="APPROVAZIONE" icon="check_circle" expanded={expanded}/>
-                <MenuItem href={`#${url}/pubblicazione`} active={active === "/pubblicazione"} title="PUBBLICAZIONE" icon="assignment" expanded={expanded}/>
+                <hr></hr>
+                <MenuItem href={`#${url}/avvio`} active={active === "/avvio"} title="AVVIO" subtitle="Avvio del Procedimento" icon="dashboard" expanded={expanded}/>
+                
+                <MenuItem href={`#${url}/adozione`} active={active === "/adozione"} title="ADOZIONE" icon="library_add" expanded={expanded}/>
+                <MenuItem href={`#${url}/approvazione`} active={active === "/approvazione"} title="APPROVAZIONE" icon="offline_pin" expanded={expanded}/>
+                <MenuItem href={`#${url}/pubblicazione`} active={active === "/pubblicazione"} title="PUBBLICAZIONE" icon="turned_in" expanded={expanded}/>
                 {/* <MenuItem href="/users/messages/inbox/" active={active === "/messaggi"} title="MESSAGGI" icon="email" expanded={expanded}>
                     <Badge color="light">{unreadMessages}</Badge>
                 </MenuItem> */}

@@ -13,9 +13,9 @@ import LinkWithIcon from './LinkWithIcon'
 
 import Messaggi from './MenuMessaggi'
 import {toggleControllableState} from '../enhancers/utils'
+import classNames from "classnames"
 
-
-export default toggleControllableState("isOpen", "toggle", false) (({isOpen= false, toggle = () =>{}, user = {}, messaggi = [], alertsCount = 0}) => (
+export default toggleControllableState("isOpen", "toggle", false) (({roleType, isOpen= false, toggle = () =>{}, user = {}, messaggi = [], alertsCount = 0}) => (
             <React.Fragment>
               <NavItem className="first">
                 <LinkWithIcon className="vertical-divider-left" icon="find_in_page" label="Ricerca" link="./#/search"></LinkWithIcon>
@@ -24,7 +24,7 @@ export default toggleControllableState("isOpen", "toggle", false) (({isOpen= fal
                 <LinkWithIcon icon="view_list" label="Archivio Piani" link="./#/archivio"></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
-                <LinkWithIcon className="vertical-divider-right" icon="note_add" label="Crea Nuovo Piano" link="./#/nuovo_piano"></LinkWithIcon>
+                <LinkWithIcon className={classNames("vertical-divider-right", {disabled: roleType !== "RUP"})} disabled={roleType !== "RUP"} icon="note_add" label="Crea Nuovo Piano" link="./#/nuovo_piano"></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
                 <LinkWithIcon className="vertical-divider-right" icon="today" label="Calendario"></LinkWithIcon>
