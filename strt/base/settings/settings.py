@@ -279,6 +279,7 @@ MIDDLEWARE = (
     'django_currentuser.middleware.ThreadLocalUserMiddleware',
     # Strt Users middleware
     'strt_users.middleware.TokenMiddleware',
+    'strt_users.middleware.SessionControlMiddleware',
 )
 
 LOGGING = {
