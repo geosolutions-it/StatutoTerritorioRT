@@ -1,0 +1,17 @@
+.strt-switch{
+    .custom-control-label.checked:before
+    {
+        color: #fff;
+        border-color: $warning;
+        background-color: $warning
+    }
+    .custom-control-label.checked:after{
+        background-color: #fff;
+        -webkit-transform: translateX(.75rem);
+        transform: translateX(.75rem);
+    }
+}
+
+.vas-switch {
+    max-width: 350px;
+}

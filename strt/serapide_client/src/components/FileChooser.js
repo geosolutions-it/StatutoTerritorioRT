@@ -64,10 +64,10 @@ class FileChooser extends React.Component {
                 'isAccept':isDragActive ? isDragAccept : acceptedFiles.length > 0 })}
             >
               <input {...getInputProps()} />
-              <i className="material-icons">cloud_upload</i>
+              <i className="material-icons text-serapide">cloud_upload</i>
               <span className="title">{this.getTitle()}</span>
               <span className="sub-title">oppure</span>
-              <Button  size={this.props.sz}>{this.getLabel()}</Button>
+              <Button  color="serapide" size={this.props.sz}>{this.getLabel()}</Button>
             </div>
           )
         }}
@@ -77,7 +77,7 @@ class FileChooser extends React.Component {
       const {modal, sz, isOpen, toggleOpen, showBtn, isLocked} = this.props
       const open = toggleOpen ? isOpen : this.state.isOpen
       if(modal && !open && showBtn) {
-        return (<Button disabled={isLocked} color="warning" onClick={this.toggleOpen}>Upload</Button>)
+        return (<Button disabled={isLocked} color="serapide" onClick={this.toggleOpen}>Upload</Button>)
       }
       const comp = this.renderChooser()
      return modal ? (

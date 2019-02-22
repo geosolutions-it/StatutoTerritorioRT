@@ -26,23 +26,23 @@ export default ({resource: { nome, uuid, tipo, dimensione, downloadUrl}, icon = 
     return  (
         <div className="resource d-flex justify-content-between align-items-center">
             <div className="d-flex">
-                <i className="material-icons text-warning">{icon}</i>
+                <i className="material-icons text-serapide">{icon}</i>
             <div className="pl-1 d-flex flex-column justify-content-between">
                 {downloadUrl ? (<a className="text-dark"href={downloadUrl} download={nome}>{nome}</a>) : (
                 <span>{nome}</span>)}
                 <span style={{fontSize: "0.8rem"}}>{getFileSize(dimensione)}</span>
             </div></div>
             <div className="d-flex justify-content-center align-items-center">
-                {isLoading && (<div className="spinner-grow text-warning" role="status">
+                {isLoading && (<div className="spinner-grow text-serapide" role="status">
                     <span className="sr-only">Loading...</span>                
                 </div>)}
                 {downloadUrl ? (
                 <a className="text-dark d-flex" href={downloadUrl} download={nome}>
-                    <i className="material-icons text-warning pointer">{isLocked ? "cloud_download" : "check_circle"}</i></a>) :
-                (<i className="material-icons text-warning pointer">{isLocked ? "cloud_download" : "check_circle"}</i>)}
+                    <i className="material-icons text-serapide pointer">{isLocked ? "cloud_download" : "check_circle"}</i></a>) :
+                (<i className="material-icons text-serapide pointer">{isLocked ? "cloud_download" : "check_circle"}</i>)}
                 
                 {isLocked ? (
-                    <i className="material-icons text-warning">lock</i>
+                    <i className="material-icons text-serapide">lock</i>
                 ) : (
                     <i className="material-icons text-danger" onClick={confirm} style={{cursor: 'pointer'}}>cancel</i>
                 ) }

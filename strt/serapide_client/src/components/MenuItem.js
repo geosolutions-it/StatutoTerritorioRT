@@ -9,7 +9,7 @@ import React from 'react'
 import classNames from 'classnames'
 
 export default ({title, subtitle, icon, iconColor, active = false, locked = false, expanded = false, children, href}) => (
-    <li onClick={() => window.location.href= href} className={classNames("list-group-item", {active, locked, collapsed: !expanded})}>
+    <li onClick={() => window.location.href= href} className={classNames("list-group-item", {"text-serapide": active, active, locked, collapsed: !expanded})}>
         <div className="d-flex align-items-center icons">
             {locked && expanded  && (<i className="material-icons icon-12">lock</i>)}
             <i className={classNames("material-icons", {"icon-16": !expanded}, iconColor)}>{icon}</i>

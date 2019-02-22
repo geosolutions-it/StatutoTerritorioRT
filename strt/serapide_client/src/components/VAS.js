@@ -122,14 +122,14 @@ export default enhancer(({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
                                     label="DEFINISCI SOGGETTO PROPONENTE"
                                     size="lg"
                                     onChange={changed}
-                                    btn={(toggleOpen) => (<Button fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="my-auto text-uppercase" color="warning" icon="add_circle" label="SOGGETTO PROPONENTE"></Button>)}
+                                    btn={(toggleOpen) => (<Button fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="my-auto text-uppercase" color="serapide" icon="add_circle" label="SOGGETTO PROPONENTE"></Button>)}
                                 >
                                 <AddContact className="mt-2" tipologia="generico"></AddContact>
                                 </EnhancedListSelector>)}
                             }
                         </Mutation>) : (<span>SOGGETTO PROPONENTE</span>) }
                             {sP && sP.nome && (<div className="d-flex pt-3" key={sP.uuid}>
-                                    <i className="material-icons text-warning">bookmark</i>
+                                    <i className="material-icons text-serapide">bookmark</i>
                                     {sP.nome}
                             </div>)}
                         </div>
@@ -151,14 +151,14 @@ export default enhancer(({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
                                     variables={{tipo: "acvas"}}
                                     size="lg"
                                     label="SELEZIONA AUTORITA’ COMPETENTE VAS"
-                                    btn={(toggleOpen) => (<Button  fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="text-uppercase" color="warning" icon="add_circle" label="AUTORITA’ COMPETENTE VAS (AC)"/>)}
+                                    btn={(toggleOpen) => (<Button  fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="text-uppercase" color="serapide" icon="add_circle" label="AUTORITA’ COMPETENTE VAS (AC)"/>)}
                                     >
                                     <AddContact className="mt-2" tipologia="acvas"></AddContact>
                                     </EnhancedListSelector>)}
                         }
                         </Mutation>) : (<span>AUTORITA’ COMPETENTE VAS</span>) }
                         {aut.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pt-3" key={uuid}>
-                                 <i className="material-icons text-warning">bookmark</i>
+                                 <i className="material-icons text-serapide">bookmark</i>
                                  {nome}
                         </div>))}
                     </div>
@@ -185,14 +185,14 @@ export default enhancer(({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
                                 label="DEFINISCI SCA"
                                 size="lg"
                                 onChange={changed}
-                                btn={(toggleOpen) => (<Button fontSize="60%" onClick={toggleOpen} className="my-auto text-uppercase" disabled={disableSCA || isLocked} color="warning" icon="add_circle" label="SOGGETTI COMPETENTI IN MATERIA AMBIENTALE (SCA)"></Button>)}
+                                btn={(toggleOpen) => (<Button fontSize="60%" onClick={toggleOpen} className="my-auto text-uppercase" disabled={disableSCA || isLocked} color="serapide" icon="add_circle" label="SOGGETTI COMPETENTI IN MATERIA AMBIENTALE (SCA)"></Button>)}
                             >
                             <AddContact className="mt-2" tipologia="sca"></AddContact>
                             </EnhancedListSelector>)}
                         }
                         </Mutation>) : (<span>SOGGETTI COMPETENTI IN MATERIA AMBIENALE</span>) }
                         {sca.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pt-3" key={uuid}>
-                                 <i className="material-icons text-warning">bookmark</i>
+                                 <i className="material-icons text-serapide">bookmark</i>
                                  {nome}
                         </div>))}
                     </div>
@@ -203,17 +203,17 @@ export default enhancer(({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
                         const updatePiano = (code) => {onConfirm({variables: {codice: code}})}
                       return (
                         <React.Fragment>
-                            <Button isLoading={loading} onClick={toggleOpen} className="my-auto text-uppercase" disabled={!canCommit} color="warning"  label="SALVA ED INVIA"></Button>
+                            <Button isLoading={loading} onClick={toggleOpen} className="my-auto text-uppercase" disabled={!canCommit} color="serapide"  label="SALVA ED INVIA"></Button>
                             {isOpen && (
                                 <Modal isOpen={isOpen} centered size="md" wrapClassName="serapide" autoFocus={true}>
-                                    <ModalHeader className="d-flex justify-content-center"><i className="material-icons text-warning icon-34">notifications_active</i></ModalHeader>
+                                    <ModalHeader className="d-flex justify-content-center"><i className="material-icons text-serapide icon-34">notifications_active</i></ModalHeader>
                                     <ModalBody className="d-flex justify-content-center flex-column pt-0 px-5 pb-5  align-items-center justify-item-center">
                                         
                                         <h4>STAI PER INVIARE I DOCUMENTI</h4>
                                         <h4> AL SISTEMA</h4>
                                         <div style={{minWidth: 200}} className="pt-5 d-flex justify-content-around">
-                                            <Button label="ANNULLA" color="warning" disabled={loading}  onClick={toggleOpen}></Button>
-                                            <Button label="SALVA" isLoading={loading} disabled={loading} color="warning" onClick={() => {updatePiano(codice)}}></Button>
+                                            <Button label="ANNULLA" color="serapide" disabled={loading}  onClick={toggleOpen}></Button>
+                                            <Button label="SALVA" isLoading={loading} disabled={loading} color="serapide" onClick={() => {updatePiano(codice)}}></Button>
                                         </div>
                                     </ModalBody>
                                 </Modal>)}

@@ -15,7 +15,7 @@ export default enhancer(({piano = {}, expanded, url, active, toggleOpen, unreadM
     <React.Fragment>
         {expanded ? (
             <div className="sidebar-header">
-            <span className="close" onClick={toggleOpen}>x</span>
+            <span className="close text-serapide" onClick={toggleOpen}>x</span>
                 <div className="d-flex flex-column pt-2">
                     <div className="">PORTALE DEL TERRITORIO</div>
                     <div className="piano-title text-capitalize">{`${piano.codice}`}</div>

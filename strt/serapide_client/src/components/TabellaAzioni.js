@@ -20,9 +20,9 @@ export default ({azioni = [], className}) => {
                     <td className="text-center"><i className={`material-icons ${getActionIconColor(stato)}`}>{getActionIcon(stato)}</i></td>
                     <td className="text-center text-capitalize">{tipologia.toLowerCase().split("_").join(" ")}</td>
                     <td className="text-center">{attore}</td>
-                    <td className={`text-center ${stato === "ATTESA" ? "text-warning" : ""}`}><span className="d-flex justify-content-center">{stato === "ATTESA" && <i className="material-icons text-warning" style={{width: 28}}>notifications_activex</i>} {data && formatDate(data)}</span></td>
-                    <td className="text-center">{actionHasBtn(attore) && <Button size="sm" color="warning">VAS</Button>}</td>
-                    <td className={`text-center ${getAction(stato) ? "pointer": ""}`}>{getAction(stato) && <i className="material-icons text-warning">play_circle_filled</i>}</td>
+                    <td className={`text-center ${stato === "ATTESA" ? "text-serapide" : ""}`}><span className="d-flex justify-content-center">{stato === "ATTESA" && <i className="material-icons text-serapide" style={{width: 28}}>notifications_activex</i>} {data && formatDate(data)}</span></td>
+                    <td className="text-center">{actionHasBtn(attore) && <Button size="sm" color="serapide">VAS</Button>}</td>
+                    <td className={`text-center ${getAction(stato) ? "pointer": ""}`}>{getAction(stato) && <i className="material-icons text-serapide">play_circle_filled</i>}</td>
                 </tr>))}
         </tbody>
     </Table>

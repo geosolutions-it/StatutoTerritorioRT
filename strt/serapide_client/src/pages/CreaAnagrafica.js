@@ -69,7 +69,7 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                     <div className="d-flex flex-column ">
                         <h4 className="text-uppercase">{getEnteLabel(ente)}</h4>  
                         <div className="pb-4 pt-3 d-flex flex-row">
-                            <i className="material-icons text-warning icon-34 pr-4 ">assignment</i>
+                            <i className="material-icons text-serapide icon-34 pr-4 ">assignment</i>
                             <div className="d-flex flex-column flex-fill">
                                 <h3 className="mb-0">CREA ANAGRAFICA</h3>
                                 <h3 className="mb-0 text-capitalize">{`${tipo.toLowerCase()} ${codice}`}</h3>
@@ -89,7 +89,7 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                                 <span className="pt-5">ALTRI DOCUMENTI</span>
                                 <span className="font-weight-light">Caricare eventuali allegati trascinando i files nel riquadro, formato obbligatorio pdf</span>
                                 <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_opts" }} isLocked={locked}/>
-                                <div style={{borderBottom: "2px dashed"}} className="mt-5 text-warning" ></div>
+                                <div style={{borderBottom: "2px dashed"}} className="mt-5 text-serapide" ></div>
                                 <VAS codice={codice} canUpdate={canCommit(dataDelibera, delibera, descrizione)} isLocked={locked}></VAS>
                             </div>
                             

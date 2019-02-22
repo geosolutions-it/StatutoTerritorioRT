@@ -43,7 +43,7 @@ LICENSE file in the root directory of this source tree.
                             <a aria-haspopup="true" href="" class="p-0 dropdown-toggle nav-link"
                                aria-expanded="false" data-toggle="dropdown">
                                 <span class="link-icon d-inline-flex flex-row">
-                                    <i class="material-icons text-warning m-1 rounded-circle bg-white">group</i>
+                                    <i class="material-icons text-serapide m-1 rounded-circle bg-white">group</i>
                                     <div class="flex-column align-self-center">
                                         <div class="link-icon-label ">
                                             {% trans 'gestione utenti'|capfirst %}
@@ -75,7 +75,7 @@ LICENSE file in the root directory of this source tree.
                         <a aria-haspopup="true" href="" class="p-0 dropdown-toggle nav-link"
                            data-toggle="dropdown" aria-expanded="false">
                             <span class="link-icon d-inline-flex flex-row">
-                                <i class="material-icons text-warning m-1 rounded-circle bg-white">person</i>
+                                <i class="material-icons text-serapide m-1 rounded-circle bg-white">person</i>
                                 <div class="flex-column align-self-center">
                                     <div class="link-icon-label ">
                                         {{ request.user.get_full_name }}
@@ -85,10 +85,10 @@ LICENSE file in the root directory of this source tree.
                         </a>
                         <div role="menu" aria-hidden="true"
                              class="dropdown-menu dropdown-menu-right">
-                            <!-- <span class="role text-warning">{% trans 'ruolo'|upper %}:</span>
+                            <!-- <span class="role text-serapide">{% trans 'ruolo'|upper %}:</span>
                             {% for m in request.user.memberships %}
                                 {% if m.organization.code == request.session.organization %}
-                                <span class="d-block role role-item text-warning">{{ m.description|default_if_none:m.type }}</span>
+                                <span class="d-block role role-item text-serapide">{{ m.description|default_if_none:m.type }}</span>
                                 {% endif %}
                             {% endfor %} -->
                             <a class="dropdown-item" href="{% url 'users_profile_detail' %}">

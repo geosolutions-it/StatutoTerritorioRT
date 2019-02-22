@@ -45,12 +45,12 @@ export default ({title, piani = []}) => (
                         <td className="text-center text-capitalize">{tipo}</td>
                         <td className="text-center">{formatDate(lastUpdate)}</td>
                         <td className="text-center">{codice}</td>
-                        <td className="text-center" style={{cursor: "pointer"}} onClick={() => goToAnagrafica(codice, fase)}><i className="material-icons text-warning">assignment</i></td>
+                        <td className="text-center" style={{cursor: "pointer"}} onClick={() => goToAnagrafica(codice, fase)}><i className="material-icons text-serapide">assignment</i></td>
                         <td>
                             <StatoProgress stato={fase}></StatoProgress>
                         </td>
                         <td className="text-justify text-center">{user && `${user.firstName} ${user.lastName}`}</td>
-                        <td className="text-center" style={{cursor: "pointer"}} onClick={() => goToPiano(codice)}><i className="material-icons text-warning">play_circle_filled</i></td>
+                        <td className="text-center" style={{cursor: "pointer"}} onClick={() => goToPiano(codice)}><i className="material-icons text-serapide">play_circle_filled</i></td>
                     </tr>))}
                 </tbody>
             </Table>

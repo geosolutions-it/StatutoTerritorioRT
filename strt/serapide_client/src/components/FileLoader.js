@@ -14,7 +14,7 @@ const getFileSize = (file) => file.size ? `${Math.round(file.size/100000)/10} MB
 const UI = ({placeholder, isLoading, progress, icon = "picture_as_pdf", onCancel, file = {}, error = false, onRetry}) => (
         <div className="file-loader d-flex justify-content-between align-items-center" >
             <div className="d-flex">
-                {file.name && (<i className="material-icons text-warning">{icon}</i>)}
+                {file.name && (<i className="material-icons text-serapide">{icon}</i>)}
             <div className="pl-1 d-flex flex-column justify-content-between">
                 <span>{file.name || placeholder}</span>
                 <span style={{fontSize: "0.8rem"}}>{getFileSize(file)}</span>
@@ -23,7 +23,7 @@ const UI = ({placeholder, isLoading, progress, icon = "picture_as_pdf", onCancel
             {isLoading && (
                             <div className="d-flex justify-content-center align-items-center">
                                 <div className="prog text-dark">{Math.round(progress)}%</div> 
-                                <div className="spinner-grow text-warning"role="status">
+                                <div className="spinner-grow text-serapide"role="status">
                                         <span className="sr-only">Loading...</span>                
                                 </div>       
                                 <i className="material-icons text-danger" onClick={onCancel}style={{cursor: 'pointer'}}>cancel</i>

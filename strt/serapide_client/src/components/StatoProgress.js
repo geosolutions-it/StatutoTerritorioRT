@@ -13,12 +13,13 @@ import classNames from "classnames"
 
 export default ({stato: {nome = "Unknown", codice}, className= "stato-progress", legend= false}) => {
     const id =  `_${shortid.generate()}`
-    const activeFase = fasi[fasi.indexOf(nome.toLocaleLowerCase()) + 1]
+    const activeIdx = fasi.indexOf(nome.toLocaleLowerCase()) + 1
+    const activeFase = fasi[activeIdx]
     return (
         <span className={className}>
-            <i id={id} className={`material-icons ${activeFase}`}>room</i>
-            <ul className={`_${activeFase} _icons`}>
-                {fasi.map((fase, idx) => (<li key={`_${fase}`} id={`_${fase}`} className={classNames({active: activeFase === fase})}/>))}
+            <i id={id} className={`material-icons text-serapide ${activeFase}`}>room</i>
+            <ul className="_icons">
+                {fasi.map((fase, idx) => (<li key={`_${fase}`} id={`_${fase}`} className={classNames({"bg-serapide": activeIdx >= idx})}/>))}
                 {!legend && <UncontrolledTooltip placement="top" target={id} ><span className="text-capitalize">{activeFase.toLowerCase()}</span></UncontrolledTooltip>}
             </ul>
             {legend && (

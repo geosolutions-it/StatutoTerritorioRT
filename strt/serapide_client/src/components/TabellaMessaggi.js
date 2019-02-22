@@ -13,7 +13,7 @@ export default ({title, messaggi = []}) => (
             <tbody>
                 {messaggi.map(({sentAt, content, thread: {id, absoluteUrl, subject} = {}, sender: {email, firstName, lastName} = {}}) => (
                     <tr key={id} onClick={() => window.location.href = absoluteUrl} className="pointer">
-                        <td className="text-center"><i className="material-icons text-warning">fiber_manual_record</i></td>
+                        <td className="text-center"><i className="material-icons text-serapide">fiber_manual_record</i></td>
                         <td className="text-center">{formatDate(sentAt)}</td>
                         <td className="text-center">
                             <span className="d-inline-flex flex-column">

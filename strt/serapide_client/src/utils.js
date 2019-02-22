@@ -20,7 +20,7 @@ export const getActionIconColor = (stato) => {
     switch (stato) {
         case "NECESSARIA":
         case "ATTESA":
-            return "text-warning"
+            return "text-serapide"
         default:
             return ""
     }
