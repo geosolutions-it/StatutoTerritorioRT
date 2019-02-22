@@ -174,6 +174,21 @@ query{
     edges {
       node {
         ...User
+        contactType
+        role{
+          type
+          name
+          code
+          description
+          organization {
+            name
+            description
+            code
+            type {
+              code
+            }
+          }
+        }
         unreadThreadsCount
         unreadMessages {
           thread {

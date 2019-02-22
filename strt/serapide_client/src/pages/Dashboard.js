@@ -56,9 +56,7 @@ export default ({utente, ...props}) => {
                 <Piani></Piani>
                 <span className="legenda">LEGENDA NOTIFICHE</span>
                 <div className="mr-4 pt-2 pb-5 d-flex flex-row justify-content-start legenda">
-                    <i className="material-icons mr-1 urgente">notification_important</i><span >Notifiche urgenti per le quali è richiesta un'azione</span>
-                    <i className="material-icons mr-1 importante">notification_important</i><span >Notifiche importanti per le quali è richiesta un'azione</span>
-                    <i className="material-icons mr-1 prossimamente">notification_important</i><span >Notifiche urgenti per le quali è richiesta un'azione</span>
+                    <i className="material-icons mr-1 urgente">notification_important</i><span>Il piano ha della azioni necessarie o in attesa</span>
                 </div>
                 <h6 className="py-5">MESSAGGI </h6>
                 <TabellaMessaggi messaggi={utente.unreadMessages}></TabellaMessaggi>

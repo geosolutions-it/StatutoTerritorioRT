@@ -41,3 +41,11 @@ export const getAction = (stato) => {
             return false
     }
 }
+export const getThemeClass = (contactType = "", orgCode = "") => {
+    if(contactType.length > 0) {
+        return `ruolo-${contactType}`
+    }else if(orgCode.length > 0) {
+        return `ruolo-${orgCode}`
+    }
+
+}

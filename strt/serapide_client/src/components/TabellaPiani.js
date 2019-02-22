@@ -40,7 +40,7 @@ export default ({title, piani = []}) => (
             <tbody>
                 {piani.map(({node: {alertsCount = 0, descrizione, tipo, lastUpdate, codice, fase = {}, user= {}}} = {}) => (
                     <tr key={codice}>
-                        <td className="text-center"><i className={`material-icons ${alertsCount > 0 ? "text-danger" : "nessuna"}`}>notification_important</i></td>
+                        <td className="text-center">{alertsCount > 0 && (<i className="material-icons text-danger">notification_important</i>)}</td>
                         <td style={{maxWidth: 350}}>{descrizione}</td>
                         <td className="text-center text-capitalize">{tipo}</td>
                         <td className="text-center">{formatDate(lastUpdate)}</td>

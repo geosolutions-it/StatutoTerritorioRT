@@ -17,11 +17,14 @@
 
 @include serapide-color($warning);
 
-.ruolo-regione {
+.ruolo-R {
     @include serapide-color(#09D7F2);
 }
-.ruolo-vas {
+.ruolo-SOGGETTO_SCA {
     @include serapide-color(#FA2AB3);
+}
+.ruolo-AUT_COMP_VAS {
+    @include serapide-color(#44F5D3);
 }
 
 .content {
