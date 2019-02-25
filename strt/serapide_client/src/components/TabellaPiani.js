@@ -9,6 +9,8 @@ import React from 'react'
 import { Table } from 'reactstrap'
 import StatoProgress from './StatoProgress'
 import {formatDate} from '../utils'
+import { toast } from 'react-toastify'
+import Confirm from './ConfirmToast'
 const {Fragment} = React;
 const goToAnagrafica = (codice, {nome} = {}) => {
     if(nome === "DRAFT"){
@@ -20,7 +22,25 @@ const goToAnagrafica = (codice, {nome} = {}) => {
 const goToPiano = (codice) => {
         window.location.href=`#/piano/${codice}`
 }
-export default ({title, piani = []}) => (
+const isDelete = ({nome = "Unknown"}) => (nome === 'DRAFT' || nome === "Unknown")
+
+
+
+export default ({title, piani = [], onDeleteResource = () => console.warn("Aggiungere query per eliminazione piano")}) => {
+    const deleteResource = (codice) => onDeleteResource({ variables: {codice}})
+    const confirm = (codice) => {
+        if(!toast.isActive(codice)) {
+            toast.warn(<Confirm label="Eliminare definitavmente il piano?" confirm={deleteResource} id={codice} />, {
+                autoClose: true,
+                draggable: true,
+                id: codice,
+                // hook will be called whent the component unmount
+                onClose: ( ) => {}
+            });
+        }
+    }    
+    
+    return (
     <Fragment>
         <h6 className="pb-3 text-uppercase">{title}</h6>
         <Table className="pb-4" size="sm" hover>
@@ -49,10 +69,11 @@ export default ({title, piani = []}) => (
                         <td>
                             <StatoProgress stato={fase}></StatoProgress>
                         </td>
-                        <td className="text-justify text-center">{user && `${user.firstName} ${user.lastName}`}</td>
-                        <td className="text-center" style={{cursor: "pointer"}} onClick={() => goToPiano(codice)}><i className="material-icons text-serapide">play_circle_filled</i></td>
+                        <td className="text-justify text-center">{user && `${user.firstName || ''} ${user.lastName || ''}`}</td>
+                        <td className="text-center" style={{cursor: "pointer"}} onClick={() => (isDelete(fase) ? confirm(codice) :  goToPiano(codice))}><i className="material-icons text-serapide">{isDelete(fase) ? "delete" : "play_circle_filled"}</i></td>
                     </tr>))}
                 </tbody>
             </Table>
+
     </Fragment>
-)
+)}
