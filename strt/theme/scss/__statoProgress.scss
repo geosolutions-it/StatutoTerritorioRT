@@ -1,15 +1,14 @@
 
 $fasi: (
-  anagrafica: -2,
-  avvio: -1,
-  adozione: 0,
-  approvazione: 1,
-  pubblicazione: 2
+  avvio: -1.5,
+  adozione: -0.5,
+  approvazione: 0.5,
+  pubblicazione: 1.5
 );
 
 
 @mixin statoProgress($dim, $stato-progress-width, $nFasi, $font-size: 24px){
-  $space-between: ($stato-progress-width - (($dim * 1.2) * $nFasi)) / $nFasi;
+  $space-between: ($stato-progress-width - ($dim * ($nFasi + 1))) / $nFasi;
   
   @each $fase in map-keys($fasi) {
     $val: map-get($fasi, $fase);
@@ -19,11 +18,11 @@ $fasi: (
   }
   i {
       font-size: $font-size;
-      transform: translateX(($stato-progress-width * -0.5) + ($dim/2)); // di deafult va sul primo
+      transform: translateX(($stato-progress-width * -0.5) + ($dim/2)); // di default va sul primo
    
     }
-  i.draft{
-    color: $gray-400;
+  i.draft, i.anagrafica{
+    color: $gray-400 !important;
   }
   min-width: $stato-progress-width;
   flex-direction: column;
@@ -42,7 +41,7 @@ $fasi: (
     ul._labels{
       padding-top:10px;
       display: inline;
-      .label_draft {
+      .label_draft, .label_anagrafica {
         display: none;
       }
       li{
@@ -97,18 +96,23 @@ $fasi: (
     padding-top: 10px;
     font-size: 1rem;
   }
-  .current-fase.draft{
+  .current-fase.draft, .current-fase.anagrafica{
     display: none;
+  }
+  ul._icons._anagrafica{
+    li{
+      background-color: $gray-400 !important; 
+    }
   }
 }
 
 
 
 .stato-progress {
-  @include statoProgress(8px, 120px, 5, 24px)
+  @include statoProgress(8px, 120px, 4, 24px)
   
 }
 
 .stato-progress-xxl {
-  @include statoProgress(18px, 400px, 5, 80px)
+  @include statoProgress(18px, 400px, 4, 80px)
 }

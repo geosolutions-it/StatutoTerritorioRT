@@ -14,9 +14,9 @@ export default ({ id, confirm , closeToast, label = "Elimina risorsa?" }) => {
         closeToast();
     }
     return (
-      <div  className=" text-dark d-flex  justify-content-around align-items-center">
+      <div  className="px-1 text-dark d-flex  justify-content-around align-items-center">
         
-         <span>{label}</span> <Button style={{fontSize: "0.7rem"}} color="danger"  onClick={handleClick}>Conferma</Button>
+         <span className="pr-1">{label}</span> <Button style={{fontSize: "0.7rem"}} color="danger"  onClick={handleClick}>Conferma</Button>
         
       </div>
     );

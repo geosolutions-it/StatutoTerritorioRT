@@ -18,9 +18,9 @@ export default ({stato: {nome = "Unknown", codice}, className= "stato-progress",
     return (
         <span className={className}>
             <i id={id} className={`material-icons text-serapide ${activeFase}`}>room</i>
-            <ul className="_icons">
+            <ul className={`_icons _${activeFase}`}>
                 {fasi.map((fase, idx) => (<li key={`_${fase}`} id={`_${fase}`} className={classNames({"bg-serapide": activeIdx >= idx})}/>))}
-                {!legend && <UncontrolledTooltip placement="top" target={id} ><span className="text-capitalize">{activeFase.toLowerCase()}</span></UncontrolledTooltip>}
+                {(!legend && activeFase !== "anagrafica") && <UncontrolledTooltip placement="top" target={id} ><span className="text-capitalize">{activeFase.toLowerCase()}</span></UncontrolledTooltip>}
             </ul>
             {legend && (
                 <React.Fragment>
