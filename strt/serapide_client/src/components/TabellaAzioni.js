@@ -14,6 +14,16 @@ const reverseOrder = ({node: {order: a}}, {node: {order: b}}) => (b - a)
 export default ({azioni = [], className}) => {
     return (
     <Table size="sm" className={className} hover>
+        <thead>
+            <tr>
+                <th className="text-center">Stato</th>
+                <th className="text-center">Azione</th>
+                <th className="text-center">Attori</th>
+                <th className="text-center">Data</th>
+                <th className="text-center"></th>
+                <th className="text-center"></th>
+            </tr>
+        </thead>
         <tbody>
             {azioni.sort(reverseOrder).map(({node: {stato = "", tipologia = "", attore = "", data, uuid}} = {}) => (
                 <tr key={uuid}>
