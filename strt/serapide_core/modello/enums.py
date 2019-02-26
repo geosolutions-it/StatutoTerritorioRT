@@ -67,6 +67,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('creato_piano', _('Creato Piano')),
         ('parere_verifica_vas', _('Parere Verifica VAS')),
         ('richiesta_verifica_vas', _('Richiesta Verifica VAS')),
+        ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),
         ('avvio_procedimento', _('Avvio Procedimento')),
         ('formazione_del_piano', _('Formazione del Piano')),
         ('protocollo_genio_civile', _('Protocollo Genio Civile')),
@@ -94,6 +95,10 @@ AZIONI = {
     FASE.anagrafica: [
         {
             "tipologia": TIPOLOGIA_AZIONE.parere_verifica_vas,
+            "attore": TIPOLOGIA_ATTORE.ac
+        },
+        {
+            "tipologia": TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
             "attore": TIPOLOGIA_ATTORE.ac
         },
         {

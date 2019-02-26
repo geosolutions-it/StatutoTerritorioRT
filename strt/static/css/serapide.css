@@ -6938,22 +6938,19 @@ a.text-dark:hover, a.text-dark:focus {
   display: inline-flex;
   align-items: center;
   line-height: 0px; }
-  .serapide .stato-progress .anagrafica {
-    transform: translateX(-44.8px); }
   .serapide .stato-progress .avvio {
-    transform: translateX(-22.4px); }
+    transform: translateX(-42px); }
   .serapide .stato-progress .adozione {
-    transform: translateX(0px); }
+    transform: translateX(-14px); }
   .serapide .stato-progress .approvazione {
-    transform: translateX(22.4px); }
+    transform: translateX(14px); }
   .serapide .stato-progress .pubblicazione {
-    transform: translateX(44.8px); }
+    transform: translateX(42px); }
   .serapide .stato-progress i {
     font-size: 24px;
-    transform: translateX(-56px);
-    color: #ffc107; }
-  .serapide .stato-progress i.draft {
-    color: #ced4da; }
+    transform: translateX(-56px); }
+  .serapide .stato-progress i.draft, .serapide .stato-progress i.anagrafica {
+    color: #ced4da !important; }
   .serapide .stato-progress ul {
     list-style: none;
     display: block;
@@ -6965,42 +6962,22 @@ a.text-dark:hover, a.text-dark:focus {
   .serapide .stato-progress ul._labels {
     padding-top: 10px;
     display: inline; }
-    .serapide .stato-progress ul._labels .label_draft {
+    .serapide .stato-progress ul._labels .label_draft, .serapide .stato-progress ul._labels .label_anagrafica {
       display: none; }
     .serapide .stato-progress ul._labels li {
       font-size: 10px;
-      width: 14.4px;
+      width: 20px;
       text-align: center;
       white-space: nowrap;
       text-overflow: ellipsis;
       text-transform: capitalize; }
-  .serapide .stato-progress ._anagrafica._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress ._anagrafica._icons li:before {
-      background-color: #ffc107; }
-  .serapide .stato-progress ._avvio._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress ._avvio._icons li:before {
-      background-color: #ffc107; }
-  .serapide .stato-progress ._adozione._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress ._adozione._icons li:before {
-      background-color: #ffc107; }
-  .serapide .stato-progress ._approvazione._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress ._approvazione._icons li:before {
-      background-color: #ffc107; }
-  .serapide .stato-progress ._pubblicazione._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress ._pubblicazione._icons li:before {
-      background-color: #ffc107; }
   .serapide .stato-progress ._icons li {
     width: 8px;
     height: 8px;
     text-align: center;
     line-height: 1em;
     border-radius: 4px;
-    margin: 0 0 0 14.4px;
+    margin: 0 0 0 20px;
     display: inline-block;
     color: #fff;
     background-color: #ced4da;
@@ -7008,11 +6985,11 @@ a.text-dark:hover, a.text-dark:focus {
     z-index: 1; }
     .serapide .stato-progress ._icons li:before {
       content: '';
-      background-color: #ced4da;
       position: absolute;
+      background-color: inherit;
       top: 2px;
-      left: -14.4px;
-      width: 14.4px;
+      left: -20px;
+      width: 20px;
       height: 4px;
       z-index: 0; }
   .serapide .stato-progress ._icons li:first-child {
@@ -7021,19 +6998,13 @@ a.text-dark:hover, a.text-dark:focus {
     margin-right: 0px; }
   .serapide .stato-progress ._icons li:first-child::before {
     display: none; }
-  .serapide .stato-progress ._icons .active {
-    background: #ffc107; }
-  .serapide .stato-progress ._icons ._draft .active {
-    background: #ced4da; }
-  .serapide .stato-progress ._icons .active ~ li {
-    background: #ced4da; }
-  .serapide .stato-progress ._icons .active ~ li::before {
-    background: #ced4da; }
   .serapide .stato-progress .current-fase {
     padding-top: 10px;
     font-size: 1rem; }
-  .serapide .stato-progress .current-fase.draft {
+  .serapide .stato-progress .current-fase.draft, .serapide .stato-progress .current-fase.anagrafica {
     display: none; }
+  .serapide .stato-progress ul._icons._anagrafica li {
+    background-color: #ced4da !important; }
 
 .serapide .stato-progress-xxl {
   min-width: 400px;
@@ -7041,22 +7012,19 @@ a.text-dark:hover, a.text-dark:focus {
   display: inline-flex;
   align-items: center;
   line-height: 0px; }
-  .serapide .stato-progress-xxl .anagrafica {
-    transform: translateX(-152.8px); }
   .serapide .stato-progress-xxl .avvio {
-    transform: translateX(-76.4px); }
+    transform: translateX(-143.25px); }
   .serapide .stato-progress-xxl .adozione {
-    transform: translateX(0px); }
+    transform: translateX(-47.75px); }
   .serapide .stato-progress-xxl .approvazione {
-    transform: translateX(76.4px); }
+    transform: translateX(47.75px); }
   .serapide .stato-progress-xxl .pubblicazione {
-    transform: translateX(152.8px); }
+    transform: translateX(143.25px); }
   .serapide .stato-progress-xxl i {
     font-size: 80px;
-    transform: translateX(-191px);
-    color: #ffc107; }
-  .serapide .stato-progress-xxl i.draft {
-    color: #ced4da; }
+    transform: translateX(-191px); }
+  .serapide .stato-progress-xxl i.draft, .serapide .stato-progress-xxl i.anagrafica {
+    color: #ced4da !important; }
   .serapide .stato-progress-xxl ul {
     list-style: none;
     display: block;
@@ -7068,42 +7036,22 @@ a.text-dark:hover, a.text-dark:focus {
   .serapide .stato-progress-xxl ul._labels {
     padding-top: 10px;
     display: inline; }
-    .serapide .stato-progress-xxl ul._labels .label_draft {
+    .serapide .stato-progress-xxl ul._labels .label_draft, .serapide .stato-progress-xxl ul._labels .label_anagrafica {
       display: none; }
     .serapide .stato-progress-xxl ul._labels li {
       font-size: 10px;
-      width: 58.4px;
+      width: 77.5px;
       text-align: center;
       white-space: nowrap;
       text-overflow: ellipsis;
       text-transform: capitalize; }
-  .serapide .stato-progress-xxl ._anagrafica._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress-xxl ._anagrafica._icons li:before {
-      background-color: #ffc107; }
-  .serapide .stato-progress-xxl ._avvio._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress-xxl ._avvio._icons li:before {
-      background-color: #ffc107; }
-  .serapide .stato-progress-xxl ._adozione._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress-xxl ._adozione._icons li:before {
-      background-color: #ffc107; }
-  .serapide .stato-progress-xxl ._approvazione._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress-xxl ._approvazione._icons li:before {
-      background-color: #ffc107; }
-  .serapide .stato-progress-xxl ._pubblicazione._icons li {
-    background-color: #ffc107; }
-    .serapide .stato-progress-xxl ._pubblicazione._icons li:before {
-      background-color: #ffc107; }
   .serapide .stato-progress-xxl ._icons li {
     width: 18px;
     height: 18px;
     text-align: center;
     line-height: 1em;
     border-radius: 9px;
-    margin: 0 0 0 58.4px;
+    margin: 0 0 0 77.5px;
     display: inline-block;
     color: #fff;
     background-color: #ced4da;
@@ -7111,11 +7059,11 @@ a.text-dark:hover, a.text-dark:focus {
     z-index: 1; }
     .serapide .stato-progress-xxl ._icons li:before {
       content: '';
-      background-color: #ced4da;
       position: absolute;
+      background-color: inherit;
       top: 4.5px;
-      left: -58.4px;
-      width: 58.4px;
+      left: -77.5px;
+      width: 77.5px;
       height: 9px;
       z-index: 0; }
   .serapide .stato-progress-xxl ._icons li:first-child {
@@ -7124,19 +7072,13 @@ a.text-dark:hover, a.text-dark:focus {
     margin-right: 0px; }
   .serapide .stato-progress-xxl ._icons li:first-child::before {
     display: none; }
-  .serapide .stato-progress-xxl ._icons .active {
-    background: #ffc107; }
-  .serapide .stato-progress-xxl ._icons ._draft .active {
-    background: #ced4da; }
-  .serapide .stato-progress-xxl ._icons .active ~ li {
-    background: #ced4da; }
-  .serapide .stato-progress-xxl ._icons .active ~ li::before {
-    background: #ced4da; }
   .serapide .stato-progress-xxl .current-fase {
     padding-top: 10px;
     font-size: 1rem; }
-  .serapide .stato-progress-xxl .current-fase.draft {
+  .serapide .stato-progress-xxl .current-fase.draft, .serapide .stato-progress-xxl .current-fase.anagrafica {
     display: none; }
+  .serapide .stato-progress-xxl ul._icons._anagrafica li {
+    background-color: #ced4da !important; }
 
 .navbar {
   z-index: 1031;
@@ -7391,11 +7333,7 @@ a.text-dark:hover, a.text-dark:focus {
   background-color: #fff;
   flex-direction: column; }
   .serapide .dropzone .material-icons {
-    font-size: 4rem;
-    color: #ffc107; }
-  .serapide .dropzone .btn {
-    background-color: #ffc107;
-    border-color: #ffc107; }
+    font-size: 4rem; }
   .serapide .dropzone .title {
     color: #6c757d;
     font-size: 1.5rem; }
@@ -7452,13 +7390,10 @@ a.text-dark:hover, a.text-dark:focus {
   border-top: none;
   border-bottom: none; }
 
-.serapide .file-loader {
-  flex: 2 1 100%; }
-
 .serapide .strt-switch .custom-control-label.checked:before {
   color: #fff;
-  border-color: #ffc107;
-  background-color: #ffc107; }
+  border-color: inherit;
+  background-color: inherit; }
 
 .serapide .strt-switch .custom-control-label.checked:after {
   background-color: #fff;
@@ -7476,7 +7411,6 @@ a.text-dark:hover, a.text-dark:focus {
     padding: 8px;
     margin-bottom: 10px; }
     .sidebar .sidebar-header .close {
-      color: #ffc107;
       font-size: 1rem;
       text-shadow: none;
       opacity: 1;
@@ -7522,10 +7456,181 @@ a.text-dark:hover, a.text-dark:focus {
       margin-right: 0px; }
   .sidebar .list-group .list-group-item.active {
     background-color: #3c3b3b;
-    border-left: 4px solid #ffc107;
-    color: #ffc107; }
+    border-left: 4px solid; }
   .sidebar .list-group .list-group-item.active.collapsed {
     padding-left: 0px; }
+
+.text-serapide {
+  color: #ffc107 !important; }
+
+a.text-serapide:hover, a.text-serapide:focus {
+  color: #ba8b00 !important; }
+
+.bg-serapide {
+  background-color: #ffc107 !important; }
+
+a.bg-serapide:hover, a.bg-serapide:focus,
+button.bg-serapide:hover,
+button.bg-serapide:focus {
+  background-color: #d39e00 !important; }
+
+.bg-gradient-serapide {
+  background: #ffc107 linear-gradient(180deg, #ffca2c, #ffc107) repeat-x !important; }
+
+.btn-serapide {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107; }
+  .btn-serapide:hover {
+    color: #212529;
+    background-color: #e0a800;
+    border-color: #d39e00; }
+  .btn-serapide:focus, .btn-serapide.focus {
+    box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5); }
+  .btn-serapide.disabled, .btn-serapide:disabled {
+    color: #212529;
+    background-color: #ffc107;
+    border-color: #ffc107; }
+  .btn-serapide:not(:disabled):not(.disabled):active, .btn-serapide:not(:disabled):not(.disabled).active,
+  .show > .btn-serapide.dropdown-toggle {
+    color: #212529;
+    background-color: #d39e00;
+    border-color: #c69500; }
+    .btn-serapide:not(:disabled):not(.disabled):active:focus, .btn-serapide:not(:disabled):not(.disabled).active:focus,
+    .show > .btn-serapide.dropdown-toggle:focus {
+      box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5); }
+
+.border-serapide {
+  border-color: #ffc107 !important; }
+
+.ruolo-R .text-serapide {
+  color: #09D7F2 !important; }
+
+.ruolo-R a.text-serapide:hover, .ruolo-R a.text-serapide:focus {
+  color: #0695a8 !important; }
+
+.ruolo-R .bg-serapide {
+  background-color: #09D7F2 !important; }
+
+.ruolo-R a.bg-serapide:hover, .ruolo-R a.bg-serapide:focus,
+.ruolo-R button.bg-serapide:hover,
+.ruolo-R button.bg-serapide:focus {
+  background-color: #07abc1 !important; }
+
+.ruolo-R .bg-gradient-serapide {
+  background: #09D7F2 linear-gradient(180deg, #2eddf4, #09D7F2) repeat-x !important; }
+
+.ruolo-R .btn-serapide {
+  color: #212529;
+  background-color: #09D7F2;
+  border-color: #09D7F2; }
+  .ruolo-R .btn-serapide:hover {
+    color: #fff;
+    background-color: #08b6cd;
+    border-color: #07abc1; }
+  .ruolo-R .btn-serapide:focus, .ruolo-R .btn-serapide.focus {
+    box-shadow: 0 0 0 0.2rem rgba(13, 188, 212, 0.5); }
+  .ruolo-R .btn-serapide.disabled, .ruolo-R .btn-serapide:disabled {
+    color: #212529;
+    background-color: #09D7F2;
+    border-color: #09D7F2; }
+  .ruolo-R .btn-serapide:not(:disabled):not(.disabled):active, .ruolo-R .btn-serapide:not(:disabled):not(.disabled).active,
+  .show > .ruolo-R .btn-serapide.dropdown-toggle {
+    color: #fff;
+    background-color: #07abc1;
+    border-color: #07a0b5; }
+    .ruolo-R .btn-serapide:not(:disabled):not(.disabled):active:focus, .ruolo-R .btn-serapide:not(:disabled):not(.disabled).active:focus,
+    .show > .ruolo-R .btn-serapide.dropdown-toggle:focus {
+      box-shadow: 0 0 0 0.2rem rgba(13, 188, 212, 0.5); }
+
+.ruolo-R .border-serapide {
+  border-color: #09D7F2 !important; }
+
+.ruolo-SOGGETTO_SCA .text-serapide {
+  color: #FA2AB3 !important; }
+
+.ruolo-SOGGETTO_SCA a.text-serapide:hover, .ruolo-SOGGETTO_SCA a.text-serapide:focus {
+  color: #d3058c !important; }
+
+.ruolo-SOGGETTO_SCA .bg-serapide {
+  background-color: #FA2AB3 !important; }
+
+.ruolo-SOGGETTO_SCA a.bg-serapide:hover, .ruolo-SOGGETTO_SCA a.bg-serapide:focus,
+.ruolo-SOGGETTO_SCA button.bg-serapide:hover,
+.ruolo-SOGGETTO_SCA button.bg-serapide:focus {
+  background-color: #eb069d !important; }
+
+.ruolo-SOGGETTO_SCA .bg-gradient-serapide {
+  background: #FA2AB3 linear-gradient(180deg, #fb4abe, #FA2AB3) repeat-x !important; }
+
+.ruolo-SOGGETTO_SCA .btn-serapide {
+  color: #fff;
+  background-color: #FA2AB3;
+  border-color: #FA2AB3; }
+  .ruolo-SOGGETTO_SCA .btn-serapide:hover {
+    color: #fff;
+    background-color: #f806a5;
+    border-color: #eb069d; }
+  .ruolo-SOGGETTO_SCA .btn-serapide:focus, .ruolo-SOGGETTO_SCA .btn-serapide.focus {
+    box-shadow: 0 0 0 0.2rem rgba(251, 74, 190, 0.5); }
+  .ruolo-SOGGETTO_SCA .btn-serapide.disabled, .ruolo-SOGGETTO_SCA .btn-serapide:disabled {
+    color: #fff;
+    background-color: #FA2AB3;
+    border-color: #FA2AB3; }
+  .ruolo-SOGGETTO_SCA .btn-serapide:not(:disabled):not(.disabled):active, .ruolo-SOGGETTO_SCA .btn-serapide:not(:disabled):not(.disabled).active,
+  .show > .ruolo-SOGGETTO_SCA .btn-serapide.dropdown-toggle {
+    color: #fff;
+    background-color: #eb069d;
+    border-color: #df0595; }
+    .ruolo-SOGGETTO_SCA .btn-serapide:not(:disabled):not(.disabled):active:focus, .ruolo-SOGGETTO_SCA .btn-serapide:not(:disabled):not(.disabled).active:focus,
+    .show > .ruolo-SOGGETTO_SCA .btn-serapide.dropdown-toggle:focus {
+      box-shadow: 0 0 0 0.2rem rgba(251, 74, 190, 0.5); }
+
+.ruolo-SOGGETTO_SCA .border-serapide {
+  border-color: #FA2AB3 !important; }
+
+.ruolo-AUT_COMP_VAS .text-serapide {
+  color: #44F5D3 !important; }
+
+.ruolo-AUT_COMP_VAS a.text-serapide:hover, .ruolo-AUT_COMP_VAS a.text-serapide:focus {
+  color: #0ce0b8 !important; }
+
+.ruolo-AUT_COMP_VAS .bg-serapide {
+  background-color: #44F5D3 !important; }
+
+.ruolo-AUT_COMP_VAS a.bg-serapide:hover, .ruolo-AUT_COMP_VAS a.bg-serapide:focus,
+.ruolo-AUT_COMP_VAS button.bg-serapide:hover,
+.ruolo-AUT_COMP_VAS button.bg-serapide:focus {
+  background-color: #14f2c8 !important; }
+
+.ruolo-AUT_COMP_VAS .bg-gradient-serapide {
+  background: #44F5D3 linear-gradient(180deg, #60f7da, #44F5D3) repeat-x !important; }
+
+.ruolo-AUT_COMP_VAS .btn-serapide {
+  color: #212529;
+  background-color: #44F5D3;
+  border-color: #44F5D3; }
+  .ruolo-AUT_COMP_VAS .btn-serapide:hover {
+    color: #212529;
+    background-color: #20f3ca;
+    border-color: #14f2c8; }
+  .ruolo-AUT_COMP_VAS .btn-serapide:focus, .ruolo-AUT_COMP_VAS .btn-serapide.focus {
+    box-shadow: 0 0 0 0.2rem rgba(63, 214, 186, 0.5); }
+  .ruolo-AUT_COMP_VAS .btn-serapide.disabled, .ruolo-AUT_COMP_VAS .btn-serapide:disabled {
+    color: #212529;
+    background-color: #44F5D3;
+    border-color: #44F5D3; }
+  .ruolo-AUT_COMP_VAS .btn-serapide:not(:disabled):not(.disabled):active, .ruolo-AUT_COMP_VAS .btn-serapide:not(:disabled):not(.disabled).active,
+  .show > .ruolo-AUT_COMP_VAS .btn-serapide.dropdown-toggle {
+    color: #212529;
+    background-color: #14f2c8;
+    border-color: #0dedc2; }
+    .ruolo-AUT_COMP_VAS .btn-serapide:not(:disabled):not(.disabled):active:focus, .ruolo-AUT_COMP_VAS .btn-serapide:not(:disabled):not(.disabled).active:focus,
+    .show > .ruolo-AUT_COMP_VAS .btn-serapide.dropdown-toggle:focus {
+      box-shadow: 0 0 0 0.2rem rgba(63, 214, 186, 0.5); }
+
+.ruolo-AUT_COMP_VAS .border-serapide {
+  border-color: #44F5D3 !important; }
 
 .content {
   min-height: calc(100vh - 196px);

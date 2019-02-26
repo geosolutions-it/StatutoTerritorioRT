@@ -1102,6 +1102,34 @@ class UpdatePiano(relay.ClientIDMutation):
             return GraphQLError(_("Forbidden"), code=403)
 
 
+class DeletePiano(graphene.Mutation):
+
+    class Arguments:
+        codice_piano = graphene.String(required=True)
+
+    success = graphene.Boolean()
+    codice_piano = graphene.String()
+
+    def mutate(self, info, **input):
+        if info.context.user and is_RUP(info.context.user):
+
+            # Fetching input arguments
+            _id = input['codice_piano']
+            try:
+                _piano = Piano.objects.get(codice=_id)
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                    _piano.delete()
+
+                    return DeletePiano(success=True, codice_piano=_id)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        return DeletePiano(success=False)
+
+
 class CreateProceduraVAS(relay.ClientIDMutation):
 
     class Input:
@@ -1473,6 +1501,14 @@ class PromozionePiano(graphene.Mutation):
                     datetime.timedelta(days=_verifica_vas_expire_days)
                 _verifica_vas.save()
 
+            _consultazioni_sca = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
+            if _consultazioni_sca:
+                _consultazioni_sca.stato = STATO_AZIONE.attesa
+                _consultazioni_sca_expire_days = getattr(settings, 'CONSULTAZIONI_SCA_EXPIRE_DAYS', 10)
+                _consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone()) + \
+                datetime.timedelta(days=_consultazioni_sca_expire_days)
+                _consultazioni_sca.save()
+
         elif fase.nome == FASE.avvio:
 
             _genio_civile = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
@@ -1521,6 +1557,7 @@ class Mutation(object):
 
     create_piano = CreatePiano.Field()
     update_piano = UpdatePiano.Field()
+    delete_piano = DeletePiano.Field()
 
     create_procedura_vas = CreateProceduraVAS.Field()
     update_procedura_vas = UpdateProceduraVAS.Field()
