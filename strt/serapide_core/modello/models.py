@@ -426,3 +426,5 @@ def delete_piano_associations(sender, instance, **kwargs):
         RisorseVas.objects.filter(procedura_vas=_vas).delete()
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
+    for _t in PianoAuthTokens.objects.filter(piano=instance):
+        _t.token.delete()
