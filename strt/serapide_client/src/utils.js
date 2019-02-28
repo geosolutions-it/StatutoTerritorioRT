@@ -36,16 +36,10 @@ export const actionHasBtn = (actor = "") => {
 export const getAction = (stato) => {
     switch (stato) {
         case "NECESSARIA":
+        case "ATTESA":
             return true
         default:
             return false
     }
 }
-export const getThemeClass = (contactType = "", orgCode = "") => {
-    if(contactType.length > 0) {
-        return `ruolo-${contactType}`
-    }else if(orgCode.length > 0) {
-        return `ruolo-${orgCode}`
-    }
 
-}

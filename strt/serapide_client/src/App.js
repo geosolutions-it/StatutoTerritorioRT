@@ -16,7 +16,7 @@ import Piano from './pages/Piano'
 import Injector from './components/Injector'
 import ThemeInjector from './components/InjectSerapideTheme'
 import NavBar from './components/NavigationBar'
-import {getThemeClass} from "./utils"
+import {globalAuth} from './autorizzazioni'
 
 import  {ToastContainer} from 'react-toastify'
 import {Query} from 'react-apollo'
@@ -28,10 +28,10 @@ return (
     <ApolloProvider client={client}>
         <ToastContainer/>
         <Query query={GET_UTENTE} pollInterval={20000}>
-        {({loading, data: {utenti: {edges= []} = {}} = {}, error}) => {
-            const {node: utente = {}} = edges[0] || {}
-            const {type, contactType, role: {organization : {type: {code} = {}} = {}} = {} } = utente || {}
-            const themeClass = getThemeClass(contactType, code)
+        {({loading, data: {utenti: {edges = [{}]} = {}} = {}, error}) => {
+            const {node: utente = {}} = edges[0]
+            const {attore: themeClass, role: {type: ruolo} = {} } = utente
+            
             if (loading) return (
                 <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
                     <div className="d-flex justify-content-center">
@@ -40,11 +40,13 @@ return (
                     </div>
                 </div>
                 </div>)
+                globalAuth._attore_attivo = themeClass
+                globalAuth._ruolo = ruolo
             return(
                 <React.Fragment>
                  <ThemeInjector themeClass={themeClass}/>
                   <Injector el="user-navbar-list">
-                      <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}  roleType={type}/>
+                      <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}  roleType={ruolo}/>
                   </Injector>
                   <Router>
                       <Switch>
