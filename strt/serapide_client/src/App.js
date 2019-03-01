@@ -22,11 +22,12 @@ import  {ToastContainer} from 'react-toastify'
 import {Query} from 'react-apollo'
 import '../node_modules/react-toastify/dist/ReactToastify.min.css'
 import {GET_UTENTE} from "./queries"
-
+import ReactTooltip from 'react-tooltip'
 export default () => {
 return (
     <ApolloProvider client={client}>
         <ToastContainer/>
+        
         <Query query={GET_UTENTE} pollInterval={20000}>
         {({loading, data: {utenti: {edges = [{}]} = {}} = {}, error}) => {
             const {node: utente = {}} = edges[0]
@@ -48,6 +49,7 @@ return (
                   <Injector el="user-navbar-list">
                       <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}  roleType={ruolo}/>
                   </Injector>
+                  <ReactTooltip></ReactTooltip>
                   <Router>
                       <Switch>
                           <Route  path="/piano/:code" render={(props) => <Piano utente={utente} {...props}/>} />
