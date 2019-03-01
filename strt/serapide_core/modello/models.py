@@ -404,6 +404,28 @@ class RisorseVas(models.Model):
         db_table = "strt_core_vas_risorse"
 
 
+class ConsultazioneVAS(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_scadenza = models.DateTimeField(null=True, blank=True)
+    data_ricezione_pareri = models.DateTimeField(null=True, blank=True)
+
+    avvio_consultazioni_sca = models.BooleanField(null=False, blank=False, default=False)
+
+    procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_consultazioni_vas"
+        verbose_name_plural = 'Consultazioni VAS'
+
+
 class AutoritaCompetenteVAS(models.Model):
     autorita_competente = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
