@@ -6,7 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import { UncontrolledTooltip } from 'reactstrap'
 import shortid from "shortid"
 import {fasi} from "../utils"
 import classNames from "classnames"
@@ -15,12 +14,12 @@ export default ({stato: {nome = "Unknown", codice}, className= "stato-progress",
     const id =  `_${shortid.generate()}`
     const activeIdx = fasi.indexOf(nome.toLocaleLowerCase()) + 1
     const activeFase = fasi[activeIdx]
+    const toolTip = { "data-tip": `<span class="text-capitalize">${activeFase.toLowerCase()}</span>`, "data-html": true}
     return (
         <span className={className}>
-            <i id={id} className={`material-icons text-serapide ${activeFase}`}>room</i>
+            <i id={id} {...toolTip} className={`material-icons text-serapide ${activeFase}`}>room</i>
             <ul className={`_icons _${activeFase}`}>
                 {fasi.map((fase, idx) => (<li key={`_${fase}`} id={`_${fase}`} className={classNames({"bg-serapide": activeIdx >= idx})}/>))}
-                {(!legend && activeFase !== "anagrafica") && <UncontrolledTooltip placement="top" target={id} ><span className="text-capitalize">{activeFase.toLowerCase()}</span></UncontrolledTooltip>}
             </ul>
             {legend && (
                 <React.Fragment>

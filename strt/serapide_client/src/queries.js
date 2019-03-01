@@ -175,6 +175,7 @@ query{
       node {
         ...User
         contactType
+        attore
         role{
           type
           name

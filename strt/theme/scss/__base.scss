@@ -3,6 +3,13 @@
 // di default si usa il warning per il comune, 
 // si possono creare varianti, usanto una classe wrapper per il tipo
 
+$attori: (
+  Regione: #09D7F2,
+  AC: #44F5D3,
+  SCA: #FA2AB3
+);
+
+
 @mixin serapide-color ($color){
     @include text-emphasis-variant(".text-serapide", $color );
     @include bg-variant(".bg-serapide", $color);
@@ -15,17 +22,19 @@
     }  
 }
 
+
 @include serapide-color($warning);
 
-.ruolo-R {
-    @include serapide-color(#09D7F2);
+@each $attore in map-keys($attori) {
+        $colore: map-get($attori, $attore);
+        .#{$attore}{
+            @include serapide-color($colore);
+        }
 }
-.ruolo-SOGGETTO_SCA {
-    @include serapide-color(#FA2AB3);
-}
-.ruolo-AUT_COMP_VAS {
-    @include serapide-color(#44F5D3);
-}
+
+
+
+
 
 .content {
     min-height: calc(100vh - 196px);

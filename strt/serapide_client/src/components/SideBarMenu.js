@@ -7,12 +7,14 @@
  */
 import React from 'react'
 import MenuItem from './MenuItem'
+import ReactTooltip from 'react-tooltip'
 // import {Badge} from 'reactstrap'
 import {toggleControllableState} from '../enhancers/utils'
 const enhancer = toggleControllableState("expanded", "toggleOpen", true)
 
 export default enhancer(({piano = {}, expanded, url, active, toggleOpen, unreadMessages = 0}) => (
     <React.Fragment>
+        <ReactTooltip id="sidebar-tooltip"/>
         {expanded ? (
             <div className="sidebar-header">
             <span className="close text-serapide" onClick={toggleOpen}>x</span>

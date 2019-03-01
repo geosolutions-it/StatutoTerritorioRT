@@ -8,6 +8,7 @@
 import React from 'react'
 import { Table } from 'reactstrap'
 import {formatDate, getActionIcon, getActionIconColor, getAction, actionHasBtn} from '../utils'
+import {canExecuteAction} from '../autorizzazioni'
 import {Button} from 'reactstrap'
 const reverseOrder = ({node: {order: a}}, {node: {order: b}}) => (b - a)
 
@@ -32,7 +33,7 @@ export default ({azioni = [], className}) => {
                     <td className="text-center">{attore}</td>
                     <td className={`text-center ${stato === "ATTESA" ? "text-serapide" : ""}`}><span className="d-flex justify-content-center">{stato === "ATTESA" && <i className="material-icons text-serapide" style={{width: 28}}>notifications_activex</i>} {data && formatDate(data)}</span></td>
                     <td className="text-center">{actionHasBtn(attore) && <Button size="sm" color="serapide">VAS</Button>}</td>
-                    <td className={`text-center ${getAction(stato) ? "pointer": ""}`}>{getAction(stato) && <i className="material-icons text-serapide">play_circle_filled</i>}</td>
+                    <td className={`text-center ${getAction(stato) && canExecuteAction({attore, tipologia})  ? "pointer": ""}`}>{getAction(stato) && canExecuteAction({attore, tipologia}) && <i className="material-icons text-serapide">play_circle_filled</i>}</td>
                 </tr>))}
         </tbody>
     </Table>
