@@ -7,17 +7,44 @@
  */
 import React from 'react'
 import Azioni from '../components/TabellaAzioni'
+import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
+import {Switch, Route} from 'react-router-dom'
+import classNames from 'classnames'
+const getAction = (url = "", pathname = "") => {
+    return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
+}
 
-export default ({azioni = []}) => (
-    <div className="d-flex flex-column pb-4 pt-5">
-        <div className="d-flex border-serapide border-top border-bottom py-4 justify-content-around">
-            <span>LEGGENDA</span>
-            <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_add</i><span>E’ richiesta un’azione</span></span>
-            <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_on</i><span>In attesa di risposta da altri attori</span></span>
-            <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_off</i><span>Nessuna azione richiesta</span></span>
-        </div>
-        <div className="py-4">
-            <Azioni azioni={azioni}/>
+export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, azioni = []}) => {
+    const action = getAction(url, pathname)
+    console.log(url, path, action)
+    const goToAction = (action = "") => {
+
+        window.location.href = `#${url}/${action.toLowerCase().replace(" ","_")}`
+    } 
+    return (
+    <div className="d-flex pb-4 pt-5">
+        <div className={classNames("d-flex flex-column", {"flex-fill": !action})}>
+            <div className="d-flex border-serapide border-top border-bottom py-4 justify-content-around">
+                <span>LEGGENDA</span>
+                <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_add</i><span>E’ richiesta un’azione</span></span>
+                <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_on</i><span>In attesa di risposta da altri attori</span></span>
+                <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_off</i><span>Nessuna azione richiesta</span></span>
+            </div>
+            <div className="py-4">
+                <Azioni azioni={azioni} onExecute={goToAction}/>
+            </div>
+        </div >
+        <div className={classNames("d-flex flex-column ml-2 border-left pl-3", {"flex-fill": action})}>
+            <Switch>
+                <Route path={`${path}/avvio_consultazioni_sca`} >
+                    <AvvioConsultazioniSCA></AvvioConsultazioniSCA>
+                </Route>
+                { action && (
+                <Route path={path}>
+                    <div className="p-6"> Azione non ancora implementata</div>
+                
+                </Route>)}
+            </Switch>
         </div>
     </div>
-)
+)}

@@ -20,7 +20,7 @@ const goToAnagrafica = (codice, {nome} = {}) => {
         }
 }
 const goToPiano = (codice) => {
-        window.location.href=`#/piano/${codice}`
+        window.location.href=`#/piano/${codice}/home`
 }
 const isDelete = ({nome = "Unknown"}) => (nome === 'DRAFT' || nome === "Unknown")
 

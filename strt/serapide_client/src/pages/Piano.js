@@ -21,10 +21,11 @@ import Home from "./Home"
 
 
 const getActive = (url = "", pathname = "") => {
-    return pathname.replace(url, "")
+    return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
     const activeLocation = getActive(url, pathname)
+    console.log(code, activeLocation, url, path, pathname)
     return (<Query query={GET_PIANI} variables={{codice: code}}>
 
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
@@ -61,9 +62,8 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                         <Switch>
                             <Route  path={`${path}/anagrafica`} component={Anagrafica}/>
                             <Route  path={`${path}/formazione`} component={Formazione}/>
-                            <Route  path={`${path}`}>
-                                <Home azioni={azioni}></Home>
-                            </Route>
+                            <Route  path={`${path}/home`} render={(props) => <Home azioni={azioni} {...props}></Home>}/>
+                                    
                         </Switch>
                         
                             

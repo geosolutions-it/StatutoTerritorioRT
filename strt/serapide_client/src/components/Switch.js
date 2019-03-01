@@ -9,6 +9,7 @@ import React from 'react'
 import classeNames from 'classnames'
 import {Mutation} from  "react-apollo"
 import { toast } from 'react-toastify'
+import {isFunction} from 'lodash'
 
 const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)}, className, children, checked }) => {
     const toggle = () => { 
@@ -25,7 +26,7 @@ const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)},
                     <label  onClick={toggle} style={{cursor: isLocked ? 'not-allowed' : 'pointer'}} className={classeNames('custom-control-label', {"border-serapide bg-serapide": checked, checked})}></label>
                 </div> ) } 
             </div>
-            {children(checked)}
+            {isFunction(children) && children(checked)}
         </React.Fragment>) : null
     }
 export default Switch

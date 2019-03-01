@@ -23,7 +23,10 @@ class SingleFile extends React.PureComponent {
         disabled: PropTypes.bool,
         mutation: PropTypes.object,
         resourceMutation: PropTypes.object,
-        getSuccess: PropTypes.func
+        modal: PropTypes.bool,
+        showBtn: PropTypes.bool,
+        getSuccess: PropTypes.func,
+        sz: PropTypes.oneOf(["sm","lg"]) 
     }
     static defaultProps = {
         placeholder: "",
@@ -33,7 +36,10 @@ class SingleFile extends React.PureComponent {
         disabled: false,
         mutation: FILE_UPLOAD,
         resourceMutation: DELETE_RISORSA,
-        getSuccess: ({upload: {success}}) => success
+        modal: true,
+        showBtn: true,
+        getSuccess: ({upload: {success}}) => success,
+        sz: "lg"
         
     } 
     onFilesChange = (files = []) => {
@@ -56,9 +62,9 @@ class SingleFile extends React.PureComponent {
     render() {
         
         const {file} = this.state || {}
-        const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation} = this.props
+        const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation, modal, showBtn, sz, className = ""} = this.props
         return  risorsa ? (<Resource codice={variables.codice} mutation={resourceMutation} resource={risorsa} isLocked={isLocked}/>) : (
-            <div style={{minHeight: "3.813rem"}} className="file-loader d-flex justify-content-between border-top border-bottom align-items-center">
+            <div style={{minHeight: "3.813rem"}} className={`${className} file-loader d-flex justify-content-between border-top border-bottom align-items-center`}>
                 <FileLoader
                     mutation={mutation}
                     file={file}
@@ -72,9 +78,9 @@ class SingleFile extends React.PureComponent {
                             multiple={false}
                             fileType="application/pdf"
                             onFilesChange={this.onFilesChange}
-                            modal
-                            showBtn
-                            sz="lg"/>)}
+                            modal={modal}
+                            showBtn={showBtn}
+                            sz={sz}/>)}
                 />
                 
             </div>
