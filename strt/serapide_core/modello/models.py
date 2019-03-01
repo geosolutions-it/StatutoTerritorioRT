@@ -143,6 +143,38 @@ class Contatto(models.Model):
         null=True
     )
 
+    @classmethod
+    def tipologia_contatto(cls, user):
+        contact_type = ""
+        if user:
+            contact = Contatto.objects.filter(user=user).first()
+            if contact:
+                contact_type = TIPOLOGIA_CONTATTO[contact.tipologia]
+        return contact_type
+
+    @classmethod
+    def attore(cls, user, organization=None, token=None):
+        attore = ""
+        if user:
+            contact = Contatto.objects.filter(user=user).first()
+            if contact:
+                if contact.tipologia == 'acvas':
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
+                elif contact.tipologia == 'sca':
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
+                else:
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+            else:
+                if token:
+                    membership = user.memberships.all().first()
+                else:
+                    membership = user.memberships.get(organization__code=organization)
+                if membership and membership.organization and membership.organization.type:
+                    attore = membership.organization.type.name
+                else:
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+        return attore
+
     class Meta:
         db_table = "strt_core_contatto"
         verbose_name_plural = 'Contatti'

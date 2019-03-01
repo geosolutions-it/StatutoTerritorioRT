@@ -9,6 +9,7 @@
 #
 #########################################################################
 
+import traceback
 # from django.conf import settings
 
 from django.contrib import auth
@@ -17,7 +18,7 @@ from django.contrib.auth import logout
 from django.http import HttpResponseBadRequest  # HttpResponseRedirect
 
 from strt_users.models import Token, Organization
-from serapide_core.modello.models import PianoAuthTokens
+from serapide_core.modello.models import PianoAuthTokens, Contatto
 
 
 class TokenMiddleware(object):
@@ -88,6 +89,17 @@ class SessionControlMiddleware(object):
                         Organization.objects.get(code=organization)
                     except BaseException:
                         self.redirect_to_login(request)
+
+                attore = request.session['attore'] if 'attore' in request.session else None
+                if not attore:
+                    try:
+                        attore = Contatto.attore(request.user, organization, token)
+                        request.session['attore'] = attore
+                    except BaseException:
+                        traceback.print_exc()
+                        pass
+                    if not attore:
+                        return self.redirect_to_login(request)
 
             # ------------------------
             response = self.get_response(request)
