@@ -8,9 +8,9 @@
 import React from 'react'
 import classNames from 'classnames'
 
-export default ({title, subtitle, icon, iconColor, active = false, locked = false, expanded = false, children, href}) => {
+export default ({title, subtitle, icon, disabled = false, iconColor, active = false, locked = false, expanded = false, children, href}) => {
     return (
-    <li onClick={() => window.location.href= href} className={classNames("list-group-item", {"text-serapide": active, active, locked, collapsed: !expanded})}>
+    <li onClick={() => {if(href) window.location.href = href}} className={classNames("list-group-item", {"text-serapide": active, active, locked, collapsed: !expanded})}>
         <div  data-for="sidebar-tooltip" data-tip-disable={expanded} data-tip={title} className="d-flex align-items-center icons">
             {locked && expanded  && (<i className="material-icons icon-12">lock</i>)}
             <i className={classNames("material-icons", {"icon-16": !expanded}, iconColor)}>{icon}</i>

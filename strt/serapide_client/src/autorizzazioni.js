@@ -15,8 +15,9 @@ import {includes} from "lodash"
   * 
   */
 const azioni = {
+        "AVVIO_PROCEDIMENTO": ["RUP", "OP"],
         "AVVIO_CONSULTAZIONI_SCA": ["TMP"],
-        "PARERE_VERIFICA_VAS" : ["", ""],
+        "PARERE_VERIFICA_VAS" : ["TMP", ""],
         "RICHIESTA_VERIFICA_VAS": ["", ""]
     }
 export const globalAuth = {
@@ -28,5 +29,6 @@ export const globalAuth = {
 export const checkAttore = ( {attore = ""} = {}, attore_attivo = globalAuth._attore_attivo) => attore === attore_attivo
 
 export const canExecuteAction = ({tipologia = "", attore= ""} = {}, attore_attivo = globalAuth._attore_attivo, ruolo = globalAuth._ruolo) => {
-  return attore_attivo === attore && includes((azioni[tipologia] || []), ruolo) 
+ // console.log(attore_attivo, ruolo, tipologia, attore, includes((azioni[tipologia] || []), ruolo) );
+  return attore_attivo.toLowerCase() === attore.toLowerCase() && includes((azioni[tipologia] || []), ruolo) 
 }
