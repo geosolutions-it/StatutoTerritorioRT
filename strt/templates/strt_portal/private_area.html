@@ -32,7 +32,7 @@ LICENSE file in the root directory of this source tree.
 
             <div class="collapse navbar-collapse" id="userNavbarSupportedContent">
 
-                <h4>{% for m in request.user.memberships %}{% if m.organization.code == request.session.organization %}<span class="d-block role role-item text-white">{{ m.description|default:m.name }}</span>{% endif %}{% endfor %}</h4>
+                <h5><span class="d-block role role-item text-white">{{ request.user }} [{{ request.session.attore }}]</span>{% for m in request.user.memberships %}{% if m.organization.code == request.session.organization %}<span class="d-block role role-item text-white">{{ m.description|default:m.name }}</span>{% endif %}{% endfor %}</h5>
                 <ul class="ml-auto text-center navbar-nav" id="user-navbar-list">
 
                     {% has_perm 'strt_users.can_manage_users' request.user as can_manage_users %}

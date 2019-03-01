@@ -79,7 +79,6 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_PIANO,
-    TIPOLOGIA_ATTORE,
     TIPOLOGIA_AZIONE,
     TIPOLOGIA_CONTATTO,
 )
@@ -285,34 +284,12 @@ class AppUserNode(DjangoObjectType):
         return unread_messages
 
     def resolve_contact_type(self, info, **args):
-        contact_type = ""
-        contact = Contatto.objects.filter(user=self).first()
-        if contact:
-            contact_type = TIPOLOGIA_CONTATTO[contact.tipologia]
-        return contact_type
+        return Contatto.tipologia_contatto(self)
 
     def resolve_attore(self, info, **args):
-        attore = ""
-        contact = Contatto.objects.filter(user=self).first()
-        if contact:
-            if contact.tipologia == 'acvas':
-                attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
-            elif contact.tipologia == 'sca':
-                attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
-            else:
-                attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-        else:
-            _org = info.context.session.get('organization', None)
-            token = info.context.session.get('token', None)
-            if token:
-                membership = self.memberships.all().first()
-            else:
-                membership = self.memberships.get(organization__code=_org)
-            if membership and membership.organization and membership.organization.type:
-                attore = membership.organization.type.name
-            else:
-                attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-        return attore
+        organization = info.context.session.get('organization', None)
+        token = info.context.session.get('token', None)
+        return Contatto.attore(self, organization, token)
 
     class Meta:
         model = AppUser
