@@ -185,8 +185,7 @@ class UploadRisorsaConsultazione(UploadBaseBase):
                 # Validating 'Procedura VAS'
                 _consultazione_vas = ConsultazioneVAS.objects.get(uuid=_uuid_consultazione)
                 _procedura_vas = _consultazione_vas.procedura_vas
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano) and \
-                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _procedura_vas.piano):
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
                     _resources = UploadBaseBase.handle_uploaded_data(
                         file,
                         _procedura_vas.uuid,
@@ -316,8 +315,7 @@ class DeleteRisorsaConsultazione(DeleteRisorsaBase):
             try:
                 _consultazione_vas = ConsultazioneVAS.objects.get(uuid=_uuid_consultazione)
                 _procedura_vas = _consultazione_vas.procedura_vas
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano) and \
-                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _procedura_vas.piano):
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaConsultazione(

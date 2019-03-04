@@ -16,7 +16,7 @@ import graphene
 import traceback
 
 from django.conf import settings
-
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from graphene import relay
@@ -144,8 +144,7 @@ class CreateConsultazioneVAS(relay.ClientIDMutation):
         _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
 
         if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 nuova_consultazione_vas = ConsultazioneVAS()
                 nuova_consultazione_vas.user = info.context.user
@@ -178,8 +177,7 @@ class UpdateConsultazioneVAS(relay.ClientIDMutation):
         _consultazione_vas_data = input.get('consultazione_vas')
         _piano = _consultazione_vas.procedura_vas.piano
         if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 consultazione_vas_aggiornata = update_create_instance(_consultazione_vas, _consultazione_vas_data)
                 return cls(consultazione_vas_aggiornata=consultazione_vas_aggiornata)
