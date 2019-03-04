@@ -102,3 +102,13 @@ class ProceduraVASUpdateInput(InputObjectType):
     verifica_effettuata = graphene.Boolean(required=False)
     procedimento_effettuato = graphene.Boolean(required=False)
     non_necessaria = graphene.Boolean(required=False)
+
+
+class ConsultazioneVASUpdateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    data_scadenza = graphene.types.datetime.DateTime(required=False)
+    data_ricezione_pareri = graphene.types.datetime.DateTime(required=False)
+    avvio_consultazioni_sca = graphene.Boolean(required=False)

@@ -58,6 +58,8 @@ class Query(object):
     procedure_vas = DjangoFilterConnectionField(types.ProceduraVASNode,
                                                 filterset_class=filters.ProceduraVASMembershipFilter)
 
+    consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
+
     contatti = DjangoFilterConnectionField(types.ContattoNode,
                                            filterset_class=filters.EnteContattoMembershipFilter)
 
@@ -114,7 +116,10 @@ class Mutation(object):
     create_procedura_vas = vas.CreateProceduraVAS.Field()
     update_procedura_vas = vas.UpdateProceduraVAS.Field()
 
+    create_consultazione_vas = vas.CreateConsultazioneVAS.Field()
+
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
     upload_risorsa_vas = uploads.UploadRisorsaVAS.Field()
     delete_risorsa_vas = uploads.DeleteRisorsaVAS.Field()
+    upload_consultazione_vas = uploads.UploadConsultazioneVAS.Field()

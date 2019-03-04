@@ -8082,6 +8082,21 @@ button.bg-serapide:focus {
 .SCA .border-serapide {
   border-color: #FA2AB3 !important; }
 
+.border-2 {
+  border: 2px solid #dee2e6 !important; }
+
+.border-top-2 {
+  border-top: 2px solid #dee2e6 !important; }
+
+.border-right-2 {
+  border-right: 2px solid #dee2e6 !important; }
+
+.border-bottom-2 {
+  border-bottom: 2px solid #dee2e6 !important; }
+
+.border-left-2 {
+  border-left: 2px solid #dee2e6 !important; }
+
 .content {
   min-height: calc(100vh - 196px);
   padding-top: 60px; }

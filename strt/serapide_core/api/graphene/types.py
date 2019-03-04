@@ -37,6 +37,7 @@ from serapide_core.modello.models import (
     Risorsa,
     Contatto,
     ProceduraVAS,
+    ConsultazioneVAS,
     PianoAuthTokens,
     FasePianoStorico,
     RisorsePiano,
@@ -293,6 +294,26 @@ class ContattoNode(DjangoObjectType):
             'ente': ['exact'],
             'piano__codice': ['exact'],
         }
+        interfaces = (relay.Node, )
+
+
+class ConsultazioneVASNode(DjangoObjectType):
+
+    user = graphene.Field(AppUserNode)
+    contatto = graphene.Field(ContattoNode)
+    procedura_vas = graphene.Field(ProceduraVASNode)
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    def resolve_contatto(self, info, **args):
+        _contatto = None
+        if self.user:
+            _contatto = Contatto.objects.filter(user=self.user).first()
+        return _contatto
+
+    class Meta:
+        model = ConsultazioneVAS
+        # Allow for some more advanced filtering here
+        filter_fields = '__all__'
         interfaces = (relay.Node, )
 
 
