@@ -421,6 +421,15 @@ class ConsultazioneVAS(models.Model):
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
     risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
 
+    user = models.ForeignKey(
+        to=AppUser,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
     class Meta:
         db_table = "strt_core_consultazioni_vas"
         verbose_name_plural = 'Consultazioni VAS'

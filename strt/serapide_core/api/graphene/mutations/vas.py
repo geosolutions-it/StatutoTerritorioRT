@@ -25,6 +25,7 @@ from serapide_core.helpers import update_create_instance
 from serapide_core.modello.models import (
     Piano,
     ProceduraVAS,
+    ConsultazioneVAS
 )
 
 from serapide_core.modello.enums import TIPOLOGIA_VAS
@@ -119,6 +120,63 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                     _procedura_vas.note = _data[0]
                 procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
                 return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class CreateConsultazioneVAS(relay.ClientIDMutation):
+
+    class Input:
+        codice_piano = graphene.String(required=True)
+
+    nuova_consultazione_vas = graphene.Field(types.ConsultazioneVASNode)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        _piano = Piano.objects.get(codice=input['codice_piano'])
+        _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
+
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+            try:
+                nuova_consultazione_vas = ConsultazioneVAS()
+                nuova_consultazione_vas.user = info.context.user
+                nuova_consultazione_vas.procedura_vas = _procedura_vas
+                nuova_consultazione_vas.save()
+                return cls(nuova_consultazione_vas=nuova_consultazione_vas)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class UpdateConsultazioneVAS(relay.ClientIDMutation):
+
+    class Input:
+        consultazione_vas = graphene.Argument(inputs.ConsultazioneVASUpdateInput)
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
+        _consultazione_vas_data = input.get('consultazione_vas')
+        _piano = _consultazione_vas.procedura_vas.piano
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+            try:
+                consultazione_vas_aggiornata = update_create_instance(_consultazione_vas, _consultazione_vas_data)
+                return cls(consultazione_vas_aggiornata=consultazione_vas_aggiornata)
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)
