@@ -30,10 +30,9 @@ const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
 const showError = (error) => {
     toast.error(error.message,  {autoClose: true})
 }
-export default ({backUrl =""}) => {
+export default () => {
     return (
         <React.Fragment>
-            <div  className="close align-self-end">x</div>
             <div  className="mt-5"><h2 className="m-0">Avvio Consultazioni SCA</h2></div>
             <div className="d-flex py-3 my-4 justify-content-between border-bottom-2 border-top-2">
                 <div className="d-flex">
