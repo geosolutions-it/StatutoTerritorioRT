@@ -169,7 +169,7 @@ class UploadRisorsaVAS(UploadBaseBase):
         return GraphQLError(_("Not Allowed"), code=405)
 
 
-class UploadConsultazioneVAS(UploadBaseBase):
+class UploadRisorsaConsultazione(UploadBaseBase):
 
     success = graphene.Boolean()
     consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
@@ -199,7 +199,9 @@ class UploadConsultazioneVAS(UploadBaseBase):
                         for _risorsa in _resources:
                             _consultazione_vas.risorsa = _risorsa
                             _consultazione_vas.save()
-                    return UploadRisorsaVAS(consultazione_vas_aggiornata=_consultazione_vas, success=_success)
+                    return UploadRisorsaConsultazione(
+                        consultazione_vas_aggiornata=_consultazione_vas,
+                        success=_success)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
@@ -288,6 +290,39 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
+
+
+class DeleteRisorsaConsultazione(DeleteRisorsaBase):
+
+    success = graphene.Boolean()
+    cosnsultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _id = input['risorsa_id']
+            _uuid_consultazione = input['codice']
+            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            try:
+                _consultazione_vas = ConsultazioneVAS.objects.get(uuid=_uuid_consultazione)
+                _procedura_vas = _consultazione_vas.procedura_vas
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano) and \
+                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _procedura_vas.piano):
+                    _risorsa = Risorsa.objects.get(uuid=_id)
+                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                    return DeleteRisorsaConsultazione(
+                        cosnsultazione_vas_aggiornata=_consultazione_vas,
+                        success=_success)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
