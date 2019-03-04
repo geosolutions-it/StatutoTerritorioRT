@@ -20,6 +20,7 @@ from .models import (
     ProceduraVAS, RisorseVas,
     AutoritaCompetenteVAS, SoggettiSCA,
     PianoAuthTokens,
+    ConsultazioneVAS
 )
 
 
@@ -61,7 +62,7 @@ class ProceduraVASAdmin(admin.ModelAdmin):
 
 admin.site.register(Fase)
 admin.site.register(Azione)
-# admin.site.register(Risorsa)
 admin.site.register(Contatto)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
+admin.site.register(ConsultazioneVAS)
