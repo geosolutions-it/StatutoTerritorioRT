@@ -8,13 +8,14 @@
 import React from 'react'
 import Azioni from '../components/TabellaAzioni'
 import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
+import PareriSCA from "./actions/PareriSCA"
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
 const getAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
 
-export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, azioni = []}) => {
+export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, azioni = []}) => {
     const action = getAction(url, pathname)
     console.log(url, path, action)
     const goToAction = (action = "") => {
@@ -34,15 +35,18 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Azioni azioni={azioni} onExecute={goToAction}/>
             </div>
         </div >
-        <div className={classNames("d-flex flex-column ml-2 border-left pl-3", {"flex-fill": action})}>
+        <div className={classNames("d-flex flex-column ", {"ml-2  pl-3 flex-fill border-left": action})}>
+            {action && <div  className="close align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
                 <Route path={`${path}/avvio_consultazioni_sca`} >
-                    <AvvioConsultazioniSCA></AvvioConsultazioniSCA>
+                    <AvvioConsultazioniSCA onClose={history.goBack}></AvvioConsultazioniSCA>
+                </Route>
+                <Route path={`${path}/pareri_sca`} >
+                    <PareriSCA></PareriSCA>
                 </Route>
                 { action && (
                 <Route path={path}>
                     <div className="p-6"> Azione non ancora implementata</div>
-                
                 </Route>)}
             </Switch>
         </div>

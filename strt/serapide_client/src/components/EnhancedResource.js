@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 import Risorsa from "./Resource"
 import {DELETE_RISORSA} from "../queries"
 
-export default ({ resource, codice, isLocked, mutation = DELETE_RISORSA, ...mutationProps}) => (
+export default ({ className, resource, codice, isLocked, mutation = DELETE_RISORSA, ...mutationProps}) => (
             <Mutation mutation={mutation} {...mutationProps}>
                     {(deleteResource, m_props) => {
                         const {error, data: {deleteRisorsa: res} = {}, loading} = m_props
@@ -21,7 +21,7 @@ export default ({ resource, codice, isLocked, mutation = DELETE_RISORSA, ...muta
                             toast.error("Impossibile eliminare la risorsa ",  {autoClose: true})
                         }
                         return (
-                            <Risorsa isLoading={loading} onDeleteResource={deleteResource} resource={resource} codice={codice} isLocked={isLocked}/>)
+                            <Risorsa className={className} isLoading={loading} onDeleteResource={deleteResource} resource={resource} codice={codice} isLocked={isLocked}/>)
                     }}
             </Mutation>
 )
