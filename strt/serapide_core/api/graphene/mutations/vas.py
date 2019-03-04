@@ -11,8 +11,11 @@
 
 import rules
 import logging
+import datetime
 import graphene
 import traceback
+
+from django.conf import settings
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -147,6 +150,9 @@ class CreateConsultazioneVAS(relay.ClientIDMutation):
                 nuova_consultazione_vas = ConsultazioneVAS()
                 nuova_consultazione_vas.user = info.context.user
                 nuova_consultazione_vas.procedura_vas = _procedura_vas
+                _consultazioni_vas_expire_days = getattr(settings, 'CONSULTAZIONI_SCA_EXPIRE_DAYS', 90)
+                nuova_consultazione_vas.data_scadenza = datetime.datetime.now(timezone.get_current_timezone()) + \
+                datetime.timedelta(days=_consultazioni_vas_expire_days)
                 nuova_consultazione_vas.save()
                 return cls(nuova_consultazione_vas=nuova_consultazione_vas)
             except BaseException as e:
