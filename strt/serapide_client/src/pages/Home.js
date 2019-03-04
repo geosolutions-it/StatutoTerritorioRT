@@ -47,7 +47,6 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 { action && (
                 <Route path={path}>
                     <div className="p-6"> Azione non ancora implementata</div>
-                
                 </Route>)}
             </Switch>
         </div>

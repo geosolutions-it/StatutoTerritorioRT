@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 import Confirm from './ConfirmToast'
 
 const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : null
-export default ({resource: { nome, uuid, tipo, dimensione, downloadUrl}, icon = "picture_as_pdf", codice, isLoading , isLocked = true, onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
+export default ({resource: { nome, uuid, tipo, dimensione, downloadUrl}, className ="resource", icon = "picture_as_pdf", codice, isLoading , isLocked = true, onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
     let toastId
     const deleteResource = () => onDeleteResource({ variables: { id: uuid, codice}})
     const confirm = () => {
@@ -24,7 +24,7 @@ export default ({resource: { nome, uuid, tipo, dimensione, downloadUrl}, icon = 
         }
     }
     return  (
-        <div className="resource d-flex justify-content-between align-items-center">
+        <div className={`${className} d-flex justify-content-between align-items-center`}>
             <div className="d-flex">
                 <i className="material-icons text-serapide">{icon}</i>
             <div className="pl-1 d-flex flex-column justify-content-between">
