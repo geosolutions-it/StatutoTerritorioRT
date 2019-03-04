@@ -355,6 +355,14 @@ mutation PromozionePiano($codice: String!){
 }
 ${PianoFragment}
 `
+export const DELETE_PIANO = gql`
+  mutation($codice: String!) {
+    deletePiano(codicePiano: $codice){
+        success
+        codicePiano
+    }
+}
+`
 
 // LOCAL STATE
 // example of local state query

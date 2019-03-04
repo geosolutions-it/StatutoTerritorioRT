@@ -11,6 +11,8 @@ import StatoProgress from './StatoProgress'
 import {formatDate} from '../utils'
 import { toast } from 'react-toastify'
 import Confirm from './ConfirmToast'
+
+
 const {Fragment} = React;
 const goToAnagrafica = (codice, {nome} = {}) => {
     if(nome === "DRAFT"){
@@ -26,8 +28,8 @@ const isDelete = ({nome = "Unknown"}) => (nome === 'DRAFT' || nome === "Unknown"
 
 
 
-export default ({title, piani = [], onDeleteResource = () => console.warn("Aggiungere query per eliminazione piano")}) => {
-    const deleteResource = (codice) => onDeleteResource({ variables: {codice}})
+export default ({title, piani = [], onDeletePiano = () => console.warn("Aggiungere query per eliminazione piano")}) => {
+    const deleteResource = (codice) => onDeletePiano({ variables: {codice}})
     const confirm = (codice) => {
         if(!toast.isActive(codice)) {
             toast.warn(<Confirm label="Eliminare definitavmente il piano?" confirm={deleteResource} id={codice} />, {
@@ -77,3 +79,5 @@ export default ({title, piani = [], onDeleteResource = () => console.warn("Aggiu
 
     </Fragment>
 )}
+    
+
