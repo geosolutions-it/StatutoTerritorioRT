@@ -117,9 +117,11 @@ class Mutation(object):
     update_procedura_vas = vas.UpdateProceduraVAS.Field()
 
     create_consultazione_vas = vas.CreateConsultazioneVAS.Field()
+    update_consultazione_vas = vas.UpdateConsultazioneVAS.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
     upload_risorsa_vas = uploads.UploadRisorsaVAS.Field()
     delete_risorsa_vas = uploads.DeleteRisorsaVAS.Field()
-    upload_consultazione_vas = uploads.UploadConsultazioneVAS.Field()
+    upload_consultazione_vas = uploads.UploadRisorsaConsultazione.Field()
+    delete_consultazione_vas = uploads.DeleteRisorsaConsultazione.Field()

@@ -313,7 +313,9 @@ class ConsultazioneVASNode(DjangoObjectType):
     class Meta:
         model = ConsultazioneVAS
         # Allow for some more advanced filtering here
-        filter_fields = '__all__'
+        filter_fields = {
+            'procedura_vas__piano__codice': ['exact'],
+        }
         interfaces = (relay.Node, )
 
 
