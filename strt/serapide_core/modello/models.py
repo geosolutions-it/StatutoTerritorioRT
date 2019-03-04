@@ -419,7 +419,7 @@ class ConsultazioneVAS(models.Model):
     avvio_consultazioni_sca = models.BooleanField(null=False, blank=False, default=False)
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
-    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, null=True, blank=True, on_delete=models.CASCADE)
 
     user = models.ForeignKey(
         to=AppUser,
