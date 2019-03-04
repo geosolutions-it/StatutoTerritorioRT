@@ -11,19 +11,39 @@ import React from 'react'
 import TabellaPiani from '../components/TabellaPiani'
 import TabellaMessaggi from '../components/TabellaMessaggi'
 import Button from '../components/IconButton'
-import {Query} from "react-apollo"; 
+import {Query, Mutation} from "react-apollo"; 
 import {toast} from 'react-toastify';
 
-import {GET_PIANI} from '../queries'
+import {GET_PIANI, DELETE_PIANO} from '../queries'
 
-
+const showError = (error) => {
+    toast.error(error.message,  {autoClose: true})
+}
+ 
+const update = (cache, { data: {deletePiano : {success, codicePiano}}  = {}} = {}) => {
+    if (success) {
+        let { piani ={}} = cache.readQuery({ query: GET_PIANI}) || {}
+        const edges = piani.edges.filter(({node}) => node.codice !== codicePiano)
+        piani.edges = edges
+        cache.writeQuery({
+                        query: GET_PIANI,
+                        data: { piani}
+                    })
+    }
+}
 const Piani = () => (
         <Query query={GET_PIANI}>
             {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
                 if (error) {
                     toast.error(error.message,  {autoClose: true})
                 }
-                return (<TabellaPiani title="piani in corso" piani={edges}></TabellaPiani>)
+                return ( <Mutation mutation={DELETE_PIANO} update={update} onError={showError}>
+                    {(onDelete, m_props) => {
+                        return (
+                            <TabellaPiani title="piani in corso" piani={edges} onDeletePiano={onDelete}></TabellaPiani>
+                        )
+                    }}
+                </Mutation>)
             }}
         </Query>)
 // const PianiArchiviati = () => (
