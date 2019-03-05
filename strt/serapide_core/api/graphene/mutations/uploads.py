@@ -316,6 +316,8 @@ class DeleteRisorsaConsultazione(DeleteRisorsaBase):
                 _consultazione_vas = ConsultazioneVAS.objects.get(uuid=_uuid_consultazione)
                 _procedura_vas = _consultazione_vas.procedura_vas
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+                    _consultazione_vas.risorsa = None
+                    _consultazione_vas.save()
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaConsultazione(

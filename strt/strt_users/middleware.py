@@ -77,9 +77,12 @@ class SessionControlMiddleware(object):
             else:
                 token = request.session['token'] if 'token' in request.session else None
                 if token:
-                    _t = Token.objects.get(key=token)
-                    if _t.is_expired():
-                        self.redirect_to_login(request)
+                    try:
+                        _t = Token.objects.get(key=token)
+                        if _t.is_expired():
+                            self.redirect_to_login(request)
+                    except BaseException:
+                        traceback.print_exc()
 
                 organization = request.session['organization'] if 'organization' in request.session else None
                 if not organization:
@@ -88,6 +91,7 @@ class SessionControlMiddleware(object):
                     try:
                         Organization.objects.get(code=organization)
                     except BaseException:
+                        traceback.print_exc()
                         self.redirect_to_login(request)
 
                 attore = request.session['attore'] if 'attore' in request.session else None
@@ -97,7 +101,7 @@ class SessionControlMiddleware(object):
                         request.session['attore'] = attore
                     except BaseException:
                         traceback.print_exc()
-                        pass
+
                     if not attore:
                         return self.redirect_to_login(request)
 
