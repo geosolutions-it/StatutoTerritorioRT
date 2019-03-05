@@ -36,12 +36,12 @@ const showError = (error, onError) => {
 }
 const _getInput = () => ({variables: {input: {}}})
 
-export const EnhancedSwitch  = ({isLocked, mutation, update, getInput = _getInput, label, value, className, children, checked,  ...mutationProps}) => {
+export const EnhancedSwitch  = ({isLocked, mutation, update, getInput = _getInput, label, value, className, children, checked, ignoreChecked = false, ...mutationProps}) => {
     return (
     <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
         {(onChange, m_props) => {
             const toggleSwitch = (checked, val) => {
-                if (checked) {
+                if (checked || ignoreChecked) {
                     onChange(getInput(val))
                 }
             }

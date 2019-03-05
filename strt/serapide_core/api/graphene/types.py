@@ -302,7 +302,7 @@ class ConsultazioneVASNode(DjangoObjectType):
     user = graphene.Field(AppUserNode)
     contatto = graphene.Field(ContattoNode)
     procedura_vas = graphene.Field(ProceduraVASNode)
-    risorsa = DjangoFilterConnectionField(RisorsaNode)
+    risorsa = graphene.Field(RisorsaNode)
 
     def resolve_contatto(self, info, **args):
         _contatto = None

@@ -10,14 +10,13 @@ import FileUpload from '../../components/UploadSingleFile'
 import Resource from '../../components/Resource'
 import { VAS_FILE_UPLOAD, DELETE_RISORSA_VAS} from '../../queries'
 import Button from '../../components/IconButton'
-import Switch from '../../components/Switch'
 
 const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 
 export default () => {
     return (
         <React.Fragment>
-            <div  className="mt-3 py-3 border-bottom-2 border-top-2"><h2 className="m-0">Pareri SCA</h2></div>
+            <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Pareri SCA</h2></div>
             <div className="d-flex mb-3 mt-3 justify-content-between">
                 <div className="d-flex">
                     <i className="material-icons text-serapide">check_circle_outline</i>

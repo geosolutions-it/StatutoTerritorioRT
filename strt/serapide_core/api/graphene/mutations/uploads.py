@@ -188,7 +188,7 @@ class UploadRisorsaConsultazione(UploadBaseBase):
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
                     _resources = UploadBaseBase.handle_uploaded_data(
                         file,
-                        _procedura_vas.uuid,
+                        str(_procedura_vas.uuid),
                         _procedura_vas.piano.fase,
                         _tipo_file
                     )
@@ -303,7 +303,7 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
 class DeleteRisorsaConsultazione(DeleteRisorsaBase):
 
     success = graphene.Boolean()
-    cosnsultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
+    consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -319,7 +319,7 @@ class DeleteRisorsaConsultazione(DeleteRisorsaBase):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaConsultazione(
-                        cosnsultazione_vas_aggiornata=_consultazione_vas,
+                        consultazione_vas_aggiornata=_consultazione_vas,
                         success=_success)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
