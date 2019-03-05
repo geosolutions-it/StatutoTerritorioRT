@@ -30,6 +30,16 @@ def is_draft(user, obj):
 
 
 @rules.predicate
+def is_anagrafica(user, obj):
+    if isinstance(obj, Piano):
+        return obj.fase.nome == FASE.anagrafica
+    elif isinstance(obj, ProceduraVAS):
+        return obj.piano.fase.nome == FASE.anagrafica
+    else:
+        return False
+
+
+@rules.predicate
 def has_data_delibera(piano):
     return piano.data_delibera is not None
 

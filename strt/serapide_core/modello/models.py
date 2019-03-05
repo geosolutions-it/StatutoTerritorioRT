@@ -419,7 +419,20 @@ class ConsultazioneVAS(models.Model):
     avvio_consultazioni_sca = models.BooleanField(null=False, blank=False, default=False)
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
-    risorsa = models.ForeignKey(Risorsa, null=True, blank=True, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(
+        Risorsa,
+        related_name='risorsa',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING
+    )
+    parere_sca = models.ForeignKey(
+        Risorsa,
+        related_name='parere_sca',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING
+    )
 
     user = models.ForeignKey(
         to=AppUser,
@@ -433,6 +446,9 @@ class ConsultazioneVAS(models.Model):
     class Meta:
         db_table = "strt_core_consultazioni_vas"
         verbose_name_plural = 'Consultazioni VAS'
+
+    def __str__(self):
+        return '{} - [{}]'.format(self.procedura_vas, self.uuid)
 
 
 class AutoritaCompetenteVAS(models.Model):
