@@ -9,7 +9,6 @@ $attori: (
   SCA: #FA2AB3
 );
 
-
 @mixin serapide-color ($color){
     @include text-emphasis-variant(".text-serapide", $color );
     @include bg-variant(".bg-serapide", $color);
@@ -216,6 +215,15 @@ a {
 .serapide {
     .flex-eql {
         flex: 1 1 0%;
+    }
+    .flex-2 {
+        flex: 2;
+    }
+    .flex-1 {
+        flex: 1;
+    }
+    .flex-3 {
+        flex: 3;
     }
     .Toastify__toast {
         border-radius: 8px;

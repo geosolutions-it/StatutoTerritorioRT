@@ -131,6 +131,22 @@ ${RisorsaFragment}
 ${UserFragment}
 ${AUT_VASFragment}
 ` 
+
+const ConsultazioneVasFragment = gql`
+fragment  ConsultazioneVAS on ConsultazioneVASNode {
+          uuid
+          avvioConsultazioniSca
+          dataCreazione
+          dataScadenza
+          dataRicezionePareri
+          risorsa{
+          ...Risorsa 
+          }
+  }
+  ${RisorsaFragment}
+`
+
+/** queries */
 export const GET_ENTI = gql`
 query {
     enti{
@@ -146,7 +162,22 @@ query {
     }
 }`
 
-/** queries */
+
+export const GET_CONSULTAZIONE_VAS = gql`
+query ConsultazioniVas($codice: String){
+  consultazioneVas(proceduraVas_Piano_Codice: $codice){
+  edges{
+    node{
+      ...ConsultazioneVAS
+    }
+  }
+  }
+}
+${ConsultazioneVasFragment}
+`
+
+
+
 export const CREA_PIANO_PAGE = gql`
 query CreaPianoPage{
     enti{
@@ -277,7 +308,18 @@ mutation($file: Upload!, $codice: String!, $tipo: String!) {
   }
   ${VASFragment}
 `
-
+// Upload a consultazione vas resources
+export const CONSULTAZIONE_VAS_FILE_UPLOAD = gql`
+mutation($file: Upload!, $codice: String!, $tipo: String!) {
+    uploadConsultazioneVas(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      consultazioneVasAggiornata{
+          ...ConsultazioneVAS
+      }
+    }
+  }
+  ${ConsultazioneVasFragment}
+`
 
 
 export const CREA_PIANO= gql`mutation CreatePiano($input: CreatePianoInput!) {
@@ -310,6 +352,16 @@ mutation UpdateProceduraVas($input: UpdateProceduraVASInput!) {
 }
 ${VASFragment}
 `
+export const UPDATE_CONSULTAZIONE_VAS = gql`
+mutation UpdateConsultazioneVas($input: UpdateConsultazioneVASInput!) {
+  updateConsultazioneVas(input: $input) {
+      consultazioneVasAggiornata {
+            ...ConsultazioneVAS
+        }
+    }
+}
+${ConsultazioneVasFragment}
+`
 
 export const DELETE_RISORSA = gql`
 mutation($id: ID!, $codice: String!) {
@@ -333,6 +385,19 @@ mutation($id: ID!, $codice: String!) {
 }
 ${VASFragment}
 `
+export const DELETE_RISORSA_CONSULTAZIONE_VAS = gql`
+mutation($id: ID!, $codice: String!) {
+    deleteConsultazioneVas(risorsaId: $id, codice: $codice){
+        success
+        consultazioneVasAggiornata {
+            ...ConsultazioneVAS
+        }
+    }
+}
+${ConsultazioneVasFragment}
+`
+
+
 
 export const CREATE_CONTATTO = gql`
 mutation CreaContatto($input: CreateContattoInput!){
@@ -363,6 +428,17 @@ export const DELETE_PIANO = gql`
     }
 }
 `
+export const CREA_CONSULTAZIONE_VAS = gql`
+mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
+  createConsultazioneVas(input: $input){
+    nuovaConsultazioneVas{     
+      ...ConsultazioneVAS
+    }
+  }
+}
+${ConsultazioneVasFragment}
+`
+
 
 // LOCAL STATE
 // example of local state query

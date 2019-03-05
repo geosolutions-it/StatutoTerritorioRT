@@ -1,5 +1,6 @@
 import { format, parseISO} from 'date-fns'
 import { it } from 'date-fns/locale'
+import { toast } from 'react-toastify'
 
 export const getEnteLabel = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `${tipoente} di ${name}`
 export const getEnteLabelID = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `ID ${tipoente} ${code}`
@@ -41,5 +42,9 @@ export const getAction = (stato) => {
         default:
             return false
     }
+}
+
+export const showError = (error) => {
+    toast.error(error.message,  {autoClose: true})
 }
 

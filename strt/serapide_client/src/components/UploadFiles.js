@@ -22,7 +22,8 @@ class UploadFiles extends React.PureComponent {
         disabled: PropTypes.bool,
         mutation: PropTypes.object,
         resourceMutation: PropTypes.object,
-        getSuccess: PropTypes.func
+        getSuccess: PropTypes.func,
+        multiple: PropTypes.bool
     }
     static defaultProps = {
         placeholder: "",
@@ -31,6 +32,7 @@ class UploadFiles extends React.PureComponent {
         risorse: [],
         isLocked: true,
         disabled: false,
+        multiple: true,
         mutation: FILE_UPLOAD,
         resourceMutation: DELETE_RISORSA,
         getSuccess: ({upload: {success}}) => success
@@ -84,7 +86,7 @@ class UploadFiles extends React.PureComponent {
                     isLocked={this.props.isLocked}
                     disabled={this.props.isLocked} 
                     fileType={this.props.fileType}
-                    multiple={true}
+                    multiple={this.props.multiple }
                     onFilesChange={this.onFilesChange}
                     sz="sm"/>}
                 </div>

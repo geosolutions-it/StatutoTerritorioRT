@@ -25,7 +25,6 @@ const getActive = (url = "", pathname = "") => {
 }
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
     const activeLocation = getActive(url, pathname)
-    console.log(code, activeLocation, url, path, pathname)
     return (<Query query={GET_PIANI} variables={{codice: code}}>
 
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
