@@ -13,6 +13,7 @@ import Button from '../../components/IconButton'
 import {EnhancedSwitch} from '../../components/Switch'
 import AutoMutation from '../../components/AutoMutation'
 import {Query} from "react-apollo"
+import SalvaInvia from '../../components/SalvaInvia'
 import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     DELETE_RISORSA_CONSULTAZIONE_VAS,
     CONSULTAZIONE_VAS_FILE_UPLOAD,
@@ -75,7 +76,8 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                     
                     </div>
                 <div className="align-self-center mt-7">
-                <Button isLoading={false} onClick={() => {}} className=" text-uppercase" disabled={false} color="serapide"  label="SALVA ED INVIA"></Button>
+                <SalvaInvia mutation={CONSULTAZIONE_VAS_FILE_UPLOAD} canCommit={avvioConsultazioniSca && risorsa}></SalvaInvia>
+                
                 </div>
             </React.Fragment>)
 
