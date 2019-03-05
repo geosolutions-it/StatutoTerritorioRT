@@ -15,9 +15,9 @@ import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD, DELETE_RISORSA_VAS, UPDATE_VAS, 
 import { Query, Mutation} from 'react-apollo';
 import { toast } from 'react-toastify'
 import AddContact from '../components/AddContact'
+import SalvaInvia from '../components/SalvaInvia'
 
-import {toggleControllableState} from '../enhancers/utils'
-import {Modal, ModalBody, ModalHeader} from 'reactstrap'
+
 const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 const getVasTypeInput = (uuid) => (tipologia) => ({
     variables: {
@@ -49,9 +49,8 @@ const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifi
     }
 }
 
-const enhancer = toggleControllableState("isOpen", "toggleOpen", false)
 
-export default enhancer(({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
+export default ({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
             {({loading, data: {procedureVas: {edges = []} = []} = {}}) => {
@@ -198,30 +197,8 @@ export default enhancer(({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
                     </div>
                 </div>
                 {!isLocked && (<div className="d-flex mt-5 pt-5  justify-content-end">
-                    <Mutation mutation={PROMUOVI_PIANO} onError={showError}>
-                    {(onConfirm, {loading}) => {
-                        const updatePiano = (code) => {onConfirm({variables: {codice: code}})}
-                      return (
-                        <React.Fragment>
-                            <Button isLoading={loading} onClick={toggleOpen} className="my-auto text-uppercase" disabled={!canCommit} color="serapide"  label="SALVA ED INVIA"></Button>
-                            {isOpen && (
-                                <Modal isOpen={isOpen} centered size="md" wrapClassName="serapide" autoFocus={true}>
-                                    <ModalHeader className="d-flex justify-content-center"><i className="material-icons text-serapide icon-34">notifications_active</i></ModalHeader>
-                                    <ModalBody className="d-flex justify-content-center flex-column pt-0 px-5 pb-5  align-items-center justify-item-center">
-                                        
-                                        <h4>STAI PER INVIARE I DOCUMENTI</h4>
-                                        <h4> AL SISTEMA</h4>
-                                        <div style={{minWidth: 200}} className="pt-5 d-flex justify-content-around">
-                                            <Button label="ANNULLA" color="serapide" disabled={loading}  onClick={toggleOpen}></Button>
-                                            <Button label="SALVA" isLoading={loading} disabled={loading} color="serapide" onClick={() => {updatePiano(codice)}}></Button>
-                                        </div>
-                                    </ModalBody>
-                                </Modal>)}
-                        </React.Fragment>)
-                    }}
-                    </Mutation>
+                        <SalvaInvia mutation={PROMUOVI_PIANO} variables={{codice}} canCommit={canCommit}></SalvaInvia>
                 </div>)}
-                
             </React.Fragment>)}}
          </Query>)
-        })
+        }
