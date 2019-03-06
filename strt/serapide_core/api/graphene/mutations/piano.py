@@ -389,7 +389,6 @@ class PromozionePiano(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
-
             _creato = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
             if _creato.stato != STATO_AZIONE.necessaria:
                 raise Exception("Stato Inconsistente!")
