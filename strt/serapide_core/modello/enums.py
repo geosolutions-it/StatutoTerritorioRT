@@ -102,7 +102,7 @@ AZIONI = {
     FASE.anagrafica: [
         {
             "tipologia": TIPOLOGIA_AZIONE.parere_verifica_vas,
-            "attore": TIPOLOGIA_ATTORE.ac
+            "attore": TIPOLOGIA_ATTORE.comune
         },
         {
             "tipologia": TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
