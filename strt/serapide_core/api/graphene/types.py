@@ -42,6 +42,7 @@ from serapide_core.modello.models import (
     FasePianoStorico,
     RisorsePiano,
     RisorseVas,
+    RisorseConsultazioneVas,
 )
 from serapide_core.modello.enums import STATO_AZIONE
 
@@ -151,6 +152,16 @@ class RisorseVASType(DjangoObjectType):
 
     class Meta:
         model = RisorseVas
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorseConsultazioneVASType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorseConsultazioneVas
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -302,7 +313,7 @@ class ConsultazioneVASNode(DjangoObjectType):
     user = graphene.Field(AppUserNode)
     contatto = graphene.Field(ContattoNode)
     procedura_vas = graphene.Field(ProceduraVASNode)
-    risorsa = graphene.Field(RisorsaNode)
+    risorsa = DjangoFilterConnectionField(RisorseConsultazioneVASType)
 
     def resolve_contatto(self, info, **args):
         _contatto = None
