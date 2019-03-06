@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 export const getEnteLabel = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `${tipoente} di ${name}`
 export const getEnteLabelID = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `ID ${tipoente} ${code}`
 export const getPianoLabel = (tipo = "") => (tipo === "VARIANTE" ? tipo.toLowerCase() : `piano ${tipo.toLowerCase()}`)
-export const formatDate = (date, template = "iiii do MMMM yyyy") => format(!isDate(date) ? parseISO(date) : date, template, {locale: it})
+export const formatDate = (date, template = "dd/MM/yyyy") => format(!isDate(date) ? parseISO(date) : date, template, {locale: it})
 export const getDifferenceInDays = (dateEnd, dateStart) => differenceInCalendarDays(!isDate(dateEnd) ? parseISO(dateEnd) :  dateEnd, !isDate(dateStart) ? parseISO(dateStart) : dateStart)
 export const fasi = [ "anagrafica", "avvio", "adozione", "approvazione", "pubblicazione"]
 export const getActionIcon = (stato) => {

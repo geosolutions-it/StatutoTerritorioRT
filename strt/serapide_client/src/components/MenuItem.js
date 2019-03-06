@@ -8,9 +8,9 @@
 import React from 'react'
 import classNames from 'classnames'
 import {withRouter} from "react-router-dom"
-export default withRouter(({title, subtitle, icon, disabled = false, iconColor, active = false, locked = false, expanded = false, children, href, history}) => {
+export default withRouter(({title, subtitle, icon, disabled = false, iconColor, active = false, locked = false, className = "", expanded = false, children, href, history}) => {
     return (
-    <li onClick={() => { if(href) history.push(href)}} className={classNames("list-group-item", {"text-serapide": active, active, locked, collapsed: !expanded})}>
+    <li onClick={() => { if(href) history.push(href)}} className={classNames("list-group-item", className, {"text-serapide": active, active, locked, collapsed: !expanded})}>
         <div  data-for="sidebar-tooltip" data-tip-disable={expanded} data-tip={title} className="d-flex align-items-center icons">
             {locked && expanded  && (<i className="material-icons icon-12">lock</i>)}
             <i className={classNames("material-icons", {"icon-16": !expanded}, iconColor)}>{icon}</i>

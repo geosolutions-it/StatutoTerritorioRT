@@ -28,8 +28,8 @@ export default enhancer(({piano = {}, expanded, url, active, toggleOpen, unreadM
             <ul className="list-group">
                 <MenuItem href={active !== "home" && `${url}/home`} active={active === "home"} title="HOME PIANO" icon="home" expanded={expanded}/>
                 <MenuItem href={`${url}/anagrafica`} active={active === "anagrafica"} title="ANAGRAFICA" icon="assignment" expanded={expanded}/>
-                <MenuItem href={`${url}/formazione`} active={active === "formazione"} title="FORMAZIONE PIANO" subtitle="Accesso agli strumenti" icon="build" expanded={expanded}/>
-                <hr></hr>
+                <MenuItem className="border-bottom-3" href={`${url}/formazione`} active={active === "formazione"} title="FORMAZIONE PIANO" subtitle="Accesso agli strumenti" icon="build" expanded={expanded}/>
+                
                 <MenuItem href={`${url}/avvio`} active={active === "avvio"} title="AVVIO" subtitle="Avvio del Procedimento" icon="dashboard" expanded={expanded}/>
                 
                 <MenuItem href={`${url}/adozione`} active={active === "adozione"} title="ADOZIONE" icon="library_add" expanded={expanded}/>

@@ -25,7 +25,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
     <div className="d-flex pb-4 pt-5">
         <div className={classNames("d-flex flex-column flex-1")}>
             <div className="d-flex border-serapide border-top border-bottom py-4 justify-content-around">
-                <span>LEGGENDA</span>
+                <span>LEGENDA</span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_add</i><span>E’ richiesta un’azione</span></span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_on</i><span>In attesa di risposta da altri attori</span></span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_off</i><span>Nessuna azione richiesta</span></span>
