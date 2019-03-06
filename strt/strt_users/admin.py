@@ -62,6 +62,7 @@ class AppUserAdmin(UserAdmin):
     )
     list_display = ('fiscal_code', 'email', 'first_name', 'last_name', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    list_editable = ('first_name', 'last_name', 'email')
     search_fields = ('fiscal_code', 'first_name', 'last_name', 'email')
     ordering = ('fiscal_code',)
 
