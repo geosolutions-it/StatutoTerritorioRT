@@ -36,6 +36,11 @@ $attori: (
 .border-right-2   { border-right: ($border-width * 2) solid $border-color !important; }
 .border-bottom-2 { border-bottom: ($border-width * 2) solid $border-color !important; }
 .border-left-2    { border-left: ($border-width * 2) solid $border-color !important; }
+.border-3         { border: ($border-width * 3) solid $border-color !important; }
+.border-top-3    { border-top: ($border-width * 3) solid $border-color !important; }
+.border-right-3   { border-right: ($border-width * 3) solid $border-color !important; }
+.border-bottom-3 { border-bottom: ($border-width * 3) solid $border-color !important; }
+.border-left-3    { border-left: ($border-width * 3) solid $border-color !important; }
 
 
 

@@ -17,7 +17,7 @@ const enhancer = toggleControllableState("isOpen", "toggleOpen", false)
 
 const ListItem = ({option: {value, label} = {}, selected = false, onClick}) => (
     <ListGroupItem  onClick={() => onClick(value)}>
-        <span className="d-flex justify-content-start">
+        <span className="d-flex justify-content-start pointer">
             <i className={classNames('material-icons',{"text-serapide": selected})}>{selected ?  'radio_button_checked' : 'radio_button_unchecked'}</i>
             <span className="pl-2">{label}</span>
         </span>
@@ -28,7 +28,7 @@ const ListSelector = enhancer(({size, children, label, selected = [], isOpen, to
     <React.Fragment>
            {btn && btn(toggleOpen)}
             <Modal size={size} isOpen={isOpen} toggle={toggleOpen} wrapClassName="serapide" autoFocus={true}>
-                <ModalHeader>{label}</ModalHeader>
+                <ModalHeader toggle={toggleOpen}>{label}</ModalHeader>
                 <ModalBody> 
                     <ListGroup>
                         {items.map((n) => {
