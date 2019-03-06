@@ -53,7 +53,7 @@ const AddContact = ({tipologia = "generico", ...p}) => (
             onChange({variables: getVariables(p,tipologia)})
         }
         return (<div className={classNames("add-contact d-flex justify-content-between align-items-center mb-3", p.className)}>
-            <Input  name="name" placeholder="Nome" value={p.nome} onChange={p.nameChange}/>
+            <Input  name="name" placeholder="Nominativo" value={p.nome} onChange={p.nameChange}/>
             <Query query={GET_ENTI}>
                 {({loading: isLoading, data: {enti: {edges = []} = {}} = {}, error}) => {
                     if (error) {

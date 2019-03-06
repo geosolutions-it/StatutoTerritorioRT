@@ -61,7 +61,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                         <Switch>
                             <Route  path={`${path}/anagrafica`} component={Anagrafica}/>
                             <Route  path={`${path}/formazione`} component={Formazione}/>
-                            <Route  path={`${path}/home`} render={(props) => <Home azioni={azioni} {...props}></Home>}/>
+                            <Route  path={`${path}/home`} render={(props) => <Home utente={utente} azioni={azioni} {...props}></Home>}/>
                             <Route path={path}>
                                 <div className="p-6"><h1> Working in progress </h1> 
                                     <div className="d-flex justify-content-center">

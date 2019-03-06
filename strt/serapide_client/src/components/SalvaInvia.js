@@ -15,9 +15,9 @@ import Button from './IconButton'
 import {Modal, ModalBody, ModalHeader} from 'reactstrap'
 const enhancer = toggleControllableState("isOpen", "toggleOpen", false)
 
-export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = false}) => (
+export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = false, onCompleted}) => (
 
-            <Mutation mutation={mutation} onError={showError}>
+            <Mutation mutation={mutation} onError={showError} onCompleted={onCompleted}>
                     {(onConfirm, {loading}) => {
                         const updatePiano = () => {onConfirm({variables})}
                       return (
@@ -27,7 +27,6 @@ export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = f
                                 <Modal isOpen={isOpen} centered size="md" wrapClassName="serapide" autoFocus={true}>
                                     <ModalHeader className="d-flex justify-content-center"><i className="material-icons text-serapide icon-34">notifications_active</i></ModalHeader>
                                     <ModalBody className="d-flex justify-content-center flex-column pt-0 px-5 pb-5  align-items-center justify-item-center">
-                                        
                                         <h4>STAI PER INVIARE I DOCUMENTI</h4>
                                         <h4> AL SISTEMA</h4>
                                         <div style={{minWidth: 200}} className="pt-5 d-flex justify-content-around">
