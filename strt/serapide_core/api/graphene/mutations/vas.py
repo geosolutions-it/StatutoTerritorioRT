@@ -27,11 +27,19 @@ from serapide_core.helpers import update_create_instance
 
 from serapide_core.modello.models import (
     Piano,
+    Azione,
+    AzioniPiano,
     ProceduraVAS,
     ConsultazioneVAS
 )
 
-from serapide_core.modello.enums import TIPOLOGIA_VAS
+from serapide_core.modello.enums import (
+    FASE,
+    STATO_AZIONE,
+    TIPOLOGIA_VAS,
+    TIPOLOGIA_AZIONE,
+    TIPOLOGIA_ATTORE,
+)
 
 from .. import types
 from .. import inputs
@@ -185,5 +193,65 @@ class UpdateConsultazioneVAS(relay.ClientIDMutation):
                 tb = traceback.format_exc()
                 logger.error(tb)
                 return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class AvvioConsultazioniVAS(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _avvio_consultazioni_sca = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
+            if _avvio_consultazioni_sca.stato == STATO_AZIONE.attesa:
+                _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
+                _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+                _avvio_consultazioni_sca.save()
+
+                _pareri_vas_expire_days = getattr(settings, 'PARERI_VAS_EXPIRE_DAYS', 60)
+                _pareri_sca = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.pareri_sca,
+                    attore=TIPOLOGIA_ATTORE.sca,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=datetime.datetime.now(timezone.get_current_timezone()) +
+                    datetime.timedelta(days=_pareri_vas_expire_days)
+                )
+                _pareri_sca.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
+        _procedura_vas = _consultazione_vas.procedura_vas
+        _piano = _procedura_vas.piano
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+
+                return AvvioConsultazioniVAS(
+                    consultazione_vas_aggiornata=_consultazione_vas,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
