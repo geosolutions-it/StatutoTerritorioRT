@@ -36,6 +36,7 @@ from serapide_core.modello.models import (
     ConsultazioneVAS,
     RisorsePiano,
     RisorseVas,
+    RisorseConsultazioneVas,
 )
 
 from .. import types
@@ -51,7 +52,7 @@ class UploadBaseBase(graphene.Mutation):
         file = Upload(required=True)
 
     @classmethod
-    def handle_uploaded_data(cls, file, media_prefix, fase, tipo_file=None):
+    def handle_uploaded_data(cls, file, media_prefix, fase, tipo_file=None, user=None):
         # Ensuring Media Folder exists and is writable
         _base_media_folder = os.path.join(settings.MEDIA_ROOT, media_prefix)
         if not os.path.exists(_base_media_folder):
@@ -76,6 +77,7 @@ class UploadBaseBase(graphene.Mutation):
                         tipo_file,
                         _dimensione_file,
                         fase)
+                    _risorsa.user = user
                     _risorsa.save()
                     resources.append(_risorsa)
                     # _full_path = os.path.join(settings.MEDIA_ROOT, _file_path)
@@ -110,7 +112,8 @@ class UploadFile(UploadBaseBase):
                         file,
                         _codice_piano,
                         _piano.fase,
-                        _tipo_file
+                        _tipo_file,
+                        info.context.user
                     )
                     _success = False
                     if _resources and len(_resources) > 0:
@@ -150,7 +153,8 @@ class UploadRisorsaVAS(UploadBaseBase):
                         file,
                         _uuid_vas,
                         _procedura_vas.piano.fase,
-                        _tipo_file
+                        _tipo_file,
+                        info.context.user
                     )
                     _success = False
                     if _resources and len(_resources) > 0:
@@ -190,14 +194,19 @@ class UploadRisorsaConsultazione(UploadBaseBase):
                         file,
                         str(_procedura_vas.uuid),
                         _procedura_vas.piano.fase,
-                        _tipo_file
+                        _tipo_file,
+                        info.context.user
                     )
                     _success = False
                     if _resources and len(_resources) > 0:
                         _success = True
-                        for _risorsa in _resources:
-                            _consultazione_vas.risorsa = _risorsa
-                            _consultazione_vas.save()
+                        if _resources and len(_resources) > 0:
+                            _success = True
+                            for _risorsa in _resources:
+                                RisorseConsultazioneVas(
+                                    consultazione_vas=_consultazione_vas,
+                                    risorsa=_risorsa
+                                ).save()
                     return UploadRisorsaConsultazione(
                         consultazione_vas_aggiornata=_consultazione_vas,
                         success=_success)
@@ -316,8 +325,6 @@ class DeleteRisorsaConsultazione(DeleteRisorsaBase):
                 _consultazione_vas = ConsultazioneVAS.objects.get(uuid=_uuid_consultazione)
                 _procedura_vas = _consultazione_vas.procedura_vas
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
-                    _consultazione_vas.risorsa = None
-                    _consultazione_vas.save()
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaConsultazione(

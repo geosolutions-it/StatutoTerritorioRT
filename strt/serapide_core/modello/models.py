@@ -90,6 +90,15 @@ class Risorsa(models.Model):
 
     fase = models.ForeignKey(Fase, on_delete=models.CASCADE)
 
+    user = models.ForeignKey(
+        to=AppUser,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
     @classmethod
     def create(cls, nome, file, tipo, dimensione, fase):
         _file = cls(nome=nome, file=file, tipo=tipo, dimensione=dimensione, fase=fase)
@@ -419,20 +428,7 @@ class ConsultazioneVAS(models.Model):
     avvio_consultazioni_sca = models.BooleanField(null=False, blank=False, default=False)
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
-    risorsa = models.ForeignKey(
-        Risorsa,
-        related_name='risorsa',
-        null=True,
-        blank=True,
-        on_delete=models.DO_NOTHING
-    )
-    parere_sca = models.ForeignKey(
-        Risorsa,
-        related_name='parere_sca',
-        null=True,
-        blank=True,
-        on_delete=models.DO_NOTHING
-    )
+    risorse = models.ManyToManyField(Risorsa, through='RisorseConsultazioneVas')
 
     user = models.ForeignKey(
         to=AppUser,
@@ -449,6 +445,14 @@ class ConsultazioneVAS(models.Model):
 
     def __str__(self):
         return '{} - [{}]'.format(self.procedura_vas, self.uuid)
+
+
+class RisorseConsultazioneVas(models.Model):
+    consultazione_vas = models.ForeignKey(ConsultazioneVAS, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_consultazioni_vas_risorse"
 
 
 class AutoritaCompetenteVAS(models.Model):
