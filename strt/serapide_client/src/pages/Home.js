@@ -38,10 +38,10 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
                 <Route path={`${path}/avvio_consultazioni_sca`} >
-                    <AvvioConsultazioniSCA onClose={history.goBack} codicePiano={code}></AvvioConsultazioniSCA>
+                    <AvvioConsultazioniSCA codicePiano={code} back={history.goBack}></AvvioConsultazioniSCA>
                 </Route>
                 <Route path={`${path}/pareri_sca`} >
-                    <PareriSCA></PareriSCA>
+                    <PareriSCA codicePiano={code} utente={utente}></PareriSCA>
                 </Route>
                 { action && (
                 <Route path={path}>

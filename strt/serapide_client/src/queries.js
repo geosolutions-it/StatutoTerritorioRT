@@ -18,6 +18,10 @@ fragment Risorsa on RisorsaNode {
     tipo
     dimensione
     downloadUrl
+    lastUpdate
+    user{
+      fiscalCode
+    }
 }
 `
 const AUT_VASFragment = gql`
@@ -139,8 +143,12 @@ fragment  ConsultazioneVAS on ConsultazioneVASNode {
           dataCreazione
           dataScadenza
           dataRicezionePareri
-          risorsa{
-          ...Risorsa 
+          risorse{
+            edges{
+              node{
+                ...Risorsa 
+              }
+            }
           }
   }
   ${RisorsaFragment}
@@ -438,6 +446,35 @@ mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
 }
 ${ConsultazioneVasFragment}
 `
+
+export const AVVIO_CONSULTAZIONE_VAS = gql`
+mutation AvvioConsultazioniVAS($codice: String!) {
+    avvioConsultazioniVas(uuid: $codice) {
+      errors
+      consultazioneVasAggiornata {
+        uuid
+        proceduraVas{
+        piano{
+          codice
+          azioni {
+            edges {
+                node {
+                    order
+                    tipologia
+                    stato
+                    attore
+                    data
+                    uuid
+                }
+            }
+          }
+        }
+      }
+      }
+    }
+}
+`
+
 
 
 // LOCAL STATE
