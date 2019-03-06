@@ -60,6 +60,7 @@ LICENSE file in the root directory of this source tree.
                                 <span>{% trans 'area riservata'|capfirst %}</span>
                             </a>
                         </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'geoportal' %}">
                                 <span>{% trans 'geoportale'|upper %}</span>
@@ -104,78 +105,75 @@ LICENSE file in the root directory of this source tree.
             </div> <!-- end CONTENT -->
 
             <!-- FOOTER -->
-            <div class="footer footer-padding-trans bg-ldark w-100">
-                <div class="row p-2 m-0 text-secondary">
-                    <div class="col-12 col-lg-1 m-0 p-0 text-uppercase">{% trans 'contatti' %}</div>
-                    <div class="col-12 col-lg-2 p-lg-0 m-lg-0">
-                        <br class="d-none d-lg-inline">
-                        <div class="row">
-                            <div class="col-12 p-0 m-0">
-                                <small>+345 678 903</small>
-                            </div>
-                            <div class="col-12 p-0 m-0">
-                                <a href="/">
-                                    <small>email@pianificazioneterritoriale.it</small>
-                                </a>
-                            </div>
-                            <div class="col-12 p-0 m-0">
-                                <a href="/">
-                                    <small>...</small>
-                                </a>
-                            </div>
+            <div class="footer page-footer footer-padding-trans bg-ldark w-100">
+                <div class="container-fluid text-center text-md-left pt-4 px-md-7">
+                    <div class="row p-2 m-0 text-secondary">
+                        <div class="col-md-4  m-0 p-0 ">
+                            <h5 class="text-uppercase">{% trans 'contatti' %}</h5>
+                            <ul class="list-unstyled">
+                                <li><small>+345 678 903</small></li>
+                                <li><a href="/">
+                                        <small>email@pianificazioneterritoriale.it</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/">
+                                        <small>...</small>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                    <div class="col-12 col-lg-1 p-0 m-0 text-uppercase">{% trans 'supporto' %}</div>
-                    <div class="col-12 col-lg-2 p-lg-0 m-lg-0">
-                        <br class="d-none d-lg-inline">
-                        <div class="row">
-                            <div class="col-12 p-0 m-0">
-                                <a href="/">
-                                    <small>{% trans 'documentazione'|capfirst %}</small>
-                                </a>
-                            </div>
-                            <div class="col-12 p-0 m-0">
-                                <a href="/">
-                                    <small>{% trans 'WIKI' %}</small>
-                                </a>
-                            </div>
-                            <div class="col-12 p-0 m-0">
-                                <a href="/">
-                                    <small>{% trans 'FAQ' %}</small>
-                                </a>
-                            </div>
-                            <div class="col-12 p-0 m-0">
-                                <a href="/">
-                                    <small>{% trans 'tutorial'|capfirst %}</small>
-                                </a>
-                            </div>
+                        <hr class="clearfix w-100 d-md-none pb-3">
+                        <div class="col-md-3  p-0 m-0 text-uppercase">
+                                <h5 class="text-uppercase">{% trans 'supporto' %}</h5>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <a href="/">
+                                            <small>{% trans 'documentazione'|capfirst %}</small>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/">
+                                            <small>{% trans 'WIKI' %}</small>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/">
+                                            <small>{% trans 'FAQ' %}</small>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/">
+                                            <small>{% trans 'tutorial'|capfirst %}</small>
+                                        </a>
+                                    </li>
+                                </ul>
                         </div>
-                    </div>
-                    <div class="col-12 col-lg-1 p-0 m-0 text-uppercase">{% trans 'informazioni' %}</div>
-                    <div class="col-12 col-lg-2 p-lg-0 m-lg-0">
-                        <br class="d-none d-lg-inline">
-                        <div class="row">
-                            <div class="col-12 p-0 m-0">
-                                <a href="/">
-                                    <small>{% trans 'Privacy Policy'|capfirst %}</small>
-                                </a>
-                            </div>
-                            <div class="col-12 p-0 m-0">
-                                <a href="/">
-                                    <small>{% trans 'Termini & condizioni'|capfirst %}</small>
-                                </a>
-                            </div>
-                            <div class="col-12 p-0 m-0">
-                                <a href="/">
-                                    <small>{% trans 'Ufficio Stampa'|capfirst %}</small>
-                                </a>
-                            </div>
+                        <hr class="clearfix w-100 d-md-none pb-3">
+                        <div class="col-md-3  p-0 m-0 text-uppercase">
+                                <h5 class="text-uppercase"> {% trans 'informazioni' %}</h5>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <a href="/">
+                                            <small>{% trans 'Privacy Policy'|capfirst %}</small>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/">
+                                            <small>{% trans 'Termini & condizioni'|capfirst %}</small>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/">
+                                            <small>{% trans 'Ufficio Stampa'|capfirst %}</small>
+                                        </a>
+                                    </li>
+                                </ul>
                         </div>
-                    </div>
-                    <div class="col-12 col-lg-3 text-right align-self-end">
-                        <small>{% trans '@ Regione Toscana'|capfirst %}</small>
+                        <div class="col-md-2 text-md-right align-self-md-end"> <small>{% trans '@ Regione Toscana'|capfirst %}</small></div>
                     </div>
                 </div>
+            </div>
             </div> <!-- end FOOTER -->
 
         </div> <!-- end CONTAINER-FLUID -->
