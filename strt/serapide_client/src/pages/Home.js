@@ -9,6 +9,7 @@ import React from 'react'
 import Azioni from '../components/TabellaAzioni'
 import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
 import PareriSCA from "./actions/PareriSCA"
+import ProvvedimentoVerificaVAS from './actions/ProvvedimentoVerificaVAS'
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
 const getAction = (url = "", pathname = "") => {
@@ -42,6 +43,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 </Route>
                 <Route path={`${path}/pareri_sca`} >
                     <PareriSCA codicePiano={code} utente={utente}></PareriSCA>
+                </Route>
+                <Route path={`${path}/provvedimento_verifica`} >
+                    <ProvvedimentoVerificaVAS codicePiano={code} utente={utente}></ProvvedimentoVerificaVAS>
                 </Route>
                 { action && (
                 <Route path={path}>
