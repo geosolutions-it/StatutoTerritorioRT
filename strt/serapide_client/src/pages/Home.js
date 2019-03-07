@@ -10,6 +10,7 @@ import Azioni from '../components/TabellaAzioni'
 import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
 import PareriSCA from "./actions/PareriSCA"
 import ProvvedimentoVerificaVAS from './actions/ProvvedimentoVerificaVAS'
+import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
 const getAction = (url = "", pathname = "") => {
@@ -46,6 +47,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 </Route>
                 <Route path={`${path}/provvedimento_verifica`} >
                     <ProvvedimentoVerificaVAS codicePiano={code} utente={utente}></ProvvedimentoVerificaVAS>
+                </Route>
+                <Route path={`${path}/pubblicazione_provvedimento`} >
+                    <PubblicazioneProvv codicePiano={code} utente={utente}></PubblicazioneProvv>
                 </Route>
                 { action && (
                 <Route path={path}>
