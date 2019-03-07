@@ -65,7 +65,7 @@ STATO_AZIONE = Choices(
 TIPOLOGIA_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
         ('creato_piano', _('Creato Piano')),  # Comune
-        ('parere_verifica_vas', _('Parere Verifica VAS')),  # Comune
+        ('parere_verifica_vas', _('Parere Verifica VAS')),  # AC
         ('richiesta_verifica_vas', _('Richiesta Verifica VAS')),  # AC
         ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),  # AC
         ('avvio_procedimento', _('Avvio Procedimento')),  # Comune
@@ -74,6 +74,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('pareri_sca', _('Pareri SCA')),  # SCA
         ('osservazioni_enti', _('Osservazioni Enti')),  # SCA
         ('osservazioni_regione', _('Osservazioni Regione')),  # Regione
+        ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
         ('convocazione_conferenza_copianificazione', _('Convocazione Conferenza di Copianificazione')),  # Regione
         ('emissione_provvedimento_verifica', _('Emissione Provvedimento di Verifica')),  # AC
         ('pubblicazione_provvedimento_verifica', _('Pubblicazione Provvedimento di Verifica')),  # AC
@@ -83,8 +84,10 @@ TIPOLOGIA_AZIONE = Choices(
 TIPOLOGIA_ATTORE = Choices(
         ('unknown', _('UNKNOWN')),
         ('comune', _('Comune')),
+        ('regione', _('Regione')),
         ('ac', _('AC')),
         ('sca', _('SCA')),
+        ('enti', _('ENTI')),
         ('genio_civile', _('Genio Civile')),
     )
 
@@ -102,7 +105,7 @@ AZIONI = {
     FASE.anagrafica: [
         {
             "tipologia": TIPOLOGIA_AZIONE.parere_verifica_vas,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "attore": TIPOLOGIA_ATTORE.ac
         },
         {
             "tipologia": TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
