@@ -295,6 +295,14 @@ class AssoggettamentoVAS(graphene.Mutation):
                 procedura_vas.verifica_effettuata = True
                 procedura_vas.save()
 
+            if procedura_vas.verifica_effettuata:
+                _emissione_provvedimento_verifica = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica).first()
+                if _emissione_provvedimento_verifica and \
+                _emissione_provvedimento_verifica.stato != STATO_AZIONE.nessuna:
+                    _emissione_provvedimento_verifica.stato = STATO_AZIONE.nessuna
+                    _emissione_provvedimento_verifica.save()
+
     @classmethod
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
