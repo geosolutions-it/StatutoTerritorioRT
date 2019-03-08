@@ -413,6 +413,37 @@ class RisorseVas(models.Model):
         db_table = "strt_core_vas_risorse"
 
 
+class ParereVerificaVAS(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_invio_parere = models.DateTimeField(null=True, blank=True)
+    data_ricezione_parere = models.DateTimeField(null=True, blank=True)
+
+    procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
+
+    user = models.ForeignKey(
+        to=AppUser,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        db_table = "strt_core_pareri_verifica_vas"
+        verbose_name_plural = 'Pareri Verifica VAS'
+
+    def __str__(self):
+        return '{} - [{}]'.format(self.procedura_vas, self.uuid)
+
+
 class ConsultazioneVAS(models.Model):
 
     uuid = models.UUIDField(
@@ -428,7 +459,6 @@ class ConsultazioneVAS(models.Model):
     avvio_consultazioni_sca = models.BooleanField(null=False, blank=False, default=False)
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
-    risorse = models.ManyToManyField(Risorsa, through='RisorseConsultazioneVas')
 
     user = models.ForeignKey(
         to=AppUser,
@@ -445,14 +475,6 @@ class ConsultazioneVAS(models.Model):
 
     def __str__(self):
         return '{} - [{}]'.format(self.procedura_vas, self.uuid)
-
-
-class RisorseConsultazioneVas(models.Model):
-    consultazione_vas = models.ForeignKey(ConsultazioneVAS, on_delete=models.CASCADE)
-    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "strt_core_consultazioni_vas_risorse"
 
 
 class ParereVAS(models.Model):

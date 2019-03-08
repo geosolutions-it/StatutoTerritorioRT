@@ -65,20 +65,19 @@ STATO_AZIONE = Choices(
 TIPOLOGIA_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
         ('creato_piano', _('Creato Piano')),  # Comune
-        ('parere_verifica_vas', _('Parere Verifica VAS')),  # AC
         ('richiesta_verifica_vas', _('Richiesta Verifica VAS')),  # AC
-        ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),  # AC
         ('avvio_procedimento', _('Avvio Procedimento')),  # Comune
         ('formazione_del_piano', _('Formazione del Piano')),  # Comune
         ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Genio Civile
-        ('pareri_sca', _('Pareri SCA')),  # SCA
+        ('pareri_verifica_sca', _('Pareri Verifica VAS')),  # SCA
         ('osservazioni_enti', _('Osservazioni Enti')),  # SCA
         ('osservazioni_regione', _('Osservazioni Regione')),  # Regione
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
         ('convocazione_conferenza_copianificazione', _('Convocazione Conferenza di Copianificazione')),  # Regione
         ('emissione_provvedimento_verifica', _('Emissione Provvedimento di Verifica')),  # AC
         ('pubblicazione_provvedimento_verifica', _('Pubblicazione Provvedimento di Verifica')),  # AC
-        ('procedimento_vas', _('Procedimento VAS')),  # Comune
+        ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),  # AC
+        ('pareri_sca', _('Pareri SCA')),  # SCA
     )
 
 TIPOLOGIA_ATTORE = Choices(
@@ -91,7 +90,7 @@ TIPOLOGIA_ATTORE = Choices(
         ('genio_civile', _('Genio Civile')),
     )
 
-AZIONI = {
+AZIONI_BASE = {
     FASE.draft: [
         {
             "tipologia": TIPOLOGIA_AZIONE.creato_piano,
@@ -103,14 +102,6 @@ AZIONI = {
         }
     ],
     FASE.anagrafica: [
-        {
-            "tipologia": TIPOLOGIA_AZIONE.parere_verifica_vas,
-            "attore": TIPOLOGIA_ATTORE.ac
-        },
-        {
-            "tipologia": TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
-            "attore": TIPOLOGIA_ATTORE.ac
-        },
         {
             "tipologia": TIPOLOGIA_AZIONE.avvio_procedimento,
             "attore": TIPOLOGIA_ATTORE.comune

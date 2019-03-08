@@ -42,9 +42,12 @@ from serapide_core.modello.models import (
     FasePianoStorico,
     RisorsePiano,
     RisorseVas,
-    RisorseConsultazioneVas,
 )
-from serapide_core.modello.enums import STATO_AZIONE
+
+from serapide_core.modello.enums import (
+    STATO_AZIONE,
+    TIPOLOGIA_VAS,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -152,16 +155,6 @@ class RisorseVASType(DjangoObjectType):
 
     class Meta:
         model = RisorseVas
-        filter_fields = ['risorsa__fase__codice']
-        interfaces = (relay.Node, )
-
-
-class RisorseConsultazioneVASType(DjangoObjectType):
-
-    risorsa = DjangoFilterConnectionField(RisorsaNode)
-
-    class Meta:
-        model = RisorseConsultazioneVas
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -278,6 +271,20 @@ class ProceduraVASNode(DjangoObjectType):
 
     ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseVASType)
+    documento_preliminare_verifica = graphene.Field(RisorsaNode)
+    relazione_motivata_vas_semplificata = graphene.Field(RisorsaNode)
+
+    def resolve_documento_preliminare_verifica(self, info, **args):
+        _risorsa = None
+        if self.tipologia == TIPOLOGIA_VAS.verifica:
+            _risorsa = self.risorse.filter(tipo='vas_verifica').first()
+        return _risorsa
+
+    def resolve_relazione_motivata_vas_semplificata(self, info, **args):
+        _risorsa = None
+        if self.tipologia == TIPOLOGIA_VAS.semplificata:
+            _risorsa = self.risorse.filter(tipo='vas_semplificata').first()
+        return _risorsa
 
     class Meta:
         model = ProceduraVAS
@@ -313,7 +320,6 @@ class ConsultazioneVASNode(DjangoObjectType):
     user = graphene.Field(AppUserNode)
     contatto = graphene.Field(ContattoNode)
     procedura_vas = graphene.Field(ProceduraVASNode)
-    risorsa = DjangoFilterConnectionField(RisorseConsultazioneVASType)
 
     def resolve_contatto(self, info, **args):
         _contatto = None
