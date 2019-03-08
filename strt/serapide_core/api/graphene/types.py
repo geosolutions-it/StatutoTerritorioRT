@@ -271,8 +271,16 @@ class ProceduraVASNode(DjangoObjectType):
 
     ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseVASType)
+    documento_preliminare_vas = graphene.Field(RisorsaNode)
     documento_preliminare_verifica = graphene.Field(RisorsaNode)
     relazione_motivata_vas_semplificata = graphene.Field(RisorsaNode)
+
+    def resolve_documento_preliminare_vas(self, info, **args):
+        _risorsa = None
+        if self.verifica_effettuata and \
+        self.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
+            _risorsa = self.risorse.filter(tipo='documento_preliminare_vas').first()
+        return _risorsa
 
     def resolve_documento_preliminare_verifica(self, info, **args):
         _risorsa = None

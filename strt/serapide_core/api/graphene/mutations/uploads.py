@@ -159,7 +159,10 @@ class UploadRisorsaVAS(UploadBaseBase):
                         _success = True
                         for _risorsa in _resources:
                             RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
-                    return UploadRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success, file_name=_resources[0].nome)
+                    return UploadRisorsaVAS(
+                        procedura_vas_aggiornata=_procedura_vas,
+                        success=_success,
+                        file_name=_resources[0].nome)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
