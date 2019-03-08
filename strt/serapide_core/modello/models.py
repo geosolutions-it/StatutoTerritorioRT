@@ -383,6 +383,7 @@ class ProceduraVAS(models.Model):
     verifica_effettuata = models.BooleanField(null=False, blank=False, default=False)
     procedimento_effettuato = models.BooleanField(null=False, blank=False, default=False)
     non_necessaria = models.BooleanField(null=False, blank=False, default=False)
+    assoggettamento = models.BooleanField(null=False, blank=False, default=True)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseVas')
 

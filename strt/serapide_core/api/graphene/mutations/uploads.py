@@ -134,6 +134,7 @@ class UploadRisorsaVAS(UploadBaseBase):
 
     success = graphene.Boolean()
     procedura_vas_aggiornata = graphene.Field(types.ProceduraVASNode)
+    file_name = graphene.String()
 
     @classmethod
     def mutate(cls, root, info, file, **input):
@@ -145,8 +146,7 @@ class UploadRisorsaVAS(UploadBaseBase):
             try:
                 # Validating 'Procedura VAS'
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano) and \
-                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _procedura_vas.piano):
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
                     _resources = UploadBaseBase.handle_uploaded_data(
                         file,
                         _uuid_vas,
@@ -159,7 +159,7 @@ class UploadRisorsaVAS(UploadBaseBase):
                         _success = True
                         for _risorsa in _resources:
                             RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
-                    return UploadRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+                    return UploadRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success, file_name=_resources[0].nome)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
@@ -243,8 +243,7 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
             # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano) and \
-                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _procedura_vas.piano):
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)

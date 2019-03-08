@@ -49,6 +49,6 @@ const UI = ({consultazioneSCA: {node: { dataCreazione, dataRicezionePareri, data
                         </div>)
                 }
                 return (
-                    <UI consultazioneSCA={edges[0]} utente={utente}/>)}
+                    <UI vas={edges[0]} utente={utente}/>)}
             }
         </Query>)

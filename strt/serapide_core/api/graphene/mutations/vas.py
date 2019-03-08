@@ -104,8 +104,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             _procedura_vas_data.pop('piano')
         _piano = _procedura_vas.piano
         if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 if 'uuid' in _procedura_vas_data:
                     _procedura_vas_data.pop('uuid')

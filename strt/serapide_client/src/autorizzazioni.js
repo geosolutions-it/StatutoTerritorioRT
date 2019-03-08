@@ -16,10 +16,11 @@ import {includes} from "lodash"
   */
 const azioni = {
         "AVVIO_PROCEDIMENTO": ["RUP", "OP"],
-        "AVVIO_CONSULTAZIONI_SCA": ["TMP"],
-        "PARERE_VERIFICA_VAS" : ["TMP", ""],
+        "EMISSIONE_PROVVEDIMENTO_VERIFICA": ["TMP"],
+        "PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA": ["TMP", "RUP", "OP"],
+        "PARERI_VERIFICA_VAS" : ["TMP", ""],
         "RICHIESTA_VERIFICA_VAS": ["", ""],
-        "PARERI_SCA": ["TMP"]
+        "PARERI_VERIFICA_SCA": ["TMP"]
     }
 export const globalAuth = {
     _attore_attivo: "",
