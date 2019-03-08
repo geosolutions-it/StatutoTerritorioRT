@@ -130,7 +130,26 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                 if 'note' in _procedura_vas_data:
                     _data = _procedura_vas_data.pop('note')
                     _procedura_vas.note = _data[0]
+
                 procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
+
+                if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap:
+                    _pubblicazione_provvedimento_verifica_ap = _piano.azioni.filter(
+                        tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                        attore=TIPOLOGIA_ATTORE.comune).first()
+                    if _pubblicazione_provvedimento_verifica_ap and \
+                    _pubblicazione_provvedimento_verifica_ap.stato != STATO_AZIONE.nessuna:
+                        _pubblicazione_provvedimento_verifica_ap.stato = STATO_AZIONE.nessuna
+                        _pubblicazione_provvedimento_verifica_ap.save()
+                if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
+                    _pubblicazione_provvedimento_verifica_ac = _piano.azioni.filter(
+                        tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                        attore=TIPOLOGIA_ATTORE.ac).first()
+                    if _pubblicazione_provvedimento_verifica_ac and \
+                    _pubblicazione_provvedimento_verifica_ac.stato != STATO_AZIONE.nessuna:
+                        _pubblicazione_provvedimento_verifica_ac.stato = STATO_AZIONE.nessuna
+                        _pubblicazione_provvedimento_verifica_ac.save()
+
                 return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
             except BaseException as e:
                 tb = traceback.format_exc()
