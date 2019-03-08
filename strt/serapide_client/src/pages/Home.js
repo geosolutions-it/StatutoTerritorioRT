@@ -11,7 +11,7 @@ import Azioni from '../components/TabellaAzioni'
 import PareriSCA from "./actions/PareriSCA"
 import ProvvedimentoVerificaVAS from './actions/ProvvedimentoVerificaVAS'
 
-// import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
+import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
 
@@ -22,7 +22,7 @@ const getAction = (url = "", pathname = "") => {
 
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, azioni = []}) => {
     const action = getAction(url, pathname)
-    const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data}}) => data).shift()
+    const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data, }}) => data).shift()
     
     const goToAction = (action = "") => {
         history.push(`${url}/${action.toLowerCase().replace(" ","_")}`)
@@ -53,9 +53,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Route path={`${path}/emissione_provvedimento_verifica`} >
                     <ProvvedimentoVerificaVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
                 </Route>
-                {/*<Route path={`${path}/pubblicazione_provvedimento`} >
-                    <PubblicazioneProvv codicePiano={code} utente={utente}></PubblicazioneProvv>
-                </Route> */}
+                <Route path={`${path}/pubblicazione_provvedimento_verifica`} >
+                    <PubblicazioneProvv codicePiano={code} utente={utente} back={history.goBack}></PubblicazioneProvv>
+                </Route>
                 { action && (
                 <Route path={path}>
                     <div className="p-6"> Azione non ancora implementata</div>
