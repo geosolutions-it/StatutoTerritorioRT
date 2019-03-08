@@ -103,6 +103,8 @@ class ProceduraVASUpdateInput(InputObjectType):
     procedimento_effettuato = graphene.Boolean(required=False)
     non_necessaria = graphene.Boolean(required=False)
     assoggettamento = graphene.Boolean(required=False)
+    pubblicazione_provvedimento_verifica_ap = graphene.String(required=False)
+    pubblicazione_provvedimento_verifica_ac = graphene.String(required=False)
 
 
 class ConsultazioneVASUpdateInput(InputObjectType):
