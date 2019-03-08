@@ -51,11 +51,12 @@ from serapide_core.modello.models import (
 
 from serapide_core.modello.enums import (
     FASE,
-    AZIONI,
     FASE_NEXT,
+    AZIONI_BASE,
     STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
+    TIPOLOGIA_ATTORE,
 )
 
 from .. import types
@@ -113,7 +114,7 @@ class CreatePiano(relay.ClientIDMutation):
                 # Inizializzazione Azioni del Piano
                 _order = 0
                 _azioni_piano = []
-                for _a in AZIONI[_fase.nome]:
+                for _a in AZIONI_BASE[_fase.nome]:
                     _azione = Azione(
                         tipologia=_a["tipologia"],
                         attore=_a["attore"],
@@ -376,7 +377,7 @@ class PromozionePiano(graphene.Mutation):
             _order += 1
 
         # - Attach Actions Templates for the Next "Fase"
-        for _a in AZIONI[fase.nome]:
+        for _a in AZIONI_BASE[fase.nome]:
             _azione = Azione(
                 tipologia=_a["tipologia"],
                 attore=_a["attore"],
@@ -398,27 +399,73 @@ class PromozionePiano(graphene.Mutation):
                 _creato.data = datetime.datetime.now(timezone.get_current_timezone())
                 _creato.save()
 
-            _verifica_vas = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.parere_verifica_vas).first()
+            _verifica_vas = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas).first()
             if _verifica_vas:
                 if procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
                     _verifica_vas.stato = STATO_AZIONE.nessuna
-                else:
+
+                elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
+                    _verifica_vas.stato = STATO_AZIONE.nessuna
+                    # TODO: not yet implemented
+                    # _consultazioni_sca = piano.azioni.filter(
+                    #    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
+                    # if _consultazioni_sca:
+                    #     _consultazioni_sca.stato = STATO_AZIONE.attesa
+                    #     _consultazioni_sca_expire_days = getattr(settings, 'CONSULTAZIONI_SCA_EXPIRE_DAYS', 90)
+                    #     _consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone()) + \
+                    #     datetime.timedelta(days=_consultazioni_sca_expire_days)
+                    #     _consultazioni_sca.save()
+
+                elif procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
+                    _verifica_vas.stato = STATO_AZIONE.nessuna
+
+                    _emissione_provvedimento_verifica_expire_days = 30
+                    _emissione_provvedimento_verifica = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
+                        attore=TIPOLOGIA_ATTORE.ac,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa,
+                        data=datetime.datetime.now(timezone.get_current_timezone()) +
+                        datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
+                    )
+                    _emissione_provvedimento_verifica.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
+
+                elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
                     _verifica_vas.stato = STATO_AZIONE.attesa
                     _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
                     _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
                     datetime.timedelta(days=_verifica_vas_expire_days)
-                _verifica_vas.save()
+                    _verifica_vas.save()
 
-            _consultazioni_sca = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
-            if _consultazioni_sca:
-                _consultazioni_sca.stato = STATO_AZIONE.attesa
-                _consultazioni_sca_expire_days = getattr(settings, 'CONSULTAZIONI_SCA_EXPIRE_DAYS', 90)
-                _consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone()) + \
-                datetime.timedelta(days=_consultazioni_sca_expire_days)
-                _consultazioni_sca.save()
+                    _pareri_vas_expire_days = getattr(settings, 'PARERI_VERIFICA_VAS_EXPIRE_DAYS', 30)
+                    _pareri_sca = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca,
+                        attore=TIPOLOGIA_ATTORE.sca,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa,
+                        data=datetime.datetime.now(timezone.get_current_timezone()) +
+                        datetime.timedelta(days=_pareri_vas_expire_days)
+                    )
+                    _pareri_sca.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
+
+                    _emissione_provvedimento_verifica_expire_days = 90
+                    _emissione_provvedimento_verifica = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
+                        attore=TIPOLOGIA_ATTORE.ac,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa,
+                        data=datetime.datetime.now(timezone.get_current_timezone()) +
+                        datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
+                    )
+                    _emissione_provvedimento_verifica.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
 
         elif fase.nome == FASE.avvio:
-
             _genio_civile = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
             if _genio_civile:
                 _genio_civile.stato = STATO_AZIONE.attesa

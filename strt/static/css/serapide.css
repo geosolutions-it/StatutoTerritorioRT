@@ -8103,6 +8103,21 @@ button.bg-serapide:focus {
 .border-left-2 {
   border-left: 2px solid #dee2e6 !important; }
 
+.border-3 {
+  border: 3px solid #dee2e6 !important; }
+
+.border-top-3 {
+  border-top: 3px solid #dee2e6 !important; }
+
+.border-right-3 {
+  border-right: 3px solid #dee2e6 !important; }
+
+.border-bottom-3 {
+  border-bottom: 3px solid #dee2e6 !important; }
+
+.border-left-3 {
+  border-left: 3px solid #dee2e6 !important; }
+
 .content {
   min-height: calc(100vh - 196px);
   padding-top: 60px; }
