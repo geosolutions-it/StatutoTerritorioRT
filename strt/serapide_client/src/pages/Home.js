@@ -7,22 +7,27 @@
  */
 import React from 'react'
 import Azioni from '../components/TabellaAzioni'
-import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
+// import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
 import PareriSCA from "./actions/PareriSCA"
 import ProvvedimentoVerificaVAS from './actions/ProvvedimentoVerificaVAS'
-import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
+
+// import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
+
+
 const getAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
 
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, azioni = []}) => {
     const action = getAction(url, pathname)
+    const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data}}) => data).shift()
+    
     const goToAction = (action = "") => {
+        history.push(`${url}/${action.toLowerCase().replace(" ","_")}`)
+    }
 
-        window.location.href = `#${url}/${action.toLowerCase().replace(" ","_")}`
-    } 
     return (
     <div className="d-flex pb-4 pt-5">
         <div className={classNames("d-flex flex-column flex-1")}>
@@ -39,18 +44,18 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
         <div className={classNames("d-flex flex-column ", {"ml-2  pl-3 flex-2 border-left": action})}>
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
-                <Route path={`${path}/avvio_consultazioni_sca`} >
+                {/* <Route path={`${path}/avvio_consultazioni_sca`} >
                     <AvvioConsultazioniSCA codicePiano={code} back={history.goBack}></AvvioConsultazioniSCA>
+                </Route> */}
+                <Route path={`${path}/pareri_verifica_sca`} >
+                    <PareriSCA codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza}/>
                 </Route>
-                <Route path={`${path}/pareri_sca`} >
-                    <PareriSCA codicePiano={code} utente={utente}></PareriSCA>
+                <Route path={`${path}/emissione_provvedimento_verifica`} >
+                    <ProvvedimentoVerificaVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
                 </Route>
-                <Route path={`${path}/provvedimento_verifica`} >
-                    <ProvvedimentoVerificaVAS codicePiano={code} utente={utente}></ProvvedimentoVerificaVAS>
-                </Route>
-                <Route path={`${path}/pubblicazione_provvedimento`} >
+                {/*<Route path={`${path}/pubblicazione_provvedimento`} >
                     <PubblicazioneProvv codicePiano={code} utente={utente}></PubblicazioneProvv>
-                </Route>
+                </Route> */}
                 { action && (
                 <Route path={path}>
                     <div className="p-6"> Azione non ancora implementata</div>

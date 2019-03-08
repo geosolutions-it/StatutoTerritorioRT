@@ -35,7 +35,8 @@ class UploadFiles extends React.PureComponent {
         multiple: true,
         mutation: FILE_UPLOAD,
         resourceMutation: DELETE_RISORSA,
-        getSuccess: ({upload: {success}}) => success
+        getSuccess: ({upload: {success}}) => success,
+        getFileName: ({upload: {fileName}}) => fileName
     }
     onFilesChange = (files = []) => {
         if (files.length > 0) {
@@ -46,8 +47,7 @@ class UploadFiles extends React.PureComponent {
     }
     updateCache = (cache, { data} = {}) => {
         if (this.props.getSuccess(data)) {
-            const {upload: {fileName} } = data
-            this.removeFile(fileName)
+            this.removeFile(this.props.getFileName(data))
         }
     }
     renderRisorse = () => {
@@ -67,7 +67,7 @@ class UploadFiles extends React.PureComponent {
             <FileLoader
                 key={file.name}
                 update={this.updateCache}
-                mutation={FILE_UPLOAD}
+                mutation={this.props.mutation}
                 file={file}
                 placeholder={placeholder}
                 variables={variables}

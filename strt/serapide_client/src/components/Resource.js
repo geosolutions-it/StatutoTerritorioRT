@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 import Confirm from './ConfirmToast'
 import {formatDate} from '../utils'
 const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : null
-export default ({resource: { nome, uuid, lastUpdate, tipo, dimensione, downloadUrl}, className ="resource", icon = "picture_as_pdf", codice, isLoading , isLocked = true, onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
+export default ({resource: { nome, uuid, lastUpdate, tipo, dimensione, downloadUrl} = {}, className ="resource", icon = "picture_as_pdf", codice, isLoading , isLocked = true, onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
     let toastId
     const deleteResource = () => onDeleteResource({ variables: { id: uuid, codice}})
     const confirm = () => {
@@ -32,7 +32,7 @@ export default ({resource: { nome, uuid, lastUpdate, tipo, dimensione, downloadU
                 <span>{nome}</span>)}
                 <span style={{fontSize: "0.8rem"}}>{getFileSize(dimensione)}</span>
             </div></div>
-            <div>{formatDate(lastUpdate, "dd MMMM yyyy")}</div>
+            <div>{lastUpdate && formatDate(lastUpdate, "dd MMMM yyyy")}</div>
             <div className="d-flex justify-content-center align-items-center">
                 {isLoading && (<div className="spinner-grow text-serapide" role="status">
                     <span className="sr-only">Loading...</span>                

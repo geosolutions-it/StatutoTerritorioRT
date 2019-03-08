@@ -50,7 +50,7 @@ const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifi
 }
 
 
-export default ({codice, canUpdate, isLocked, isOpen, toggleOpen}) => {
+export default ({codice, canUpdate, isLocked}) => {
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
             {({loading, data: {procedureVas: {edges = []} = []} = {}}) => {

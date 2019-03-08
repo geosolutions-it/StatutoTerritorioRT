@@ -22,6 +22,7 @@ fragment Risorsa on RisorsaNode {
     user{
       fiscalCode
     }
+    
 }
 `
 const AUT_VASFragment = gql`
@@ -34,6 +35,14 @@ const VASFragment = gql`
 fragment VAS on ProceduraVASNode {
         uuid
         tipologia
+        dataVerifica
+        dataCreazione
+        dataProcedimento
+        dataApprovazione
+        verificaEffettuata
+        procedimentoEffettuato
+        assoggettamento
+        nonNecessaria
         piano {
             codice
             autoritaCompetenteVas{
@@ -60,6 +69,12 @@ fragment VAS on ProceduraVASNode {
                 ...Risorsa 
               }
             }
+        }
+        documentoPreliminareVerifica{
+          ...Risorsa 
+        }
+        relazioneMotivataVasSemplificata{
+          ...Risorsa 
         }
 }
 ${RisorsaFragment}
@@ -293,7 +308,7 @@ query getContatti($tipo: String){
 // MUTATION
 // Upload a generic risources
 export const FILE_UPLOAD = gql`
-mutation($file: Upload!, $codice: String!, $tipo: String!) {
+mutation UploadFile($file: Upload!, $codice: String!, $tipo: String!) {
     upload(file: $file, codice: $codice, tipoFile: $tipo) {
       success
       pianoAggiornato {
@@ -306,28 +321,29 @@ mutation($file: Upload!, $codice: String!, $tipo: String!) {
 `
 // Upload a vas resources
 export const VAS_FILE_UPLOAD = gql`
-mutation($file: Upload!, $codice: String!, $tipo: String!) {
+mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
     uploadRisorsaVas(file: $file, codice: $codice, tipoFile: $tipo) {
       success
       proceduraVasAggiornata {
           ...VAS
       }
+      fileName
     }
   }
   ${VASFragment}
 `
 // Upload a consultazione vas resources
-export const CONSULTAZIONE_VAS_FILE_UPLOAD = gql`
-mutation($file: Upload!, $codice: String!, $tipo: String!) {
-    uploadConsultazioneVas(file: $file, codice: $codice, tipoFile: $tipo) {
-      success
-      consultazioneVasAggiornata{
-          ...ConsultazioneVAS
-      }
-    }
-  }
-  ${ConsultazioneVasFragment}
-`
+// export const CONSULTAZIONE_VAS_FILE_UPLOAD = gql`
+// mutation($file: Upload!, $codice: String!, $tipo: String!) {
+//     uploadConsultazioneVas(file: $file, codice: $codice, tipoFile: $tipo) {
+//       success
+//       consultazioneVasAggiornata{
+//           ...ConsultazioneVAS
+//       }
+//     }
+//   }
+//   ${ConsultazioneVasFragment}
+// `
 
 
 export const CREA_PIANO= gql`mutation CreatePiano($input: CreatePianoInput!) {
@@ -360,16 +376,28 @@ mutation UpdateProceduraVas($input: UpdateProceduraVASInput!) {
 }
 ${VASFragment}
 `
-export const UPDATE_CONSULTAZIONE_VAS = gql`
-mutation UpdateConsultazioneVas($input: UpdateConsultazioneVASInput!) {
-  updateConsultazioneVas(input: $input) {
-      consultazioneVasAggiornata {
-            ...ConsultazioneVAS
+// export const UPDATE_CONSULTAZIONE_VAS = gql`
+// mutation UpdateConsultazioneVas($input: UpdateConsultazioneVASInput!) {
+//   updateConsultazioneVas(input: $input) {
+//       consultazioneVasAggiornata {
+//             ...ConsultazioneVAS
+//         }
+//     }
+// }
+// ${ConsultazioneVasFragment}
+// `
+
+export const INVIO_PARERI_VERIFICA = gql`
+mutation InvioPareriVerifica($codice: String!) {
+  invioPareriVerificaVas(uuid: $codice) {
+        vasAggiornata {
+          ...VAS
         }
     }
 }
-${ConsultazioneVasFragment}
+${VASFragment}
 `
+
 
 export const DELETE_RISORSA = gql`
 mutation($id: ID!, $codice: String!) {
@@ -393,17 +421,17 @@ mutation($id: ID!, $codice: String!) {
 }
 ${VASFragment}
 `
-export const DELETE_RISORSA_CONSULTAZIONE_VAS = gql`
-mutation($id: ID!, $codice: String!) {
-    deleteConsultazioneVas(risorsaId: $id, codice: $codice){
-        success
-        consultazioneVasAggiornata {
-            ...ConsultazioneVAS
-        }
-    }
-}
-${ConsultazioneVasFragment}
-`
+// export const DELETE_RISORSA_CONSULTAZIONE_VAS = gql`
+// mutation($id: ID!, $codice: String!) {
+//     deleteConsultazioneVas(risorsaId: $id, codice: $codice){
+//         success
+//         consultazioneVasAggiornata {
+//             ...ConsultazioneVAS
+//         }
+//     }
+// }
+// ${ConsultazioneVasFragment}
+// `
 
 
 
@@ -436,44 +464,44 @@ export const DELETE_PIANO = gql`
     }
 }
 `
-export const CREA_CONSULTAZIONE_VAS = gql`
-mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
-  createConsultazioneVas(input: $input){
-    nuovaConsultazioneVas{     
-      ...ConsultazioneVAS
-    }
-  }
-}
-${ConsultazioneVasFragment}
-`
+// export const CREA_CONSULTAZIONE_VAS = gql`
+// mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
+//   createConsultazioneVas(input: $input){
+//     nuovaConsultazioneVas{     
+//       ...ConsultazioneVAS
+//     }
+//   }
+// }
+// ${ConsultazioneVasFragment}
+// `
 
-export const AVVIO_CONSULTAZIONE_VAS = gql`
-mutation AvvioConsultazioniVAS($codice: String!) {
-    avvioConsultazioniVas(uuid: $codice) {
-      errors
-      consultazioneVasAggiornata {
-        uuid
-        proceduraVas{
-        piano{
-          codice
-          azioni {
-            edges {
-                node {
-                    order
-                    tipologia
-                    stato
-                    attore
-                    data
-                    uuid
-                }
-            }
-          }
-        }
-      }
-      }
-    }
-}
-`
+// export const AVVIO_CONSULTAZIONE_VAS = gql`
+// mutation AvvioConsultazioniVAS($codice: String!) {
+//     avvioConsultazioniVas(uuid: $codice) {
+//       errors
+//       consultazioneVasAggiornata {
+//         uuid
+//         proceduraVas{
+//         piano{
+//           codice
+//           azioni {
+//             edges {
+//                 node {
+//                     order
+//                     tipologia
+//                     stato
+//                     attore
+//                     data
+//                     uuid
+//                 }
+//             }
+//           }
+//         }
+//       }
+//       }
+//     }
+// }
+// `
 
 
 
