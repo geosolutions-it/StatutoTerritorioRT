@@ -464,6 +464,31 @@ export const DELETE_PIANO = gql`
     }
 }
 `
+export const PROVVEDIMENTO_VERIFICA_VAS = gql`
+mutation ProvveddimentoVerificaVAS($uuid: String!) {
+    assoggettamentoVas(uuid: $uuid){
+        vasAggiornata{
+          uuid
+          verificaEffettuata
+        piano{
+            codice
+            azioni {
+              edges {
+              node {
+                order
+                tipologia
+                stato
+                attore
+                data
+                uuid
+                }
+              }
+          }
+        }  
+      }
+    }
+  }
+`
 // export const CREA_CONSULTAZIONE_VAS = gql`
 // mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
 //   createConsultazioneVas(input: $input){

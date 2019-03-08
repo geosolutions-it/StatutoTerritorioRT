@@ -12,7 +12,8 @@ import {Query, Mutation} from 'react-apollo'
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
-    UPDATE_VAS
+    UPDATE_VAS,
+    PROVVEDIMENTO_VERIFICA_VAS
 } from '../../queries'
 import SalvaInvia from '../../components/SalvaInvia'
 import  {showError, formatDate,daysSub} from '../../utils'
@@ -90,7 +91,7 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
                     isLocked={false} risorsa={provvedimento} variables={{codice: uuid, tipo: "provvedimento_verifica_vas" }}/>
                 </div>
             <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} mutation={UPDATE_VAS} variables={{input: {proceduraVas:  {verificaEffettuata: true},  uuid}}} canCommit={!!provvedimento}></SalvaInvia>
+                <SalvaInvia onCompleted={back} mutation={PROVVEDIMENTO_VERIFICA_VAS} variables={{uuid}} canCommit={!!provvedimento}></SalvaInvia>
             </div>
         </React.Fragment>)
     }
