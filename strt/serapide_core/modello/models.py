@@ -385,6 +385,9 @@ class ProceduraVAS(models.Model):
     non_necessaria = models.BooleanField(null=False, blank=False, default=False)
     assoggettamento = models.BooleanField(null=False, blank=False, default=True)
 
+    pubblicazione_provvedimento_verifica_ap = models.URLField(null=True, blank=True)
+    pubblicazione_provvedimento_verifica_ac = models.URLField(null=True, blank=True)
+
     risorse = models.ManyToManyField(Risorsa, through='RisorseVas')
 
     ente = models.ForeignKey(
