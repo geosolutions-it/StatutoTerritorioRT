@@ -4,7 +4,7 @@ import React from 'react'
 import {Input} from 'reactstrap'
 import "react-datepicker/dist/react-datepicker.css"
 import {Mutation} from  "react-apollo"
-import { toast } from 'react-toastify'
+import {showError} from '../utils'
 import {debounce} from 'lodash'
 
 
@@ -14,12 +14,10 @@ const updatePiano = (update, getInput, value) => {
 const debounced = debounce(updatePiano, 500)
 
 
-const showError = (error, onError) => {
-    toast.error(error.message,  {autoClose: true})
-}
 
 
-export default  ({disabled, mutation, value, update, selected, getInput = (val) => { return {variables: {input: {descrizione: val}}}}, ...mutationProps}) => {
+
+export default  ({disabled, mutation, value, update, selected, type="textarea", getInput = (val) => { return {variables: {input: {descrizione: val}}}}, ...mutationProps}) => {
     return (
         <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
             {(onChange, m_props) => {
@@ -28,7 +26,7 @@ export default  ({disabled, mutation, value, update, selected, getInput = (val) 
                     debounced(onChange, getInput, value)
                 }
                 return (
-                <Input disabled={disabled} onChange={saveInput} type="textarea" name="text" defaultValue={value}/>
+                <Input disabled={disabled} onChange={saveInput} type={type} name="text" defaultValue={value}/>
                 )
             }}
         </Mutation>)

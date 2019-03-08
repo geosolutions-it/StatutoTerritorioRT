@@ -251,7 +251,8 @@ class AssoggettamentoVAS(graphene.Mutation):
                 _avvio_consultazioni_sca.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
-
+                procedura_vas.verifica_effettuata = True
+                procedura_vas.save()
             else:
                 _pubblicazione_vas_comune = Azione(
                     tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
@@ -272,6 +273,8 @@ class AssoggettamentoVAS(graphene.Mutation):
                 _pubblicazione_vas_ac.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_pubblicazione_vas_ac, piano=piano)
+                procedura_vas.verifica_effettuata = True
+                procedura_vas.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -279,7 +282,7 @@ class AssoggettamentoVAS(graphene.Mutation):
         _piano = _procedura_vas.piano
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                if _procedura_vas.verifica_effettuata and \
+                if not _procedura_vas.verifica_effettuata and \
                 _procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
                 else:
