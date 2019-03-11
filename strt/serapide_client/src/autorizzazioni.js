@@ -20,7 +20,8 @@ const azioni = {
         "PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA": ["TMP", "RUP", "OP"],
         "PARERI_VERIFICA_VAS" : ["TMP", ""],
         "RICHIESTA_VERIFICA_VAS": ["", ""],
-        "PARERI_VERIFICA_SCA": ["TMP"]
+        "PARERI_VERIFICA_SCA": ["TMP"],
+        "AVVIO_CONSULTAZIONI_SCA": ["RUP", "OP"]
     }
 export const globalAuth = {
     _attore_attivo: "",

@@ -13,14 +13,14 @@ import AutoMutation from '../../components/AutoMutation'
 import {Query} from "react-apollo"
 import SalvaInvia from '../../components/SalvaInvia'
 import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
-    DELETE_RISORSA_CONSULTAZIONE_VAS,
-    CONSULTAZIONE_VAS_FILE_UPLOAD,
+    DELETE_RISORSA_VAS,
+    VAS_FILE_UPLOAD,
     UPDATE_CONSULTAZIONE_VAS,
     AVVIO_CONSULTAZIONE_VAS
 } from '../../queries'
 import {} from '../../utils'
 
-const getSuccess = ({uploadConsultazioneVas: {success}} = {}) => success
+const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 const getVasTypeInput = (uuid) => (value) => ({
     variables: {
         input: { 
@@ -30,9 +30,9 @@ const getVasTypeInput = (uuid) => (value) => ({
     }
 })
 
-const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dataScadenza, risorse: {edges=[]} = {}, uuid} = {}} = {}, back}) => {
+const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dataScadenza, proceduraVas: {uuid: pVasUUID, risorse: {edges=[]} = {} } = {}, uuid} = {}} = {}, back}) => {
             
-            const docPrelim = (edges.filter(({node: {tipo}}) => tipo === "consultazione_vas_preliminare").pop() || {}).node
+            const docPrelim = (edges.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").pop() || {}).node
             return (<React.Fragment>
                 <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Avvio Consultazioni SCA</h2></div>
                 <div className="d-flex mb-5 mt-3 justify-content-between">
@@ -48,9 +48,9 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                 <FileUpload 
                     className="border-0 flex-column"
                     sz="sm" modal={false} showBtn={false} 
-                    getSuccess={getSuccess} mutation={CONSULTAZIONE_VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_CONSULTAZIONE_VAS} disabled={false} 
-                    isLocked={false} risorsa={docPrelim} variables={{codice: uuid, tipo: "consultazione_vas_preliminare" }}/>
+                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
+                    resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
+                    isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
                 </div>
                 
                     <div className="d-flex justify-content-between">

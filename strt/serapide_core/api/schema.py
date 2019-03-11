@@ -58,7 +58,7 @@ class Query(object):
     procedure_vas = DjangoFilterConnectionField(types.ProceduraVASNode,
                                                 filterset_class=filters.ProceduraVASMembershipFilter)
 
-    # consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
+    consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
 
     contatti = DjangoFilterConnectionField(types.ContattoNode,
                                            filterset_class=filters.EnteContattoMembershipFilter)
