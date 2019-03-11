@@ -251,21 +251,11 @@ class AssoggettamentoVAS(graphene.Mutation):
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             if procedura_vas.assoggettamento:
-                _documento_preliminare_vas = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.emissione_documento_preliminare_vas,
-                    attore=TIPOLOGIA_ATTORE.comune,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _documento_preliminare_vas.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_documento_preliminare_vas, piano=piano)
-
                 _avvio_consultazioni_sca = Azione(
                     tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
                     attore=TIPOLOGIA_ATTORE.comune,
                     order=_order,
-                    stato=STATO_AZIONE.attesa
+                    stato=STATO_AZIONE.necessaria
                 )
                 _avvio_consultazioni_sca.save()
                 _order += 1
