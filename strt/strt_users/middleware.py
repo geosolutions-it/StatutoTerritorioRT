@@ -74,7 +74,7 @@ class SessionControlMiddleware(object):
             not request.user.is_active or \
             request.user.is_anonymous:
                 self.redirect_to_login(request)
-            else:
+            elif not request.user.is_superuser:
                 token = request.session['token'] if 'token' in request.session else None
                 if token:
                     try:

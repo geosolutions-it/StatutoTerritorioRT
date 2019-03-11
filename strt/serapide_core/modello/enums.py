@@ -75,9 +75,8 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
         ('convocazione_conferenza_copianificazione', _('Convocazione Conferenza di Copianificazione')),  # Regione
         ('emissione_provvedimento_verifica', _('Emissione Provvedimento di Verifica')),  # AC
-        ('emissione_documento_preliminare_vas', _('Emissione Documento Preliminare VAS')),  # Comune
         ('pubblicazione_provvedimento_verifica', _('Pubblicazione Provvedimento di Verifica')),  # AC/Comune
-        ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),  # AC
+        ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),  # Comune
         ('pareri_sca', _('Pareri SCA')),  # SCA
     )
 

@@ -406,15 +406,17 @@ class PromozionePiano(graphene.Mutation):
 
                 elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
                     _verifica_vas.stato = STATO_AZIONE.nessuna
-                    # TODO: not yet implemented
-                    # _consultazioni_sca = piano.azioni.filter(
-                    #    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
-                    # if _consultazioni_sca:
-                    #     _consultazioni_sca.stato = STATO_AZIONE.attesa
-                    #     _consultazioni_sca_expire_days = getattr(settings, 'CONSULTAZIONI_SCA_EXPIRE_DAYS', 90)
-                    #     _consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone()) + \
-                    #     datetime.timedelta(days=_consultazioni_sca_expire_days)
-                    #     _consultazioni_sca.save()
+                    _avvio_consultazioni_sca = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _avvio_consultazioni_sca.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+                    procedura_vas.verifica_effettuata = True
+                    procedura_vas.save()
 
                 elif procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
                     _verifica_vas.stato = STATO_AZIONE.nessuna
