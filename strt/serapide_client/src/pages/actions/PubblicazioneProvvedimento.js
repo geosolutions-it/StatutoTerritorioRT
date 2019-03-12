@@ -9,7 +9,7 @@ import React from 'react'
 import {Input} from 'reactstrap'
 import Resource from '../../components/Resource'
 import {Query} from 'react-apollo'
-import {GET_VAS, UPDATE_VAS} from '../../queries'
+import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from '../../queries'
 import SalvaInvia from '../../components/SalvaInvia'
 import  {showError} from '../../utils'
 import {withControllableState} from '../../enhancers/utils'
@@ -34,7 +34,7 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
             </span>
             <span style={{fontSize: "80%", maxWidth: 400}}className="pl-4 font-80">Inserire la URL della pagina dove è stato pubblicato il provvedimento di verifica</span>
             <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} mutation={UPDATE_VAS} variables={{input: {proceduraVas: {[pubblicazione_provvedimento_verifica]: url}, uuid}}} canCommit={url.length > 0}></SalvaInvia>
+                <SalvaInvia onCompleted={back} mutation={PUBBLICA_PROVV_VERIFICA} variables={{input: {proceduraVas: {[pubblicazione_provvedimento_verifica]: url}, uuid}}} canCommit={url.length > 0}></SalvaInvia>
             </div>
         </React.Fragment>)
     })

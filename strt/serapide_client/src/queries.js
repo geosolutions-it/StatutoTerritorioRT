@@ -158,13 +158,16 @@ fragment  ConsultazioneVAS on ConsultazioneVASNode {
           dataCreazione
           dataScadenza
           dataRicezionePareri
-          risorse{
-            edges{
-              node{
+          proceduraVas{
+            uuid
+            risorse {
+            edges {
+              node {
                 ...Risorsa 
               }
             }
           }
+        }
   }
   ${RisorsaFragment}
 `
@@ -332,7 +335,7 @@ mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
   }
   ${VASFragment}
 `
-// Upload a consultazione vas resources
+// //Upload a consultazione vas resources
 // export const CONSULTAZIONE_VAS_FILE_UPLOAD = gql`
 // mutation($file: Upload!, $codice: String!, $tipo: String!) {
 //     uploadConsultazioneVas(file: $file, codice: $codice, tipoFile: $tipo) {
@@ -376,22 +379,61 @@ mutation UpdateProceduraVas($input: UpdateProceduraVASInput!) {
 }
 ${VASFragment}
 `
-// export const UPDATE_CONSULTAZIONE_VAS = gql`
-// mutation UpdateConsultazioneVas($input: UpdateConsultazioneVASInput!) {
-//   updateConsultazioneVas(input: $input) {
-//       consultazioneVasAggiornata {
-//             ...ConsultazioneVAS
-//         }
-//     }
-// }
-// ${ConsultazioneVasFragment}
-// `
+export const UPDATE_CONSULTAZIONE_VAS = gql`
+mutation UpdateConsultazioneVas($input: UpdateConsultazioneVASInput!) {
+  updateConsultazioneVas(input: $input) {
+      consultazioneVasAggiornata {
+            ...ConsultazioneVAS
+        }
+    }
+}
+${ConsultazioneVasFragment}
+`
 
+
+export const PUBBLICA_PROVV_VERIFICA = gql`
+mutation UpdateProceduraVas($input: UpdateProceduraVASInput!) {
+    updateProceduraVas(input: $input) {
+        proceduraVasAggiornata {
+
+              piano {
+                codice
+                azioni{
+                  edges {
+                    node {
+                      order
+                      tipologia
+                      stato
+              	      attore
+              	      data
+              	      uuid
+                    }
+                  }
+                }
+              }
+            }
+        }
+    }
+`
 export const INVIO_PARERI_VERIFICA = gql`
 mutation InvioPareriVerifica($codice: String!) {
   invioPareriVerificaVas(uuid: $codice) {
         vasAggiornata {
           ...VAS
+          piano {
+            azioni{
+              edges {
+                node {
+                  order
+                  tipologia
+                  stato
+                  attore
+                  data
+                  uuid
+                }
+              }
+            }
+          }
         }
     }
 }
@@ -489,44 +531,43 @@ mutation ProvveddimentoVerificaVAS($uuid: String!) {
     }
   }
 `
-// export const CREA_CONSULTAZIONE_VAS = gql`
-// mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
-//   createConsultazioneVas(input: $input){
-//     nuovaConsultazioneVas{     
-//       ...ConsultazioneVAS
-//     }
-//   }
-// }
-// ${ConsultazioneVasFragment}
-// `
+export const CREA_CONSULTAZIONE_VAS = gql`
+mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
+  createConsultazioneVas(input: $input){
+    nuovaConsultazioneVas{     
+      ...ConsultazioneVAS
+    }
+  }
+}
+${ConsultazioneVasFragment}
+`
 
-// export const AVVIO_CONSULTAZIONE_VAS = gql`
-// mutation AvvioConsultazioniVAS($codice: String!) {
-//     avvioConsultazioniVas(uuid: $codice) {
-//       errors
-//       consultazioneVasAggiornata {
-//         uuid
-//         proceduraVas{
-//         piano{
-//           codice
-//           azioni {
-//             edges {
-//                 node {
-//                     order
-//                     tipologia
-//                     stato
-//                     attore
-//                     data
-//                     uuid
-//                 }
-//             }
-//           }
-//         }
-//       }
-//       }
-//     }
-// }
-// `
+export const AVVIO_CONSULTAZIONE_VAS = gql`
+mutation AvvioConsultazioniVAS($codice: String!) {
+    avvioConsultazioniVas(uuid: $codice) {
+      errors
+      consultazioneVasAggiornata {
+        proceduraVas{
+        piano{
+          codice
+          azioni {
+            edges {
+                node {
+                    order
+                    tipologia
+                    stato
+                    attore
+                    data
+                    uuid
+                }
+            }
+          }
+        }
+      }
+      }
+    }
+}
+`
 
 
 

@@ -7,7 +7,7 @@
  */
 import React from 'react'
 import Azioni from '../components/TabellaAzioni'
-// import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
+import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
 import PareriSCA from "./actions/PareriSCA"
 import ProvvedimentoVerificaVAS from './actions/ProvvedimentoVerificaVAS'
 
@@ -44,9 +44,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
         <div className={classNames("d-flex flex-column ", {"ml-2  pl-3 flex-2 border-left": action})}>
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
-                {/* <Route path={`${path}/avvio_consultazioni_sca`} >
+                {<Route path={`${path}/avvio_consultazioni_sca`} >
                     <AvvioConsultazioniSCA codicePiano={code} back={history.goBack}></AvvioConsultazioniSCA>
-                </Route> */}
+                </Route>}
                 <Route path={`${path}/pareri_verifica_sca`} >
                     <PareriSCA codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza}/>
                 </Route>
