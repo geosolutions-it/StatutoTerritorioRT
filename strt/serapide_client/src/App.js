@@ -45,19 +45,21 @@ return (
                 globalAuth._ruolo = ruolo
             return(
                 <React.Fragment>
-                 <ThemeInjector themeClass={themeClass}/>
-                  <Injector el="user-navbar-list">
-                      <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}  roleType={ruolo}/>
-                  </Injector>
-                  <ReactTooltip></ReactTooltip>
-                  <Router>
-                      <Switch>
-                          <Route  path="/piano/:code" render={(props) => <Piano utente={utente} {...props}/>} />
-                          <Route  path="/crea_anagrafica/:code" component={CreaAnagrafica}/>
-                          <Route  path="/nuovo_piano/" component={NuovoPiano}/>             
-                          <Route  path="/" render={(props) => <Dashboard utente={utente} {...props}/>}/>
-                      </Switch>
-                  </Router>
+                    <ThemeInjector themeClass={themeClass}/>
+                    <Injector el="user-navbar-list">
+                        <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}  roleType={ruolo}/>
+                    </Injector>
+                    <ReactTooltip></ReactTooltip>
+                    <div className="serapide-content pt-5 pb-5 pX-lg-1 pX-xl-2 px-4 serapide-top-offset position-relative">
+                            <Router>
+                                <Switch>
+                                    <Route  path="/piano/:code" render={(props) => <Piano utente={utente} {...props}/>} />
+                                    <Route  path="/crea_anagrafica/:code" component={CreaAnagrafica}/>
+                                    <Route  path="/nuovo_piano/" component={NuovoPiano}/>             
+                                    <Route  path="/" render={(props) => <Dashboard utente={utente} {...props}/>}/>
+                                </Switch>
+                            </Router>
+                    </div>
                 </React.Fragment>)
         }}
         </Query>

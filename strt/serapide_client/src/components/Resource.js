@@ -24,16 +24,17 @@ export default ({resource: { nome, uuid, lastUpdate, tipo, dimensione, downloadU
         }
     }
     return  (
-        <div className={`${className} d-flex justify-content-between align-items-center`}>
-            <div className="d-flex">
-                <i className="material-icons text-serapide">{icon}</i>
-            <div className="pl-1 d-flex flex-column justify-content-between">
+        <div className={`${className} row align-items-center`}>
+            
+            <div className="col-6 d-flex">
+                <i className="material-icons text-serapide align-self-center">{icon}</i>
+                <div className="pl-1 d-flex flex-column justify-content-between">
                 {downloadUrl ? (<a className="text-dark"href={downloadUrl} download={nome}>{nome}</a>) : (
                 <span>{nome}</span>)}
                 <span style={{fontSize: "0.8rem"}}>{getFileSize(dimensione)}</span>
             </div></div>
-            <div>{lastUpdate && formatDate(lastUpdate, "dd MMMM yyyy")}</div>
-            <div className="d-flex justify-content-center align-items-center">
+            <div className="col-3">{lastUpdate && formatDate(lastUpdate, "dd MMMM yyyy")}</div>
+            <div className="col-3 d-flex justify-content-end">
                 {isLoading && (<div className="spinner-grow text-serapide" role="status">
                     <span className="sr-only">Loading...</span>                
                 </div>)}

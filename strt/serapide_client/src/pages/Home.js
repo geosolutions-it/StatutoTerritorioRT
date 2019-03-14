@@ -20,14 +20,13 @@ const getAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
 
-export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, azioni = []}) => {
+export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, piano = {}, azioni = []}) => {
     const action = getAction(url, pathname)
     const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data, }}) => data).shift()
-    
     const goToAction = (action = "") => {
         history.push(`${url}/${action.toLowerCase().replace(" ","_")}`)
     }
-
+    console.log(piano)
     return (
     <div className="d-flex pb-4 pt-5">
         <div className={classNames("d-flex flex-column flex-1")}>
@@ -45,7 +44,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
                 {<Route path={`${path}/avvio_consultazioni_sca`} >
-                    <AvvioConsultazioniSCA codicePiano={code} back={history.goBack}></AvvioConsultazioniSCA>
+                    <AvvioConsultazioniSCA codicePiano={code} piano={piano} back={history.goBack}></AvvioConsultazioniSCA>
                 </Route>}
                 <Route path={`${path}/pareri_verifica_sca`} >
                     <PareriSCA codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza}/>

@@ -60,7 +60,7 @@ export default ({utente, ...props}) => {
     const {role: {type} = {}} = utente || {}
     return (
         <React.Fragment>
-            <div className="serapide-content pt-5 pX-lg px-4 serapide-top-offset position-relative overflow-x-scroll">
+            <div>
                 <h1>Portale del territorio</h1>
                 <h2>Strumenti per la formazione e gestione dei piani</h2>
                 <hr className="border-serapide border-bottom"></hr>

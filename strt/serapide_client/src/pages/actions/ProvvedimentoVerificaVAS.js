@@ -82,9 +82,9 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
             <h4>Emissione Provvedimento di Verifica</h4> 
             <SwitchAssoggetamento assoggettamento={assoggettamento} uuid={uuid}></SwitchAssoggetamento>
             <h4 className="font-weight-light pl-4 pb-1">PROVVEDIMENTO DI VERIFICA</h4>
-                <div style={{width: "100%"}} className="action-uploader d-flex align-self-start pb-5">
+                <div className="action-uploader  align-self-start pb-5">
                 <FileUpload 
-                    className="border-0 flex-column"
+                     className={`border-0 ${!provvedimento ? "flex-column": ""}`}
                     sz="sm" modal={false} showBtn={false} 
                     getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 

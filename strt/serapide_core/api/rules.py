@@ -47,7 +47,7 @@ rules.add_rule(
 
 rules.add_rule(
     'strt_core.api.can_update_piano',
-    user_rules.can_access_piano & piano_rules.is_draft
+    user_rules.can_access_piano
 )
 
 rules.add_rule(

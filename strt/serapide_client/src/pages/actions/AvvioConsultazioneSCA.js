@@ -10,15 +10,21 @@ import FileUpload from '../../components/UploadSingleFile'
 import  {showError, formatDate} from '../../utils'
 import {EnhancedSwitch} from '../../components/Switch'
 import AutoMutation from '../../components/AutoMutation'
-import {Query} from "react-apollo"
+import {Query, Mutation} from "react-apollo"
+import Resource from '../../components/Resource'
+import {EnhancedListSelector} from '../../components/ListSelector'
 import SalvaInvia from '../../components/SalvaInvia'
+import AddContact from '../../components/AddContact'
+import Button from '../../components/IconButton'
 import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
     UPDATE_CONSULTAZIONE_VAS,
-    AVVIO_CONSULTAZIONE_VAS
+    AVVIO_CONSULTAZIONE_VAS, UPDATE_PIANO,
+    GET_CONTATTI
 } from '../../queries'
-import {} from '../../utils'
+
+
 
 const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 const getVasTypeInput = (uuid) => (value) => ({
@@ -29,55 +35,155 @@ const getVasTypeInput = (uuid) => (value) => ({
         }
     }
 })
+const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
+    return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
+}
 
-const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dataScadenza, proceduraVas: {uuid: pVasUUID, risorse: {edges=[]} = {} } = {}, uuid} = {}} = {}, back}) => {
+const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dataScadenza, proceduraVas: {uuid: pVasUUID, tipologia, risorse: {edges=[]} = {} } = {}, uuid} = {}} = {}, piano: {codice, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, back}) => {
             
-            const docPrelim = (edges.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").pop() || {}).node
+            const isFull = tipologia === "SEMPLIFICATA" || tipologia === "VERIFICA"
+            const provvedimentoVerificaVas  = edges.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
+            const docPrelim = edges.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").map(({node}) => node).shift()
+            const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
+            const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
             return (<React.Fragment>
                 <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Avvio Consultazioni SCA</h2></div>
+                {isFull ? (<React.Fragment>
+                    <div className="py-3 border-bottom-2">
+                        <Resource className="border-0 mt-2" icon="attach_file" resource={provvedimentoVerificaVas}></Resource>
+                        <div className="row mt-2">
+                            <div className="col-6 d-flex">
+                                <i className="material-icons text-serapide self-align-center">assignment_turned_in</i>
+                                <span className="pl-1">ESITO: Assoggettamento VAS</span>
+                            </div>
+                            <span className="col-3">22/03/2019</span>
+                        </div>
+                    </div>
+                    <h5 className="font-weight-light pb-1 mt-3">AUTORITA' COMPETENTE (AC)</h5>
+                    {aut.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pl-2 mt-3 " key={uuid}>
+                                 <i className="material-icons text-serapide">bookmark</i>
+                                 {nome}
+                        </div>))}
+                    <div className="mt-4 pl-4 pb-4">
+                    <Mutation mutation={UPDATE_PIANO} onError={showError}>
+                        {(onChange) => {
+                            const changed = (val) => {
+                                const autoritaCompetenteVas = auths.indexOf(val) !== -1 ? [] : [val]
+                                    onChange({variables:{ input:{ 
+                                            pianoOperativo: { autoritaCompetenteVas}, codice}
+                                    }})
+                            }
+                            return (
+                                <EnhancedListSelector
+                                    selected={auths}
+                                    query={GET_CONTATTI}
+                                    getList={getAuthorities}
+                                    onChange={changed}
+                                    variables={{tipo: "acvas"}}
+                                    size="lg"
+                                    label="SELEZIONA AUTORITA’ COMPETENTE VAS"
+                                    btn={(toggleOpen) => (
+                                        <div className="row">
+                                            <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="text-serapide rounded-pill" color="dark" icon="add_circle" label="Autorità competente VAS (AC)"/>
+                                        </div>
+                                        )}
+
+                                    >
+                                    <AddContact className="mt-2" tipologia="acvas"></AddContact>
+                                    </EnhancedListSelector>)}
+                        }
+                        </Mutation>
+                        </div>
+                        <h5 className="font-weight-light pb-1 mt-3">SOGGETTI COMPETENTI SCA</h5>
+                        {sca.map(({node: {nome, uuid} = {}}) => (<div className="d-flex mt-3" key={uuid}>
+                                 <i className="material-icons text-serapide">bookmark</i>
+                                 {nome}
+                        </div>))}
+                        <div className="mt-3 pl-4 border-bottom-2 pb-4 mb-5">
+                        <Mutation mutation={UPDATE_PIANO} onError={showError}>
+                    {(onChange) => {
+                            const changed = (val) => {
+                                let nscas = []
+                                if(scas.indexOf(val)!== -1){
+                                    nscas = scas.filter( uuid => uuid !== val)
+                                }else {
+                                    nscas = scas.concat(val)
+                                }
+                                onChange({variables:{ input:{ 
+                                            pianoOperativo: { soggettiSca: nscas}, codice}
+                                    }})
+                            }
+                            return (
+                        <EnhancedListSelector
+                                selected={scas}
+                                query={GET_CONTATTI}
+                                variables={{tipo: "sca"}}
+                                getList={getAuthorities}
+                                label="DEFINISCI SCA"
+                                size="lg"
+                                onChange={changed}
+                                btn={(toggleOpen) => (
+                                    <div className="row">
+                                        <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="text-serapide rounded-pill" color="dark" icon="add_circle" label="Soggetti competenti in materia ambientale (SCA))"/>
+                                    </div>)}
+                            >
+                            <AddContact className="mt-2" tipologia="sca"></AddContact>
+                            </EnhancedListSelector>)}
+                        }
+                        </Mutation>
+                        </div>
+                    </React.Fragment>
+                    ) : (
                 <div className="d-flex mb-5 mt-3 justify-content-between">
-                    <div className="d-flex">
+                    
+                        <div className="d-flex">
                         <i className="material-icons text-serapide">check_circle_outline</i>
                         <span className="pl-2">Richiesta Comune</span>
-                    </div>
+                        </div>
+                    
                     <div>{formatDate(dataCreazione, "dd MMMM yyyy")}</div>
-                </div>
+                </div>)}
                 
-                <h4 className="font-weight-light pl-4 pb-1">DOCUMENTO PRELIMINARE</h4>
-                <div style={{width: "100%"}} className="action-uploader d-flex align-self-start pb-5">
+                <h4 className="font-weight-light pl-2 pb-1">DOCUMENTO PRELIMINARE</h4>
+                <div className="action-uploader  align-self-start pl-2 pb-5">
                 <FileUpload 
-                    className="border-0 flex-column"
+                    className={`border-0 ${!docPrelim ? "flex-column": ""}`}
                     sz="sm" modal={false} showBtn={false} 
                     getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
                 </div>
                 
-                    <div className="d-flex justify-content-between">
-                        <div className="d-flex flex-column">
-                            <div className="d-flex pb-3"> 
+                    <div className="row pl-2">
+                        <div className="col-8">
+                            <div className="col-12 d-flex">
                                 <i className="material-icons text-serapide pr-3">email</i>
-                                <EnhancedSwitch value={avvioConsultazioniSca} label="Avvia consultazione SCA"
+                                <div className="bg-serapide mb-auto px-2">Avvia consultazione SCA</div>
+                                <EnhancedSwitch value={avvioConsultazioniSca}
                                     getInput={getVasTypeInput(uuid)}  
                                     ignoreChecked
                                     mutation={UPDATE_CONSULTAZIONE_VAS} checked={avvioConsultazioniSca} 
                                 /> 
                             </div>
-                            <span style={{maxWidth: 500}}>Selezionando l’opzione e cliccando “Salva e Invia” verrà inviata comunicazione e
+                            
+                            <div className="col-12 pt-2">Selezionando l’opzione e cliccando “Salva e Invia” verrà inviata comunicazione e
                             documento preliminare agli SCA selezionati e per conoscenza all’Autorità Competente
-                            in materia ambientale identificati all’atto di creazione del Piano.</span>
+                            in materia ambientale identificati all’atto di creazione del Piano.</div>
+                        
                         </div>
-                        <div className="d-flex">
-                        <i className="material-icons pr-3">event_busy</i> 
-                        <div className="d-flex flex-column">
-                            <span>{formatDate(dataScadenza, "dd MMMM yyyy")}</span>
-                            <span style={{maxWidth: 150}}>90 giorni per ricevere i pareri sca</span>
+                        <div className="col-4 d-flex">
+                            <i className="material-icons pr-3">event_busy</i> 
+                            <div className="d-flex flex-column">
+                                <span>{formatDate(dataScadenza, "dd MMMM yyyy")}</span>
+                                <span style={{maxWidth: 150}}>90 giorni per ricevere i pareri sca</span>
+                            </div>
                         </div>
-                        </div>
+                      </div> 
                     
-                    </div>
+                    
+                
                 <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIO_CONSULTAZIONE_VAS} canCommit={avvioConsultazioniSca && docPrelim}></SalvaInvia>
+                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIO_CONSULTAZIONE_VAS} canCommit={avvioConsultazioniSca && docPrelim && (!isFull || (auths.length > 0 && scas.length > 0))}></SalvaInvia>
                 
                 </div>
             </React.Fragment>)}
@@ -92,7 +198,7 @@ const updateCache =(codice) => (cache, { data: {createConsultazioneVas : { nuova
                     })
     }
 }
-export default ({codicePiano, back}) => (
+export default ({codicePiano, back, piano}) => (
                 <Query query={GET_CONSULTAZIONE_VAS} variables={{codice: codicePiano}} onError={showError}>
                     {({loading, data: {consultazioneVas: {edges = []} = []} = {}, error}) => {
                         if (!loading && !error && edges.length === 0 && codicePiano) {
@@ -115,6 +221,6 @@ export default ({codicePiano, back}) => (
                                 </div>)
                         }
                         return (
-                            <UI consultazioneSCA={edges[0]} back={back}/>)}
+                            <UI consultazioneSCA={edges[0]} back={back} piano={piano}/>)}
                     }
                 </Query>)

@@ -160,6 +160,7 @@ fragment  ConsultazioneVAS on ConsultazioneVASNode {
           dataRicezionePareri
           proceduraVas{
             uuid
+            tipologia
             risorse {
             edges {
               node {

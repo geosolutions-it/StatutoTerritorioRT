@@ -36,13 +36,11 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
             if(loading){
                 return (
-                    <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
                         <div className="d-flex justify-content-center">
                             <div className="spinner-grow " role="status">
                                 <span className="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    </div>)
+                            </div>
+                        </div>)
             } else if(edges.length === 0) {
                 toast.error(`Impossobile trovare il piano: ${code}`,  {autoClose: true})
                 return <div></div>
