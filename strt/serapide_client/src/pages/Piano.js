@@ -18,7 +18,7 @@ import Injector from '../components/Injector'
 import SideBar from '../components/SideBarMenu'
 import StatoProgress from '../components/StatoProgress'
 import Home from "./Home"
-
+import ReactTooltip from 'react-tooltip'
 
 const getActive = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()

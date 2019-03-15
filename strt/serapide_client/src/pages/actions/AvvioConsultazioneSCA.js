@@ -156,7 +156,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                 
                     <div className="row pl-2">
                         <div className="col-8">
-                            <div className="col-12 d-flex">
+                            <div className="col-12 d-flex pl-0">
                                 <i className="material-icons text-serapide pr-3">email</i>
                                 <div className="bg-serapide mb-auto px-2">Avvia consultazione SCA</div>
                                 <EnhancedSwitch value={avvioConsultazioniSca}

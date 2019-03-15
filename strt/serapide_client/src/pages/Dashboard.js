@@ -40,7 +40,7 @@ const Piani = () => (
                 return ( <Mutation mutation={DELETE_PIANO} update={update} onError={showError}>
                     {(onDelete, m_props) => {
                         return (
-                            <TabellaPiani title="piani in corso" piani={edges} onDeletePiano={onDelete}></TabellaPiani>
+                            <TabellaPiani title="piani in formazione" piani={edges} onDeletePiano={onDelete}></TabellaPiani>
                         )
                     }}
                 </Mutation>)
@@ -61,8 +61,8 @@ export default ({utente, ...props}) => {
     return (
         <React.Fragment>
             <div>
-                <h1>Portale del territorio</h1>
-                <h2>Strumenti per la formazione e gestione dei piani</h2>
+                <h1>Portale della pianificazione</h1>
+                <h2>Formazione e gestione dei piani (L.R. 65/2014)</h2>
                 <hr className="border-serapide border-bottom"></hr>
                 <div className="py-4 d-flex flex-row">
                     <div className="d-flex flex-column ">

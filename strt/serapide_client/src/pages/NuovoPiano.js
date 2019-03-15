@@ -60,15 +60,17 @@ const updateCache = (cache, { data: {createPiano : {nuovoPiano: node}}  = {}} = 
 const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti, ente, selectEnte, tipiPiano}) => {
             return (
                 <div>
-                        <div className="d-flex flex-column flex-eql ">
-                            <h4 className="text-uppercase">{getEnteLabel(ente)}</h4>  
-                            <div className="pb-4 pt-3 d-flex flex-row">
-                                <i className="material-icons text-serapide icon-34 pr-4 ">assignment</i>
-                                <div className="d-flex flex-column ">
-                                    <h3 className="mb-0">CREA NUOVO PIANO</h3>
-                                    {enti && (<EnteSelector className="pt-5" enti={enti} onChange={selectEnte} isLoading={isLoading} value={ente}></EnteSelector>)}
-                                    <span className="pt-4 pb-2 font-weight-bold">Atto di governo del territorio</span>
-                                    <span className="pt-2 pb-1small">Seleziona il tipo di atto</span>
+                    <h4 className="text-uppercase">{getEnteLabel(ente)}</h4>  
+                    <div className="row">
+                        <div className="col-6">
+                            <div className="row pb-4 pt-3">
+                                <div className="col-12">
+                                    <h3 className="mb-0 d-flex"><i className="material-icons text-serapide icon-34">assignment</i> FORMAZIONE DI UN NUOVO ATTO DEL TERRITORIO</h3>
+                                </div>
+                                <div style={{paddingLeft: 49, maxWidth: 400}} className="col-sm-12">
+                                    {enti && (<EnteSelector className="pt-6" enti={enti} onChange={selectEnte} isLoading={isLoading} value={ente}></EnteSelector>)}
+                                    <div className="pt-4 pb-2 font-weight-bold">Atto di governo del territorio</div><br/>
+                                    <div className="pb-1 small">Seleziona il tipo di atto</div>
                                     <SelectTipo className="mb-5 text-capitolize" onChange={selectTipo} tipiPiano={tipiPiano} value={tipo} isLoading={isLoading}></SelectTipo>
                                     <Button disabled={!canSubmit(ente, isLoading, tipo, isSaving)} onClick={() => creaPiano(getInput(ente, tipo))}
                                         size='md' tag="a" href="./#/nuovo_piano" 
@@ -78,13 +80,43 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                                 </div>   
                             </div>
                         </div>
-                        <div className="d-flex flex-column flex-eql "><div className="pb-4 pt-5"><h5 className="text-uppercase">Istruzioni per la compilazione</h5><p>
-                        Lore ipsum tante storie queli sono le istruzioni per la compilazione? qui va scritta un botto di roba ma se nessuno
-                        mi di ce cosa scrivere non è possibile riempire questo spazio</p>
-                        <h5 className="text-uppercase">Dcumenti richiesti per la creazione del piano</h5><p>Lore ipsum tante storie queli sono le istruzioni per la compilazione? qui va scritta un botto di roba ma se nessuno
-                        mi di ce cosa scrivere non è possibile riempire questo spazio</p>
-                        <h5 className="text-uppercase">Informazioni richieste per la creazione del piano</h5><p>Lore ipsum tante storie queli sono le istruzioni per la compilazione? qui va scritta un botto di roba ma se nessuno
-                        mi di ce cosa scrivere non è possibile riempire questo spazio</p></div></div>
+                        <div className="col-6">
+                            <div className="row pb-4 pt-3">
+                                <div className="col-12">
+                                    <h5 className="text-uppercase">Istruzioni per la creazione del piano</h5>
+                                        <p style={{textAlign: "justify"}}>
+                                            In questa sezione è possibile creare un nuovo atto di governo del Territorio e di conseguenza,
+                                            aprire il relativo procedimento amministrativo.<br/>Dal menù è possibile
+                                            selezionare il tipo di atto per il quale si intende avviare il procedimento (es: Piano Strutturale, Piano Operativo,
+                                            Variante)
+                                        </p>
+                                    </div>
+                                <div className="col-12">
+                                    <h5 className="text-uppercase">Dcumenti richiesti per la creazione del piano</h5>
+                                    <p style={{textAlign: "justify"}}>
+                                    Per poter creare l'atto di governo del territorio è necessario compilare una anagrafica del Piano selezionato nella successiva sezione
+                                    "CREA ANAGRAFICA". A tal fine è necessario inserire  l’atto amministrativo di avvio del procedimento, specificandone il numero e la sua 
+                                    denominazione. Inoltre, sarà necessario indicare se l’atto è assoggettato a VAS (ordinaria o semplificata, secondo le procedure previste dalla L.R. 10/2010)
+                                    o se è necessario avviare la procedura di verifica di assoggettabilità (ordinaria o semplificata, secondo le procedure previste dalla L.R. 10/2010) ed allegare.
+                                    In ogni caso, i relativii documenti richiesti di avvio alla procedura di VAS dovranno essere caricati in questo momento (Documento preliminare o relazione motivata).
+                                    </p>
+                                    </div>
+                                <div className="col-12">
+                                    <h5 className="text-uppercase">Informazioni richieste per la creazione del piano</h5>
+                                    <p style={{textAlign: "justify"}}>
+                                        Per poter procedere correttamente alla creazione del procedimento amministrativo finalizzato all’approvazione dell’atto di governo del territorio,
+                                        è necessario essere in possesso delle seguenti informazioni:
+                                        <ul className="pt-2">
+                                            <li>nominativo RUP</li>
+                                            <li>individuazione garante della comunicazione</li>
+                                            <li>estremi identificativi dell’atto di avvio del procedimento</li>
+                                            <li>procedura di VAS necessaria (secondo quanto previsto dalla L.R. 10/2010)</li>
+                                        </ul>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>)}
             )
 export default () => (

@@ -26,7 +26,6 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
     const goToAction = (action = "") => {
         history.push(`${url}/${action.toLowerCase().replace(" ","_")}`)
     }
-    console.log(piano)
     return (
     <div className="d-flex pb-4 pt-5">
         <div className={classNames("d-flex flex-column flex-1")}>
