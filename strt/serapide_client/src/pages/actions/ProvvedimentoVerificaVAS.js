@@ -9,14 +9,16 @@ import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
 import Resource from '../../components/Resource'
 import {Query, Mutation} from 'react-apollo'
+import RichiestaComune from '../../components/RichiestaComune'
+import SalvaInvia from '../../components/SalvaInvia'
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
     UPDATE_VAS,
     PROVVEDIMENTO_VERIFICA_VAS
 } from '../../queries'
-import SalvaInvia from '../../components/SalvaInvia'
 import  {showError, formatDate,daysSub} from '../../utils'
+
 
 const SwitchAssoggetamento = ({uuid, assoggettamento}) => (
         <Mutation mutation={UPDATE_VAS} onError={showError}>
@@ -55,13 +57,7 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
     return (
         <React.Fragment>
             <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Provvedimento di Verifica (art.22 L.R. 10/2010)</h2></div>
-            <div className="d-flex mb-3 mt-3 justify-content-between">
-                <div className="d-flex">
-                    <i className="material-icons text-serapide">check_circle_outline</i>
-                    <span className="pl-2">Richiesta Comune</span>
-                </div>
-                <div>{scadenza && formatDate(daysSub(scadenza, IsSemplificata ? 30 : 90), "dd MMMM yyyy")}</div>
-            </div>
+            <RichiestaComune scadenza={scadenza && daysSub(scadenza, scadenza, IsSemplificata ? 30 : 90)}/>
             <Resource className="border-0 mt-2" icon="attach_file" resource={IsSemplificata ? relazioneMotivataVasSemplificata : documentoPreliminareVerifica}></Resource>
             <div className="mt-3 mb-5 border-bottom-2 pb-2 d-flex">
                     <i className="material-icons text-serapide pr-3">event_busy</i> 

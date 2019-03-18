@@ -14,7 +14,9 @@ import {GET_VAS,
     VAS_FILE_UPLOAD, INVIO_PARERI_VERIFICA
 } from '../../queries'
 import SalvaInvia from '../../components/SalvaInvia'
+import RichiestaComune from '../../components/RichiestaComune'
 import  {showError, formatDate, daysSub} from '../../utils'
+
 
 const getSuccess = ({uploadConsultazioneVas: {success}} = {}) => success
 
@@ -24,13 +26,7 @@ const UI = ({back, vas: {node: {uuid, documentoPreliminareVerifica, risorse : {e
     return (
         <React.Fragment>
             <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Pareri SCA</h2></div>
-            <div className="d-flex mb-3 mt-3 justify-content-between">
-                <div className="d-flex">
-                    <i className="material-icons text-serapide">check_circle_outline</i>
-                    <span className="pl-2">Richiesta Comune</span>
-                </div>
-                <div>{scadenza && formatDate(daysSub(scadenza, 30), "dd MMMM yyyy")}</div>
-            </div>
+            <RichiestaComune scadenza={scadenza && daysSub(scadenza, 30)}/>
             <Resource className="border-0 mt-2" icon="attach_file" resource={documentoPreliminareVerifica}></Resource>
             <div className="mt-3 mb-5 border-bottom-2 pb-2 d-flex">
                     <i className="material-icons text-serapide pr-3">event_busy</i> 
