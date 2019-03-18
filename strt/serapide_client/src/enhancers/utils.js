@@ -33,7 +33,8 @@ export const toggleControllableState = (propName, handlerName, initialValue = fa
         branch(
             (props = {}) => !props[handlerName],
             compose(
-                withStateHandlers({[propName]: initialValue}, 
+                withStateHandlers((props) => ({
+                    [propName]: props.initValue || initialValue}), 
                     {[handlerName]: (s) => () => ({[propName]: !s[propName]}) 
                     }
             )

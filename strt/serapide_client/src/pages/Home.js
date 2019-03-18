@@ -10,7 +10,7 @@ import Azioni from '../components/TabellaAzioni'
 import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
 import PareriSCA from "./actions/PareriSCA"
 import ProvvedimentoVerificaVAS from './actions/ProvvedimentoVerificaVAS'
-
+import FaseSwitch from '../components/FaseSwitch'
 import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
@@ -21,6 +21,7 @@ const getAction = (url = "", pathname = "") => {
 }
 
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, piano = {}, azioni = []}) => {
+    
     const action = getAction(url, pathname)
     const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data, }}) => data).shift()
     const goToAction = (action = "") => {
@@ -28,18 +29,21 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
     }
     return (
     <div className="d-flex pb-4 pt-5">
-        <div className={classNames("d-flex flex-column flex-1")}>
+        {!action && <div className={classNames("d-flex flex-column flex-1")}>
             <div className="d-flex border-serapide border-top border-bottom py-4 justify-content-around">
                 <span>LEGENDA</span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_add</i><span>E’ richiesta un’azione</span></span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_on</i><span>In attesa di risposta da altri attori</span></span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_off</i><span>Nessuna azione richiesta</span></span>
             </div>
-            <div className="py-4">
-                <Azioni azioni={azioni} onExecute={goToAction}/>
-            </div>
-        </div >
-        <div className={classNames("d-flex flex-column ", {"ml-2  pl-3 flex-2 border-left": action})}>
+            <FaseSwitch className="mt-3" initValue={true} fase="avvio" goToSection={() => history.push(url.replace("home","avvio"))}>
+                <div className="py-4">
+                    <Azioni azioni={azioni} onExecute={goToAction}/>
+                </div>
+            </FaseSwitch>
+            
+        </div >}
+        <div className={classNames("d-flex flex-column ", {"ml-2  pl-3 flex-2": action})}>
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
                 {<Route path={`${path}/avvio_consultazioni_sca`} >

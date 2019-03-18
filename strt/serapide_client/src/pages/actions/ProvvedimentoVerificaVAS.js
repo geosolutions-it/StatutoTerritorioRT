@@ -54,7 +54,7 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
     const provvedimento =  resources.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
     return (
         <React.Fragment>
-            <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Provvedimento di Verifica</h2></div>
+            <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Provvedimento di Verifica (art.22 L.R. 10/2010)</h2></div>
             <div className="d-flex mb-3 mt-3 justify-content-between">
                 <div className="d-flex">
                     <i className="material-icons text-serapide">check_circle_outline</i>
