@@ -377,6 +377,7 @@ class ProceduraVAS(models.Model):
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     data_verifica = models.DateTimeField(null=True, blank=True)
     data_procedimento = models.DateTimeField(null=True, blank=True)
+    data_assoggettamento = models.DateTimeField(null=True, blank=True)
     data_approvazione = models.DateTimeField(null=True, blank=True)
     last_update = models.DateTimeField(auto_now=True, blank=True)
 

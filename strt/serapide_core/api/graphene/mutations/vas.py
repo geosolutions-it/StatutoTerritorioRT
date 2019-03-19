@@ -302,6 +302,8 @@ class AssoggettamentoVAS(graphene.Mutation):
                 if not _procedura_vas.verifica_effettuata and \
                 _procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+                    vas_aggiornata.data_assoggettamento = datetime.datetime.now(timezone.get_current_timezone())
+                    vas_aggiornata.save()
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
 
