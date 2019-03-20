@@ -397,7 +397,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         if fase.nome == FASE.anagrafica:
             _avvio_consultazioni_sca = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
-            if _avvio_consultazioni_sca.stato == STATO_AZIONE.attesa:
+            if _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
                 _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
                 _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                 _avvio_consultazioni_sca.save()
