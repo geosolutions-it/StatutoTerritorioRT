@@ -79,7 +79,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),  # Comune
         ('pareri_sca', _('Pareri SCA')),  # SCA
         ('avvio_esame_pareri_sca', _('Avvio Esame Pareri SCA')),  # Comune
-        ('upload_elaborati', _('Upload Elaborati')),  # Comune
+        ('upload_elaborati_vas', _('Upload Elaborati VAS')),  # Comune
     )
 
 TIPOLOGIA_ATTORE = Choices(
