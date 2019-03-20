@@ -585,7 +585,7 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                 _avvio_esame_pareri_sca = piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca).first()
 
-                if _avvio_esame_pareri_sca.stato == STATO_AZIONE.nessuna:
+                if _avvio_esame_pareri_sca.stato != STATO_AZIONE.nessuna:
                     _avvio_esame_pareri_sca.stato = STATO_AZIONE.nessuna
                     _avvio_esame_pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                     _avvio_esame_pareri_sca.save()
