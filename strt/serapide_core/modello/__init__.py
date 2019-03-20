@@ -41,6 +41,7 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         # label, display, description
         ("message_sent", _("Messaggio Ricevuto"), _("Messaggio Ricevuto"),),
         ("piano_phase_changed", _("Piano Aggiornato"), _("Piano Aggiornato"),),
+        ("piano_verifica_vas_updated", _("Documento Preliminare VAS"), _("Documento Preliminare VAS"),),
     )
 
     name = 'serapide_core.modello'

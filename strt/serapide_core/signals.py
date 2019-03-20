@@ -51,6 +51,7 @@ def message_sent_notification(sender, **kwargs):
 def piano_phase_changed_notification(sender, **kwargs):
 
     if 'piano' in kwargs:
+        notification_type = kwargs['message_type']
         from_user = kwargs['user']
         piano = kwargs['piano']
 
@@ -71,7 +72,7 @@ def piano_phase_changed_notification(sender, **kwargs):
             tokens = [_p.token for _p in PianoAuthTokens.objects.filter(piano=piano)]
 
         send_now_notification(users,
-                              "piano_phase_changed",
+                              notification_type,
                               {
                                 "user": from_user,
                                 "piano": piano,
