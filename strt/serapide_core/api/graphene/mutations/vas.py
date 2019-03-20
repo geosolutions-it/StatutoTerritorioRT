@@ -610,3 +610,51 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                     return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
+
+
+class UploadElaboratiVAS(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _upload_elaborati_vas = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.upload_elaborati_vas).first()
+            if _upload_elaborati_vas.stato != STATO_AZIONE.nessuna:
+                _upload_elaborati_vas.stato = STATO_AZIONE.nessuna
+                _upload_elaborati_vas.data = datetime.datetime.now(timezone.get_current_timezone())
+                _upload_elaborati_vas.save()
+
+                # TODO: what's next?
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _piano = _procedura_vas.piano
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+
+                return UploadElaboratiVAS(
+                    vas_aggiornata=_procedura_vas,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)

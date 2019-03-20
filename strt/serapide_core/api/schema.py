@@ -122,6 +122,7 @@ class Mutation(object):
     avvio_consultazioni_vas = vas.AvvioConsultazioniVAS.Field()
     invio_pareri_vas = vas.InvioPareriVAS.Field()
     avvio_esame_pareri_sca = vas.AvvioEsamePareriSCA.Field()
+    upload_elaborati_vas = vas.UploadElaboratiVAS.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
