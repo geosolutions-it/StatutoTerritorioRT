@@ -446,7 +446,7 @@ class InvioPareriVAS(graphene.Mutation):
         uuid = graphene.String(required=True)
 
     errors = graphene.List(graphene.String)
-    consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
+    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_vas):
@@ -548,7 +548,7 @@ class InvioPareriVAS(graphene.Mutation):
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
                 return InvioPareriVAS(
-                    consultazione_vas_aggiornata=_consultazione_vas,
+                    vas_aggiornata=_procedura_vas,
                     errors=[]
                 )
             except BaseException as e:
