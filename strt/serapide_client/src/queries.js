@@ -559,6 +559,52 @@ mutation ProvveddimentoVerificaVAS($uuid: String!) {
     }
   }
 `
+export const AVVIO_ESAME_PARERI_SCA = gql`
+mutation AvvioEsamePareriSCA($uuid: String!) {
+  avvioEsamePareriSca(uuid: $uuid){
+    vasAggiornata{
+    piano{
+        codice
+        azioni {
+          edges {
+          node {
+            order
+            tipologia
+            stato
+            attore
+            data
+            uuid
+            }
+          }
+      }
+    }  
+  }
+}
+}
+`
+export const UPLOAD_ELABORATI_VAS = gql`
+mutation UploadElaboratiVas($uuid: String!) {
+    uploadElaboratiVas(uuid: $uuid) {
+      vasAggiornata{
+      piano{
+          codice
+          azioni {
+            edges {
+            node {
+              order
+              tipologia
+              stato
+              attore
+              data
+              uuid
+              }
+            }
+        }
+      }  
+    }
+  }
+}
+`
 export const CREA_CONSULTAZIONE_VAS = gql`
 mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
   createConsultazioneVas(input: $input){

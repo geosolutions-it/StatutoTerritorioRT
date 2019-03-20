@@ -10,7 +10,9 @@ import classeNames from 'classnames'
 import {Mutation} from  "react-apollo"
 import { toast } from 'react-toastify'
 import {isFunction} from 'lodash'
+import {toggleControllableState} from '../enhancers/utils'
 
+const enhancer = toggleControllableState('checked', 'toggleSwitch', false)
 const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)}, className, children, checked }) => {
     const toggle = () => { 
         if(!isLocked) {
@@ -51,3 +53,5 @@ export const EnhancedSwitch  = ({isLocked, mutation, update, getInput = _getInpu
         }}
     </Mutation>)
 }
+
+export const UnSwitch = enhancer(Switch)

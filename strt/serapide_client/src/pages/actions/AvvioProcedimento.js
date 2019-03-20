@@ -7,8 +7,7 @@
  */
 import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
-import  {showError, formatDate} from '../../utils'
-import {EnhancedSwitch} from '../../components/Switch'
+import  {showError} from '../../utils'
 import AutoMutation from '../../components/AutoMutation'
 import {Query, Mutation} from "react-apollo"
 import Resource from '../../components/Resource'
@@ -22,7 +21,6 @@ import {Input} from 'reactstrap'
 import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
-    UPDATE_CONSULTAZIONE_VAS,
     AVVIO_CONSULTAZIONE_VAS, UPDATE_PIANO,
     GET_CONTATTI
 } from '../../queries'
@@ -31,14 +29,7 @@ import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
 
 
 const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
-const getVasTypeInput = (uuid) => (value) => ({
-    variables: {
-        input: { 
-            consultazioneVas: {avvioConsultazioniSca:!value}, 
-            uuid
-        }
-    }
-})
+
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
@@ -47,7 +38,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
             const dataTermine = new Date()
             const isFull = tipologia === "SEMPLIFICATA" || tipologia === "VERIFICA"
             const {node: delibera} = resPiano.filter(({node: n}) => n.tipo === "delibera").pop() || {};
-            const provvedimentoVerificaVas  = edges.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
+            
             const docPrelim = edges.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").map(({node}) => node).shift()
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)

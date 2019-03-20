@@ -103,16 +103,16 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                                     </div>
                                 <div className="col-12">
                                     <h5 className="text-uppercase">Informazioni richieste per la creazione del piano</h5>
-                                    <p style={{textAlign: "justify"}}>
+                                    <p style={{textAlign: "justify", marginBottom: 0}}>
                                         Per poter procedere correttamente alla creazione del procedimento amministrativo finalizzato all’approvazione dell’atto di governo del territorio,
-                                        è necessario essere in possesso delle seguenti informazioni:
+                                        è necessario essere in possesso delle seguenti informazioni:</p>
                                         <ul className="pt-2">
                                             <li>nominativo RUP</li>
                                             <li>individuazione garante della comunicazione</li>
                                             <li>estremi identificativi dell’atto di avvio del procedimento</li>
                                             <li>procedura di VAS necessaria (secondo quanto previsto dalla L.R. 10/2010)</li>
                                         </ul>
-                                    </p>
+                                    
                                 </div>
                             </div>
                         </div>

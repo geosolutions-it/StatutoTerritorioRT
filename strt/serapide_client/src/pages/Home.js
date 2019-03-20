@@ -12,7 +12,9 @@ import PareriSCA from "./actions/PareriSCA"
 import ProvvedimentoVerificaVAS from './actions/ProvvedimentoVerificaVAS'
 import AvvioProcedimento from './actions/AvvioProcedimento'
 import FaseSwitch from '../components/FaseSwitch'
+import AvviaEsamePareri from './actions/AvviaEsamePareri'
 import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
+import UploadElaboratiVAS from './actions/UploadElaboratiVAS'
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
 import {INVIO_PARERI_VAS} from '../queries'
@@ -55,10 +57,10 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                     <PareriSCA codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza}/>
                 </Route>
                 <Route path={`${path}/pareri_sca`} >
-                    <PareriSCA tipo="parere_sca" tipoVas="documento_preliminare_vas" label="Pareri SCA" codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza} />
+                    <PareriSCA tipo="parere_sca" saveMutation={INVIO_PARERI_VAS}  tipoVas="documento_preliminare_vas" label="Pareri SCA" codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza} />
                 </Route>
                 <Route path={`${path}/emissione_provvedimento_verifica`} >
-                    <ProvvedimentoVerificaVAS saveMutation={INVIO_PARERI_VAS} back={history.goBack} codicePiano={code} scadenza={scadenza}/>
+                    <ProvvedimentoVerificaVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
                 </Route>
                 <Route path={`${path}/pubblicazione_provvedimento_verifica`} >
                     <PubblicazioneProvv codicePiano={code} utente={utente} back={history.goBack}/>
@@ -66,9 +68,15 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Route path={`${path}/avvio_procedimento`} >
                     <AvvioProcedimento codicePiano={code} piano={piano} back={history.goBack}/>
                 </Route>
+                <Route path={`${path}/avvio_esame_pareri_sca`} >
+                    <AvviaEsamePareri back={history.goBack} codicePiano={code} scadenza={scadenza}/>
+                </Route>
+                <Route path={`${path}/upload_elaborati_vas`} >
+                    <UploadElaboratiVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
+                </Route>
                 { action && (
                 <Route path={path}>
-                    <div className="p-6"> Azione non ancora implementata</div>
+                    <div className="p-6">Azione non ancora implementata</div>
                 </Route>)}
             </Switch>
         </div>

@@ -12,6 +12,7 @@ import {Query, Mutation} from 'react-apollo'
 import RichiestaComune from '../../components/RichiestaComune'
 import SalvaInvia from '../../components/SalvaInvia'
 import className from "classnames"
+import {map} from 'lodash'
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
@@ -53,7 +54,16 @@ const getNominativo = ({firstName, lastName, fiscalCode} = {}) =>  firstName || 
 
 const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSemplificata, documentoPreliminareVerifica, tipologia, risorse : {edges: resources = []} = {}} = {}} = {}, scadenza}) => {
     const IsSemplificata = tipologia === 'SEMPLIFICATA';
-    const pareri =  resources.filter(({node: {tipo}}) => tipo === "parere_verifica_vas").map(({node}) => node)
+    const pareriUser =  resources.filter(({node: {tipo}}) => tipo === "parere_verifica_vas").reduce((acc, {node}) => {
+        if (acc[node.user.fiscalCode]) { 
+            acc[node.user.fiscalCode].push(node)
+        }
+        else {
+            acc[node.user.fiscalCode] = [node]
+        }
+        return acc
+    } , {}) 
+
     const provvedimento =  resources.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
     return (
         <React.Fragment>
@@ -67,11 +77,11 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
                         <span>Data entro la quale ricevere i pareri</span>
                     </div>
             </div>
-            <div className={className(" mb-4", {"border-bottom-2": pareri.length > 0})}>
-            {pareri.map((parere) => (
-                <div key={parere.uuid} className="mb-4">
-                    <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(parere.user)}</span></div>
-                    <Resource className="border-0 mt-2" icon="attach_file" resource={parere}></Resource>
+            <div className={className(" mb-4", {"border-bottom-2": pareriUser.length > 0})}>
+            {map(pareriUser, (u) => (
+                <div key={u[0].user.fiscalCode} className="mb-4">
+                    <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(u[0].user)}</span></div>
+                    {u.map(parere => (<Resource key={parere.uuid} className="border-0 mt-2" icon="attach_file" resource={parere}></Resource>))}
                 </div>
                 ))
                 }
