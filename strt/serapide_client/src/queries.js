@@ -442,6 +442,30 @@ mutation InvioPareriVerifica($codice: String!) {
 }
 ${VASFragment}
 `
+export const INVIO_PARERI_VAS = gql`
+mutation InvioPareriVAS($codice: String!) {
+  invioPareriVas(uuid: $codice) {
+        vasAggiornata {
+          ...VAS
+          piano {
+            azioni{
+              edges {
+                node {
+                  order
+                  tipologia
+                  stato
+                  attore
+                  data
+                  uuid
+                }
+              }
+            }
+          }
+        }
+    }
+}
+${VASFragment}
+`
 
 
 export const DELETE_RISORSA = gql`

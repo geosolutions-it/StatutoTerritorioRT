@@ -15,6 +15,7 @@ import FaseSwitch from '../components/FaseSwitch'
 import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
+import {INVIO_PARERI_VAS} from '../queries'
 
 
 const getAction = (url = "", pathname = "") => {
@@ -53,8 +54,11 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Route path={`${path}/pareri_verifica_sca`} >
                     <PareriSCA codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza}/>
                 </Route>
+                <Route path={`${path}/pareri_sca`} >
+                    <PareriSCA tipo="parere_sca" tipoVas="documento_preliminare_vas" label="Pareri SCA" codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza} />
+                </Route>
                 <Route path={`${path}/emissione_provvedimento_verifica`} >
-                    <ProvvedimentoVerificaVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
+                    <ProvvedimentoVerificaVAS saveMutation={INVIO_PARERI_VAS} back={history.goBack} codicePiano={code} scadenza={scadenza}/>
                 </Route>
                 <Route path={`${path}/pubblicazione_provvedimento_verifica`} >
                     <PubblicazioneProvv codicePiano={code} utente={utente} back={history.goBack}/>

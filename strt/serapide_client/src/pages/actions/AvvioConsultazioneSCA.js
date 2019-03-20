@@ -101,7 +101,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                                  <i className="material-icons text-serapide">bookmark</i>
                                  {nome}
                         </div>))}
-                        <div className="mt-3 pl-4 border-bottom-2 pb-4 mb-5">
+                        <div className="mt-3 pl-4 border-bottom-2 mb-5">
                         <Mutation mutation={UPDATE_PIANO} onError={showError}>
                     {(onChange) => {
                             const changed = (val) => {
@@ -136,10 +136,10 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                         </div>
                     </React.Fragment>
                     ) : (
-                        <RichiestaComune scadenza={dataCreazione}/> 
+                        <RichiestaComune   scadenza={dataCreazione}/> 
                         )}
                 
-                <h4 className="font-weight-light pl-2 pb-1">DOCUMENTO PRELIMINARE</h4>
+                <h4 className="font-weight-light pt-4 pl-2 pb-1">DOCUMENTO PRELIMINARE</h4>
                 <div className="action-uploader  align-self-start pl-2 pb-5">
                 <FileUpload 
                     className={`border-0 ${!docPrelim ? "flex-column": ""}`}
