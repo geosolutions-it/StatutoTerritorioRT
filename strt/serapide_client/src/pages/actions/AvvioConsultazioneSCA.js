@@ -41,7 +41,7 @@ const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
 
-const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dataScadenza, proceduraVas: {uuid: pVasUUID, tipologia, risorse: {edges=[]} = {} } = {}, uuid} = {}} = {}, piano: {codice, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, back}) => {
+const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dataRicezionePareri, dataScadenza, proceduraVas: {uuid: pVasUUID, dataAssoggettamento, tipologia, risorse: {edges=[]} = {} } = {}, uuid} = {}} = {}, piano: {codice, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, back}) => {
             
             const isFull = tipologia === "SEMPLIFICATA" || tipologia === "VERIFICA"
             const provvedimentoVerificaVas  = edges.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
@@ -58,7 +58,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                                 <i className="material-icons text-serapide self-align-center">assignment_turned_in</i>
                                 <span className="pl-1">ESITO: Assoggettamento VAS</span>
                             </div>
-                            <span className="col-3">22/03/2019</span>
+                            <span className="col-3">{dataAssoggettamento && formatDate(dataAssoggettamento)}</span>
                         </div>
                     </div>
                     <h5 className="font-weight-light pb-1 mt-3">AUTORITA' COMPETENTE (AC)</h5>
@@ -169,7 +169,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                         <div className="col-4 d-flex">
                             <i className="material-icons pr-3">event_busy</i> 
                             <div className="d-flex flex-column">
-                                <span>{formatDate(dataScadenza, "dd MMMM yyyy")}</span>
+                                <span>{dataRicezionePareri && formatDate(dataRicezionePareri, "dd MMMM yyyy")}</span>
                                 <span style={{maxWidth: 150}}>90 giorni per ricevere i pareri sca</span>
                             </div>
                         </div>

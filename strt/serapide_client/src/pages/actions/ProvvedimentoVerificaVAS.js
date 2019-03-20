@@ -11,6 +11,7 @@ import Resource from '../../components/Resource'
 import {Query, Mutation} from 'react-apollo'
 import RichiestaComune from '../../components/RichiestaComune'
 import SalvaInvia from '../../components/SalvaInvia'
+import className from "classnames"
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
@@ -57,7 +58,7 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
     return (
         <React.Fragment>
             <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Provvedimento di Verifica (art.22 L.R. 10/2010)</h2></div>
-            <RichiestaComune scadenza={scadenza && daysSub(scadenza, scadenza, IsSemplificata ? 30 : 90)}/>
+            <RichiestaComune scadenza={scadenza && daysSub(scadenza, IsSemplificata ? 30 : 90)}/>
             <Resource className="border-0 mt-2" icon="attach_file" resource={IsSemplificata ? relazioneMotivataVasSemplificata : documentoPreliminareVerifica}></Resource>
             <div className="mt-3 mb-5 border-bottom-2 pb-2 d-flex">
                     <i className="material-icons text-serapide pr-3">event_busy</i> 
@@ -66,7 +67,7 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
                         <span>Data entro la quale ricevere i pareri</span>
                     </div>
             </div>
-            <div className=" mb-4 border-bottom-2">
+            <div className={className(" mb-4", {"border-bottom-2": pareri.length > 0})}>
             {pareri.map((parere) => (
                 <div key={parere.uuid} className="mb-4">
                     <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(parere.user)}</span></div>

@@ -39,6 +39,7 @@ fragment VAS on ProceduraVASNode {
         dataCreazione
         dataProcedimento
         dataApprovazione
+        dataAssoggettamento
         verificaEffettuata
         procedimentoEffettuato
         assoggettamento
@@ -161,6 +162,7 @@ fragment  ConsultazioneVAS on ConsultazioneVASNode {
           proceduraVas{
             uuid
             tipologia
+            dataAssoggettamento
             risorse {
             edges {
               node {
@@ -513,6 +515,7 @@ mutation ProvveddimentoVerificaVAS($uuid: String!) {
         vasAggiornata{
           uuid
           verificaEffettuata
+          dataAssoggettamento
         piano{
             codice
             azioni {
