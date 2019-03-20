@@ -25,6 +25,10 @@ from graphql_extensions.exceptions import GraphQLError
 
 from serapide_core.helpers import update_create_instance
 
+from serapide_core.signals import (
+    piano_phase_changed,
+)
+
 from serapide_core.modello.models import (
     Piano,
     Azione,
@@ -140,7 +144,16 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                     if _pubblicazione_provvedimento_verifica_ap and \
                     _pubblicazione_provvedimento_verifica_ap.stato != STATO_AZIONE.nessuna:
                         _pubblicazione_provvedimento_verifica_ap.stato = STATO_AZIONE.nessuna
+
+                        # Notify Users
+                        piano_phase_changed.send(
+                            sender=Piano,
+                            user=info.context.user,
+                            piano=_piano,
+                            message_type="piano_verifica_vas_updated")
+
                         _pubblicazione_provvedimento_verifica_ap.save()
+
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
                     _pubblicazione_provvedimento_verifica_ac = _piano.azioni.filter(
                         tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
@@ -148,6 +161,14 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                     if _pubblicazione_provvedimento_verifica_ac and \
                     _pubblicazione_provvedimento_verifica_ac.stato != STATO_AZIONE.nessuna:
                         _pubblicazione_provvedimento_verifica_ac.stato = STATO_AZIONE.nessuna
+
+                        # Notify Users
+                        piano_phase_changed.send(
+                            sender=Piano,
+                            user=info.context.user,
+                            piano=_piano,
+                            message_type="piano_verifica_vas_updated")
+
                         _pubblicazione_provvedimento_verifica_ac.save()
 
                 return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
@@ -302,7 +323,7 @@ class AssoggettamentoVAS(graphene.Mutation):
             try:
                 _pareri_verifica_sca = _piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca).first()
-                if _pareri_verifica_sca.stato != STATO_AZIONE.nessuna:
+                if _pareri_verifica_sca and _pareri_verifica_sca.stato != STATO_AZIONE.nessuna:
                     return GraphQLError(_("Forbidden"), code=403)
                 if not _procedura_vas.verifica_effettuata and \
                 _procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
@@ -389,7 +410,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
     consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
 
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -404,6 +425,14 @@ class AvvioConsultazioniVAS(graphene.Mutation):
             if _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
                 _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
                 _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=user,
+                    piano=piano,
+                    message_type="piano_verifica_vas_updated")
+
                 _avvio_consultazioni_sca.save()
 
                 _pareri_vas_expire_days = getattr(settings, 'PARERI_VAS_EXPIRE_DAYS', 60)
@@ -426,7 +455,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         _piano = _procedura_vas.piano
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
                 return AvvioConsultazioniVAS(
                     consultazione_vas_aggiornata=_consultazione_vas,

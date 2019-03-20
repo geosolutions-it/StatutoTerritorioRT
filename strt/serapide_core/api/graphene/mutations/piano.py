@@ -485,7 +485,14 @@ class PromozionePiano(graphene.Mutation):
                                    _piano,
                                    _procedura_vas):
                     _piano.fase = _fase = Fase.objects.get(nome=_next_fase)
-                    piano_phase_changed.send(sender=Piano, user=info.context.user, piano=_piano)
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
+
                     _piano.save()
 
                     cls.update_actions_for_phase(_fase, _piano, _procedura_vas)
