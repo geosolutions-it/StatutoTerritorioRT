@@ -582,15 +582,23 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.pareri_sca).first()
             if _pareri_sca.stato == STATO_AZIONE.nessuna:
 
-                _upload_elaborati_vas = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.upload_elaborati_vas,
-                    attore=TIPOLOGIA_ATTORE.comune,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _upload_elaborati_vas.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_upload_elaborati_vas, piano=piano)
+                _avvio_esame_pareri_sca = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca).first()
+
+                if _avvio_esame_pareri_sca.stato == STATO_AZIONE.nessuna:
+                    _avvio_esame_pareri_sca.stato = STATO_AZIONE.nessuna
+                    _avvio_esame_pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+                    _avvio_esame_pareri_sca.save()
+
+                    _upload_elaborati_vas = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.upload_elaborati_vas,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _upload_elaborati_vas.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_upload_elaborati_vas, piano=piano)
 
     @classmethod
     def mutate(cls, root, info, **input):
