@@ -300,6 +300,10 @@ class AssoggettamentoVAS(graphene.Mutation):
         _piano = _procedura_vas.piano
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
+                _pareri_verifica_sca = _piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca).first()
+                if _pareri_verifica_sca.stato != STATO_AZIONE.nessuna:
+                    return GraphQLError(_("Forbidden"), code=403)
                 if not _procedura_vas.verifica_effettuata and \
                 _procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
@@ -494,8 +498,8 @@ class InvioPareriVAS(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
-        _procedura_vas = _consultazione_vas.procedura_vas
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _consultazione_vas = ConsultazioneVAS.objects.get(procedura_vas=_procedura_vas)
         _piano = _procedura_vas.piano
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
