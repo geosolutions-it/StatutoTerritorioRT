@@ -114,15 +114,15 @@ AZIONI_BASE = {
             "tipologia": TIPOLOGIA_AZIONE.avvio_procedimento,
             "attore": TIPOLOGIA_ATTORE.comune
         }
-    ],
-    FASE.avvio: [
-        {
-            "tipologia": TIPOLOGIA_AZIONE.formazione_del_piano,
-            "attore": TIPOLOGIA_ATTORE.comune
-        },
-        {
-            "tipologia": TIPOLOGIA_AZIONE.protocollo_genio_civile,
-            "attore": TIPOLOGIA_ATTORE.genio_civile
-        }
     ]
+    # FASE.avvio: [
+    #     {
+    #         "tipologia": TIPOLOGIA_AZIONE.formazione_del_piano,
+    #         "attore": TIPOLOGIA_ATTORE.comune
+    #     },
+    #     {
+    #         "tipologia": TIPOLOGIA_AZIONE.protocollo_genio_civile,
+    #         "attore": TIPOLOGIA_ATTORE.genio_civile
+    #     }
+    # ]
 }
