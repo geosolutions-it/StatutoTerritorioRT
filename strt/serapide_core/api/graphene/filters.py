@@ -26,6 +26,7 @@ from serapide_core.modello.models import (
     Piano,
     Contatto,
     ProceduraVAS,
+    ProceduraAvvio,
     PianoAuthTokens,
 )
 
@@ -158,3 +159,31 @@ class ProceduraVASMembershipFilter(django_filters.FilterSet):
                 _enti.append(_p.ente.code)
 
         return super(ProceduraVASMembershipFilter, self).qs.filter(ente__code__in=_enti)
+
+
+class ProceduraAvvioMembershipFilter(django_filters.FilterSet):
+
+    piano__codice = django_filters.CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = ProceduraAvvio
+        fields = '__all__'
+
+    @property
+    def qs(self):
+        # The query context can be found in self.request.
+        _enti = []
+        _memberships = None
+        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
+            _memberships = self.request.user.memberships
+            if _memberships:
+                _enti = [_m.organization.code for _m in _memberships.all()]
+
+        token = self.request.session.get('token', None)
+        if token:
+            _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
+            _pianos = [_p for _p in Piano.objects.filter(codice__in=_allowed_pianos)]
+            for _p in _pianos:
+                _enti.append(_p.ente.code)
+
+        return super(ProceduraAvvioMembershipFilter, self).qs.filter(ente__code__in=_enti)

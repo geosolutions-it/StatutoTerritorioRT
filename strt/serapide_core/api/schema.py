@@ -20,6 +20,7 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_VAS,
     TIPOLOGIA_PIANO,
     TIPOLOGIA_CONTATTO,
+    TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
 from serapide_core.api.graphene import (
@@ -31,6 +32,7 @@ from serapide_core.api.graphene import (
 from serapide_core.api.graphene.mutations import (
     vas,
     core,
+    avvio,
     piano,
     uploads,
 )
@@ -58,6 +60,9 @@ class Query(object):
     procedure_vas = DjangoFilterConnectionField(types.ProceduraVASNode,
                                                 filterset_class=filters.ProceduraVASMembershipFilter)
 
+    procedure_avvio = DjangoFilterConnectionField(types.ProceduraAvvioNode,
+                                                  filterset_class=filters.ProceduraAvvioMembershipFilter)
+
     consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
 
     contatti = DjangoFilterConnectionField(types.ContattoNode,
@@ -68,6 +73,7 @@ class Query(object):
     tipologia_vas = graphene.List(enums.TipologiaVAS)
     tipologia_piano = graphene.List(enums.TipologiaPiano)
     tipologia_contatto = graphene.List(enums.TipologiaContatto)
+    tipologia_conferenza_copianificazione = graphene.List(enums.TipologiaContatto)
 
     def resolve_fase_piano(self, info):
         _l = []
@@ -91,6 +97,12 @@ class Query(object):
         _l = []
         for _t in TIPOLOGIA_CONTATTO:
             _l.append(enums.TipologiaContatto(_t[0], _t[1]))
+        return _l
+
+    def resolve_tipologia_conferenza_copianificazione(self, info):
+        _l = []
+        for _t in TIPOLOGIA_CONF_COPIANIFIZAZIONE:
+            _l.append(enums.TipologiaConferenzaCopianificazione(_t[0], _t[1]))
         return _l
 
     # Debug
@@ -124,7 +136,12 @@ class Mutation(object):
     avvio_esame_pareri_sca = vas.AvvioEsamePareriSCA.Field()
     upload_elaborati_vas = vas.UploadElaboratiVAS.Field()
 
+    create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
+    update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()
+
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
     upload_risorsa_vas = uploads.UploadRisorsaVAS.Field()
     delete_risorsa_vas = uploads.DeleteRisorsaVAS.Field()
+    upload_risorsa_avvio = uploads.UploadRisorsaAvvio.Field()
+    delete_risorsa_avvio = uploads.DeleteRisorsaAvvio.Field()

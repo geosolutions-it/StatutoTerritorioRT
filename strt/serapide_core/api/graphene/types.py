@@ -40,8 +40,10 @@ from serapide_core.modello.models import (
     ConsultazioneVAS,
     PianoAuthTokens,
     FasePianoStorico,
+    ProceduraAvvio,
     RisorsePiano,
     RisorseVas,
+    RisorseAvvio,
 )
 
 from serapide_core.modello.enums import (
@@ -155,6 +157,16 @@ class RisorseVASType(DjangoObjectType):
 
     class Meta:
         model = RisorseVas
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorseAvvioType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorseAvvio
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -302,6 +314,21 @@ class ProceduraVASNode(DjangoObjectType):
             'piano__codice': ['exact'],
             'note': ['exact', 'icontains'],
             'tipologia': ['exact', 'icontains'],
+        }
+        interfaces = (relay.Node, )
+
+
+class ProceduraAvvioNode(DjangoObjectType):
+
+    ente = graphene.Field(EnteNode)
+    risorsa = DjangoFilterConnectionField(RisorseAvvioType)
+
+    class Meta:
+        model = ProceduraAvvio
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'ente': ['exact'],
+            'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )
 

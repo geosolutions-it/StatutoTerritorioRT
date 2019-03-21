@@ -55,6 +55,12 @@ TIPOLOGIA_VAS = Choices(
         ('non_necessaria', _('NON_NECESSARIA')),
     )
 
+TIPOLOGIA_CONF_COPIANIFIZAZIONE = Choices(
+        ('necessaria', _('NECESSARIA')),
+        ('posticipata', _('POSTICIPATA')),
+        ('non_necessaria', _('NON_NECESSARIA')),
+    )
+
 STATO_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
         ('nessuna', _('NESSUNA')),

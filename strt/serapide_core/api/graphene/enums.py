@@ -32,3 +32,7 @@ class TipologiaPiano(StrtEnumNode):
 
 class TipologiaContatto(StrtEnumNode):
     pass
+
+
+class TipologiaConferenzaCopianificazione(StrtEnumNode):
+    pass

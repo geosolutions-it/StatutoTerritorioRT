@@ -31,7 +31,8 @@ from .enums import (FASE,
                     TIPOLOGIA_PIANO,
                     TIPOLOGIA_ATTORE,
                     TIPOLOGIA_AZIONE,
-                    TIPOLOGIA_CONTATTO
+                    TIPOLOGIA_CONTATTO,
+                    TIPOLOGIA_CONF_COPIANIFIZAZIONE
                     )
 
 
@@ -231,6 +232,9 @@ class Azione(models.Model):
         return '{} - {} [{}]'.format(self.attore, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
 
 
+# ############################################################################ #
+# - Piano
+# ############################################################################ #
 class Piano(models.Model):
     """
     Every "Piano" in the serapide_core application has a unique uuid
@@ -359,6 +363,9 @@ class AzioniPiano(models.Model):
         db_table = "strt_core_piano_azioni"
 
 
+# ############################################################################ #
+# - VAS
+# ############################################################################ #
 class ProceduraVAS(models.Model):
 
     uuid = models.UUIDField(
@@ -546,6 +553,58 @@ class PianoAuthTokens(models.Model):
 
     def __str__(self):
         return '{} <---> {}'.format(self.piano.codice, self.token.key)
+
+
+# ############################################################################ #
+# - Avvio
+# ############################################################################ #
+class ProceduraAvvio(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    conferenza_copianificazione = models.CharField(
+        choices=TIPOLOGIA_CONF_COPIANIFIZAZIONE,
+        default=TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria,
+        max_length=20
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_scadenza_risposta = models.DateTimeField(null=True, blank=True)
+
+    garante_nominativo = models.TextField(null=True, blank=True)
+    garante_pec = models.EmailField(null=False, blank=False)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
+
+    ente = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_avvio"
+        verbose_name_plural = 'Procedure Avvio'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+
+
+class RisorseAvvio(models.Model):
+    procedura_avvio = models.ForeignKey(ProceduraAvvio, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_avvio_risorse"
 
 
 # ############################################################################ #
