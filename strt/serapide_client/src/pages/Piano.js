@@ -18,7 +18,7 @@ import Injector from '../components/Injector'
 import SideBar from '../components/SideBarMenu'
 import StatoProgress from '../components/StatoProgress'
 import Home from "./Home"
-
+import ReactTooltip from 'react-tooltip'
 
 const getActive = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
@@ -30,13 +30,12 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
             if(loading){
                 return (
-                    <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
                         <div className="d-flex justify-content-center">
                             <div className="spinner-grow " role="status">
                                 <span className="sr-only">Loading...</span>
+                            </div>
                         </div>
-                    </div>
-                    </div>)
+                    )
             } else if(edges.length === 0) {
                 toast.error(`Impossibile trovare il piano: ${code}`,  {autoClose: true})
                 return <div></div>
@@ -48,7 +47,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Injector el="serapide-sidebar">
                     <SideBar url={url} piano={piano} active={activeLocation} unreadMessages={utente.unreadThreadsCount}></SideBar>
                 </Injector>
-                <div className="serapide-content pt-5 pb-5 pX-lg px-4 serapide-top-offset position-relative">
+                <div>
                     <div className="d-flex flex-column ">
                         <div className="d-flex justify-content-between align-items-center ">
                             <div className="pr-3">
@@ -61,9 +60,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                         <Switch>
                             <Route  path={`${path}/anagrafica`} component={Anagrafica}/>
                             <Route  path={`${path}/formazione`} component={Formazione}/>
-                            <Route  path={`${path}/home`} render={(props) => <Home utente={utente} azioni={azioni} {...props}></Home>}/>
+                            <Route  path={`${path}/home`} render={(props) => <Home utente={utente} azioni={azioni} piano={piano} {...props}></Home>}/>
                             <Route path={path}>
-                                <div className="p-6"><h1> Working in progress </h1> 
+                                <div className="p-6"><h1> Works in progress </h1> 
                                     <div className="d-flex justify-content-center">
                                         <div className="spinner-grow " role="status">
                                             <span className="sr-only">Loading...</span>

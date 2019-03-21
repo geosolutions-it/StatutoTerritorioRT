@@ -45,18 +45,18 @@ export default ({title, piani = [], onDeletePiano = () => console.warn("Aggiunge
     return (
     <Fragment>
         <h6 className="pb-3 text-uppercase">{title}</h6>
-        <Table className="pb-4" size="sm" hover>
+        <Table className="pb-4" size="sm" striped>
             <thead>
                 <tr>
-                    <th className="text-center">Notifiche</th>
-                    <th className="text-center">Nome Piano</th>
-                    <th className="text-center">Tipo</th>
-                    <th className="text-center">Ultima Modifica</th>
-                    <th className="text-center">Codice Unico</th>
-                    <th className="text-center">Anagrafica</th>
-                    <th className="text-center">Stato</th>
-                    <th className="text-center">RUP</th>
-                    <th className="text-center">Riprendi procedimento</th>
+                    <th >Notifiche</th>
+                    <th >Nome Piano</th>
+                    <th >Tipo</th>
+                    <th >Ultima Modifica</th>
+                    <th >Codice Unico</th>
+                    <th >Anagrafica</th>
+                    <th >Stato</th>
+                    <th >RUP</th>
+                    <th >Riprendi procedimento</th>
                 </tr>
             </thead>
             <tbody>

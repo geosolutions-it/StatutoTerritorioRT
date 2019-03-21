@@ -16,11 +16,11 @@ const _getInput = (val) => { return {variables: {input: {data: val.toISOString()
 
 class CustomInput extends React.PureComponent {
     render () {
-        const {onClick, value, disabled, readOnly} = this.props 
+        const {onClick, value, disabled, readOnly, className} = this.props 
             return (
                 <Button 
                     disabled={disabled}
-                    className={`${readOnly && 'read-only'}`}
+                    className={`${readOnly && 'read-only'} ${className}`}
                     style={{minWidth: 170}}
                     label={value || "Seleziona Data"}
                     color="serapide"

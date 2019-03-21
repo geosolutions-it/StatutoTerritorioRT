@@ -173,7 +173,7 @@ class Contatto(models.Model):
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
                 else:
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-            else:
+            if not contact or attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
                 if token:
                     membership = user.memberships.all().first()
                 else:
@@ -377,6 +377,7 @@ class ProceduraVAS(models.Model):
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     data_verifica = models.DateTimeField(null=True, blank=True)
     data_procedimento = models.DateTimeField(null=True, blank=True)
+    data_assoggettamento = models.DateTimeField(null=True, blank=True)
     data_approvazione = models.DateTimeField(null=True, blank=True)
     last_update = models.DateTimeField(auto_now=True, blank=True)
 

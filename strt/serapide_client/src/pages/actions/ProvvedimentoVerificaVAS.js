@@ -9,14 +9,18 @@ import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
 import Resource from '../../components/Resource'
 import {Query, Mutation} from 'react-apollo'
+import RichiestaComune from '../../components/RichiestaComune'
+import SalvaInvia from '../../components/SalvaInvia'
+import className from "classnames"
+import {map} from 'lodash'
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
     UPDATE_VAS,
     PROVVEDIMENTO_VERIFICA_VAS
 } from '../../queries'
-import SalvaInvia from '../../components/SalvaInvia'
 import  {showError, formatDate,daysSub} from '../../utils'
+
 
 const SwitchAssoggetamento = ({uuid, assoggettamento}) => (
         <Mutation mutation={UPDATE_VAS} onError={showError}>
@@ -50,18 +54,21 @@ const getNominativo = ({firstName, lastName, fiscalCode} = {}) =>  firstName || 
 
 const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSemplificata, documentoPreliminareVerifica, tipologia, risorse : {edges: resources = []} = {}} = {}} = {}, scadenza}) => {
     const IsSemplificata = tipologia === 'SEMPLIFICATA';
-    const pareri =  resources.filter(({node: {tipo}}) => tipo === "parere_verifica_vas").map(({node}) => node)
+    const pareriUser =  resources.filter(({node: {tipo}}) => tipo === "parere_verifica_vas").reduce((acc, {node}) => {
+        if (acc[node.user.fiscalCode]) { 
+            acc[node.user.fiscalCode].push(node)
+        }
+        else {
+            acc[node.user.fiscalCode] = [node]
+        }
+        return acc
+    } , {}) 
+
     const provvedimento =  resources.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
     return (
         <React.Fragment>
-            <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Provvedimento di Verifica</h2></div>
-            <div className="d-flex mb-3 mt-3 justify-content-between">
-                <div className="d-flex">
-                    <i className="material-icons text-serapide">check_circle_outline</i>
-                    <span className="pl-2">Richiesta Comune</span>
-                </div>
-                <div>{scadenza && formatDate(daysSub(scadenza, IsSemplificata ? 30 : 90), "dd MMMM yyyy")}</div>
-            </div>
+            <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Provvedimento di Verifica (art.22 L.R. 10/2010)</h2></div>
+            <RichiestaComune scadenza={scadenza && daysSub(scadenza, IsSemplificata ? 30 : 90)}/>
             <Resource className="border-0 mt-2" icon="attach_file" resource={IsSemplificata ? relazioneMotivataVasSemplificata : documentoPreliminareVerifica}></Resource>
             <div className="mt-3 mb-5 border-bottom-2 pb-2 d-flex">
                     <i className="material-icons text-serapide pr-3">event_busy</i> 
@@ -70,11 +77,11 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
                         <span>Data entro la quale ricevere i pareri</span>
                     </div>
             </div>
-            <div className=" mb-4 border-bottom-2">
-            {pareri.map((parere) => (
-                <div key={parere.uuid} className="mb-4">
-                    <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(parere.user)}</span></div>
-                    <Resource className="border-0 mt-2" icon="attach_file" resource={parere}></Resource>
+            <div className={className(" mb-4", {"border-bottom-2": pareriUser.length > 0})}>
+            {map(pareriUser, (u) => (
+                <div key={u[0].user.fiscalCode} className="mb-4">
+                    <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(u[0].user)}</span></div>
+                    {u.map(parere => (<Resource key={parere.uuid} className="border-0 mt-2" icon="attach_file" resource={parere}></Resource>))}
                 </div>
                 ))
                 }
@@ -82,9 +89,9 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
             <h4>Emissione Provvedimento di Verifica</h4> 
             <SwitchAssoggetamento assoggettamento={assoggettamento} uuid={uuid}></SwitchAssoggetamento>
             <h4 className="font-weight-light pl-4 pb-1">PROVVEDIMENTO DI VERIFICA</h4>
-                <div style={{width: "100%"}} className="action-uploader d-flex align-self-start pb-5">
+                <div className="action-uploader  align-self-start pb-5">
                 <FileUpload 
-                    className="border-0 flex-column"
+                     className={`border-0 ${!provvedimento ? "flex-column": ""}`}
                     sz="sm" modal={false} showBtn={false} 
                     getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 

@@ -101,10 +101,34 @@ $attori: (
     @each $breakpoint in map-keys($grid-breakpoints) {
         $next: breakpoint-next($breakpoint, $grid-breakpoints);
         $infix: breakpoint-infix($next, $grid-breakpoints);
-        &#{$infix} {
+        &#{$infix}-1 {
             @include media-breakpoint-up($next) {
-                padding-left: $portal-header * 2  !important;
-                padding-right: $portal-header * 2 !important;
+                padding-left: $portal-header  !important;
+                padding-right: $portal-header  !important;
+            }
+        }
+    }
+}
+.pX{
+    @each $breakpoint in map-keys($grid-breakpoints) {
+        $next: breakpoint-next($breakpoint, $grid-breakpoints);
+        $infix: breakpoint-infix($next, $grid-breakpoints);
+        &#{$infix}-2 {
+            @include media-breakpoint-up($next) {
+                padding-left: $portal-header * 2 !important;
+                padding-right: $portal-header * 2!important;
+            }
+        }
+    }
+}
+.pX{
+    @each $breakpoint in map-keys($grid-breakpoints) {
+        $next: breakpoint-next($breakpoint, $grid-breakpoints);
+        $infix: breakpoint-infix($next, $grid-breakpoints);
+        &#{$infix}-3 {
+            @include media-breakpoint-up($next) {
+                padding-left: $portal-header * 3 !important;
+                padding-right: $portal-header * 3 !important;
             }
         }
     }

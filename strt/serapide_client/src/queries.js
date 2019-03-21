@@ -1,176 +1,5 @@
 import gql from "graphql-tag";
-/** Fragment sheare field between queries */
-const UserFragment = gql`
-fragment User on AppUserNode {
-    id
-    email
-    fiscalCode
-    firstName
-    lastName
-    dateJoined
-    alertsCount
-}
-`
-const RisorsaFragment = gql`
-fragment Risorsa on RisorsaNode {
-    nome
-    uuid
-    tipo
-    dimensione
-    downloadUrl
-    lastUpdate
-    user{
-      fiscalCode
-    }
-    
-}
-`
-const AUT_VASFragment = gql`
-fragment AUT_VAS on ContattoNode{
-        nome
-        uuid
-}
-`
-const VASFragment = gql`
-fragment VAS on ProceduraVASNode {
-        uuid
-        tipologia
-        dataVerifica
-        dataCreazione
-        dataProcedimento
-        dataApprovazione
-        verificaEffettuata
-        procedimentoEffettuato
-        assoggettamento
-        nonNecessaria
-        piano {
-            codice
-            autoritaCompetenteVas{
-                edges{
-                  node{
-                    ...AUT_VAS
-                  }
-                }
-            }
-            soggettiSca {
-                edges{
-                    node{
-                        ...AUT_VAS
-                    }
-                }
-            }
-            soggettoProponente {
-              ...AUT_VAS
-            }
-        }
-        risorse{
-            edges{
-              node{
-                ...Risorsa 
-              }
-            }
-        }
-        documentoPreliminareVerifica{
-          ...Risorsa 
-        }
-        relazioneMotivataVasSemplificata{
-          ...Risorsa 
-        }
-}
-${RisorsaFragment}
-${AUT_VASFragment}
-`
-
-
-const PianoFragment = gql`
-fragment Piano on PianoNode {
-    codice
-    tipo: tipologia
-    descrizione
-    lastUpdate
-    dataDelibera
-    dataCreazione
-    dataAccettazione
-    dataAvvio
-    dataApprovazione
-    alertsCount
-    azioni {
-        edges {
-            node {
-                order
-                tipologia
-                stato
-              	attore
-              	data
-              	uuid
-            }
-        }
-    }
-    ente {
-            code
-            name
-            type {
-                tipoente: name
-            }
-        }
-    fase{
-        nome
-        codice
-        descrizione
-    }
-    user{
-        ...User
-    }
-    risorse{
-        edges{
-          node{
-            ...Risorsa 
-          }
-        }
-      }
-    autoritaCompetenteVas{
-        edges{
-          node{
-            ...AUT_VAS
-          }
-        }
-    }
-    soggettiSca{
-        edges{
-          node{
-            ...AUT_VAS
-          }
-        }
-    }
-    soggettoProponente {
-      ...AUT_VAS
-    }
-}
-${RisorsaFragment}
-${UserFragment}
-${AUT_VASFragment}
-` 
-
-const ConsultazioneVasFragment = gql`
-fragment  ConsultazioneVAS on ConsultazioneVASNode {
-          uuid
-          avvioConsultazioniSca
-          dataCreazione
-          dataScadenza
-          dataRicezionePareri
-          proceduraVas{
-            uuid
-            risorse {
-            edges {
-              node {
-                ...Risorsa 
-              }
-            }
-          }
-        }
-  }
-  ${RisorsaFragment}
-`
+import * as FR from './fragments'
 
 /** queries */
 export const GET_ENTI = gql`
@@ -199,7 +28,7 @@ query ConsultazioniVas($codice: String){
   }
   }
 }
-${ConsultazioneVasFragment}
+${FR.CONSULTAZIONE_VAS}
 `
 
 
@@ -266,7 +95,7 @@ query{
     }
   }
 }
-${UserFragment}`
+${FR.USER}`
 
 
 export const GET_PIANI = gql`
@@ -279,7 +108,7 @@ query getPiani($faseCodice: String, $codice: String){
           }
         }
 }
-    ${PianoFragment}
+    ${FR.PIANO}
 `
 
 export const GET_VAS = gql`
@@ -293,7 +122,7 @@ query getVas($codice: String!) {
         }
     }
 }
-${VASFragment}
+${FR.VAS}
 `
 
 export const GET_CONTATTI = gql`
@@ -309,6 +138,7 @@ query getContatti($tipo: String){
   }
 `
 // MUTATION
+// Mutation per piano
 // Upload a generic risources
 export const FILE_UPLOAD = gql`
 mutation UploadFile($file: Upload!, $codice: String!, $tipo: String!) {
@@ -320,8 +150,60 @@ mutation UploadFile($file: Upload!, $codice: String!, $tipo: String!) {
       fileName
     }
   }
-  ${PianoFragment}
+  ${FR.PIANO}
 `
+export const DELETE_RISORSA = gql`
+mutation($id: ID!, $codice: String!) {
+    deleteRisorsa(risorsaId: $id, codice: $codice){
+        success
+        pianoAggiornato {
+            ...Piano
+        }
+    }
+}
+${FR.PIANO}
+`
+
+export const CREA_PIANO= gql`mutation CreatePiano($input: CreatePianoInput!) {
+    createPiano(input: $input) {
+        nuovoPiano {
+            ...Piano
+      }
+    }
+  }
+  ${FR.PIANO}
+`
+export const UPDATE_PIANO = gql`
+mutation UpdatePiano($input: UpdatePianoInput!) {
+    updatePiano(input: $input) {
+        pianoAggiornato {
+            ...Piano
+        }
+    }
+}
+${FR.PIANO}
+`
+export const PROMUOVI_PIANO = gql`
+mutation PromozionePiano($codice: String!){
+  promozionePiano(codicePiano: $codice){
+    pianoAggiornato {
+      ...Piano
+  }
+  }
+}
+${FR.PIANO}
+`
+export const DELETE_PIANO = gql`
+  mutation($codice: String!) {
+    deletePiano(codicePiano: $codice){
+        success
+        codicePiano
+    }
+}
+`
+
+// Mutation per VAS
+
 // Upload a vas resources
 export const VAS_FILE_UPLOAD = gql`
 mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
@@ -333,40 +215,7 @@ mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
       fileName
     }
   }
-  ${VASFragment}
-`
-// //Upload a consultazione vas resources
-// export const CONSULTAZIONE_VAS_FILE_UPLOAD = gql`
-// mutation($file: Upload!, $codice: String!, $tipo: String!) {
-//     uploadConsultazioneVas(file: $file, codice: $codice, tipoFile: $tipo) {
-//       success
-//       consultazioneVasAggiornata{
-//           ...ConsultazioneVAS
-//       }
-//     }
-//   }
-//   ${ConsultazioneVasFragment}
-// `
-
-
-export const CREA_PIANO= gql`mutation CreatePiano($input: CreatePianoInput!) {
-    createPiano(input: $input) {
-        nuovoPiano {
-            ...Piano
-      }
-    }
-  }
-  ${PianoFragment}
-`
-export const UPDATE_PIANO = gql`
-mutation UpdatePiano($input: UpdatePianoInput!) {
-    updatePiano(input: $input) {
-        pianoAggiornato {
-            ...Piano
-        }
-    }
-}
-${PianoFragment}
+  ${FR.VAS}
 `
 
 export const UPDATE_VAS = gql`
@@ -377,7 +226,7 @@ mutation UpdateProceduraVas($input: UpdateProceduraVASInput!) {
         }
     }
 }
-${VASFragment}
+${FR.VAS}
 `
 export const UPDATE_CONSULTAZIONE_VAS = gql`
 mutation UpdateConsultazioneVas($input: UpdateConsultazioneVASInput!) {
@@ -387,71 +236,53 @@ mutation UpdateConsultazioneVas($input: UpdateConsultazioneVASInput!) {
         }
     }
 }
-${ConsultazioneVasFragment}
+${FR.CONSULTAZIONE_VAS}
 `
-
 
 export const PUBBLICA_PROVV_VERIFICA = gql`
 mutation UpdateProceduraVas($input: UpdateProceduraVASInput!) {
     updateProceduraVas(input: $input) {
         proceduraVasAggiornata {
-
               piano {
-                codice
-                azioni{
-                  edges {
-                    node {
-                      order
-                      tipologia
-                      stato
-              	      attore
-              	      data
-              	      uuid
-                    }
-                  }
-                }
+                ...AzioniPiano
               }
             }
         }
     }
+  ${FR.AZIONI_PIANO}
 `
+
 export const INVIO_PARERI_VERIFICA = gql`
 mutation InvioPareriVerifica($codice: String!) {
   invioPareriVerificaVas(uuid: $codice) {
         vasAggiornata {
           ...VAS
           piano {
-            azioni{
-              edges {
-                node {
-                  order
-                  tipologia
-                  stato
-                  attore
-                  data
-                  uuid
-                }
-              }
-            }
+            ...AzioniPiano
           }
         }
     }
 }
-${VASFragment}
+${FR.AZIONI_PIANO}
+${FR.VAS}
 `
-
-
-export const DELETE_RISORSA = gql`
-mutation($id: ID!, $codice: String!) {
-    deleteRisorsa(risorsaId: $id, codice: $codice){
-        success
-        pianoAggiornato {
-            ...Piano
+export const INVIO_PARERI_VAS = gql`
+mutation InvioPareriVAS($codice: String!) {
+  invioPareriVas(uuid: $codice) {
+        vasAggiornata {
+          ...VAS
+          piano {
+            ...AzioniPiano
+          }
         }
     }
 }
-${PianoFragment}
+${FR.AZIONI_PIANO}
+${FR.VAS}
 `
+
+
+
 export const DELETE_RISORSA_VAS = gql`
 mutation($id: ID!, $codice: String!) {
     deleteRisorsaVas(risorsaId: $id, codice: $codice){
@@ -461,21 +292,76 @@ mutation($id: ID!, $codice: String!) {
         }
     }
 }
-${VASFragment}
+${FR.VAS}
 `
-// export const DELETE_RISORSA_CONSULTAZIONE_VAS = gql`
-// mutation($id: ID!, $codice: String!) {
-//     deleteConsultazioneVas(risorsaId: $id, codice: $codice){
-//         success
-//         consultazioneVasAggiornata {
-//             ...ConsultazioneVAS
-//         }
-//     }
-// }
-// ${ConsultazioneVasFragment}
-// `
 
+export const PROVVEDIMENTO_VERIFICA_VAS = gql`
+mutation ProvveddimentoVerificaVAS($uuid: String!) {
+    assoggettamentoVas(uuid: $uuid){
+        vasAggiornata{
+          uuid
+          verificaEffettuata
+          dataAssoggettamento
+          piano{
+            ...AzioniPiano
+          }
+      }
+    }
+  }
+${FR.AZIONI_PIANO}
+`
+export const AVVIO_ESAME_PARERI_SCA = gql`
+mutation AvvioEsamePareriSCA($uuid: String!) {
+    avvioEsamePareriSca(uuid: $uuid){
+        vasAggiornata{
+            piano{
+              ...AzioniPiano 
+            }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+export const UPLOAD_ELABORATI_VAS = gql`
+mutation UploadElaboratiVas($uuid: String!) {
+    uploadElaboratiVas(uuid: $uuid) {
+        vasAggiornata{
+            piano{  
+              ...AzioniPiano
+            }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+export const CREA_CONSULTAZIONE_VAS = gql`
+mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
+    createConsultazioneVas(input: $input){
+        nuovaConsultazioneVas{     
+            ...ConsultazioneVAS
+        }
+    }
+}
+${FR.CONSULTAZIONE_VAS}
+`
 
+export const AVVIO_CONSULTAZIONE_VAS = gql`
+mutation AvvioConsultazioniVAS($codice: String!) {
+    avvioConsultazioniVas(uuid: $codice) {
+        errors
+        consultazioneVasAggiornata {
+            proceduraVas{
+              piano{
+                ...AzioniPiano
+              }
+            }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
+// altre mutations
 
 export const CREATE_CONTATTO = gql`
 mutation CreaContatto($input: CreateContattoInput!){
@@ -488,88 +374,6 @@ mutation CreaContatto($input: CreateContattoInput!){
 	
 }
 `
-export const PROMUOVI_PIANO = gql`
-mutation PromozionePiano($codice: String!){
-  promozionePiano(codicePiano: $codice){
-    pianoAggiornato {
-      ...Piano
-  }
-  }
-}
-${PianoFragment}
-`
-export const DELETE_PIANO = gql`
-  mutation($codice: String!) {
-    deletePiano(codicePiano: $codice){
-        success
-        codicePiano
-    }
-}
-`
-export const PROVVEDIMENTO_VERIFICA_VAS = gql`
-mutation ProvveddimentoVerificaVAS($uuid: String!) {
-    assoggettamentoVas(uuid: $uuid){
-        vasAggiornata{
-          uuid
-          verificaEffettuata
-        piano{
-            codice
-            azioni {
-              edges {
-              node {
-                order
-                tipologia
-                stato
-                attore
-                data
-                uuid
-                }
-              }
-          }
-        }  
-      }
-    }
-  }
-`
-export const CREA_CONSULTAZIONE_VAS = gql`
-mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
-  createConsultazioneVas(input: $input){
-    nuovaConsultazioneVas{     
-      ...ConsultazioneVAS
-    }
-  }
-}
-${ConsultazioneVasFragment}
-`
-
-export const AVVIO_CONSULTAZIONE_VAS = gql`
-mutation AvvioConsultazioniVAS($codice: String!) {
-    avvioConsultazioniVas(uuid: $codice) {
-      errors
-      consultazioneVasAggiornata {
-        proceduraVas{
-        piano{
-          codice
-          azioni {
-            edges {
-                node {
-                    order
-                    tipologia
-                    stato
-                    attore
-                    data
-                    uuid
-                }
-            }
-          }
-        }
-      }
-      }
-    }
-}
-`
-
-
 
 // LOCAL STATE
 // example of local state query

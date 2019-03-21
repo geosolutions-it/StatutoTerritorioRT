@@ -25,6 +25,10 @@ from graphql_extensions.exceptions import GraphQLError
 
 from serapide_core.helpers import update_create_instance
 
+from serapide_core.signals import (
+    piano_phase_changed,
+)
+
 from serapide_core.modello.models import (
     Piano,
     Azione,
@@ -140,7 +144,16 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                     if _pubblicazione_provvedimento_verifica_ap and \
                     _pubblicazione_provvedimento_verifica_ap.stato != STATO_AZIONE.nessuna:
                         _pubblicazione_provvedimento_verifica_ap.stato = STATO_AZIONE.nessuna
+
+                        # Notify Users
+                        piano_phase_changed.send(
+                            sender=Piano,
+                            user=info.context.user,
+                            piano=_piano,
+                            message_type="piano_verifica_vas_updated")
+
                         _pubblicazione_provvedimento_verifica_ap.save()
+
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
                     _pubblicazione_provvedimento_verifica_ac = _piano.azioni.filter(
                         tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
@@ -148,6 +161,14 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                     if _pubblicazione_provvedimento_verifica_ac and \
                     _pubblicazione_provvedimento_verifica_ac.stato != STATO_AZIONE.nessuna:
                         _pubblicazione_provvedimento_verifica_ac.stato = STATO_AZIONE.nessuna
+
+                        # Notify Users
+                        piano_phase_changed.send(
+                            sender=Piano,
+                            user=info.context.user,
+                            piano=_piano,
+                            message_type="piano_verifica_vas_updated")
+
                         _pubblicazione_provvedimento_verifica_ac.save()
 
                 return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
@@ -261,6 +282,7 @@ class AssoggettamentoVAS(graphene.Mutation):
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
                 procedura_vas.verifica_effettuata = True
+                procedura_vas.data_assoggettamento = datetime.datetime.now(timezone.get_current_timezone())
                 procedura_vas.save()
             else:
                 _pubblicazione_vas_comune = Azione(
@@ -299,6 +321,10 @@ class AssoggettamentoVAS(graphene.Mutation):
         _piano = _procedura_vas.piano
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
+                _pareri_verifica_sca = _piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca).first()
+                if _pareri_verifica_sca and _pareri_verifica_sca.stato != STATO_AZIONE.nessuna:
+                    return GraphQLError(_("Forbidden"), code=403)
                 if not _procedura_vas.verifica_effettuata and \
                 _procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
@@ -384,7 +410,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
     consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
 
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -396,9 +422,17 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         if fase.nome == FASE.anagrafica:
             _avvio_consultazioni_sca = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
-            if _avvio_consultazioni_sca.stato == STATO_AZIONE.attesa:
+            if _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
                 _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
                 _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=user,
+                    piano=piano,
+                    message_type="piano_verifica_vas_updated")
+
                 _avvio_consultazioni_sca.save()
 
                 _pareri_vas_expire_days = getattr(settings, 'PARERI_VAS_EXPIRE_DAYS', 60)
@@ -421,7 +455,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         _piano = _procedura_vas.piano
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
                 return AvvioConsultazioniVAS(
                     consultazione_vas_aggiornata=_consultazione_vas,
@@ -441,7 +475,7 @@ class InvioPareriVAS(graphene.Mutation):
         uuid = graphene.String(required=True)
 
     errors = graphene.List(graphene.String)
-    consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
+    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_vas):
@@ -456,45 +490,58 @@ class InvioPareriVAS(graphene.Mutation):
         if fase.nome == FASE.anagrafica:
             _pareri_sca = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.pareri_sca).first()
-            if _pareri_sca.stato == STATO_AZIONE.attesa:
+            if _pareri_sca.stato != STATO_AZIONE.nessuna:
                 _pareri_sca.stato = STATO_AZIONE.nessuna
                 _pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                 _pareri_sca.save()
 
-                _osservazioni_enti = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.osservazioni_enti,
-                    attore=TIPOLOGIA_ATTORE.enti,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _osservazioni_enti.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_osservazioni_enti, piano=piano)
-
-                _osservazioni_regione = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.osservazioni_regione,
-                    attore=TIPOLOGIA_ATTORE.regione,
-                    order=_order,
-                    stato=STATO_AZIONE.attesa
-                )
-                _osservazioni_regione.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_osservazioni_regione, piano=piano)
-
-                _upload_osservazioni_privati = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati,
+                _avvio_esame_pareri_sca = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
                     attore=TIPOLOGIA_ATTORE.comune,
                     order=_order,
                     stato=STATO_AZIONE.necessaria
                 )
-                _upload_osservazioni_privati.save()
+                _avvio_esame_pareri_sca.save()
                 _order += 1
-                AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
+                AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
+
+                """
+                    TODO: Queste azioni qui sotto in realtà sono di AVVIO Prodedimento!
+                """
+                # _osservazioni_enti = Azione(
+                #     tipologia=TIPOLOGIA_AZIONE.osservazioni_enti,
+                #     attore=TIPOLOGIA_ATTORE.enti,
+                #     order=_order,
+                #     stato=STATO_AZIONE.necessaria
+                # )
+                # _osservazioni_enti.save()
+                # _order += 1
+                # AzioniPiano.objects.get_or_create(azione=_osservazioni_enti, piano=piano)
+                #
+                # _osservazioni_regione = Azione(
+                #     tipologia=TIPOLOGIA_AZIONE.osservazioni_regione,
+                #     attore=TIPOLOGIA_ATTORE.regione,
+                #     order=_order,
+                #     stato=STATO_AZIONE.attesa
+                # )
+                # _osservazioni_regione.save()
+                # _order += 1
+                # AzioniPiano.objects.get_or_create(azione=_osservazioni_regione, piano=piano)
+                #
+                # _upload_osservazioni_privati = Azione(
+                #     tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati,
+                #     attore=TIPOLOGIA_ATTORE.comune,
+                #     order=_order,
+                #     stato=STATO_AZIONE.necessaria
+                # )
+                # _upload_osservazioni_privati.save()
+                # _order += 1
+                # AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
 
     @classmethod
     def mutate(cls, root, info, **input):
-        _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
-        _procedura_vas = _consultazione_vas.procedura_vas
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _consultazione_vas = ConsultazioneVAS.objects.get(procedura_vas=_procedura_vas)
         _piano = _procedura_vas.piano
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
@@ -530,7 +577,116 @@ class InvioPareriVAS(graphene.Mutation):
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
                 return InvioPareriVAS(
-                    consultazione_vas_aggiornata=_consultazione_vas,
+                    vas_aggiornata=_procedura_vas,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class AvvioEsamePareriSCA(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _pareri_sca = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.pareri_sca).first()
+            if _pareri_sca.stato == STATO_AZIONE.nessuna:
+
+                _avvio_esame_pareri_sca = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca).first()
+
+                if _avvio_esame_pareri_sca.stato != STATO_AZIONE.nessuna:
+                    _avvio_esame_pareri_sca.stato = STATO_AZIONE.nessuna
+                    _avvio_esame_pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+                    _avvio_esame_pareri_sca.save()
+
+                    _upload_elaborati_vas = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.upload_elaborati_vas,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _upload_elaborati_vas.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_upload_elaborati_vas, piano=piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _piano = _procedura_vas.piano
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+
+                return AvvioEsamePareriSCA(
+                    vas_aggiornata=_procedura_vas,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class UploadElaboratiVAS(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _upload_elaborati_vas = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.upload_elaborati_vas).first()
+            if _upload_elaborati_vas.stato != STATO_AZIONE.nessuna:
+                _upload_elaborati_vas.stato = STATO_AZIONE.nessuna
+                _upload_elaborati_vas.data = datetime.datetime.now(timezone.get_current_timezone())
+                _upload_elaborati_vas.save()
+
+                # TODO: what's next?
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _piano = _procedura_vas.piano
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+
+                return UploadElaboratiVAS(
+                    vas_aggiornata=_procedura_vas,
                     errors=[]
                 )
             except BaseException as e:

@@ -63,7 +63,7 @@ class SingleFile extends React.PureComponent {
         
         const {file} = this.state || {}
         const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation, modal, showBtn, sz, className = ""} = this.props
-        return  risorsa ? (<Resource codice={variables.codice} mutation={resourceMutation} resource={risorsa} isLocked={isLocked}/>) : (
+        return  risorsa ? (<Resource className={className} codice={variables.codice} mutation={resourceMutation} resource={risorsa} isLocked={isLocked}/>) : (
             <div style={{minHeight: "3.813rem"}} className={`${className} file-loader d-flex justify-content-between border-top border-bottom align-items-center`}>
                 <FileLoader
                     mutation={mutation}

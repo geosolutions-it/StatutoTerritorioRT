@@ -7840,11 +7840,12 @@ a.text-dark:hover, a.text-dark:focus {
   border-top: none;
   border-bottom: none; }
 
-.serapide .action-uploader .file-loader, .serapide .action-uploader .resource {
+.serapide .action-uploader {
   width: 100%; }
-
-.serapide .action-uploader div .dropzone {
-  align-self: baseline; }
+  .serapide .action-uploader .file-loader, .serapide .action-uploader .resource {
+    width: 100%; }
+  .serapide .action-uploader div .dropzone {
+    align-self: baseline; }
 
 .serapide .strt-switch .custom-control-label.checked:before {
   color: #fff;
@@ -7855,9 +7856,6 @@ a.text-dark:hover, a.text-dark:focus {
   background-color: #fff;
   -webkit-transform: translateX(0.75rem);
   transform: translateX(0.75rem); }
-
-.serapide .vas-switch {
-  max-width: 350px; }
 
 .sidebar {
   background-color: #515050 !important;
@@ -8168,28 +8166,76 @@ button.bg-serapide:focus {
   height: 60px; }
 
 @media (min-width: 576px) {
-  .pX-sm {
+  .pX-sm-1 {
+    padding-left: 60px !important;
+    padding-right: 60px !important; } }
+
+@media (min-width: 768px) {
+  .pX-md-1 {
+    padding-left: 60px !important;
+    padding-right: 60px !important; } }
+
+@media (min-width: 992px) {
+  .pX-lg-1 {
+    padding-left: 60px !important;
+    padding-right: 60px !important; } }
+
+@media (min-width: 1200px) {
+  .pX-xl-1 {
+    padding-left: 60px !important;
+    padding-right: 60px !important; } }
+
+.pX-1 {
+  padding-left: 60px !important;
+  padding-right: 60px !important; }
+
+@media (min-width: 576px) {
+  .pX-sm-2 {
     padding-left: 120px !important;
     padding-right: 120px !important; } }
 
 @media (min-width: 768px) {
-  .pX-md {
+  .pX-md-2 {
     padding-left: 120px !important;
     padding-right: 120px !important; } }
 
 @media (min-width: 992px) {
-  .pX-lg {
+  .pX-lg-2 {
     padding-left: 120px !important;
     padding-right: 120px !important; } }
 
 @media (min-width: 1200px) {
-  .pX-xl {
+  .pX-xl-2 {
     padding-left: 120px !important;
     padding-right: 120px !important; } }
 
-.pX {
+.pX-2 {
   padding-left: 120px !important;
   padding-right: 120px !important; }
+
+@media (min-width: 576px) {
+  .pX-sm-3 {
+    padding-left: 180px !important;
+    padding-right: 180px !important; } }
+
+@media (min-width: 768px) {
+  .pX-md-3 {
+    padding-left: 180px !important;
+    padding-right: 180px !important; } }
+
+@media (min-width: 992px) {
+  .pX-lg-3 {
+    padding-left: 180px !important;
+    padding-right: 180px !important; } }
+
+@media (min-width: 1200px) {
+  .pX-xl-3 {
+    padding-left: 180px !important;
+    padding-right: 180px !important; } }
+
+.pX-3 {
+  padding-left: 180px !important;
+  padding-right: 180px !important; }
 
 .serapide {
   width: 100%; }

@@ -81,23 +81,26 @@ export default ({codice, canUpdate, isLocked}) => {
                 {!isLocked && (<span className="p-3 pb-5">NOTA : Le opzioni sono escludenti. Se viene selezionata la richiesta della VAS semplificata
                     è richiesto l’upload della Relazione Motivata; se viene selezionata la Richiesta di Verifica VAS è richiesto
             l’upload del documento preliminare di verifica; se si seleziona il Procedimento Vas si decide di seguire il procedimento VAS esteso.</span>)}
-                <EnhancedSwitch isLocked={isLocked} getInput={getVasTypeInput(uuid)} mutation={UPDATE_VAS} value="semplificata" checked={tipologia === "SEMPLIFICATA"}  label="RICHIESTA VAS SEMPLIFICATA" className="mt-5 vas-EnhancedSwitch justify-content-between mb-4">
+                <EnhancedSwitch isLocked={isLocked} getInput={getVasTypeInput(uuid)} mutation={UPDATE_VAS} value="semplificata" checked={tipologia === "SEMPLIFICATA"}  label="RICHIESTA VAS SEMPLIFICATA" className="mt-5 mb-4">
                     {(checked) =>
-                        <FileUpload getSuccess={getSuccess}  mutation={VAS_FILE_UPLOAD} resourceMutation={DELETE_RISORSA_VAS} disabled={!checked} isLocked={!checked || isLocked} risorsa={semplificata} placeholder="Relazione motivata per VAS semplificata" variables={{codice: uuid, tipo: "vas_semplificata" }}/>
+                        <div className="row">
+                        <FileUpload  className="col-xl-12" getSuccess={getSuccess}  mutation={VAS_FILE_UPLOAD} resourceMutation={DELETE_RISORSA_VAS} disabled={!checked} isLocked={!checked || isLocked} risorsa={semplificata} placeholder="Relazione motivata per VAS semplificata" variables={{codice: uuid, tipo: "vas_semplificata" }}/>
+                        </div>
                     }
                 </EnhancedSwitch>
-                <EnhancedSwitch  isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="verifica" checked={tipologia === "VERIFICA"}  label="RICHIESTA VERIFICA VAS" className="mt-5 vas-EnhancedSwitch justify-content-between mb-4">
-                    {(checked) => <FileUpload getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} resourceMutation={DELETE_RISORSA_VAS} disabled={!checked} isLocked={!checked || isLocked} risorsa={verifica} placeholder="Documento preliminare di verifica" variables={{codice: uuid, tipo: "vas_verifica" }}/>}
+                <EnhancedSwitch  isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="verifica" checked={tipologia === "VERIFICA"}  label="RICHIESTA VERIFICA VAS" className="mt-5 mb-4">
+                    {(checked) => <div className="row"><FileUpload className="col-xl-12" getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} resourceMutation={DELETE_RISORSA_VAS} disabled={!checked} isLocked={!checked || isLocked} risorsa={verifica} placeholder="Documento preliminare di verifica" variables={{codice: uuid, tipo: "vas_verifica" }}/></div>}
                 </EnhancedSwitch>
-                <EnhancedSwitch isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="procedimento" checked={tipologia === "PROCEDIMENTO"}  label="PROCEDIMENTO VAS (AVVIO)" className="mt-5 vas-EnhancedSwitch justify-content-between">
+                <EnhancedSwitch isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="procedimento" checked={tipologia === "PROCEDIMENTO"}  label="PROCEDIMENTO VAS (AVVIO)" className="mt-5">
                     {() => (
-                        <span className="p-3">Scegliendo “Procedura VAS” verrà inviata una comunicazione all’autorità procedente e proponente (AP/P)
-                    che avvierà le consultazioni degli Soggetti Competenti in Materia Ambientale (SCA)</span>
+                        <div className="row">
+                        <span className="p-3 col-xl-12">Scegliendo “Procedura VAS” verrà inviata una comunicazione all’autorità procedente e proponente (AP/P)
+                    che avvierà le consultazioni degli Soggetti Competenti in Materia Ambientale (SCA)</span></div>
                         
                     )}
                 </EnhancedSwitch>
-                <EnhancedSwitch  isLocked={isLocked} getInput={getVasTypeInput(uuid)} mutation={UPDATE_VAS} value="non_necessaria"  checked={tipologia === "NON_NECESSARIA"}  label="VAS NON NECESSARIA" className="mt-5 vas-EnhancedSwitch justify-content-between">
-                        {() =>(<span className="p-3 mb-5">In questo caso per il piano non è necessaria alcuna VAS </span>)}
+                <EnhancedSwitch  isLocked={isLocked} getInput={getVasTypeInput(uuid)} mutation={UPDATE_VAS} value="non_necessaria"  checked={tipologia === "NON_NECESSARIA"}  label="VAS NON NECESSARIA" className="mt-5">
+                        {() =>(<div className="row"><span className="p-3 mb-5 col-xl-12">In questo caso per il piano non è necessaria alcuna VAS </span></div>)}
                 </EnhancedSwitch>
                 <div className="d-flex mt-5 pt-5 justify-content-between mb-3">
                     <div style={{minWidth: "33%"}}>

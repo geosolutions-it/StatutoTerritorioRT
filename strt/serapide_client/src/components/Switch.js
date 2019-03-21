@@ -10,7 +10,9 @@ import classeNames from 'classnames'
 import {Mutation} from  "react-apollo"
 import { toast } from 'react-toastify'
 import {isFunction} from 'lodash'
+import {toggleControllableState} from '../enhancers/utils'
 
+const enhancer = toggleControllableState('checked', 'toggleSwitch', false)
 const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)}, className, children, checked }) => {
     const toggle = () => { 
         if(!isLocked) {
@@ -19,10 +21,10 @@ const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)},
     }
     return !isLocked || checked ? (
         <React.Fragment>
-            <div key={value}  className={classeNames('strt-switch','d-flex', 'direction-column', className, {"mt-3": isLocked})}>
-                <span className="pr-3">{label}</span>
+            <div key={value}  className={classeNames('strt-switch','row', className, {"mt-3": isLocked})}>
+                <span className="col-xl-4 col-lg-5 col-md-5 col-10">{label}</span>
                 {!isLocked && (
-                <div  className="switch-label custom-control custom-switch">
+                <div  className="switch-label custom-control custom-switch col-1">
                     <label  onClick={toggle} style={{cursor: isLocked ? 'not-allowed' : 'pointer'}} className={classeNames('custom-control-label', {"border-serapide bg-serapide": checked, checked})}></label>
                 </div> ) } 
             </div>
@@ -51,3 +53,5 @@ export const EnhancedSwitch  = ({isLocked, mutation, update, getInput = _getInpu
         }}
     </Mutation>)
 }
+
+export const UnSwitch = enhancer(Switch)

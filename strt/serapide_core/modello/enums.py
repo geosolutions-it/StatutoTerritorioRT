@@ -78,6 +78,8 @@ TIPOLOGIA_AZIONE = Choices(
         ('pubblicazione_provvedimento_verifica', _('Pubblicazione Provvedimento di Verifica')),  # AC/Comune
         ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),  # Comune
         ('pareri_sca', _('Pareri SCA')),  # SCA
+        ('avvio_esame_pareri_sca', _('Avvio Esame Pareri SCA')),  # Comune
+        ('upload_elaborati_vas', _('Upload Elaborati VAS')),  # Comune
     )
 
 TIPOLOGIA_ATTORE = Choices(
