@@ -278,6 +278,18 @@ class Piano(models.Model):
         through='AutoritaCompetenteVAS'
     )
 
+    autorita_istituzionali = models.ManyToManyField(
+        Contatto,
+        related_name='autorita_istituzionali',
+        through='AutoritaIstituzionali'
+    )
+
+    altri_destinatari = models.ManyToManyField(
+        Contatto,
+        related_name='altri_destinatari',
+        through='AltriDestinatari'
+    )
+
     soggetti_sca = models.ManyToManyField(
         Contatto,
         related_name='soggetti_sca',
@@ -543,6 +555,28 @@ class SoggettiSCA(models.Model):
         return '{} <---> {}'.format(self.piano.codice, self.soggetto_sca.email)
 
 
+class AutoritaIstituzionali(models.Model):
+    autorita_istituzionale = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = "strt_core_autorita_istituzionale"
+
+    def __str__(self):
+        return '{} <---> {}'.format(self.piano.codice, self.autorita_istituzionale.email)
+
+
+class AltriDestinatari(models.Model):
+    altro_destinatario = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = "strt_core_altri_destinatari"
+
+    def __str__(self):
+        return '{} <---> {}'.format(self.piano.codice, self.altro_destinatario.email)
+
+
 class PianoAuthTokens(models.Model):
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
     token = models.ForeignKey(Token, on_delete=models.CASCADE)
@@ -621,6 +655,8 @@ def delete_roles_and_users(sender, instance, **kwargs):
 @receiver(pre_delete, sender=Piano)
 def delete_piano_associations(sender, instance, **kwargs):
     AutoritaCompetenteVAS.objects.filter(piano=instance).delete()
+    AutoritaIstituzionali.objects.filter(piano=instance).delete()
+    AltriDestinatari.objects.filter(piano=instance).delete()
     SoggettiSCA.objects.filter(piano=instance).delete()
     instance.risorse.all().delete()
     RisorsePiano.objects.filter(piano=instance).delete()

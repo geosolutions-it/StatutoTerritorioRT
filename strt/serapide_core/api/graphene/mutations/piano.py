@@ -47,7 +47,10 @@ from serapide_core.modello.models import (
     ProceduraVAS,
     ProceduraAvvio,
     PianoAuthTokens,
-    AutoritaCompetenteVAS, SoggettiSCA,
+    AutoritaCompetenteVAS,
+    AutoritaIstituzionali,
+    AltriDestinatari,
+    SoggettiSCA,
 )
 
 from serapide_core.modello.enums import (
@@ -322,6 +325,48 @@ class UpdatePiano(relay.ClientIDMutation):
                                 for _sca in _soggetti_sca:
                                     UpdatePiano.get_or_create_token(_sca.soggetto_sca.user, _piano)
                                     _sca.save()
+
+                # Autorità Istituzionali (O)
+                if 'autorita_istituzionali' in _piano_data:
+                    _autorita_istituzionali = _piano_data.pop('autorita_istituzionali')
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        _piano.autorita_istituzionali.clear()
+                        if _autorita_istituzionali:
+                            for _ac in _piano.autorita_istituzionali.all():
+                                UpdatePiano.delete_token(_ac.user, _piano)
+
+                            if len(_autorita_istituzionali) > 0:
+                                _autorita_competenti = []
+                                for _contatto_uuid in _autorita_istituzionali:
+                                    _autorita_competenti.append(AutoritaIstituzionali(
+                                        piano=_piano,
+                                        autorita_istituzionale=Contatto.objects.get(uuid=_contatto_uuid))
+                                    )
+
+                                for _ac in _autorita_competenti:
+                                    UpdatePiano.get_or_create_token(_ac.autorita_istituzionale.user, _piano)
+                                    _ac.save()
+
+                # Altri Destinatari (O)
+                if 'altri_destinatari' in _piano_data:
+                    _altri_destinatari = _piano_data.pop('altri_destinatari')
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        _piano.altri_destinatari.clear()
+                        if _altri_destinatari:
+                            for _ac in _piano.altri_destinatari.all():
+                                UpdatePiano.delete_token(_ac.user, _piano)
+
+                            if len(_altri_destinatari) > 0:
+                                _autorita_competenti = []
+                                for _contatto_uuid in _altri_destinatari:
+                                    _autorita_competenti.append(AltriDestinatari(
+                                        piano=_piano,
+                                        altro_destinatario=Contatto.objects.get(uuid=_contatto_uuid))
+                                    )
+
+                                for _ac in _autorita_competenti:
+                                    UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano)
+                                    _ac.save()
 
                 piano_aggiornato = update_create_instance(_piano, _piano_data)
                 return cls(piano_aggiornato=piano_aggiornato)

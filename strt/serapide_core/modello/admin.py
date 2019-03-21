@@ -19,7 +19,10 @@ from .models import (
     Piano, RisorsePiano,
     ProceduraVAS, RisorseVas,
     ProceduraAvvio, RisorseAvvio,
-    AutoritaCompetenteVAS, SoggettiSCA,
+    AutoritaCompetenteVAS,
+    AutoritaIstituzionali,
+    AltriDestinatari,
+    SoggettiSCA,
     PianoAuthTokens,
     ConsultazioneVAS
 )
@@ -45,6 +48,14 @@ class AutoritaCompetenteVASInline(admin.TabularInline):
     model = AutoritaCompetenteVAS
 
 
+class AutoritaIstituzionaliInline(admin.TabularInline):
+    model = AutoritaIstituzionali
+
+
+class AltriDestinatariInline(admin.TabularInline):
+    model = AltriDestinatari
+
+
 class SoggettiSCAInline(admin.TabularInline):
     model = SoggettiSCA
 
@@ -56,6 +67,8 @@ class TokensInline(admin.TabularInline):
 class PianoAdmin(admin.ModelAdmin):
     inlines = [AzioniPianoInline,
                AutoritaCompetenteVASInline,
+               AutoritaIstituzionaliInline,
+               AltriDestinatariInline,
                SoggettiSCAInline,
                RisorsePianoInline,
                TokensInline, ]
