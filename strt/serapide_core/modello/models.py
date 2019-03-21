@@ -578,6 +578,8 @@ class ProceduraAvvio(models.Model):
     garante_nominativo = models.TextField(null=True, blank=True)
     garante_pec = models.EmailField(null=True, blank=True)
 
+    notifica_genio_civile = models.BooleanField(null=False, blank=False, default=False)
+
     risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
 
     ente = models.ForeignKey(
