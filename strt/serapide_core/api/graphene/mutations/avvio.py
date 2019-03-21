@@ -11,9 +11,11 @@
 
 import rules
 import logging
+import datetime
 import graphene
 import traceback
 
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from graphene import relay
@@ -24,10 +26,16 @@ from serapide_core.helpers import update_create_instance
 
 from serapide_core.modello.models import (
     Piano,
+    Azione,
+    AzioniPiano,
     ProceduraAvvio,
 )
 
 from serapide_core.modello.enums import (
+    FASE,
+    STATO_AZIONE,
+    TIPOLOGIA_AZIONE,
+    TIPOLOGIA_ATTORE,
     TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
@@ -118,5 +126,84 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
                 tb = traceback.format_exc()
                 logger.error(tb)
                 return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class AvvioPiano(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _avvio_procedimento = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
+            if _avvio_procedimento and _avvio_procedimento.stato != STATO_AZIONE.nessuna:
+                _avvio_procedimento.stato = STATO_AZIONE.nessuna
+                _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())
+                _avvio_procedimento.save()
+
+                _formazione_del_piano = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.formazione_del_piano,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.necessaria
+                )
+                _formazione_del_piano.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_formazione_del_piano, piano=piano)
+
+                if procedura_avvio.notifica_genio_civile:
+                    _protocollo_genio_civile = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
+                        attore=TIPOLOGIA_ATTORE.genio_civile,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa,
+                        data=procedura_avvio.data_scadenza_risposta
+                    )
+                    _protocollo_genio_civile.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile, piano=piano)
+
+                if procedura_avvio.conferenza_copianificazione != TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+                    _conferenza_copianificazione = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _conferenza_copianificazione.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
+        _piano = _procedura_avvio.piano
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                return AvvioPiano(
+                    avvio_aggiornato=_procedura_avvio,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
