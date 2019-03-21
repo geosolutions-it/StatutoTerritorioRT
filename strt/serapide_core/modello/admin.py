@@ -18,6 +18,7 @@ from .models import (
     Azione, AzioniPiano,
     Piano, RisorsePiano,
     ProceduraVAS, RisorseVas,
+    ProceduraAvvio, RisorseAvvio,
     AutoritaCompetenteVAS, SoggettiSCA,
     PianoAuthTokens,
     ConsultazioneVAS
@@ -34,6 +35,10 @@ class RisorsePianoInline(admin.TabularInline):
 
 class RisorseVasInline(admin.TabularInline):
     model = RisorseVas
+
+
+class RisorseAvvioInline(admin.TabularInline):
+    model = RisorseAvvio
 
 
 class AutoritaCompetenteVASInline(admin.TabularInline):
@@ -60,10 +65,15 @@ class ProceduraVASAdmin(admin.ModelAdmin):
     inlines = [RisorseVasInline, ]
 
 
+class ProceduraAvvioAdmin(admin.ModelAdmin):
+    inlines = [RisorseAvvioInline, ]
+
+
 admin.site.register(Fase)
 admin.site.register(Azione)
 admin.site.register(Risorsa)
 admin.site.register(Contatto)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
+admin.site.register(ProceduraAvvio, ProceduraAvvioAdmin)
 admin.site.register(ConsultazioneVAS)

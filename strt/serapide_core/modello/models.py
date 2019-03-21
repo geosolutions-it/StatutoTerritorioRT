@@ -576,7 +576,7 @@ class ProceduraAvvio(models.Model):
     data_scadenza_risposta = models.DateTimeField(null=True, blank=True)
 
     garante_nominativo = models.TextField(null=True, blank=True)
-    garante_pec = models.EmailField(null=False, blank=False)
+    garante_pec = models.EmailField(null=True, blank=True)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
 

@@ -109,7 +109,7 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
                 if 'conferenza_copianificazione' in _procedura_avvio_data:
                     _conferenza_copianificazione = _procedura_avvio_data.pop('conferenza_copianificazione')
                     if _conferenza_copianificazione and _conferenza_copianificazione in TIPOLOGIA_CONF_COPIANIFIZAZIONE:
-                        _procedura_avvio_data['tipologia'] = _conferenza_copianificazione
+                        _procedura_avvio_data['conferenza_copianificazione'] = _conferenza_copianificazione
 
                 procedura_avvio_aggiornata = update_create_instance(_procedura_avvio, _procedura_avvio_data)
 
