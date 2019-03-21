@@ -45,6 +45,7 @@ from serapide_core.modello.models import (
     Contatto,
     AzioniPiano,
     ProceduraVAS,
+    ProceduraAvvio,
     PianoAuthTokens,
     AutoritaCompetenteVAS, SoggettiSCA,
 )
@@ -127,10 +128,18 @@ class CreatePiano(relay.ClientIDMutation):
                 _procedura_vas = ProceduraVAS()
                 _procedura_vas.tipologia = TIPOLOGIA_VAS.semplificata
 
+                # Inizializzazione Procedura Avvio
+                _procedura_avvio = ProceduraAvvio()
+
                 nuovo_piano = update_create_instance(_piano, _piano_data)
+
                 _procedura_vas.piano = nuovo_piano
                 _procedura_vas.ente = nuovo_piano.ente
                 _procedura_vas.save()
+
+                _procedura_avvio.piano = nuovo_piano
+                _procedura_avvio.ente = nuovo_piano.ente
+                _procedura_avvio.save()
 
                 for _ap in _azioni_piano:
                     _ap.save()
