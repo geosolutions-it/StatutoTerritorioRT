@@ -173,7 +173,7 @@ class Contatto(models.Model):
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
                 else:
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-            else:
+            if not contact or attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
                 if token:
                     membership = user.memberships.all().first()
                 else:
