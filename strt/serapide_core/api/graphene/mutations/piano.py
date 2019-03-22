@@ -212,6 +212,8 @@ class UpdatePiano(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
         _piano_data = input.get('piano_operativo')
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
@@ -287,7 +289,8 @@ class UpdatePiano(relay.ClientIDMutation):
                 # Autorità Competente VAS (O)
                 if 'autorita_competente_vas' in _piano_data:
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
                         _piano.autorita_competente_vas.clear()
                         if _autorita_competente_vas:
                             for _ac in _piano.autorita_competente_vas.all():
@@ -304,11 +307,14 @@ class UpdatePiano(relay.ClientIDMutation):
                                 for _ac in _autorita_competenti:
                                     UpdatePiano.get_or_create_token(_ac.autorita_competente.user, _piano)
                                     _ac.save()
+                    else:
+                        return GraphQLError(_("Forbidden"), code=403)
 
                 # Soggetti SCA (O)
                 if 'soggetti_sca' in _piano_data:
                     _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
                         _piano.soggetti_sca.clear()
                         if _soggetti_sca_uuid:
                             for _sca in _piano.soggetti_sca.all():
@@ -325,6 +331,8 @@ class UpdatePiano(relay.ClientIDMutation):
                                 for _sca in _soggetti_sca:
                                     UpdatePiano.get_or_create_token(_sca.soggetto_sca.user, _piano)
                                     _sca.save()
+                    else:
+                        return GraphQLError(_("Forbidden"), code=403)
 
                 # Autorità Istituzionali (O)
                 if 'autorita_istituzionali' in _piano_data:

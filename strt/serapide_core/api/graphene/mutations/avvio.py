@@ -22,7 +22,9 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
-from serapide_core.helpers import update_create_instance
+from serapide_core.helpers import (
+    is_RUP,
+    update_create_instance)
 
 from serapide_core.modello.models import (
     Piano,
@@ -97,6 +99,8 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
             # This cannot be changed
             _procedura_avvio_data.pop('piano')
         _piano = _procedura_avvio.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _ente = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
@@ -114,7 +118,9 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
                     # This cannot be changed
 
                 # Tipologia (O)
-                if 'conferenza_copianificazione' in _procedura_avvio_data:
+                if 'conferenza_copianificazione' in _procedura_avvio_data and \
+                (rules.test_rule('strt_users.is_superuser', info.context.user) or is_RUP(info.context.user) or
+                 rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune')):
                     _conferenza_copianificazione = _procedura_avvio_data.pop('conferenza_copianificazione')
                     if _conferenza_copianificazione and _conferenza_copianificazione in TIPOLOGIA_CONF_COPIANIFIZAZIONE:
                         _procedura_avvio_data['conferenza_copianificazione'] = _conferenza_copianificazione
@@ -196,7 +202,10 @@ class AvvioPiano(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 

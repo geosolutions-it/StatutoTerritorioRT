@@ -126,8 +126,11 @@ class CreateContatto(relay.ClientIDMutation):
                 else:
                     _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
                 _data['ente'] = _ente
+            _token = info.context.session['token'] if 'token' in info.context.session else None
 
-            if info.context.user and not info.context.user.is_anonymous:
+            if info.context.user and not info.context.user.is_anonymous and \
+            (rules.test_rule('strt_users.is_superuser', info.context.user) or is_RUP(info.context.user) or
+             rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune')):
 
                 # Tipologia (M)
                 if 'tipologia' in _data:
@@ -200,7 +203,7 @@ class DeleteContatto(graphene.Mutation):
 
     def mutate(self, info, **input):
         if info.context.user and rules.test_rule('strt_users.can_access_private_area', info.context.user) and \
-        is_RUP(info.context.user):
+        (rules.test_rule('strt_users.is_superuser', info.context.user) or is_RUP(info.context.user)):
 
             # Fetching input arguments
             _id = input['uuid']
