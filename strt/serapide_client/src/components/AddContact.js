@@ -38,7 +38,6 @@ const getVariables = ({nome, email, ente: {node: {code} = {}}}, tipologia) => ({
     }
   })
 const onUpdate = (tipo) => (cache, { data: {createContatto: {nuovoContatto: node} ={}} }) => {
-    debugger;
     if(node) {
         const {contatti} = cache.readQuery({ query: GET_CONTATTI, variables: tipo ? {tipo} : {} })
         const nCont = {...contatti, edges: contatti.edges.concat({node, __typename: "ContattoNodeEdge"})} 
@@ -59,8 +58,8 @@ const AddContact = ({onTypeChange, tipologia, ...p}) => (
             const isF = !!onTypeChange
             return (
                 <div style={{marginLeft: 0, marginRight: 0}}className={classNames("add-contact row d-flex align-items-center mb-3", p.className)}>
-                    <div className={`col col-sm-12 col-md-${isF ? 6 : 4}  col-lg-${isF ? 3 : 4} `}><Input  name="name" placeholder="Nominativo" value={p.nome} onChange={p.nameChange}/></div>
-                    <div className={`col col-sm-12 col-md-${isF ? 6 : 3}  col-lg-3`}>
+                    <div className={`my-1 col col-sm-12 col-md-${isF ? 6 : 4}  col-lg-${isF ? 3 : 4} `}><Input  name="name" placeholder="Nominativo" value={p.nome} onChange={p.nameChange}/></div>
+                    <div className={`my-1 col col-sm-12 col-md-${isF ? 6 : 3}  col-lg-3`}>
                         <Query query={GET_ENTI} onError={showError}>
                             {({loading: isLoading, data: {enti: {edges = []} = {}} = {}}) => {
                         return (
@@ -69,10 +68,10 @@ const AddContact = ({onTypeChange, tipologia, ...p}) => (
                         }}
                         </Query>
                     </div>
-                    <div className={`col col-sm-12 col-md-${isF ? 6 : 4}  col-lg-${isF ? 3 : 4}`}>
+                    <div className={`my-1 col col-sm-12 col-md-${isF ? 6 : 4}  col-lg-${isF ? 3 : 4}`}>
                         <Input type="email" placeholder="Indirizzo PEC" value={p.email} onChange={p.emailChange}/>
                     </div>
-                    {onTypeChange && (<div className={`col col-sm-11 col-md-5 col-lg-2`}>
+                    {onTypeChange && (<div className={`my-1 col col-sm-11 col-md-5 col-lg-2`}>
                         <Query query={GET_TIPO_CONTATTO} onError={showError}>
                             {({loading: isLoading, data: {tipologiaContatto: tipi =[]}}) => {
                             return (
@@ -81,7 +80,7 @@ const AddContact = ({onTypeChange, tipologia, ...p}) => (
                         }}
                         </Query>
                     </div>)}
-                    <div className="col col-1 d-flex justify-content-center">
+                    <div className="my-1 col col-1 d-flex justify-content-center">
                         {loading ? (<div className="spinner-border spinner-border-sm ml-2" role="status">
                                 <span className="sr-only">Loading...</span>
                         </div>): (<i className={classNames("material-icons icon-34", {disabled: !isValid(p)})} onClick={createContact  }>perm_contact_calendar</i>)}

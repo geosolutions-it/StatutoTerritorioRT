@@ -24,7 +24,8 @@ const azioni = {
         "AVVIO_CONSULTAZIONI_SCA": ["RUP", "OP"],
         "PARERI_SCA": ["TMP"],
         "AVVIO_ESAME_PARERI_SCA": ["RUP", "OP"],
-        "UPLOAD_ELABORATI_VAS": ["RUP", "OP"]
+        "UPLOAD_ELABORATI_VAS": ["RUP", "OP"],
+        "FORMAZIONE_DEL_PIANO": ["RUP", "OP"]
     }
 export const globalAuth = {
     _attore_attivo: "",

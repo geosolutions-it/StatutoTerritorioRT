@@ -49,6 +49,7 @@ from serapide_core.modello.models import (
 from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_VAS,
+    TIPOLOGIA_AZIONE
 )
 
 logger = logging.getLogger(__name__)
@@ -107,6 +108,10 @@ class UserMessageType(DjangoObjectType):
 
 
 class AzioneNode(DjangoObjectType):
+    label = graphene.String()
+
+    def resolve_label(self, info, **args):
+        return TIPOLOGIA_AZIONE[self.tipologia]
 
     class Meta:
         model = Azione

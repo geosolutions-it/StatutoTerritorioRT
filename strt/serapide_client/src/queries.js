@@ -156,12 +156,12 @@ query getContatti($tipo: String){
     contatti(tipologia: $tipo) {
       edges {
         node{
-          nome
-          uuid
+          ...Contatto
         }
       }
     }
   }
+  ${FR.CONTATTO}
 `
 // MUTATION
 // Mutation per piano
@@ -393,12 +393,12 @@ export const CREATE_CONTATTO = gql`
 mutation CreaContatto($input: CreateContattoInput!){
   createContatto(input: $input){
     nuovoContatto{
-      uuid
-      nome
+      ...Contatto
     }
   }
 	
 }
+${FR.CONTATTO}
 `
 // Mutation avvio procedura
 

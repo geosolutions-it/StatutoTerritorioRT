@@ -27,6 +27,7 @@ fragment Risorsa on RisorsaNode {
 export const CONTATTO = gql`
 fragment Contatto on ContattoNode{
         nome
+        tipologia
         uuid
 }
 `
@@ -36,6 +37,7 @@ fragment Azioni on AzioneNodeConnection {
     node {
       order
       tipologia
+      label
       stato
       attore
       data

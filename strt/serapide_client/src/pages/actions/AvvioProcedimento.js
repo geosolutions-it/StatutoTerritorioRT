@@ -57,7 +57,7 @@ const getScadenzaInput = (uuid) => (val) => ({
 const getSuccess = ({uploadRisorsaAvvio: {success}} = {}) => success
 
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
+    return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
 }
 
 const UI = ({
@@ -139,10 +139,12 @@ const UI = ({
                 <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
                 
                 <h5 className="font-weight-light pb-1 mt-5">SCELTA SOGGETTI ISTITUZIONALI</h5>
-                    {aut.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pl-2 mt-3 " key={uuid}>
+                    <div className="row">  
+                    {aut.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
                                  <i className="material-icons text-serapide">bookmark</i>
                                  {nome}
                         </div>))}
+                    </div>
                     <div className="mt-3 pl-4 pb-4">
                     <Mutation mutation={UPDATE_PIANO} onError={showError}>
                         {(onChange) => {
@@ -178,10 +180,12 @@ const UI = ({
                         </Mutation>
                         </div>
                         <h5 className="font-weight-light pb-1 mt-5">ALTRI DESTINATARI</h5>
-                        {dest.map(({node: {nome, uuid} = {}}) => (<div className="d-flex mt-3" key={uuid}>
-                                 <i className="material-icons text-serapide">bookmark</i>
-                                 {nome}
-                        </div>))}
+                        <div className="row">
+                            {dest.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
+                                    <i className="material-icons text-serapide">bookmark</i>
+                                    {nome}
+                            </div>))}
+                        </div>
                         <div className="mt-3 pl-4 border-bottom-2 pb-4 mb-5">
                         <Mutation mutation={UPDATE_PIANO} onError={showError}>
                     {(onChange) => {
