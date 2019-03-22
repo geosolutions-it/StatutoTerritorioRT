@@ -12,8 +12,14 @@
 import os
 import rules
 
-from serapide_core.modello.enums import FASE, STATO_AZIONE
-from serapide_core.modello.models import Piano, ProceduraVAS
+from serapide_core.modello.enums import (
+    FASE,
+    STATO_AZIONE)
+
+from serapide_core.modello.models import (
+    Piano,
+    ProceduraVAS,
+    ProceduraAvvio)
 
 
 # ############################################################################ #
@@ -68,6 +74,11 @@ def has_soggetto_proponente(piano):
 @rules.predicate
 def has_procedura_vas(piano):
     return ProceduraVAS.objects.filter(piano=piano).count() == 1
+
+
+@rules.predicate
+def has_procedura_avvio(piano):
+    return ProceduraAvvio.objects.filter(piano=piano).count() == 1
 
 
 @rules.predicate

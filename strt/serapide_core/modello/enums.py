@@ -38,6 +38,8 @@ TIPOLOGIA_CONTATTO = Choices(
         ('generico', _('GENERICO')),
         ('acvas', _('AUT_COMP_VAS')),
         ('sca', _('SOGGETTO_SCA')),
+        ('ente', _('ENTE')),
+        ('genio_civile', _('GENIO_CIVILE')),
     )
 
 TIPOLOGIA_PIANO = Choices(

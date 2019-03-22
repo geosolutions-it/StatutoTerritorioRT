@@ -319,7 +319,11 @@ class AssoggettamentoVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC'):
             try:
                 _pareri_verifica_sca = _piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca).first()

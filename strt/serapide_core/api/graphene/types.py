@@ -238,7 +238,12 @@ class AppUserNode(DjangoObjectType):
     def resolve_attore(self, info, **args):
         organization = info.context.session.get('organization', None)
         token = info.context.session.get('token', None)
-        return Contatto.attore(self, organization, token)
+        _attore = None
+        if token:
+            _attore = Contatto.attore(self, token=token)
+        elif organization:
+            _attore = Contatto.attore(self, organization=organization)
+        return _attore
 
     class Meta:
         model = AppUser

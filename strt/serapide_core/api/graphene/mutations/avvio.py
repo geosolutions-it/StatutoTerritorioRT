@@ -166,7 +166,21 @@ class AvvioPiano(graphene.Mutation):
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_formazione_del_piano, piano=piano)
 
-                if procedura_avvio.notifica_genio_civile:
+                if procedura_avvio.conferenza_copianificazione != TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+
+                    procedura_avvio.notifica_genio_civile = True
+                    procedura_avvio.save()
+
+                    _conferenza_copianificazione = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _conferenza_copianificazione.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
+
                     _protocollo_genio_civile = Azione(
                         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
                         attore=TIPOLOGIA_ATTORE.genio_civile,
@@ -177,17 +191,6 @@ class AvvioPiano(graphene.Mutation):
                     _protocollo_genio_civile.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile, piano=piano)
-
-                if procedura_avvio.conferenza_copianificazione != TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
-                    _conferenza_copianificazione = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
-                        attore=TIPOLOGIA_ATTORE.comune,
-                        order=_order,
-                        stato=STATO_AZIONE.necessaria
-                    )
-                    _conferenza_copianificazione.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
 
     @classmethod
     def mutate(cls, root, info, **input):
