@@ -138,6 +138,7 @@ class Mutation(object):
 
     create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
     update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()
+    avvia_piano = avvio.AvvioPiano.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
