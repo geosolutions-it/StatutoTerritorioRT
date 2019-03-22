@@ -7,108 +7,154 @@
  */
 import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
+import UploadFiles from '../../components/UploadFiles'
 import  {showError} from '../../utils'
-import AutoMutation from '../../components/AutoMutation'
+
 import {Query, Mutation} from "react-apollo"
 import Resource from '../../components/Resource'
 import {EnhancedListSelector} from '../../components/ListSelector'
 import SalvaInvia from '../../components/SalvaInvia'
 import AddContact from '../../components/AddContact'
 import Button from '../../components/IconButton'
-import EnhancedDateSelector from '../../components/DateSelector'
+import {EnhancedDateSelector} from '../../components/DateSelector'
 
-import {Input} from 'reactstrap'
-import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
-    DELETE_RISORSA_VAS,
-    VAS_FILE_UPLOAD,
+import Input from '../../components/EnhancedInput'
+
+import {GET_AVVIO, UPDATE_AVVIO,
+    DELETE_RISORSA_AVVIO,
+    AVVIO_FILE_UPLOAD,
     AVVIO_CONSULTAZIONE_VAS, UPDATE_PIANO,
-    GET_CONTATTI
+    GET_CONTATTI,
+    AVVIA_PIANO
 } from '../../queries'
 
 
+const getGaranteInput = (uuid) => (val) => ({
+    variables: {
+        input: { 
+            proceduraAvvio: {
+                garanteNominativo: val}, 
+            uuid
+        }
+    }})
+const getGarantePecInput = (uuid) => (val) => ({
+        variables: {
+            input: { 
+                proceduraAvvio: {
+                    garantePec: val}, 
+            uuid
+        }
+}})
+const getScadenzaInput = (uuid) => (val) => ({
+    variables: {
+        input: { 
+            proceduraAvvio: {
+                dataScadenzaRisposta: val.toISOString()},
+            uuid
+        }
+    }})
 
-
-const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
+const getSuccess = ({uploadRisorsaAvvio: {success}} = {}) => success
 
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
 
-const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dataScadenza, proceduraVas: {uuid: pVasUUID, tipologia, risorse: {edges=[]} = {} } = {}, uuid} = {}} = {}, piano: {codice, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}, risorse: {edges: resPiano = []}} = {}, back}) => {
-            const dataTermine = new Date()
-            const isFull = tipologia === "SEMPLIFICATA" || tipologia === "VERIFICA"
+const UI = ({
+    procedureAvvio: {node: {
+            uuid, conferenzaCopianificazione, 
+            dataCreazione, dataScadenzaRisposta,
+            garanteNominativo, garantePec,
+            risorse: {edges=[]} = {}
+            } = {}} = {}, 
+        piano: {
+            autoritaIstituzionali: {edges: aut =[]} = {},
+            altriDestinatari: {edges: dest = []} = {},
+            codice,    
+            risorse: {edges: resPiano = []}} = {}, 
+        back}) => {
+
             const {node: delibera} = resPiano.filter(({node: n}) => n.tipo === "delibera").pop() || {};
-            
-            const docPrelim = edges.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").map(({node}) => node).shift()
+            const obiettivi = edges.filter(({node: {tipo}}) => tipo === "obiettivi_piano").map(({node}) => node).shift()
+            const quadro = edges.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").map(({node}) => node).shift()
+            const programma = edges.filter(({node: {tipo}}) => tipo === "programma_attivita").map(({node}) => node).shift()
+            const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
+            const allegati = edges.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node)
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
-            const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
+            const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
+
             return (<React.Fragment>
-                <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Avvio del Procedimento <small>(Atto di Avvio)<br/>documentazione (art. 17 L.R. 65/2014)</small></h2></div>
+                <div  className="py-3 border-bottom-2 border-top-2 mb-3"><h2 className="m-0">Avvio del Procedimento <small>(Atto di Avvio)<br/>documentazione (art. 17 L.R. 65/2014)</small></h2></div>
+                
+                <h6>Delibera di avvio</h6>
                 <Resource className="border-0 mt-2" icon="attach_file" resource={delibera}/>
-                <span className="pt-4">Elaborati del Piano</span>
-                <div className="action-uploader  align-self-start border-bottom ">
-                <FileUpload 
-                    className={`border-0`}
-                    sz="sm"
-                    placeholder="Delibera di avvio (ai sensi dell’articolo. 17 L.R. 65/2014)"
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
-                    isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
-                </div>
-                <div className="action-uploader  align-self-start border-bottom ">
-                <FileUpload 
-                    className={`border-0`}
-                    sz="sm"
-                    placeholder="Quadro conoscitivo (art. 17, lett.b, L.R. 65/2014)"
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
-                    isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
-                </div>
+                <h6 className="pt-5">Elaborati allegati alla delibera di avvio del procedimento</h6>
                 <div className="action-uploader  align-self-start border-bottom">
                 <FileUpload 
                     className={`border-0`}
-                    sz="sm"
                     placeholder="Obiettivi del piano"
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
-                    isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
+                    getSuccess={getSuccess} mutation={AVVIO_FILE_UPLOAD} 
+                    resourceMutation={DELETE_RISORSA_AVVIO} disabled={false} 
+                    isLocked={false} risorsa={obiettivi} variables={{codice: uuid, tipo: "obiettivi_piano" }}/>
                 </div>
-                <div className="action-uploader  align-self-start border-bottom mb-3">
+                <div className="action-uploader  align-self-start border-bottom ">
                 <FileUpload 
                     className={`border-0`}
-                    sz="sm"
-                    placeholder="Obiettivi del piano"
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
-                    isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
+                    placeholder="Quadro conoscitivo"
+                    getSuccess={getSuccess} mutation={AVVIO_FILE_UPLOAD} 
+                    resourceMutation={DELETE_RISORSA_AVVIO} disabled={false} 
+                    isLocked={false} risorsa={quadro} variables={{codice: uuid, tipo: "quadro_conoscitivo" }}/>
                 </div>
-                <h4 className="font-weight-light pl-2 pb-1">ALTRI ALLEGATI</h4>
-                <div className="action-uploader  align-self-start pl-2 pb-5">
+                <div className="action-uploader  align-self-start border-bottom ">
                 <FileUpload 
-                    className={`border-0 ${!docPrelim ? "flex-column": ""}`}
-                    sz="sm" modal={false} showBtn={false} 
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
-                    isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
+                    className={`border-0`}
+                    placeholder="Programma delle attività di informazione ai cittadini"
+                    getSuccess={getSuccess} mutation={AVVIO_FILE_UPLOAD} 
+                    resourceMutation={DELETE_RISORSA_AVVIO} disabled={false} 
+                    isLocked={false} risorsa={programma} variables={{codice: uuid, tipo: "programma_attivita" }}/>
                 </div>
-                <h5 className="font-weight-light pb-1 mt-3 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
-                <Input disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} type="text" />
-                <Input disabled={false} className="mb-3 rounded-pill" placeholder="Indirizzo Pec" onChange={undefined} type="url"/>
-                <h5 className="font-weight-light pb-1 mt-3 mb-3">TERMINI SCADENZA PER LA RISPOSTA</h5>
-                <EnhancedDateSelector className="py-0 rounded-pill" selected={dataTermine} mutation={UPDATE_PIANO}/>
+                <div className="action-uploader  align-self-start border-bottom ">
+                <FileUpload 
+                    className={`border-0`}
+                    placeholder="Individuazione del garante dell'informazione"
+                    getSuccess={getSuccess} mutation={AVVIO_FILE_UPLOAD} 
+                    resourceMutation={DELETE_RISORSA_AVVIO} disabled={false} 
+                    isLocked={false} risorsa={garante} variables={{codice: uuid, tipo: "individuazione_garante_informazione" }}/>
+                </div>
                 
-                <h5 className="font-weight-light pb-1 mt-4">SCELTA SOGGETTI ISTITUZIONALI</h5>
+                <h4 className="font-weight-light pt-5 pl-2 pb-1">ALTRI ALLEGATI</h4>
+                <UploadFiles 
+                    risorse={allegati} 
+                    mutation={AVVIO_FILE_UPLOAD} 
+                    resourceMutation={DELETE_RISORSA_AVVIO}
+                    variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
+                    isLocked={false} getSuccess={getSuccess} getFileName={({uploadRisorsaAvvio: {fileName} = {}}) => fileName}/>
+                
+                
+                <h5 className="font-weight-light pb-1 mt-5 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
+                <Input getInput={getGaranteInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />
+                <Input getInput={getGarantePecInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} className="mb-3 rounded-pill" placeholder="Indirizzo Pec" onChange={undefined} value={garantePec} type="url"/>
+                
+                <h5 className="font-weight-light pb-1 mt-5 mb-3">TERMINI SCADENZA PER LA RISPOSTA</h5>
+                <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
+                
+                <h5 className="font-weight-light pb-1 mt-5">SCELTA SOGGETTI ISTITUZIONALI</h5>
                     {aut.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pl-2 mt-3 " key={uuid}>
                                  <i className="material-icons text-serapide">bookmark</i>
                                  {nome}
                         </div>))}
-                    <div className="mt-4 pl-4 pb-4">
+                    <div className="mt-3 pl-4 pb-4">
                     <Mutation mutation={UPDATE_PIANO} onError={showError}>
                         {(onChange) => {
                             const changed = (val) => {
-                                const autoritaCompetenteVas = auths.indexOf(val) !== -1 ? [] : [val]
+                                let autoritaIstituzionali = []
+                                if(auths.indexOf(val)!== -1){
+                                    autoritaIstituzionali = auths.filter( uuid => uuid !== val)
+                                }else {
+                                    autoritaIstituzionali = auths.concat(val)
+                                }
                                     onChange({variables:{ input:{ 
-                                            pianoOperativo: { autoritaCompetenteVas}, codice}
+                                            pianoOperativo: { autoritaIstituzionali}, codice}
                                     }})
                             }
                             return (
@@ -117,7 +163,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                                     query={GET_CONTATTI}
                                     getList={getAuthorities}
                                     onChange={changed}
-                                    variables={{tipo: "acvas"}}
+                                    variables={{}}
                                     size="lg"
                                     label="SOGGETTI ISTITUZIONALI"
                                     btn={(toggleOpen) => (
@@ -125,15 +171,14 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                                             <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="rounded-pill" color="serapide" icon="add_circle" label="Seleziona soggetti istituzionali"/>
                                         </div>
                                         )}
-
                                     >
-                                    <AddContact className="mt-2" tipologia="acvas"></AddContact>
+                                    <AddContact className="mt-2"></AddContact>
                                     </EnhancedListSelector>)}
                         }
                         </Mutation>
                         </div>
-                        <h5 className="font-weight-light pb-1 mt-3">ALTRI DESTINATARI</h5>
-                        {sca.map(({node: {nome, uuid} = {}}) => (<div className="d-flex mt-3" key={uuid}>
+                        <h5 className="font-weight-light pb-1 mt-5">ALTRI DESTINATARI</h5>
+                        {dest.map(({node: {nome, uuid} = {}}) => (<div className="d-flex mt-3" key={uuid}>
                                  <i className="material-icons text-serapide">bookmark</i>
                                  {nome}
                         </div>))}
@@ -141,21 +186,21 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                         <Mutation mutation={UPDATE_PIANO} onError={showError}>
                     {(onChange) => {
                             const changed = (val) => {
-                                let nscas = []
-                                if(scas.indexOf(val)!== -1){
-                                    nscas = scas.filter( uuid => uuid !== val)
+                                let altriDestinatari = []
+                                if(dests.indexOf(val)!== -1){
+                                    altriDestinatari = dests.filter( uuid => uuid !== val)
                                 }else {
-                                    nscas = scas.concat(val)
+                                    altriDestinatari = dests.concat(val)
                                 }
                                 onChange({variables:{ input:{ 
-                                            pianoOperativo: { soggettiSca: nscas}, codice}
+                                            pianoOperativo: { altriDestinatari}, codice}
                                     }})
                             }
                             return (
                         <EnhancedListSelector
-                                selected={scas}
+                                selected={dests}
                                 query={GET_CONTATTI}
-                                variables={{tipo: "sca"}}
+                                variables={{}}
                                 getList={getAuthorities}
                                 label="SOGGETTI NON ISTITUZIONALI"
                                 size="lg"
@@ -165,12 +210,12 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                                         <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="rounded-pill" color="serapide" icon="add_circle" label="Aggiungi soggetti non istituzionali"/>
                                     </div>)}
                             >
-                            <AddContact className="mt-2" tipologia="sca"></AddContact>
+                            <AddContact className="mt-2"></AddContact>
                             </EnhancedListSelector>)}
                         }
                         </Mutation>
                         </div>
-                        <h5 className="font-weight-light pb-1 mt-4">RICHIESTA CONFERENZA DI COPIANIFICAZIONE</h5>
+                        <h5 className="font-weight-light pb-1 mt-5">RICHIESTA CONFERENZA DI COPIANIFICAZIONE</h5>
                         <div className="row pl-2">
                             <div className="col-12 pt-2">
                                 Se si seleziona l'opzione "Si" viene inviata a Regione Toscana la RICHIESTA
@@ -184,46 +229,49 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                                 
                             </div>
                         </div>
-                        <div className="d-flex flex-column mt-4 pl-2">
-                        <div className="d-flex"><span style={{width: 200}}>SI</span><input class="form-check-input position-static" type="checkbox"></input></div>
-                        <div className="d-flex"><span style={{width: 200}}>NON ADESSO</span><input class="form-check-input position-static" type="checkbox"></input></div>
-                        <div className="d-flex"><span style={{width: 200}}>NON NECESSARIA</span><input class="form-check-input position-static" type="checkbox"></input>
-                        <i className="ml-3 material-icons">check_circle_outline</i><span className="pl-1">NOTIFICA AL GENIO CIVILE</span>
-                        </div>
-                        </div>
+                        <Mutation mutation={UPDATE_AVVIO} onError={showError}>
+                            {(onChange) => {
+                                const changed = (e) => {
+                                    onChange({
+                                        variables:{ 
+                                            input:{ 
+                                                proceduraAvvio: {conferenzaCopianificazione: e.target.value.toLowerCase()}, 
+                                                uuid
+                                            }
+                                        }})
+                                }   
+                                return (
+                                    <div className="d-flex flex-column mt-4 pl-2">
+                                        <div className="d-flex">
+                                            <span style={{minWidth: 200}}>SI</span>
+                                            <input onChange={changed} value="NECESSARIA" checked={conferenzaCopianificazione === "NECESSARIA"} className="form-check-input position-static" type="checkbox"/>
+                                            </div>
+                                        <div className="d-flex">
+                                            <span style={{minWidth: 200}}>NON ADESSO</span>
+                                            <input onChange={changed} value="POSTICIPATA" checked={conferenzaCopianificazione === "POSTICIPATA"} className="form-check-input position-static" type="checkbox"/>
+                                        </div>
+                                        <div className="d-flex">
+                                            <span style={{minWidth: 200}}>NON NECESSARIA</span>
+                                            <input onChange={changed} value="NON_NECESSARIA" checked={conferenzaCopianificazione === "NON_NECESSARIA"} className="form-check-input position-static" type="checkbox"/>
+                                            <i className={`ml-3 material-icons ${conferenzaCopianificazione === "NON_NECESSARIA" ? "text-serapide" : ""}`}>check_circle_outline</i>
+                                            <span className={`pl-1 ${conferenzaCopianificazione === "NON_NECESSARIA" ? "text-serapide" : "text-gray"}`}>NOTIFICA AL GENIO CIVILE</span>
+                                        </div>
+                                    </div>)}
+                            }
+                        </Mutation>
+                        
 
                     
                 
                 <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIO_CONSULTAZIONE_VAS} canCommit={avvioConsultazioniSca && docPrelim && (!isFull || (auths.length > 0 && scas.length > 0))}></SalvaInvia>
+                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={obiettivi && quadro && garante && programma && auths.length > 0 && dests.length > 0 && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
                 
                 </div>
             </React.Fragment>)}
 
-const updateCache =(codice) => (cache, { data: {createConsultazioneVas : { nuovaConsultazioneVas: node}}  = {}} = {}) => {
-    if (node) {
-        const consultazioneVas = {__typename: "ConsultazioneVASNodeConnection", edges: [{__typename: "ConsultazioneVASNodeEdge", node}]}
-        cache.writeQuery({
-                        query: GET_CONSULTAZIONE_VAS,
-                        data: { consultazioneVas},
-                        variables: {codice}
-                    })
-    }
-}
-export default ({codicePiano, back, piano}) => (
-                <Query query={GET_CONSULTAZIONE_VAS} variables={{codice: codicePiano}} onError={showError}>
-                    {({loading, data: {consultazioneVas: {edges = []} = []} = {}, error}) => {
-                        if (!loading && !error && edges.length === 0 && codicePiano) {
-                            return (
-                                <AutoMutation variables={{input: {codicePiano}}} mutation={CREA_CONSULTAZIONE_VAS} onError={showError} update={updateCache(codicePiano)}>
-                                    {() => (
-                                        <div className="flex-fill d-flex justify-content-center">
-                                            <div className="spinner-grow " role="status">
-                                                <span className="sr-only">Loading...</span>
-                                            </div>
-                                        </div>)}
-                                </AutoMutation>)
-                        }
+export default ({back, piano}) => (
+                <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
+                    {({loading, data: {procedureAvvio: {edges = []} = []} = {}, error}) => {
                         if(loading) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
@@ -233,6 +281,6 @@ export default ({codicePiano, back, piano}) => (
                                 </div>)
                         }
                         return (
-                            <UI consultazioneSCA={edges[0]} back={back} piano={piano}/>)}
+                            <UI procedureAvvio={edges[0]} back={back} piano={piano}/>)}
                     }
                 </Query>)

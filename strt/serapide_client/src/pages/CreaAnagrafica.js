@@ -38,7 +38,7 @@ const getDataDeliberaInput = (codice) => (val) => ({
         codice}
     }})
 
-const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera && delibera && descrizione && descrizione.length > 0
+const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera && delibera && descrizione
 
 
 export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {

@@ -26,7 +26,6 @@ const SwitchAssoggetamento = ({uuid, assoggettamento}) => (
         <Mutation mutation={UPDATE_VAS} onError={showError}>
             {(update, {loading}) => {
                 const onClick = (val) =>{
-                    console.log(uuid, assoggettamento)
                     if(val !== assoggettamento) {
                         update({variables: {input: {proceduraVas: {assoggettamento: !assoggettamento}, uuid}}})
                     }

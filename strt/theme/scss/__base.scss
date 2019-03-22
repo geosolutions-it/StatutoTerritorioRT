@@ -260,13 +260,14 @@ a {
 }
 
 .add-contact {
-    .ente-sel {
-        min-width: 200px
-    }
-    .form-control {
-        width: auto;
-        min-width: 200px
-    }
+    // .ente-sel {
+    //     min-width: 200px
+    // }
+     .col{ 
+         padding-left: 5px;
+         padding-right: 5px;
+     }
+    
     i{
         cursor: pointer
     }

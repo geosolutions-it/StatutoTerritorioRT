@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import {Modal, ModalBody, ModalHeader, ListGroup, ListGroupItem} from 'reactstrap'
+import {Modal, ModalBody, ModalHeader, ModalFooter, ListGroup, ListGroupItem} from 'reactstrap'
 import {toggleControllableState} from '../enhancers/utils'
 import {Query} from 'react-apollo'
 import {toast} from 'react-toastify'
@@ -30,16 +30,18 @@ const ListSelector = enhancer(({size, children, label, selected = [], isOpen, to
             <Modal size={size} isOpen={isOpen} toggle={toggleOpen} wrapClassName="serapide" autoFocus={true}>
                 <ModalHeader toggle={toggleOpen}>{label}</ModalHeader>
                 <ModalBody> 
+                    <div style={{maxHeight: "60vh", overflowY: "scroll"}}>
                     <ListGroup>
                         {items.map((n) => {
                             const opt = getOption(n) || {}
                             return <ListItem key={opt.value} option={opt} onClick={onChange} selected={selected.indexOf(opt.value) !== -1} ></ListItem>
                         })}
                     </ListGroup>
-                    {children}
+                    </div>
                 </ModalBody>
-            
-                
+                <ModalFooter style={{display: 'block'}}>
+                    {children}
+                </ModalFooter>
             </Modal>
     </React.Fragment>
     )}

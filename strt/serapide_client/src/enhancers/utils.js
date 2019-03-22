@@ -26,12 +26,12 @@ import { withStateHandlers, branch, withState, compose} from 'recompose';
  */
 export const withControllableState = (propName, handlerName, initialValue) =>
     branch(
-        (props = {}) => !props[handlerName],
+        (props = {}) => !props[handlerName] && !props[propName],
         withState(propName, handlerName, initialValue)
     )
 export const toggleControllableState = (propName, handlerName, initialValue = false) =>
         branch(
-            (props = {}) => !props[handlerName],
+            (props = {}) => !props[handlerName] && !props[propName],
             compose(
                 withStateHandlers((props) => ({
                     [propName]: props.initValue || initialValue}), 

@@ -24,8 +24,8 @@ fragment Risorsa on RisorsaNode {
     }  
 }
 `
-export const AUT_VASFragment = gql`
-fragment AUT_VAS on ContattoNode{
+export const CONTATTO = gql`
+fragment Contatto on ContattoNode{
         nome
         uuid
 }
@@ -82,19 +82,19 @@ fragment VAS on ProceduraVASNode {
             autoritaCompetenteVas{
                 edges{
                   node{
-                    ...AUT_VAS
+                    ...Contatto
                   }
                 }
             }
             soggettiSca {
                 edges{
                     node{
-                        ...AUT_VAS
+                        ...Contatto
                     }
                 }
             }
             soggettoProponente {
-              ...AUT_VAS
+              ...Contatto
             }
         }
         risorse{
@@ -108,7 +108,7 @@ fragment VAS on ProceduraVASNode {
         }
 }
 ${RISORSE}
-${AUT_VASFragment}
+${CONTATTO}
 `
 export const PIANO = gql`
 fragment Piano on PianoNode {
@@ -146,24 +146,39 @@ fragment Piano on PianoNode {
     autoritaCompetenteVas{
         edges{
           node{
-            ...AUT_VAS
+            ...Contatto
           }
         }
     }
     soggettiSca{
         edges{
           node{
-            ...AUT_VAS
+            ...Contatto
           }
         }
     }
+    autoritaIstituzionali{
+                edges{
+                    node{
+                        ...Contatto
+                    }
+                }
+            }
+            altriDestinatari{
+                edges{
+                    node{
+                        ...Contatto
+                    }
+                }
+            }
+    
     soggettoProponente {
-      ...AUT_VAS
+      ...Contatto
     }
 }
 ${RISORSE}
 ${USER}
-${AUT_VASFragment}
+${CONTATTO}
 ${AZIONI}
 ` 
 
@@ -184,4 +199,18 @@ fragment  ConsultazioneVAS on ConsultazioneVASNode {
           }
 }
   ${RISORSE}
+`
+export const AVVIO = gql`
+fragment AVVIO on ProceduraAvvioNode {
+        uuid
+        conferenzaCopianificazione
+        dataCreazione
+        dataScadenzaRisposta
+        garanteNominativo
+        garantePec
+        risorse {
+            ...Risorse
+        }
+}
+${RISORSE}
 `

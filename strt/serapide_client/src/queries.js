@@ -17,6 +17,31 @@ query {
     }
 }`
 
+export const GET_TIPO_CONTATTO = gql`
+query GetTipoContatto{
+  tipologiaContatto {
+    label
+    value
+  }
+}
+`
+
+export const GET_AVVIO = gql`
+query GetAvvio($codice: String!) {
+    procedureAvvio(piano_Codice: $codice) {
+        edges{
+          node{
+            ...AVVIO 
+            }
+            
+        }
+    }
+}
+${FR.AVVIO}
+`
+
+
+
 
 export const GET_CONSULTAZIONE_VAS = gql`
 query ConsultazioniVas($codice: String){
@@ -53,6 +78,7 @@ query CreaPianoPage{
       }
 }
 `
+
 
 export const GET_UTENTE = gql`
 query{
@@ -374,6 +400,57 @@ mutation CreaContatto($input: CreateContattoInput!){
 	
 }
 `
+// Mutation avvio procedura
+
+export const AVVIO_FILE_UPLOAD = gql`
+mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    uploadRisorsaAvvio(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      proceduraAvvioAggiornata {
+          ...AVVIO
+      }
+      fileName
+    }
+  }
+  ${FR.AVVIO}
+`
+
+export const UPDATE_AVVIO = gql`
+mutation UpdateProceduraAvvio($input: UpdateProceduraAvvioInput!) {
+    updateProceduraAvvio(input: $input) {
+        proceduraAvvioAggiornata {
+            ...AVVIO
+        }
+    }
+}
+${FR.AVVIO}
+`
+
+export const DELETE_RISORSA_AVVIO = gql`
+mutation DeleteRisorsaAvvio($id: ID!, $codice: String!) {
+    deleteRisorsaAvvio(risorsaId: $id, codice: $codice){
+        success
+        proceduraAvvioAggiornata {
+            ...AVVIO
+        }
+    }
+}
+${FR.AVVIO}
+`
+export const AVVIA_PIANO = gql`
+mutation AvvioPiano($codice: String!) {
+    avviaPiano(uuid: $codice) {
+        errors
+        avvioAggiornato {
+              piano {
+                ...AzioniPiano
+              }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
 
 // LOCAL STATE
 // example of local state query
