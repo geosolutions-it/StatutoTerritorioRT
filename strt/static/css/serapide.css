@@ -8340,12 +8340,9 @@ a {
 .serapide .Toastify__toast {
   border-radius: 8px; }
 
-.add-contact .ente-sel {
-  min-width: 200px; }
-
-.add-contact .form-control {
-  width: auto;
-  min-width: 200px; }
+.add-contact .col {
+  padding-left: 5px;
+  padding-right: 5px; }
 
 .add-contact i {
   cursor: pointer; }

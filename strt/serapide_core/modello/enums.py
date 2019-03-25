@@ -33,6 +33,17 @@ FASE_NEXT = {
     'pubblicazione': None
 }
 
+TIPOLOGIA_RISORSA = {
+    'tipo_risorsa_1': {
+        'label': 'testo label',
+        'tooltip': 'testo tooltip'
+    },
+    'tipo_risorsa_1': {
+        'label': 'testo label',
+        'tooltip': 'testo tooltip'
+    }
+}
+
 TIPOLOGIA_CONTATTO = Choices(
         ('unknown', _('UNKNOWN')),
         ('generico', _('GENERICO')),
@@ -72,9 +83,9 @@ STATO_AZIONE = Choices(
 
 TIPOLOGIA_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
-        ('creato_piano', _('Creato Piano')),  # Comune
+        ('creato_piano', _('Creato Piano/Variante')),  # Comune
         # Procedura VAS
-        ('richiesta_verifica_vas', _('Richiesta Verifica VAS')),  # AC
+        ('richiesta_verifica_vas', _('Documento Preliminare VAS')),  # AC
         ('pareri_verifica_sca', _('Pareri Verifica VAS')),  # SCA
         ('emissione_provvedimento_verifica', _('Emissione Provvedimento di Verifica')),  # AC
         ('pubblicazione_provvedimento_verifica', _('Pubblicazione Provvedimento di Verifica')),  # AC/Comune
@@ -85,13 +96,24 @@ TIPOLOGIA_AZIONE = Choices(
         # Avvio
         ('avvio_procedimento', _('Avvio Procedimento')),  # Comune
         ('formazione_del_piano', _('Formazione del Piano')),  # Comune
-        ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Genio Civile
+        ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Comune
+        ('protocollo_genio_civile_id', _('Protocollo N.')),  # Genio Civile
         ('richiesta_conferenza_copianificazione', _('Convocazione Conferenza di Copianificazione')),  # Comune
         ('convocazione_conferenza_copianificazione', _('Convocazione Conferenza di Copianificazione')),  # Regione
         # Adozione
         ('osservazioni_enti', _('Osservazioni Enti')),  # Enti
         ('osservazioni_regione', _('Osservazioni Regione')),  # Regione
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
+    )
+
+TOOLTIP_AZIONE = Choices(
+        ('unknown', _('UNKNOWN')),
+        # Procedura VAS
+        ('richiesta_verifica_vas', _('art 23  L.R. 10/2010')),  # AC
+        ('emissione_provvedimento_verifica', _('art 22  L.R. 10/2010')),  # AC
+        ('pubblicazione_provvedimento_verifica', _('art 22  L.R. 10/2010')),  # AC/Comune
+        # Avvio
+        ('avvio_procedimento', _('art. 17 L.R. 65/2014, comma 1, art. 21 Disciplina del Piano , PIT-PPR')),
     )
 
 TIPOLOGIA_ATTORE = Choices(
