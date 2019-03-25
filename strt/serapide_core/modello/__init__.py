@@ -42,6 +42,8 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         ("message_sent", _("Messaggio Ricevuto"), _("Messaggio Ricevuto"),),
         ("piano_phase_changed", _("Piano Aggiornato"), _("Piano Aggiornato"),),
         ("piano_verifica_vas_updated", _("Documento Preliminare VAS"), _("Documento Preliminare VAS"),),
+        ("conferenza_copianificazione", _("Conferenza di Copianificazione"), _("Conferenza di Copianificazione"),),
+        ("protocollo_genio_civile", _("Protocollo Genio Civile"), _("Protocollo Genio Civile"),),
     )
 
     name = 'serapide_core.modello'

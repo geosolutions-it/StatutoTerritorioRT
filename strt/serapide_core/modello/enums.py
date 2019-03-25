@@ -38,7 +38,7 @@ TIPOLOGIA_RISORSA = {
         'label': 'testo label',
         'tooltip': 'testo tooltip'
     },
-    'tipo_risorsa_1': {
+    'tipo_risorsa_2': {
         'label': 'testo label',
         'tooltip': 'testo tooltip'
     }
@@ -65,6 +65,7 @@ TIPOLOGIA_VAS = Choices(
         ('semplificata', _('SEMPLIFICATA')),
         ('verifica', _('VERIFICA')),
         ('procedimento', _('PROCEDIMENTO')),
+        ('procedimento_semplificato', _('PROCEDIMENTO_SEMPLIFICATO')),
         ('non_necessaria', _('NON_NECESSARIA')),
     )
 
@@ -89,7 +90,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('pareri_verifica_sca', _('Pareri Verifica VAS')),  # SCA
         ('emissione_provvedimento_verifica', _('Emissione Provvedimento di Verifica')),  # AC
         ('pubblicazione_provvedimento_verifica', _('Pubblicazione Provvedimento di Verifica')),  # AC/Comune
-        ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),  # Comune
+        ('avvio_consultazioni_sca', _('Avvio Consultazioni SCA')),  # Comune/AC
         ('pareri_sca', _('Pareri SCA')),  # SCA
         ('avvio_esame_pareri_sca', _('Avvio Esame Pareri SCA')),  # Comune
         ('upload_elaborati_vas', _('Upload Elaborati VAS')),  # Comune
