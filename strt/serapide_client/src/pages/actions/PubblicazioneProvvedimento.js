@@ -10,6 +10,7 @@ import {Input} from 'reactstrap'
 import Resource from '../../components/Resource'
 import {Query} from 'react-apollo'
 import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from '../../queries'
+import ActionTitle from '../../components/ActionTitle'
 import SalvaInvia from '../../components/SalvaInvia'
 import  {showError} from '../../utils'
 import {withControllableState} from '../../enhancers/utils'
@@ -24,7 +25,7 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
     const pubblicazione_provvedimento_verifica = attore === 'AC' ? "pubblicazioneProvvedimentoVerificaAc" : "pubblicazioneProvvedimentoVerificaAp"
     return (
         <React.Fragment>
-            <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Pubblicazione Provvedimento di Verifica</h2></div>
+            <ActionTitle>Pubblicazione Provvedimento di Verifica</ActionTitle>
             <Resource className="border-0 mt-2" icon="attach_file" resource={provvedimentoVerificaVas}></Resource>
             
             <span style={{maxWidth: 400}} className="mt-5 d-flex align-items-center">

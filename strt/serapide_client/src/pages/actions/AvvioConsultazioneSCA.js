@@ -14,6 +14,7 @@ import {Query, Mutation} from "react-apollo"
 import Resource from '../../components/Resource'
 import {EnhancedListSelector} from '../../components/ListSelector'
 import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
 import AddContact from '../../components/AddContact'
 import Button from '../../components/IconButton'
 import RichiestaComune from '../../components/RichiestaComune'
@@ -49,7 +50,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
             return (<React.Fragment>
-                <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Avvio Consultazioni SCA</h2></div>
+                <ActionTitle>Avvio Consultazioni SCA</ActionTitle>
                 {isFull ? (<React.Fragment>
                     <div className="py-3 border-bottom-2">
                         <Resource className="border-0 mt-2" icon="attach_file" resource={provvedimentoVerificaVas}></Resource>

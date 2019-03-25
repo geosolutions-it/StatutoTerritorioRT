@@ -14,6 +14,7 @@ import {Query, Mutation} from "react-apollo"
 import Resource from '../../components/Resource'
 import {EnhancedListSelector} from '../../components/ListSelector'
 import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
 import AddContact from '../../components/AddContact'
 import Button from '../../components/IconButton'
 import {EnhancedDateSelector} from '../../components/DateSelector'
@@ -84,9 +85,9 @@ const UI = ({
             const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
 
             return (<React.Fragment>
-                <div  className="py-3 border-bottom-2 border-top-2 mb-3"><h2 className="m-0">Avvio del Procedimento <small>(Atto di Avvio)<br/>documentazione (art. 17 L.R. 65/2014)</small></h2></div>
+                <ActionTitle>Avvio del Procedimento <small>(Atto di Avvio)<br/>documentazione (art. 17 L.R. 65/2014)</small></ActionTitle>
                 
-                <h6>Delibera di avvio</h6>
+                <h6 className="mt-3">Delibera di avvio</h6>
                 <Resource className="border-0 mt-2" icon="attach_file" resource={delibera}/>
                 <h6 className="pt-5">Elaborati allegati alla delibera di avvio del procedimento</h6>
                 <div className="action-uploader  align-self-start border-bottom">

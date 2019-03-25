@@ -14,6 +14,7 @@ import {GET_VAS,
     VAS_FILE_UPLOAD, INVIO_PARERI_VERIFICA
 } from '../../queries'
 import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
 import RichiestaComune from '../../components/RichiestaComune'
 import  {showError, formatDate, daysSub} from '../../utils'
 
@@ -36,7 +37,7 @@ const UI = ({
         
         return (
             <React.Fragment>
-                <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Pareri SCA</h2></div>
+                <ActionTitle>Pareri SCA</ActionTitle>
                 <RichiestaComune scadenza={scadenza && daysSub(scadenza, 30)}/>
                 <Resource className="border-0 mt-2" icon="attach_file" resource={documento}></Resource>
                 <div className="mt-3 mb-5 border-bottom-2 pb-2 d-flex">
