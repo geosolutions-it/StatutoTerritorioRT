@@ -376,6 +376,16 @@ class UpdatePiano(relay.ClientIDMutation):
                                     UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano)
                                     _ac.save()
 
+                # Protocollo Genio Civile
+                if 'data_protocollo_genio_civile' in _piano_data:
+                    _piano_data.pop('data_protocollo_genio_civile')
+                    # This cannot be changed
+                if 'numero_protocollo_genio_civile' in _piano_data:
+                    if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) or \
+                    not rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'genio_civile'):
+                        _piano_data.pop('numero_protocollo_genio_civile')
+                        # This can be changed only by Genio Civile
+
                 piano_aggiornato = update_create_instance(_piano, _piano_data)
                 return cls(piano_aggiornato=piano_aggiornato)
             except BaseException as e:

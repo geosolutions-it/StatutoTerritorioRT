@@ -267,6 +267,9 @@ class Piano(models.Model):
     data_approvazione = models.DateTimeField(null=True, blank=True)
     last_update = models.DateTimeField(auto_now=True, blank=True)
 
+    data_protocollo_genio_civile = models.DateTimeField(null=True, blank=True)
+    numero_protocollo_genio_civile = models.TextField(null=True, blank=True)
+
     fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
     storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
     risorse = models.ManyToManyField(Risorsa, through='RisorsePiano')

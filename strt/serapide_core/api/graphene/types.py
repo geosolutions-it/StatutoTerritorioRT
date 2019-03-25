@@ -108,6 +108,7 @@ class UserMessageType(DjangoObjectType):
 
 
 class AzioneNode(DjangoObjectType):
+
     label = graphene.String()
 
     def resolve_label(self, info, **args):

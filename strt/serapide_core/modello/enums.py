@@ -85,7 +85,8 @@ TIPOLOGIA_AZIONE = Choices(
         # Avvio
         ('avvio_procedimento', _('Avvio Procedimento')),  # Comune
         ('formazione_del_piano', _('Formazione del Piano')),  # Comune
-        ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Genio Civile
+        ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Comune
+        ('protocollo_genio_civile_id', _('Protocollo N.')),  # Genio Civile
         ('richiesta_conferenza_copianificazione', _('Convocazione Conferenza di Copianificazione')),  # Comune
         ('convocazione_conferenza_copianificazione', _('Convocazione Conferenza di Copianificazione')),  # Regione
         # Adozione
