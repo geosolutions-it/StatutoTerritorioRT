@@ -26,6 +26,10 @@ from serapide_core.helpers import (
     is_RUP,
     update_create_instance)
 
+from serapide_core.signals import (
+    piano_phase_changed,
+)
+
 from serapide_core.modello.models import (
     Piano,
     Azione,
@@ -145,6 +149,31 @@ class AvvioPiano(graphene.Mutation):
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
     @classmethod
+    def autorita_ok(cls, piano):
+        _res = False
+        _has_genio_civile = False
+        if piano.soggetto_proponente and \
+        piano.autorita_competente_vas.all().count() > 0 and \
+        piano.autorita_istituzionali.all().count() > 0 and \
+        piano.altri_destinatari.all().count() > 0 and \
+        piano.soggetti_sca.all().count() > 0:
+            for _c in piano.soggetti_sca.all():
+                if _c.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
+                    _has_genio_civile = True
+                    break
+            for _c in piano.autorita_istituzionali.all():
+                if _c.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
+                    _has_genio_civile = True
+                    break
+            for _c in piano.altri_destinatari.all():
+                if _c.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
+                    _has_genio_civile = True
+                    break
+            _res = _has_genio_civile
+        return _res
+
+
+    @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
 
         # Update Azioni Piano
@@ -172,9 +201,34 @@ class AvvioPiano(graphene.Mutation):
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_formazione_del_piano, piano=piano)
 
-                if procedura_avvio.conferenza_copianificazione != TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+                if cls.autorita_ok(piano) and \
+                procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria:
 
-                    procedura_avvio.notifica_genio_civile = True
+                    procedura_avvio.notifica_genio_civile = False
+                    procedura_avvio.save()
+
+                    _conferenza_copianificazione = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.convocazione_conferenza_copianificazione,
+                        attore=TIPOLOGIA_ATTORE.regione,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _conferenza_copianificazione.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
+
+                    # TODO: verificare che parta la mail di conf. di Copianificazione
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="conferenza_copianificazione")
+
+                elif cls.autorita_ok(piano) and \
+                procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
+
+                    procedura_avvio.notifica_genio_civile = False
                     procedura_avvio.save()
 
                     _conferenza_copianificazione = Azione(
@@ -186,6 +240,12 @@ class AvvioPiano(graphene.Mutation):
                     _conferenza_copianificazione.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
+
+                elif cls.autorita_ok(piano) and \
+                procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+
+                    procedura_avvio.notifica_genio_civile = True
+                    procedura_avvio.save()
 
                     _protocollo_genio_civile = Azione(
                         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
@@ -207,6 +267,14 @@ class AvvioPiano(graphene.Mutation):
                     _protocollo_genio_civile_id.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile_id, piano=piano)
+
+                    # TODO: verificare che parta la mail di notifica al Genio Civile
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="protocollo_genio_civile")
 
     @classmethod
     def mutate(cls, root, info, **input):

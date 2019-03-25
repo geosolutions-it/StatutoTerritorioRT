@@ -48,8 +48,10 @@ from serapide_core.modello.models import (
 
 from serapide_core.modello.enums import (
     STATO_AZIONE,
+    TIPOLOGIA_RISORSA,
     TIPOLOGIA_VAS,
-    TIPOLOGIA_AZIONE
+    TIPOLOGIA_AZIONE,
+    TOOLTIP_AZIONE
 )
 
 logger = logging.getLogger(__name__)
@@ -110,9 +112,13 @@ class UserMessageType(DjangoObjectType):
 class AzioneNode(DjangoObjectType):
 
     label = graphene.String()
+    tooltip = graphene.String()
 
     def resolve_label(self, info, **args):
-        return TIPOLOGIA_AZIONE[self.tipologia]
+        return TIPOLOGIA_AZIONE[self.tipologia] if self.tipologia in TIPOLOGIA_AZIONE else None
+
+    def resolve_tooltip(self, info, **args):
+        return TOOLTIP_AZIONE[self.tipologia] if self.tipologia in TOOLTIP_AZIONE else None
 
     class Meta:
         model = Azione
@@ -127,10 +133,24 @@ class AzioneNode(DjangoObjectType):
 class RisorsaNode(DjangoObjectType):
 
     download_url = graphene.String()
+    label = graphene.String()
+    tooltip = graphene.String()
 
     def resolve_download_url(self, info, **args):
         _url = str(self.file)
         return urljoin(settings.SITE_URL, _url[_url.index('media/'):])
+
+    def resolve_label(self, info, **args):
+        _type = TIPOLOGIA_RISORSA[self.tipologia] if self.tipologia in TIPOLOGIA_RISORSA else None
+        if _type:
+            return _type['label']
+        return None
+
+    def resolve_tooltip(self, info, **args):
+        _type = TIPOLOGIA_RISORSA[self.tipologia] if self.tipologia in TIPOLOGIA_RISORSA else None
+        if _type:
+            return _type['tooltip']
+        return None
 
     class Meta:
         model = Risorsa

@@ -276,7 +276,8 @@ class UpdatePiano(relay.ClientIDMutation):
                 # Soggetto Proponente (O)
                 if 'soggetto_proponente_uuid' in _piano_data:
                     _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
                         if _piano.soggetto_proponente:
                             UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
                             _piano.soggetto_proponente = None
