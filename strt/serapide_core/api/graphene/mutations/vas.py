@@ -8,7 +8,6 @@
 # LICENSE file in the root directory of this source tree.
 #
 #########################################################################
-
 import rules
 import logging
 import datetime
@@ -387,7 +386,8 @@ class CreateConsultazioneVAS(relay.ClientIDMutation):
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
             try:
                 nuova_consultazione_vas = ConsultazioneVAS()
                 nuova_consultazione_vas.user = info.context.user
@@ -490,7 +490,8 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
@@ -525,26 +526,46 @@ class InvioPareriVAS(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
+            _verifica_vas = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas).first()
+            _avvio_consultazioni_sca = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
             _pareri_sca = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.pareri_sca).first()
-            if _pareri_sca.stato != STATO_AZIONE.nessuna:
+            if _verifica_vas and _pareri_sca.stato != STATO_AZIONE.nessuna:
                 _pareri_sca.stato = STATO_AZIONE.nessuna
                 _pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                 _pareri_sca.save()
 
-                _avvio_esame_pareri_sca = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
-                    attore=TIPOLOGIA_ATTORE.comune,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _avvio_esame_pareri_sca.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
+                if _avvio_consultazioni_sca and \
+                _avvio_consultazioni_sca.attore == TIPOLOGIA_ATTORE.ac:
+                    _verifica_vas.stato = STATO_AZIONE.nessuna
+                    _verifica_vas.save()
+                    _avvio_consultazioni_sca = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _avvio_consultazioni_sca.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+                    procedura_vas.verifica_effettuata = True
+                    procedura_vas.save()
 
-                """
-                    TODO: Queste azioni qui sotto in realtà sono di AVVIO Prodedimento!
-                """
+                else:
+                    _avvio_esame_pareri_sca = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _avvio_esame_pareri_sca.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
+
+                # TODO: Queste azioni qui sotto in realtà sono di AVVIO Prodedimento!
+
                 # _osservazioni_enti = Azione(
                 #     tipologia=TIPOLOGIA_AZIONE.osservazioni_enti,
                 #     attore=TIPOLOGIA_ATTORE.enti,
@@ -678,7 +699,8 @@ class AvvioEsamePareriSCA(graphene.Mutation):
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 

@@ -1,5 +1,5 @@
 {% autoescape off %}{% load i18n %}Gentile {{ recipient }},
-Le notifichiamo che il Documento Preliminare di Verifica VAS per il piano {{ piano.tipologia }} "{{ piano.codice }}" è stato pubblicato dall'utente {{ user }}.
+Le notifichiamo che è stata richiesta Notifica al Genio Civile per il piano {{ piano.tipologia }} "{{ piano.codice }}" dall'utente {{ user }}.
 Potrebbero essere necessarie azioni e/o interventi sul piano in oggetto.
 
 {% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:

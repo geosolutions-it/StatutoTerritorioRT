@@ -383,7 +383,8 @@ class UpdatePiano(relay.ClientIDMutation):
                     # This cannot be changed
                 if 'numero_protocollo_genio_civile' in _piano_data:
                     if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) or \
-                    not rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'genio_civile'):
+                    not rules.test_rule('strt_core.api.is_actor', _token or
+                                        (info.context.user, _organization), 'genio_civile'):
                         _piano_data.pop('numero_protocollo_genio_civile')
                         # This can be changed only by Genio Civile
 
@@ -477,19 +478,18 @@ class PromozionePiano(graphene.Mutation):
                 if procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
                     _verifica_vas.stato = STATO_AZIONE.nessuna
 
-                elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
-                    _verifica_vas.stato = STATO_AZIONE.nessuna
+                elif procedura_vas.tipologia in \
+                (TIPOLOGIA_VAS.procedimento, TIPOLOGIA_VAS.procedimento_semplificato):
+                    _verifica_vas.stato = STATO_AZIONE.attesa
                     _avvio_consultazioni_sca = Azione(
                         tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
-                        attore=TIPOLOGIA_ATTORE.comune,
+                        attore=TIPOLOGIA_ATTORE.ac,
                         order=_order,
                         stato=STATO_AZIONE.necessaria
                     )
                     _avvio_consultazioni_sca.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
-                    procedura_vas.verifica_effettuata = True
-                    procedura_vas.save()
 
                 elif procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
                     _verifica_vas.stato = STATO_AZIONE.nessuna

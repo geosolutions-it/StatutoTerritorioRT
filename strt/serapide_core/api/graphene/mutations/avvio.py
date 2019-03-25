@@ -42,6 +42,7 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_AZIONE,
     TIPOLOGIA_ATTORE,
+    TIPOLOGIA_CONTATTO,
     TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
@@ -152,11 +153,12 @@ class AvvioPiano(graphene.Mutation):
     def autorita_ok(cls, piano):
         _res = False
         _has_genio_civile = False
+
         if piano.soggetto_proponente and \
         piano.autorita_competente_vas.all().count() > 0 and \
-        piano.autorita_istituzionali.all().count() > 0 and \
-        piano.altri_destinatari.all().count() > 0 and \
-        piano.soggetti_sca.all().count() > 0:
+        piano.autorita_istituzionali.all().count() >= 0 and \
+        piano.altri_destinatari.all().count() >= 0 and \
+        piano.soggetti_sca.all().count() >= 0:
             for _c in piano.soggetti_sca.all():
                 if _c.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
                     _has_genio_civile = True
@@ -172,7 +174,6 @@ class AvvioPiano(graphene.Mutation):
             _res = _has_genio_civile
         return _res
 
-
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
 
@@ -187,6 +188,9 @@ class AvvioPiano(graphene.Mutation):
             _avvio_procedimento = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
             if _avvio_procedimento and _avvio_procedimento.stato != STATO_AZIONE.nessuna:
+                if not cls.autorita_ok(piano):
+                    raise Exception("Missing GENIO_CIVILE")
+
                 _avvio_procedimento.stato = STATO_AZIONE.nessuna
                 _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())
                 _avvio_procedimento.save()
@@ -201,8 +205,7 @@ class AvvioPiano(graphene.Mutation):
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_formazione_del_piano, piano=piano)
 
-                if cls.autorita_ok(piano) and \
-                procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria:
+                if procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria:
 
                     procedura_avvio.notifica_genio_civile = False
                     procedura_avvio.save()
@@ -221,12 +224,11 @@ class AvvioPiano(graphene.Mutation):
                     # Notify Users
                     piano_phase_changed.send(
                         sender=Piano,
-                        user=info.context.user,
-                        piano=_piano,
+                        user=user,
+                        piano=piano,
                         message_type="conferenza_copianificazione")
 
-                elif cls.autorita_ok(piano) and \
-                procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
+                elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
 
                     procedura_avvio.notifica_genio_civile = False
                     procedura_avvio.save()
@@ -241,8 +243,7 @@ class AvvioPiano(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
 
-                elif cls.autorita_ok(piano) and \
-                procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+                elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
 
                     procedura_avvio.notifica_genio_civile = True
                     procedura_avvio.save()
@@ -272,8 +273,8 @@ class AvvioPiano(graphene.Mutation):
                     # Notify Users
                     piano_phase_changed.send(
                         sender=Piano,
-                        user=info.context.user,
-                        piano=_piano,
+                        user=user,
+                        piano=piano,
                         message_type="protocollo_genio_civile")
 
     @classmethod
