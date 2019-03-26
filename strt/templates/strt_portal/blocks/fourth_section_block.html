@@ -37,12 +37,14 @@ LICENSE file in the root directory of this source tree.
                     <p class="wrap-text pb-3 pb-lg-5">
                         <small>{{ self.first_box.short_description }}</small>
                     </p>
-                    <div class="open-panel-btn">
-                        <button type="button" class="btn bg-transparent" data-toggle="collapse"
-                                data-target="#first-panel-detail">
-                            <i class="home-icon material-icons text-secondary">add_circle</i>
-                        </button>
-                    </div>
+                    {% if self.first_box.detailed_description %}
+                        <div class="open-panel-btn">
+                            <button type="button" class="btn bg-transparent" data-toggle="collapse"
+                                    data-target="#first-panel-detail">
+                                <i class="home-icon material-icons text-secondary">add_circle</i>
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -60,12 +62,14 @@ LICENSE file in the root directory of this source tree.
                     <p class="wrap-text pb-3 pb-lg-5">
                         <small>{{ self.second_box.short_description }}</small>
                     </p>
-                    <div class="open-panel-btn">
-                        <button type="button" class="btn bg-transparent" data-toggle="collapse"
-                                data-target="#second-panel-detail">
-                            <i class="home-icon material-icons text-secondary">add_circle</i>
-                        </button>
-                    </div>
+                    {% if self.second_box.detailed_description %}
+                        <div class="open-panel-btn">
+                            <button type="button" class="btn bg-transparent" data-toggle="collapse"
+                                    data-target="#second-panel-detail">
+                                <i class="home-icon material-icons text-secondary">add_circle</i>
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -83,12 +87,14 @@ LICENSE file in the root directory of this source tree.
                     <p class="wrap-text pb-3 pb-lg-5">
                         <small>{{ self.third_box.short_description }}</small>
                     </p>
-                    <div class="open-panel-btn">
-                        <button type="button" class="btn bg-transparent" data-toggle="collapse"
-                                data-target="#third-panel-detail">
-                            <i class="home-icon material-icons text-secondary">add_circle</i>
-                        </button>
-                    </div>
+                    {% if self.third_box.detailed_description %}
+                        <div class="open-panel-btn">
+                            <button type="button" class="btn bg-transparent" data-toggle="collapse"
+                                    data-target="#third-panel-detail">
+                                <i class="home-icon material-icons text-secondary">add_circle</i>
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -106,12 +112,14 @@ LICENSE file in the root directory of this source tree.
                     <p class="wrap-text pb-3 pb-lg-5">
                         <small>{{ self.fourth_box.short_description }}</small>
                     </p>
-                    <div class="open-panel-btn">
-                        <button type="button" class="btn bg-transparent" data-toggle="collapse"
-                                data-target="#fourth-panel-detail">
-                            <i class="home-icon material-icons text-secondary">add_circle</i>
-                        </button>
-                    </div>
+                    {% if self.fourth_box.detailed_description %}
+                        <div class="open-panel-btn">
+                            <button type="button" class="btn bg-transparent" data-toggle="collapse"
+                                    data-target="#fourth-panel-detail">
+                                <i class="home-icon material-icons text-secondary">add_circle</i>
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -142,7 +150,7 @@ LICENSE file in the root directory of this source tree.
                 </div>
                 <div class="row wrap-text pb-2 pb-lg-5">
                     <div class="col-12">
-                        {{ self.first_box.short_description }}
+                        {{ self.first_box.detailed_description }}
                     </div>
                 </div>
                 <div class="row py-3">
@@ -155,7 +163,8 @@ LICENSE file in the root directory of this source tree.
                 </div>
                 <div class="row">
                     <div class="col-12 text-center p-3">
-                        <a href="" class="bg-secondary p-3 text-dark">
+                        <a href="{{ self.first_box.button_url }}" target="{{ self.first_box.button_target }}"
+                           class="bg-dark p-3 text-white">
                             {{ self.first_box.button_text }}
                         </a>
                     </div>
@@ -188,7 +197,7 @@ LICENSE file in the root directory of this source tree.
                 </div>
                 <div class="row wrap-text pb-2 pb-lg-5">
                     <div class="col-12">
-                        {{ self.second_box.short_description }}
+                        {{ self.second_box.detailed_description }}
                     </div>
                 </div>
                 <div class="row py-3">
@@ -201,7 +210,8 @@ LICENSE file in the root directory of this source tree.
                 </div>
                 <div class="row">
                     <div class="col-12 text-center p-3">
-                        <a href="" class="bg-secondary p-3 text-dark">
+                        <a href="{{ self.second_box.button_url }}" target="{{ self.second_box.button_target }}"
+                           class="bg-dark p-3 text-white">
                             {{ self.second_box.button_text }}
                         </a>
                     </div>
@@ -234,7 +244,7 @@ LICENSE file in the root directory of this source tree.
                 </div>
                 <div class="row wrap-text pb-2 pb-lg-5">
                     <div class="col-12">
-                        {{ self.third_box.short_description }}
+                        {{ self.third_box.detailed_description }}
                     </div>
                 </div>
                 <div class="row py-3">
@@ -247,7 +257,8 @@ LICENSE file in the root directory of this source tree.
                 </div>
                 <div class="row">
                     <div class="col-12 text-center p-3">
-                        <a href="" class="bg-secondary p-3 text-dark">
+                        <a href="{{ self.third_box.button_url }}" target="{{ self.third_box.button_target }}"
+                           class="bg-dark p-3 text-white">
                             {{ self.third_box.button_text }}
                         </a>
                     </div>
@@ -280,7 +291,7 @@ LICENSE file in the root directory of this source tree.
                 </div>
                 <div class="row wrap-text pb-2 pb-lg-5">
                     <div class="col-12">
-                        {{ self.fourth_box.short_description }}
+                        {{ self.fourth_box.detailed_description }}
                     </div>
                 </div>
                 <div class="row py-3">
@@ -293,7 +304,8 @@ LICENSE file in the root directory of this source tree.
                 </div>
                 <div class="row">
                     <div class="col-12 text-center p-3">
-                        <a href="" class="bg-secondary p-3 text-dark">
+                        <a href="{{ self.fourth_box.button_url }}" target="{{ self.fourth_box.button_target }}"
+                           class="bg-dark p-3 text-white">
                             {{ self.fourth_box.button_text }}
                         </a>
                     </div>

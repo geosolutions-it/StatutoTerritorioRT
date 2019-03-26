@@ -15,18 +15,33 @@ LICENSE file in the root directory of this source tree.
 <div class="row m-0 py-3 py-lg-5 third-section-row">
 
     <div class="col-12 col-lg-5 text-center">
-        {% image self.image fill-800x800 class="img-fluid" %}
+        {% image self.main_block.image fill-800x800 class="img-fluid" %}
     </div>
-    <div class="col-12 col-lg-7">
+    <div class="col-12 col-lg-7 " id="side-content">
         <p class="font-weight-bold wrap-text">
-            {{ self.subtitle }}
+            {{ self.main_block.subtitle }}
         </p>
         <p class="medium-text wrap-text">
-            {{ self.title }}
+            {{ self.main_block.title }}
         </p>
         <p class="wrap-text">
-            {{ self.text }}
+            {{ self.main_block.text }}
         </p>
+        <div class="my-5">
+            <a href="" class="bg-dark p-3 text-white"
+               data-toggle="collapse" data-target="#details-panel">
+                {{ self.main_block.button_text }}
+            </a>
+        </div>
+    </div>
+    <div class="col-12 border border-secondary p-3 collapse" id="details-panel">
+        <div class="close-panel-btn">
+            <button type="button" class="btn bg-transparent" data-toggle="collapse"
+                    data-target="#details-panel">
+                <i class="home-icon material-icons text-secondary">clear</i>
+            </button>
+        </div>
+        {{ self.details_block }}
     </div>
 
 </div>

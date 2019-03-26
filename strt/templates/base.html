@@ -31,55 +31,33 @@ LICENSE file in the root directory of this source tree.
     <body>
 
         <!-- CONTAINER-FLUID -->
-        <div class="container-fluid p-0 " >
+        <div class="container-fluid p-0" >
 
             <!-- TOP-NAVBAR -->
-            <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top pl-0 py-0 top-navbar">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark
+                        sticky-top pl-0 py-0 top-navbar">
 
-                <!-- BRAND -->
-                <a class="navbar-brand p-0" href="/">
-                    <img src="{% static 'img/RT_logo.png' %}" alt="RT Logo"
-                        class="d-inline-block img-fluid rt-logo p-0">
-                    <span class="d-none d-lg-inline-block pl-2">
-                        {% trans 'Portale del Territorio' %}
-                    </span>
-                </a><!-- end BRAND -->
+                    <!-- BRAND -->
+                    <a class="navbar-brand p-0 d-inline-block" href="/">
+                        <div class="d-inline-block pr-lg-3">
+                            <img src="{% static 'img/RT_logo.png' %}" alt="RT Logo"
+                                class="d-inline-block img-fluid rt-logo p-0">
+                            <span class="d-none d-xl-inline-block pl-2 brand-text">
+                                {% trans 'Regione Toscana' %}
+                            </span>
+                        </div>
+                        <div class="d-inline-block border-left border-white px-2 px-lg-4">
+                            <img src="{% static 'img/RT_logo_governo.png' %}" alt="RT Logo Governo"
+                                class="d-inline-block img-fluid rt-logo-gov p-0">
+                            <span class="d-none d-lg-inline-block pl-2 brand-text">
+                                {% trans 'Governo del Territorio' %}
+                            </span>
+                        </div>
+                    </a><!-- end BRAND -->
 
-                <!-- TOGGLER BUTTON -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button><!-- end TOGGLER BUTTON -->
-
-                <!-- NAVBAR COLLPSABLE CONTENT -->
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto pl-2">
-                        {% if request.path == '/' or request.path == '/serapide/' %}
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'serapide' %}#/">
-                                <span>{% trans 'area riservata'|capfirst %}</span>
-                            </a>
-                        </li>
-                        {% endif %}
-
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'geoportal' %}">
-                                <span>{% trans 'geoportale'|upper %}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'opendata' %}">
-                                <span>{% trans 'open data'|upper %}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white pr-0" href="{% url 'glossary' %}">
-                                <span>{% trans 'glossario'|upper %}</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div><!-- end NAVBAR COLLPSABLE CONTENT -->
+                    {% block top_navbar_items %}
+                        <!-- Here the navbar items -->
+                    {% endblock top_navbar_items %}
 
             </nav><!-- end TOP-NAVBAR -->
 
@@ -90,7 +68,6 @@ LICENSE file in the root directory of this source tree.
 
             <!-- CONTENT -->
             <div class="content bg-light d-flex">
-                <!-- start content block -->
 
                 <div id="serapide-sidebar" class="sidebar">
 
@@ -102,75 +79,74 @@ LICENSE file in the root directory of this source tree.
 
                 {% endblock content %}
 
-                <!-- end content block -->
-
             </div> <!-- end CONTENT -->
 
             <!-- FOOTER -->
             <div class="footer page-footer footer-padding-trans bg-ldark w-100">
                 <div class="container-fluid text-center text-md-left pt-4 px-md-7">
                     <div class="row p-2 m-0 text-secondary">
-                        <div class="col-md-4  m-0 p-0 ">
+                        <div class="col-md-4  m-0 p-0">
                             <h5 class="text-uppercase">{% trans 'contatti' %}</h5>
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled pl-1 pl-md-3 pl-lg-5">
                                 <li><small>+345 678 903</small></li>
-                                <li><a href="/">
+                                <li>
+                                    <a href="/" class="text-secondary">
                                         <small>email@pianificazioneterritoriale.it</small>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/">
+                                    <a href="/" class="text-secondary">
                                         <small>...</small>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                         <hr class="clearfix w-100 d-md-none pb-3">
-                        <div class="col-md-3  p-0 m-0 text-uppercase">
-                                <h5 class="text-uppercase">{% trans 'supporto' %}</h5>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <a href="/">
-                                            <small>{% trans 'documentazione'|capfirst %}</small>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/">
-                                            <small>{% trans 'WIKI' %}</small>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/">
-                                            <small>{% trans 'FAQ' %}</small>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/">
-                                            <small>{% trans 'tutorial'|capfirst %}</small>
-                                        </a>
-                                    </li>
-                                </ul>
+                        <div class="col-md-3  p-0 m-0">
+                            <h5 class="text-uppercase">{% trans 'supporto' %}</h5>
+                            <ul class="list-unstyled pl-1 pl-md-3 pl-lg-5">
+                                <li>
+                                    <a href="/" class="text-secondary">
+                                        <small>{% trans 'documentazione'|capfirst %}</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/" class="text-secondary">
+                                        <small>{% trans 'WIKI' %}</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/" class="text-secondary">
+                                        <small>{% trans 'FAQ' %}</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/" class="text-secondary">
+                                        <small>{% trans 'tutorial'|capfirst %}</small>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                         <hr class="clearfix w-100 d-md-none pb-3">
-                        <div class="col-md-3  p-0 m-0 text-uppercase">
-                                <h5 class="text-uppercase"> {% trans 'informazioni' %}</h5>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <a href="/">
-                                            <small>{% trans 'Privacy Policy'|capfirst %}</small>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/">
-                                            <small>{% trans 'Termini & condizioni'|capfirst %}</small>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/">
-                                            <small>{% trans 'Ufficio Stampa'|capfirst %}</small>
-                                        </a>
-                                    </li>
-                                </ul>
+                        <div class="col-md-3  p-0 m-0">
+                            <h5 class="text-uppercase"> {% trans 'informazioni' %}</h5>
+                            <ul class="list-unstyled pl-1 pl-md-3 pl-lg-5">
+                                <li>
+                                    <a href="/" class="text-secondary">
+                                        <small>{% trans 'Privacy Policy'|capfirst %}</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/" class="text-secondary">
+                                        <small>{% trans 'Termini & condizioni'|capfirst %}</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/" class="text-secondary">
+                                        <small>{% trans 'Ufficio Stampa'|capfirst %}</small>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                         <div class="col-md-2 text-md-right align-self-md-end"> <small>{% trans '@ Regione Toscana'|capfirst %}</small></div>
                     </div>
