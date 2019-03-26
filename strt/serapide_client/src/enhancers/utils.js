@@ -5,8 +5,8 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { withStateHandlers, branch, withState, compose} from 'recompose';
-
+import { withStateHandlers, branch, withState, compose, lifecycle, pure} from 'recompose';
+import ReactTooltip from 'react-tooltip'
 
 /**
  * Same as recompose's `withState`, but if the component has already defined a property
@@ -40,9 +40,27 @@ export const toggleControllableState = (propName, handlerName, initialValue = fa
             )
             )
         )
+
+export const rebuildTooltip = ({onUpdate = false, log = false, comp = ""}) => {
+    const logger = log ? (fase) => {console.log(comp + " " + fase + " ")} : () => {}
+    return compose(pure,
+        lifecycle({
+            componentDidUpdate() {
+                ReactTooltip.rebuild()
+                logger("Update")
+            },
+            componentDidMount() { 
+                ReactTooltip.rebuild()
+                logger("Mount")
+    }}
+))}
+    
+
+
 export default {
         withControllableState,
-        toggleControllableState
+        toggleControllableState,
+        rebuildTooltip
 }
 
   

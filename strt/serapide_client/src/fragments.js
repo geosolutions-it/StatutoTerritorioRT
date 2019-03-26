@@ -21,7 +21,9 @@ fragment Risorsa on RisorsaNode {
     lastUpdate
     user{
       fiscalCode
-    }  
+    }
+    label
+    tooltip
 }
 `
 export const CONTATTO = gql`
@@ -37,11 +39,12 @@ fragment Azioni on AzioneNodeConnection {
     node {
       order
       tipologia
-      label
       stato
       attore
       data
       uuid
+      label
+      tooltip
     }
   }
 }

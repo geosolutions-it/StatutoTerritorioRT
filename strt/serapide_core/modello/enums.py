@@ -34,9 +34,9 @@ FASE_NEXT = {
 }
 
 TIPOLOGIA_RISORSA = {
-    'tipo_risorsa_1': {
-        'label': 'testo label',
-        'tooltip': 'testo tooltip'
+    'delibera': {
+        'label': 'Delibera di avvio ',
+        'tooltip': 'ai sensi dell’articolo. 17 L.R. 65/2014'
     },
     'tipo_risorsa_2': {
         'label': 'testo label',
@@ -95,7 +95,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('avvio_esame_pareri_sca', _('Avvio Esame Pareri SCA')),  # Comune
         ('upload_elaborati_vas', _('Upload Elaborati VAS')),  # Comune
         # Avvio
-        ('avvio_procedimento', _('Avvio Procedimento')),  # Comune
+        ('avvio_procedimento', _('Avvio del Procedimento')),  # Comune
         ('formazione_del_piano', _('Formazione del Piano')),  # Comune
         ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Comune
         ('protocollo_genio_civile_id', _('Protocollo N.')),  # Genio Civile

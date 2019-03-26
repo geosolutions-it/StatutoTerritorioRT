@@ -141,13 +141,13 @@ class RisorsaNode(DjangoObjectType):
         return urljoin(settings.SITE_URL, _url[_url.index('media/'):])
 
     def resolve_label(self, info, **args):
-        _type = TIPOLOGIA_RISORSA[self.tipologia] if self.tipologia in TIPOLOGIA_RISORSA else None
+        _type = TIPOLOGIA_RISORSA[self.tipo] if self.tipo in TIPOLOGIA_RISORSA else None
         if _type:
             return _type['label']
         return None
 
     def resolve_tooltip(self, info, **args):
-        _type = TIPOLOGIA_RISORSA[self.tipologia] if self.tipologia in TIPOLOGIA_RISORSA else None
+        _type = TIPOLOGIA_RISORSA[self.tipo] if self.tipo in TIPOLOGIA_RISORSA else None
         if _type:
             return _type['tooltip']
         return None

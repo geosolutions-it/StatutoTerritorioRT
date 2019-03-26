@@ -392,7 +392,7 @@ class ProceduraVAS(models.Model):
     tipologia = models.CharField(
         choices=TIPOLOGIA_VAS,
         default=TIPOLOGIA_VAS.unknown,
-        max_length=20
+        max_length=50
     )
 
     note = models.TextField(null=True, blank=True)

@@ -44,6 +44,8 @@ const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifi
         return auths.length > 0 && scas.length > 0 && !!sP
         case "non_necessaria":
         return !!sP
+        case "procedimento_semplificato":
+        return auths.length > 0 && scas.length > 0 && !!sP
         default:
         return false
     }
@@ -91,6 +93,7 @@ export default ({codice, canUpdate, isLocked}) => {
                 <EnhancedSwitch  isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="verifica" checked={tipologia === "VERIFICA"}  label="RICHIESTA VERIFICA VAS" className="mt-5 mb-4">
                     {(checked) => <div className="row"><FileUpload className="col-xl-12" getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} resourceMutation={DELETE_RISORSA_VAS} disabled={!checked} isLocked={!checked || isLocked} risorsa={verifica} placeholder="Documento preliminare di verifica" variables={{codice: uuid, tipo: "vas_verifica" }}/></div>}
                 </EnhancedSwitch>
+                <EnhancedSwitch  isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="procedimento_semplificato" checked={tipologia === "PROCEDIMENTO_SEMPLIFICATO"}  label="PROCEDIMENTO SEMPLIFICATO" className="mt-5 mb-4"/>
                 <EnhancedSwitch isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="procedimento" checked={tipologia === "PROCEDIMENTO"}  label="PROCEDIMENTO VAS (AVVIO)" className="mt-5">
                     {() => (
                         <div className="row">
