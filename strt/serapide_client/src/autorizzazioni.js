@@ -21,7 +21,7 @@ const azioni = {
         "PARERI_VERIFICA_SCA": ["TMP"],
         "EMISSIONE_PROVVEDIMENTO_VERIFICA": ["TMP"],
         "PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA": ["TMP", "RUP", "OP"],
-        "AVVIO_CONSULTAZIONI_SCA": ["RUP", "OP"],
+        "AVVIO_CONSULTAZIONI_SCA": ["RUP", "OP", "TMP"],
         "PARERI_SCA": ["TMP"],
         "AVVIO_ESAME_PARERI_SCA": ["RUP", "OP"],
         "UPLOAD_ELABORATI_VAS": ["RUP", "OP"],

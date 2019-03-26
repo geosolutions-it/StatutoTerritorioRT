@@ -423,7 +423,8 @@ class UpdateConsultazioneVAS(relay.ClientIDMutation):
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
             try:
                 consultazione_vas_aggiornata = update_create_instance(_consultazione_vas, _consultazione_vas_data)
                 return cls(consultazione_vas_aggiornata=consultazione_vas_aggiornata)
