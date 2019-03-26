@@ -41,6 +41,11 @@ def procedura_vas_is_valid(piano, procedura_vas):
                         for r in procedura_vas.risorse.filter(tipo='vas_verifica')
                     )
                 return False
+            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento_semplificato:
+                return (
+                    piano.autorita_competente_vas.count() > 0 and
+                    piano.soggetti_sca.count() > 0
+                )
             elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
                 return (
                     piano.autorita_competente_vas.count() > 0 and

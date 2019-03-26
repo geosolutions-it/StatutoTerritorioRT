@@ -8122,16 +8122,16 @@ button.bg-serapide:focus {
 
 /** colori notifiche**/
 .icon-34 {
-  font-size: 34px; }
+  font-size: 34px !important; }
 
 .icon-16 {
-  font-size: 16px; }
+  font-size: 16px !important; }
 
 .icon-14 {
-  font-size: 14px; }
+  font-size: 14px !important; }
 
 .icon-12 {
-  font-size: 12px; }
+  font-size: 12px !important; }
 
 .first {
   order: -1; }
