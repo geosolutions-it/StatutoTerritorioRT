@@ -16,6 +16,7 @@ import traceback
 
 from django.conf import settings
 from django.utils import timezone
+from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
 from graphene import relay
@@ -456,8 +457,14 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _avvio_consultazioni_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
-            if _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
+                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
+            for _ac in _avvio_consultazioni_sca:
+                if _ac.stato != STATO_AZIONE.nessuna:
+                    _avvio_consultazioni_sca = _ac
+                    break
+            if _avvio_consultazioni_sca and \
+            not isinstance(_avvio_consultazioni_sca, QuerySet) and \
+            _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
                 _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
                 _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
 
@@ -530,18 +537,46 @@ class InvioPareriVAS(graphene.Mutation):
             _verifica_vas = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas).first()
             _avvio_consultazioni_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
+                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
+            for _ac in _avvio_consultazioni_sca:
+                if _ac.stato != STATO_AZIONE.nessuna:
+                    _avvio_consultazioni_sca = _ac
+                    break
             _pareri_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.pareri_sca).first()
-            if _verifica_vas and _pareri_sca.stato != STATO_AZIONE.nessuna:
+                tipologia=TIPOLOGIA_AZIONE.pareri_sca)
+            for _psca in _pareri_sca:
+                if _psca.stato != STATO_AZIONE.nessuna:
+                    _pareri_sca = _psca
+                    break
+
+            if _verifica_vas and \
+            _pareri_sca and \
+            (isinstance(_pareri_sca, QuerySet) or
+             _pareri_sca.stato != STATO_AZIONE.nessuna):
+                if isinstance(_pareri_sca, QuerySet):
+                    _pareri_sca = _pareri_sca.last()
+
                 _pareri_sca.stato = STATO_AZIONE.nessuna
                 _pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                 _pareri_sca.save()
 
                 if _avvio_consultazioni_sca and \
-                _avvio_consultazioni_sca.attore == TIPOLOGIA_ATTORE.ac:
+                (not isinstance(_avvio_consultazioni_sca, QuerySet) or
+                 ((_avvio_consultazioni_sca.count() == 1 and
+                   procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento) or (
+                    _avvio_consultazioni_sca.count() == 1 and
+                    _avvio_consultazioni_sca.first().attore == TIPOLOGIA_ATTORE.ac and
+                        procedura_vas.tipologia != TIPOLOGIA_VAS.procedimento_semplificato))):
+                    if isinstance(_avvio_consultazioni_sca, QuerySet):
+                        _avvio_consultazioni_sca = _avvio_consultazioni_sca.last()
+
+                    _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
+                    _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+                    _avvio_consultazioni_sca.save()
+
                     _verifica_vas.stato = STATO_AZIONE.nessuna
                     _verifica_vas.save()
+
                     _avvio_consultazioni_sca = Azione(
                         tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
                         attore=TIPOLOGIA_ATTORE.comune,
@@ -612,15 +647,18 @@ class InvioPareriVAS(graphene.Mutation):
                     user=info.context.user,
                     procedura_vas=_procedura_vas,
                     consultazione_vas=_consultazione_vas
-                ).count()
+                )
 
-                if _pareri_vas_count == 0:
+                if _pareri_vas_count.count() == 0:
                     _parere_vas = ParereVAS(
                         user=info.context.user,
                         procedura_vas=_procedura_vas,
                         consultazione_vas=_consultazione_vas
                     )
                     _parere_vas.save()
+                elif _pareri_vas_count.count() == 1:
+                    _pareri_vas_count.first().stato = STATO_AZIONE.attesa
+                    _pareri_vas_count.first().save()
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
 
@@ -632,7 +670,7 @@ class InvioPareriVAS(graphene.Mutation):
                         consultazione_vas=_consultazione_vas
                     ).count()
 
-                    if _pareri_vas_count != 1:
+                    if _pareri_vas_count == 0:
                         _tutti_pareri_inviati = False
                         break
 

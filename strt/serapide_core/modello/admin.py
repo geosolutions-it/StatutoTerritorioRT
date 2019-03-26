@@ -24,7 +24,7 @@ from .models import (
     AltriDestinatari,
     SoggettiSCA,
     PianoAuthTokens,
-    ConsultazioneVAS
+    ConsultazioneVAS, ParereVAS
 )
 
 
@@ -64,6 +64,10 @@ class TokensInline(admin.TabularInline):
     model = PianoAuthTokens
 
 
+class ParereVASInline(admin.TabularInline):
+    model = ParereVAS
+
+
 class PianoAdmin(admin.ModelAdmin):
     inlines = [AzioniPianoInline,
                AutoritaCompetenteVASInline,
@@ -82,6 +86,10 @@ class ProceduraAvvioAdmin(admin.ModelAdmin):
     inlines = [RisorseAvvioInline, ]
 
 
+class ConsultazioneVASAdmin(admin.ModelAdmin):
+    inlines = [ParereVASInline, ]
+
+
 admin.site.register(Fase)
 admin.site.register(Azione)
 admin.site.register(Risorsa)
@@ -89,4 +97,4 @@ admin.site.register(Contatto)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
 admin.site.register(ProceduraAvvio, ProceduraAvvioAdmin)
-admin.site.register(ConsultazioneVAS)
+admin.site.register(ConsultazioneVAS, ConsultazioneVASAdmin)
