@@ -1,0 +1,51 @@
+<!--
+
+Copyright 2018, GeoSolutions Sas.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+{% load static %}
+{% load i18n %}
+
+
+<!-- TOGGLER BUTTON -->
+<button class="navbar-toggler" type="button" data-toggle="collapse"
+    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button><!-- end TOGGLER BUTTON -->
+
+<!-- NAVBAR COLLPSABLE CONTENT -->
+<div class="collapse navbar-collapse bg-{{ bg_color }}" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto pl-2">
+        <li class="nav-item">
+            <a class="nav-link text-{{ text_color }}" href="">
+                <span>{% trans 'il portale'|upper %}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-{{ text_color }}" href="">
+                <span>{% trans 'pianificazione'|upper %}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-{{ text_color }}" href="">
+                <span>{% trans 'statuto del territorio'|upper %}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-{{ text_color }}" href="">
+                <span>{% trans 'open data'|upper %}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-{{ text_color }} pr-0" href="">
+                <span>{% trans 'contatti'|upper %}</span>
+            </a>
+        </li>
+    </ul>
+</div><!-- end NAVBAR COLLPSABLE CONTENT -->

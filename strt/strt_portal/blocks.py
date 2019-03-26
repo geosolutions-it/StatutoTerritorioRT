@@ -23,6 +23,8 @@ class BaseBlock(StructBlock):
     text = TextBlock(required=False)
     image = ImageChooserBlock(required=False)
     button_text = CharBlock(required=False)
+    button_url = CharBlock(required=False)
+    button_target = CharBlock(required=False)
 
 
 class FirstSectionBlock(BaseBlock):
@@ -41,7 +43,10 @@ class SecondSectionBlock(StructBlock):
         template = 'strt_portal/blocks/second_section_block.html'
 
 
-class ThirdSectionBlock(BaseBlock):
+class ThirdSectionBlock(StructBlock):
+
+    main_block = BaseBlock(label='main content')
+    details_block = RichTextBlock(label='detailed content')
 
     class Meta:
         template = 'strt_portal/blocks/third_section_block.html'
