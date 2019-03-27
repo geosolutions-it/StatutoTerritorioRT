@@ -26,7 +26,7 @@ const azioni = {
         "AVVIO_ESAME_PARERI_SCA": ["RUP", "OP"],
         "UPLOAD_ELABORATI_VAS": ["RUP", "OP"],
         "FORMAZIONE_DEL_PIANO": ["RUP", "OP"],
-        "PROTOCOLLO_GENIO_CIVILE_ID": ["GENIO_CIVILE"]
+        "PROTOCOLLO_GENIO_CIVILE_ID": ["TMP"]
     }
 export const globalAuth = {
     _attore_attivo: "",
@@ -37,6 +37,6 @@ export const globalAuth = {
 export const checkAttore = ( {attore = ""} = {}, attore_attivo = globalAuth._attore_attivo) => attore === attore_attivo
 
 export const canExecuteAction = ({tipologia = "", attore= ""} = {}, attore_attivo = globalAuth._attore_attivo, ruolo = globalAuth._ruolo) => {
- // console.log(attore_attivo, ruolo, tipologia, attore, includes((azioni[tipologia] || []), ruolo) );
+  // console.log(attore_attivo, ruolo, tipologia, attore, includes((azioni[tipologia] || []), ruolo) );
   return attore_attivo.toLowerCase() === attore.toLowerCase() && includes((azioni[tipologia] || []), ruolo) 
 }

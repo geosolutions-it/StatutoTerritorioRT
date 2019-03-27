@@ -15,12 +15,12 @@ const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : 
 
 const ResourceTitle = ({resource: {downloadUrl, label, tooltip, nome} = {}, useLabel} = {}) => {
     const lab = useLabel ?  label : nome
-    const tip = (<TooltipIcon dataTip={tooltip} dataTipDisable={!useLabel}/>)
+    const tip = (<TooltipIcon dataTip={tooltip} dataTipDisable={!useLabel} text={label}/>)
     return downloadUrl ?(
             <a className="text-dark" href={downloadUrl} download={nome}>
-                {lab}{useLabel && tip}
+                {useLabel ? tip : lab}
             </a>) : (
-        <span >{lab}{useLabel && tip}</span>)
+        <span >{useLabel ? tip : lab}</span>)
 }
 
 export default ({

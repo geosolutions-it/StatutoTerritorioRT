@@ -102,7 +102,7 @@ fragment VAS on ProceduraVASNode {
               ...Contatto
             }
         }
-        risorse{
+        risorse(archiviata: false){
             ...Risorse
         }
         documentoPreliminareVerifica{
@@ -127,6 +127,8 @@ fragment Piano on PianoNode {
     dataAvvio
     dataApprovazione
     alertsCount
+    numeroProtocolloGenioCivile
+    dataProtocolloGenioCivile
     azioni {
         ...Azioni
     }
@@ -145,7 +147,7 @@ fragment Piano on PianoNode {
     user{
         ...User
     }
-    risorse{
+    risorse(archiviata: false){
         ...Risorse
       }
     autoritaCompetenteVas{
@@ -198,7 +200,7 @@ fragment  ConsultazioneVAS on ConsultazioneVASNode {
             uuid
             tipologia
             dataAssoggettamento
-            risorse {
+            risorse(archiviata: false) {
             ...Risorse
             }
           }
@@ -213,7 +215,7 @@ fragment AVVIO on ProceduraAvvioNode {
         dataScadenzaRisposta
         garanteNominativo
         garantePec
-        risorse {
+        risorse(archiviata: false) {
             ...Risorse
         }
 }

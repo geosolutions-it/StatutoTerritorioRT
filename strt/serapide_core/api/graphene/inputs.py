@@ -76,6 +76,7 @@ class PianoUpdateInput(InputObjectType):
     soggetti_sca = graphene.List(graphene.String, required=False)
     autorita_istituzionali = graphene.List(graphene.String, required=False)
     altri_destinatari = graphene.List(graphene.String, required=False)
+    numero_protocollo_genio_civile = graphene.String(required=False)
 
 
 class ProceduraVASCreateInput(InputObjectType):

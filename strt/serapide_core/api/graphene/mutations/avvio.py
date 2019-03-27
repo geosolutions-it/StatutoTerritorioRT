@@ -319,7 +319,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _protocollo_genio_civile = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE._protocollo_genio_civile).first()
+                tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
             _protocollo_genio_civile_id = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id).first()
             if _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato != STATO_AZIONE.nessuna:
@@ -343,7 +343,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'GENIO_CIVILE'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 

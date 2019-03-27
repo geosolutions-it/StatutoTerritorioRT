@@ -64,7 +64,7 @@ export default ({utente, ...props}) => {
         <React.Fragment>
             <div>
                 <h1>Portale della pianificazione</h1>
-                <h3>Software per la formazione e gestione dei piani<TooltipIcon dataTip="(L.R. 65/2014)"/></h3>
+                <h3><TooltipIcon dataTip="(L.R. 65/2014)" text="Software per la formazione e gestione dei piani"/></h3>
                 <hr className="border-serapide border-bottom"></hr>
                 <div className="py-4 d-flex flex-row">
                     <div className="d-flex flex-column ">

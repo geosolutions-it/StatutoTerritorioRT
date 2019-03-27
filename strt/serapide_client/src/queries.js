@@ -388,6 +388,22 @@ mutation AvvioConsultazioniVAS($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
+export const INVIO_PROTOCOLLO_GENIO = gql`
+mutation InvioProtocolloGenioCivile($codice: String!) {
+    invioProtocolloGenioCivile(uuid: $codice) {
+        errors
+        avvioAggiornato {
+              piano{
+                numeroProtocolloGenioCivile,
+                dataProtocolloGenioCivile
+                ...AzioniPiano
+              }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
 // altre mutations
 
 export const CREATE_CONTATTO = gql`

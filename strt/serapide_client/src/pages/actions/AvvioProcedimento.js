@@ -243,15 +243,15 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                                 return (
                                     <div className="d-flex flex-column mt-4 pl-2">
                                         <div className="d-flex">
-                                            <span style={{minWidth: 200}}>SI<TooltipIcon dataTip="art. 25, comma 3 bis L.R. 65/2014"/></span>
+                                            <span style={{minWidth: 200}}><TooltipIcon dataTip="art. 25, comma 3 bis L.R. 65/2014" text="SI"/></span>
                                             <input onChange={changed} value="NECESSARIA" checked={conferenzaCopianificazione === "NECESSARIA"} className="form-check-input position-static" type="checkbox"/>
                                             </div>
                                         <div className="d-flex">
-                                            <span style={{minWidth: 200}}>NON ADESSO<TooltipIcon dataTip="art. 25, comma 3 bis L.R. 65/2014"/></span>
+                                            <span style={{minWidth: 200}}><TooltipIcon dataTip="art. 25, comma 3 bis L.R. 65/2014" text="NON ADESSO"/></span>
                                             <input onChange={changed} value="POSTICIPATA" checked={conferenzaCopianificazione === "POSTICIPATA"} className="form-check-input position-static" type="checkbox"/>
                                         </div>
                                         <div className="d-flex">
-                                            <span style={{minWidth: 200}}>NON NECESSARIA<TooltipIcon dataTip="art.88, comma 7, lett. c,  e art. 90 comma 7, lett.b, L.R. 65/2014"/></span>
+                                            <span style={{minWidth: 200}}><TooltipIcon dataTip="art.88, comma 7, lett. c,  e art. 90 comma 7, lett.b, L.R. 65/2014" text="NON NECESSARIA"/></span>
                                             <input onChange={changed} value="NON_NECESSARIA" checked={conferenzaCopianificazione === "NON_NECESSARIA"} className="form-check-input position-static" type="checkbox"/>
                                             <i className={`ml-3 material-icons ${conferenzaCopianificazione === "NON_NECESSARIA" ? "text-serapide" : ""}`}>check_circle_outline</i>
                                             <span className={`pl-1 ${conferenzaCopianificazione === "NON_NECESSARIA" ? "text-serapide" : "text-gray"}`}>NOTIFICA AL GENIO CIVILE</span>

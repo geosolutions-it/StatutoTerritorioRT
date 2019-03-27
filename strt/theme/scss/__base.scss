@@ -6,7 +6,8 @@
 $attori: (
   Regione: #09D7F2,
   AC: #44F5D3,
-  SCA: #FA2AB3
+  SCA: #FA2AB3,
+  GENIO_CIVILE: #FA2AB3
 );
 
 @mixin serapide-color ($color){
@@ -53,6 +54,9 @@ $attori: (
 /** colori notifiche**/
 .icon-34 {
     font-size: 34px !important;
+}
+.icon-18 {
+    font-size: 16px !important;
 }
 .icon-16 {
     font-size: 16px !important;

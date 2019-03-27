@@ -7,8 +7,22 @@
  */
 import React from 'react'
 
-export default ({dataTip, dataTipDisable, text = ""}) => {
-    return text ?
-    (<span className="text-nowrap">{text}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i></span>) : 
-    (<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>)
+
+const OneWord = (word, className, dataTip, dataTipDisable) => (
+        <span className={`text-nowrap ${className}`}>
+            {word.slice(1)}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>
+        </span>)
+const ManyWords = (words, className, dataTip, dataTipDisable) => (
+    <span className={className}>
+        {words.slice(0, -1).join(" ")}
+        <span className="text-nowrap">
+            {" "}
+            {words.slice(-1)}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>
+        </span>
+    </span>
+)
+const getComp = (words, className, dataTip, dataTipDisable) => (words.length > 1 ? ManyWords(words, className, dataTip, dataTipDisable) : OneWord(words, className, dataTip, dataTipDisable))
+export default ({dataTip, dataTipDisable, text = "", className}) => {
+    const words = text.replace(/ +(?= )/g,'').split(" ")
+    return text ? getComp(words, className, dataTip, dataTipDisable) : (<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>)
 }

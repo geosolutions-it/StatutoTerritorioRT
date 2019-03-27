@@ -20,7 +20,7 @@ import {CREA_PIANO, CREA_PIANO_PAGE, GET_PIANI} from '../queries'
 /** 
  * TODO:: Manca la gestione errore 
 */
-const enhancer = compose(rebuildTooltip({onUpdate: false, log: true, comp: "Crea"}), withStateHandlers( ({}),
+const enhancer = compose(rebuildTooltip({onUpdate: false}), withStateHandlers( ({}),
     {
         selectTipo: () => value => ({tipo: value})
     }),

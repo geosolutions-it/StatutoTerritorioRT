@@ -13,10 +13,6 @@ const updatePiano = (update, getInput, value) => {
 }
 const debounced = debounce(updatePiano, 500)
 
-
-
-
-
 export default  ({className, disabled, mutation, value, update, selected, type="textarea", getInput = (val) => { return {variables: {input: {descrizione: val}}}}, ...mutationProps}) => {
     return (
         <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>

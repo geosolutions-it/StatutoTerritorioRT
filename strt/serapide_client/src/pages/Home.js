@@ -15,6 +15,7 @@ import FaseSwitch from '../components/FaseSwitch'
 import AvviaEsamePareri from './actions/AvviaEsamePareri'
 import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
 import UploadElaboratiVAS from './actions/UploadElaboratiVAS'
+import GenioCivile from './actions/GenioCivile'
 import {Switch, Route} from 'react-router-dom'
 
 
@@ -78,7 +79,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                     <UploadElaboratiVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
                 </Route>
                 <Route path={`${path}/protocollo_genio_civile_id`} >
-                    <UploadElaboratiVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
+                    <GenioCivile piano={piano} back={history.goBack}/>
                 </Route>
                 { action && (
                 <Route path={path}>
