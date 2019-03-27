@@ -149,6 +149,15 @@ class UploadRisorsaVAS(UploadBaseBase):
                 # Validating 'Procedura VAS'
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+
+                    if _tipo_file == 'parere_sca' and \
+                    not rules.test_rule('strt_core.api.parere_sca_ok', info.context.user, _procedura_vas):
+                        return GraphQLError(_("Forbidden"), code=403)
+
+                    if _tipo_file == 'parere_verifica_vas' and \
+                    not rules.test_rule('strt_core.api.parere_verifica_vas_ok', info.context.user, _procedura_vas):
+                        return GraphQLError(_("Forbidden"), code=403)
+
                     _resources = UploadBaseBase.handle_uploaded_data(
                         file,
                         _uuid_vas,
@@ -296,6 +305,15 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
                     _risorsa = Risorsa.objects.get(uuid=_id)
+
+                    if _risorsa.tipo == 'parere_sca' and \
+                    not rules.test_rule('strt_core.api.parere_sca_ok', info.context.user, _procedura_vas):
+                        return GraphQLError(_("Forbidden"), code=403)
+
+                    if _risorsa.tipo == 'parere_verifica_vas' and \
+                    not rules.test_rule('strt_core.api.parere_verifica_vas_ok', info.context.user, _procedura_vas):
+                        return GraphQLError(_("Forbidden"), code=403)
+
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
                 else:

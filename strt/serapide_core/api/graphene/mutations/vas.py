@@ -260,14 +260,12 @@ class InvioPareriVerificaVAS(graphene.Mutation):
 
                 if _pareri_vas_count.count() == (_avvio_consultazioni_sca_count - 1):
                     _parere_vas = ParereVerificaVAS(
+                        inviata=True,
                         user=info.context.user,
                         procedura_vas=_procedura_vas
                     )
                     _parere_vas.save()
-                elif _pareri_vas_count.count() == _avvio_consultazioni_sca_count:
-                    _pareri_vas_count.first().stato = STATO_AZIONE.attesa
-                    _pareri_vas_count.first().save()
-                else:
+                elif _pareri_vas_count.count() != _avvio_consultazioni_sca_count:
                     return GraphQLError(_("Forbidden"), code=403)
 
                 _tutti_pareri_inviati = True
@@ -276,21 +274,20 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                         user=_sca.user,
                         procedura_vas=_procedura_vas
                     ).count()
-
                     if _pareri_vas_count != _avvio_consultazioni_sca_count:
                         _tutti_pareri_inviati = False
                         break
-
-                if _tutti_pareri_inviati:
-
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=info.context.user,
-                        piano=_piano,
-                        message_type="tutti_pareri_inviati")
-
-                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+                print(_tutti_pareri_inviati)
+                # if _tutti_pareri_inviati:
+                #
+                #     # Notify Users
+                #     piano_phase_changed.send(
+                #         sender=Piano,
+                #         user=info.context.user,
+                #         piano=_piano,
+                #         message_type="tutti_pareri_inviati")
+                #
+                #     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
                 return InvioPareriVerificaVAS(
                     vas_aggiornata=_procedura_vas,
@@ -670,6 +667,10 @@ class InvioPareriVAS(graphene.Mutation):
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
             try:
+                if _procedura_vas.risorse.filter(
+                tipo='parere_sca', archiviata=False, user=info.context.user).count() == 0:
+                    return GraphQLError(_("Forbidden"), code=403)
+
                 _avvio_consultazioni_sca_count = _piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
 
@@ -681,15 +682,13 @@ class InvioPareriVAS(graphene.Mutation):
 
                 if _pareri_vas_count.count() == (_avvio_consultazioni_sca_count - 1):
                     _parere_vas = ParereVAS(
+                        inviata=True,
                         user=info.context.user,
                         procedura_vas=_procedura_vas,
-                        consultazione_vas=_consultazione_vas
+                        consultazione_vas=_consultazione_vas,
                     )
                     _parere_vas.save()
-                elif _pareri_vas_count.count() == _avvio_consultazioni_sca_count:
-                    _pareri_vas_count.first().stato = STATO_AZIONE.attesa
-                    _pareri_vas_count.first().save()
-                else:
+                elif _pareri_vas_count.count() != _avvio_consultazioni_sca_count:
                     return GraphQLError(_("Forbidden"), code=403)
 
                 _tutti_pareri_inviati = True
