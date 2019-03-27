@@ -20,7 +20,7 @@ import UploadFiles from '../components/UploadFiles'
 import VAS from '../components/VAS'
 import EnhanchedInput from '../components/EnhancedInput'
 
-
+const getPianoLabel = (tipo) => tipo === "variante" ? `${tipo} piano` : `piano ${tipo}`
 
 const getDescrizioneInput = (codice) => (val) => ({
     variables: {
@@ -72,19 +72,20 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                             <i className="material-icons text-serapide icon-34 pr-4 ">assignment</i>
                             <div className="d-flex flex-column flex-fill">
                                 <h3 className="mb-0">CREA ANAGRAFICA</h3>
-                                <h3 className="mb-0 text-capitalize">{`${tipo.toLowerCase()} ${codice}`}</h3>
+                                <h3 className="mb-0 text-capitalize">{`${getPianoLabel(tipo.toLowerCase())} ${codice}`}</h3>
                                 <span className="pt-5">{getEnteLabelID(ente)}</span>
-                                <div className="d-flex pt-5 align-items-center">
+                                <h5 className="pt-5 pb-2">Delibera di Consiglio/Giunta</h5>
+                                <div className="d-flex align-items-center">
                                     <span className="pr-2">DELIBERA DEL</span>
                                     <EnhancedDateSelector disabled={locked} selected={dataDelibera ? new Date(dataDelibera) : undefined} mutation={UPDATE_PIANO} getInput={getDataDeliberaInput(codice)}/>
                                 </div>
                                 <div className="d-flex pt-5 align-items-center ">
-                                    <span className="pr-2">DESCRIZIONE</span>
+                                    <span className="pr-2">DENOMINAZIONE DELL’ATTO</span>
                                     <EnhanchedInput disabled={locked} value={descrizione} mutation={UPDATE_PIANO} getInput={getDescrizioneInput(codice)}></EnhanchedInput>
                                     
                                 </div>
-                                <span className="pt-5">DELIBERA COMUNALE</span>
-                                <span className="pb-2 font-weight-light">Caricare delibera comunale, formato obbligatorio pdf</span>
+                                <span className="pt-5">DELIBERA DI AVVIO DEL PROCEDIMENTO</span>
+                                <span className="pb-2 font-weight-light">Caricare delibera, formato obbligatorio pdf</span>
                                 <Delibera placeholder="Delibera Comunale (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={locked}/>
                                 <span className="pt-5">ALTRI DOCUMENTI</span>
                                 <span className="font-weight-light">Caricare eventuali allegati trascinando i files nel riquadro, formato obbligatorio pdf</span>

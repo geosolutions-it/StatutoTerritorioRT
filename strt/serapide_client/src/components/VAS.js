@@ -16,7 +16,7 @@ import { Query, Mutation} from 'react-apollo';
 import { toast } from 'react-toastify'
 import AddContact from '../components/AddContact'
 import SalvaInvia from '../components/SalvaInvia'
-
+import TooltipIcon from '../components/TooltipIcon'
 
 const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 const getVasTypeInput = (uuid) => (tipologia) => ({
@@ -34,7 +34,7 @@ const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
 const showError = (error) => {
     toast.error(error.message,  {autoClose: true})
 }
-const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifica) => {
+const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifica, docProcSemp) => {
     switch (tipologia.toLowerCase()) {
         case "semplificata":
         return semplificata && auths.length > 0 && !!sP
@@ -45,12 +45,13 @@ const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifi
         case "non_necessaria":
         return !!sP
         case "procedimento_semplificato":
-        return auths.length > 0 && scas.length > 0 && !!sP
+        return docProcSemp && auths.length > 0 && scas.length > 0 && !!sP
         default:
         return false
     }
 }
-
+const fileProps = {className:"col-xl-12", getSuccess: getSuccess,
+                    mutation: VAS_FILE_UPLOAD, resourceMutation: DELETE_RISORSA_VAS}
 
 export default ({codice, canUpdate, isLocked}) => {
     return (
@@ -70,10 +71,12 @@ export default ({codice, canUpdate, isLocked}) => {
             const {node: {uuid, tipologia, piano: {soggettoProponente: sP, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = edges[0] || {}
             const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
             const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
+            const {node: docProcSemp} = resources.filter(({node: n}) => n.tipo === "doc_proc_semplificato").pop() || {};
+            
             const disableSCA = tipologia === "SEMPLIFICATA" || tipologia === "NON_NECESSARIA"
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
-            const canCommit = !isLocked && canUpdate && checkAnagrafica(tipologia, sP, auths, scas, semplificata, verifica)
+            const canCommit = !isLocked && canUpdate && checkAnagrafica(tipologia, sP, auths, scas, semplificata, verifica, docProcSemp)
 
 
 
@@ -83,18 +86,61 @@ export default ({codice, canUpdate, isLocked}) => {
                 {!isLocked && (<span className="p-3 pb-5">NOTA : Le opzioni sono escludenti. Se viene selezionata la richiesta della VAS semplificata
                     è richiesto l’upload della Relazione Motivata; se viene selezionata la Richiesta di Verifica VAS è richiesto
             l’upload del documento preliminare di verifica; se si seleziona il Procedimento Vas si decide di seguire il procedimento VAS esteso.</span>)}
-                <EnhancedSwitch isLocked={isLocked} getInput={getVasTypeInput(uuid)} mutation={UPDATE_VAS} value="semplificata" checked={tipologia === "SEMPLIFICATA"}  label="RICHIESTA VAS SEMPLIFICATA" className="mt-5 mb-4">
+                <EnhancedSwitch isLocked={isLocked} 
+                                getInput={getVasTypeInput(uuid)} 
+                                mutation={UPDATE_VAS} 
+                                value="semplificata" checked={tipologia === "SEMPLIFICATA"}  
+                                label={(<span className="text-nowrap">PROCEDIMENTO DI VERIFICA SEMPLIFICATA <TooltipIcon dataTip="art.5 co.3ter L.R. 10/2010"/> </span>)}
+                                className="mt-5 mb-4">
                     {(checked) =>
                         <div className="row">
-                        <FileUpload  className="col-xl-12" getSuccess={getSuccess}  mutation={VAS_FILE_UPLOAD} resourceMutation={DELETE_RISORSA_VAS} disabled={!checked} isLocked={!checked || isLocked} risorsa={semplificata} placeholder="Relazione motivata per VAS semplificata" variables={{codice: uuid, tipo: "vas_semplificata" }}/>
+                        <FileUpload  {...fileProps}
+                                     disabled={!checked} 
+                                     isLocked={!checked || isLocked}
+                                     risorsa={semplificata} 
+                                     placeholder={(<span>Relazione motivata per VAS semplificata<TooltipIcon dataTip="art.5 co.3ter L.R. 10/2010"/></span>)}
+                                     variables={{codice: uuid, tipo: "vas_semplificata" }}/>
                         </div>
                     }
                 </EnhancedSwitch>
-                <EnhancedSwitch  isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="verifica" checked={tipologia === "VERIFICA"}  label="RICHIESTA VERIFICA VAS" className="mt-5 mb-4">
-                    {(checked) => <div className="row"><FileUpload className="col-xl-12" getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} resourceMutation={DELETE_RISORSA_VAS} disabled={!checked} isLocked={!checked || isLocked} risorsa={verifica} placeholder="Documento preliminare di verifica" variables={{codice: uuid, tipo: "vas_verifica" }}/></div>}
+                <EnhancedSwitch  isLocked={isLocked}
+                    getInput={getVasTypeInput(uuid)} 
+                    mutation={UPDATE_VAS} 
+                    value="verifica" 
+                    checked={tipologia === "VERIFICA"}  
+                    label={(<span className="text-nowrap">RICHIESTA VERIFICA DI ASSOGGETTABILITA' <TooltipIcon dataTip="art.22 L.R. 10/2010"/> </span>)}
+                    label="RICHIESTA VERIFICA VAS" 
+                    className="mt-5 mb-4">
+                    {(checked) => <div className="row">
+                        <FileUpload {...fileProps}
+                                    disabled={!checked} isLocked={!checked || isLocked}
+                                    risorsa={verifica}
+                                    placeholder={(<span>Documento preliminare<TooltipIcon dataTip="art.22 L.R. 10/2010"/></span>)}
+                                    variables={{codice: uuid, tipo: "vas_verifica" }}/>
+                            </div>}
                 </EnhancedSwitch>
-                <EnhancedSwitch  isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="procedimento_semplificato" checked={tipologia === "PROCEDIMENTO_SEMPLIFICATO"}  label="PROCEDIMENTO SEMPLIFICATO" className="mt-5 mb-4"/>
-                <EnhancedSwitch isLocked={isLocked} getInput={getVasTypeInput(uuid)}  mutation={UPDATE_VAS} value="procedimento" checked={tipologia === "PROCEDIMENTO"}  label="PROCEDIMENTO VAS (AVVIO)" className="mt-5">
+                <EnhancedSwitch  isLocked={isLocked} 
+                    getInput={getVasTypeInput(uuid)}
+                    mutation={UPDATE_VAS}
+                    value="procedimento_semplificato"
+                    label={(<span className="text-nowrap">PROCEDIMENTO SEMPLIFICATO' <TooltipIcon dataTip="art.8 co.5 L.R. 10/2010"/> </span>)}
+                    checked={tipologia === "PROCEDIMENTO_SEMPLIFICATO"}
+                    className="mt-5 mb-4">
+                    {(checked) => <div className="row">
+                        <FileUpload {...fileProps}
+                                    disabled={!checked} isLocked={!checked || isLocked}
+                                    risorsa={docProcSemp}
+                                    placeholder={(<span>Documento preliminare<TooltipIcon dataTip="art. 8, 22 e 23 L.R. 10/2010"/></span>)}
+                                    variables={{codice: uuid, tipo: "doc_proc_semplificato" }}/>
+                            </div>}
+                    </EnhancedSwitch>
+                <EnhancedSwitch isLocked={isLocked} 
+                    getInput={getVasTypeInput(uuid)}
+                    mutation={UPDATE_VAS}
+                    value="procedimento"
+                    checked={tipologia === "PROCEDIMENTO"}
+                    label="PROCEDIMENTO VAS (AVVIO)"
+                    className="mt-5">
                     {() => (
                         <div className="row">
                         <span className="p-3 col-xl-12">Scegliendo “Procedura VAS” verrà inviata una comunicazione all’autorità procedente e proponente (AP/P)
@@ -102,7 +148,13 @@ export default ({codice, canUpdate, isLocked}) => {
                         
                     )}
                 </EnhancedSwitch>
-                <EnhancedSwitch  isLocked={isLocked} getInput={getVasTypeInput(uuid)} mutation={UPDATE_VAS} value="non_necessaria"  checked={tipologia === "NON_NECESSARIA"}  label="VAS NON NECESSARIA" className="mt-5">
+                <EnhancedSwitch  isLocked={isLocked}
+                    getInput={getVasTypeInput(uuid)}
+                    mutation={UPDATE_VAS}
+                    value="non_necessaria"
+                    checked={tipologia === "NON_NECESSARIA"}
+                    label="VAS NON NECESSARIA"
+                    className="mt-5">
                         {() =>(<div className="row"><span className="p-3 mb-5 col-xl-12">In questo caso per il piano non è necessaria alcuna VAS </span></div>)}
                 </EnhancedSwitch>
                 <div className="d-flex mt-5 pt-5 justify-content-between mb-3">

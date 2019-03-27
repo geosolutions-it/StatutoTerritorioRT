@@ -45,6 +45,7 @@ return (
                 </div>)
                 globalAuth._attore_attivo = themeClass
                 globalAuth._ruolo = ruolo
+            
             return(
                 <React.Fragment>
                     <ThemeInjector themeClass={themeClass}/>
@@ -57,7 +58,9 @@ return (
                                 <Switch>
                                     <Route  path="/piano/:code" render={(props) => <Piano utente={utente} {...props}/>} />
                                     <Route  path="/crea_anagrafica/:code" component={CreaAnagrafica}/>
-                                    <Route  path="/nuovo_piano/" component={NuovoPiano}/>             
+                                    <Route  path="/nuovo_piano/" >
+                                    {utente && utente.role && utente.role.type === "RUP" && <NuovoPiano utente={utente}></NuovoPiano>}
+                                    </Route>             
                                     <Route  path="/" render={(props) => <Dashboard utente={utente} {...props}/>}/>
                                 </Switch>
                             </Router>

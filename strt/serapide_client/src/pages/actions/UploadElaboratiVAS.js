@@ -37,7 +37,7 @@ const UI = ({
                 <div className="action-uploader mt-3 align-self-start border-bottom border-top mb-3">
                 <FileUpload 
                     className="border-0"
-                    placeholder="Rapporto Ambientale"
+                    placeholder="Documento preliminare di VAS"
                     getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>

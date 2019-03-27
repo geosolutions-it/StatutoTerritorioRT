@@ -98,6 +98,7 @@ query{
             description
             code
             type {
+              tipo: name
               code
             }
           }
