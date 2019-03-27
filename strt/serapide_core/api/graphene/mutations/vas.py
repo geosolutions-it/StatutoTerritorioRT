@@ -250,17 +250,23 @@ class InvioPareriVerificaVAS(graphene.Mutation):
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
             try:
+                _avvio_consultazioni_sca_count = _piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
+
                 _pareri_vas_count = ParereVerificaVAS.objects.filter(
                     user=info.context.user,
                     procedura_vas=_procedura_vas
-                ).count()
+                )
 
-                if _pareri_vas_count == 0:
+                if _pareri_vas_count.count() == (_avvio_consultazioni_sca_count - 1):
                     _parere_vas = ParereVerificaVAS(
                         user=info.context.user,
                         procedura_vas=_procedura_vas
                     )
                     _parere_vas.save()
+                elif _pareri_vas_count.count() == _avvio_consultazioni_sca_count:
+                    _pareri_vas_count.first().stato = STATO_AZIONE.attesa
+                    _pareri_vas_count.first().save()
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
 
@@ -271,7 +277,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                         procedura_vas=_procedura_vas
                     ).count()
 
-                    if _pareri_vas_count != 1:
+                    if _pareri_vas_count != _avvio_consultazioni_sca_count:
                         _tutti_pareri_inviati = False
                         break
 
@@ -664,20 +670,23 @@ class InvioPareriVAS(graphene.Mutation):
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
             try:
+                _avvio_consultazioni_sca_count = _piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
+
                 _pareri_vas_count = ParereVAS.objects.filter(
                     user=info.context.user,
                     procedura_vas=_procedura_vas,
                     consultazione_vas=_consultazione_vas
                 )
 
-                if _pareri_vas_count.count() == 0:
+                if _pareri_vas_count.count() == (_avvio_consultazioni_sca_count - 1):
                     _parere_vas = ParereVAS(
                         user=info.context.user,
                         procedura_vas=_procedura_vas,
                         consultazione_vas=_consultazione_vas
                     )
                     _parere_vas.save()
-                elif _pareri_vas_count.count() == 1:
+                elif _pareri_vas_count.count() == _avvio_consultazioni_sca_count:
                     _pareri_vas_count.first().stato = STATO_AZIONE.attesa
                     _pareri_vas_count.first().save()
                 else:
@@ -691,7 +700,7 @@ class InvioPareriVAS(graphene.Mutation):
                         consultazione_vas=_consultazione_vas
                     ).count()
 
-                    if _pareri_vas_count == 0:
+                    if _pareri_vas_count != _avvio_consultazioni_sca_count:
                         _tutti_pareri_inviati = False
                         break
 
