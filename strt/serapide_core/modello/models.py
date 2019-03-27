@@ -172,6 +172,12 @@ class Contatto(models.Model):
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
                 elif contact.tipologia == 'sca':
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
+                elif contact.tipologia == 'generico':
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+                elif contact.tipologia == 'ente':
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
+                elif contact.tipologia == 'genio_civile':
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
                 else:
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
             if not contact or attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
