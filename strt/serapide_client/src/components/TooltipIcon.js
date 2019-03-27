@@ -7,5 +7,8 @@
  */
 import React from 'react'
 
-export default ({dataTip, dataTipDisable}) => (
-<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>)
+export default ({dataTip, dataTipDisable, text = ""}) => {
+    return text ?
+    (<span className="text-nowrap">{text}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i></span>) : 
+    (<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>)
+}

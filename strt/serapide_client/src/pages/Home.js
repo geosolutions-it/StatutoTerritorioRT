@@ -77,6 +77,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Route path={`${path}/upload_elaborati_vas`} >
                     <UploadElaboratiVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
                 </Route>
+                <Route path={`${path}/protocollo_genio_civile_id`} >
+                    <UploadElaboratiVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
+                </Route>
                 { action && (
                 <Route path={path}>
                     <div className="p-6">Azione non ancora implementata</div>

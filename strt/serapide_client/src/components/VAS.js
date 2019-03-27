@@ -90,7 +90,7 @@ export default ({codice, canUpdate, isLocked}) => {
                                 getInput={getVasTypeInput(uuid)} 
                                 mutation={UPDATE_VAS} 
                                 value="semplificata" checked={tipologia === "SEMPLIFICATA"}  
-                                label={(<span className="text-nowrap">PROCEDIMENTO DI VERIFICA SEMPLIFICATA <TooltipIcon dataTip="art.5 co.3ter L.R. 10/2010"/> </span>)}
+                                label={(<span>PROCEDIMENTO DI VERIFICA <TooltipIcon dataTip="art.5 co.3ter L.R. 10/2010" text="SEMPLIFICATA"/> </span>)}
                                 className="mt-5 mb-4">
                     {(checked) =>
                         <div className="row">
@@ -98,7 +98,7 @@ export default ({codice, canUpdate, isLocked}) => {
                                      disabled={!checked} 
                                      isLocked={!checked || isLocked}
                                      risorsa={semplificata} 
-                                     placeholder={(<span>Relazione motivata per VAS semplificata<TooltipIcon dataTip="art.5 co.3ter L.R. 10/2010"/></span>)}
+                                     placeholder={(<span>Relazione motivata per VAS <TooltipIcon dataTip="art.5 co.3ter L.R. 10/2010" text="semplificata"/></span>)}
                                      variables={{codice: uuid, tipo: "vas_semplificata" }}/>
                         </div>
                     }
@@ -108,8 +108,7 @@ export default ({codice, canUpdate, isLocked}) => {
                     mutation={UPDATE_VAS} 
                     value="verifica" 
                     checked={tipologia === "VERIFICA"}  
-                    label={(<span className="text-nowrap">RICHIESTA VERIFICA DI ASSOGGETTABILITA' <TooltipIcon dataTip="art.22 L.R. 10/2010"/> </span>)}
-                    label="RICHIESTA VERIFICA VAS" 
+                    label={(<span>RICHIESTA VERIFICA DI ' <TooltipIcon dataTip="art.22 L.R. 10/2010" text="ASSOGGETTABILITA"/> </span>)}
                     className="mt-5 mb-4">
                     {(checked) => <div className="row">
                         <FileUpload {...fileProps}

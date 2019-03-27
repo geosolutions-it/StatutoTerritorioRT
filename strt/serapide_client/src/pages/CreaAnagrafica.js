@@ -75,18 +75,18 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                                 <h3 className="mb-0 text-capitalize">{`${getPianoLabel(tipo.toLowerCase())} ${codice}`}</h3>
                                 <span className="pt-5">{getEnteLabelID(ente)}</span>
                                 <h5 className="pt-5 pb-2">Delibera di Consiglio/Giunta</h5>
-                                <div className="d-flex align-items-center">
-                                    <span className="pr-2">DELIBERA DEL</span>
-                                    <EnhancedDateSelector disabled={locked} selected={dataDelibera ? new Date(dataDelibera) : undefined} mutation={UPDATE_PIANO} getInput={getDataDeliberaInput(codice)}/>
+                                <div className="row d-flex align-items-center">
+                                    <span className="col-4 ">DELIBERA DEL</span>
+                                    <div className="col-8 "><EnhancedDateSelector disabled={locked} selected={dataDelibera ? new Date(dataDelibera) : undefined} mutation={UPDATE_PIANO} getInput={getDataDeliberaInput(codice)}/></div>
                                 </div>
-                                <div className="d-flex pt-5 align-items-center ">
-                                    <span className="pr-2">DENOMINAZIONE DELL’ATTO</span>
-                                    <EnhanchedInput disabled={locked} value={descrizione} mutation={UPDATE_PIANO} getInput={getDescrizioneInput(codice)}></EnhanchedInput>
+                                <div className="row d-flex pt-5 align-items-center ">
+                                    <span className="col-4">DENOMINAZIONE DELL’ATTO</span>
+                                    <div className="col-8 "><EnhanchedInput disabled={locked} value={descrizione} mutation={UPDATE_PIANO} getInput={getDescrizioneInput(codice)}></EnhanchedInput></div>
                                     
                                 </div>
                                 <span className="pt-5">DELIBERA DI AVVIO DEL PROCEDIMENTO</span>
                                 <span className="pb-2 font-weight-light">Caricare delibera, formato obbligatorio pdf</span>
-                                <Delibera placeholder="Delibera Comunale (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={locked}/>
+                                <Delibera placeholder="Delibera (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={locked}/>
                                 <span className="pt-5">ALTRI DOCUMENTI</span>
                                 <span className="font-weight-light">Caricare eventuali allegati trascinando i files nel riquadro, formato obbligatorio pdf</span>
                                 <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_opts" }} isLocked={locked}/>
