@@ -129,7 +129,7 @@ TIPOLOGIA_ATTORE = Choices(
         ('ac', _('AC')),
         ('sca', _('SCA')),
         ('enti', _('ENTI')),
-        ('genio_civile', _('Genio Civile')),
+        ('genio_civile', _('GENIO_CIVILE')),
     )
 
 AZIONI_BASE = {
