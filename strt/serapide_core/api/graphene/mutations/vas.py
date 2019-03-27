@@ -227,6 +227,19 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                 _pareri_verifica_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                 _pareri_verifica_sca.save()
 
+                _emissione_provvedimento_verifica_expire_days = 90
+                _emissione_provvedimento_verifica = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
+                    attore=TIPOLOGIA_ATTORE.ac,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=datetime.datetime.now(timezone.get_current_timezone()) +
+                    datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
+                )
+                _emissione_provvedimento_verifica.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
+
     @classmethod
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
