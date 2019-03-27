@@ -1,7 +1,11 @@
 
 @at-root .navbar {
     z-index: 1031;
+    height: $portal-header !important;
     padding-right: $portal-header !important;
+}
+@at-root .navbar-menu {
+    z-index: 1030;
 }
 @at-root .container-fluid {
     .navbar-expand {
@@ -20,7 +24,12 @@
         }
     }
 }
-
+@at-root .top-navbar {
+    font-size: 90%;
+}
+@at-root .brand-text {
+    font-size: 80%;
+}
 .user-navbar {
     top: $portal-header !important;
 }
