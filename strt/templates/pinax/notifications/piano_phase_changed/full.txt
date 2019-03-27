@@ -1,5 +1,8 @@
 {% autoescape off %}{% load i18n %}Gentile {{ recipient }},
-Le notifichiamo che il piano {{ piano.tipologia }} "{{ piano.codice }}" è stato promosso alla fase "{{ piano.fase.descrizione }}" dall'utente {{ user }}.
+
+Con riferimento al piano {{ piano.tipologia }} Codice: {{ piano.codice }} - "{{ piano.descrizione }}"
+
+Le notifichiamo che il piano è stato promosso alla fase "{{ piano.fase.descrizione }}" dall'utente {{ user }}.
 
 {% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:
 {{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}

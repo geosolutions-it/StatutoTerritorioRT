@@ -157,6 +157,7 @@ class RisorsaNode(DjangoObjectType):
         filter_fields = ['uuid',
                          'nome',
                          'tipo',
+                         'archiviata',
                          'dimensione',
                          'descrizione',
                          'data_creazione',

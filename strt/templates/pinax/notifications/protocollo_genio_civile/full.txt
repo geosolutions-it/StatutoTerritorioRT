@@ -1,5 +1,8 @@
 {% autoescape off %}{% load i18n %}Gentile {{ recipient }},
-Le notifichiamo che è stata richiesta Notifica al Genio Civile per il piano {{ piano.tipologia }} "{{ piano.codice }}" dall'utente {{ user }}.
+
+Con riferimento al piano {{ piano.tipologia }} Codice: {{ piano.codice }} - "{{ piano.descrizione }}"
+
+Le notifichiamo che è stata richiesta Notifica al Genio Civile per il piano dall'utente {{ user }}.
 Potrebbero essere necessarie azioni e/o interventi sul piano in oggetto.
 
 {% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:
