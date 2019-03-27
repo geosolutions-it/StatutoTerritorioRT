@@ -100,6 +100,8 @@ class Risorsa(models.Model):
         null=True
     )
 
+    archiviata = models.BooleanField(null=False, blank=False, default=False)
+
     @classmethod
     def create(cls, nome, file, tipo, dimensione, fase):
         _file = cls(nome=nome, file=file, tipo=tipo, dimensione=dimensione, fase=fase)
@@ -672,6 +674,9 @@ def delete_piano_associations(sender, instance, **kwargs):
     for _vas in ProceduraVAS.objects.filter(piano=instance):
         _vas.risorse.all().delete()
         RisorseVas.objects.filter(procedura_vas=_vas).delete()
+    for _avvio in ProceduraAvvio.objects.filter(piano=instance):
+        _avvio.risorse.all().delete()
+        RisorseAvvio.objects.filter(procedura_avvio=_avvio).delete()
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
     for _t in PianoAuthTokens.objects.filter(piano=instance):

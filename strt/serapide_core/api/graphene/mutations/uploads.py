@@ -233,11 +233,13 @@ class DeleteRisorsaBase(graphene.Mutation):
         when corresponding `MediaFile` object is deleted.
         """
         try:
-            if risorsa.file:
-                if os.path.isfile(risorsa.file.path) and os.path.exists(risorsa.file.path):
-                    os.remove(risorsa.file.path)
-            risorsa.delete()
-            return True
+            # if risorsa.file:
+            #     if os.path.isfile(risorsa.file.path) and os.path.exists(risorsa.file.path):
+            #         os.remove(risorsa.file.path)
+            # risorsa.delete()
+            risorsa.archiviata = True
+            risorsa.save()
+            return risorsa.archiviata
         except BaseException:
             tb = traceback.format_exc()
             logger.error(tb)
