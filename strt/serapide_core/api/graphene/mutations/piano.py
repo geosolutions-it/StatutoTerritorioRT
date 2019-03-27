@@ -286,6 +286,8 @@ class UpdatePiano(relay.ClientIDMutation):
                             _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
                             UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano)
                             _piano.soggetto_proponente = _soggetto_proponente
+                    else:
+                        return GraphQLError(_("Forbidden"), code=403)
 
                 # Autorità Competente VAS (O)
                 if 'autorita_competente_vas' in _piano_data:
@@ -381,6 +383,7 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'data_protocollo_genio_civile' in _piano_data:
                     _piano_data.pop('data_protocollo_genio_civile')
                     # This cannot be changed
+
                 if 'numero_protocollo_genio_civile' in _piano_data:
                     if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) or \
                     not rules.test_rule('strt_core.api.is_actor', _token or
