@@ -37,7 +37,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
     }
     return (
     <div className="d-flex pb-4 pt-5">
-        <div className={classNames("d-flex flex-column flex-1")}>
+        <div className={classNames("d-flex flex-column", {"flex-fill": !action})}>
             <div className="d-flex border-serapide border-top border-bottom py-4 justify-content-around">
                 <span>LEGENDA</span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_add</i><span>E’ richiesta un’azione</span></span>
@@ -51,7 +51,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
             </FaseSwitch>
             
         </div >
-        <div className={classNames("d-flex flex-column ", {"ml-2  pl-3 flex-2 border-left": action})}>
+        <div className={classNames("d-flex flex-column ", {"ml-2  pl-3 flex-fill border-left": action})}>
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
                 {<Route path={`${path}/avvio_consultazioni_sca`} >
