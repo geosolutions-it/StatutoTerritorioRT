@@ -276,6 +276,14 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                         break
 
                 if _tutti_pareri_inviati:
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="tutti_pareri_inviati")
+
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
                 return InvioPareriVerificaVAS(
@@ -688,6 +696,14 @@ class InvioPareriVAS(graphene.Mutation):
                         break
 
                 if _tutti_pareri_inviati:
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="tutti_pareri_inviati")
+
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
                 return InvioPareriVAS(

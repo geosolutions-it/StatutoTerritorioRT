@@ -43,6 +43,7 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         ("piano_phase_changed", _("Piano Aggiornato"), _("Piano Aggiornato"),),
         ("piano_verifica_vas_updated", _("Documento Preliminare VAS"), _("Documento Preliminare VAS"),),
         ("conferenza_copianificazione", _("Conferenza di Copianificazione"), _("Conferenza di Copianificazione"),),
+        ("tutti_pareri_inviati", _("Pareri pronti per la verifica"), _("Pareri pronti per la verifica"),),
         ("protocollo_genio_civile", _("Protocollo Genio Civile"), _("Protocollo Genio Civile"),),
     )
 
