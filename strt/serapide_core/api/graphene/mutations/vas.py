@@ -277,17 +277,17 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                     if _pareri_vas_count != _avvio_consultazioni_sca_count:
                         _tutti_pareri_inviati = False
                         break
-                print(_tutti_pareri_inviati)
-                # if _tutti_pareri_inviati:
-                #
-                #     # Notify Users
-                #     piano_phase_changed.send(
-                #         sender=Piano,
-                #         user=info.context.user,
-                #         piano=_piano,
-                #         message_type="tutti_pareri_inviati")
-                #
-                #     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+                # print(_tutti_pareri_inviati)
+                if _tutti_pareri_inviati:
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="tutti_pareri_inviati")
+
+                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
                 return InvioPareriVerificaVAS(
                     vas_aggiornata=_procedura_vas,
