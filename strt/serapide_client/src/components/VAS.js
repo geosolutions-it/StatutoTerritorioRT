@@ -16,7 +16,7 @@ import { Query, Mutation} from 'react-apollo';
 import { toast } from 'react-toastify'
 import AddContact from '../components/AddContact'
 import SalvaInvia from '../components/SalvaInvia'
-import TooltipIcon from '../components/TooltipIcon'
+import TextWithTooltip from '../components/TextWithTooltip'
 import  {rebuildTooltip} from '../enhancers/utils'
 
 const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
@@ -79,7 +79,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
                         getInput={getVasTypeInput(uuid)} 
                         mutation={UPDATE_VAS} 
                         value="semplificata" checked={tipologia === "SEMPLIFICATA"}  
-                        label={(<TooltipIcon dataTip="art.5 co.3ter L.R. 10/2010" text="PROCEDIMENTO DI VERIFICA SEMPLIFICATA"/>)}
+                        label={(<TextWithTooltip dataTip="art.5 co.3ter L.R. 10/2010" text="PROCEDIMENTO DI VERIFICA SEMPLIFICATA"/>)}
                         className="mt-5 mb-4">
             {(checked) =>
                 <div className="row">
@@ -87,7 +87,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
                                 disabled={!checked} 
                                 isLocked={!checked || isLocked}
                                 risorsa={semplificata} 
-                                placeholder={(<TooltipIcon dataTip="art.5 co.3ter L.R. 10/2010" text="Relazione motivata per VAS semplificata"/>)}
+                                placeholder={(<TextWithTooltip dataTip="art.5 co.3ter L.R. 10/2010" text="Relazione motivata per VAS semplificata"/>)}
                                 variables={{codice: uuid, tipo: "vas_semplificata" }}/>
                 </div>
             }
@@ -97,13 +97,13 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
             mutation={UPDATE_VAS} 
             value="verifica" 
             checked={tipologia === "VERIFICA"}  
-            label={(<TooltipIcon dataTip="art.22 L.R. 10/2010" text="RICHIESTA VERIFICA DI  ASSOGGETTABILITA'"/>)}
+            label={(<TextWithTooltip dataTip="art.22 L.R. 10/2010" text="RICHIESTA VERIFICA DI  ASSOGGETTABILITA'"/>)}
             className="mt-5 mb-4">
             {(checked) => <div className="row">
                 <FileUpload {...fileProps}
                             disabled={!checked} isLocked={!checked || isLocked}
                             risorsa={verifica}
-                            placeholder={(<TooltipIcon dataTip="art.22 L.R. 10/2010" text="Documento preliminare"/>)}
+                            placeholder={(<TextWithTooltip dataTip="art.22 L.R. 10/2010" text="Documento preliminare"/>)}
                             variables={{codice: uuid, tipo: "vas_verifica" }}/>
                     </div>}
         </EnhancedSwitch>
@@ -111,14 +111,14 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
             getInput={getVasTypeInput(uuid)}
             mutation={UPDATE_VAS}
             value="procedimento_semplificato"
-            label={(<TooltipIcon dataTip="art.8 co.5 L.R. 10/2010" text="PROCEDIMENTO SEMPLIFICATO"/>)}
+            label={(<TextWithTooltip dataTip="art.8 co.5 L.R. 10/2010" text="PROCEDIMENTO SEMPLIFICATO"/>)}
             checked={tipologia === "PROCEDIMENTO_SEMPLIFICATO"}
             className="mt-5 mb-4">
             {(checked) => <div className="row">
                 <FileUpload {...fileProps}
                             disabled={!checked} isLocked={!checked || isLocked}
                             risorsa={docProcSemp}
-                            placeholder={(<TooltipIcon dataTip="art. 8, 22 e 23 L.R. 10/2010" text="Documento preliminare"/>)}
+                            placeholder={(<TextWithTooltip dataTip="art. 8, 22 e 23 L.R. 10/2010" text="Documento preliminare"/>)}
                             variables={{codice: uuid, tipo: "doc_proc_semplificato" }}/>
                     </div>}
             </EnhancedSwitch>

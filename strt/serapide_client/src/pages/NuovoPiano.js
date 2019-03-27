@@ -9,7 +9,7 @@ import React from 'react'
 import Button from '../components/IconButton'
 import {withPropsOnChange, withStateHandlers, compose} from 'recompose'
 import SelectTipo from '../components/SelectTipo'
-import TooltipIcon from '../components/TooltipIcon'
+import TextWithTooltip from '../components/TextWithTooltip'
 import { Mutation, Query} from "react-apollo";
 import EnteSelector from "../components/EnteSelector"
 import { toast } from 'react-toastify'
@@ -92,7 +92,7 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                                         <p style={{textAlign: "justify"}}>
                                             In questa sezione è possibile creare un nuovo atto di governo del Territorio e di conseguenza,
                                             aprire il relativo procedimento amministrativo.<br/>Dal menù è possibile
-                                            selezionare il tipo di atto per il quale si intende avviare il procedimento  <TooltipIcon dataTip="es: Piano Strutturale, Piano Operativo,
+                                            selezionare il tipo di atto per il quale si intende avviare il procedimento  <TextWithTooltip dataTip="es: Piano Strutturale, Piano Operativo,
                                             Variante"/>
                                         </p>
                                     </div>
@@ -102,8 +102,8 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                                     Per poter creare l'atto di governo del territorio è necessario compilare una anagrafica del Piano selezionato nella successiva sezione
                                     "CREA ANAGRAFICA". A tal fine è necessario inserire  l’atto amministrativo di avvio del procedimento, specificandone il numero e la sua 
                                     denominazione. Inoltre, sarà necessario indicare se l’atto è assoggettato a VAS (ordinaria o semplificata, secondo le procedure previste dalla L.R. 10/2010)
-                                    o se è necessario avviare la procedura di verifica di assoggettabilità <TooltipIcon dataTip="ordinaria o semplificata, secondo le procedure previste dalla L.R. 10/2010"/> ed allegare.
-                                    In ogni caso, i relativii documenti richiesti di avvio alla procedura di VAS dovranno essere caricati in questo momento.<TooltipIcon dataTip="Documento preliminare o relazione motivata"/>
+                                    o se è necessario avviare la procedura di verifica di assoggettabilità <TextWithTooltip dataTip="ordinaria o semplificata, secondo le procedure previste dalla L.R. 10/2010"/> ed allegare.
+                                    In ogni caso, i relativii documenti richiesti di avvio alla procedura di VAS dovranno essere caricati in questo momento.<TextWithTooltip dataTip="Documento preliminare o relazione motivata"/>
                                     </p>
                                     </div>
                                 <div className="col-12">
@@ -115,7 +115,7 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                                             <li>nominativo RUP</li>
                                             <li>individuazione garante della comunicazione</li>
                                             <li>estremi identificativi dell’atto di avvio del procedimento</li>
-                                            <li>procedura di VAS necessaria <TooltipIcon dataTip="secondo quanto previsto dalla L.R. 10/2010"/></li>
+                                            <li>procedura di VAS necessaria <TextWithTooltip dataTip="secondo quanto previsto dalla L.R. 10/2010"/></li>
                                         </ul>
                                     
                                 </div>

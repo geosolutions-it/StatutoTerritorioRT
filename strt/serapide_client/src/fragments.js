@@ -21,6 +21,8 @@ fragment Risorsa on RisorsaNode {
     lastUpdate
     user{
       fiscalCode
+      firstName
+      lastName
     }
     label
     tooltip

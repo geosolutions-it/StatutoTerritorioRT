@@ -18,14 +18,14 @@ import Injector from '../components/Injector'
 import SideBar from '../components/SideBarMenu'
 import StatoProgress from '../components/StatoProgress'
 import Home from "./Home"
-import ReactTooltip from 'react-tooltip'
+
 
 const getActive = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
     const activeLocation = getActive(url, pathname)
-    return (<Query query={GET_PIANI} variables={{codice: code}}>
+    return (<Query query={GET_PIANI} pollInterval={5000} variables={{codice: code}}>
 
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
             if(loading){

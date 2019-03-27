@@ -102,7 +102,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                                  <i className="material-icons text-serapide">bookmark</i>
                                  {nome}
                         </div>))}
-                        <div className="mt-3 pl-4 border-bottom-2 mb-5">
+                        <div className="mt-3 pl-4 border-bottom-2 pb-5">
                         <Mutation mutation={UPDATE_PIANO} onError={showError}>
                     {(onChange) => {
                             const changed = (val) => {
@@ -127,7 +127,13 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                                 onChange={changed}
                                 btn={(toggleOpen) => (
                                     <div className="row">
-                                        <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="text-serapide rounded-pill" color="dark" icon="add_circle" label="Soggetti competenti in materia ambientale (SCA))"/>
+                                        <Button 
+                                            fontSize="60%"  
+                                            classNameLabel="py-0" 
+                                            onClick={toggleOpen} 
+                                            className="text-serapide rounded-pill" 
+                                            color="dark" icon="add_circle" 
+                                            label="Soggetti competenti in materia ambientale (SCA)"/>
                                     </div>)}
                             >
                             <AddContact className="mt-2" tipologia="sca"></AddContact>

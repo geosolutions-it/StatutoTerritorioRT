@@ -10,7 +10,7 @@ import React from 'react'
 
 const OneWord = (word, className, dataTip, dataTipDisable) => (
         <span className={`text-nowrap ${className}`}>
-            {word.slice(1)}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>
+            {word[0]}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>
         </span>)
 const ManyWords = (words, className, dataTip, dataTipDisable) => (
     <span className={className}>

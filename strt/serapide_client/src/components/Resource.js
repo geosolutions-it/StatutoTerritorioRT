@@ -9,13 +9,13 @@ import React from 'react'
 import { toast } from 'react-toastify'
 import Confirm from './ConfirmToast'
 import {formatDate} from '../utils'
-import TooltipIcon from './TooltipIcon'
+import TextWithTooltip from './TextWithTooltip'
 const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : null
 
 
 const ResourceTitle = ({resource: {downloadUrl, label, tooltip, nome} = {}, useLabel} = {}) => {
     const lab = useLabel ?  label : nome
-    const tip = (<TooltipIcon dataTip={tooltip} dataTipDisable={!useLabel} text={label}/>)
+    const tip = (<TextWithTooltip dataTip={tooltip} dataTipDisable={!useLabel} text={label}/>)
     return downloadUrl ?(
             <a className="text-dark" href={downloadUrl} download={nome}>
                 {useLabel ? tip : lab}

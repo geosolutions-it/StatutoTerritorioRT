@@ -17,7 +17,7 @@ import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import AddContact from '../../components/AddContact'
 import Button from '../../components/IconButton'
-import TooltipIcon from '../../components/TooltipIcon'
+import TextWithTooltip from '../../components/TextWithTooltip'
 import {EnhancedDateSelector} from '../../components/DateSelector'
 import {rebuildTooltip} from '../../enhancers/utils'
 import Input from '../../components/EnhancedInput'
@@ -87,11 +87,11 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
 
             return (<React.Fragment>
                 <ActionTitle>
-                    Avvio del Procedimento<br/><small className="text-nowrap">(Atto di Avvio)<TooltipIcon dataTip="art. 17 L.R. 65/2014"/></small>
+                    Avvio del Procedimento<br/><small className="text-nowrap">(Atto di Avvio)<TextWithTooltip dataTip="art. 17 L.R. 65/2014"/></small>
                 </ActionTitle>
                 
                 <Resource useLabel fileSize={false} className="border-0 mt-3" icon="attach_file" resource={delibera}/>
-                <h6 className="pt-5">Elaborati allegati alla delibera di avvio del procedimento <TooltipIcon dataTip="ai sensi dell’art. 17 comma 3, lett. a,b,c,d,e,f, L.R. 65/2014"/></h6>
+                <h6 className="pt-5">Elaborati allegati alla delibera di avvio del procedimento <TextWithTooltip dataTip="ai sensi dell’art. 17 comma 3, lett. a,b,c,d,e,f, L.R. 65/2014"/></h6>
                 <div className="action-uploader  align-self-start border-bottom">
                 <FileUpload 
                     {...fileProps}
@@ -101,13 +101,13 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 <div className="action-uploader  align-self-start border-bottom ">
                 <FileUpload 
                     {...fileProps}
-                    placeholder={(<span>Quadro Conoscitivo<TooltipIcon dataTip="art. 17, lett.b, L.R. 65/2014"/></span>)}
+                    placeholder={(<span>Quadro Conoscitivo<TextWithTooltip dataTip="art. 17, lett.b, L.R. 65/2014"/></span>)}
                     risorsa={quadro} variables={{codice: uuid, tipo: "quadro_conoscitivo" }}/>
                 </div>
                 <div className="action-uploader  align-self-start border-bottom ">
                 <FileUpload 
                     {...fileProps}
-                    placeholder={(<span>Programma delle attività di informazione e di partecipazione<TooltipIcon dataTip="art. 17, lett.e, L.R. 65/2014"/></span>)}
+                    placeholder={(<span>Programma delle attività di informazione e di partecipazione<TextWithTooltip dataTip="art. 17, lett.e, L.R. 65/2014"/></span>)}
                     risorsa={programma} variables={{codice: uuid, tipo: "programma_attivita" }}/>
                 </div>
                 
@@ -125,7 +125,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 <div className="action-uploader  align-self-start border-bottom ">
                 <FileUpload 
                     {...fileProps}
-                    placeholder={(<span>Individuazione del garante dell’informazione e della partecipazione<TooltipIcon dataTip="art. 17, lett.f, L.R. 65/2014"/></span>)}
+                    placeholder={(<span>Individuazione del garante dell’informazione e della partecipazione<TextWithTooltip dataTip="art. 17, lett.f, L.R. 65/2014"/></span>)}
                     risorsa={garante} variables={{codice: uuid, tipo: "individuazione_garante_informazione" }}/>
                 </div>
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">TERMINI SCADENZA PER LA RISPOSTA</h5>
@@ -133,7 +133,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 
                 <h5 className="font-weight-light pb-1 mt-5">SCELTA SOGGETTI ISTITUZIONALI</h5>
                 <h6 className="font-weight-light pb-1">
-                        Soggetti istituzionali a cui si chiede il contributo tecnico <TooltipIcon dataTip="art. 17, lett.c, L.R. 65/2014"/>
+                        Soggetti istituzionali a cui si chiede il contributo tecnico <TextWithTooltip dataTip="art. 17, lett.c, L.R. 65/2014"/>
                 </h6>
                     <div className="row">  
                     {aut.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
@@ -175,7 +175,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                         }
                         </Mutation>
                         </div>
-                        <h5 className="font-weight-light pb-1 mt-5">ALTRI DESTINATARI<TooltipIcon dataTip="art.8 co.1 L.R. 65/2014"/></h5>
+                        <h5 className="font-weight-light pb-1 mt-5">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h5>
                         <div className="row">
                             {dest.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
                                     <i className="material-icons text-serapide">bookmark</i>
@@ -215,7 +215,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                         }
                         </Mutation>
                         </div>
-                        <h5 className="font-weight-light pb-1 mt-5">RICHIESTA CONFERENZA DI COPIANIFICAZIONE<TooltipIcon dataTip="art. 25 L.R. 65/2014"/></h5>
+                        <h5 className="font-weight-light pb-1 mt-5">RICHIESTA CONFERENZA DI COPIANIFICAZIONE<TextWithTooltip dataTip="art. 25 L.R. 65/2014"/></h5>
                         <div className="row pl-2">
                             <div className="col-12 pt-2">
                                 Se si seleziona l'opzione "Si" viene inviata a Regione Toscana la RICHIESTA
@@ -243,15 +243,15 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                                 return (
                                     <div className="d-flex flex-column mt-4 pl-2">
                                         <div className="d-flex">
-                                            <span style={{minWidth: 200}}><TooltipIcon dataTip="art. 25, comma 3 bis L.R. 65/2014" text="SI"/></span>
+                                            <span style={{minWidth: 200}}><TextWithTooltip dataTip="art. 25, comma 3 bis L.R. 65/2014" text="SI"/></span>
                                             <input onChange={changed} value="NECESSARIA" checked={conferenzaCopianificazione === "NECESSARIA"} className="form-check-input position-static" type="checkbox"/>
                                             </div>
                                         <div className="d-flex">
-                                            <span style={{minWidth: 200}}><TooltipIcon dataTip="art. 25, comma 3 bis L.R. 65/2014" text="NON ADESSO"/></span>
+                                            <span style={{minWidth: 200}}><TextWithTooltip dataTip="art. 25, comma 3 bis L.R. 65/2014" text="NON ADESSO"/></span>
                                             <input onChange={changed} value="POSTICIPATA" checked={conferenzaCopianificazione === "POSTICIPATA"} className="form-check-input position-static" type="checkbox"/>
                                         </div>
                                         <div className="d-flex">
-                                            <span style={{minWidth: 200}}><TooltipIcon dataTip="art.88, comma 7, lett. c,  e art. 90 comma 7, lett.b, L.R. 65/2014" text="NON NECESSARIA"/></span>
+                                            <span style={{minWidth: 200}}><TextWithTooltip dataTip="art.88, comma 7, lett. c,  e art. 90 comma 7, lett.b, L.R. 65/2014" text="NON NECESSARIA"/></span>
                                             <input onChange={changed} value="NON_NECESSARIA" checked={conferenzaCopianificazione === "NON_NECESSARIA"} className="form-check-input position-static" type="checkbox"/>
                                             <i className={`ml-3 material-icons ${conferenzaCopianificazione === "NON_NECESSARIA" ? "text-serapide" : ""}`}>check_circle_outline</i>
                                             <span className={`pl-1 ${conferenzaCopianificazione === "NON_NECESSARIA" ? "text-serapide" : "text-gray"}`}>NOTIFICA AL GENIO CIVILE</span>

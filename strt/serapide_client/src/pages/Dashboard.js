@@ -12,7 +12,7 @@ import TabellaPiani from '../components/TabellaPiani'
 import TabellaMessaggi from '../components/TabellaMessaggi'
 import Button from '../components/IconButton'
 import {Query, Mutation} from "react-apollo"; 
-import TooltipIcon from '../components/TooltipIcon'
+import TextWithTooltip from '../components/TextWithTooltip'
 import {toast} from 'react-toastify';
 import {GET_PIANI, DELETE_PIANO} from '../queries'
 import IconButton from '../components/IconButton';
@@ -64,7 +64,7 @@ export default ({utente, ...props}) => {
         <React.Fragment>
             <div>
                 <h1>Portale della pianificazione</h1>
-                <h3><TooltipIcon dataTip="(L.R. 65/2014)" text="Software per la formazione e gestione dei piani"/></h3>
+                <h3><TextWithTooltip dataTip="(L.R. 65/2014)" text="Software per la formazione e gestione dei piani"/></h3>
                 <hr className="border-serapide border-bottom"></hr>
                 <div className="py-4 d-flex flex-row">
                     <div className="d-flex flex-column ">

@@ -41,7 +41,7 @@ export const toggleControllableState = (propName, handlerName, initialValue = fa
             )
         )
 
-export const rebuildTooltip = ({onUpdate = false, log = false, comp = ""}) => {
+export const rebuildTooltip = ({onUpdate = false, log = false, comp = ""} = {}) => {
     const logger = log ? (fase) => {console.log(comp + " " + fase + " ")} : () => {}
     return compose(pure,
         lifecycle({

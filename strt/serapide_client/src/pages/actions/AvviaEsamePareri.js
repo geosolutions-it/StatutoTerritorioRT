@@ -17,12 +17,12 @@ import {map} from 'lodash'
 import {GET_VAS,
     AVVIO_ESAME_PARERI_SCA
 } from '../../queries'
-import  {showError, formatDate,daysSub} from '../../utils'
+import  {showError, getNominativo} from '../../utils'
 import {toggleControllableState} from '../../enhancers/utils'
 
 const enhancer = toggleControllableState('checked', 'toggleSwitch', false)
 
-const getNominativo = ({firstName, lastName, fiscalCode} = {}) =>  firstName || lastName ? `${firstName} ${lastName}` : fiscalCode
+
 
 
 const UI = enhancer(({
