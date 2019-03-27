@@ -7532,7 +7532,11 @@ a.text-dark:hover, a.text-dark:focus {
 
 .navbar {
   z-index: 1031;
+  height: 60px !important;
   padding-right: 60px !important; }
+
+.navbar-menu {
+  z-index: 1030; }
 
 @media (max-width: 767.98px) {
   .container-fluid .navbar-expand-sm.navbar {
@@ -7548,6 +7552,12 @@ a.text-dark:hover, a.text-dark:focus {
 
 .container-fluid .navbar-expand-xl.navbar {
   padding-right: 0.5rem !important; }
+
+.top-navbar {
+  font-size: 90%; }
+
+.brand-text {
+  font-size: 80%; }
 
 .serapide .user-navbar {
   top: 60px !important; }
@@ -8164,6 +8174,9 @@ button.bg-serapide:focus {
 
 .rt-logo {
   height: 60px; }
+
+.rt-logo-gov {
+  height: 40px; }
 
 @media (min-width: 576px) {
   .pX-sm-1 {
