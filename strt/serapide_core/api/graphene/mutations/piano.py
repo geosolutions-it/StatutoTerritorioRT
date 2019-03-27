@@ -481,11 +481,14 @@ class PromozionePiano(graphene.Mutation):
                 elif procedura_vas.tipologia in \
                 (TIPOLOGIA_VAS.procedimento, TIPOLOGIA_VAS.procedimento_semplificato):
                     _verifica_vas.stato = STATO_AZIONE.attesa
+                    _avvio_consultazioni_sca_ac_expire_days = 10
                     _avvio_consultazioni_sca = Azione(
                         tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
                         attore=TIPOLOGIA_ATTORE.ac,
                         order=_order,
-                        stato=STATO_AZIONE.necessaria
+                        stato=STATO_AZIONE.attesa,
+                        data=datetime.datetime.now(timezone.get_current_timezone()) +
+                        datetime.timedelta(days=_avvio_consultazioni_sca_ac_expire_days)
                     )
                     _avvio_consultazioni_sca.save()
                     _order += 1
