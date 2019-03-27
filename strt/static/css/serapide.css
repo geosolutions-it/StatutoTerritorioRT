@@ -8096,6 +8096,49 @@ button.bg-serapide:focus {
 .SCA .border-serapide {
   border-color: #FA2AB3 !important; }
 
+.GENIO_CIVILE .text-serapide {
+  color: #FA2AB3 !important; }
+
+.GENIO_CIVILE a.text-serapide:hover, .GENIO_CIVILE a.text-serapide:focus {
+  color: #d3058c !important; }
+
+.GENIO_CIVILE .bg-serapide {
+  background-color: #FA2AB3 !important; }
+
+.GENIO_CIVILE a.bg-serapide:hover, .GENIO_CIVILE a.bg-serapide:focus,
+.GENIO_CIVILE button.bg-serapide:hover,
+.GENIO_CIVILE button.bg-serapide:focus {
+  background-color: #eb069d !important; }
+
+.GENIO_CIVILE .bg-gradient-serapide {
+  background: #FA2AB3 linear-gradient(180deg, #fb4abe, #FA2AB3) repeat-x !important; }
+
+.GENIO_CIVILE .btn-serapide {
+  color: #fff;
+  background-color: #FA2AB3;
+  border-color: #FA2AB3; }
+  .GENIO_CIVILE .btn-serapide:hover {
+    color: #fff;
+    background-color: #f806a5;
+    border-color: #eb069d; }
+  .GENIO_CIVILE .btn-serapide:focus, .GENIO_CIVILE .btn-serapide.focus {
+    box-shadow: 0 0 0 0.2rem rgba(251, 74, 190, 0.5); }
+  .GENIO_CIVILE .btn-serapide.disabled, .GENIO_CIVILE .btn-serapide:disabled {
+    color: #fff;
+    background-color: #FA2AB3;
+    border-color: #FA2AB3; }
+  .GENIO_CIVILE .btn-serapide:not(:disabled):not(.disabled):active, .GENIO_CIVILE .btn-serapide:not(:disabled):not(.disabled).active,
+  .show > .GENIO_CIVILE .btn-serapide.dropdown-toggle {
+    color: #fff;
+    background-color: #eb069d;
+    border-color: #df0595; }
+    .GENIO_CIVILE .btn-serapide:not(:disabled):not(.disabled):active:focus, .GENIO_CIVILE .btn-serapide:not(:disabled):not(.disabled).active:focus,
+    .show > .GENIO_CIVILE .btn-serapide.dropdown-toggle:focus {
+      box-shadow: 0 0 0 0.2rem rgba(251, 74, 190, 0.5); }
+
+.GENIO_CIVILE .border-serapide {
+  border-color: #FA2AB3 !important; }
+
 .border-2 {
   border: 2px solid #dee2e6 !important; }
 
@@ -8133,6 +8176,9 @@ button.bg-serapide:focus {
 /** colori notifiche**/
 .icon-34 {
   font-size: 34px !important; }
+
+.icon-18 {
+  font-size: 16px !important; }
 
 .icon-16 {
   font-size: 16px !important; }

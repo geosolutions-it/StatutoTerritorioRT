@@ -59,10 +59,10 @@ def has_description(piano):
 def has_delibera_comunale(piano):
     return (
         piano.risorse.count() > 0 and
-        piano.risorse.filter(tipo='delibera').count() == 1 and
-        piano.risorse.get(tipo='delibera').dimensione > 0 and
-        piano.risorse.get(tipo='delibera').file and
-        os.path.exists(piano.risorse.get(tipo='delibera').file.path)
+        piano.risorse.filter(tipo='delibera', archiviata=False).count() == 1 and
+        piano.risorse.get(tipo='delibera', archiviata=False).dimensione > 0 and
+        piano.risorse.get(tipo='delibera', archiviata=False).file and
+        os.path.exists(piano.risorse.get(tipo='delibera', archiviata=False).file.path)
     )
 
 
