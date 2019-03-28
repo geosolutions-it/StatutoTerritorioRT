@@ -227,19 +227,6 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                 _pareri_verifica_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                 _pareri_verifica_sca.save()
 
-                _emissione_provvedimento_verifica_expire_days = 90
-                _emissione_provvedimento_verifica = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
-                    attore=TIPOLOGIA_ATTORE.ac,
-                    order=_order,
-                    stato=STATO_AZIONE.attesa,
-                    data=datetime.datetime.now(timezone.get_current_timezone()) +
-                    datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
-                )
-                _emissione_provvedimento_verifica.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
-
     @classmethod
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
@@ -250,22 +237,19 @@ class InvioPareriVerificaVAS(graphene.Mutation):
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
             try:
-                _avvio_consultazioni_sca_count = _piano.azioni.filter(
-                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
-
                 _pareri_vas_count = ParereVerificaVAS.objects.filter(
                     user=info.context.user,
                     procedura_vas=_procedura_vas
                 )
 
-                if _pareri_vas_count.count() == (_avvio_consultazioni_sca_count - 1):
+                if _pareri_vas_count.count() == 0:
                     _parere_vas = ParereVerificaVAS(
                         inviata=True,
                         user=info.context.user,
                         procedura_vas=_procedura_vas
                     )
                     _parere_vas.save()
-                elif _pareri_vas_count.count() != _avvio_consultazioni_sca_count:
+                elif _pareri_vas_count.count() != 1:
                     return GraphQLError(_("Forbidden"), code=403)
 
                 _tutti_pareri_inviati = True
@@ -274,10 +258,10 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                         user=_sca.user,
                         procedura_vas=_procedura_vas
                     ).count()
-                    if _pareri_vas_count != _avvio_consultazioni_sca_count:
+                    if _pareri_vas_count != 1:
                         _tutti_pareri_inviati = False
                         break
-                # print(_tutti_pareri_inviati)
+
                 if _tutti_pareri_inviati:
 
                     # Notify Users

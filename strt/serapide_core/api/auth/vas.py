@@ -49,24 +49,23 @@ def parere_sca_ok(user, procedura_vas):
             return True
     return False
 
+
 @rules.predicate
 def parere_verifica_vas_ok(user, procedura_vas):
     if user and procedura_vas:
-        _piano = procedura_vas.piano
         _resources = procedura_vas.risorse.filter(tipo='parere_verifica_vas', archiviata=False, user=user)
-        _avvio_consultazioni_sca_count = _piano.azioni.filter(
-            tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
         _pareri_vas = ParereVerificaVAS.objects.filter(
             user=user,
             inviata=True,
             procedura_vas=procedura_vas
         )
         if _resources and _resources.count() > 0 and \
-        _pareri_vas and _pareri_vas.count() == _avvio_consultazioni_sca_count:
+        _pareri_vas and _pareri_vas.count() == 1:
             return False
         else:
             return True
     return False
+
 
 @rules.predicate
 def procedura_vas_is_valid(piano, procedura_vas):
