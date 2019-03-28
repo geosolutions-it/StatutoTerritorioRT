@@ -188,7 +188,8 @@ class AvvioPiano(graphene.Mutation):
             _avvio_procedimento = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
             if _avvio_procedimento and _avvio_procedimento.stato != STATO_AZIONE.nessuna:
-                if not cls.autorita_ok(piano):
+                if not cls.autorita_ok(piano) and \
+                procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
                     raise Exception("Missing GENIO_CIVILE")
 
                 _avvio_procedimento.stato = STATO_AZIONE.nessuna
