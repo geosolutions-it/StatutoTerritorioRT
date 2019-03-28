@@ -183,9 +183,10 @@ class Contatto(models.Model):
                 else:
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
             if not contact or attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+                membership = None
                 if token:
                     membership = user.memberships.all().first()
-                else:
+                elif organization:
                     membership = user.memberships.get(organization__code=organization)
                 if membership and membership.organization and membership.organization.type:
                     attore = membership.organization.type.name

@@ -35,6 +35,7 @@ from serapide_core.modello.models import (
     Azione,
     AzioniPiano,
     ProceduraAvvio,
+    Contatto
 )
 
 from serapide_core.modello.enums import (
@@ -150,9 +151,9 @@ class AvvioPiano(graphene.Mutation):
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
     @classmethod
-    def autorita_ok(cls, piano):
+    def autorita_ok(cls, piano, tipologia, contatto=True):
         _res = False
-        _has_genio_civile = False
+        _has_tipologia = False
 
         if piano.soggetto_proponente and \
         piano.autorita_competente_vas.all().count() > 0 and \
@@ -160,18 +161,26 @@ class AvvioPiano(graphene.Mutation):
         piano.altri_destinatari.all().count() >= 0 and \
         piano.soggetti_sca.all().count() >= 0:
             for _c in piano.soggetti_sca.all():
-                if _c.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
-                    _has_genio_civile = True
+                _tipologia = _c.tipologia if contatto else Contatto.attore(_c.user)
+                print(_tipologia)
+                if _tipologia == tipologia:
+                    _has_tipologia = True
                     break
-            for _c in piano.autorita_istituzionali.all():
-                if _c.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
-                    _has_genio_civile = True
-                    break
-            for _c in piano.altri_destinatari.all():
-                if _c.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
-                    _has_genio_civile = True
-                    break
-            _res = _has_genio_civile
+            if not _has_tipologia:
+                for _c in piano.autorita_istituzionali.all():
+                    _tipologia = _c.tipologia if contatto else Contatto.attore(_c.user)
+                    print(_tipologia)
+                    if _tipologia == tipologia:
+                        _has_tipologia = True
+
+            if not _has_tipologia:
+                for _c in piano.altri_destinatari.all():
+                    _tipologia = _c.tipologia if contatto else Contatto.attore(_c.user)
+                    print(_tipologia)
+                    if _tipologia == tipologia:
+                        _has_tipologia = True
+                        break
+            _res = _has_tipologia
         return _res
 
     @classmethod
@@ -188,9 +197,13 @@ class AvvioPiano(graphene.Mutation):
             _avvio_procedimento = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
             if _avvio_procedimento and _avvio_procedimento.stato != STATO_AZIONE.nessuna:
-                if not cls.autorita_ok(piano) and \
+                if not cls.autorita_ok(piano, TIPOLOGIA_CONTATTO.genio_civile) and \
                 procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
-                    raise Exception("Missing GENIO_CIVILE")
+                    raise Exception("Missing %s" % TIPOLOGIA_CONTATTO.genio_civile)
+
+                if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione], contatto=False) and \
+                procedura_avvio.conferenza_copianificazione != TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+                    raise Exception("Missing %s" % TIPOLOGIA_ATTORE.regione)
 
                 _avvio_procedimento.stato = STATO_AZIONE.nessuna
                 _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())

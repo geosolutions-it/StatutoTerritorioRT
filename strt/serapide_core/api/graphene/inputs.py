@@ -77,6 +77,10 @@ class PianoUpdateInput(InputObjectType):
     autorita_istituzionali = graphene.List(graphene.String, required=False)
     altri_destinatari = graphene.List(graphene.String, required=False)
     numero_protocollo_genio_civile = graphene.String(required=False)
+    redazione_norme_tecniche_attuazione_url = graphene.String(required=False)
+    compilazione_rapporto_ambientale_url = graphene.String(required=False)
+    conformazione_pit_ppr_url = graphene.String(required=False)
+    monitoraggio_urbanistico_url = graphene.String(required=False)
 
 
 class ProceduraVASCreateInput(InputObjectType):
