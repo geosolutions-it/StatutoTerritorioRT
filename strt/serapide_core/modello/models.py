@@ -165,7 +165,7 @@ class Contatto(models.Model):
         return contact_type
 
     @classmethod
-    def attore(cls, user, organization=None, token=None):
+    def attore(cls, user, organization=None, token=None, tipologia=None):
         attore = ""
         if user:
             contact = Contatto.objects.filter(user=user).first()
@@ -191,7 +191,14 @@ class Contatto(models.Model):
                 if membership and membership.organization and membership.organization.type:
                     attore = membership.organization.type.name
                 else:
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+                    if tipologia:
+                        membership = user.memberships.filter(organization__type__name=tipologia).first()
+                        if attore:
+                            attore = membership.organization.type.name
+                        else:
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+                    else:
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
         return attore
 
     class Meta:

@@ -161,23 +161,23 @@ class AvvioPiano(graphene.Mutation):
         piano.altri_destinatari.all().count() >= 0 and \
         piano.soggetti_sca.all().count() >= 0:
             for _c in piano.soggetti_sca.all():
-                _tipologia = _c.tipologia if contatto else Contatto.attore(_c.user)
-                print(_tipologia)
-                if _tipologia == tipologia:
+                _tipologia = _c.tipologia if contatto else \
+                    Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
+                if _tipologia.upper() == tipologia.upper():
                     _has_tipologia = True
                     break
             if not _has_tipologia:
                 for _c in piano.autorita_istituzionali.all():
-                    _tipologia = _c.tipologia if contatto else Contatto.attore(_c.user)
-                    print(_tipologia)
-                    if _tipologia == tipologia:
+                    _tipologia = _c.tipologia if contatto else \
+                        Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
+                    if _tipologia.upper() == tipologia.upper():
                         _has_tipologia = True
 
             if not _has_tipologia:
                 for _c in piano.altri_destinatari.all():
-                    _tipologia = _c.tipologia if contatto else Contatto.attore(_c.user)
-                    print(_tipologia)
-                    if _tipologia == tipologia:
+                    _tipologia = _c.tipologia if contatto else \
+                        Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
+                    if _tipologia.upper() == tipologia.upper():
                         _has_tipologia = True
                         break
             _res = _has_tipologia
@@ -201,7 +201,7 @@ class AvvioPiano(graphene.Mutation):
                 procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
                     raise Exception("Missing %s" % TIPOLOGIA_CONTATTO.genio_civile)
 
-                if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione], contatto=False) and \
+                if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE.regione, contatto=False) and \
                 procedura_avvio.conferenza_copianificazione != TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
                     raise Exception("Missing %s" % TIPOLOGIA_ATTORE.regione)
 
