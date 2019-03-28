@@ -314,6 +314,7 @@ class AssoggettamentoVAS(graphene.Mutation):
                 _avvio_consultazioni_sca.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+
                 procedura_vas.verifica_effettuata = True
                 procedura_vas.data_assoggettamento = datetime.datetime.now(timezone.get_current_timezone())
                 procedura_vas.save()
