@@ -60,7 +60,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                         <Switch>
                             <Route  path={`${path}/anagrafica`} component={Anagrafica}/>
                             <Route  path={`${path}/formazione`} >
-                                <Formazione utente={utente}></Formazione>
+                                <Formazione utente={utente} piano={piano}></Formazione>
                             </Route>
                             <Route  path={`${path}/home`} render={(props) => <Home utente={utente} azioni={azioni} piano={piano} {...props}></Home>}/>
                             <Route path={path}>

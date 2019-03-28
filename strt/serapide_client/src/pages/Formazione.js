@@ -13,7 +13,9 @@ const goTo = (url) => {
     window.open(url , '_blank');
 }
 
-export default ({utente: {attore} = {}}) => (
+export default ({utente: {attore} = {},
+    piano: {redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl} = {}
+    } = {}) => (
     <div className="d-flex flex-column pb-4 pt-5">
         <div className="d-flex border-serapide border-top py-5 justify-content-around">
             <span className="d-flex mt-4 align-items-center" >
@@ -27,7 +29,7 @@ export default ({utente: {attore} = {}}) => (
         <div className="row pt-5">
         
                 <div className="col-auto py-2 m-auto">
-                    <Button onClick={() => goTo( attore === "Comune" ? "http://159.213.57.114/vas046021/gotoP/046021/07062018/PS191218" : "http://159.213.57.114/vas046021/gotoP/RegioneToscana/14042017/PS191218")}
+                    <Button disabled={!redazioneNormeTecnicheAttuazioneUrl} onClick={() => goTo(redazioneNormeTecnicheAttuazioneUrl)}
                             className="margin-auto" style={{minWidth: 344}} size="lg" color="serapide">
                         <div  className="d-flex flex-column">
                             <span>REDAZIONE NORME TECHINCHE</span>
@@ -35,9 +37,12 @@ export default ({utente: {attore} = {}}) => (
                             <span>[Minerva]</span>
                         </div>
                     </Button>
+                    <div className="mt-3 mb-4">
+                        <span>URL</span><div className="border p-2">{redazioneNormeTecnicheAttuazioneUrl}</div>
+                    </div>
                 </div>
                 <div className="col-auto m-auto">
-                    <Button onClick={() => goTo( attore === "Comune" ? "http://159.213.57.114/vas046021/gotoP/046021/07062018/PS191218" : "http://159.213.57.114/vas046021/gotoP/RegioneToscana/14042017/PS191218")} 
+                    <Button disabled={!compilazioneRapportoAmbientaleUrl} onClick={() => goTo( compilazioneRapportoAmbientaleUrl)} 
                             className="margin-auto" style={{minWidth: 344}}  size="lg" color="serapide">
                         <div className="d-flex flex-column">
                             <span>COMPILAZIONE DEL</span>
@@ -45,11 +50,14 @@ export default ({utente: {attore} = {}}) => (
                             <span>[Minerva]</span>
                         </div>
                     </Button>
+                    <div className="mt-3 mb-4">
+                     <span>URL</span><div className="border p-2">{compilazioneRapportoAmbientaleUrl}</div>
+                    </div>
                 </div>
         </div>
         <div className="row">
                 <div className="col-auto py-2 m-auto">
-                    <Button onClick={() => goTo(attore === "Comune" ? "http://159.213.57.114/crono046021/gotoP/046021/07062018/PS191218" : "http://159.213.57.114/crono046021/gotoP/RegioneToscana/14042017/PS191218")}
+                    <Button disabled={!conformazionePitPprUrl} onClick={() => goTo(conformazionePitPprUrl)}
                             className="margin-auto" style={{minWidth: 344}} size="lg" color="serapide">
                         <div className="d-flex flex-column">
                             <span>CONFORMAZIONE</span>
@@ -57,17 +65,22 @@ export default ({utente: {attore} = {}}) => (
                             <span>[Crono]</span>
                         </div>
                     </Button>
+                    <div className="mt-3 mb-4">
+                     <span>URL</span><div className="border p-2">{conformazionePitPprUrl}</div>
+                    </div>
                 </div>
                 <div className="col-auto m-auto">
-                    <Button onClick={() => goTo("http://159.213.57.114/Database%20Strumenti%20Urbanistici.html")}
+                    <Button disabled={!monitoraggioUrbanisticoUrl} onClick={() => goTo(monitoraggioUrbanisticoUrl)}
                             className="margin-auto" style={{minWidth: 344}}  size="lg" color="serapide">
                         <div className="d-flex flex-column">
                             <span>MONITORAGGIO</span>
                             <span>URBANISTICO</span>
                             <span>[Input]</span>
                         </div>
-                        
                     </Button>
+                    <div className="mt-3 mb-4">
+                     <span>URL</span><div className="border p-2">{monitoraggioUrbanisticoUrl}</div>
+                    </div>
                 </div>
            
         </div>
