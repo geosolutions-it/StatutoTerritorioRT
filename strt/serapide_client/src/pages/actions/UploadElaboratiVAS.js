@@ -19,7 +19,7 @@ import SalvaInvia from '../../components/SalvaInvia'
 import  {showError} from '../../utils'
 
 
-const getSuccess = ({uploadConsultazioneVas: {success}} = {}) => success
+const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 
 
 const UI = ({
