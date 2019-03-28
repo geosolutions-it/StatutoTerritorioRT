@@ -283,6 +283,11 @@ class Piano(models.Model):
     risorse = models.ManyToManyField(Risorsa, through='RisorsePiano')
     azioni = models.ManyToManyField(Azione, through='AzioniPiano')
 
+    redazione_norme_tecniche_attuazione_url = models.URLField(null=True, blank=True, default='')
+    compilazione_rapporto_ambientale_url = models.URLField(null=True, blank=True, default='')
+    conformazione_pit_ppr_url = models.URLField(null=True, blank=True, default='')
+    monitoraggio_urbanistico_url = models.URLField(null=True, blank=True, default='')
+
     autorita_competente_vas = models.ManyToManyField(
         Contatto,
         related_name='autorita_competente_vas',

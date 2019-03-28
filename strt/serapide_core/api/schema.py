@@ -124,6 +124,7 @@ class Mutation(object):
     update_piano = piano.UpdatePiano.Field()
     delete_piano = piano.DeletePiano.Field()
     promozione_piano = piano.PromozionePiano.Field()
+    formazione_del_piano = piano.FormazionePiano.Field()
 
     create_procedura_vas = vas.CreateProceduraVAS.Field()
     update_procedura_vas = vas.UpdateProceduraVAS.Field()

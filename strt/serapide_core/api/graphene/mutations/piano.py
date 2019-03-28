@@ -594,3 +594,51 @@ class PromozionePiano(graphene.Mutation):
                     return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
+
+
+class FormazionePiano(graphene.Mutation):
+
+    class Arguments:
+        codice_piano = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    piano_aggiornato = graphene.Field(types.PianoNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _formazione_del_piano = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
+            if _formazione_del_piano and _formazione_del_piano.stato != STATO_AZIONE.nessuna:
+                _formazione_del_piano.stato = STATO_AZIONE.nessuna
+                _formazione_del_piano.data = datetime.datetime.now(timezone.get_current_timezone())
+                _formazione_del_piano.save()
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _piano = Piano.objects.get(codice=input['codice_piano'])
+        _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+            try:
+                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+
+                    return FormazionePiano(
+                        piano_aggiornato=_piano,
+                        errors=[]
+                    )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
