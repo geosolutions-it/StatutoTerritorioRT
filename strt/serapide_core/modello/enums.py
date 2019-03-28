@@ -100,7 +100,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Comune
         ('protocollo_genio_civile_id', _('Protocollo N.')),  # Genio Civile
         ('richiesta_conferenza_copianificazione', _('Convocazione conferenza di copianificazione')),  # Comune
-        ('convocazione_conferenza_copianificazione', _('Convocazione conferenza di copianificazione')),  # Regione
+        ('esito_conferenza_copianificazione', _('Esito conferenza di copianificazione')),  # Regione
         # Adozione
         ('osservazioni_enti', _('Osservazioni Enti')),  # Enti
         ('osservazioni_regione', _('Osservazioni Regione')),  # Regione
@@ -119,7 +119,7 @@ TOOLTIP_AZIONE = Choices(
         # Avvio
         ('avvio_procedimento', _('art. 17 L.R. 65/2014, comma 1, art. 21 Disciplina del Piano , PIT-PPR')),
         ('richiesta_conferenza_copianificazione', _('art.25 L.R. 65/2014')),
-        ('convocazione_conferenza_copianificazione', _('art.25 L.R. 65/2014')),
+        ('esito_conferenza_copianificazione', _('art.25 L.R. 65/2014')),
     )
 
 TIPOLOGIA_ATTORE = Choices(

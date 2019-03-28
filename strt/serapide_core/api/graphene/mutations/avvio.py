@@ -211,17 +211,16 @@ class AvvioPiano(graphene.Mutation):
                     procedura_avvio.notifica_genio_civile = False
                     procedura_avvio.save()
 
-                    _conferenza_copianificazione = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.convocazione_conferenza_copianificazione,
+                    _esito_conferenza_copianificazione = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
                         attore=TIPOLOGIA_ATTORE.regione,
                         order=_order,
-                        stato=STATO_AZIONE.necessaria
+                        stato=STATO_AZIONE.attesa
                     )
-                    _conferenza_copianificazione.save()
+                    _esito_conferenza_copianificazione.save()
                     _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
+                    AzioniPiano.objects.get_or_create(azione=_esito_conferenza_copianificazione, piano=piano)
 
-                    # TODO: verificare che parta la mail di conf. di Copianificazione
                     # Notify Users
                     piano_phase_changed.send(
                         sender=Piano,
@@ -236,13 +235,32 @@ class AvvioPiano(graphene.Mutation):
 
                     _conferenza_copianificazione = Azione(
                         tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
-                        attore=TIPOLOGIA_ATTORE.comune,
+                        attore=TIPOLOGIA_ATTORE.regione,
                         order=_order,
-                        stato=STATO_AZIONE.necessaria
+                        stato=STATO_AZIONE.attesa,
+                        data=procedura_avvio.data_scadenza_risposta
                     )
                     _conferenza_copianificazione.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
+
+                    _esito_conferenza_copianificazione = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
+                        attore=TIPOLOGIA_ATTORE.regione,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa,
+                        data=procedura_avvio.data_scadenza_risposta
+                    )
+                    _esito_conferenza_copianificazione.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_esito_conferenza_copianificazione, piano=piano)
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=user,
+                        piano=piano,
+                        message_type="conferenza_copianificazione")
 
                 elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
 
@@ -270,7 +288,6 @@ class AvvioPiano(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile_id, piano=piano)
 
-                    # TODO: verificare che parta la mail di notifica al Genio Civile
                     # Notify Users
                     piano_phase_changed.send(
                         sender=Piano,
