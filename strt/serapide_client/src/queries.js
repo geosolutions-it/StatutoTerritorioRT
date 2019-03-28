@@ -337,6 +337,20 @@ mutation ProvveddimentoVerificaVAS($uuid: String!) {
   }
 ${FR.AZIONI_PIANO}
 `
+
+
+export const FORMAZIONE_PIANO = gql`
+mutation ForamzioneDelPiano($codice: String!) {
+  formazioneDelPiano(codicePiano: $codice){
+        pianoAggiornato{
+              ...AzioniPiano 
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
+
 export const AVVIO_ESAME_PARERI_SCA = gql`
 mutation AvvioEsamePareriSCA($uuid: String!) {
     avvioEsamePareriSca(uuid: $uuid){

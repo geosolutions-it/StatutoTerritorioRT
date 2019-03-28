@@ -16,6 +16,7 @@ import AvviaEsamePareri from './actions/AvviaEsamePareri'
 import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
 import UploadElaboratiVAS from './actions/UploadElaboratiVAS'
 import GenioCivile from './actions/GenioCivile'
+import FormazionePiano from './actions/FormazionePiano'
 import {Switch, Route} from 'react-router-dom'
 
 
@@ -81,6 +82,11 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Route path={`${path}/protocollo_genio_civile_id`} >
                     <GenioCivile piano={piano} back={history.goBack}/>
                 </Route>
+                <Route path={`${path}/formazione_del_piano`} >
+                    <FormazionePiano piano={piano} back={history.goBack}/>
+                </Route>
+
+                
                 { action && (
                 <Route path={path}>
                     <div className="p-6">Azione non ancora implementata</div>

@@ -131,6 +131,10 @@ fragment Piano on PianoNode {
     alertsCount
     numeroProtocolloGenioCivile
     dataProtocolloGenioCivile
+    redazioneNormeTecnicheAttuazioneUrl
+    compilazioneRapportoAmbientaleUrl
+    conformazionePitPprUrl
+    monitoraggioUrbanisticoUrl 
     azioni {
         ...Azioni
     }
