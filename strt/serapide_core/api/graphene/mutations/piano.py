@@ -483,7 +483,11 @@ class PromozionePiano(graphene.Mutation):
 
                 elif procedura_vas.tipologia in \
                 (TIPOLOGIA_VAS.procedimento, TIPOLOGIA_VAS.procedimento_semplificato):
-                    _verifica_vas.stato = STATO_AZIONE.attesa
+                    _verifica_vas.stato = STATO_AZIONE.nessuna
+                    _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
+                    _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
+                    datetime.timedelta(days=_verifica_vas_expire_days)
+
                     _avvio_consultazioni_sca_ac_expire_days = 10
                     _avvio_consultazioni_sca = Azione(
                         tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
@@ -514,11 +518,11 @@ class PromozionePiano(graphene.Mutation):
                     AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
 
                 elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
-                    _verifica_vas.stato = STATO_AZIONE.attesa
+                    # _verifica_vas.stato = STATO_AZIONE.attesa
+                    _verifica_vas.stato = STATO_AZIONE.nessuna
                     _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
                     _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
                     datetime.timedelta(days=_verifica_vas_expire_days)
-                    _verifica_vas.save()
 
                     _pareri_vas_expire_days = getattr(settings, 'PARERI_VERIFICA_VAS_EXPIRE_DAYS', 30)
                     _pareri_sca = Azione(
@@ -532,6 +536,8 @@ class PromozionePiano(graphene.Mutation):
                     _pareri_sca.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
+
+                _verifica_vas.save()
 
         elif fase.nome == FASE.avvio:
             _genio_civile = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()

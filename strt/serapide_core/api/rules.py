@@ -56,6 +56,16 @@ rules.add_rule(
 )
 
 rules.add_rule(
+    'strt_core.api.parere_sca_ok',
+    vas_rules.parere_sca_ok
+)
+
+rules.add_rule(
+    'strt_core.api.parere_verifica_vas_ok',
+    vas_rules.parere_verifica_vas_ok
+)
+
+rules.add_rule(
     'strt_core.api.fase_anagrafica_completa',
     ~piano_rules.has_pending_alerts &
     piano_rules.is_draft & piano_rules.has_data_delibera & piano_rules.has_description &

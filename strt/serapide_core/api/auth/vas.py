@@ -12,15 +12,62 @@
 import os
 import rules
 
+from serapide_core.modello.models import (
+    ParereVAS,
+    ConsultazioneVAS,
+    ParereVerificaVAS
+)
+
 from serapide_core.modello.enums import (
     FASE,
-    TIPOLOGIA_VAS
+    TIPOLOGIA_VAS,
+    TIPOLOGIA_AZIONE
 )
 
 
 # ############################################################################ #
 # Procedura VAS
 # ############################################################################ #
+@rules.predicate
+def parere_sca_ok(user, procedura_vas):
+    if user and procedura_vas:
+        _piano = procedura_vas.piano
+        _resources = procedura_vas.risorse.filter(tipo='parere_sca', archiviata=False, user=user)
+        _consultazione_vas = ConsultazioneVAS.objects.get(procedura_vas=procedura_vas)
+        _avvio_consultazioni_sca_count = _piano.azioni.filter(
+            tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
+        _pareri_vas = ParereVAS.objects.filter(
+            user=user,
+            inviata=True,
+            procedura_vas=procedura_vas,
+            consultazione_vas=_consultazione_vas,
+        )
+        if _resources and _resources.count() > 0 and \
+        _pareri_vas and _pareri_vas.count() == _avvio_consultazioni_sca_count:
+            return False
+        else:
+            return True
+    return False
+
+@rules.predicate
+def parere_verifica_vas_ok(user, procedura_vas):
+    if user and procedura_vas:
+        _piano = procedura_vas.piano
+        _resources = procedura_vas.risorse.filter(tipo='parere_verifica_vas', archiviata=False, user=user)
+        _avvio_consultazioni_sca_count = _piano.azioni.filter(
+            tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
+        _pareri_vas = ParereVerificaVAS.objects.filter(
+            user=user,
+            inviata=True,
+            procedura_vas=procedura_vas
+        )
+        if _resources and _resources.count() > 0 and \
+        _pareri_vas and _pareri_vas.count() == _avvio_consultazioni_sca_count:
+            return False
+        else:
+            return True
+    return False
+
 @rules.predicate
 def procedura_vas_is_valid(piano, procedura_vas):
     if procedura_vas.piano == piano:
