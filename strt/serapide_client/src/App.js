@@ -53,7 +53,7 @@ return (
                         <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}  roleType={ruolo}/>
                     </Injector>
                     <ReactTooltip></ReactTooltip>
-                    <div className="serapide-content pt-5 pb-5 pX-lg-1 pX-xl-2 px-4 serapide-top-offset position-relative">
+                    <div className="serapide-content pt-5 pb-5 pX-lg-1 pX-xl-2 px-4 serapide-top-offset position-relative overflow-auto">
                             <Router>
                                 <Switch>
                                     <Route  path="/piano/:code" render={(props) => <Piano utente={utente} {...props}/>} />

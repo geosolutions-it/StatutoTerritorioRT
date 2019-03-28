@@ -17,7 +17,7 @@ const ResourceTitle = ({resource: {downloadUrl, label, tooltip, nome} = {}, useL
     const lab = useLabel ?  label : nome
     const tip = (<TextWithTooltip dataTip={tooltip} dataTipDisable={!useLabel} text={label}/>)
     return downloadUrl ?(
-            <a className="text-dark" href={downloadUrl} download={nome}>
+            <a target="_blank" rel="noopener noreferrer" className="text-dark" href={downloadUrl} download={nome}>
                 {useLabel ? tip : lab}
             </a>) : (
         <span >{useLabel ? tip : lab}</span>)
@@ -61,7 +61,7 @@ export default ({
                     <span className="sr-only">Loading...</span>                
                 </div>)}
                 {downloadUrl ? (
-                <a className="text-dark d-flex" href={downloadUrl} download={nome}>
+                <a className="text-dark d-flex" target="_blank" rel="noopener noreferrer" href={downloadUrl} download={nome}>
                     <i className="material-icons text-serapide pointer">{isLocked ? "cloud_download" : "check_circle"}</i></a>) :
                 (<i className="material-icons text-serapide pointer">{isLocked ? "cloud_download" : "check_circle"}</i>)}
                 
