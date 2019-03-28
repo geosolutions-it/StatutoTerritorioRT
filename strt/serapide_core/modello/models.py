@@ -463,7 +463,7 @@ class ParereVerificaVAS(models.Model):
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
 
     inviata = models.BooleanField(null=False, blank=False, default=False)
-    
+
     user = models.ForeignKey(
         to=AppUser,
         on_delete=models.CASCADE,

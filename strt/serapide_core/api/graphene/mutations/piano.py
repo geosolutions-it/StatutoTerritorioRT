@@ -537,6 +537,19 @@ class PromozionePiano(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
 
+                    _emissione_provvedimento_verifica_expire_days = 90
+                    _emissione_provvedimento_verifica = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
+                        attore=TIPOLOGIA_ATTORE.ac,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa,
+                        data=datetime.datetime.now(timezone.get_current_timezone()) +
+                        datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
+                    )
+                    _emissione_provvedimento_verifica.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
+
                 _verifica_vas.save()
 
         elif fase.nome == FASE.avvio:
