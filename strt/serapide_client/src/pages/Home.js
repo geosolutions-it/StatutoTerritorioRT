@@ -17,9 +17,11 @@ import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
 import UploadElaboratiVAS from './actions/UploadElaboratiVAS'
 import GenioCivile from './actions/GenioCivile'
 import FormazionePiano from './actions/FormazionePiano'
+import RichiestaConferenza from './actions/RichiestaConferenza'
+import ConvocazioneConferenza from './actions/ConvocazioneConferenza'
+import SvolgimentoConferenza from './actions/SvolgimentoConfernza'
+
 import {Switch, Route} from 'react-router-dom'
-
-
 import classNames from 'classnames'
 import {INVIO_PARERI_VAS} from '../queries'
 
@@ -85,8 +87,15 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Route path={`${path}/formazione_del_piano`} >
                     <FormazionePiano piano={piano} back={history.goBack}/>
                 </Route>
-
-                
+                <Route path={`${path}/richiesta_conferenza_copianificazione`} >
+                    <RichiestaConferenza piano={piano} back={history.goBack}/>
+                </Route>
+                <Route path={`${path}/convocazione_conferenza_copianificazione`} >
+                    <ConvocazioneConferenza piano={piano} back={history.goBack}/>
+                </Route>
+                <Route path={`${path}/svolgimento_conferenza_copianificazione`} >
+                    <SvolgimentoConferenza piano={piano} codicePiano={code} back={history.goBack}/>
+                </Route>
                 { action && (
                 <Route path={path}>
                     <div className="p-6">Azione non ancora implementata</div>
