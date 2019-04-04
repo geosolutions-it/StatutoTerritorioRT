@@ -24,7 +24,9 @@ from .models import (
     AltriDestinatari,
     SoggettiSCA,
     PianoAuthTokens,
-    ConsultazioneVAS, ParereVAS
+    ConsultazioneVAS, ParereVAS,
+    ConferenzaCopianificazione,
+    RisorseCopianificazione
 )
 
 
@@ -42,6 +44,10 @@ class RisorseVasInline(admin.TabularInline):
 
 class RisorseAvvioInline(admin.TabularInline):
     model = RisorseAvvio
+
+
+class RisorseCopianificazioneInline(admin.TabularInline):
+    model = RisorseCopianificazione
 
 
 class AutoritaCompetenteVASInline(admin.TabularInline):
@@ -90,6 +96,10 @@ class ConsultazioneVASAdmin(admin.ModelAdmin):
     inlines = [ParereVASInline, ]
 
 
+class ConferenzaCopianificazioneAdmin(admin.ModelAdmin):
+    inlines = [RisorseCopianificazioneInline, ]
+
+
 admin.site.register(Fase)
 admin.site.register(Azione)
 admin.site.register(Risorsa)
@@ -98,3 +108,4 @@ admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
 admin.site.register(ProceduraAvvio, ProceduraAvvioAdmin)
 admin.site.register(ConsultazioneVAS, ConsultazioneVASAdmin)
+admin.site.register(ConferenzaCopianificazione, ConferenzaCopianificazioneAdmin)

@@ -168,21 +168,13 @@ class Contatto(models.Model):
     def attore(cls, user, organization=None, token=None, tipologia=None):
         attore = ""
         if user:
-            contact = Contatto.objects.filter(user=user).first()
-            if contact:
-                if contact.tipologia == 'acvas':
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
-                elif contact.tipologia == 'sca':
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
-                elif contact.tipologia == 'generico':
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-                elif contact.tipologia == 'ente':
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
-                elif contact.tipologia == 'genio_civile':
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
-                else:
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-            if not contact or attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+            if tipologia:
+                membership = user.memberships.filter(organization__type__name=tipologia).first()
+                attore = membership.organization.type.name
+            else:
+                attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+
+            if attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
                 membership = None
                 if token:
                     membership = user.memberships.all().first()
@@ -191,14 +183,24 @@ class Contatto(models.Model):
                 if membership and membership.organization and membership.organization.type:
                     attore = membership.organization.type.name
                 else:
-                    if tipologia:
-                        membership = user.memberships.filter(organization__type__name=tipologia).first()
-                        if attore:
-                            attore = membership.organization.type.name
-                        else:
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+
+                if attore in (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown], TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
+                    for contact in Contatto.objects.filter(user=user):
+                        if contact.tipologia == 'acvas':
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
+                        elif contact.tipologia == 'sca':
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
+                        elif contact.tipologia == 'generico' and \
+                        attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
                             attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-                    else:
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+                        elif contact.tipologia == 'ente' and \
+                        (attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] or
+                         attore != TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
+                        elif contact.tipologia == 'genio_civile':
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
+
         return attore
 
     class Meta:
@@ -685,8 +687,14 @@ class ConferenzaCopianificazione(models.Model):
     data_richiesta_conferenza = models.DateTimeField(null=True, blank=True)
     data_scadenza_risposta = models.DateTimeField(null=True, blank=True)
 
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
     class Meta:
         db_table = "strt_core_conferenza_copianificazione"
+        verbose_name_plural = 'Conferenze di Copianificazione'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.piano.ente, self.uuid)
 
 
 class RisorseCopianificazione(models.Model):
@@ -720,6 +728,9 @@ def delete_piano_associations(sender, instance, **kwargs):
     for _avvio in ProceduraAvvio.objects.filter(piano=instance):
         _avvio.risorse.all().delete()
         RisorseAvvio.objects.filter(procedura_avvio=_avvio).delete()
+    for _cc in ConferenzaCopianificazione.objects.filter(piano=instance):
+        _cc.risorse.all().delete()
+        RisorseCopianificazione.objects.filter(conferenza_copianificazione=_cc).delete()
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
     for _t in PianoAuthTokens.objects.filter(piano=instance):

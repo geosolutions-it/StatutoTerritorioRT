@@ -141,6 +141,7 @@ class Mutation(object):
     update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()
     avvia_piano = avvio.AvvioPiano.Field()
     invio_protocollo_genio_civile = avvio.InvioProtocolloGenioCivile.Field()
+    richiesta_conferenza_copianificazione = avvio.RichiestaConferenzaCopianificazione.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
