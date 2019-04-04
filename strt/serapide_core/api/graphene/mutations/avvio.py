@@ -248,7 +248,7 @@ class AvvioPiano(graphene.Mutation):
 
                     _conferenza_copianificazione = Azione(
                         tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
-                        attore=TIPOLOGIA_ATTORE.regione,
+                        attore=TIPOLOGIA_ATTORE.comune,
                         order=_order,
                         stato=STATO_AZIONE.attesa,
                         data=procedura_avvio.data_scadenza_risposta
@@ -256,24 +256,6 @@ class AvvioPiano(graphene.Mutation):
                     _conferenza_copianificazione.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
-
-                    _esito_conferenza_copianificazione = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
-                        attore=TIPOLOGIA_ATTORE.regione,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=procedura_avvio.data_scadenza_risposta
-                    )
-                    _esito_conferenza_copianificazione.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_esito_conferenza_copianificazione, piano=piano)
-
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=user,
-                        piano=piano,
-                        message_type="conferenza_copianificazione")
 
                 elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
 

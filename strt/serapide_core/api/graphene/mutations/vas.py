@@ -455,7 +455,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
     consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
 
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
+    def update_actions_for_phase(cls, fase, piano, consultazione_vas, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -477,6 +477,8 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                 _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
                 _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
 
+                consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
+
                 # Notify Users
                 piano_phase_changed.send(
                     sender=Piano,
@@ -485,6 +487,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                     message_type="piano_verifica_vas_updated")
 
                 _avvio_consultazioni_sca.save()
+                consultazione_vas.save()
 
                 _pareri_vas_expire_days = getattr(settings, 'PARERI_VAS_EXPIRE_DAYS', 60)
                 _pareri_sca = Azione(
@@ -510,7 +513,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
          rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+                cls.update_actions_for_phase(_piano.fase, _piano, _consultazione_vas, info.context.user)
 
                 return AvvioConsultazioniVAS(
                     consultazione_vas_aggiornata=_consultazione_vas,
@@ -595,6 +598,11 @@ class InvioPareriVAS(graphene.Mutation):
                     _avvio_consultazioni_sca.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+
+                    consultazione_vas = ConsultazioneVAS.objects.get(procedura_vas=procedura_vas)
+                    consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
+                    consultazione_vas.save()
+
                     procedura_vas.verifica_effettuata = True
                     procedura_vas.save()
 

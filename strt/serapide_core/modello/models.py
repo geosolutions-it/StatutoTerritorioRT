@@ -506,6 +506,7 @@ class ConsultazioneVAS(models.Model):
     data_scadenza = models.DateTimeField(null=True, blank=True)
     data_ricezione_pareri = models.DateTimeField(null=True, blank=True)
 
+    data_avvio_consultazioni_sca = models.DateTimeField(null=True, blank=True)
     avvio_consultazioni_sca = models.BooleanField(null=False, blank=False, default=False)
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
@@ -669,6 +670,31 @@ class RisorseAvvio(models.Model):
 
     class Meta:
         db_table = "strt_core_avvio_risorse"
+
+
+class ConferenzaCopianificazione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    id_pratica = models.TextField(null=True, blank=True)
+
+    data_richiesta_conferenza = models.DateTimeField(null=True, blank=True)
+    data_scadenza_risposta = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "strt_core_conferenza_copianificazione"
+
+
+class RisorseCopianificazione(models.Model):
+    conferenza_copianificazione = models.ForeignKey(ConferenzaCopianificazione, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_risorse_copianificazione"
 
 
 # ############################################################################ #

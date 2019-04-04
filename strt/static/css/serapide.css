@@ -8413,4 +8413,9 @@ a {
 .serapide button.read-only.btn {
   cursor: not-allowed; }
 
+.date-time-picker .react-datepicker-wrapper {
+  display: flex; }
+  .date-time-picker .react-datepicker-wrapper .react-datepicker__input-container {
+    flex: 1 1 auto !important; }
+
 /*# sourceMappingURL=serapide.css.map */
