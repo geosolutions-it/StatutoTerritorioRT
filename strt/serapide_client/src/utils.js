@@ -13,7 +13,7 @@ export const getDate = (date) => {
     return isDate(date) ? date : parseISO(date)
 }
 
-export const formatDate = (date, template = "dd/MM/yyyy") => format(getDate(date), template, {locale: it})
+export const formatDate = (date, template = "dd/MM/yyyy") => date ? format(getDate(date), template, {locale: it}) : null
 
 export const getDifferenceInDays = (dateEnd, dateStart) => differenceInCalendarDays(getDate(dateEnd), getDate(dateStart))
 

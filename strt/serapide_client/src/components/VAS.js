@@ -9,15 +9,18 @@ import React from 'react'
 import {EnhancedSwitch} from './Switch'
 import FileUpload from './UploadSingleFile'
 import Button from './IconButton'
-
+import {formatDate, getNominativo, showError} from '../utils'
 import {EnhancedListSelector} from './ListSelector'
-import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD, DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO, PROMUOVI_PIANO} from '../queries'
+import Resource from '../components/Resource'
+import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD, DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO, PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from '../queries'
 import { Query, Mutation} from 'react-apollo';
 import { toast } from 'react-toastify'
 import AddContact from '../components/AddContact'
 import SalvaInvia from '../components/SalvaInvia'
 import TextWithTooltip from '../components/TextWithTooltip'
 import  {rebuildTooltip} from '../enhancers/utils'
+import {map}  from 'lodash'
+
 
 const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 const getVasTypeInput = (uuid) => (tipologia) => ({
@@ -32,9 +35,6 @@ const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
 
-const showError = (error) => {
-    toast.error(error.message,  {autoClose: true})
-}
 const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifica, docProcSemp) => {
     switch (tipologia.toLowerCase()) {
         case "semplificata":
@@ -55,9 +55,11 @@ const fileProps = {className:"col-xl-12", getSuccess: getSuccess,
                     mutation: VAS_FILE_UPLOAD, resourceMutation: DELETE_RISORSA_VAS}
 
 
-const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas = {}}) => {
+const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, canUpdate, isLocked, Vas = {}}) => {
             
-    const {node: {uuid, tipologia, piano: {soggettoProponente: sP, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
+    const {node: {uuid, tipologia, dataAssoggettamento, assoggettamento,
+        piano: {soggettoProponente: sP, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
+    const {node: {avvioConsultazioniSca, dataAvvioConsultazioniSca, dataRicezionePareri, dataScadenza} = {}} = consultazioneSCA
     const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
     const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
     const {node: docProcSemp} = resources.filter(({node: n}) => n.tipo === "doc_proc_semplificato").pop() || {};
@@ -67,6 +69,15 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
     const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
     const canCommit = !isLocked && canUpdate && checkAnagrafica(tipologia, sP, auths, scas, semplificata, verifica, docProcSemp)
 
+    const pareriUser =  resources.filter(({node: {tipo}}) => tipo === "parere_sca").reduce((acc, {node}) => {
+        if (acc[node.user.fiscalCode]) { 
+            acc[node.user.fiscalCode].push(node)
+        }
+        else {
+            acc[node.user.fiscalCode] = [node]
+        }
+        return acc
+    } , {})
 
 
     return(
@@ -145,7 +156,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
             className="mt-5">
                 {() =>(<div className="row"><span className="p-3 mb-5 col-xl-12">In questo caso per il piano non è necessaria alcuna VAS </span></div>)}
         </EnhancedSwitch>
-        <div className="d-flex mt-5 pt-5 justify-content-between mb-3">
+        <div className="d-flex mt-2 pt-2 justify-content-between mb-3">
             <div style={{minWidth: "33%"}}>
                 { !isLocked ? (<Mutation mutation={UPDATE_PIANO} onError={showError}>
                 {(onChange) => {
@@ -245,6 +256,36 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
         {!isLocked && (<div className="d-flex mt-5 pt-5  justify-content-end">
                 <SalvaInvia mutation={PROMUOVI_PIANO} variables={{codice}} canCommit={canCommit}></SalvaInvia>
         </div>)}
+            {/* Mosrta il resto delle aprocedura vas quando simo in riassunot  i casi sono molteplici, 
+                ho richiesta di verifica, ho richiesta verifica semplificata, richiesta procedimento richiesta procedimento semplificato, se la vas non è necessaia non aggiungo nulla
+            */}
+        { isLocked && (tipologia === "VERIFICA"  || tipologia === "SEMPLIFICATA") && (
+            <div className="row pt-5">
+                <div className="col-5 d-flex">
+                        <i className="material-icons text-serapide self-align-center">{assoggettamento && "check_box" || "check_box_outline_blank"}</i>
+                        <span className="pl-1">ESITO: {assoggettamento && "Assoggettamento VAS" || "Esclusione VAS"}</span>
+                </div>
+                <span className="col-4">{dataAssoggettamento && formatDate(dataAssoggettamento)}</span>            
+            </div>)
+        }
+        { avvioConsultazioniSca && (
+            <div className="row pt-5">
+            <div className="col-5 d-flex">
+                    <i className="material-icons text-serapide self-align-center">check_box</i>
+                        <span className="pl-1">Avvio Consultazioni SCA</span>
+                </div>
+                <span className="col-4">{dataAvvioConsultazioniSca && formatDate(dataAvvioConsultazioniSca)}</span> 
+            <div className="col-12 pt-2"></div>
+            {map(pareriUser, (u) => (
+                <div key={u[0].user.fiscalCode} className="col-12 pt-4">
+                    <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(u[0].user)}</span></div>
+                    {u.map(parere => (<Resource key={parere.uuid} className="border-0 mt-2" icon="attach_file" resource={parere}></Resource>))}
+                </div>
+                ))
+                }
+            </div>
+
+        )}
     </React.Fragment>)})
 
 
@@ -252,8 +293,10 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
 export default ({codice, canUpdate, isLocked}) => {
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []} = {}}) => {
-                if(loading){
+            {({loading, data: {procedureVas: {edges = []} = []} = {}}) => (
+                <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
+                {({loadingC, data: {consultazioneVas: {edges: cons = []} = []} = {}}) => {
+                if(loading || loadingC){
                     return (
                     <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
                         <div className="d-flex justify-content-center">
@@ -263,7 +306,8 @@ export default ({codice, canUpdate, isLocked}) => {
                     </div>
                     </div>)
                 }
-            return <UI codice={codice} canUpdate={canUpdate} isLocked={isLocked} Vas={edges[0]}/>
+            return <UI codice={codice}  consultazioneSCA={cons[0]} canUpdate={canUpdate} isLocked={isLocked} Vas={edges[0]}/>
             }}
+            </Query>)}
         </Query>)
     } 

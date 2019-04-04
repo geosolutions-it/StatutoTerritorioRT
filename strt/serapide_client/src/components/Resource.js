@@ -13,14 +13,14 @@ import TextWithTooltip from './TextWithTooltip'
 const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : null
 
 
-const ResourceTitle = ({resource: {downloadUrl, label, tooltip, nome} = {}, useLabel} = {}) => {
-    const lab = useLabel ?  label : nome
+const ResourceTitle = ({resource: {downloadUrl, label = "", tooltip = "", nome} = {}, useLabel} = {}) => {
+    const lab = useLabel && label ?  label : nome
     const tip = (<TextWithTooltip dataTip={tooltip} dataTipDisable={!useLabel} text={label}/>)
     return downloadUrl ?(
             <a target="_blank" rel="noopener noreferrer" className="text-dark" href={downloadUrl} download={nome}>
-                {useLabel ? tip : lab}
+                {useLabel && tooltip ? tip : lab}
             </a>) : (
-        <span >{useLabel ? tip : lab}</span>)
+        <span >{useLabel && tooltip ? tip : lab}</span>)
 }
 
 export default ({

@@ -21,7 +21,7 @@ const ManyWords = (words, className, dataTip, dataTipDisable) => (
         </span>
     </span>
 )
-const getComp = (words, className, dataTip, dataTipDisable) => (words.length > 1 ? ManyWords(words, className, dataTip, dataTipDisable) : OneWord(words, className, dataTip, dataTipDisable))
+const getComp = (words = "", className, dataTip = "", dataTipDisable) => (words.length > 1 ? ManyWords(words, className, dataTip, dataTipDisable) : OneWord(words, className, dataTip, dataTipDisable))
 export default ({dataTip, dataTipDisable, text = "", className}) => {
     const words = text.replace(/ +(?= )/g,'').split(" ")
     return text ? getComp(words, className, dataTip, dataTipDisable) : (<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>)

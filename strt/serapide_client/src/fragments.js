@@ -201,6 +201,7 @@ fragment  ConsultazioneVAS on ConsultazioneVASNode {
           avvioConsultazioniSca
           dataCreazione
           dataScadenza
+          dataAvvioConsultazioniSca
           dataRicezionePareri
           proceduraVas{
             uuid

@@ -54,7 +54,7 @@ const showError = (error, onError) => {
 export default (props) => (<DatePicker customInput={<CustomInput />} {...props}/>) 
 
 // Pass a mutation an update function if needed, the getInput
-export const EnhancedDateSelector = ({useDateTime = false, showTimeSelect, className, isLocked, mutation, update, selected, disabled, getInput = _getInput, ...mutationProps}) => {
+export const EnhancedDateSelector = ({useDateTime = false, showTimeSelect = false, className, isLocked, mutation, update, selected, disabled, getInput = _getInput, ...mutationProps}) => {
     return (
         <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
             {(onChange, m_props) => {
@@ -64,7 +64,7 @@ export const EnhancedDateSelector = ({useDateTime = false, showTimeSelect, class
                 return (
                     <DatePicker 
                     calendarClassName={useDateTime ? "d-flex" : undefined}
-                    showTimeSelect eadOnly={isLocked}
+                    showTimeSelect={showTimeSelect} eadOnly={isLocked}
                     className={className}
                     disabled={disabled}
                     selected={selected}

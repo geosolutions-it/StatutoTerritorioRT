@@ -38,9 +38,21 @@ TIPOLOGIA_RISORSA = {
         'label': 'Delibera di avvio ',
         'tooltip': 'ai sensi dell’articolo. 17 L.R. 65/2014'
     },
-    'tipo_risorsa_2': {
-        'label': 'testo label',
-        'tooltip': 'testo tooltip'
+    'obiettivi_piano': {
+        'label': 'Obiettivi del Piano',
+        'tooltip': ''
+    },
+    'quadro_conoscitivo': {
+        'label': 'Quadro Conoscitivo',
+        'tooltip': 'art. 17, lett.b, L.R. 65/2014'
+    },
+    'programma_attivita': {
+        'label': 'Programma delle attività di inforamazione ai cittadini',
+        'tooltip': ''
+    },
+    'individuazione_garante_informazione': {
+        'label': 'Individuazione del garante dell\'informazione',
+        'tooltip': ''
     }
 }
 
