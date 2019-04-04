@@ -34,9 +34,11 @@ from serapide_core.modello.models import (
     Risorsa,
     ProceduraVAS,
     ProceduraAvvio,
+    ConferenzaCopianificazione,
     RisorsePiano,
     RisorseVas,
     RisorseAvvio,
+    RisorseCopianificazione,
 )
 
 from .. import types
@@ -229,6 +231,54 @@ class UploadRisorsaAvvio(UploadBaseBase):
         return GraphQLError(_("Not Allowed"), code=405)
 
 
+class UploadRisorsaCopianificazione(UploadBaseBase):
+
+    success = graphene.Boolean()
+    conferenza_copianificazione_aggiornata = graphene.Field(types.ConferenzaCopianificazioneNode)
+    file_name = graphene.String()
+
+    @classmethod
+    def mutate(cls, root, info, file, **input):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _uuid_cc = input['codice']
+            _tipo_file = input['tipo_file']
+
+            try:
+                # Validating 'Procedura VAS'
+                _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
+                if rules.test_rule('strt_core.api.can_edit_piano',
+                                   info.context.user,
+                                   _conferenza_copianificazione.piano):
+                    _resources = UploadBaseBase.handle_uploaded_data(
+                        file,
+                        _uuid_cc,
+                        _conferenza_copianificazione.piano.fase,
+                        _tipo_file,
+                        info.context.user
+                    )
+                    _success = False
+                    if _resources and len(_resources) > 0:
+                        _success = True
+                        for _risorsa in _resources:
+                            RisorseCopianificazione(
+                                conferenza_copianificazione_aggiornata=_conferenza_copianificazione,
+                                risorsa=_risorsa).save()
+                    return UploadRisorsaCopianificazione(
+                        procedura_avvio_aggiornata=_conferenza_copianificazione,
+                        success=_success,
+                        file_name=_resources[0].nome)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
+
+
 class DeleteRisorsaBase(graphene.Mutation):
 
     class Arguments:
@@ -345,6 +395,38 @@ class DeleteRisorsaAvvio(DeleteRisorsaBase):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaAvvio(procedura_avvio_aggiornata=_procedura_avvio, success=_success)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
+
+
+class DeleteRisorsaCopianificazione(DeleteRisorsaBase):
+
+    success = graphene.Boolean()
+    conferenza_copianificazione_aggiornata = graphene.Field(types.ConferenzaCopianificazioneNode)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _id = input['risorsa_id']
+            _uuid_cc = input['codice']
+            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            try:
+                _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
+                if rules.test_rule('strt_core.api.can_edit_piano',
+                                   info.context.user,
+                                   _conferenza_copianificazione.piano):
+                    _risorsa = Risorsa.objects.get(uuid=_id)
+                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                    return DeleteRisorsaCopianificazione(
+                        conferenza_copianificazione_aggiornata=_conferenza_copianificazione, success=_success)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:

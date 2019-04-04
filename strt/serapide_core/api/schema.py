@@ -149,3 +149,5 @@ class Mutation(object):
     delete_risorsa_vas = uploads.DeleteRisorsaVAS.Field()
     upload_risorsa_avvio = uploads.UploadRisorsaAvvio.Field()
     delete_risorsa_avvio = uploads.DeleteRisorsaAvvio.Field()
+    upload_risorsa_copianificazione = uploads.UploadRisorsaCopianificazione.Field()
+    delete_risorsa_copianificazione = uploads.DeleteRisorsaCopianificazione.Field()
