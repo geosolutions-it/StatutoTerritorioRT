@@ -8,6 +8,7 @@
 import React from 'react'
 import UploadFiles from '../../components/UploadFiles'
 import FileUpload from '../../components/UploadSingleFile'
+import ActionTitle from '../../components/ActionTitle'
 import {Query} from 'react-apollo'
 import {GET_VAS,
     DELETE_RISORSA_VAS,
@@ -18,7 +19,7 @@ import SalvaInvia from '../../components/SalvaInvia'
 import  {showError} from '../../utils'
 
 
-const getSuccess = ({uploadConsultazioneVas: {success}} = {}) => success
+const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 
 
 const UI = ({
@@ -31,12 +32,12 @@ const UI = ({
         
         return (
             <React.Fragment>
-                <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Upload Elaborati VAS</h2></div>
+                <ActionTitle>Upload Elaborati VAS</ActionTitle>
                 <p>Il comune esamina i pareri, forma il piano e redige il Rapporto Ambientale. Gli elaborati vengono caricati nella piattafo</p>
                 <div className="action-uploader mt-3 align-self-start border-bottom border-top mb-3">
                 <FileUpload 
                     className="border-0"
-                    placeholder="Rapporto Ambientale"
+                    placeholder="Documento preliminare di VAS"
                     getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>

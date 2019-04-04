@@ -9,8 +9,31 @@ import React from 'react'
 import { toast } from 'react-toastify'
 import Confirm from './ConfirmToast'
 import {formatDate} from '../utils'
+import TextWithTooltip from './TextWithTooltip'
 const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : null
-export default ({resource: { nome, uuid, lastUpdate, tipo, dimensione, downloadUrl} = {}, className ="resource", icon = "picture_as_pdf", codice, isLoading , isLocked = true, onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
+
+
+const ResourceTitle = ({resource: {downloadUrl, label = "", tooltip = "", nome} = {}, useLabel} = {}) => {
+    const lab = useLabel && label ?  label : nome
+    const tip = (<TextWithTooltip dataTip={tooltip} dataTipDisable={!useLabel} text={label}/>)
+    return downloadUrl ?(
+            <a target="_blank" rel="noopener noreferrer" className="text-dark" href={downloadUrl} download={nome}>
+                {useLabel && tooltip ? tip : lab}
+            </a>) : (
+        <span >{useLabel && tooltip ? tip : lab}</span>)
+}
+
+export default ({
+    resource = {},
+    className ="resource",
+    icon = "picture_as_pdf",
+    codice,
+    isLoading,
+    isLocked = true,
+    useLabel = false,
+    fileSize = true,
+    onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
+    const  { nome, uuid, lastUpdate, dimensione, downloadUrl} = resource;
     let toastId
     const deleteResource = () => onDeleteResource({ variables: { id: uuid, codice}})
     const confirm = () => {
@@ -18,7 +41,7 @@ export default ({resource: { nome, uuid, lastUpdate, tipo, dimensione, downloadU
         toastId = toast.warn(<Confirm confirm={deleteResource} id={uuid} />, {
             autoClose: true,
             draggable: true,
-            // hook will be called whent the component unmount
+            // hook will be called  whent the component unmount
             onClose: ( ) => {toastId = null}
           });
         }
@@ -29,9 +52,8 @@ export default ({resource: { nome, uuid, lastUpdate, tipo, dimensione, downloadU
             <div className="col-6 d-flex">
                 <i className="material-icons text-serapide align-self-center">{icon}</i>
                 <div className="pl-1 d-flex flex-column justify-content-between">
-                {downloadUrl ? (<a className="text-dark"href={downloadUrl} download={nome}>{nome}</a>) : (
-                <span>{nome}</span>)}
-                <span style={{fontSize: "0.8rem"}}>{getFileSize(dimensione)}</span>
+                <ResourceTitle resource={resource} useLabel={useLabel}/>
+                {fileSize && (<span style={{fontSize: "0.8rem"}}>{getFileSize(dimensione)}</span>)}
             </div></div>
             <div className="col-3">{lastUpdate && formatDate(lastUpdate, "dd MMMM yyyy")}</div>
             <div className="col-3 d-flex justify-content-end">
@@ -39,7 +61,7 @@ export default ({resource: { nome, uuid, lastUpdate, tipo, dimensione, downloadU
                     <span className="sr-only">Loading...</span>                
                 </div>)}
                 {downloadUrl ? (
-                <a className="text-dark d-flex" href={downloadUrl} download={nome}>
+                <a className="text-dark d-flex" target="_blank" rel="noopener noreferrer" href={downloadUrl} download={nome}>
                     <i className="material-icons text-serapide pointer">{isLocked ? "cloud_download" : "check_circle"}</i></a>) :
                 (<i className="material-icons text-serapide pointer">{isLocked ? "cloud_download" : "check_circle"}</i>)}
                 

@@ -64,6 +64,14 @@ def piano_phase_changed_notification(sender, **kwargs):
             for _c in piano.autorita_competente_vas.all():
                 users.append(_c.user)
 
+        if piano.autorita_istituzionali:
+            for _c in piano.autorita_istituzionali.all():
+                users.append(_c.user)
+
+        if piano.altri_destinatari:
+            for _c in piano.altri_destinatari.all():
+                users.append(_c.user)
+
         if piano.soggetti_sca:
             for _c in piano.soggetti_sca.all():
                 users.append(_c.user)

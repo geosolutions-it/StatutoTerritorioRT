@@ -18,9 +18,15 @@ from .models import (
     Azione, AzioniPiano,
     Piano, RisorsePiano,
     ProceduraVAS, RisorseVas,
-    AutoritaCompetenteVAS, SoggettiSCA,
+    ProceduraAvvio, RisorseAvvio,
+    AutoritaCompetenteVAS,
+    AutoritaIstituzionali,
+    AltriDestinatari,
+    SoggettiSCA,
     PianoAuthTokens,
-    ConsultazioneVAS
+    ConsultazioneVAS, ParereVAS,
+    ConferenzaCopianificazione,
+    RisorseCopianificazione
 )
 
 
@@ -36,8 +42,24 @@ class RisorseVasInline(admin.TabularInline):
     model = RisorseVas
 
 
+class RisorseAvvioInline(admin.TabularInline):
+    model = RisorseAvvio
+
+
+class RisorseCopianificazioneInline(admin.TabularInline):
+    model = RisorseCopianificazione
+
+
 class AutoritaCompetenteVASInline(admin.TabularInline):
     model = AutoritaCompetenteVAS
+
+
+class AutoritaIstituzionaliInline(admin.TabularInline):
+    model = AutoritaIstituzionali
+
+
+class AltriDestinatariInline(admin.TabularInline):
+    model = AltriDestinatari
 
 
 class SoggettiSCAInline(admin.TabularInline):
@@ -48,9 +70,15 @@ class TokensInline(admin.TabularInline):
     model = PianoAuthTokens
 
 
+class ParereVASInline(admin.TabularInline):
+    model = ParereVAS
+
+
 class PianoAdmin(admin.ModelAdmin):
     inlines = [AzioniPianoInline,
                AutoritaCompetenteVASInline,
+               AutoritaIstituzionaliInline,
+               AltriDestinatariInline,
                SoggettiSCAInline,
                RisorsePianoInline,
                TokensInline, ]
@@ -60,10 +88,24 @@ class ProceduraVASAdmin(admin.ModelAdmin):
     inlines = [RisorseVasInline, ]
 
 
+class ProceduraAvvioAdmin(admin.ModelAdmin):
+    inlines = [RisorseAvvioInline, ]
+
+
+class ConsultazioneVASAdmin(admin.ModelAdmin):
+    inlines = [ParereVASInline, ]
+
+
+class ConferenzaCopianificazioneAdmin(admin.ModelAdmin):
+    inlines = [RisorseCopianificazioneInline, ]
+
+
 admin.site.register(Fase)
 admin.site.register(Azione)
 admin.site.register(Risorsa)
 admin.site.register(Contatto)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
-admin.site.register(ConsultazioneVAS)
+admin.site.register(ProceduraAvvio, ProceduraAvvioAdmin)
+admin.site.register(ConsultazioneVAS, ConsultazioneVASAdmin)
+admin.site.register(ConferenzaCopianificazione, ConferenzaCopianificazioneAdmin)

@@ -40,13 +40,20 @@ from serapide_core.modello.models import (
     ConsultazioneVAS,
     PianoAuthTokens,
     FasePianoStorico,
+    ProceduraAvvio,
+    ConferenzaCopianificazione,
     RisorsePiano,
     RisorseVas,
+    RisorseAvvio,
+    RisorseCopianificazione,
 )
 
 from serapide_core.modello.enums import (
     STATO_AZIONE,
+    TIPOLOGIA_RISORSA,
     TIPOLOGIA_VAS,
+    TIPOLOGIA_AZIONE,
+    TOOLTIP_AZIONE
 )
 
 logger = logging.getLogger(__name__)
@@ -106,6 +113,15 @@ class UserMessageType(DjangoObjectType):
 
 class AzioneNode(DjangoObjectType):
 
+    label = graphene.String()
+    tooltip = graphene.String()
+
+    def resolve_label(self, info, **args):
+        return TIPOLOGIA_AZIONE[self.tipologia] if self.tipologia in TIPOLOGIA_AZIONE else None
+
+    def resolve_tooltip(self, info, **args):
+        return TOOLTIP_AZIONE[self.tipologia] if self.tipologia in TOOLTIP_AZIONE else None
+
     class Meta:
         model = Azione
         filter_fields = ['uuid',
@@ -119,16 +135,31 @@ class AzioneNode(DjangoObjectType):
 class RisorsaNode(DjangoObjectType):
 
     download_url = graphene.String()
+    label = graphene.String()
+    tooltip = graphene.String()
 
     def resolve_download_url(self, info, **args):
         _url = str(self.file)
         return urljoin(settings.SITE_URL, _url[_url.index('media/'):])
+
+    def resolve_label(self, info, **args):
+        _type = TIPOLOGIA_RISORSA[self.tipo] if self.tipo in TIPOLOGIA_RISORSA else None
+        if _type:
+            return _type['label']
+        return None
+
+    def resolve_tooltip(self, info, **args):
+        _type = TIPOLOGIA_RISORSA[self.tipo] if self.tipo in TIPOLOGIA_RISORSA else None
+        if _type:
+            return _type['tooltip']
+        return None
 
     class Meta:
         model = Risorsa
         filter_fields = ['uuid',
                          'nome',
                          'tipo',
+                         'archiviata',
                          'dimensione',
                          'descrizione',
                          'data_creazione',
@@ -155,6 +186,26 @@ class RisorseVASType(DjangoObjectType):
 
     class Meta:
         model = RisorseVas
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorseAvvioType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorseAvvio
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorseCopianificazioneType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorseCopianificazione
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -226,7 +277,12 @@ class AppUserNode(DjangoObjectType):
     def resolve_attore(self, info, **args):
         organization = info.context.session.get('organization', None)
         token = info.context.session.get('token', None)
-        return Contatto.attore(self, organization, token)
+        _attore = None
+        if token:
+            _attore = Contatto.attore(self, token=token)
+        elif organization:
+            _attore = Contatto.attore(self, organization=organization)
+        return _attore
 
     class Meta:
         model = AppUser
@@ -306,6 +362,21 @@ class ProceduraVASNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class ProceduraAvvioNode(DjangoObjectType):
+
+    ente = graphene.Field(EnteNode)
+    risorsa = DjangoFilterConnectionField(RisorseAvvioType)
+
+    class Meta:
+        model = ProceduraAvvio
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'ente': ['exact'],
+            'piano__codice': ['exact'],
+        }
+        interfaces = (relay.Node, )
+
+
 class ContattoNode(DjangoObjectType):
 
     ente = graphene.Field(EnteNode)
@@ -340,6 +411,20 @@ class ConsultazioneVASNode(DjangoObjectType):
         # Allow for some more advanced filtering here
         filter_fields = {
             'procedura_vas__piano__codice': ['exact'],
+        }
+        interfaces = (relay.Node, )
+
+
+class ConferenzaCopianificazioneNode(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorseCopianificazioneType)
+
+    class Meta:
+        model = ConferenzaCopianificazione
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'id_pratica': ['exact'],
+            'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )
 

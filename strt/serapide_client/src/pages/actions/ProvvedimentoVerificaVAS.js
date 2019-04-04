@@ -12,6 +12,9 @@ import {Query, Mutation} from 'react-apollo'
 import RichiestaComune from '../../components/RichiestaComune'
 import SalvaInvia from '../../components/SalvaInvia'
 import className from "classnames"
+import ActionTitle from '../../components/ActionTitle'
+import TextWithTooltip from '../../components/TextWithTooltip'
+import {rebuildTooltip} from '../../enhancers/utils'
 import {map} from 'lodash'
 import {GET_VAS,
     DELETE_RISORSA_VAS,
@@ -19,14 +22,13 @@ import {GET_VAS,
     UPDATE_VAS,
     PROVVEDIMENTO_VERIFICA_VAS
 } from '../../queries'
-import  {showError, formatDate,daysSub} from '../../utils'
+import  {showError, formatDate,daysSub, getNominativo} from '../../utils'
 
 
 const SwitchAssoggetamento = ({uuid, assoggettamento}) => (
         <Mutation mutation={UPDATE_VAS} onError={showError}>
             {(update, {loading}) => {
                 const onClick = (val) =>{
-                    console.log(uuid, assoggettamento)
                     if(val !== assoggettamento) {
                         update({variables: {input: {proceduraVas: {assoggettamento: !assoggettamento}, uuid}}})
                     }
@@ -49,10 +51,10 @@ const SwitchAssoggetamento = ({uuid, assoggettamento}) => (
 
 
 const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
-const getNominativo = ({firstName, lastName, fiscalCode} = {}) =>  firstName || lastName ? `${firstName} ${lastName}` : fiscalCode
 
 
-const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSemplificata, documentoPreliminareVerifica, tipologia, risorse : {edges: resources = []} = {}} = {}} = {}, scadenza}) => {
+
+const UI = rebuildTooltip()(({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSemplificata, documentoPreliminareVerifica, tipologia, risorse : {edges: resources = []} = {}} = {}} = {}, scadenza}) => {
     const IsSemplificata = tipologia === 'SEMPLIFICATA';
     const pareriUser =  resources.filter(({node: {tipo}}) => tipo === "parere_verifica_vas").reduce((acc, {node}) => {
         if (acc[node.user.fiscalCode]) { 
@@ -67,7 +69,7 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
     const provvedimento =  resources.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
     return (
         <React.Fragment>
-            <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Provvedimento di Verifica (art.22 L.R. 10/2010)</h2></div>
+            <ActionTitle><TextWithTooltip text="Provvedimento di Verifica" dataTip="art.22 L.R. 10/2010"/></ActionTitle>
             <RichiestaComune scadenza={scadenza && daysSub(scadenza, IsSemplificata ? 30 : 90)}/>
             <Resource className="border-0 mt-2" icon="attach_file" resource={IsSemplificata ? relazioneMotivataVasSemplificata : documentoPreliminareVerifica}></Resource>
             <div className="mt-3 mb-5 border-bottom-2 pb-2 d-flex">
@@ -101,7 +103,7 @@ const UI = ({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSempl
                 <SalvaInvia onCompleted={back} mutation={PROVVEDIMENTO_VERIFICA_VAS} variables={{uuid}} canCommit={!!provvedimento}></SalvaInvia>
             </div>
         </React.Fragment>)
-    }
+    })
 
     export default ({codicePiano, scadenza, back}) => (
         <Query query={GET_VAS} variables={{codice: codicePiano}} onError={showError}>

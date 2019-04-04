@@ -6,7 +6,8 @@
 $attori: (
   Regione: #09D7F2,
   AC: #44F5D3,
-  SCA: #FA2AB3
+  SCA: #FA2AB3,
+  GENIO_CIVILE: #FA2AB3
 );
 
 @mixin serapide-color ($color){
@@ -52,16 +53,19 @@ $attori: (
 }
 /** colori notifiche**/
 .icon-34 {
-    font-size: 34px;
+    font-size: 34px !important;
+}
+.icon-18 {
+    font-size: 16px !important;
 }
 .icon-16 {
-    font-size: 16px;
+    font-size: 16px !important;
 }
 .icon-14 {
-    font-size: 14px;
+    font-size: 14px !important;
 }
 .icon-12 {
-    font-size: 12px;
+    font-size: 12px !important;
 }
 .first {
     order: -1;
@@ -263,13 +267,14 @@ a {
 }
 
 .add-contact {
-    .ente-sel {
-        min-width: 200px
-    }
-    .form-control {
-        width: auto;
-        min-width: 200px
-    }
+    // .ente-sel {
+    //     min-width: 200px
+    // }
+     .col{ 
+         padding-left: 5px;
+         padding-right: 5px;
+     }
+    
     i{
         cursor: pointer
     }
@@ -282,5 +287,14 @@ a {
 .serapide {
     button.read-only.btn {
         cursor: not-allowed
+    }
+}
+
+.date-time-picker {
+    .react-datepicker-wrapper {
+            display: flex;
+            .react-datepicker__input-container{
+                flex: 1 1 auto !important
+            }
     }
 }

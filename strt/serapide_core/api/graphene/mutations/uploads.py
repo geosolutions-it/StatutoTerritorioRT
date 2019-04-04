@@ -33,8 +33,12 @@ from serapide_core.modello.models import (
     Piano,
     Risorsa,
     ProceduraVAS,
+    ProceduraAvvio,
+    ConferenzaCopianificazione,
     RisorsePiano,
     RisorseVas,
+    RisorseAvvio,
+    RisorseCopianificazione,
 )
 
 from .. import types
@@ -147,6 +151,15 @@ class UploadRisorsaVAS(UploadBaseBase):
                 # Validating 'Procedura VAS'
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+
+                    if _tipo_file == 'parere_sca' and \
+                    not rules.test_rule('strt_core.api.parere_sca_ok', info.context.user, _procedura_vas):
+                        return GraphQLError(_("Forbidden"), code=403)
+
+                    if _tipo_file == 'parere_verifica_vas' and \
+                    not rules.test_rule('strt_core.api.parere_verifica_vas_ok', info.context.user, _procedura_vas):
+                        return GraphQLError(_("Forbidden"), code=403)
+
                     _resources = UploadBaseBase.handle_uploaded_data(
                         file,
                         _uuid_vas,
@@ -174,6 +187,98 @@ class UploadRisorsaVAS(UploadBaseBase):
         return GraphQLError(_("Not Allowed"), code=405)
 
 
+class UploadRisorsaAvvio(UploadBaseBase):
+
+    success = graphene.Boolean()
+    procedura_avvio_aggiornata = graphene.Field(types.ProceduraAvvioNode)
+    file_name = graphene.String()
+
+    @classmethod
+    def mutate(cls, root, info, file, **input):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _uuid_avvio = input['codice']
+            _tipo_file = input['tipo_file']
+
+            try:
+                # Validating 'Procedura VAS'
+                _procedura_avvio = ProceduraAvvio.objects.get(uuid=_uuid_avvio)
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_avvio.piano):
+                    _resources = UploadBaseBase.handle_uploaded_data(
+                        file,
+                        _uuid_avvio,
+                        _procedura_avvio.piano.fase,
+                        _tipo_file,
+                        info.context.user
+                    )
+                    _success = False
+                    if _resources and len(_resources) > 0:
+                        _success = True
+                        for _risorsa in _resources:
+                            RisorseAvvio(procedura_avvio=_procedura_avvio, risorsa=_risorsa).save()
+                    return UploadRisorsaAvvio(
+                        procedura_avvio_aggiornata=_procedura_avvio,
+                        success=_success,
+                        file_name=_resources[0].nome)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
+
+
+class UploadRisorsaCopianificazione(UploadBaseBase):
+
+    success = graphene.Boolean()
+    conferenza_copianificazione_aggiornata = graphene.Field(types.ConferenzaCopianificazioneNode)
+    file_name = graphene.String()
+
+    @classmethod
+    def mutate(cls, root, info, file, **input):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _uuid_cc = input['codice']
+            _tipo_file = input['tipo_file']
+
+            try:
+                # Validating 'Procedura VAS'
+                _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
+                if rules.test_rule('strt_core.api.can_edit_piano',
+                                   info.context.user,
+                                   _conferenza_copianificazione.piano):
+                    _resources = UploadBaseBase.handle_uploaded_data(
+                        file,
+                        _uuid_cc,
+                        _conferenza_copianificazione.piano.fase,
+                        _tipo_file,
+                        info.context.user
+                    )
+                    _success = False
+                    if _resources and len(_resources) > 0:
+                        _success = True
+                        for _risorsa in _resources:
+                            RisorseCopianificazione(
+                                conferenza_copianificazione_aggiornata=_conferenza_copianificazione,
+                                risorsa=_risorsa).save()
+                    return UploadRisorsaCopianificazione(
+                        procedura_avvio_aggiornata=_conferenza_copianificazione,
+                        success=_success,
+                        file_name=_resources[0].nome)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
+
+
 class DeleteRisorsaBase(graphene.Mutation):
 
     class Arguments:
@@ -187,11 +292,13 @@ class DeleteRisorsaBase(graphene.Mutation):
         when corresponding `MediaFile` object is deleted.
         """
         try:
-            if risorsa.file:
-                if os.path.isfile(risorsa.file.path) and os.path.exists(risorsa.file.path):
-                    os.remove(risorsa.file.path)
-            risorsa.delete()
-            return True
+            # if risorsa.file:
+            #     if os.path.isfile(risorsa.file.path) and os.path.exists(risorsa.file.path):
+            #         os.remove(risorsa.file.path)
+            # risorsa.delete()
+            risorsa.archiviata = True
+            risorsa.save()
+            return risorsa.archiviata
         except BaseException:
             tb = traceback.format_exc()
             logger.error(tb)
@@ -248,8 +355,78 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
                 _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
                     _risorsa = Risorsa.objects.get(uuid=_id)
+
+                    if _risorsa.tipo == 'parere_sca' and \
+                    not rules.test_rule('strt_core.api.parere_sca_ok', info.context.user, _procedura_vas):
+                        return GraphQLError(_("Forbidden"), code=403)
+
+                    if _risorsa.tipo == 'parere_verifica_vas' and \
+                    not rules.test_rule('strt_core.api.parere_verifica_vas_ok', info.context.user, _procedura_vas):
+                        return GraphQLError(_("Forbidden"), code=403)
+
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
+
+
+class DeleteRisorsaAvvio(DeleteRisorsaBase):
+
+    success = graphene.Boolean()
+    procedura_avvio_aggiornata = graphene.Field(types.ProceduraAvvioNode)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _id = input['risorsa_id']
+            _uuid_avvio = input['codice']
+            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            try:
+                _procedura_avvio = ProceduraAvvio.objects.get(uuid=_uuid_avvio)
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_avvio.piano):
+                    _risorsa = Risorsa.objects.get(uuid=_id)
+                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                    return DeleteRisorsaAvvio(procedura_avvio_aggiornata=_procedura_avvio, success=_success)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
+
+
+class DeleteRisorsaCopianificazione(DeleteRisorsaBase):
+
+    success = graphene.Boolean()
+    conferenza_copianificazione_aggiornata = graphene.Field(types.ConferenzaCopianificazioneNode)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _id = input['risorsa_id']
+            _uuid_cc = input['codice']
+            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            try:
+                _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
+                if rules.test_rule('strt_core.api.can_edit_piano',
+                                   info.context.user,
+                                   _conferenza_copianificazione.piano):
+                    _risorsa = Risorsa.objects.get(uuid=_id)
+                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                    return DeleteRisorsaCopianificazione(
+                        conferenza_copianificazione_aggiornata=_conferenza_copianificazione, success=_success)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:

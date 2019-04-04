@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import {Modal, ModalBody, ModalHeader, ListGroup, ListGroupItem} from 'reactstrap'
+import {Modal, ModalBody, ModalHeader, ModalFooter, ListGroup, ListGroupItem} from 'reactstrap'
 import {toggleControllableState} from '../enhancers/utils'
 import {Query} from 'react-apollo'
 import {toast} from 'react-toastify'
@@ -15,31 +15,36 @@ import classNames from 'classnames'
 
 const enhancer = toggleControllableState("isOpen", "toggleOpen", false)
 
-const ListItem = ({option: {value, label} = {}, selected = false, onClick}) => (
+const ListItem = ({option: {value, label, tipologia} = {}, selected = false, onClick}) => (
     <ListGroupItem  onClick={() => onClick(value)}>
-        <span className="d-flex justify-content-start pointer">
-            <i className={classNames('material-icons',{"text-serapide": selected})}>{selected ?  'radio_button_checked' : 'radio_button_unchecked'}</i>
-            <span className="pl-2">{label}</span>
+        <span className="row d-flex pointer">
+            <span className="col-1">
+                <i className={classNames('material-icons',{"text-serapide": selected})}>{selected ?  'radio_button_checked' : 'radio_button_unchecked'}</i>
+            </span>         
+            <span className="col-4">{label}</span>
+            <span className="col-4"><small>{tipologia}</small></span>
         </span>
     </ListGroupItem>)
 
-const ListSelector = enhancer(({size, children, label, selected = [], isOpen, toggleOpen, onChange = () => {}, btn, items = [], getOption = ({value, label}) => ({value, label})}) => {
+const ListSelector = enhancer(({size, children, label, selected = [], isOpen, toggleOpen, onChange = () => {}, btn, items = [], getOption = ({value, label, tipologia}) => ({value, label, tipologia})}) => {
     return (
     <React.Fragment>
            {btn && btn(toggleOpen)}
             <Modal size={size} isOpen={isOpen} toggle={toggleOpen} wrapClassName="serapide" autoFocus={true}>
                 <ModalHeader toggle={toggleOpen}>{label}</ModalHeader>
                 <ModalBody> 
+                    <div style={{maxHeight: "60vh", overflowY: "scroll"}}>
                     <ListGroup>
                         {items.map((n) => {
                             const opt = getOption(n) || {}
                             return <ListItem key={opt.value} option={opt} onClick={onChange} selected={selected.indexOf(opt.value) !== -1} ></ListItem>
                         })}
                     </ListGroup>
-                    {children}
+                    </div>
                 </ModalBody>
-            
-                
+                <ModalFooter style={{display: 'block'}}>
+                    {children}
+                </ModalFooter>
             </Modal>
     </React.Fragment>
     )}

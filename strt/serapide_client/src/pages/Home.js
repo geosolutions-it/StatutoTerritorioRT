@@ -15,9 +15,16 @@ import FaseSwitch from '../components/FaseSwitch'
 import AvviaEsamePareri from './actions/AvviaEsamePareri'
 import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
 import UploadElaboratiVAS from './actions/UploadElaboratiVAS'
+import GenioCivile from './actions/GenioCivile'
+import FormazionePiano from './actions/FormazionePiano'
+import RichiestaConferenza from './actions/RichiestaConferenza'
+import ConvocazioneConferenza from './actions/ConvocazioneConferenza'
+import SvolgimentoConferenza from './actions/SvolgimentoConfernza'
+
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
 import {INVIO_PARERI_VAS} from '../queries'
+
 
 
 const getAction = (url = "", pathname = "") => {
@@ -33,7 +40,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
     }
     return (
     <div className="d-flex pb-4 pt-5">
-        <div className={classNames("d-flex flex-column flex-1")}>
+        <div className={classNames("d-flex flex-column flex-1", {"flex-fill": !action})}>
             <div className="d-flex border-serapide border-top border-bottom py-4 justify-content-around">
                 <span>LEGENDA</span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_add</i><span>E’ richiesta un’azione</span></span>
@@ -47,7 +54,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
             </FaseSwitch>
             
         </div >
-        <div className={classNames("d-flex flex-column ", {"ml-2  pl-3 flex-2 border-left": action})}>
+        <div className={classNames("d-flex flex-column", {"ml-2  pl-3 flex-3 border-left": action})} style={action ? {minWidth: 500}: {}}>
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
                 {<Route path={`${path}/avvio_consultazioni_sca`} >
@@ -73,6 +80,21 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 </Route>
                 <Route path={`${path}/upload_elaborati_vas`} >
                     <UploadElaboratiVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
+                </Route>
+                <Route path={`${path}/protocollo_genio_civile_id`} >
+                    <GenioCivile piano={piano} back={history.goBack}/>
+                </Route>
+                <Route path={`${path}/formazione_del_piano`} >
+                    <FormazionePiano piano={piano} back={history.goBack}/>
+                </Route>
+                <Route path={`${path}/richiesta_conferenza_copianificazione`} >
+                    <RichiestaConferenza piano={piano} back={history.goBack}/>
+                </Route>
+                <Route path={`${path}/convocazione_conferenza_copianificazione`} >
+                    <ConvocazioneConferenza piano={piano} back={history.goBack}/>
+                </Route>
+                <Route path={`${path}/svolgimento_conferenza_copianificazione`} >
+                    <SvolgimentoConferenza piano={piano} codicePiano={code} back={history.goBack}/>
                 </Route>
                 { action && (
                 <Route path={path}>

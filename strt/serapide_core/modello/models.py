@@ -31,7 +31,8 @@ from .enums import (FASE,
                     TIPOLOGIA_PIANO,
                     TIPOLOGIA_ATTORE,
                     TIPOLOGIA_AZIONE,
-                    TIPOLOGIA_CONTATTO
+                    TIPOLOGIA_CONTATTO,
+                    TIPOLOGIA_CONF_COPIANIFIZAZIONE
                     )
 
 
@@ -99,6 +100,8 @@ class Risorsa(models.Model):
         null=True
     )
 
+    archiviata = models.BooleanField(null=False, blank=False, default=False)
+
     @classmethod
     def create(cls, nome, file, tipo, dimensione, fase):
         _file = cls(nome=nome, file=file, tipo=tipo, dimensione=dimensione, fase=fase)
@@ -162,26 +165,42 @@ class Contatto(models.Model):
         return contact_type
 
     @classmethod
-    def attore(cls, user, organization=None, token=None):
+    def attore(cls, user, organization=None, token=None, tipologia=None):
         attore = ""
         if user:
-            contact = Contatto.objects.filter(user=user).first()
-            if contact:
-                if contact.tipologia == 'acvas':
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
-                elif contact.tipologia == 'sca':
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
-                else:
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-            if not contact or attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+            if tipologia:
+                membership = user.memberships.filter(organization__type__name=tipologia).first()
+                attore = membership.organization.type.name
+            else:
+                attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+
+            if attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+                membership = None
                 if token:
                     membership = user.memberships.all().first()
-                else:
+                elif organization:
                     membership = user.memberships.get(organization__code=organization)
                 if membership and membership.organization and membership.organization.type:
                     attore = membership.organization.type.name
                 else:
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+
+                if attore in (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown], TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
+                    for contact in Contatto.objects.filter(user=user):
+                        if contact.tipologia == 'acvas':
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
+                        elif contact.tipologia == 'sca':
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
+                        elif contact.tipologia == 'generico' and \
+                        attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+                        elif contact.tipologia == 'ente' and \
+                        (attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] or
+                         attore != TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
+                        elif contact.tipologia == 'genio_civile':
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
+
         return attore
 
     class Meta:
@@ -231,6 +250,9 @@ class Azione(models.Model):
         return '{} - {} [{}]'.format(self.attore, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
 
 
+# ############################################################################ #
+# - Piano
+# ############################################################################ #
 class Piano(models.Model):
     """
     Every "Piano" in the serapide_core application has a unique uuid
@@ -263,15 +285,35 @@ class Piano(models.Model):
     data_approvazione = models.DateTimeField(null=True, blank=True)
     last_update = models.DateTimeField(auto_now=True, blank=True)
 
+    data_protocollo_genio_civile = models.DateTimeField(null=True, blank=True)
+    numero_protocollo_genio_civile = models.TextField(null=True, blank=True)
+
     fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
     storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
     risorse = models.ManyToManyField(Risorsa, through='RisorsePiano')
     azioni = models.ManyToManyField(Azione, through='AzioniPiano')
 
+    redazione_norme_tecniche_attuazione_url = models.URLField(null=True, blank=True, default='')
+    compilazione_rapporto_ambientale_url = models.URLField(null=True, blank=True, default='')
+    conformazione_pit_ppr_url = models.URLField(null=True, blank=True, default='')
+    monitoraggio_urbanistico_url = models.URLField(null=True, blank=True, default='')
+
     autorita_competente_vas = models.ManyToManyField(
         Contatto,
         related_name='autorita_competente_vas',
         through='AutoritaCompetenteVAS'
+    )
+
+    autorita_istituzionali = models.ManyToManyField(
+        Contatto,
+        related_name='autorita_istituzionali',
+        through='AutoritaIstituzionali'
+    )
+
+    altri_destinatari = models.ManyToManyField(
+        Contatto,
+        related_name='altri_destinatari',
+        through='AltriDestinatari'
     )
 
     soggetti_sca = models.ManyToManyField(
@@ -359,6 +401,9 @@ class AzioniPiano(models.Model):
         db_table = "strt_core_piano_azioni"
 
 
+# ############################################################################ #
+# - VAS
+# ############################################################################ #
 class ProceduraVAS(models.Model):
 
     uuid = models.UUIDField(
@@ -370,7 +415,7 @@ class ProceduraVAS(models.Model):
     tipologia = models.CharField(
         choices=TIPOLOGIA_VAS,
         default=TIPOLOGIA_VAS.unknown,
-        max_length=20
+        max_length=50
     )
 
     note = models.TextField(null=True, blank=True)
@@ -432,6 +477,8 @@ class ParereVerificaVAS(models.Model):
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
 
+    inviata = models.BooleanField(null=False, blank=False, default=False)
+
     user = models.ForeignKey(
         to=AppUser,
         on_delete=models.CASCADE,
@@ -461,6 +508,7 @@ class ConsultazioneVAS(models.Model):
     data_scadenza = models.DateTimeField(null=True, blank=True)
     data_ricezione_pareri = models.DateTimeField(null=True, blank=True)
 
+    data_avvio_consultazioni_sca = models.DateTimeField(null=True, blank=True)
     avvio_consultazioni_sca = models.BooleanField(null=False, blank=False, default=False)
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
@@ -496,6 +544,8 @@ class ParereVAS(models.Model):
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
     consultazione_vas = models.ForeignKey(ConsultazioneVAS, on_delete=models.CASCADE)
+
+    inviata = models.BooleanField(null=False, blank=False, default=False)
 
     user = models.ForeignKey(
         to=AppUser,
@@ -536,6 +586,28 @@ class SoggettiSCA(models.Model):
         return '{} <---> {}'.format(self.piano.codice, self.soggetto_sca.email)
 
 
+class AutoritaIstituzionali(models.Model):
+    autorita_istituzionale = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = "strt_core_autorita_istituzionale"
+
+    def __str__(self):
+        return '{} <---> {}'.format(self.piano.codice, self.autorita_istituzionale.email)
+
+
+class AltriDestinatari(models.Model):
+    altro_destinatario = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = "strt_core_altri_destinatari"
+
+    def __str__(self):
+        return '{} <---> {}'.format(self.piano.codice, self.altro_destinatario.email)
+
+
 class PianoAuthTokens(models.Model):
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
     token = models.ForeignKey(Token, on_delete=models.CASCADE)
@@ -546,6 +618,91 @@ class PianoAuthTokens(models.Model):
 
     def __str__(self):
         return '{} <---> {}'.format(self.piano.codice, self.token.key)
+
+
+# ############################################################################ #
+# - Avvio
+# ############################################################################ #
+class ProceduraAvvio(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    conferenza_copianificazione = models.CharField(
+        choices=TIPOLOGIA_CONF_COPIANIFIZAZIONE,
+        default=TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria,
+        max_length=20
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_scadenza_risposta = models.DateTimeField(null=True, blank=True)
+
+    garante_nominativo = models.TextField(null=True, blank=True)
+    garante_pec = models.EmailField(null=True, blank=True)
+
+    notifica_genio_civile = models.BooleanField(null=False, blank=False, default=False)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
+
+    ente = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_avvio"
+        verbose_name_plural = 'Procedure Avvio'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+
+
+class RisorseAvvio(models.Model):
+    procedura_avvio = models.ForeignKey(ProceduraAvvio, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_avvio_risorse"
+
+
+class ConferenzaCopianificazione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    id_pratica = models.TextField(null=True, blank=True)
+
+    data_richiesta_conferenza = models.DateTimeField(null=True, blank=True)
+    data_scadenza_risposta = models.DateTimeField(null=True, blank=True)
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_conferenza_copianificazione"
+        verbose_name_plural = 'Conferenze di Copianificazione'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.piano.ente, self.uuid)
+
+
+class RisorseCopianificazione(models.Model):
+    conferenza_copianificazione = models.ForeignKey(ConferenzaCopianificazione, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_risorse_copianificazione"
 
 
 # ############################################################################ #
@@ -560,12 +717,20 @@ def delete_roles_and_users(sender, instance, **kwargs):
 @receiver(pre_delete, sender=Piano)
 def delete_piano_associations(sender, instance, **kwargs):
     AutoritaCompetenteVAS.objects.filter(piano=instance).delete()
+    AutoritaIstituzionali.objects.filter(piano=instance).delete()
+    AltriDestinatari.objects.filter(piano=instance).delete()
     SoggettiSCA.objects.filter(piano=instance).delete()
     instance.risorse.all().delete()
     RisorsePiano.objects.filter(piano=instance).delete()
     for _vas in ProceduraVAS.objects.filter(piano=instance):
         _vas.risorse.all().delete()
         RisorseVas.objects.filter(procedura_vas=_vas).delete()
+    for _avvio in ProceduraAvvio.objects.filter(piano=instance):
+        _avvio.risorse.all().delete()
+        RisorseAvvio.objects.filter(procedura_avvio=_avvio).delete()
+    for _cc in ConferenzaCopianificazione.objects.filter(piano=instance):
+        _cc.risorse.all().delete()
+        RisorseCopianificazione.objects.filter(conferenza_copianificazione=_cc).delete()
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
     for _t in PianoAuthTokens.objects.filter(piano=instance):

@@ -74,6 +74,13 @@ class PianoUpdateInput(InputObjectType):
     soggetto_proponente_uuid = graphene.String(required=False)
     autorita_competente_vas = graphene.List(graphene.String, required=False)
     soggetti_sca = graphene.List(graphene.String, required=False)
+    autorita_istituzionali = graphene.List(graphene.String, required=False)
+    altri_destinatari = graphene.List(graphene.String, required=False)
+    numero_protocollo_genio_civile = graphene.String(required=False)
+    redazione_norme_tecniche_attuazione_url = graphene.String(required=False)
+    compilazione_rapporto_ambientale_url = graphene.String(required=False)
+    conformazione_pit_ppr_url = graphene.String(required=False)
+    monitoraggio_urbanistico_url = graphene.String(required=False)
 
 
 class ProceduraVASCreateInput(InputObjectType):
@@ -115,3 +122,24 @@ class ConsultazioneVASUpdateInput(InputObjectType):
     data_scadenza = graphene.types.datetime.DateTime(required=False)
     data_ricezione_pareri = graphene.types.datetime.DateTime(required=False)
     avvio_consultazioni_sca = graphene.Boolean(required=False)
+
+
+class ProceduraAvvioCreateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    piano = graphene.InputField(PianoUpdateInput, required=False)
+    data_creazione = graphene.types.datetime.DateTime(required=False)
+
+
+class ProceduraAvvioUpdateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    conferenza_copianificazione = graphene.String(required=False)
+    data_creazione = graphene.types.datetime.DateTime(required=False)
+    data_scadenza_risposta = graphene.types.datetime.DateTime(required=False)
+    garante_nominativo = graphene.String(required=False)
+    garante_pec = graphene.String(required=False)

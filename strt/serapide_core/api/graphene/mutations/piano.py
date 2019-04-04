@@ -45,8 +45,12 @@ from serapide_core.modello.models import (
     Contatto,
     AzioniPiano,
     ProceduraVAS,
+    ProceduraAvvio,
     PianoAuthTokens,
-    AutoritaCompetenteVAS, SoggettiSCA,
+    AutoritaCompetenteVAS,
+    AutoritaIstituzionali,
+    AltriDestinatari,
+    SoggettiSCA,
 )
 
 from serapide_core.modello.enums import (
@@ -127,10 +131,18 @@ class CreatePiano(relay.ClientIDMutation):
                 _procedura_vas = ProceduraVAS()
                 _procedura_vas.tipologia = TIPOLOGIA_VAS.semplificata
 
+                # Inizializzazione Procedura Avvio
+                _procedura_avvio = ProceduraAvvio()
+
                 nuovo_piano = update_create_instance(_piano, _piano_data)
+
                 _procedura_vas.piano = nuovo_piano
                 _procedura_vas.ente = nuovo_piano.ente
                 _procedura_vas.save()
+
+                _procedura_avvio.piano = nuovo_piano
+                _procedura_avvio.ente = nuovo_piano.ente
+                _procedura_avvio.save()
 
                 for _ap in _azioni_piano:
                     _ap.save()
@@ -200,6 +212,8 @@ class UpdatePiano(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
         _piano_data = input.get('piano_operativo')
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
@@ -262,7 +276,8 @@ class UpdatePiano(relay.ClientIDMutation):
                 # Soggetto Proponente (O)
                 if 'soggetto_proponente_uuid' in _piano_data:
                     _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
                         if _piano.soggetto_proponente:
                             UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
                             _piano.soggetto_proponente = None
@@ -271,11 +286,14 @@ class UpdatePiano(relay.ClientIDMutation):
                             _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
                             UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano)
                             _piano.soggetto_proponente = _soggetto_proponente
+                    else:
+                        return GraphQLError(_("Forbidden"), code=403)
 
                 # Autorità Competente VAS (O)
                 if 'autorita_competente_vas' in _piano_data:
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
                         _piano.autorita_competente_vas.clear()
                         if _autorita_competente_vas:
                             for _ac in _piano.autorita_competente_vas.all():
@@ -292,11 +310,14 @@ class UpdatePiano(relay.ClientIDMutation):
                                 for _ac in _autorita_competenti:
                                     UpdatePiano.get_or_create_token(_ac.autorita_competente.user, _piano)
                                     _ac.save()
+                    else:
+                        return GraphQLError(_("Forbidden"), code=403)
 
                 # Soggetti SCA (O)
                 if 'soggetti_sca' in _piano_data:
                     _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
                         _piano.soggetti_sca.clear()
                         if _soggetti_sca_uuid:
                             for _sca in _piano.soggetti_sca.all():
@@ -313,6 +334,62 @@ class UpdatePiano(relay.ClientIDMutation):
                                 for _sca in _soggetti_sca:
                                     UpdatePiano.get_or_create_token(_sca.soggetto_sca.user, _piano)
                                     _sca.save()
+                    else:
+                        return GraphQLError(_("Forbidden"), code=403)
+
+                # Autorità Istituzionali (O)
+                if 'autorita_istituzionali' in _piano_data:
+                    _autorita_istituzionali = _piano_data.pop('autorita_istituzionali')
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        _piano.autorita_istituzionali.clear()
+                        if _autorita_istituzionali:
+                            for _ac in _piano.autorita_istituzionali.all():
+                                UpdatePiano.delete_token(_ac.user, _piano)
+
+                            if len(_autorita_istituzionali) > 0:
+                                _autorita_competenti = []
+                                for _contatto_uuid in _autorita_istituzionali:
+                                    _autorita_competenti.append(AutoritaIstituzionali(
+                                        piano=_piano,
+                                        autorita_istituzionale=Contatto.objects.get(uuid=_contatto_uuid))
+                                    )
+
+                                for _ac in _autorita_competenti:
+                                    UpdatePiano.get_or_create_token(_ac.autorita_istituzionale.user, _piano)
+                                    _ac.save()
+
+                # Altri Destinatari (O)
+                if 'altri_destinatari' in _piano_data:
+                    _altri_destinatari = _piano_data.pop('altri_destinatari')
+                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                        _piano.altri_destinatari.clear()
+                        if _altri_destinatari:
+                            for _ac in _piano.altri_destinatari.all():
+                                UpdatePiano.delete_token(_ac.user, _piano)
+
+                            if len(_altri_destinatari) > 0:
+                                _autorita_competenti = []
+                                for _contatto_uuid in _altri_destinatari:
+                                    _autorita_competenti.append(AltriDestinatari(
+                                        piano=_piano,
+                                        altro_destinatario=Contatto.objects.get(uuid=_contatto_uuid))
+                                    )
+
+                                for _ac in _autorita_competenti:
+                                    UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano)
+                                    _ac.save()
+
+                # Protocollo Genio Civile
+                if 'data_protocollo_genio_civile' in _piano_data:
+                    _piano_data.pop('data_protocollo_genio_civile')
+                    # This cannot be changed
+
+                if 'numero_protocollo_genio_civile' in _piano_data:
+                    if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) or \
+                    not rules.test_rule('strt_core.api.is_actor', _token or
+                                        (info.context.user, _organization), 'genio_civile'):
+                        _piano_data.pop('numero_protocollo_genio_civile')
+                        # This can be changed only by Genio Civile
 
                 piano_aggiornato = update_create_instance(_piano, _piano_data)
                 return cls(piano_aggiornato=piano_aggiornato)
@@ -404,19 +481,25 @@ class PromozionePiano(graphene.Mutation):
                 if procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
                     _verifica_vas.stato = STATO_AZIONE.nessuna
 
-                elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
+                elif procedura_vas.tipologia in \
+                (TIPOLOGIA_VAS.procedimento, TIPOLOGIA_VAS.procedimento_semplificato):
                     _verifica_vas.stato = STATO_AZIONE.nessuna
+                    _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
+                    _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
+                    datetime.timedelta(days=_verifica_vas_expire_days)
+
+                    _avvio_consultazioni_sca_ac_expire_days = 10
                     _avvio_consultazioni_sca = Azione(
                         tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
-                        attore=TIPOLOGIA_ATTORE.comune,
+                        attore=TIPOLOGIA_ATTORE.ac,
                         order=_order,
-                        stato=STATO_AZIONE.necessaria
+                        stato=STATO_AZIONE.attesa,
+                        data=datetime.datetime.now(timezone.get_current_timezone()) +
+                        datetime.timedelta(days=_avvio_consultazioni_sca_ac_expire_days)
                     )
                     _avvio_consultazioni_sca.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
-                    procedura_vas.verifica_effettuata = True
-                    procedura_vas.save()
 
                 elif procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
                     _verifica_vas.stato = STATO_AZIONE.nessuna
@@ -435,11 +518,11 @@ class PromozionePiano(graphene.Mutation):
                     AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
 
                 elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
-                    _verifica_vas.stato = STATO_AZIONE.attesa
+                    # _verifica_vas.stato = STATO_AZIONE.attesa
+                    _verifica_vas.stato = STATO_AZIONE.nessuna
                     _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
                     _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
                     datetime.timedelta(days=_verifica_vas_expire_days)
-                    _verifica_vas.save()
 
                     _pareri_vas_expire_days = getattr(settings, 'PARERI_VERIFICA_VAS_EXPIRE_DAYS', 30)
                     _pareri_sca = Azione(
@@ -466,6 +549,8 @@ class PromozionePiano(graphene.Mutation):
                     _emissione_provvedimento_verifica.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
+
+                _verifica_vas.save()
 
         elif fase.nome == FASE.avvio:
             _genio_civile = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
@@ -503,6 +588,54 @@ class PromozionePiano(graphene.Mutation):
                     )
                 else:
                     return GraphQLError(_("Not Allowed"), code=405)
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class FormazionePiano(graphene.Mutation):
+
+    class Arguments:
+        codice_piano = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    piano_aggiornato = graphene.Field(types.PianoNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _formazione_del_piano = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
+            if _formazione_del_piano and _formazione_del_piano.stato != STATO_AZIONE.nessuna:
+                _formazione_del_piano.stato = STATO_AZIONE.nessuna
+                _formazione_del_piano.data = datetime.datetime.now(timezone.get_current_timezone())
+                _formazione_del_piano.save()
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _piano = Piano.objects.get(codice=input['codice_piano'])
+        _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+            try:
+                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+
+                    return FormazionePiano(
+                        piano_aggiornato=_piano,
+                        errors=[]
+                    )
             except BaseException as e:
                     tb = traceback.format_exc()
                     logger.error(tb)

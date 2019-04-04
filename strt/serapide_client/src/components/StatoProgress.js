@@ -10,28 +10,25 @@ import shortid from "shortid"
 import {fasi} from "../utils"
 import classNames from "classnames"
 import {capitalize} from 'lodash'
-import ReactTooltip from 'react-tooltip'
-export default  class StatoProgress extends React.PureComponent {
-        componentDidMount() {
-            ReactTooltip.rebuild()
-        }
-        render () {
-                const {stato: {nome = "Unknown", codice}, className= "stato-progress", legend= false} = this.props
-                const id =  `_${shortid.generate()}`
-                const activeIdx = fasi.indexOf(nome.toLocaleLowerCase()) + 1
-                const activeFase = fasi[activeIdx]
-                return (
-                    <span className={className}>
-                        <i id={id} data-tip={`${capitalize(activeFase)}`} className={`material-icons text-serapide ${activeFase}`}>room</i>
-                        <ul className={`_icons _${activeFase}`}>
-                            {fasi.map((fase, idx) => (<li key={`_${fase}`} data-tip={`${capitalize(fase)}`} id={`_${fase}`} className={classNames({"bg-serapide": activeIdx >= idx})}/>))}
-                        </ul>
-                        {legend && (
-                            <React.Fragment>
-                            <ul className={`_${activeFase} _labels`}>
-                                {fasi.map((fase, idx) => (<li key={`label_${fase}`}  id={`label_${fase}`} className={classNames(`label_${fase}`, fase)}>{fase}</li>))}
-                            </ul>    
-                            </React.Fragment>)}
-                    </span>)
-        }
-}
+import {rebuildTooltip} from '../enhancers/utils'
+
+export default  rebuildTooltip({onUpdate: true, log: true, comp: "Stato Progres"})(({
+    stato: {nome = "Unknown", codice},
+    className= "stato-progress",
+    legend= false}) => {
+    const id =  `_${shortid.generate()}`
+    const activeIdx = fasi.indexOf(nome.toLocaleLowerCase()) + 1
+    const activeFase = fasi[activeIdx]
+    return (
+        <span className={className}>
+            <i id={id} data-tip={`${capitalize(activeFase)}`} className={`material-icons text-serapide ${activeFase}`}>room</i>
+            <ul className={`_icons _${activeFase}`}>
+                {fasi.map((fase, idx) => (<li key={`_${fase}`} data-tip={`${capitalize(fase)}`} id={`_${fase}`} className={classNames({"bg-serapide": activeIdx >= idx})}/>))}
+            </ul>
+            {legend && (
+                <React.Fragment>
+                <ul className={`_${activeFase} _labels`}>
+                    {fasi.map((fase, idx) => (<li key={`label_${fase}`}  id={`label_${fase}`} className={classNames(`label_${fase}`, fase)}>{fase}</li>))}
+                </ul>    
+                </React.Fragment>)}
+        </span>)})

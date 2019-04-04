@@ -38,7 +38,7 @@ class FileLoader extends React.Component {
     static propTypes = {
         file: PropTypes.object,
         variables: PropTypes.object,
-        placeholder: PropTypes.string,
+        placeholder: PropTypes.node,
         isLoading: PropTypes.bool,
         upload: PropTypes.func,
         error: PropTypes.bool,

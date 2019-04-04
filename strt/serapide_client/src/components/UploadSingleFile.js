@@ -16,7 +16,7 @@ import Resource from './EnhancedResource'
 class SingleFile extends React.PureComponent {
     static propTypes = {
         risorsa: PropTypes.object,
-        placeholder: PropTypes.string,
+        placeholder: PropTypes.node,
         variables: PropTypes.object,
         fileType: PropTypes.string,
         isLocked: PropTypes.bool,

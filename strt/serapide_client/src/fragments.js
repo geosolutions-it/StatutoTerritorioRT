@@ -21,12 +21,17 @@ fragment Risorsa on RisorsaNode {
     lastUpdate
     user{
       fiscalCode
-    }  
+      firstName
+      lastName
+    }
+    label
+    tooltip
 }
 `
-export const AUT_VASFragment = gql`
-fragment AUT_VAS on ContattoNode{
+export const CONTATTO = gql`
+fragment Contatto on ContattoNode{
         nome
+        tipologia
         uuid
 }
 `
@@ -40,6 +45,8 @@ fragment Azioni on AzioneNodeConnection {
       attore
       data
       uuid
+      label
+      tooltip
     }
   }
 }
@@ -82,22 +89,22 @@ fragment VAS on ProceduraVASNode {
             autoritaCompetenteVas{
                 edges{
                   node{
-                    ...AUT_VAS
+                    ...Contatto
                   }
                 }
             }
             soggettiSca {
                 edges{
                     node{
-                        ...AUT_VAS
+                        ...Contatto
                     }
                 }
             }
             soggettoProponente {
-              ...AUT_VAS
+              ...Contatto
             }
         }
-        risorse{
+        risorse(archiviata: false){
             ...Risorse
         }
         documentoPreliminareVerifica{
@@ -108,7 +115,7 @@ fragment VAS on ProceduraVASNode {
         }
 }
 ${RISORSE}
-${AUT_VASFragment}
+${CONTATTO}
 `
 export const PIANO = gql`
 fragment Piano on PianoNode {
@@ -122,6 +129,12 @@ fragment Piano on PianoNode {
     dataAvvio
     dataApprovazione
     alertsCount
+    numeroProtocolloGenioCivile
+    dataProtocolloGenioCivile
+    redazioneNormeTecnicheAttuazioneUrl
+    compilazioneRapportoAmbientaleUrl
+    conformazionePitPprUrl
+    monitoraggioUrbanisticoUrl 
     azioni {
         ...Azioni
     }
@@ -140,30 +153,45 @@ fragment Piano on PianoNode {
     user{
         ...User
     }
-    risorse{
+    risorse(archiviata: false){
         ...Risorse
       }
     autoritaCompetenteVas{
         edges{
           node{
-            ...AUT_VAS
+            ...Contatto
           }
         }
     }
     soggettiSca{
         edges{
           node{
-            ...AUT_VAS
+            ...Contatto
           }
         }
     }
+    autoritaIstituzionali{
+                edges{
+                    node{
+                        ...Contatto
+                    }
+                }
+            }
+            altriDestinatari{
+                edges{
+                    node{
+                        ...Contatto
+                    }
+                }
+            }
+    
     soggettoProponente {
-      ...AUT_VAS
+      ...Contatto
     }
 }
 ${RISORSE}
 ${USER}
-${AUT_VASFragment}
+${CONTATTO}
 ${AZIONI}
 ` 
 
@@ -173,15 +201,30 @@ fragment  ConsultazioneVAS on ConsultazioneVASNode {
           avvioConsultazioniSca
           dataCreazione
           dataScadenza
+          dataAvvioConsultazioniSca
           dataRicezionePareri
           proceduraVas{
             uuid
             tipologia
             dataAssoggettamento
-            risorse {
+            risorse(archiviata: false) {
             ...Risorse
             }
           }
 }
   ${RISORSE}
+`
+export const AVVIO = gql`
+fragment AVVIO on ProceduraAvvioNode {
+        uuid
+        conferenzaCopianificazione
+        dataCreazione
+        dataScadenzaRisposta
+        garanteNominativo
+        garantePec
+        risorse(archiviata: false) {
+            ...Risorse
+        }
+}
+${RISORSE}
 `

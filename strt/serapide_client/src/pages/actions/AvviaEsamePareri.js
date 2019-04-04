@@ -11,17 +11,18 @@ import Resource from '../../components/Resource'
 import {Query, Mutation} from 'react-apollo'
 
 import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
 import className from "classnames"
 import {map} from 'lodash'
 import {GET_VAS,
     AVVIO_ESAME_PARERI_SCA
 } from '../../queries'
-import  {showError, formatDate,daysSub} from '../../utils'
+import  {showError, getNominativo} from '../../utils'
 import {toggleControllableState} from '../../enhancers/utils'
 
 const enhancer = toggleControllableState('checked', 'toggleSwitch', false)
 
-const getNominativo = ({firstName, lastName, fiscalCode} = {}) =>  firstName || lastName ? `${firstName} ${lastName}` : fiscalCode
+
 
 
 const UI = enhancer(({
@@ -42,7 +43,7 @@ const UI = enhancer(({
     const docpreliminare =  resources.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").map(({node}) => node).shift()
     return (
         <React.Fragment>
-            <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Avvia Esame Pareri SCA</h2></div>
+            <ActionTitle>Avvia Esame Pareri SCA</ActionTitle>
             <h5 className="font-weight-light mt-4">DOCUMENTO PRELIMINARE</h5>
             <Resource className="border-0 mt-2" icon="attach_file" resource={docpreliminare}></Resource>
             

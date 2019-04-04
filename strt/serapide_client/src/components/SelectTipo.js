@@ -8,9 +8,9 @@
 import React from 'react'
 import Select from 'react-select'
 
-export default ({ value, onChange= (val,action) => {}, className, error, isLoading = false, tipiPiano= []}) => (
+export default ({ value, onChange= (val,action) => {}, className, error, isLoading = false, tipiPiano= [], placeholder="Selezionare il tipo piano..."}) => (
             <Select 
-                    placeholder="Selezionare il tipo piano..."
+                    placeholder={placeholder}
                     isDisabled={!!error}
                     onChange={onChange}
                     value={value}  isLoading={isLoading} className={className}

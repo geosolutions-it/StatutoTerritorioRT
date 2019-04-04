@@ -10,6 +10,7 @@ import {Input} from 'reactstrap'
 import Resource from '../../components/Resource'
 import {Query} from 'react-apollo'
 import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from '../../queries'
+import ActionTitle from '../../components/ActionTitle'
 import SalvaInvia from '../../components/SalvaInvia'
 import  {showError} from '../../utils'
 import {withControllableState} from '../../enhancers/utils'
@@ -22,10 +23,9 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
     
     const provvedimentoVerificaVas  = resources.filter(({node: {tipo, user = {}}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
     const pubblicazione_provvedimento_verifica = attore === 'AC' ? "pubblicazioneProvvedimentoVerificaAc" : "pubblicazioneProvvedimentoVerificaAp"
-    console.log(attore, pubblicazione_provvedimento_verifica)
     return (
         <React.Fragment>
-            <div  className="py-3 border-bottom-2 border-top-2"><h2 className="m-0">Pubblicazione Provvedimento di Verifica</h2></div>
+            <ActionTitle>Pubblicazione Provvedimento di Verifica</ActionTitle>
             <Resource className="border-0 mt-2" icon="attach_file" resource={provvedimentoVerificaVas}></Resource>
             
             <span style={{maxWidth: 400}} className="mt-5 d-flex align-items-center">
@@ -34,7 +34,7 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
             </span>
             <span style={{fontSize: "80%", maxWidth: 400}}className="pl-4 font-80">Inserire la URL della pagina dove è stato pubblicato il provvedimento di verifica</span>
             <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} mutation={PUBBLICA_PROVV_VERIFICA} variables={{input: {proceduraVas: {[pubblicazione_provvedimento_verifica]: url}, uuid}}} canCommit={url.length > 0}></SalvaInvia>
+                <SalvaInvia onCompleted={back} mutation={PUBBLICA_PROVV_VERIFICA} variables={{input: {proceduraVas: {[pubblicazione_provvedimento_verifica]: url}, uuid}}} canCommit={url}></SalvaInvia>
             </div>
         </React.Fragment>)
     })

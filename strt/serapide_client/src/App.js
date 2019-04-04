@@ -45,6 +45,7 @@ return (
                 </div>)
                 globalAuth._attore_attivo = themeClass
                 globalAuth._ruolo = ruolo
+            
             return(
                 <React.Fragment>
                     <ThemeInjector themeClass={themeClass}/>
@@ -52,12 +53,14 @@ return (
                         <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount}  roleType={ruolo}/>
                     </Injector>
                     <ReactTooltip></ReactTooltip>
-                    <div className="serapide-content pt-5 pb-5 pX-lg-1 pX-xl-2 px-4 serapide-top-offset position-relative">
+                    <div className="serapide-content pt-5 pb-5 pX-lg-1 pX-xl-2 px-4 serapide-top-offset position-relative overflow-auto">
                             <Router>
                                 <Switch>
                                     <Route  path="/piano/:code" render={(props) => <Piano utente={utente} {...props}/>} />
                                     <Route  path="/crea_anagrafica/:code" component={CreaAnagrafica}/>
-                                    <Route  path="/nuovo_piano/" component={NuovoPiano}/>             
+                                    <Route  path="/nuovo_piano/" >
+                                    {utente && utente.role && utente.role.type === "RUP" && <NuovoPiano utente={utente}></NuovoPiano>}
+                                    </Route>             
                                     <Route  path="/" render={(props) => <Dashboard utente={utente} {...props}/>}/>
                                 </Switch>
                             </Router>

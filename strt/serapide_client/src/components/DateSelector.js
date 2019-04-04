@@ -31,6 +31,22 @@ class CustomInput extends React.PureComponent {
     }
   }
 
+class DateTimeInput extends React.PureComponent {
+    render () {
+        const {onClick, value = "", disabled, readOnly, className} = this.props 
+        const data = value.trim().split(" ").slice(0, 1).pop()
+        const ora = value.trim().split(" ").slice(1).join(" ")
+        console.log(value)
+            return (
+                <div className="row flex-fill p-2 text-serapide border pointer"
+                onClick={onClick}>
+                    <div className="col-6">{data || "Data"}</div>
+                    <div className="col-6">{ora || "Ora"}</div>
+    
+                </div>)
+    }
+  }
+
 const showError = (error, onError) => {
     toast.error(error.message,  {autoClose: true})
 }
@@ -38,7 +54,7 @@ const showError = (error, onError) => {
 export default (props) => (<DatePicker customInput={<CustomInput />} {...props}/>) 
 
 // Pass a mutation an update function if needed, the getInput
-export const EnhancedDateSelector = ({isLocked, mutation, update, selected, disabled, getInput = _getInput, ...mutationProps}) => {
+export const EnhancedDateSelector = ({useDateTime = false, showTimeSelect = false, className, isLocked, mutation, update, selected, disabled, getInput = _getInput, ...mutationProps}) => {
     return (
         <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
             {(onChange, m_props) => {
@@ -46,7 +62,17 @@ export const EnhancedDateSelector = ({isLocked, mutation, update, selected, disa
                     onChange(getInput(val))
                 }
                 return (
-                    <DatePicker readOnly={isLocked} disabled={disabled} selected={selected} customInput={<CustomInput />} onChange={saveDate}/>
+                    <DatePicker 
+                    calendarClassName={useDateTime ? "d-flex" : undefined}
+                    showTimeSelect={showTimeSelect} eadOnly={isLocked}
+                    className={className}
+                    disabled={disabled}
+                    selected={selected}
+                    customInput={useDateTime ? <DateTimeInput/> : <CustomInput />}
+                    onChange={saveDate}
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    dateFormat=" dd-MM-yyyy h:mm aa"/>
                 )
             }}
         </Mutation>)

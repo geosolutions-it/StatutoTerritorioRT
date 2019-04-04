@@ -12,20 +12,21 @@ import { Route, Switch} from 'react-router-dom';
 import {Query} from "react-apollo"
 import Anagrafica from './Anagrafica'
 import Formazione from './Formazione'
+import Avvio from './Avvio'
 import {getEnteLabel, getPianoLabel} from "../utils"
 import {GET_PIANI} from "../queries"
 import Injector from '../components/Injector'
 import SideBar from '../components/SideBarMenu'
 import StatoProgress from '../components/StatoProgress'
 import Home from "./Home"
-import ReactTooltip from 'react-tooltip'
+
 
 const getActive = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
     const activeLocation = getActive(url, pathname)
-    return (<Query query={GET_PIANI} variables={{codice: code}}>
+    return (<Query query={GET_PIANI} pollInterval={5000} variables={{codice: code}}>
 
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
             if(loading){
@@ -59,7 +60,12 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                         </div>
                         <Switch>
                             <Route  path={`${path}/anagrafica`} component={Anagrafica}/>
-                            <Route  path={`${path}/formazione`} component={Formazione}/>
+                            <Route  path={`${path}/formazione`} >
+                                <Formazione utente={utente} piano={piano}></Formazione>
+                            </Route>
+                            <Route  path={`${path}/avvio`} >
+                                <Avvio piano={piano}></Avvio>
+                            </Route>
                             <Route  path={`${path}/home`} render={(props) => <Home utente={utente} azioni={azioni} piano={piano} {...props}></Home>}/>
                             <Route path={path}>
                                 <div className="p-6"><h1> Works in progress </h1> 

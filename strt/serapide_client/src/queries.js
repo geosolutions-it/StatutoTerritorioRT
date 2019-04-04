@@ -17,6 +17,31 @@ query {
     }
 }`
 
+export const GET_TIPO_CONTATTO = gql`
+query GetTipoContatto{
+  tipologiaContatto {
+    label
+    value
+  }
+}
+`
+
+export const GET_AVVIO = gql`
+query GetAvvio($codice: String!) {
+    procedureAvvio(piano_Codice: $codice) {
+        edges{
+          node{
+            ...AVVIO 
+            }
+            
+        }
+    }
+}
+${FR.AVVIO}
+`
+
+
+
 
 export const GET_CONSULTAZIONE_VAS = gql`
 query ConsultazioniVas($codice: String){
@@ -54,6 +79,7 @@ query CreaPianoPage{
 }
 `
 
+
 export const GET_UTENTE = gql`
 query{
   utenti {
@@ -72,6 +98,7 @@ query{
             description
             code
             type {
+              tipo: name
               code
             }
           }
@@ -130,12 +157,12 @@ query getContatti($tipo: String){
     contatti(tipologia: $tipo) {
       edges {
         node{
-          nome
-          uuid
+          ...Contatto
         }
       }
     }
   }
+  ${FR.CONTATTO}
 `
 // MUTATION
 // Mutation per piano
@@ -310,6 +337,20 @@ mutation ProvveddimentoVerificaVAS($uuid: String!) {
   }
 ${FR.AZIONI_PIANO}
 `
+
+
+export const FORMAZIONE_PIANO = gql`
+mutation ForamzioneDelPiano($codice: String!) {
+  formazioneDelPiano(codicePiano: $codice){
+        pianoAggiornato{
+              ...AzioniPiano 
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
+
 export const AVVIO_ESAME_PARERI_SCA = gql`
 mutation AvvioEsamePareriSCA($uuid: String!) {
     avvioEsamePareriSca(uuid: $uuid){
@@ -361,19 +402,86 @@ mutation AvvioConsultazioniVAS($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
+export const INVIO_PROTOCOLLO_GENIO = gql`
+mutation InvioProtocolloGenioCivile($codice: String!) {
+    invioProtocolloGenioCivile(uuid: $codice) {
+        errors
+        avvioAggiornato {
+              piano{
+                numeroProtocolloGenioCivile,
+                dataProtocolloGenioCivile
+                ...AzioniPiano
+              }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
 // altre mutations
 
 export const CREATE_CONTATTO = gql`
 mutation CreaContatto($input: CreateContattoInput!){
   createContatto(input: $input){
     nuovoContatto{
-      uuid
-      nome
+      ...Contatto
     }
   }
 	
 }
+${FR.CONTATTO}
 `
+// Mutation avvio procedura
+
+export const AVVIO_FILE_UPLOAD = gql`
+mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    uploadRisorsaAvvio(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      proceduraAvvioAggiornata {
+          ...AVVIO
+      }
+      fileName
+    }
+  }
+  ${FR.AVVIO}
+`
+
+export const UPDATE_AVVIO = gql`
+mutation UpdateProceduraAvvio($input: UpdateProceduraAvvioInput!) {
+    updateProceduraAvvio(input: $input) {
+        proceduraAvvioAggiornata {
+            ...AVVIO
+        }
+    }
+}
+${FR.AVVIO}
+`
+
+export const DELETE_RISORSA_AVVIO = gql`
+mutation DeleteRisorsaAvvio($id: ID!, $codice: String!) {
+    deleteRisorsaAvvio(risorsaId: $id, codice: $codice){
+        success
+        proceduraAvvioAggiornata {
+            ...AVVIO
+        }
+    }
+}
+${FR.AVVIO}
+`
+export const AVVIA_PIANO = gql`
+mutation AvvioPiano($codice: String!) {
+    avviaPiano(uuid: $codice) {
+        errors
+        avvioAggiornato {
+              piano {
+                ...AzioniPiano
+              }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
 
 // LOCAL STATE
 // example of local state query

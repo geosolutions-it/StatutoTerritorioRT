@@ -8,7 +8,6 @@
 # LICENSE file in the root directory of this source tree.
 #
 #########################################################################
-
 import rules
 import logging
 import datetime
@@ -17,13 +16,16 @@ import traceback
 
 from django.conf import settings
 from django.utils import timezone
+from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
 from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
-from serapide_core.helpers import update_create_instance
+from serapide_core.helpers import (
+    is_RUP,
+    update_create_instance)
 
 from serapide_core.signals import (
     piano_phase_changed,
@@ -65,9 +67,14 @@ class CreateProceduraVAS(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas_data = input.get('procedura_vas')
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _ente = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+        (rules.test_rule('strt_users.is_superuser', info.context.user) or
+         is_RUP(info.context.user) or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune')):
             try:
                 # ProceduraVAS (M)
                 _procedura_vas_data['piano'] = _piano
@@ -108,6 +115,8 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # This cannot be changed
             _procedura_vas_data.pop('piano')
         _piano = _procedura_vas.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _ente = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
@@ -126,50 +135,62 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
                 # Tipologia (O)
                 if 'tipologia' in _procedura_vas_data:
-                    _tipologia = _procedura_vas_data.pop('tipologia')
-                    if _tipologia and _tipologia in TIPOLOGIA_VAS:
-                        _procedura_vas_data['tipologia'] = _tipologia
+                    if rules.test_rule('strt_users.is_superuser', info.context.user) or \
+                    is_RUP(info.context.user) or \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune'):
+                        _tipologia = _procedura_vas_data.pop('tipologia')
+                        if _tipologia and _tipologia in TIPOLOGIA_VAS:
+                            _procedura_vas_data['tipologia'] = _tipologia
 
                 # Note (O)
                 if 'note' in _procedura_vas_data:
-                    _data = _procedura_vas_data.pop('note')
-                    _procedura_vas.note = _data[0]
+                    if rules.test_rule('strt_users.is_superuser', info.context.user) or \
+                    is_RUP(info.context.user) or \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune'):
+                        _data = _procedura_vas_data.pop('note')
+                        _procedura_vas.note = _data[0]
 
                 procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
 
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap:
-                    _pubblicazione_provvedimento_verifica_ap = _piano.azioni.filter(
-                        tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
-                        attore=TIPOLOGIA_ATTORE.comune).first()
-                    if _pubblicazione_provvedimento_verifica_ap and \
-                    _pubblicazione_provvedimento_verifica_ap.stato != STATO_AZIONE.nessuna:
-                        _pubblicazione_provvedimento_verifica_ap.stato = STATO_AZIONE.nessuna
+                    if rules.test_rule('strt_users.is_superuser', info.context.user) or \
+                    is_RUP(info.context.user) or \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune'):
+                        _pubblicazione_provvedimento_verifica_ap = _piano.azioni.filter(
+                            tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                            attore=TIPOLOGIA_ATTORE.comune).first()
+                        if _pubblicazione_provvedimento_verifica_ap and \
+                        _pubblicazione_provvedimento_verifica_ap.stato != STATO_AZIONE.nessuna:
+                            _pubblicazione_provvedimento_verifica_ap.stato = STATO_AZIONE.nessuna
 
-                        # Notify Users
-                        piano_phase_changed.send(
-                            sender=Piano,
-                            user=info.context.user,
-                            piano=_piano,
-                            message_type="piano_verifica_vas_updated")
+                            # Notify Users
+                            piano_phase_changed.send(
+                                sender=Piano,
+                                user=info.context.user,
+                                piano=_piano,
+                                message_type="piano_verifica_vas_updated")
 
-                        _pubblicazione_provvedimento_verifica_ap.save()
+                            _pubblicazione_provvedimento_verifica_ap.save()
 
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
-                    _pubblicazione_provvedimento_verifica_ac = _piano.azioni.filter(
-                        tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
-                        attore=TIPOLOGIA_ATTORE.ac).first()
-                    if _pubblicazione_provvedimento_verifica_ac and \
-                    _pubblicazione_provvedimento_verifica_ac.stato != STATO_AZIONE.nessuna:
-                        _pubblicazione_provvedimento_verifica_ac.stato = STATO_AZIONE.nessuna
+                    if rules.test_rule('strt_users.is_superuser', info.context.user) or \
+                    is_RUP(info.context.user) or \
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'AC'):
+                        _pubblicazione_provvedimento_verifica_ac = _piano.azioni.filter(
+                            tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                            attore=TIPOLOGIA_ATTORE.ac).first()
+                        if _pubblicazione_provvedimento_verifica_ac and \
+                        _pubblicazione_provvedimento_verifica_ac.stato != STATO_AZIONE.nessuna:
+                            _pubblicazione_provvedimento_verifica_ac.stato = STATO_AZIONE.nessuna
 
-                        # Notify Users
-                        piano_phase_changed.send(
-                            sender=Piano,
-                            user=info.context.user,
-                            piano=_piano,
-                            message_type="piano_verifica_vas_updated")
+                            # Notify Users
+                            piano_phase_changed.send(
+                                sender=Piano,
+                                user=info.context.user,
+                                piano=_piano,
+                                message_type="piano_verifica_vas_updated")
 
-                        _pubblicazione_provvedimento_verifica_ac.save()
+                            _pubblicazione_provvedimento_verifica_ac.save()
 
                 return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
             except BaseException as e:
@@ -210,20 +231,25 @@ class InvioPareriVerificaVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
             try:
                 _pareri_vas_count = ParereVerificaVAS.objects.filter(
                     user=info.context.user,
                     procedura_vas=_procedura_vas
-                ).count()
+                )
 
-                if _pareri_vas_count == 0:
+                if _pareri_vas_count.count() == 0:
                     _parere_vas = ParereVerificaVAS(
+                        inviata=True,
                         user=info.context.user,
                         procedura_vas=_procedura_vas
                     )
                     _parere_vas.save()
-                else:
+                elif _pareri_vas_count.count() != 1:
                     return GraphQLError(_("Forbidden"), code=403)
 
                 _tutti_pareri_inviati = True
@@ -232,12 +258,19 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                         user=_sca.user,
                         procedura_vas=_procedura_vas
                     ).count()
-
                     if _pareri_vas_count != 1:
                         _tutti_pareri_inviati = False
                         break
 
                 if _tutti_pareri_inviati:
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="tutti_pareri_inviati")
+
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
                 return InvioPareriVerificaVAS(
@@ -281,6 +314,7 @@ class AssoggettamentoVAS(graphene.Mutation):
                 _avvio_consultazioni_sca.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+
                 procedura_vas.verifica_effettuata = True
                 procedura_vas.data_assoggettamento = datetime.datetime.now(timezone.get_current_timezone())
                 procedura_vas.save()
@@ -319,7 +353,11 @@ class AssoggettamentoVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC'):
             try:
                 _pareri_verifica_sca = _piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca).first()
@@ -354,9 +392,12 @@ class CreateConsultazioneVAS(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
-
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
         if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
             try:
                 nuova_consultazione_vas = ConsultazioneVAS()
                 nuova_consultazione_vas.user = info.context.user
@@ -388,8 +429,12 @@ class UpdateConsultazioneVAS(relay.ClientIDMutation):
         _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
         _consultazione_vas_data = input.get('consultazione_vas')
         _piano = _consultazione_vas.procedura_vas.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
         if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
             try:
                 consultazione_vas_aggiornata = update_create_instance(_consultazione_vas, _consultazione_vas_data)
                 return cls(consultazione_vas_aggiornata=consultazione_vas_aggiornata)
@@ -410,7 +455,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
     consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
 
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
+    def update_actions_for_phase(cls, fase, piano, consultazione_vas, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -421,10 +466,18 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _avvio_consultazioni_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).first()
-            if _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
+                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
+            for _ac in _avvio_consultazioni_sca:
+                if _ac.stato != STATO_AZIONE.nessuna:
+                    _avvio_consultazioni_sca = _ac
+                    break
+            if _avvio_consultazioni_sca and \
+            not isinstance(_avvio_consultazioni_sca, QuerySet) and \
+            _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
                 _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
                 _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+
+                consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
 
                 # Notify Users
                 piano_phase_changed.send(
@@ -434,6 +487,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                     message_type="piano_verifica_vas_updated")
 
                 _avvio_consultazioni_sca.save()
+                consultazione_vas.save()
 
                 _pareri_vas_expire_days = getattr(settings, 'PARERI_VAS_EXPIRE_DAYS', 60)
                 _pareri_sca = Azione(
@@ -453,9 +507,13 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
         _procedura_vas = _consultazione_vas.procedura_vas
         _piano = _procedura_vas.piano
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+                cls.update_actions_for_phase(_piano.fase, _piano, _consultazione_vas, info.context.user)
 
                 return AvvioConsultazioniVAS(
                     consultazione_vas_aggiornata=_consultazione_vas,
@@ -488,26 +546,79 @@ class InvioPareriVAS(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
+            _verifica_vas = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas).first()
+            _avvio_consultazioni_sca = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
+            for _ac in _avvio_consultazioni_sca:
+                if _ac.stato != STATO_AZIONE.nessuna:
+                    _avvio_consultazioni_sca = _ac
+                    break
             _pareri_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.pareri_sca).first()
-            if _pareri_sca.stato != STATO_AZIONE.nessuna:
+                tipologia=TIPOLOGIA_AZIONE.pareri_sca)
+            for _psca in _pareri_sca:
+                if _psca.stato != STATO_AZIONE.nessuna:
+                    _pareri_sca = _psca
+                    break
+
+            if _verifica_vas and \
+            _pareri_sca and \
+            (isinstance(_pareri_sca, QuerySet) or
+             _pareri_sca.stato != STATO_AZIONE.nessuna):
+                if isinstance(_pareri_sca, QuerySet):
+                    _pareri_sca = _pareri_sca.last()
+
                 _pareri_sca.stato = STATO_AZIONE.nessuna
                 _pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                 _pareri_sca.save()
 
-                _avvio_esame_pareri_sca = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
-                    attore=TIPOLOGIA_ATTORE.comune,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _avvio_esame_pareri_sca.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
+                if _avvio_consultazioni_sca and \
+                (not isinstance(_avvio_consultazioni_sca, QuerySet) or
+                 ((_avvio_consultazioni_sca.count() == 1 and
+                   procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento) or (
+                    _avvio_consultazioni_sca.count() == 1 and
+                    _avvio_consultazioni_sca.first().attore == TIPOLOGIA_ATTORE.ac and
+                        procedura_vas.tipologia != TIPOLOGIA_VAS.procedimento_semplificato))):
+                    if isinstance(_avvio_consultazioni_sca, QuerySet):
+                        _avvio_consultazioni_sca = _avvio_consultazioni_sca.last()
 
-                """
-                    TODO: Queste azioni qui sotto in realtà sono di AVVIO Prodedimento!
-                """
+                    _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
+                    _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+                    _avvio_consultazioni_sca.save()
+
+                    _verifica_vas.stato = STATO_AZIONE.nessuna
+                    _verifica_vas.save()
+
+                    _avvio_consultazioni_sca = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _avvio_consultazioni_sca.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+
+                    consultazione_vas = ConsultazioneVAS.objects.get(procedura_vas=procedura_vas)
+                    consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
+                    consultazione_vas.save()
+
+                    procedura_vas.verifica_effettuata = True
+                    procedura_vas.save()
+
+                else:
+                    _avvio_esame_pareri_sca = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _avvio_esame_pareri_sca.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
+
+                # TODO: Queste azioni qui sotto in realtà sono di AVVIO Prodedimento!
+
                 # _osservazioni_enti = Azione(
                 #     tipologia=TIPOLOGIA_AZIONE.osservazioni_enti,
                 #     attore=TIPOLOGIA_ATTORE.enti,
@@ -543,22 +654,34 @@ class InvioPareriVAS(graphene.Mutation):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _consultazione_vas = ConsultazioneVAS.objects.get(procedura_vas=_procedura_vas)
         _piano = _procedura_vas.piano
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
             try:
+                if _procedura_vas.risorse.filter(
+                tipo='parere_sca', archiviata=False, user=info.context.user).count() == 0:
+                    return GraphQLError(_("Forbidden"), code=403)
+
+                _avvio_consultazioni_sca_count = _piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
+
                 _pareri_vas_count = ParereVAS.objects.filter(
                     user=info.context.user,
                     procedura_vas=_procedura_vas,
                     consultazione_vas=_consultazione_vas
-                ).count()
+                )
 
-                if _pareri_vas_count == 0:
+                if _pareri_vas_count.count() == (_avvio_consultazioni_sca_count - 1):
                     _parere_vas = ParereVAS(
+                        inviata=True,
                         user=info.context.user,
                         procedura_vas=_procedura_vas,
-                        consultazione_vas=_consultazione_vas
+                        consultazione_vas=_consultazione_vas,
                     )
                     _parere_vas.save()
-                else:
+                elif _pareri_vas_count.count() != _avvio_consultazioni_sca_count:
                     return GraphQLError(_("Forbidden"), code=403)
 
                 _tutti_pareri_inviati = True
@@ -569,11 +692,19 @@ class InvioPareriVAS(graphene.Mutation):
                         consultazione_vas=_consultazione_vas
                     ).count()
 
-                    if _pareri_vas_count != 1:
+                    if _pareri_vas_count != _avvio_consultazioni_sca_count:
                         _tutti_pareri_inviati = False
                         break
 
                 if _tutti_pareri_inviati:
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="tutti_pareri_inviati")
+
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
                 return InvioPareriVAS(
@@ -633,7 +764,12 @@ class AvvioEsamePareriSCA(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
@@ -681,7 +817,11 @@ class UploadElaboratiVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 

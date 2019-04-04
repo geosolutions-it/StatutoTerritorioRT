@@ -21,10 +21,14 @@ const azioni = {
         "PARERI_VERIFICA_SCA": ["TMP"],
         "EMISSIONE_PROVVEDIMENTO_VERIFICA": ["TMP"],
         "PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA": ["TMP", "RUP", "OP"],
-        "AVVIO_CONSULTAZIONI_SCA": ["RUP", "OP"],
+        "AVVIO_CONSULTAZIONI_SCA": ["RUP", "OP", "TMP"],
         "PARERI_SCA": ["TMP"],
         "AVVIO_ESAME_PARERI_SCA": ["RUP", "OP"],
-        "UPLOAD_ELABORATI_VAS": ["RUP", "OP"]
+        "UPLOAD_ELABORATI_VAS": ["RUP", "OP"],
+        "FORMAZIONE_DEL_PIANO": ["RUP", "OP"],
+        "PROTOCOLLO_GENIO_CIVILE_ID": ["TMP"],
+        "RICHIESTA_CONFERENZA_COPIANIFICAZIONE": ["RUP", "OP"],
+        "CONVOCAZIONE_CONFERENZA_COPIANIFICAZIONE": ["TMP"]
     }
 export const globalAuth = {
     _attore_attivo: "",
@@ -35,6 +39,6 @@ export const globalAuth = {
 export const checkAttore = ( {attore = ""} = {}, attore_attivo = globalAuth._attore_attivo) => attore === attore_attivo
 
 export const canExecuteAction = ({tipologia = "", attore= ""} = {}, attore_attivo = globalAuth._attore_attivo, ruolo = globalAuth._ruolo) => {
- // console.log(attore_attivo, ruolo, tipologia, attore, includes((azioni[tipologia] || []), ruolo) );
+  // console.log(attore_attivo, ruolo, tipologia, attore, includes((azioni[tipologia] || []), ruolo) );
   return attore_attivo.toLowerCase() === attore.toLowerCase() && includes((azioni[tipologia] || []), ruolo) 
 }

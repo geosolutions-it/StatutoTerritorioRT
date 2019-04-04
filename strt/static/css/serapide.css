@@ -7532,7 +7532,11 @@ a.text-dark:hover, a.text-dark:focus {
 
 .navbar {
   z-index: 1031;
+  height: 60px !important;
   padding-right: 60px !important; }
+
+.navbar-menu {
+  z-index: 1030; }
 
 @media (max-width: 767.98px) {
   .container-fluid .navbar-expand-sm.navbar {
@@ -7548,6 +7552,12 @@ a.text-dark:hover, a.text-dark:focus {
 
 .container-fluid .navbar-expand-xl.navbar {
   padding-right: 0.5rem !important; }
+
+.top-navbar {
+  font-size: 90%; }
+
+.brand-text {
+  font-size: 80%; }
 
 .serapide .user-navbar {
   top: 60px !important; }
@@ -8086,6 +8096,49 @@ button.bg-serapide:focus {
 .SCA .border-serapide {
   border-color: #FA2AB3 !important; }
 
+.GENIO_CIVILE .text-serapide {
+  color: #FA2AB3 !important; }
+
+.GENIO_CIVILE a.text-serapide:hover, .GENIO_CIVILE a.text-serapide:focus {
+  color: #d3058c !important; }
+
+.GENIO_CIVILE .bg-serapide {
+  background-color: #FA2AB3 !important; }
+
+.GENIO_CIVILE a.bg-serapide:hover, .GENIO_CIVILE a.bg-serapide:focus,
+.GENIO_CIVILE button.bg-serapide:hover,
+.GENIO_CIVILE button.bg-serapide:focus {
+  background-color: #eb069d !important; }
+
+.GENIO_CIVILE .bg-gradient-serapide {
+  background: #FA2AB3 linear-gradient(180deg, #fb4abe, #FA2AB3) repeat-x !important; }
+
+.GENIO_CIVILE .btn-serapide {
+  color: #fff;
+  background-color: #FA2AB3;
+  border-color: #FA2AB3; }
+  .GENIO_CIVILE .btn-serapide:hover {
+    color: #fff;
+    background-color: #f806a5;
+    border-color: #eb069d; }
+  .GENIO_CIVILE .btn-serapide:focus, .GENIO_CIVILE .btn-serapide.focus {
+    box-shadow: 0 0 0 0.2rem rgba(251, 74, 190, 0.5); }
+  .GENIO_CIVILE .btn-serapide.disabled, .GENIO_CIVILE .btn-serapide:disabled {
+    color: #fff;
+    background-color: #FA2AB3;
+    border-color: #FA2AB3; }
+  .GENIO_CIVILE .btn-serapide:not(:disabled):not(.disabled):active, .GENIO_CIVILE .btn-serapide:not(:disabled):not(.disabled).active,
+  .show > .GENIO_CIVILE .btn-serapide.dropdown-toggle {
+    color: #fff;
+    background-color: #eb069d;
+    border-color: #df0595; }
+    .GENIO_CIVILE .btn-serapide:not(:disabled):not(.disabled):active:focus, .GENIO_CIVILE .btn-serapide:not(:disabled):not(.disabled).active:focus,
+    .show > .GENIO_CIVILE .btn-serapide.dropdown-toggle:focus {
+      box-shadow: 0 0 0 0.2rem rgba(251, 74, 190, 0.5); }
+
+.GENIO_CIVILE .border-serapide {
+  border-color: #FA2AB3 !important; }
+
 .border-2 {
   border: 2px solid #dee2e6 !important; }
 
@@ -8122,16 +8175,19 @@ button.bg-serapide:focus {
 
 /** colori notifiche**/
 .icon-34 {
-  font-size: 34px; }
+  font-size: 34px !important; }
+
+.icon-18 {
+  font-size: 16px !important; }
 
 .icon-16 {
-  font-size: 16px; }
+  font-size: 16px !important; }
 
 .icon-14 {
-  font-size: 14px; }
+  font-size: 14px !important; }
 
 .icon-12 {
-  font-size: 12px; }
+  font-size: 12px !important; }
 
 .first {
   order: -1; }
@@ -8164,6 +8220,9 @@ button.bg-serapide:focus {
 
 .rt-logo {
   height: 60px; }
+
+.rt-logo-gov {
+  height: 40px; }
 
 @media (min-width: 576px) {
   .pX-sm-1 {
@@ -8340,12 +8399,9 @@ a {
 .serapide .Toastify__toast {
   border-radius: 8px; }
 
-.add-contact .ente-sel {
-  min-width: 200px; }
-
-.add-contact .form-control {
-  width: auto;
-  min-width: 200px; }
+.add-contact .col {
+  padding-left: 5px;
+  padding-right: 5px; }
 
 .add-contact i {
   cursor: pointer; }
@@ -8356,5 +8412,10 @@ a {
 
 .serapide button.read-only.btn {
   cursor: not-allowed; }
+
+.date-time-picker .react-datepicker-wrapper {
+  display: flex; }
+  .date-time-picker .react-datepicker-wrapper .react-datepicker__input-container {
+    flex: 1 1 auto !important; }
 
 /*# sourceMappingURL=serapide.css.map */

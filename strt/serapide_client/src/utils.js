@@ -13,14 +13,14 @@ export const getDate = (date) => {
     return isDate(date) ? date : parseISO(date)
 }
 
-export const formatDate = (date, template = "dd/MM/yyyy") => format(getDate(date), template, {locale: it})
+export const formatDate = (date, template = "dd/MM/yyyy") => date ? format(getDate(date), template, {locale: it}) : null
 
 export const getDifferenceInDays = (dateEnd, dateStart) => differenceInCalendarDays(getDate(dateEnd), getDate(dateStart))
 
 export const daysSub = (date, amount) =>  {
     return subDays(getDate(date), amount)
 }
-
+export const getNominativo = ({firstName, lastName, fiscalCode} = {}) =>  firstName || lastName ? `${firstName || ""} ${lastName || ""}` : fiscalCode
 export const fasi = [ "anagrafica", "avvio", "adozione", "approvazione", "pubblicazione"]
 
 export const getActionIcon = (stato) => {
