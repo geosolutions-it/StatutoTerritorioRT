@@ -185,7 +185,10 @@ class Contatto(models.Model):
                 else:
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
 
-                if attore in (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown], TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
+                if attore in \
+                (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown],
+                 TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.comune],
+                 TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
                     for contact in Contatto.objects.filter(user=user):
                         if contact.tipologia == 'acvas':
                             attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
@@ -688,6 +691,8 @@ class ConferenzaCopianificazione(models.Model):
     data_scadenza_risposta = models.DateTimeField(null=True, blank=True)
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorseCopianificazione')
 
     class Meta:
         db_table = "strt_core_conferenza_copianificazione"
