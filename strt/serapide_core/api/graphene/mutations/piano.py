@@ -507,6 +507,19 @@ class FormazionePiano(graphene.Mutation):
             try:
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
+                    if _piano.is_eligible_for_promotion:
+                        _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                        # Notify Users
+                        piano_phase_changed.send(
+                            sender=Piano,
+                            user=info.context.user,
+                            piano=_piano,
+                            message_type="piano_phase_changed")
+
+                        _piano.save()
+                        fase.promuovi_piano(_fase, _piano)
+
                     return FormazionePiano(
                         piano_aggiornato=_piano,
                         errors=[]

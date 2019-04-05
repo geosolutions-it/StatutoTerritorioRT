@@ -31,6 +31,7 @@ from serapide_core.signals import (
 )
 
 from serapide_core.modello.models import (
+    Fase,
     Piano,
     Azione,
     Contatto,
@@ -48,6 +49,7 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
+from . import fase
 from .. import types
 from .. import inputs
 
@@ -167,12 +169,14 @@ class AvvioPiano(graphene.Mutation):
                 if _tipologia.upper() == tipologia.upper():
                     _has_tipologia = True
                     break
+
             if not _has_tipologia:
                 for _c in piano.autorita_istituzionali.all():
                     _tipologia = _c.tipologia if contatto else \
                         Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
                     if _tipologia.upper() == tipologia.upper():
                         _has_tipologia = True
+                        break
 
             if not _has_tipologia:
                 for _c in piano.altri_destinatari.all():
@@ -181,6 +185,7 @@ class AvvioPiano(graphene.Mutation):
                     if _tipologia.upper() == tipologia.upper():
                         _has_tipologia = True
                         break
+
             _res = _has_tipologia
         return _res
 
@@ -198,12 +203,10 @@ class AvvioPiano(graphene.Mutation):
             _avvio_procedimento = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
             if _avvio_procedimento and _avvio_procedimento.stato != STATO_AZIONE.nessuna:
-                if not cls.autorita_ok(piano, TIPOLOGIA_CONTATTO.genio_civile) and \
-                procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+                if not cls.autorita_ok(piano, TIPOLOGIA_CONTATTO.genio_civile):
                     raise Exception("Missing %s" % TIPOLOGIA_CONTATTO.genio_civile)
 
-                if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE.regione, contatto=False) and \
-                procedura_avvio.conferenza_copianificazione != TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+                if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE.regione, contatto=False):
                     raise Exception("Missing %s" % TIPOLOGIA_ATTORE.regione)
 
                 _avvio_procedimento.stato = STATO_AZIONE.nessuna
@@ -369,6 +372,19 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'GENIO_CIVILE'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
+
+                    _piano.save()
+                    fase.promuovi_piano(_fase, _piano)
 
                 return InvioProtocolloGenioCivile(
                     avvio_aggiornato=_procedura_avvio,
@@ -536,6 +552,19 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
+
+                    _piano.save()
+                    fase.promuovi_piano(_fase, _piano)
 
                 return ChiusuraConferenzaCopianificazione(
                     avvio_aggiornato=_procedura_avvio,

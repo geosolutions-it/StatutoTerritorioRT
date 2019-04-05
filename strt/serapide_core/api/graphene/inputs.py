@@ -143,3 +143,5 @@ class ProceduraAvvioUpdateInput(InputObjectType):
     data_scadenza_risposta = graphene.types.datetime.DateTime(required=False)
     garante_nominativo = graphene.String(required=False)
     garante_pec = graphene.String(required=False)
+    notifica_genio_civile = graphene.Boolean(required=False)
+    richiesta_integrazioni = graphene.Boolean(required=False)

@@ -179,35 +179,33 @@ class Contatto(models.Model):
             else:
                 attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
 
-            if attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+            if attore in \
+            (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown],
+             TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.comune],
+             TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
                 membership = None
                 if token:
                     membership = user.memberships.all().first()
                 elif organization:
                     membership = user.memberships.get(organization__code=organization)
-                if membership and membership.organization and membership.organization.type:
+                if attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] and \
+                membership and membership.organization and membership.organization.type:
                     attore = membership.organization.type.name
-                else:
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
 
-                if attore in \
-                (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown],
-                 TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.comune],
-                 TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
-                    for contact in Contatto.objects.filter(user=user):
-                        if contact.tipologia == 'acvas':
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
-                        elif contact.tipologia == 'sca':
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
-                        elif contact.tipologia == 'generico' and \
-                        attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-                        elif contact.tipologia == 'ente' and \
-                        (attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] or
-                         attore != TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
-                        elif contact.tipologia == 'genio_civile':
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
+                for contact in Contatto.objects.filter(user=user):
+                    if contact.tipologia == 'acvas':
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
+                    elif contact.tipologia == 'sca':
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
+                    elif contact.tipologia == 'generico' and \
+                    attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+                    elif contact.tipologia == 'ente' and \
+                    (attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] or
+                     attore != TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
+                    elif contact.tipologia == 'genio_civile':
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
 
         return attore
 
@@ -671,6 +669,7 @@ class ProceduraAvvio(models.Model):
     garante_pec = models.EmailField(null=True, blank=True)
 
     notifica_genio_civile = models.BooleanField(null=False, blank=False, default=False)
+    richiesta_integrazioni = models.BooleanField(null=False, blank=False, default=False)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
 

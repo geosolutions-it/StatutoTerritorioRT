@@ -37,6 +37,10 @@ def promuovi_piano(fase, piano):
 
     procedura_vas = piano.procedura_vas
 
+    _creato = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
+    if _creato.stato != STATO_AZIONE.necessaria:
+        raise Exception("Stato Inconsistente!")
+
     # Update Azioni Piano
     # - Complete Current Actions
     _order = 0
@@ -60,14 +64,10 @@ def promuovi_piano(fase, piano):
 
     # - Update Action state accordingly
     if fase.nome == FASE.anagrafica:
-        _creato = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
-        if _creato.stato != STATO_AZIONE.necessaria:
-            raise Exception("Stato Inconsistente!")
 
-        if _creato:
-            _creato.stato = STATO_AZIONE.nessuna
-            _creato.data = datetime.datetime.now(timezone.get_current_timezone())
-            _creato.save()
+        _creato.stato = STATO_AZIONE.nessuna
+        _creato.data = datetime.datetime.now(timezone.get_current_timezone())
+        _creato.save()
 
         _verifica_vas = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas).first()
         if _verifica_vas:
@@ -146,4 +146,5 @@ def promuovi_piano(fase, piano):
             _verifica_vas.save()
 
     elif fase.nome == FASE.avvio:
+        # Nothing to do here
         pass
