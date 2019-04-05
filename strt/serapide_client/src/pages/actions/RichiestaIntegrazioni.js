@@ -10,7 +10,7 @@ import UploadFiles from '../../components/UploadFiles'
 import {Query} from 'react-apollo'
 import {GET_AVVIO,
     UPDATE_AVVIO,
-    CHIUSURA_CONFERENZA_COPIANIFICAZIONE
+    RICHIESTA_INTEGRAZIONI
 } from '../../queries'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
@@ -30,14 +30,14 @@ const getInput = (uuid) => (val) => ({
         variables: {
             input: { 
                 proceduraAvvio: {
-                    messaggioIntegrazioni: val}, 
+                    messaggioIntegrazione: val}, 
                 uuid
             }
         }})
 
 const UI = ({
     back, 
-    proceduraAvvio: {node: {uuid, richiestaIntegrazioni, messaggioIntegrazioni} = {}} = {},
+    proceduraAvvio: {node: {uuid, richiestaIntegrazioni, messaggioIntegrazione} = {}} = {},
     }) => {    
         
         return (
@@ -54,10 +54,10 @@ const UI = ({
                     </div>        
                 </div>
                 <div className="row pl-2 pt-4">
-                    <Input getInput={getMessaggioInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} placeholder="Inserisci messaggio da inviare" onChange={undefined} value={messaggioIntegrazioni} type="textarea" />
+                    <Input getInput={getMessaggioInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} placeholder="Inserisci messaggio da inviare" onChange={undefined} value={messaggioIntegrazione} type="textarea" />
                 </div>
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={CHIUSURA_CONFERENZA_COPIANIFICAZIONE} canCommit={false}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={RICHIESTA_INTEGRAZIONI} canCommit={!!messaggioIntegrazione}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }

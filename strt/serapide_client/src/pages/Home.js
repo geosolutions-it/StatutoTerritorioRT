@@ -18,7 +18,7 @@ import UploadElaboratiVAS from './actions/UploadElaboratiVAS'
 import GenioCivile from './actions/GenioCivile'
 import FormazionePiano from './actions/FormazionePiano'
 import RichiestaConferenza from './actions/RichiestaConferenza'
-import ConvocazioneConferenza from './actions/ConvocazioneConferenza'
+import IntegrazioniRichieste from './actions/IntegrazioniRichieste'
 import SvolgimentoConferenza from './actions/SvolgimentoConfernza'
 import RichiestaIntegrazioni from './actions/RichiestaIntegrazioni'
 import {Switch, Route} from 'react-router-dom'
@@ -95,6 +95,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 </Route>
                 <Route path={`${path}/richiesta_integrazioni`} >
                     <RichiestaIntegrazioni piano={piano} codicePiano={code} back={history.goBack}/>
+                </Route>
+                <Route path={`${path}/integrazioni_richieste`} >
+                    <IntegrazioniRichieste piano={piano}  back={history.goBack}/>
                 </Route>
                 { action && (
                 <Route path={path}>

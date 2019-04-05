@@ -29,7 +29,9 @@ const azioni = {
         "PROTOCOLLO_GENIO_CIVILE_ID": ["TMP"],
         "RICHIESTA_CONFERENZA_COPIANIFICAZIONE": ["RUP", "OP"],
         "CONVOCAZIONE_CONFERENZA_COPIANIFICAZIONE": ["TMP"],
-        "ESITO_CONFERENZA_COPIANIFICAZIONE": ["TMP"]
+        "ESITO_CONFERENZA_COPIANIFICAZIONE": ["TMP"],
+        "RICHIESTA_INTEGRAZIONI": ["TMP"],
+        "INTEGRAZIONI_RICHIESTE": ["RUP", "OP"]
     }
 export const globalAuth = {
     _attore_attivo: "",

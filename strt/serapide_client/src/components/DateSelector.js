@@ -64,7 +64,8 @@ export const EnhancedDateSelector = ({useDateTime = false, showTimeSelect = fals
                 return (
                     <DatePicker 
                     calendarClassName={useDateTime ? "d-flex" : undefined}
-                    showTimeSelect={showTimeSelect} eadOnly={isLocked}
+                    showTimeSelect={showTimeSelect}
+                    readOnly={isLocked}
                     className={className}
                     disabled={disabled}
                     selected={selected}
@@ -72,7 +73,7 @@ export const EnhancedDateSelector = ({useDateTime = false, showTimeSelect = fals
                     onChange={saveDate}
                     timeFormat="HH:mm"
                     timeIntervals={15}
-                    dateFormat=" dd-MM-yyyy h:mm aa"/>
+                    dateFormat={useDateTime ? "dd-MM-yyyy h:mm aa" : "dd-MM-yyyy" }/>
                 )
             }}
         </Mutation>)
