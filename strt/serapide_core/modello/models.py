@@ -170,7 +170,10 @@ class Contatto(models.Model):
         if user:
             if tipologia:
                 membership = user.memberships.filter(organization__type__name=tipologia).first()
-                attore = membership.organization.type.name
+                if membership and membership.organization:
+                    attore = membership.organization.type.name
+                else:
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
             else:
                 attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
 
