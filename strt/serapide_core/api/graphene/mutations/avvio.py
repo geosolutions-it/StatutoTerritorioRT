@@ -410,7 +410,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
 
                     if _richiesta_cc and _richiesta_cc.stato != STATO_AZIONE.nessuna:
 
-                        _richiesta_cc.stato == STATO_AZIONE.nessuna
+                        _richiesta_cc.stato = STATO_AZIONE.nessuna
                         _richiesta_cc.save()
 
                         procedura_avvio.notifica_genio_civile = False
@@ -423,7 +423,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
 
                         _conferenza_copianificazione = Azione(
                             tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
-                            attore=TIPOLOGIA_ATTORE.comune,
+                            attore=TIPOLOGIA_ATTORE.regione,
                             order=_order,
                             stato=STATO_AZIONE.attesa,
                             data=procedura_avvio.data_scadenza_risposta
@@ -431,6 +431,13 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                         _conferenza_copianificazione.save()
                         _order += 1
                         AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
+
+                        # Notify Users
+                        piano_phase_changed.send(
+                            sender=Piano,
+                            user=user,
+                            piano=piano,
+                            message_type="conferenza_copianificazione")
 
     @classmethod
     def mutate(cls, root, info, **input):

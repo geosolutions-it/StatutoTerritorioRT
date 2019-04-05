@@ -93,7 +93,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Route path={`${path}/convocazione_conferenza_copianificazione`} >
                     <ConvocazioneConferenza piano={piano} back={history.goBack}/>
                 </Route>
-                <Route path={`${path}/svolgimento_conferenza_copianificazione`} >
+                <Route path={`${path}/esito_conferenza_copianificazione`} >
                     <SvolgimentoConferenza piano={piano} codicePiano={code} back={history.goBack}/>
                 </Route>
                 { action && (

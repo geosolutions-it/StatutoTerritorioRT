@@ -228,3 +228,16 @@ fragment AVVIO on ProceduraAvvioNode {
 }
 ${RISORSE}
 `
+
+export const CONFERENZA_COPIANIFICAZIONE = gql`
+fragment CONFERENZA on ConferenzaCopianificazioneNode {
+        uuid
+        idPratica
+        dataRichiestaConferenza
+        dataScadenzaRisposta
+        risorse(archiviata: false) {
+            ...Risorse
+        }
+}
+${RISORSE}
+`
