@@ -431,7 +431,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                         _conferenza_copianificazione.save()
                         _order += 1
                         AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
-                        
+
                         # Notify Users
                         piano_phase_changed.send(
                             sender=Piano,
