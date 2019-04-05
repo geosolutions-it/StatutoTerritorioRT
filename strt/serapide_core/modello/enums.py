@@ -108,6 +108,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_elaborati_vas', _('Upload elaborati VAS')),  # Comune
         # Avvio
         ('avvio_procedimento', _('Avvio del Procedimento')),  # Comune
+        ('richiesta_integrazioni', _('Richiesta Integrazioni')),  # Comune
         ('formazione_del_piano', _('Formazione del Piano')),  # Comune
         ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Comune
         ('protocollo_genio_civile_id', _('Protocollo N.')),  # Genio Civile

@@ -223,6 +223,16 @@ class AvvioPiano(graphene.Mutation):
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_formazione_del_piano, piano=piano)
 
+                _richiesta_integrazioni = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
+                    attore=TIPOLOGIA_ATTORE.regione,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa
+                )
+                _richiesta_integrazioni.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_richiesta_integrazioni, piano=piano)
+
                 if procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria:
 
                     procedura_avvio.notifica_genio_civile = False
