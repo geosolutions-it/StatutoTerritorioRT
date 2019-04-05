@@ -33,7 +33,8 @@ def parere_sca_ok(user, procedura_vas):
     if user and procedura_vas:
         _piano = procedura_vas.piano
         _resources = procedura_vas.risorse.filter(tipo='parere_sca', archiviata=False, user=user)
-        _consultazione_vas = ConsultazioneVAS.objects.get(procedura_vas=procedura_vas)
+        _consultazione_vas = ConsultazioneVAS.objects.filter(
+            procedura_vas=procedura_vas).order_by('data_creazione').first()
         _avvio_consultazioni_sca_count = _piano.azioni.filter(
             tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
         _pareri_vas = ParereVAS.objects.filter(

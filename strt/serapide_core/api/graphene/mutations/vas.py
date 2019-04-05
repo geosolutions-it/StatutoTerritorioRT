@@ -32,6 +32,7 @@ from serapide_core.signals import (
 )
 
 from serapide_core.modello.models import (
+    Fase,
     Piano,
     Azione,
     ParereVAS,
@@ -49,6 +50,7 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_ATTORE,
 )
 
+from . import fase
 from .. import types
 from .. import inputs
 
@@ -195,6 +197,21 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                                 message_type="piano_verifica_vas_updated")
 
                             _pubblicazione_provvedimento_verifica_ac.save()
+
+                if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
+                procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
+                    if _piano.is_eligible_for_promotion:
+                        _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                        # Notify Users
+                        piano_phase_changed.send(
+                            sender=Piano,
+                            user=info.context.user,
+                            piano=_piano,
+                            message_type="piano_phase_changed")
+
+                        _piano.save()
+                        fase.promuovi_piano(_fase, _piano)
 
                 return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
             except BaseException as e:
@@ -603,7 +620,8 @@ class InvioPareriVAS(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
 
-                    consultazione_vas = ConsultazioneVAS.objects.get(procedura_vas=procedura_vas)
+                    consultazione_vas = ConsultazioneVAS.objects.filter(
+                        procedura_vas=procedura_vas).order_by('data_creazione').first()
                     consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
                     consultazione_vas.save()
 
@@ -656,7 +674,8 @@ class InvioPareriVAS(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
-        _consultazione_vas = ConsultazioneVAS.objects.get(procedura_vas=_procedura_vas)
+        _consultazione_vas = ConsultazioneVAS.objects.filter(
+            procedura_vas=_procedura_vas).order_by('data_creazione').first()
         _piano = _procedura_vas.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -676,7 +695,7 @@ class InvioPareriVAS(graphene.Mutation):
                     procedura_vas=_procedura_vas,
                     consultazione_vas=_consultazione_vas
                 )
-
+                print('%s / %s' % (_pareri_vas_count.count(), _avvio_consultazioni_sca_count))
                 if _pareri_vas_count.count() == (_avvio_consultazioni_sca_count - 1):
                     _parere_vas = ParereVAS(
                         inviata=True,
@@ -828,6 +847,19 @@ class UploadElaboratiVAS(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
+
+                    _piano.save()
+                    fase.promuovi_piano(_fase, _piano)
 
                 return UploadElaboratiVAS(
                     vas_aggiornata=_procedura_vas,
