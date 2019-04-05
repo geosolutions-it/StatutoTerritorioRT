@@ -265,7 +265,7 @@ class UploadRisorsaCopianificazione(UploadBaseBase):
                                 conferenza_copianificazione_aggiornata=_conferenza_copianificazione,
                                 risorsa=_risorsa).save()
                     return UploadRisorsaCopianificazione(
-                        procedura_avvio_aggiornata=_conferenza_copianificazione,
+                        conferenza_copianificazione_aggiornata=_conferenza_copianificazione,
                         success=_success,
                         file_name=_resources[0].nome)
                 else:

@@ -410,7 +410,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
 
                     if _richiesta_cc and _richiesta_cc.stato != STATO_AZIONE.nessuna:
 
-                        _richiesta_cc.stato == STATO_AZIONE.nessuna
+                        _richiesta_cc.stato = STATO_AZIONE.nessuna
                         _richiesta_cc.save()
 
                         procedura_avvio.notifica_genio_civile = False
