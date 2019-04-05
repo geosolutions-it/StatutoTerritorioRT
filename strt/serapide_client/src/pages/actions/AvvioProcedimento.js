@@ -271,7 +271,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
 
 export default ({back, piano}) => (
                 <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
-                    {({loading, data: {procedureAvvio: {edges = []} = []} = {}, error}) => {
+                    {({loading, data: {procedureAvvio: {edges = []} = []} = {}}) => {
                         if(loading) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">

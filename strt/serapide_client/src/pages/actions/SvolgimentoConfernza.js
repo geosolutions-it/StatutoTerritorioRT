@@ -7,48 +7,63 @@
  */
 import React from 'react'
 import UploadFiles from '../../components/UploadFiles'
-import Resource from '../../components/Resource'
 import {Query} from 'react-apollo'
-import {GET_CONFERENZA,
-    DELETE_RISORSA_COPIANIFICAZIONE,
-    CONFEREZA_FILE_UPLOAD, INVIO_PARERI_VERIFICA
+import {GET_CONFERENZA,GET_AVVIO,
+    DELETE_RISORSA_COPIANIFICAZIONE,UPDATE_AVVIO,
+    CONFEREZA_FILE_UPLOAD, CHIUSURA_CONFERENZA_COPIANIFICAZIONE
 } from '../../queries'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
-import RichiestaComune from '../../components/RichiestaComune'
-import  {showError, formatDate, daysSub} from '../../utils'
+import {EnhancedSwitch} from '../../components/Switch'
+import  {showError} from '../../utils'
 
 
-const getSuccess = ({uploadConsultazioneVas: {success}} = {}) => success
-
+const getInput = (uuid) => (val) => ({
+    variables: {
+        input: { 
+            proceduraAvvio: {
+                richiestaIntegrazioni: !val}, 
+            uuid
+        }
+    }})
 
 const UI = ({
     back, 
+    proceduraAvvio: {node: {uuid: avvioId,richiestaIntegrazioni} = {}} = {},
     conferenza: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
-    utente: {fiscalCode} = {},
-    saveMutation = INVIO_PARERI_VERIFICA}) => {
-        
-        const docsPareri =  resources.filter(({node: {tipo, user = {}}}) => tipo === 'elaborati_conferenza').map(({node}) => node)
-        
-        
+    }) => {    
+        const docsAllegati =  resources.filter(({node: {tipo, user = {}}}) => tipo === 'elaborati_conferenza').map(({node}) => node)
         return (
             <React.Fragment>
                 <ActionTitle>Svolgimento Conf. Copianificazione</ActionTitle>
                 <h4 className="mt-5 font-weight-light pl-4 pb-1">Verbali e Allegati</h4>
-                <UploadFiles risorse={docsPareri} 
+                <UploadFiles risorse={docsAllegati} 
                         mutation={CONFEREZA_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_COPIANIFICAZIONE}
                         variables={{codice: uuid, tipo: 'elaborati_conferenza' }}
                         isLocked={false} getSuccess={({uploadRisorsaCopianificazione: {success}}) => success} getFileName={({uploadRisorsaCopianificazione: {fileName} = {}}) => fileName}/>
-                
+                <div className="row pl-2 pt-5">
+                    <div className="col-5 bg-serapide">Richiesta integrazioni</div> 
+                    <div className="col-2 ml-2">
+                        <EnhancedSwitch className="" value={richiestaIntegrazioni}
+                                    getInput={getInput(avvioId)}  
+                                    ignoreChecked
+                                    mutation={UPDATE_AVVIO} checked={richiestaIntegrazioni}/> 
+                    </div>        
+                </div>
+
+
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={docsPareri.length> 0}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{codice: avvioId}} mutation={CHIUSURA_CONFERENZA_COPIANIFICAZIONE} canCommit={docsAllegati.length> 0}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }
 
-    export default ({codicePiano, utente, scadenza, back, tipo, label, tipoVas, saveMutation}) => (
-        <Query query={GET_CONFERENZA} variables={{codice: codicePiano}} onError={showError}>
+    export default ({codicePiano,back}) => (
+        <Query query={GET_AVVIO} variables={{codice: codicePiano}} onError={showError}>
+        {({loading, data: {procedureAvvio: {edges: avvii = []} = []} = {}}) => {
+
+        return (<Query query={GET_CONFERENZA} variables={{codice: codicePiano}} onError={showError}>
             {({loading, data: {conferenzaCopianificazione: {edges = []} = []} = {}, error}) => {
                 if(loading) {
                     return (
@@ -59,6 +74,7 @@ const UI = ({
                         </div>)
                 }
                 return (
-                    <UI back={back} conferenza={edges[0]} utente={utente} tipoVas={tipoVas}  scadenza={scadenza} tipoDoc={tipo} label={label}/>)}
+                    <UI back={back} proceduraAvvio={avvii[0]} conferenza={edges[0]}/>)}
             }
+        </Query>)}}
         </Query>)

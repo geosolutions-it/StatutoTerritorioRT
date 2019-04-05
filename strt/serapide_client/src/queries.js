@@ -540,6 +540,24 @@ mutation($id: ID!, $codice: String!) {
 ${FR.CONFERENZA_COPIANIFICAZIONE}
 `
 
+export const CHIUSURA_CONFERENZA_COPIANIFICAZIONE = gql `
+mutation ChiusuraConferenzaCopianificazione($codice: String!) {
+    chiusuraConferenzaCopianificazione(uuid: $codice) {
+      errors
+        avvioAggiornato {
+              piano {
+                ...AzioniPiano
+              }
+        }
+    
+  }
+}
+${FR.AZIONI_PIANO}
+
+
+`
+
+
 // LOCAL STATE
 // example of local state query
 export const GET_VAS_AUTHORITIES = gql`
