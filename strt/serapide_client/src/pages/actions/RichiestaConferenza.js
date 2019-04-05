@@ -7,6 +7,7 @@
  */
 import React from 'react'
 import {
+    RICHIESTA_CONFERENZA_COPIANIFICAZIONE,
     UPDATE_PIANO,
     INVIO_PROTOCOLLO_GENIO,
     GET_AVVIO
@@ -25,7 +26,6 @@ const getInput = (codice) => (numeroProtocolloGenioCivile) => (
     pianoOperativo: { numeroProtocolloGenioCivile}, codice}
 }})
 const UI = enhancer(({ back, 
-    piano: {numeroProtocolloGenioCivile, codice} = {}, 
     procedureAvvio: {node: {
         uuid}} = {},
         isChecked,
@@ -45,7 +45,7 @@ const UI = enhancer(({ back,
                     </Label>
                 </FormGroup>     
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={INVIO_PROTOCOLLO_GENIO} canCommit={isChecked}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={RICHIESTA_CONFERENZA_COPIANIFICAZIONE} canCommit={isChecked}></SalvaInvia>
                 </div>
             </React.Fragment>)
     })

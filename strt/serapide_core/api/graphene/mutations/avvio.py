@@ -404,10 +404,6 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
             if _avvio_procedimento and _avvio_procedimento.stato == STATO_AZIONE.nessuna:
 
-                if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE.regione, contatto=False) and \
-                procedura_avvio.conferenza_copianificazione != TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
-                    raise Exception("Missing %s" % TIPOLOGIA_ATTORE.regione)
-
                 if procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
 
                     procedura_avvio.notifica_genio_civile = False
@@ -419,7 +415,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                     _cc.save()
 
                     _conferenza_copianificazione = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
+                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
                         attore=TIPOLOGIA_ATTORE.comune,
                         order=_order,
                         stato=STATO_AZIONE.attesa,
