@@ -482,6 +482,22 @@ mutation AvvioPiano($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
+export const RICHIESTA_CONFERENZA_COPIANIFICAZIONE = gql`
+mutation RichiestaConferenzaCopianificazione($codice: String!) {
+  richiestaConferenzaCopianificazione(uuid: $codice) {
+        errors
+        avvioAggiornato {
+              piano {
+                ...AzioniPiano
+              }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
+
+
 
 // LOCAL STATE
 // example of local state query
