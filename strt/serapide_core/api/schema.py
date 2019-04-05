@@ -143,6 +143,8 @@ class Mutation(object):
     update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()
     avvia_piano = avvio.AvvioPiano.Field()
     invio_protocollo_genio_civile = avvio.InvioProtocolloGenioCivile.Field()
+    richiesta_integrazioni = avvio.RichiestaIntegrazioni.Field()
+    integrazioni_richieste = avvio.IntegrazioniRichieste.Field()
     richiesta_conferenza_copianificazione = avvio.RichiestaConferenzaCopianificazione.Field()
     chiusura_conferenza_copianificazione = avvio.ChiusuraConferenzaCopianificazione.Field()
 
