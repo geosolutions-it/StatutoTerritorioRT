@@ -144,6 +144,7 @@ class Mutation(object):
     avvia_piano = avvio.AvvioPiano.Field()
     invio_protocollo_genio_civile = avvio.InvioProtocolloGenioCivile.Field()
     richiesta_conferenza_copianificazione = avvio.RichiestaConferenzaCopianificazione.Field()
+    chiusura_conferenza_copianificazione = avvio.ChiusuraConferenzaCopianificazione.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()

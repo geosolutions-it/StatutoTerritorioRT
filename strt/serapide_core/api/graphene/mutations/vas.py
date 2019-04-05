@@ -89,6 +89,10 @@ class CreateProceduraVAS(relay.ClientIDMutation):
                 _procedura_vas_data['id'] = _procedura_vas.id
                 _procedura_vas_data['uuid'] = _procedura_vas.uuid
                 nuova_procedura_vas = update_create_instance(_procedura_vas, _procedura_vas_data)
+
+                _piano.procedura_vas = nuova_procedura_vas
+                _piano.save()
+
                 return cls(nuova_procedura_vas=nuova_procedura_vas)
             except BaseException as e:
                 tb = traceback.format_exc()

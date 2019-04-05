@@ -114,6 +114,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('richiesta_conferenza_copianificazione', _('Richiesta Conferenza di copianificazione')),  # Comune
         ('esito_conferenza_copianificazione', _('Esito conferenza di copianificazione')),  # Regione
         # Adozione
+        ('trasmissione_adozione', _('Trasmissione Adozione')),  # Comune
         ('osservazioni_enti', _('Osservazioni Enti')),  # Enti
         ('osservazioni_regione', _('Osservazioni Regione')),  # Regione
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
@@ -160,15 +161,11 @@ AZIONI_BASE = {
             "tipologia": TIPOLOGIA_AZIONE.avvio_procedimento,
             "attore": TIPOLOGIA_ATTORE.comune
         }
+    ],
+    FASE.avvio: [
+        {
+            "tipologia": TIPOLOGIA_AZIONE.trasmissione_adozione,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
     ]
-    # FASE.avvio: [
-    #     {
-    #         "tipologia": TIPOLOGIA_AZIONE.formazione_del_piano,
-    #         "attore": TIPOLOGIA_ATTORE.comune
-    #     },
-    #     {
-    #         "tipologia": TIPOLOGIA_AZIONE.protocollo_genio_civile,
-    #         "attore": TIPOLOGIA_ATTORE.genio_civile
-    #     }
-    # ]
 }
