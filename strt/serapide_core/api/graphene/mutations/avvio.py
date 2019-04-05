@@ -336,6 +336,135 @@ class AvvioPiano(graphene.Mutation):
             return GraphQLError(_("Forbidden"), code=403)
 
 
+class RichiestaIntegrazioni(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _richiesta_integrazioni = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni).first()
+            if _richiesta_integrazioni and _richiesta_integrazioni.stato != STATO_AZIONE.nessuna:
+                if procedura_avvio.messaggio_integrazione and \
+                len(procedura_avvio.messaggio_integrazione) > 0 and \
+                procedura_avvio.richiesta_integrazioni:
+                    _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
+                    _richiesta_integrazioni.data = datetime.datetime.now(timezone.get_current_timezone())
+                    _richiesta_integrazioni.save()
+
+                    _integrazioni_richieste = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa
+                    )
+                    _integrazioni_richieste.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_integrazioni_richieste, piano=piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
+        _piano = _procedura_avvio.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'GENIO_CIVILE'):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                # Notify Users
+                """
+                TODO
+                """
+                # piano_phase_changed.send(
+                #     sender=Piano,
+                #     user=info.context.user,
+                #     piano=_piano,
+                #     message_type="piano_phase_changed")
+
+                return RichiestaIntegrazioni(
+                    avvio_aggiornato=_procedura_avvio,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class IntegrazioniRichieste(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _integrazioni_richieste = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste).first()
+            if _integrazioni_richieste and _integrazioni_richieste.stato != STATO_AZIONE.nessuna:
+                _integrazioni_richieste.stato = STATO_AZIONE.nessuna
+                _integrazioni_richieste.data = datetime.datetime.now(timezone.get_current_timezone())
+                _integrazioni_richieste.save()
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
+        _piano = _procedura_avvio.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'GENIO_CIVILE'):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                # Notify Users
+                """
+                TODO
+                """
+                # piano_phase_changed.send(
+                #     sender=Piano,
+                #     user=info.context.user,
+                #     piano=_piano,
+                #     message_type="piano_phase_changed")
+
+                return IntegrazioniRichieste(
+                    avvio_aggiornato=_procedura_avvio,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
 class InvioProtocolloGenioCivile(graphene.Mutation):
 
     class Arguments:
