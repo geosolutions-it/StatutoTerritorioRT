@@ -262,7 +262,7 @@ class UploadRisorsaCopianificazione(UploadBaseBase):
                         _success = True
                         for _risorsa in _resources:
                             RisorseCopianificazione(
-                                conferenza_copianificazione_aggiornata=_conferenza_copianificazione,
+                                conferenza_copianificazione=_conferenza_copianificazione,
                                 risorsa=_risorsa).save()
                     return UploadRisorsaCopianificazione(
                         conferenza_copianificazione_aggiornata=_conferenza_copianificazione,

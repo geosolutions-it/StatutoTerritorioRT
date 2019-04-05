@@ -28,7 +28,8 @@ const azioni = {
         "FORMAZIONE_DEL_PIANO": ["RUP", "OP"],
         "PROTOCOLLO_GENIO_CIVILE_ID": ["TMP"],
         "RICHIESTA_CONFERENZA_COPIANIFICAZIONE": ["RUP", "OP"],
-        "CONVOCAZIONE_CONFERENZA_COPIANIFICAZIONE": ["TMP"]
+        "CONVOCAZIONE_CONFERENZA_COPIANIFICAZIONE": ["TMP"],
+        "ESITO_CONFERENZA_COPIANIFICAZIONE": ["TMP"]
     }
 export const globalAuth = {
     _attore_attivo: "",

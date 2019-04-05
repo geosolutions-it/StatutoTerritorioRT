@@ -164,6 +164,21 @@ query getContatti($tipo: String){
   }
   ${FR.CONTATTO}
 `
+
+export const GET_CONFERENZA = gql`
+query GetConferenzaCopianificazione($codice: String!) {
+    conferenzaCopianificazione(piano_Codice: $codice) {
+          edges {
+              node {
+                  ...CONFERENZA
+              }
+          }
+    }
+}
+${FR.CONFERENZA_COPIANIFICAZIONE}
+`
+
+
 // MUTATION
 // Mutation per piano
 // Upload a generic risources
@@ -228,6 +243,7 @@ export const DELETE_PIANO = gql`
     }
 }
 `
+
 
 // Mutation per VAS
 
@@ -496,8 +512,33 @@ mutation RichiestaConferenzaCopianificazione($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
+// upload risorse confenrenza
+export const CONFEREZA_FILE_UPLOAD = gql`
+mutation ConferenzaUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+  uploadRisorsaCopianificazione(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      conferenzaCopianificazioneAggiornata {
+          ...CONFERENZA
+      }
+      fileName
+    }
+  }
+  ${FR.CONFERENZA_COPIANIFICAZIONE}
+`
 
 
+
+export const DELETE_RISORSA_COPIANIFICAZIONE = gql`
+mutation($id: ID!, $codice: String!) {
+    deleteRisorsaCopianificazione(risorsaId: $id, codice: $codice){
+        success
+        conferenzaCopianificazioneAggiornata {
+            ...CONFERENZA
+        }
+    }
+}
+${FR.CONFERENZA_COPIANIFICAZIONE}
+`
 
 // LOCAL STATE
 // example of local state query

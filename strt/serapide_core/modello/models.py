@@ -719,7 +719,11 @@ class RisorseCopianificazione(models.Model):
 @receiver(post_delete, sender=Contatto)
 def delete_roles_and_users(sender, instance, **kwargs):
     if instance.user is not None:
-        instance.user.delete()
+        try:
+            instance.user.delete()
+        except:
+            pass
+        
 
 
 @receiver(pre_delete, sender=Piano)
