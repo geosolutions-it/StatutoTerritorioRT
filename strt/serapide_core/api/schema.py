@@ -65,6 +65,8 @@ class Query(object):
 
     consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
 
+    conferenza_copianificazione = DjangoFilterConnectionField(types.ConferenzaCopianificazioneNode)
+
     contatti = DjangoFilterConnectionField(types.ContattoNode,
                                            filterset_class=filters.EnteContattoMembershipFilter)
 

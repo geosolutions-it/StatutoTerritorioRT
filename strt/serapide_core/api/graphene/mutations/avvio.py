@@ -403,27 +403,34 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
             _avvio_procedimento = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
             if _avvio_procedimento and _avvio_procedimento.stato == STATO_AZIONE.nessuna:
-
                 if procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
 
-                    procedura_avvio.notifica_genio_civile = False
-                    procedura_avvio.save()
+                    _richiesta_cc = piano.azioni.filter(
+                        tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione).first()
 
-                    _cc = ConferenzaCopianificazione.objects.get(piano=piano)
-                    _cc.data_richiesta_conferenza = datetime.datetime.now(timezone.get_current_timezone())
-                    _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
-                    _cc.save()
+                    if _richiesta_cc and _richiesta_cc.stato != STATO_AZIONE.nessuna:
 
-                    _conferenza_copianificazione = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
-                        attore=TIPOLOGIA_ATTORE.comune,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=procedura_avvio.data_scadenza_risposta
-                    )
-                    _conferenza_copianificazione.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
+                        _richiesta_cc.stato == STATO_AZIONE.nessuna
+                        _richiesta_cc.save()
+
+                        procedura_avvio.notifica_genio_civile = False
+                        procedura_avvio.save()
+
+                        _cc = ConferenzaCopianificazione.objects.get(piano=piano)
+                        _cc.data_richiesta_conferenza = datetime.datetime.now(timezone.get_current_timezone())
+                        _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
+                        _cc.save()
+
+                        _conferenza_copianificazione = Azione(
+                            tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
+                            attore=TIPOLOGIA_ATTORE.comune,
+                            order=_order,
+                            stato=STATO_AZIONE.attesa,
+                            data=procedura_avvio.data_scadenza_risposta
+                        )
+                        _conferenza_copianificazione.save()
+                        _order += 1
+                        AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
 
     @classmethod
     def mutate(cls, root, info, **input):
