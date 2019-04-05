@@ -145,3 +145,4 @@ class ProceduraAvvioUpdateInput(InputObjectType):
     garante_pec = graphene.String(required=False)
     notifica_genio_civile = graphene.Boolean(required=False)
     richiesta_integrazioni = graphene.Boolean(required=False)
+    messaggio_integrazione = graphene.String(required=False)

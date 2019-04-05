@@ -670,6 +670,7 @@ class ProceduraAvvio(models.Model):
 
     notifica_genio_civile = models.BooleanField(null=False, blank=False, default=False)
     richiesta_integrazioni = models.BooleanField(null=False, blank=False, default=False)
+    messaggio_integrazione = models.TextField(null=True, blank=True)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
 

@@ -223,6 +223,7 @@ fragment AVVIO on ProceduraAvvioNode {
         garanteNominativo
         garantePec
         richiestaIntegrazioni
+        messaggioIntegrazione
         risorse(archiviata: false) {
             ...Risorse
         }
