@@ -10,6 +10,7 @@
 #########################################################################
 
 import uuid
+import rules
 import logging
 from datetime import datetime
 
@@ -26,6 +27,7 @@ from strt_users.models import (
 )
 
 from .enums import (FASE,
+                    FASE_NEXT,
                     STATO_AZIONE,
                     TIPOLOGIA_VAS,
                     TIPOLOGIA_PIANO,
@@ -177,35 +179,33 @@ class Contatto(models.Model):
             else:
                 attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
 
-            if attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+            if attore in \
+            (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown],
+             TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.comune],
+             TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
                 membership = None
                 if token:
                     membership = user.memberships.all().first()
                 elif organization:
                     membership = user.memberships.get(organization__code=organization)
-                if membership and membership.organization and membership.organization.type:
+                if attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] and \
+                membership and membership.organization and membership.organization.type:
                     attore = membership.organization.type.name
-                else:
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
 
-                if attore in \
-                (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown],
-                 TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.comune],
-                 TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
-                    for contact in Contatto.objects.filter(user=user):
-                        if contact.tipologia == 'acvas':
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
-                        elif contact.tipologia == 'sca':
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
-                        elif contact.tipologia == 'generico' and \
-                        attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-                        elif contact.tipologia == 'ente' and \
-                        (attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] or
-                         attore != TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
-                        elif contact.tipologia == 'genio_civile':
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
+                for contact in Contatto.objects.filter(user=user):
+                    if contact.tipologia == 'acvas':
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
+                    elif contact.tipologia == 'sca':
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
+                    elif contact.tipologia == 'generico' and \
+                    attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+                    elif contact.tipologia == 'ente' and \
+                    (attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] or
+                     attore != TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
+                    elif contact.tipologia == 'genio_civile':
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
 
         return attore
 
@@ -304,6 +304,13 @@ class Piano(models.Model):
     conformazione_pit_ppr_url = models.URLField(null=True, blank=True, default='')
     monitoraggio_urbanistico_url = models.URLField(null=True, blank=True, default='')
 
+    procedura_vas = models.ForeignKey(
+        'ProceduraVAS',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='vas')
+
     autorita_competente_vas = models.ManyToManyField(
         Contatto,
         related_name='autorita_competente_vas',
@@ -354,6 +361,18 @@ class Piano(models.Model):
         blank=True,
         null=True
     )
+
+    @property
+    def next_phase(self):
+        return FASE_NEXT[self.fase.nome]
+
+    @property
+    def is_eligible_for_promotion(self):
+        _res = rules.test_rule('strt_core.api.fase_{next}_completa'.format(
+                               next=self.next_phase),
+                               self,
+                               self.procedura_vas)
+        return _res
 
     class Meta:
         db_table = "strt_core_piano"
@@ -650,6 +669,8 @@ class ProceduraAvvio(models.Model):
     garante_pec = models.EmailField(null=True, blank=True)
 
     notifica_genio_civile = models.BooleanField(null=False, blank=False, default=False)
+    richiesta_integrazioni = models.BooleanField(null=False, blank=False, default=False)
+    messaggio_integrazione = models.TextField(null=True, blank=True)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
 
@@ -692,6 +713,7 @@ class ConferenzaCopianificazione(models.Model):
 
     data_richiesta_conferenza = models.DateTimeField(null=True, blank=True)
     data_scadenza_risposta = models.DateTimeField(null=True, blank=True)
+    data_chiusura_conferenza = models.DateTimeField(null=True, blank=True)
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 

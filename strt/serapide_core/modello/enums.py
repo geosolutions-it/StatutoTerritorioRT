@@ -108,12 +108,15 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_elaborati_vas', _('Upload elaborati VAS')),  # Comune
         # Avvio
         ('avvio_procedimento', _('Avvio del Procedimento')),  # Comune
+        ('richiesta_integrazioni', _('Richiesta Integrazioni')),  # Regione
+        ('integrazioni_richieste', _('Integrazioni Richieste')),  # Comune
         ('formazione_del_piano', _('Formazione del Piano')),  # Comune
         ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Comune
         ('protocollo_genio_civile_id', _('Protocollo N.')),  # Genio Civile
         ('richiesta_conferenza_copianificazione', _('Richiesta Conferenza di copianificazione')),  # Comune
         ('esito_conferenza_copianificazione', _('Esito conferenza di copianificazione')),  # Regione
         # Adozione
+        ('trasmissione_adozione', _('Trasmissione Adozione')),  # Comune
         ('osservazioni_enti', _('Osservazioni Enti')),  # Enti
         ('osservazioni_regione', _('Osservazioni Regione')),  # Regione
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
@@ -160,15 +163,11 @@ AZIONI_BASE = {
             "tipologia": TIPOLOGIA_AZIONE.avvio_procedimento,
             "attore": TIPOLOGIA_ATTORE.comune
         }
+    ],
+    FASE.avvio: [
+        {
+            "tipologia": TIPOLOGIA_AZIONE.trasmissione_adozione,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
     ]
-    # FASE.avvio: [
-    #     {
-    #         "tipologia": TIPOLOGIA_AZIONE.formazione_del_piano,
-    #         "attore": TIPOLOGIA_ATTORE.comune
-    #     },
-    #     {
-    #         "tipologia": TIPOLOGIA_AZIONE.protocollo_genio_civile,
-    #         "attore": TIPOLOGIA_ATTORE.genio_civile
-    #     }
-    # ]
 }

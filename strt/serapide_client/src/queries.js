@@ -498,6 +498,34 @@ mutation AvvioPiano($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
+
+export const RICHIESTA_INTEGRAZIONI = gql`
+mutation RichiestaIntegrazioni($codice: String!) {
+  richiestaIntegrazioni(uuid: $codice) {
+        errors
+        avvioAggiornato {
+              piano {
+                ...AzioniPiano
+              }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+export const INTEGRAZIONI_RICHIESTE = gql`
+mutation IntegrazioniRichieste($codice: String!) {
+  integrazioniRichieste(uuid: $codice) {
+        errors
+        avvioAggiornato {
+              piano {
+                ...AzioniPiano
+              }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
 export const RICHIESTA_CONFERENZA_COPIANIFICAZIONE = gql`
 mutation RichiestaConferenzaCopianificazione($codice: String!) {
   richiestaConferenzaCopianificazione(uuid: $codice) {
@@ -539,6 +567,24 @@ mutation($id: ID!, $codice: String!) {
 }
 ${FR.CONFERENZA_COPIANIFICAZIONE}
 `
+
+export const CHIUSURA_CONFERENZA_COPIANIFICAZIONE = gql `
+mutation ChiusuraConferenzaCopianificazione($codice: String!) {
+    chiusuraConferenzaCopianificazione(uuid: $codice) {
+      errors
+        avvioAggiornato {
+              piano {
+                ...AzioniPiano
+              }
+        }
+    
+  }
+}
+${FR.AZIONI_PIANO}
+
+
+`
+
 
 // LOCAL STATE
 // example of local state query

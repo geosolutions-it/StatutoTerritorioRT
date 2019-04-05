@@ -18,9 +18,9 @@ import UploadElaboratiVAS from './actions/UploadElaboratiVAS'
 import GenioCivile from './actions/GenioCivile'
 import FormazionePiano from './actions/FormazionePiano'
 import RichiestaConferenza from './actions/RichiestaConferenza'
-import ConvocazioneConferenza from './actions/ConvocazioneConferenza'
+import IntegrazioniRichieste from './actions/IntegrazioniRichieste'
 import SvolgimentoConferenza from './actions/SvolgimentoConfernza'
-
+import RichiestaIntegrazioni from './actions/RichiestaIntegrazioni'
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
 import {INVIO_PARERI_VAS} from '../queries'
@@ -90,11 +90,14 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <Route path={`${path}/richiesta_conferenza_copianificazione`} >
                     <RichiestaConferenza piano={piano} back={history.goBack}/>
                 </Route>
-                <Route path={`${path}/convocazione_conferenza_copianificazione`} >
-                    <ConvocazioneConferenza piano={piano} back={history.goBack}/>
-                </Route>
                 <Route path={`${path}/esito_conferenza_copianificazione`} >
                     <SvolgimentoConferenza piano={piano} codicePiano={code} back={history.goBack}/>
+                </Route>
+                <Route path={`${path}/richiesta_integrazioni`} >
+                    <RichiestaIntegrazioni piano={piano} codicePiano={code} back={history.goBack}/>
+                </Route>
+                <Route path={`${path}/integrazioni_richieste`} >
+                    <IntegrazioniRichieste piano={piano}  back={history.goBack}/>
                 </Route>
                 { action && (
                 <Route path={path}>

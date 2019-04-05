@@ -55,14 +55,13 @@ from serapide_core.modello.models import (
 
 from serapide_core.modello.enums import (
     FASE,
-    FASE_NEXT,
     AZIONI_BASE,
     STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
-    TIPOLOGIA_ATTORE,
 )
 
+from . import fase
 from .. import types
 from .. import inputs
 
@@ -143,6 +142,9 @@ class CreatePiano(relay.ClientIDMutation):
                 _procedura_avvio.piano = nuovo_piano
                 _procedura_avvio.ente = nuovo_piano.ente
                 _procedura_avvio.save()
+
+                nuovo_piano.procedura_vas = _procedura_vas
+                nuovo_piano.save()
 
                 for _ap in _azioni_piano:
                     _ap.save()
@@ -438,138 +440,12 @@ class PromozionePiano(graphene.Mutation):
     piano_aggiornato = graphene.Field(types.PianoNode)
 
     @classmethod
-    def get_next_phase(cls, fase):
-        return FASE_NEXT[fase.nome]
-
-    @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas):
-
-        # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            # _a.stato = STATO_AZIONE.nessuna
-            _a.data = datetime.datetime.now(timezone.get_current_timezone())
-            _a.save()
-            _order += 1
-
-        # - Attach Actions Templates for the Next "Fase"
-        for _a in AZIONI_BASE[fase.nome]:
-            _azione = Azione(
-                tipologia=_a["tipologia"],
-                attore=_a["attore"],
-                order=_order,
-                stato=STATO_AZIONE.necessaria
-            )
-            _azione.save()
-            _order += 1
-            AzioniPiano.objects.get_or_create(azione=_azione, piano=piano)
-
-        # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _creato = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
-            if _creato.stato != STATO_AZIONE.necessaria:
-                raise Exception("Stato Inconsistente!")
-
-            if _creato:
-                _creato.stato = STATO_AZIONE.nessuna
-                _creato.data = datetime.datetime.now(timezone.get_current_timezone())
-                _creato.save()
-
-            _verifica_vas = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas).first()
-            if _verifica_vas:
-                if procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
-                    _verifica_vas.stato = STATO_AZIONE.nessuna
-
-                elif procedura_vas.tipologia in \
-                (TIPOLOGIA_VAS.procedimento, TIPOLOGIA_VAS.procedimento_semplificato):
-                    _verifica_vas.stato = STATO_AZIONE.nessuna
-                    _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
-                    _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
-                    datetime.timedelta(days=_verifica_vas_expire_days)
-
-                    _avvio_consultazioni_sca_ac_expire_days = 10
-                    _avvio_consultazioni_sca = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
-                        attore=TIPOLOGIA_ATTORE.ac,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=datetime.datetime.now(timezone.get_current_timezone()) +
-                        datetime.timedelta(days=_avvio_consultazioni_sca_ac_expire_days)
-                    )
-                    _avvio_consultazioni_sca.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
-
-                elif procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
-                    _verifica_vas.stato = STATO_AZIONE.nessuna
-
-                    _emissione_provvedimento_verifica_expire_days = 30
-                    _emissione_provvedimento_verifica = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
-                        attore=TIPOLOGIA_ATTORE.ac,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=datetime.datetime.now(timezone.get_current_timezone()) +
-                        datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
-                    )
-                    _emissione_provvedimento_verifica.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
-
-                elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
-                    # _verifica_vas.stato = STATO_AZIONE.attesa
-                    _verifica_vas.stato = STATO_AZIONE.nessuna
-                    _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
-                    _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
-                    datetime.timedelta(days=_verifica_vas_expire_days)
-
-                    _pareri_vas_expire_days = getattr(settings, 'PARERI_VERIFICA_VAS_EXPIRE_DAYS', 30)
-                    _pareri_sca = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca,
-                        attore=TIPOLOGIA_ATTORE.sca,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=datetime.datetime.now(timezone.get_current_timezone()) +
-                        datetime.timedelta(days=_pareri_vas_expire_days)
-                    )
-                    _pareri_sca.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
-
-                    _emissione_provvedimento_verifica_expire_days = 90
-                    _emissione_provvedimento_verifica = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
-                        attore=TIPOLOGIA_ATTORE.ac,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=datetime.datetime.now(timezone.get_current_timezone()) +
-                        datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
-                    )
-                    _emissione_provvedimento_verifica.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
-
-                _verifica_vas.save()
-
-        elif fase.nome == FASE.avvio:
-            _genio_civile = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
-            if _genio_civile:
-                _genio_civile.stato = STATO_AZIONE.attesa
-                _genio_civile.save()
-
-    @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
-        _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                _next_fase = cls.get_next_phase(_piano.fase)
-                if rules.test_rule('strt_core.api.fase_{next}_completa'.format(
-                                   next=_next_fase),
-                                   _piano,
-                                   _procedura_vas):
-                    _piano.fase = _fase = Fase.objects.get(nome=_next_fase)
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -579,8 +455,7 @@ class PromozionePiano(graphene.Mutation):
                         message_type="piano_phase_changed")
 
                     _piano.save()
-
-                    cls.update_actions_for_phase(_fase, _piano, _procedura_vas)
+                    fase.promuovi_piano(_fase, _piano)
 
                     return PromozionePiano(
                         piano_aggiornato=_piano,
@@ -631,6 +506,19 @@ class FormazionePiano(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+
+                    if _piano.is_eligible_for_promotion:
+                        _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                        # Notify Users
+                        piano_phase_changed.send(
+                            sender=Piano,
+                            user=info.context.user,
+                            piano=_piano,
+                            message_type="piano_phase_changed")
+
+                        _piano.save()
+                        fase.promuovi_piano(_fase, _piano)
 
                     return FormazionePiano(
                         piano_aggiornato=_piano,

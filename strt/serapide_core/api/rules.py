@@ -27,13 +27,6 @@ from .auth import (
 # ############################################################################ #
 # RULES
 # ############################################################################ #
-"""
-- TODO:
-    . Add "notifications" on change fase operations
-    . Add backend consistency rules-checks accordingly to the fase, e.g.:
-        * Date, Description, Delibera ... cannot be changed after "DRAFT" fase
-        ...
-"""
 rules.add_rule(
     'strt_core.api.can_access_private_area',
     is_recognizable
@@ -71,4 +64,12 @@ rules.add_rule(
     piano_rules.is_draft & piano_rules.has_data_delibera & piano_rules.has_description &
     piano_rules.has_delibera_comunale & piano_rules.has_soggetto_proponente &
     piano_rules.has_procedura_vas & vas_rules.procedura_vas_is_valid
+)
+
+rules.add_rule(
+    'strt_core.api.fase_avvio_completa',
+    ~piano_rules.has_pending_alerts &
+    piano_rules.is_anagrafica &
+    piano_rules.protocollo_genio_inviato &
+    piano_rules.formazione_piano_conclusa
 )

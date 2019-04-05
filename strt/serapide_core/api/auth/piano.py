@@ -14,7 +14,8 @@ import rules
 
 from serapide_core.modello.enums import (
     FASE,
-    STATO_AZIONE)
+    STATO_AZIONE,
+    TIPOLOGIA_AZIONE,)
 
 from serapide_core.modello.models import (
     Piano,
@@ -79,6 +80,27 @@ def has_procedura_vas(piano):
 @rules.predicate
 def has_procedura_avvio(piano):
     return ProceduraAvvio.objects.filter(piano=piano).count() == 1
+
+
+@rules.predicate
+def protocollo_genio_inviato(piano):
+    _protocollo_genio_civile = piano.azioni.filter(
+        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
+    _protocollo_genio_civile_id = piano.azioni.filter(
+        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id).first()
+
+    return (_protocollo_genio_civile and _protocollo_genio_civile_id and
+            _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and
+            _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna)
+
+
+@rules.predicate
+def formazione_piano_conclusa(piano):
+    _formazione_del_piano = piano.azioni.filter(
+        tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
+
+    return (_formazione_del_piano and
+            _formazione_del_piano.stato == STATO_AZIONE.nessuna)
 
 
 @rules.predicate
