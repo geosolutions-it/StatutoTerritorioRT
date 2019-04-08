@@ -200,6 +200,10 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
                 procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
+
+                    procedura_vas_aggiornata.conclusa = True
+                    procedura_vas_aggiornata.save()
+
                     if _piano.is_eligible_for_promotion:
                         _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
 
@@ -834,7 +838,8 @@ class UploadElaboratiVAS(graphene.Mutation):
                 _upload_elaborati_vas.data = datetime.datetime.now(timezone.get_current_timezone())
                 _upload_elaborati_vas.save()
 
-                # TODO: what's next?
+                procedura_vas.conclusa = True
+                procedura_vas.save()
 
     @classmethod
     def mutate(cls, root, info, **input):

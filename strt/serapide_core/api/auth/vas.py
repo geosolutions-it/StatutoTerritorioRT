@@ -102,4 +102,18 @@ def procedura_vas_is_valid(piano, procedura_vas):
                 return True
             else:
                 return False
+
+        elif piano.fase.nome == FASE.anagrafica:
+            if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
+                return procedura_vas.conclusa
+            elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
+                return procedura_vas.conclusa
+            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento_semplificato:
+                return procedura_vas.conclusa
+            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
+                return procedura_vas.conclusa
+            elif procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+                return True
+            else:
+                return False
     return False

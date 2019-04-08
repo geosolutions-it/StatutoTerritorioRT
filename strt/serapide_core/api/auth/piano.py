@@ -89,8 +89,13 @@ def protocollo_genio_inviato(piano):
     _protocollo_genio_civile_id = piano.azioni.filter(
         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id).first()
 
-    return (_protocollo_genio_civile and _protocollo_genio_civile_id and
-            _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and
+    if not _protocollo_genio_civile:
+        return False
+
+    if not _protocollo_genio_civile_id:
+        return False
+
+    return (_protocollo_genio_civile.stato == STATO_AZIONE.nessuna and
             _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna)
 
 
@@ -99,8 +104,16 @@ def formazione_piano_conclusa(piano):
     _formazione_del_piano = piano.azioni.filter(
         tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
 
-    return (_formazione_del_piano and
-            _formazione_del_piano.stato == STATO_AZIONE.nessuna)
+    if not _formazione_del_piano:
+        return False
+
+    return _formazione_del_piano.stato == STATO_AZIONE.nessuna
+
+
+@rules.predicate
+def avvio_piano_conclusa(piano):
+    _avvio = ProceduraAvvio.objects.get(piano=piano)
+    return _avvio.conclusa
 
 
 @rules.predicate

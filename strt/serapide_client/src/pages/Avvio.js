@@ -25,6 +25,8 @@ const UI = enhancers(({
         } = {}} = {}, 
     piano: {
         codice,
+        numeroProtocolloGenioCivile,
+        dataProtocolloGenioCivile,
         autoritaIstituzionali: {edges: aut =[]} = {},
         altriDestinatari: {edges: dest = []} = {},
         ente,
@@ -134,9 +136,28 @@ const UI = enhancers(({
                     </div>
                 </TabPane>
                 <TabPane tabId="genio">
-                    <div className="row">
-                        Genio
+                    <div className="row pt-4">
+                    <div className="col-12 d-flex">
+                        <i className="material-icons text-serapide self-align-center">check_circle</i>
+                        <span className="pl-1">NOTIFICA DEL GENIO CIVILE</span>
                     </div>
+                    </div>
+                    <div className="row pt-4">
+                    <div className="col-12 d-flex">
+                        <i className="material-icons text-serapide self-align-center">check_circle</i>
+                        <span className="pl-1">RICCEZIONE PROTOCOLLO DAL GENIO CIVILE</span>
+                    </div>
+                    
+                    <div className="col-12 pt-3 pl-4 text-serapide">
+                    {numeroProtocolloGenioCivile}
+                    </div>
+                    <div className="col-12 pt-3 pl-4  text-serapide">
+                    {dataProtocolloGenioCivile}
+                    </div>
+                    </div>
+                    
+                    
+                    
                 </TabPane>
             </TabContent>
                 

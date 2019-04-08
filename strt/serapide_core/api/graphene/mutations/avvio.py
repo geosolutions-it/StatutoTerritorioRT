@@ -387,7 +387,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
 
                 # Notify Users
                 """
-                TODO
+                TODO: Messaggio RichiestaIntegrazioni :TODO
                 """
                 # piano_phase_changed.send(
                 #     sender=Piano,
@@ -500,6 +500,13 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                     _protocollo_genio_civile_id.stato = STATO_AZIONE.nessuna
                     _protocollo_genio_civile_id.data = datetime.datetime.now(timezone.get_current_timezone())
                     _protocollo_genio_civile_id.save()
+
+                    _formazione_del_piano = piano.azioni.filter(
+                        tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
+
+                    if _formazione_del_piano and _formazione_del_piano.stato == STATO_AZIONE.nessuna:
+                        procedura_avvio.conclusa = True
+                        procedura_avvio.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
