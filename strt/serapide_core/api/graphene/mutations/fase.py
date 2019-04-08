@@ -146,5 +146,16 @@ def promuovi_piano(fase, piano):
             _verifica_vas.save()
 
     elif fase.nome == FASE.avvio:
-        # Nothing to do here
-        pass
+        _richiesta_integrazioni = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni).first()
+
+        if _richiesta_integrazioni and _richiesta_integrazioni.stato != STATO_AZIONE.nessuna:
+            _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
+            _richiesta_integrazioni.save()
+
+        _integrazioni_richieste = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste).first()
+
+        if _integrazioni_richieste and _integrazioni_richieste.stato != STATO_AZIONE.nessuna:
+            _integrazioni_richieste.stato = STATO_AZIONE.nessuna
+            _integrazioni_richieste.save()

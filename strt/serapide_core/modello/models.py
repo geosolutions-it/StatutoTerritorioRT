@@ -459,6 +459,8 @@ class ProceduraVAS(models.Model):
     pubblicazione_provvedimento_verifica_ap = models.URLField(null=True, blank=True)
     pubblicazione_provvedimento_verifica_ac = models.URLField(null=True, blank=True)
 
+    conclusa = models.BooleanField(null=False, blank=False, default=False)
+
     risorse = models.ManyToManyField(Risorsa, through='RisorseVas')
 
     ente = models.ForeignKey(
@@ -671,6 +673,8 @@ class ProceduraAvvio(models.Model):
     notifica_genio_civile = models.BooleanField(null=False, blank=False, default=False)
     richiesta_integrazioni = models.BooleanField(null=False, blank=False, default=False)
     messaggio_integrazione = models.TextField(null=True, blank=True)
+
+    conclusa = models.BooleanField(null=False, blank=False, default=False)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
 

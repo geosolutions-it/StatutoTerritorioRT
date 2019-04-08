@@ -496,6 +496,18 @@ class FormazionePiano(graphene.Mutation):
                 _formazione_del_piano.data = datetime.datetime.now(timezone.get_current_timezone())
                 _formazione_del_piano.save()
 
+                _protocollo_genio_civile = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
+
+                _protocollo_genio_civile_id = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id).first()
+
+                if _protocollo_genio_civile and _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and \
+                _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna:
+                    procedura_avvio = ProceduraAvvio.objects.get(piano=piano)
+                    procedura_avvio.conclusa = True
+                    procedura_avvio.save()
+
     @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
