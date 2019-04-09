@@ -52,6 +52,7 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_RISORSA,
     TIPOLOGIA_VAS,
+    FASE_AZIONE,
     TIPOLOGIA_AZIONE,
     TOOLTIP_AZIONE
 )
@@ -113,8 +114,12 @@ class UserMessageType(DjangoObjectType):
 
 class AzioneNode(DjangoObjectType):
 
+    fase = graphene.String()
     label = graphene.String()
     tooltip = graphene.String()
+
+    def resolve_fase(self, info, **args):
+        return FASE_AZIONE[self.tipologia] if self.tipologia in FASE_AZIONE else None
 
     def resolve_label(self, info, **args):
         return TIPOLOGIA_AZIONE[self.tipologia] if self.tipologia in TIPOLOGIA_AZIONE else None

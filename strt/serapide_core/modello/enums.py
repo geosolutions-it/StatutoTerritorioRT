@@ -122,6 +122,34 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
     )
 
+FASE_AZIONE = Choices(
+        ('unknown', _('UNKNOWN')),
+        ('creato_piano', 'draft'),
+        # Procedura VAS
+        ('richiesta_verifica_vas', 'anagrafica'),
+        ('pareri_verifica_sca', 'anagrafica'),
+        ('emissione_provvedimento_verifica', 'anagrafica'),
+        ('pubblicazione_provvedimento_verifica', 'anagrafica'),
+        ('avvio_consultazioni_sca', 'anagrafica'),
+        ('pareri_sca', 'anagrafica'),
+        ('avvio_esame_pareri_sca', 'anagrafica'),
+        ('upload_elaborati_vas', 'anagrafica'),
+        # Avvio
+        ('avvio_procedimento', 'anagrafica'),
+        ('richiesta_integrazioni', 'anagrafica'),
+        ('integrazioni_richieste', 'anagrafica'),
+        ('formazione_del_piano', 'anagrafica'),
+        ('protocollo_genio_civile', 'anagrafica'),
+        ('protocollo_genio_civile_id', 'anagrafica'),
+        ('richiesta_conferenza_copianificazione', 'anagrafica'),
+        ('esito_conferenza_copianificazione', 'anagrafica'),
+        # Adozione
+        ('trasmissione_adozione', 'avvio'),
+        ('osservazioni_enti', 'avvio'),
+        ('osservazioni_regione', 'avvio'),
+        ('upload_osservazioni_privati', 'avvio'),
+    )
+
 TOOLTIP_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
         # Procedura VAS
