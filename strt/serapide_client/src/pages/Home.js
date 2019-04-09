@@ -30,6 +30,7 @@ import {INVIO_PARERI_VAS} from '../queries'
 const getAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
+const showAdozione = (f) => f=== "AVVIO" || f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, piano = {}, azioni = []}) => {
     
@@ -38,6 +39,8 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
     const goToAction = (action = "") => {
         history.push(`${url}/${action.toLowerCase().replace(" ","_")}`)
     }
+    const {fase: {nome: nomeFase}} = piano
+    console.log(nomeFase)
     return (
     <div className="d-flex pb-4 pt-5">
         <div className={classNames("d-flex flex-column flex-1", {"flex-fill": !action})}>
@@ -47,7 +50,14 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_on</i><span>In attesa di risposta da altri attori</span></span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_off</i><span>Nessuna azione richiesta</span></span>
             </div>
-            <FaseSwitch className="mt-3" initValue={true} fase="avvio" goToSection={() => history.push(url.replace("home","avvio"))}>
+
+            {showAdozione(nomeFase) && (<FaseSwitch className="mt-3" initValue={nomeFase==="AVVIO"} fase="adozione" goToSection={() => history.push(url.replace("home","adozione"))}>
+                <div className="py-4">
+                    <Azioni azioni={azioni} filtroFase="avvio" onExecute={goToAction}/>
+                </div>
+            </FaseSwitch>)}
+
+            <FaseSwitch className="mt-3" initValue={nomeFase==="ANAGRAFICA"} fase="avvio" goToSection={() => history.push(url.replace("home","avvio"))}>
                 <div className="py-4">
                     <Azioni azioni={azioni} onExecute={goToAction}/>
                 </div>

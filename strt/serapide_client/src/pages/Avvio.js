@@ -8,7 +8,7 @@
 import React from 'react'
 import Risorsa from '../components/Resource'
 import {formatDate, showError} from '../utils'
-import {GET_AVVIO} from '../queries'
+import {GET_AVVIO, GET_CONFERENZA} from '../queries'
 import {Query} from 'react-apollo'
 import {withControllableState} from '../enhancers/utils'
 import {Nav, NavItem,NavLink, TabContent,TabPane} from 'reactstrap'
@@ -32,9 +32,8 @@ const UI = enhancers(({
         ente,
         fase,
         risorse: {edges: risorsePiano = []},
-        dataDelibera,
-        
-        redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl} = {}
+        dataDelibera
+    } = {}
     , toggleSection, section} = {}) => {
         
         const {node: delibera} = risorsePiano.filter(({node: n}) => n.tipo === "delibera").shift() || {}
@@ -43,6 +42,7 @@ const UI = enhancers(({
         const {node: programma} = risorseAvvio.filter(({node: {tipo}}) => tipo === "programma_attivita").shift() || {}
         const {node: garante } = risorseAvvio.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").shift() || {}
         const allegati = risorseAvvio.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node) 
+        const integrazioni = risorseAvvio.filter(({node: {tipo}}) => tipo === "integrazioni").map(({node}) => node) 
     return (
         <div className="d-flex flex-column pb-4 pt-5">
             <div className="d-flex border-serapide border-top py-5">
@@ -72,13 +72,19 @@ const UI = enhancers(({
                 <div className="col-12 py-2">
                     <Risorsa fileSize={false} useLabel resource={garante} isLocked={true}/> 
                 </div></React.Fragment>) : (<div className="col-12 py-2">Nessun elaborato presente</div>)}
-
-                <div className="col-7 pt-4 m-auto">ALTRI ALLEGATI
+                {integrazioni.length > 0 && (<div className="col-12 pt-4">INTEGRAZIONI
+                {integrazioni.map(doc => (
+                    <div key={doc.uuid} className="col-12 px-0 py-2">
+                        <Risorsa fileSize={false}  resource={doc} isLocked={true}/> 
+                </div>))}
+                </div>)}
+                <div className="col-7 pt-4">ALTRI ALLEGATI
                 {allegati.map(doc => (
                     <div key={doc.uuid} className="col-12 px-0 py-2">
                         <Risorsa fileSize={false}  resource={doc} isLocked={true}/> 
                 </div>))}
                 </div>
+                
                 <div className="col-5 pt-4">GARANTE DELL'INFORMAZIONE E DELLA PARTECIAPZIONE
                 <div className="col-12 pt-2 pb-1">{garanteNominativo}</div>
                 <div className="col-12">{garantePec}</div>
@@ -131,9 +137,37 @@ const UI = enhancers(({
                     </div>)}
                 </TabPane>
                 <TabPane tabId="conferenza">
-                    <div className="row">
-                        Conferenza
-                    </div>
+                {section === 'conferenza' && (
+                    <Query query={GET_CONFERENZA} variables={{codice}} onError={showError}>
+                    {({loading, data: {conferenzaCopianificazione: {edges = []} = []} = {}, error}) => {
+                        if(loading) {
+                            return (
+                                <div className="flex-fill d-flex justify-content-center">
+                                    <div className="spinner-grow " role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </div>)
+                        }
+                        const {node: {dataRichiestaConferenza, risorse: {edges: elabConf = []}} = {}} = edges[0] || {}
+                        const elaboratiConferenza =  elabConf.filter(({node: {tipo, user = {}}}) => tipo === 'elaborati_conferenza').map(({node}) => node)
+                        return (
+                        <div className="row pt-4">
+                            <div className="col-8 d-flex">
+                                <i className="material-icons text-serapide self-align-center">check_circle</i>
+                                <span className="pl-1">RICHIESTA CONFERENZA DI COPIANIFICAZIONE</span>
+                            </div>
+                            <div className="col-4">{!!dataRichiestaConferenza ? formatDate(dataRichiestaConferenza) : "Nessuna richiesta"}</div>
+                            <div class="w-100 border-top my-3 border-serapide"></div>
+                            <div className="col-12 d-flex">
+                                <i className="material-icons text-serapide self-align-center">check_circle</i>
+                                <span className="pl-1 pb-2">ESITO</span>
+                            </div>
+                            {elaboratiConferenza.map(doc => (
+                                <div key={doc.uuid} className="col-12 px-0 py-2">
+                                    <Risorsa className="border-0" fileSize={false}  resource={doc} isLocked={true}/> 
+                                </div>))}
+                        </div>)}}
+                    </Query>)}
                 </TabPane>
                 <TabPane tabId="genio">
                     <div className="row pt-4">
@@ -141,8 +175,9 @@ const UI = enhancers(({
                         <i className="material-icons text-serapide self-align-center">check_circle</i>
                         <span className="pl-1">NOTIFICA DEL GENIO CIVILE</span>
                     </div>
+                    
                     </div>
-                    <div className="row pt-4">
+                    {!!numeroProtocolloGenioCivile && (<div className="row pt-4">
                     <div className="col-12 d-flex">
                         <i className="material-icons text-serapide self-align-center">check_circle</i>
                         <span className="pl-1">RICCEZIONE PROTOCOLLO DAL GENIO CIVILE</span>
@@ -152,9 +187,9 @@ const UI = enhancers(({
                     {numeroProtocolloGenioCivile}
                     </div>
                     <div className="col-12 pt-3 pl-4  text-serapide">
-                    {dataProtocolloGenioCivile}
+                    {!!dataProtocolloGenioCivile && formatDate(dataProtocolloGenioCivile)}
                     </div>
-                    </div>
+                    </div>)}
                     
                     
                     

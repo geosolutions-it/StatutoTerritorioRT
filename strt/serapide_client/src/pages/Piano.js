@@ -38,7 +38,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                         </div>
                     )
             } else if(edges.length === 0) {
-                toast.error(`Impossibile trovare il piano: ${code}`,  {autoClose: true})
+                toast.error(`Impossibile trovare il piano: ${code}`,  {autoClose: true, onClose: () => (window.location.assign(window.location.href.replace(pathname, "")))})
                 return <div></div>
             }
             const {node: piano = {}} = edges[0] || {}

@@ -29,7 +29,7 @@ const getInput = (uuid) => (val) => ({
 
 const UI = ({
     back, 
-    proceduraAvvio: {node: {uuid: avvioId,richiestaIntegrazioni} = {}} = {},
+    proceduraAvvio: {node: {uuid: avvioId, richiestaIntegrazioni} = {}} = {},
     conferenza: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
     }) => {    
         const docsAllegati =  resources.filter(({node: {tipo, user = {}}}) => tipo === 'elaborati_conferenza').map(({node}) => node)
@@ -60,9 +60,12 @@ const UI = ({
     }
 
     export default ({codicePiano,back}) => (
+        <Query query={GET_AVVIO} variables={{codice: codicePiano}} onError={showError}>
+            {({loding: loadingOut, data: {procedureAvvio: {edges: procedure = []} = []} = {}}) => {
+            return (
         <Query query={GET_CONFERENZA} variables={{codice: codicePiano}} onError={showError}>
-            {({loading, data: {conferenzaCopianificazione: {edges = []} = []} = {}, error}) => {
-                if(loading) {
+            {({loading, data: {conferenzaCopianificazione: {edges = []} = []} = {}}) => {
+                if(loading || loadingOut) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
                             <div className="spinner-grow " role="status">
@@ -71,6 +74,7 @@ const UI = ({
                         </div>)
                 }
                 return (
-                    <UI back={back} conferenza={edges[0]}/>)}
+                    <UI back={back} proceduraAvvio={procedure[0]} conferenza={edges[0]}/>)}
             }
+        </Query>)}}
         </Query>)

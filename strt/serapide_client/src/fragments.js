@@ -47,6 +47,7 @@ fragment Azioni on AzioneNodeConnection {
       uuid
       label
       tooltip
+      fase
     }
   }
 }
