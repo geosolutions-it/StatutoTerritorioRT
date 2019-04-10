@@ -7,13 +7,14 @@
  */
 import React from 'react'
 import { Table } from 'reactstrap'
-import {formatDate, getActionIcon, getActionIconColor, getAction, actionHasBtn} from '../utils'
+import {formatDate, getActionIcon, getActionIconColor, getAction} from '../utils'
 import {canExecuteAction} from '../autorizzazioni'
 import {Button} from 'reactstrap'
 import TextWithTooltip from './TextWithTooltip'
+import {rebuildTooltip} from '../enhancers/utils'
 
 const reverseOrder = ({node: {order: a}}, {node: {order: b}}) => (b - a)
-export default ({azioni = [], filtroFase = "anagrafica", className, onExecute = () => {}}) => {
+export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", className, onExecute = () => {}}) => {
     return (
     <Table size="sm" className={className} hover>
         <thead>
@@ -36,4 +37,4 @@ export default ({azioni = [], filtroFase = "anagrafica", className, onExecute = 
                 </tr>))}
         </tbody>
     </Table>
-)}
+)})

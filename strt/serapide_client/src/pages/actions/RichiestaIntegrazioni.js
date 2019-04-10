@@ -62,8 +62,8 @@ const UI = ({
             </React.Fragment>)
     }
 
-    export default ({codicePiano,back}) => (
-        <Query query={GET_AVVIO} variables={{codice: codicePiano}} onError={showError}>
+    export default ({piano = {}, back}) => (
+        <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
         {({loading, data: {procedureAvvio: {edges: avvii = []} = []} = {}}) => {
                 if(loading) {
                     return (

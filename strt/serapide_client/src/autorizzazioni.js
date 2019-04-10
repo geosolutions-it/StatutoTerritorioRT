@@ -31,7 +31,8 @@ const azioni = {
         "CONVOCAZIONE_CONFERENZA_COPIANIFICAZIONE": ["TMP"],
         "ESITO_CONFERENZA_COPIANIFICAZIONE": ["TMP"],
         "RICHIESTA_INTEGRAZIONI": ["TMP"],
-        "INTEGRAZIONI_RICHIESTE": ["RUP", "OP"]
+        "INTEGRAZIONI_RICHIESTE": ["RUP", "OP"],
+        "TRASMISSIONE_ADOZIONE": ["RUP", "OP"]
     }
 export const globalAuth = {
     _attore_attivo: "",

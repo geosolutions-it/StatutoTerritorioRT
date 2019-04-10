@@ -39,8 +39,8 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
         </React.Fragment>)
     })
 
-    export default ({codicePiano, utente, back}) => (
-        <Query query={GET_VAS} variables={{codice: codicePiano}} onError={showError}>
+    export default ({piano = {}, utente, back}) => (
+        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
             {({loading, data: {procedureVas: {edges = []} = []}, error}) => {
                 if(loading) {
                     return (

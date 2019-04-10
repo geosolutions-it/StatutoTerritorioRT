@@ -200,12 +200,12 @@ const updateCache =(codice) => (cache, { data: {createConsultazioneVas : { nuova
                     })
     }
 }
-export default ({codicePiano, back, piano}) => (
-                <Query query={GET_CONSULTAZIONE_VAS} variables={{codice: codicePiano}} onError={showError}>
+export default ({back, piano = {}}) => (
+                <Query query={GET_CONSULTAZIONE_VAS} variables={{codice: piano.codice}} onError={showError}>
                     {({loading, data: {consultazioneVas: {edges = []} = []} = {}, error}) => {
-                        if (!loading && !error && edges.length === 0 && codicePiano) {
+                        if (!loading && !error && edges.length === 0 && piano.codice) {
                             return (
-                                <AutoMutation variables={{input: {codicePiano}}} mutation={CREA_CONSULTAZIONE_VAS} onError={showError} update={updateCache(codicePiano)}>
+                                <AutoMutation variables={{input: {codicePiano: piano.codice}}} mutation={CREA_CONSULTAZIONE_VAS} onError={showError} update={updateCache(piano.codice)}>
                                     {() => (
                                         <div className="flex-fill d-flex justify-content-center">
                                             <div className="spinner-grow " role="status">

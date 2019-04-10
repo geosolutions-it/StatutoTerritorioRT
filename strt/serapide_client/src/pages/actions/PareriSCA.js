@@ -70,8 +70,8 @@ const UI = ({
             </React.Fragment>)
     }
 
-    export default ({codicePiano, utente, scadenza, back, tipo, label, tipoVas, saveMutation}) => (
-        <Query query={GET_VAS} variables={{codice: codicePiano}} onError={showError}>
+    export default ({piano = {},  utente, scadenza, back, tipo, label, tipoVas, saveMutation}) => (
+        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
             {({loading, data: {procedureVas: {edges = []} = []}, error}) => {
                 if(loading) {
                     return (

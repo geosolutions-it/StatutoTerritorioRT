@@ -7,40 +7,33 @@
  */
 import React from 'react'
 import Azioni from '../components/TabellaAzioni'
-import AvvioConsultazioniSCA from "./actions/AvvioConsultazioneSCA"
-import PareriSCA from "./actions/PareriSCA"
-import ProvvedimentoVerificaVAS from './actions/ProvvedimentoVerificaVAS'
-import AvvioProcedimento from './actions/AvvioProcedimento'
 import FaseSwitch from '../components/FaseSwitch'
-import AvviaEsamePareri from './actions/AvviaEsamePareri'
-import PubblicazioneProvv from './actions/PubblicazioneProvvedimento'
-import UploadElaboratiVAS from './actions/UploadElaboratiVAS'
-import GenioCivile from './actions/GenioCivile'
-import FormazionePiano from './actions/FormazionePiano'
-import RichiestaConferenza from './actions/RichiestaConferenza'
-import IntegrazioniRichieste from './actions/IntegrazioniRichieste'
-import SvolgimentoConferenza from './actions/SvolgimentoConfernza'
-import RichiestaIntegrazioni from './actions/RichiestaIntegrazioni'
 import {Switch, Route} from 'react-router-dom'
 import classNames from 'classnames'
-import {INVIO_PARERI_VAS} from '../queries'
+import { getAction} from '../utils'
+import {canExecuteAction} from '../autorizzazioni'
+import components from './actions'
+import {camelCase} from 'lodash'
 
-
-
-const getAction = (url = "", pathname = "") => {
+const getCurrentAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
 const showAdozione = (f) => f=== "AVVIO" || f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 
+const NotAllowed = () => (<div className="p-6 text-danger"><h4>Azione non disponibile per stato o permessi utente</h4></div>)
+const NotAvailable = () => (<div className="p-6">Azione non implementata</div>)
+
+
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, piano = {}, azioni = []}) => {
     
-    const action = getAction(url, pathname)
+    const action = getCurrentAction(url, pathname)
     const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data, }}) => data).shift()
     const goToAction = (action = "") => {
         history.push(`${url}/${action.toLowerCase().replace(" ","_")}`)
     }
     const {fase: {nome: nomeFase}} = piano
-    console.log(nomeFase)
+    const goBack = () => history.push(url)
+    console.log(azioni)
     return (
     <div className="d-flex pb-4 pt-5">
         <div className={classNames("d-flex flex-column flex-1", {"flex-fill": !action})}>
@@ -67,51 +60,18 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
         <div className={classNames("d-flex flex-column", {"ml-2  pl-3 flex-3 border-left": action})} style={action ? {minWidth: 500}: {}}>
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
-                {<Route path={`${path}/avvio_consultazioni_sca`} >
-                    <AvvioConsultazioniSCA codicePiano={code} piano={piano} back={history.goBack}/>
-                </Route>}
-                <Route path={`${path}/pareri_verifica_sca`} >
-                    <PareriSCA codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza}/>
-                </Route>
-                <Route path={`${path}/pareri_sca`} >
-                    <PareriSCA tipo="parere_sca" saveMutation={INVIO_PARERI_VAS}  tipoVas="documento_preliminare_vas" label="Pareri SCA" codicePiano={code} back={history.goBack} utente={utente} scadenza={scadenza} />
-                </Route>
-                <Route path={`${path}/emissione_provvedimento_verifica`} >
-                    <ProvvedimentoVerificaVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
-                </Route>
-                <Route path={`${path}/pubblicazione_provvedimento_verifica`} >
-                    <PubblicazioneProvv codicePiano={code} utente={utente} back={history.goBack}/>
-                </Route>
-                <Route path={`${path}/avvio_procedimento`} >
-                    <AvvioProcedimento codicePiano={code} piano={piano} back={history.goBack}/>
-                </Route>
-                <Route path={`${path}/avvio_esame_pareri_sca`} >
-                    <AvviaEsamePareri back={history.goBack} codicePiano={code} scadenza={scadenza}/>
-                </Route>
-                <Route path={`${path}/upload_elaborati_vas`} >
-                    <UploadElaboratiVAS back={history.goBack} codicePiano={code} scadenza={scadenza}/>
-                </Route>
-                <Route path={`${path}/protocollo_genio_civile_id`} >
-                    <GenioCivile piano={piano} back={history.goBack}/>
-                </Route>
-                <Route path={`${path}/formazione_del_piano`} >
-                    <FormazionePiano piano={piano} back={history.goBack}/>
-                </Route>
-                <Route path={`${path}/richiesta_conferenza_copianificazione`} >
-                    <RichiestaConferenza piano={piano} back={history.goBack}/>
-                </Route>
-                <Route path={`${path}/esito_conferenza_copianificazione`} >
-                    <SvolgimentoConferenza piano={piano} codicePiano={code} back={history.goBack}/>
-                </Route>
-                <Route path={`${path}/richiesta_integrazioni`} >
-                    <RichiestaIntegrazioni piano={piano} codicePiano={code} back={history.goBack}/>
-                </Route>
-                <Route path={`${path}/integrazioni_richieste`} >
-                    <IntegrazioniRichieste piano={piano}  back={history.goBack}/>
-                </Route>
+                {azioni.map(({node: {stato = "", tipologia = "",label = "", attore = ""}}) => {
+                    const tipo = tipologia.toLowerCase()
+                    const El = components[camelCase(tipo)]
+                    return El && (
+                            <Route key={tipo} path={`${path}/${tipo}`} >
+                                {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<NotAllowed/>)}
+                            </Route>)
+
+                })}
                 { action && (
                 <Route path={path}>
-                    <div className="p-6">Azione non ancora implementata</div>
+                    <NotAvailable/>
                 </Route>)}
             </Switch>
         </div>

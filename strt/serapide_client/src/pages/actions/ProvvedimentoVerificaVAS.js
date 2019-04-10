@@ -105,8 +105,8 @@ const UI = rebuildTooltip()(({back, vas: {node: {uuid, assoggettamento, relazion
         </React.Fragment>)
     })
 
-    export default ({codicePiano, scadenza, back}) => (
-        <Query query={GET_VAS} variables={{codice: codicePiano}} onError={showError}>
+    export default ({piano = {}, scadenza, back}) => (
+        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
             {({loading, data: {procedureVas: {edges = []} = []} = {}, error}) => {
                 if(loading) {
                     return (

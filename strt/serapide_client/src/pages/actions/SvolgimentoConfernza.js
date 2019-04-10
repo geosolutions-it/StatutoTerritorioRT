@@ -59,11 +59,11 @@ const UI = ({
             </React.Fragment>)
     }
 
-    export default ({codicePiano,back}) => (
-        <Query query={GET_AVVIO} variables={{codice: codicePiano}} onError={showError}>
+    export default ({piano = {}, back}) => (
+        <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
             {({loding: loadingOut, data: {procedureAvvio: {edges: procedure = []} = []} = {}}) => {
             return (
-        <Query query={GET_CONFERENZA} variables={{codice: codicePiano}} onError={showError}>
+        <Query query={GET_CONFERENZA} variables={{codice: piano.codice}} onError={showError}>
             {({loading, data: {conferenzaCopianificazione: {edges = []} = []} = {}}) => {
                 if(loading || loadingOut) {
                     return (
