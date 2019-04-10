@@ -8,7 +8,7 @@
 import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
 import UploadFiles from '../../components/UploadFiles'
-import  {showError} from '../../utils'
+import  {showError, formatDate} from '../../utils'
 
 import {Query, Mutation} from "react-apollo"
 import Resource from '../../components/Resource'
@@ -28,6 +28,13 @@ import {GET_AVVIO, UPDATE_AVVIO,
     GET_CONTATTI,
     AVVIA_PIANO
 } from '../../queries'
+
+
+const getInput = (codice, field) => (val) => (
+    {variables:{ input:{ 
+    pianoOperativo: { [field]: val}, codice}
+}})
+
 
 
 const getGaranteInput = (uuid) => (val) => ({
@@ -65,11 +72,11 @@ const fileProps = {className: `border-0`, getSuccess, mutation: AVVIO_FILE_UPLOA
 const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
     procedureAvvio: {node: {
             uuid, conferenzaCopianificazione, 
-            dataCreazione, dataScadenzaRisposta,
             garanteNominativo, garantePec,
             risorse: {edges=[]} = {}
             } = {}} = {}, 
         piano: {
+            redazioneNormeTecnicheAttuazioneUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl,
             autoritaIstituzionali: {edges: aut =[]} = {},
             altriDestinatari: {edges: dest = []} = {},
             codice,    
@@ -77,194 +84,128 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
         back}) => {
 
             const {node: delibera} = resPiano.filter(({node: n}) => n.tipo === "delibera").pop() || {};
-            const obiettivi = edges.filter(({node: {tipo}}) => tipo === "obiettivi_piano").map(({node}) => node).shift()
-            const quadro = edges.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").map(({node}) => node).shift()
-            const programma = edges.filter(({node: {tipo}}) => tipo === "programma_attivita").map(({node}) => node).shift()
-            const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
-            const allegati = edges.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node)
+            
+            const deliberaAdozione = edges.filter(({node: {tipo}}) => tipo === "delibera_adozione").map(({node}) => node).shift()
+            const elaboratiAdozione = edges.filter(({node: {tipo}}) => tipo === "elaborati_adozione").map(({node}) => node)
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
-
+            const dataDelibera = undefined
             return (<React.Fragment>
                 <ActionTitle>
-                    Avvio del Procedimento<br/><small className="text-nowrap">(Atto di Avvio)<TextWithTooltip dataTip="art. 17 L.R. 65/2014"/></small>
+                   Trasmissione Adozione
                 </ActionTitle>
-                
+                <h5 className="pt-5 font-weight-light">RIFERIMENTI DOCUMENTALI</h5>
+                <h6 className="pt-3 font-weight-light">NORME TECHINICHE DI ATTUAZIONE E RAPPORTO AMBIENTALE</h6>
+                <div className="mt-1 row d-flex align-items-center">
+                    <div className="col-12 d-flex">
+                        <i className="material-icons text-serapide">link</i><div className="pl-1">{redazioneNormeTecnicheAttuazioneUrl}</div>
+                    </div>
+                </div>
                 <Resource useLabel fileSize={false} className="border-0 mt-3" icon="attach_file" resource={delibera}/>
-                <h6 className="pt-5">Elaborati allegati alla delibera di avvio del procedimento <TextWithTooltip dataTip="ai sensi dell’art. 17 comma 3, lett. a,b,c,d,e,f, L.R. 65/2014"/></h6>
-                <div className="action-uploader  align-self-start border-bottom">
-                <FileUpload 
-                    {...fileProps}
-                    placeholder="Obiettivi del piano"
-                    risorsa={obiettivi} variables={{codice: uuid, tipo: "obiettivi_piano" }}/>
+                <h6 className="pt-3 font-weight-light">CONFORMAZIONE AL PIT-PPR</h6>
+                <div className="mt-1 row d-flex align-items-center">
+                    <div className="col-12 d-flex">
+                        <i className="material-icons text-serapide">link</i><div className="pl-1">{conformazionePitPprUrl}</div>
+                    </div>
                 </div>
-                <div className="action-uploader  align-self-start border-bottom ">
-                <FileUpload 
-                    {...fileProps}
-                    placeholder={(<span>Quadro Conoscitivo<TextWithTooltip dataTip="art. 17, lett.b, L.R. 65/2014"/></span>)}
-                    risorsa={quadro} variables={{codice: uuid, tipo: "quadro_conoscitivo" }}/>
+                <h6 className="pt-3 font-weight-light">MONITORAGGIO URBANISTICO</h6>
+                <div className="mt-1 row d-flex align-items-center">
+                    <div className="col-12 d-flex">
+                        <i className="material-icons text-serapide">link</i><div className="pl-1">{conformazionePitPprUrl}</div>
+                    </div>
                 </div>
-                <div className="action-uploader  align-self-start border-bottom ">
-                <FileUpload 
-                    {...fileProps}
-                    placeholder={(<span>Programma delle attività di informazione e di partecipazione<TextWithTooltip dataTip="art. 17, lett.e, L.R. 65/2014"/></span>)}
-                    risorsa={programma} variables={{codice: uuid, tipo: "programma_attivita" }}/>
-                </div>
-                
-                <h4 className="font-weight-light pt-5 pl-2 pb-1">ALTRI ALLEGATI</h4>
-                <UploadFiles 
-                    {...fileProps}
-                    risorse={allegati} 
-                    variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
-                    getFileName={({uploadRisorsaAvvio: {fileName} = {}}) => fileName}/>
-                
-                
-                <h5 className="font-weight-light pb-1 mt-5 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
-                <Input getInput={getGaranteInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />
-                <Input getInput={getGarantePecInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} className="mb-3 rounded-pill" placeholder="Indirizzo Pec" onChange={undefined} value={garantePec} type="url"/>
-                <div className="action-uploader  align-self-start border-bottom ">
-                <FileUpload 
-                    {...fileProps}
-                    placeholder={(<span>Individuazione del garante dell’informazione e della partecipazione<TextWithTooltip dataTip="art. 17, lett.f, L.R. 65/2014"/></span>)}
-                    risorsa={garante} variables={{codice: uuid, tipo: "individuazione_garante_informazione" }}/>
-                </div>
-                <h5 className="font-weight-light pb-1 mt-5 mb-3">TERMINI SCADENZA PER LA RISPOSTA</h5>
-                <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
-                
-                <h5 className="font-weight-light pb-1 mt-5">SCELTA SOGGETTI ISTITUZIONALI</h5>
-                <h6 className="font-weight-light pb-1">
-                        Soggetti istituzionali a cui si chiede il contributo tecnico <TextWithTooltip dataTip="art. 17, lett.c, L.R. 65/2014"/>
-                </h6>
-                    <div className="row">  
+                <div className="w-100 border-top mt-3"></div>
+                <h5 className="pt-4 font-weight-light">DESTINATARI</h5>
+                <h6 className="font-weight-light pb-1 mt-2">SCELTA SOGGETTI ISTITUZIONALI</h6>
+                <div className="row">  
                     {aut.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
                                  <i className="material-icons text-serapide">bookmark</i>
                                  {nome}
                         </div>))}
                     </div>
-                    <div className="mt-3 pl-4 pb-4">
-                    <Mutation mutation={UPDATE_PIANO} onError={showError}>
-                        {(onChange) => {
-                            const changed = (val) => {
-                                let autoritaIstituzionali = []
-                                if(auths.indexOf(val)!== -1){
-                                    autoritaIstituzionali = auths.filter( uuid => uuid !== val)
-                                }else {
-                                    autoritaIstituzionali = auths.concat(val)
-                                }
-                                    onChange({variables:{ input:{ 
-                                            pianoOperativo: { autoritaIstituzionali}, codice}
-                                    }})
-                            }
-                            return (
-                                <EnhancedListSelector
-                                    selected={auths}
-                                    query={GET_CONTATTI}
-                                    getList={getAuthorities}
-                                    onChange={changed}
-                                    variables={{}}
-                                    size="lg"
-                                    label="SOGGETTI ISTITUZIONALI"
-                                    btn={(toggleOpen) => (
-                                        <div className="row">
-                                            <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="rounded-pill" color="serapide" icon="add_circle" label="Seleziona soggetti istituzionali"/>
-                                        </div>
-                                        )}
-                                    >
-                                    <AddContact className="mt-2"></AddContact>
-                                    </EnhancedListSelector>)}
-                        }
-                        </Mutation>
-                        </div>
-                        <h5 className="font-weight-light pb-1 mt-5">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h5>
-                        <div className="row">
+                <h6 className="font-weight-light pb-1 mt-4">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h6>
+                <div className="row">
                             {dest.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
                                     <i className="material-icons text-serapide">bookmark</i>
                                     {nome}
                             </div>))}
                         </div>
-                        <div className="mt-3 pl-4 border-bottom-2 pb-4 mb-5">
-                        <Mutation mutation={UPDATE_PIANO} onError={showError}>
-                    {(onChange) => {
-                            const changed = (val) => {
-                                let altriDestinatari = []
-                                if(dests.indexOf(val)!== -1){
-                                    altriDestinatari = dests.filter( uuid => uuid !== val)
-                                }else {
-                                    altriDestinatari = dests.concat(val)
-                                }
-                                onChange({variables:{ input:{ 
-                                            pianoOperativo: { altriDestinatari}, codice}
-                                    }})
-                            }
-                            return (
-                        <EnhancedListSelector
-                                selected={dests}
-                                query={GET_CONTATTI}
-                                variables={{}}
-                                getList={getAuthorities}
-                                label="SOGGETTI NON ISTITUZIONALI"
-                                size="lg"
-                                onChange={changed}
-                                btn={(toggleOpen) => (
-                                    <div className="row">
-                                        <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="rounded-pill" color="serapide" icon="add_circle" label="Aggiungi soggetti non istituzionali"/>
-                                    </div>)}
-                            >
-                            <AddContact className="mt-2"></AddContact>
-                            </EnhancedListSelector>)}
-                        }
-                        </Mutation>
-                        </div>
-                        <h5 className="font-weight-light pb-1 mt-5">RICHIESTA CONFERENZA DI COPIANIFICAZIONE<TextWithTooltip dataTip="art. 25 L.R. 65/2014"/></h5>
-                        <div className="row pl-2">
-                            <div className="col-12 pt-2">
-                                Se si seleziona l'opzione "Si" viene inviata a Regione Toscana la RICHIESTA
-                                    di convocazione della Conferenza di Copianificazione.<br/>
-                                Se si seleziona l'opzione "Non Adesso" il sistema inserisce nella lista delle attività la Conferenza di Copianificazione
-                                    come attività da espletare.
-                                <br/>
-                                    Se si seleziona l'opzione "Non necessaria" il sistema invierà i documenti al Genio Civile 
-                                    per il deposito e nella lista delle attività verrà indicata la Ricezione del Protocollo
-                                    dal Genio Civile come attività in attesa di risposta.
-                                
-                            </div>
-                        </div>
-                        <Mutation mutation={UPDATE_AVVIO} onError={showError}>
-                            {(onChange) => {
-                                const changed = (e) => {
-                                    onChange({
-                                        variables:{ 
-                                            input:{ 
-                                                proceduraAvvio: {conferenzaCopianificazione: e.target.value.toLowerCase()}, 
-                                                uuid
-                                            }
-                                        }})
-                                }   
-                                return (
-                                    <div className="d-flex flex-column mt-4 pl-2">
-                                        <div className="d-flex">
-                                            <span style={{minWidth: 200}}><TextWithTooltip dataTip="art. 25, comma 3 bis L.R. 65/2014" text="SI"/></span>
-                                            <input onChange={changed} value="NECESSARIA" checked={conferenzaCopianificazione === "NECESSARIA"} className="form-check-input position-static" type="checkbox"/>
-                                            </div>
-                                        <div className="d-flex">
-                                            <span style={{minWidth: 200}}><TextWithTooltip dataTip="art. 25, comma 3 bis L.R. 65/2014" text="NON ADESSO"/></span>
-                                            <input onChange={changed} value="POSTICIPATA" checked={conferenzaCopianificazione === "POSTICIPATA"} className="form-check-input position-static" type="checkbox"/>
-                                        </div>
-                                        <div className="d-flex">
-                                            <span style={{minWidth: 200}}><TextWithTooltip dataTip="art.88, comma 7, lett. c,  e art. 90 comma 7, lett.b, L.R. 65/2014" text="NON NECESSARIA"/></span>
-                                            <input onChange={changed} value="NON_NECESSARIA" checked={conferenzaCopianificazione === "NON_NECESSARIA"} className="form-check-input position-static" type="checkbox"/>
-                                            <i className={`ml-3 material-icons ${conferenzaCopianificazione === "NON_NECESSARIA" ? "text-serapide" : ""}`}>check_circle_outline</i>
-                                            <span className={`pl-1 ${conferenzaCopianificazione === "NON_NECESSARIA" ? "text-serapide" : "text-gray"}`}>NOTIFICA AL GENIO CIVILE</span>
-                                        </div>
-                                    </div>)}
-                            }
-                        </Mutation>
-                        
-
-                    
+                <div className="w-100 border-top mt-3"></div>
+                <div className="action-uploader  align-self-start ">
+                <FileUpload 
+                    {...fileProps}
+                    placeholder="DELIBERA DI ADOZIONE"
+                    risorsa={deliberaAdozione} variables={{codice: uuid, tipo: "delibera_adozione" }}/>                
+                </div>
+                <div className="row mt-4">
+                    <div className="col-12 d-flex pl-4 align-items-center">
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA ADOZIONE" selected={dataDelibera ? new Date(dataDelibera) : undefined} getInput={getScadenzaInput(uuid)} className="py-0" mutation={UPDATE_AVVIO}/></div>
+                </div>
                 
-                <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
+                <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
+                <UploadFiles 
+                    {...fileProps}
+                    risorse={elaboratiAdozione} 
+                    variables={{codice: uuid, tipo: "elaborati_adozione" }}
+                    getFileName={({uploadRisorsaAvvio: {fileName} = {}}) => fileName}/>
+                
+                <div className="w-100 border-top mt-3"></div>                
+                <h5 className="pt-4 font-weight-light">PUBBLICAZIONE</h5>
+                <div className="mt-2 row d-flex align-items-center">
+                    <div className="col-3">URL B.U.R.T</div>
+                    <div className="col-9 ">
+                        <Input placeholder="COPIA URL B.U.R.T." getInput={getInput(codice, "redazioneNormeTecnicheAttuazioneUrl")} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={undefined} type="text" />
+                    </div>
+                    <div className="col-9 mt-2 offset-3">
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={dataDelibera ? new Date(dataDelibera) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 " mutation={UPDATE_AVVIO}/>
+                    </div>
+
+                </div>
+                <div className="mt-2 row d-flex align-items-center">
+                    <div className="col-3">URL SITO</div>
+                    <div className="col-9 ">
+                        <Input placeholder="COPIA URL SITO" getInput={getInput(codice, "redazioneNormeTecnicheAttuazioneUrl")} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={undefined} type="text" />
+                    </div>
+                    <div className="col-9 mt-2 offset-3">
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={dataDelibera ? new Date(dataDelibera) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 " mutation={UPDATE_AVVIO}/>
+                    </div>
+
+                </div>
+                <div className="w-100 border-top mt-3"></div>    
+                <div className="row align-items-center pt-4 ">
+                    <div className="col-11"><h5 className="mb-0 font-weight-light">INVIO A SCA E AC</h5>
+                    </div>
+                    <div className="col-1">
+                    <input  checked={true} className="form-check-input position-static" type="checkbox"/>
+                    </div>
+                
+                
+                <div className="col-12 pt-2">
+                    {`Il sistema invierà i link ai Soggetti Compententi in materina ambientale e all'Autorità compentente
+                    in materia ambientale (già selezionati nella fase di avvio) la documentazione necessaria affinché i destinatari
+                    possano formulare i pareri entro 60gg dall'adozione`}
+                </div>
+                </div>
+                <div className="w-100 border-top mt-3"></div> 
+
+                <div className="row d-flex align-items-center pt-4">
+                    <div className="col-1"><i className="material-icons text-serapide">notifications_active</i></div>
+                    <div className="col-7"><div className="pl-1 py-1 bg-dark text-serapide">ALERT RICEZIONI OSSERVAZIONI</div></div>
+                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-dark pr-1">date_range</i><span>22/12/2019</span></div>
+                    <div className="col-11 offset-1">Il sistema calcola automaticamente la data entro la quale ricevere le osservazioni sulla base
+                    della data di pubblicazione su B.U.R.T. e sul sito web</div>
+                </div>
+                <div className="row align-items-center pt-4">
+                    <div className="col-1"><i className="material-icons text-serapide">notifications_active</i></div>
+                    <div className="col-7"><div className="pl-1 py-1 bg-serapide">ALERT RICEZIONI PARERI</div></div>
+                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-serapide pr-1">date_range</i><span>22/12/2019</span></div>
+                    <div className="col-11 offset-1">Il sistema calcola automaticamente la data entro la quale ricevere le osservazioni sulla base
+                    della data di adozione</div>
+                </div>
+                
+                <div className="w-100 border-top mt-3"></div> 
+                <div className="align-self-center mt-5">
+                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={ auths.length > 0  &&  garanteNominativo && garantePec}></SalvaInvia>
                 
                 </div>
             </React.Fragment>)})

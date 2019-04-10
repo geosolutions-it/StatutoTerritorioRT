@@ -16,13 +16,13 @@ const _getInput = (val) => { return {variables: {input: {data: val.toISOString()
 
 class CustomInput extends React.PureComponent {
     render () {
-        const {onClick, value, disabled, readOnly, className} = this.props 
+        const {onClick, value, disabled, readOnly, className, placeholder} = this.props 
             return (
                 <Button 
                     disabled={disabled}
                     className={`${readOnly && 'read-only'} ${className}`}
                     style={{minWidth: 170}}
-                    label={value || "Seleziona Data"}
+                    label={value || placeholder}
                     color="serapide"
                     icon="date_range"
                     onClick={onClick}>          
@@ -54,7 +54,7 @@ const showError = (error, onError) => {
 export default (props) => (<DatePicker customInput={<CustomInput />} {...props}/>) 
 
 // Pass a mutation an update function if needed, the getInput
-export const EnhancedDateSelector = ({useDateTime = false, showTimeSelect = false, className, isLocked, mutation, update, selected, disabled, getInput = _getInput, ...mutationProps}) => {
+export const EnhancedDateSelector = ({placeholder = "Seleziona Data", useDateTime = false, showTimeSelect = false, className, isLocked, mutation, update, selected, disabled, getInput = _getInput, ...mutationProps}) => {
     return (
         <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
             {(onChange, m_props) => {
@@ -62,7 +62,8 @@ export const EnhancedDateSelector = ({useDateTime = false, showTimeSelect = fals
                     onChange(getInput(val))
                 }
                 return (
-                    <DatePicker 
+                    <DatePicker
+                    placeholderText={placeholder}
                     calendarClassName={useDateTime ? "d-flex" : undefined}
                     showTimeSelect={showTimeSelect}
                     readOnly={isLocked}

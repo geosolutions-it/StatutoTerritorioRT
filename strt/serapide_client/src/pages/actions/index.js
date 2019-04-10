@@ -37,6 +37,4 @@ export default {
     richiestaIntegrazioni: (props) => (<RichiestaIntegrazioni  {...props}/>),
     integrazioniRichieste: (props) => (<IntegrazioniRichieste  {...props}/>),
     trasmissioneAdozione: (props) => (<Adozione  {...props}/>)
-
-
 }
