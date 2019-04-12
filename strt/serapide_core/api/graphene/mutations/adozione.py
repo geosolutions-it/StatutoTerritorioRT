@@ -262,7 +262,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
             _upload_osservazioni_privati = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati).first()
 
-            _organization = _piano.ente
+            _organization = piano.ente
 
             if rules.test_rule('strt_core.api.is_actor', token or (user, _organization), 'Regione'):
                 if _osservazioni_regione and _osservazioni_regione.stato != STATO_AZIONE.nessuna:
