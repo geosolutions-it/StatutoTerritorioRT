@@ -509,7 +509,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                         procedura_avvio.conclusa = True
                         procedura_avvio.save()
 
-                        procedura_adozione = ProceduraAdozione(piano=piano)
+                        procedura_adozione = ProceduraAdozione(piano=piano, ente=piano.ente)
                         procedura_adozione.save()
 
     @classmethod

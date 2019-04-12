@@ -15,6 +15,8 @@ import datetime
 import graphene
 import traceback
 
+from django.conf import settings
+
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -127,6 +129,20 @@ class UpdateProceduraAdozione(relay.ClientIDMutation):
                     # This cannot be changed
 
                 procedura_adozione_aggiornata = update_create_instance(_procedura_adozione, _procedura_adozione_data)
+
+                if procedura_adozione_aggiornata.data_delibera_adozione:
+                    _expire_days = getattr(settings, 'ADOZIONE_RICEZIONE_PARERI_EXPIRE_DAYS', 30)
+                    _alert_delta = datetime.timedelta(days=_expire_days)
+                    procedura_adozione_aggiornata.data_ricezione_pareri = \
+                        procedura_adozione_aggiornata.data_delibera_adozione + _alert_delta
+
+                if procedura_adozione_aggiornata.pubblicazione_burt_data:
+                    _expire_days = getattr(settings, 'ADOZIONE_RICEZIONE_OSSERVAZIONI_EXPIRE_DAYS', 30)
+                    _alert_delta = datetime.timedelta(days=_expire_days)
+                    procedura_adozione_aggiornata.data_ricezione_osservazioni = \
+                        procedura_adozione_aggiornata.pubblicazione_burt_data + _alert_delta
+
+                procedura_adozione_aggiornata.save()
 
                 return cls(procedura_adozione_aggiornata=procedura_adozione_aggiornata)
             except BaseException as e:
