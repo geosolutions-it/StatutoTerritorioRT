@@ -19,6 +19,7 @@ from .models import (
     Piano, RisorsePiano,
     ProceduraVAS, RisorseVas,
     ProceduraAvvio, RisorseAvvio,
+    ProceduraAdozione, RisorseAdozione,
     AutoritaCompetenteVAS,
     AutoritaIstituzionali,
     AltriDestinatari,
@@ -44,6 +45,10 @@ class RisorseVasInline(admin.TabularInline):
 
 class RisorseAvvioInline(admin.TabularInline):
     model = RisorseAvvio
+
+
+class RisorseAdozioneInline(admin.TabularInline):
+    model = RisorseAdozione
 
 
 class RisorseCopianificazioneInline(admin.TabularInline):
@@ -92,6 +97,10 @@ class ProceduraAvvioAdmin(admin.ModelAdmin):
     inlines = [RisorseAvvioInline, ]
 
 
+class ProceduraAdozioneAdmin(admin.ModelAdmin):
+    inlines = [RisorseAdozioneInline, ]
+
+
 class ConsultazioneVASAdmin(admin.ModelAdmin):
     inlines = [ParereVASInline, ]
 
@@ -107,5 +116,6 @@ admin.site.register(Contatto)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
 admin.site.register(ProceduraAvvio, ProceduraAvvioAdmin)
+admin.site.register(ProceduraAdozione, ProceduraAdozioneAdmin)
 admin.site.register(ConsultazioneVAS, ConsultazioneVASAdmin)
 admin.site.register(ConferenzaCopianificazione, ConferenzaCopianificazioneAdmin)
