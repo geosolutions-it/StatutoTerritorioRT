@@ -408,6 +408,7 @@ class ProceduraAdozioneNode(DjangoObjectType):
         }
         interfaces = (relay.Node, )
 
+
 class ContattoNode(DjangoObjectType):
 
     ente = graphene.Field(EnteNode)

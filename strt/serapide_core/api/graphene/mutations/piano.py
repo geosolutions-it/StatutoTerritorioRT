@@ -46,6 +46,7 @@ from serapide_core.modello.models import (
     AzioniPiano,
     ProceduraVAS,
     ProceduraAvvio,
+    ProceduraAdozione,
     PianoAuthTokens,
     AutoritaCompetenteVAS,
     AutoritaIstituzionali,
@@ -507,6 +508,9 @@ class FormazionePiano(graphene.Mutation):
                     procedura_avvio = ProceduraAvvio.objects.get(piano=piano)
                     procedura_avvio.conclusa = True
                     procedura_avvio.save()
+
+                    procedura_adozione = ProceduraAdozione(piano=piano)
+                    procedura_adozione.save()
 
     @classmethod
     def mutate(cls, root, info, **input):

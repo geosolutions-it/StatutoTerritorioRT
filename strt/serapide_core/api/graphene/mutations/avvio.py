@@ -37,6 +37,7 @@ from serapide_core.modello.models import (
     Contatto,
     AzioniPiano,
     ProceduraAvvio,
+    ProceduraAdozione,
     ConferenzaCopianificazione
 )
 
@@ -507,6 +508,9 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                     if _formazione_del_piano and _formazione_del_piano.stato == STATO_AZIONE.nessuna:
                         procedura_avvio.conclusa = True
                         procedura_avvio.save()
+
+                        procedura_adozione = ProceduraAdozione(piano=piano)
+                        procedura_adozione.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
