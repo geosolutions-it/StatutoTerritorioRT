@@ -243,7 +243,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
     adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
 
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -262,7 +262,9 @@ class TrasmissioneOsservazioni(graphene.Mutation):
             _upload_osservazioni_privati = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati).first()
 
-            if procedura_adozione.osservazioni_concluse:
+            _organization = _piano.ente
+
+            if rules.test_rule('strt_core.api.is_actor', token or (user, _organization), 'Regione'):
                 if _osservazioni_regione and _osservazioni_regione.stato != STATO_AZIONE.nessuna:
                     _osservazioni_regione.stato = STATO_AZIONE.nessuna
                     _osservazioni_regione.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -273,7 +275,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
                         _osservazioni_enti.data = datetime.datetime.now(timezone.get_current_timezone())
                         _osservazioni_enti.save()
 
-            else:
+            if rules.test_rule('strt_core.api.is_actor', token or (user, _organization), 'Comune'):
                 if _upload_osservazioni_privati and _upload_osservazioni_privati.stato != STATO_AZIONE.nessuna:
                     _upload_osservazioni_privati.stato = STATO_AZIONE.nessuna
                     _upload_osservazioni_privati.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -297,10 +299,9 @@ class TrasmissioneOsservazioni(graphene.Mutation):
         _piano = _procedura_adozione.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
                 return TrasmissioneOsservazioni(
                     adozione_aggiornata=_procedura_adozione,
