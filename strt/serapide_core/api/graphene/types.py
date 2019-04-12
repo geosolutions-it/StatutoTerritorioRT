@@ -41,10 +41,12 @@ from serapide_core.modello.models import (
     PianoAuthTokens,
     FasePianoStorico,
     ProceduraAvvio,
+    ProceduraAdozione,
     ConferenzaCopianificazione,
     RisorsePiano,
     RisorseVas,
     RisorseAvvio,
+    RisorseAdozione,
     RisorseCopianificazione,
 )
 
@@ -201,6 +203,16 @@ class RisorseAvvioType(DjangoObjectType):
 
     class Meta:
         model = RisorseAvvio
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorseAdozioneType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorseAdozione
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -381,6 +393,20 @@ class ProceduraAvvioNode(DjangoObjectType):
         }
         interfaces = (relay.Node, )
 
+
+class ProceduraAdozioneNode(DjangoObjectType):
+
+    ente = graphene.Field(EnteNode)
+    risorsa = DjangoFilterConnectionField(RisorseAdozioneType)
+
+    class Meta:
+        model = ProceduraAdozione
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'ente': ['exact'],
+            'piano__codice': ['exact'],
+        }
+        interfaces = (relay.Node, )
 
 class ContattoNode(DjangoObjectType):
 
