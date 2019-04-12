@@ -643,38 +643,6 @@ class InvioPareriVAS(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
 
-                # TODO: Queste azioni qui sotto in realtà sono di AVVIO Prodedimento!
-
-                # _osservazioni_enti = Azione(
-                #     tipologia=TIPOLOGIA_AZIONE.osservazioni_enti,
-                #     attore=TIPOLOGIA_ATTORE.enti,
-                #     order=_order,
-                #     stato=STATO_AZIONE.necessaria
-                # )
-                # _osservazioni_enti.save()
-                # _order += 1
-                # AzioniPiano.objects.get_or_create(azione=_osservazioni_enti, piano=piano)
-                #
-                # _osservazioni_regione = Azione(
-                #     tipologia=TIPOLOGIA_AZIONE.osservazioni_regione,
-                #     attore=TIPOLOGIA_ATTORE.regione,
-                #     order=_order,
-                #     stato=STATO_AZIONE.attesa
-                # )
-                # _osservazioni_regione.save()
-                # _order += 1
-                # AzioniPiano.objects.get_or_create(azione=_osservazioni_regione, piano=piano)
-                #
-                # _upload_osservazioni_privati = Azione(
-                #     tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati,
-                #     attore=TIPOLOGIA_ATTORE.comune,
-                #     order=_order,
-                #     stato=STATO_AZIONE.necessaria
-                # )
-                # _upload_osservazioni_privati.save()
-                # _order += 1
-                # AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
-
     @classmethod
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])

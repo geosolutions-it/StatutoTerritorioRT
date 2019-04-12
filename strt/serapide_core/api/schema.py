@@ -154,6 +154,7 @@ class Mutation(object):
 
     create_procedura_adozione = adozione.CreateProceduraAdozione.Field()
     update_procedura_adozione = adozione.UpdateProceduraAdozione.Field()
+    trasmissione_adozione = adozione.TrasmissioneAdozione.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()

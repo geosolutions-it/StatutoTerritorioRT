@@ -151,3 +151,85 @@ class UpdateProceduraAdozione(relay.ClientIDMutation):
                 return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
+
+
+class TrasmissioneAdozione(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.avvio:
+            _trasmissione_adozione = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.trasmissione_adozione).first()
+            if _trasmissione_adozione and _trasmissione_adozione.stato != STATO_AZIONE.nessuna:
+                _trasmissione_adozione.stato = STATO_AZIONE.nessuna
+                _trasmissione_adozione.data = datetime.datetime.now(timezone.get_current_timezone())
+                _trasmissione_adozione.save()
+
+                _osservazioni_enti = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.osservazioni_enti,
+                    attore=TIPOLOGIA_ATTORE.enti,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=procedura_adozione.data_ricezione_osservazioni
+                )
+                _osservazioni_enti.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_osservazioni_enti, piano=piano)
+
+                _osservazioni_regione = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.osservazioni_regione,
+                    attore=TIPOLOGIA_ATTORE.regione,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=procedura_adozione.data_ricezione_osservazioni
+                )
+                _osservazioni_regione.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_osservazioni_regione, piano=piano)
+
+                _upload_osservazioni_privati = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=procedura_adozione.data_ricezione_osservazioni
+                )
+                _upload_osservazioni_privati.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
+        _piano = _procedura_adozione.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
+
+                return TrasmissioneAdozione(
+                    adozione_aggiornata=_procedura_adozione,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
