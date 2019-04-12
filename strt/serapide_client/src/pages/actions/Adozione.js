@@ -25,10 +25,10 @@ import Input from '../../components/EnhancedInput'
 import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
     DELETE_RISORSA_ADOZIONE,
     ADOZIONE_FILE_UPLOAD,
-    AVVIA_PIANO
+    TRASMISSIONE_ADOZIONE
 } from '../../queries'
 
-const ADOZIONE_PIANO = AVVIA_PIANO
+
 const getInput = (uuid, field) => (val) => (
     {variables:
         { input:{ 
@@ -85,20 +85,20 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 <h6 className="pt-3 font-weight-light">NORME TECHINICHE DI ATTUAZIONE E RAPPORTO AMBIENTALE</h6>
                 <div className="mt-1 row d-flex align-items-center">
                     <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><div className="pl-1">{redazioneNormeTecnicheAttuazioneUrl}</div>
+                        <i className="material-icons text-serapide">link</i><a href={redazioneNormeTecnicheAttuazioneUrl} target="_blank" className="pl-1 text-secondary">{redazioneNormeTecnicheAttuazioneUrl}</a>
                     </div>
                 </div>
                 <Resource useLabel fileSize={false} className="border-0 mt-3" icon="attach_file" resource={rapportoAmbientale}/>
                 <h6 className="pt-3 font-weight-light">CONFORMAZIONE AL PIT-PPR</h6>
                 <div className="mt-1 row d-flex align-items-center">
                     <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><div className="pl-1">{conformazionePitPprUrl}</div>
+                        <i className="material-icons text-serapide">link</i><a href={conformazionePitPprUrl} target="_blank" className="pl-1 text-secondary">{conformazionePitPprUrl}</a>
                     </div>
                 </div>
                 <h6 className="pt-3 font-weight-light">MONITORAGGIO URBANISTICO</h6>
                 <div className="mt-1 row d-flex align-items-center">
                     <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><div className="pl-1">{conformazionePitPprUrl}</div>
+                        <i className="material-icons text-serapide">link</i><a href={monitoraggioUrbanisticoUrl} target="_blank" className="pl-1 text-secondary">{monitoraggioUrbanisticoUrl}</a>
                     </div>
                 </div>
                 <div className="w-100 border-top mt-3"></div>
@@ -192,8 +192,8 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 
                 <div className="w-100 border-top mt-3"></div> 
                 <div className="align-self-center mt-5">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={ADOZIONE_PIANO} 
-                        canCommit={ deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData &&  aut.length > 0}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_ADOZIONE} 
+                        canCommit={ deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData}></SalvaInvia>
                 </div>
             </React.Fragment>)})
 

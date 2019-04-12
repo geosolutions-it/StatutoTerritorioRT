@@ -68,11 +68,8 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                                 {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<NotAllowed/>)}
                             </Route>)
                 })}
-                <Route path={`${path}/osservazioni_privati`} >
-                    {components['osservazioniPrivati']({piano, back:goBack, utente, scadenza})}
-                </Route>
-                <Route path={`${path}/osservazioni_enti`} >
-                    {components['osservazioniEnti']({piano, back:goBack, utente, scadenza})}
+                <Route path={`${path}/controdeduzioni`} >
+                    {components['controdeduzioni']({piano, back:goBack, utente, scadenza})}
                 </Route>
                 { action && (
                 <Route path={path}>
