@@ -63,6 +63,9 @@ class Query(object):
 
     procedure_avvio = DjangoFilterConnectionField(types.ProceduraAvvioNode,
                                                   filterset_class=filters.ProceduraAvvioMembershipFilter)
+    
+    procedure_adozione = DjangoFilterConnectionField(types.ProceduraAdozioneNode,
+                                                     filterset_class=filters.ProceduraAdozioneMembershipFilter)                                                  
 
     consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
 
