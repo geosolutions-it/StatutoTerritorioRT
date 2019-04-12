@@ -24,22 +24,18 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
-from serapide_core.helpers import (
-    is_RUP,
-    update_create_instance)
+from serapide_core.helpers import update_create_instance
 
-from serapide_core.signals import (
-    piano_phase_changed,
-)
+# from serapide_core.signals import (
+#     piano_phase_changed,
+# )
 
 from serapide_core.modello.models import (
-    Fase,
+    # Fase,
     Piano,
     Azione,
-    Contatto,
     AzioniPiano,
     ProceduraAdozione,
-    ConferenzaCopianificazione
 )
 
 from serapide_core.modello.enums import (
@@ -47,11 +43,9 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_AZIONE,
     TIPOLOGIA_ATTORE,
-    TIPOLOGIA_CONTATTO,
-    TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
-from . import fase
+# from . import fase
 from .. import types
 from .. import inputs
 
@@ -110,8 +104,8 @@ class UpdateProceduraAdozione(relay.ClientIDMutation):
             # This cannot be changed
             _procedura_adozione_data.pop('piano')
         _piano = _procedura_adozione.piano
-        _token = info.context.session['token'] if 'token' in info.context.session else None
-        _ente = _piano.ente
+        # _token = info.context.session['token'] if 'token' in info.context.session else None
+        # _ente = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
@@ -212,6 +206,11 @@ class TrasmissioneAdozione(graphene.Mutation):
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
 
+                """
+                TODO: Trasmissione Comunicazioni (vedi interfaccia)
+                      - send_signal here!
+                """
+
     @classmethod
     def mutate(cls, root, info, **input):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
@@ -224,6 +223,86 @@ class TrasmissioneAdozione(graphene.Mutation):
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
                 return TrasmissioneAdozione(
+                    adozione_aggiornata=_procedura_adozione,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class TrasmissioneOsservazioni(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.avvio:
+            _osservazioni_enti = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.osservazioni_enti).first()
+
+            _osservazioni_regione = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.osservazioni_regione).first()
+
+            _upload_osservazioni_privati = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati).first()
+
+            if procedura_adozione.osservazioni_concluse:
+                if _osservazioni_regione and _osservazioni_regione.stato != STATO_AZIONE.nessuna:
+                    _osservazioni_regione.stato = STATO_AZIONE.nessuna
+                    _osservazioni_regione.data = datetime.datetime.now(timezone.get_current_timezone())
+                    _osservazioni_regione.save()
+
+                    if _osservazioni_enti and _osservazioni_enti.stato != STATO_AZIONE.nessuna:
+                        _osservazioni_enti.stato = STATO_AZIONE.nessuna
+                        _osservazioni_enti.data = datetime.datetime.now(timezone.get_current_timezone())
+                        _osservazioni_enti.save()
+
+            else:
+                if _upload_osservazioni_privati and _upload_osservazioni_privati.stato != STATO_AZIONE.nessuna:
+                    _upload_osservazioni_privati.stato = STATO_AZIONE.nessuna
+                    _upload_osservazioni_privati.data = datetime.datetime.now(timezone.get_current_timezone())
+                    _upload_osservazioni_privati.save()
+
+            if _upload_osservazioni_privati.stato == STATO_AZIONE.nessuna and \
+            _osservazioni_regione.stato == STATO_AZIONE.nessuna:
+                _controdeduzioni = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.controdeduzioni,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa
+                )
+                _controdeduzioni.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_controdeduzioni, piano=piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
+        _piano = _procedura_adozione.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
+
+                return TrasmissioneOsservazioni(
                     adozione_aggiornata=_procedura_adozione,
                     errors=[]
                 )
