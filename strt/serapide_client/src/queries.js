@@ -448,6 +448,33 @@ ${FR.AZIONI_PIANO}
 
 // adozione
 
+export const TRASMISSIONE_ADOZIONE = gql`
+mutation TrasmissioneAdozione($codice: String!){
+  trasmissioneAdozione(uuid: $codice){
+      errors
+        adozioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+export const TRASMISSIONE_OSSERVAZIONI = gql`
+mutation TrasmissioneOsservazioni($codice: String!){
+  trasmissioneOsservazioni(uuid: $codice){
+      errors
+        adozioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
 export const ADOZIONE_FILE_UPLOAD = gql`
 mutation AdozioneUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
     uploadRisorsaAdozione(file: $file, codice: $codice, tipoFile: $tipo) {
