@@ -6,14 +6,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+import {Switch, Route} from 'react-router-dom'
 import Azioni from '../components/TabellaAzioni'
 import FaseSwitch from '../components/FaseSwitch'
-import {Switch, Route} from 'react-router-dom'
+import components from './actions'
+
 import classNames from 'classnames'
 import { getAction} from '../utils'
 import {canExecuteAction} from '../autorizzazioni'
-import components from './actions'
+
 import {camelCase} from 'lodash'
+
 
 const getCurrentAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
@@ -43,32 +46,34 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_on</i><span>In attesa di risposta da altri attori</span></span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_off</i><span>Nessuna azione richiesta</span></span>
             </div>
-
             {showAdozione(nomeFase) && (<FaseSwitch className="mt-3" initValue={nomeFase==="AVVIO"} fase="adozione" goToSection={() => history.push(url.replace("home","adozione"))}>
                 <div className="py-4">
                     <Azioni azioni={azioni} filtroFase="avvio" onExecute={goToAction}/>
                 </div>
             </FaseSwitch>)}
-
             <FaseSwitch className="mt-3" initValue={nomeFase==="ANAGRAFICA"} fase="avvio" goToSection={() => history.push(url.replace("home","avvio"))}>
                 <div className="py-4">
                     <Azioni azioni={azioni} onExecute={goToAction}/>
                 </div>
             </FaseSwitch>
-            
         </div >
         <div className={classNames("d-flex flex-column", {"ml-2  pl-3 flex-3 border-left": action})} style={action ? {minWidth: 500}: {}}>
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
-                {azioni.map(({node: {stato = "", tipologia = "",label = "", attore = ""}}) => {
+                {azioni.filter(({node: {attore}}) => attore.toLowerCase() === utente.attore.toLowerCase()).map(({node: {stato = "", tipologia = "",label = "", attore = ""}}) => {
                     const tipo = tipologia.toLowerCase()
                     const El = components[camelCase(tipo)]
                     return El && (
                             <Route key={tipo} path={`${path}/${tipo}`} >
                                 {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<NotAllowed/>)}
                             </Route>)
-
                 })}
+                <Route path={`${path}/osservazioni_privati`} >
+                    {components['osservazioniPrivati']({piano, back:goBack, utente, scadenza})}
+                </Route>
+                <Route path={`${path}/osservazioni_enti`} >
+                    {components['osservazioniEnti']({piano, back:goBack, utente, scadenza})}
+                </Route>
                 { action && (
                 <Route path={path}>
                     <NotAvailable/>

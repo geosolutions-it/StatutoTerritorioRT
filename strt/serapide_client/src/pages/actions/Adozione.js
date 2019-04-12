@@ -22,74 +22,61 @@ import {EnhancedDateSelector} from '../../components/DateSelector'
 import {rebuildTooltip} from '../../enhancers/utils'
 import Input from '../../components/EnhancedInput'
 
-import {GET_AVVIO, UPDATE_AVVIO,
-    DELETE_RISORSA_AVVIO,
-    AVVIO_FILE_UPLOAD, UPDATE_PIANO,
-    GET_CONTATTI,
+import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
+    DELETE_RISORSA_ADOZIONE,
+    ADOZIONE_FILE_UPLOAD,
     AVVIA_PIANO
 } from '../../queries'
 
-
-const getInput = (codice, field) => (val) => (
-    {variables:{ input:{ 
-    pianoOperativo: { [field]: val}, codice}
-}})
-
-
-
-const getGaranteInput = (uuid) => (val) => ({
-    variables: {
-        input: { 
-            proceduraAvvio: {
-                garanteNominativo: val}, 
-            uuid
-        }
-    }})
-const getGarantePecInput = (uuid) => (val) => ({
-        variables: {
-            input: { 
-                proceduraAvvio: {
-                    garantePec: val}, 
+const ADOZIONE_PIANO = AVVIA_PIANO
+const getInput = (uuid, field) => (val) => (
+    {variables:
+        { input:{ 
+            proceduraAdozione: { [field]: val}, 
             uuid
         }
 }})
-const getScadenzaInput = (uuid) => (val) => ({
+
+
+const getDateInput = (uuid,field) => (val) => ({
     variables: {
         input: { 
-            proceduraAvvio: {
-                dataScadenzaRisposta: val.toISOString()},
+            proceduraAdozione: {
+                [field]: val.toISOString()},
             uuid
         }
     }})
 
-const getSuccess = ({uploadRisorsaAvvio: {success}} = {}) => success
+const getSuccess = ({uploadRisorsaAdozione: {success}} = {}) => success
 
-const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
-}
-const fileProps = {className: `border-0`, getSuccess, mutation: AVVIO_FILE_UPLOAD,
-                    resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
+// const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
+//     return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
+// }
+const fileProps = {className: `border-0`, getSuccess, mutation: ADOZIONE_FILE_UPLOAD,
+                    resourceMutation: DELETE_RISORSA_ADOZIONE, disabled: false, isLocked: false}
 const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
-    procedureAvvio: {node: {
-            uuid, conferenzaCopianificazione, 
-            garanteNominativo, garantePec,
+    vas: {node:{ risorse: {edges: resVas =[]} = {}} = {}} = {},
+    proceduraAdozione: {node: {
+            uuid,
+            dataDeliberaAdozione, dataRicezioneOsservazioni,
+            dataRicezionePareri, pubblicazioneBurtUrl,
+            pubblicazioneBurtData, pubblicazioneSitoUrl,
+            pubblicazioneSitoData,
             risorse: {edges=[]} = {}
             } = {}} = {}, 
         piano: {
             redazioneNormeTecnicheAttuazioneUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl,
             autoritaIstituzionali: {edges: aut =[]} = {},
-            altriDestinatari: {edges: dest = []} = {},
-            codice,    
-            risorse: {edges: resPiano = []}} = {}, 
+            altriDestinatari: {edges: dest = []} = {}
+            },
         back}) => {
 
-            const {node: delibera} = resPiano.filter(({node: n}) => n.tipo === "delibera").pop() || {};
             
-            const deliberaAdozione = edges.filter(({node: {tipo}}) => tipo === "delibera_adozione").map(({node}) => node).shift()
+            const {node: rapportoAmbientale} = resVas.filter(({node: {tipo}}) => tipo === "rapporto_ambientale").shift() || {}
+            const {node: deliberaAdozione} = edges.filter(({node: {tipo}}) => tipo === "delibera_adozione").shift() || {}
             const elaboratiAdozione = edges.filter(({node: {tipo}}) => tipo === "elaborati_adozione").map(({node}) => node)
-            const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
-            const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
-            const dataDelibera = undefined
+            // const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
+            // const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
             return (<React.Fragment>
                 <ActionTitle>
                    Trasmissione Adozione
@@ -101,7 +88,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                         <i className="material-icons text-serapide">link</i><div className="pl-1">{redazioneNormeTecnicheAttuazioneUrl}</div>
                     </div>
                 </div>
-                <Resource useLabel fileSize={false} className="border-0 mt-3" icon="attach_file" resource={delibera}/>
+                <Resource useLabel fileSize={false} className="border-0 mt-3" icon="attach_file" resource={rapportoAmbientale}/>
                 <h6 className="pt-3 font-weight-light">CONFORMAZIONE AL PIT-PPR</h6>
                 <div className="mt-1 row d-flex align-items-center">
                     <div className="col-12 d-flex">
@@ -139,7 +126,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 </div>
                 <div className="row mt-4">
                     <div className="col-12 d-flex pl-4 align-items-center">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA ADOZIONE" selected={dataDelibera ? new Date(dataDelibera) : undefined} getInput={getScadenzaInput(uuid)} className="py-0" mutation={UPDATE_AVVIO}/></div>
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA ADOZIONE" selected={dataDeliberaAdozione ? new Date(dataDeliberaAdozione) : undefined} getInput={getDateInput(uuid,"dataDeliberaAdozione")} className="py-0" mutation={UPDATE_ADOZIONE}/></div>
                 </div>
                 
                 <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
@@ -147,37 +134,37 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     {...fileProps}
                     risorse={elaboratiAdozione} 
                     variables={{codice: uuid, tipo: "elaborati_adozione" }}
-                    getFileName={({uploadRisorsaAvvio: {fileName} = {}}) => fileName}/>
+                    getFileName={({uploadRisorsaAdozione: {fileName} = {}}) => fileName}/>
                 
                 <div className="w-100 border-top mt-3"></div>                
                 <h5 className="pt-4 font-weight-light">PUBBLICAZIONE</h5>
                 <div className="mt-2 row d-flex align-items-center">
                     <div className="col-3">URL B.U.R.T</div>
                     <div className="col-9 ">
-                        <Input placeholder="COPIA URL B.U.R.T." getInput={getInput(codice, "redazioneNormeTecnicheAttuazioneUrl")} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={undefined} type="text" />
+                        <Input placeholder="COPIA URL B.U.R.T." getInput={getInput(uuid, "pubblicazioneBurtUrl")} mutation={UPDATE_ADOZIONE} disabled={false}  onChange={undefined} value={pubblicazioneBurtUrl} type="text" />
                     </div>
                     <div className="col-9 mt-2 offset-3">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={dataDelibera ? new Date(dataDelibera) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 " mutation={UPDATE_AVVIO}/>
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneBurtData ? new Date(pubblicazioneBurtData) : undefined} getInput={getDateInput(uuid, "pubblicazioneBurtData")} className="py-0 " mutation={UPDATE_ADOZIONE}/>
                     </div>
 
                 </div>
                 <div className="mt-2 row d-flex align-items-center">
                     <div className="col-3">URL SITO</div>
                     <div className="col-9 ">
-                        <Input placeholder="COPIA URL SITO" getInput={getInput(codice, "redazioneNormeTecnicheAttuazioneUrl")} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={undefined} type="text" />
+                        <Input placeholder="COPIA URL SITO" getInput={getInput(uuid, "pubblicazioneSitoUrl")} mutation={UPDATE_ADOZIONE} disabled={false}  onChange={undefined} value={pubblicazioneSitoUrl} type="text" />
                     </div>
                     <div className="col-9 mt-2 offset-3">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={dataDelibera ? new Date(dataDelibera) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 " mutation={UPDATE_AVVIO}/>
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneSitoData ? new Date(pubblicazioneSitoData) : undefined} getInput={getDateInput(uuid, "pubblicazioneSitoData")} className="py-0 " mutation={UPDATE_ADOZIONE}/>
                     </div>
 
                 </div>
                 <div className="w-100 border-top mt-3"></div>    
                 <div className="row align-items-center pt-4 ">
-                    <div className="col-11"><h5 className="mb-0 font-weight-light">INVIO A SCA E AC</h5>
+                    <div className="col-12"><h5 className="mb-0 font-weight-light">INVIO A SCA E AC</h5>
                     </div>
-                    <div className="col-1">
+                    {/* <div className="col-1">
                     <input  checked={true} className="form-check-input position-static" type="checkbox"/>
-                    </div>
+                    </div> */}
                 
                 
                 <div className="col-12 pt-2">
@@ -191,29 +178,31 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 <div className="row d-flex align-items-center pt-4">
                     <div className="col-1"><i className="material-icons text-serapide">notifications_active</i></div>
                     <div className="col-7"><div className="pl-1 py-1 bg-dark text-serapide">ALERT RICEZIONI OSSERVAZIONI</div></div>
-                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-dark pr-1">date_range</i><span>22/12/2019</span></div>
+                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-dark pr-1">date_range</i><span>{dataRicezioneOsservazioni && formatDate(dataRicezioneOsservazioni)}</span></div>
                     <div className="col-11 offset-1">Il sistema calcola automaticamente la data entro la quale ricevere le osservazioni sulla base
                     della data di pubblicazione su B.U.R.T. e sul sito web</div>
                 </div>
                 <div className="row align-items-center pt-4">
                     <div className="col-1"><i className="material-icons text-serapide">notifications_active</i></div>
                     <div className="col-7"><div className="pl-1 py-1 bg-serapide">ALERT RICEZIONI PARERI</div></div>
-                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-serapide pr-1">date_range</i><span>22/12/2019</span></div>
+                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-serapide pr-1">date_range</i><span>{dataRicezionePareri && formatDate(dataRicezionePareri)}</span></div>
                     <div className="col-11 offset-1">Il sistema calcola automaticamente la data entro la quale ricevere le osservazioni sulla base
                     della data di adozione</div>
                 </div>
                 
                 <div className="w-100 border-top mt-3"></div> 
                 <div className="align-self-center mt-5">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={ auths.length > 0  &&  garanteNominativo && garantePec}></SalvaInvia>
-                
+                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={ADOZIONE_PIANO} 
+                        canCommit={ deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData &&  aut.length > 0}></SalvaInvia>
                 </div>
             </React.Fragment>)})
 
 export default ({back, piano}) => (
-                <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
-                    {({loading, data: {procedureAvvio: {edges = []} = []} = {}}) => {
-                        if(loading) {
+        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
+            {({loadingVas, data: {procedureVas: {edges: vasEdges = []} = []} = {}}) => (
+                <Query query={GET_ADOZIONE} variables={{codice: piano.codice}} onError={showError}>
+                    {({loading, data: {procedureAdozione: {edges = []} = []} = {}}) => {
+                        if(loading || loadingVas) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
                                     <div className="spinner-grow " role="status">
@@ -222,6 +211,7 @@ export default ({back, piano}) => (
                                 </div>)
                         }
                         return (
-                            <UI procedureAvvio={edges[0]} back={back} piano={piano}/>)}
+                            <UI vas={vasEdges[0]} proceduraAdozione={edges[0]} back={back} piano={piano}/>)}
                     }
-                </Query>)
+                </Query>)}
+        </Query>)

@@ -26,7 +26,7 @@ const getActive = (url = "", pathname = "") => {
 }
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
     const activeLocation = getActive(url, pathname)
-    return (<Query query={GET_PIANI} pollInterval={5000} variables={{codice: code}}>
+    return (<Query query={GET_PIANI} pollInterval={10000} variables={{codice: code}}>
 
         {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
             if(loading){

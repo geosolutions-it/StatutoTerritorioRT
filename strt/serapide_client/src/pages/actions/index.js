@@ -15,6 +15,7 @@ import SvolgimentoConferenza from './SvolgimentoConfernza'
 import RichiestaIntegrazioni from './RichiestaIntegrazioni'
 import {INVIO_PARERI_VAS} from '../../queries'
 import Adozione from './Adozione'
+import Osservazioni from './Osservazioni'
 // parametri passati di default piano, back, utente, scadenza
 
 export default {
@@ -31,10 +32,12 @@ export default {
     avvioEsamePareri_sca: (props) => (<AvviaEsamePareri {...props}/>),
     uploadElaboratiVas: (props) => (<UploadElaboratiVAS {...props}/>),
     protocolloGenioCivileId: (props) => (<GenioCivile {...props}/>),
-    formazione_delPiano: (props) => (<FormazionePiano {...props}/>),
+    formazioneDelPiano: (props) => (<FormazionePiano {...props}/>),
     richiestaConferenzaCopianificazione: (props) => (<RichiestaConferenza {...props}/>),
     esitoConferenzaCopianificazione: (props) => (<SvolgimentoConferenza {...props}/>),
     richiestaIntegrazioni: (props) => (<RichiestaIntegrazioni  {...props}/>),
     integrazioniRichieste: (props) => (<IntegrazioniRichieste  {...props}/>),
-    trasmissioneAdozione: (props) => (<Adozione  {...props}/>)
+    trasmissioneAdozione: (props) => (<Adozione  {...props}/>),
+    osservazioniPrivati: (props) => (<Osservazioni  {...props}/>),
+    osservazioniEnti: (props) => (<Osservazioni label="OSSERVAZIONI" titolo="Osservazioni Ente"  filterByUser={false} tipo="osservazioni_enti" {...props}/>)
 }

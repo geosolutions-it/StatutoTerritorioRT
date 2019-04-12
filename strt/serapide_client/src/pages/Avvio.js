@@ -148,7 +148,7 @@ const UI = enhancers(({
                                     </div>
                                 </div>)
                         }
-                        const {node: {dataRichiestaConferenza, risorse: {edges: elabConf = []}} = {}} = edges[0] || {}
+                        const {node: {dataRichiestaConferenza, risorse: {edges: elabConf = []} = {}} = {}} = edges[0] || {}
                         const elaboratiConferenza =  elabConf.filter(({node: {tipo, user = {}}}) => tipo === 'elaborati_conferenza').map(({node}) => node)
                         return (
                         <div className="row pt-4">

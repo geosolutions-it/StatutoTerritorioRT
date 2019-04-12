@@ -232,6 +232,28 @@ fragment AVVIO on ProceduraAvvioNode {
 ${RISORSE}
 `
 
+
+export const ADOZIONE = gql`
+fragment ADOZIONE on ProceduraAdozioneNode {
+        uuid
+        dataCreazione
+        dataDeliberaAdozione
+        dataRicezioneOsservazioni
+        dataRicezionePareri
+        pubblicazioneBurtUrl
+        pubblicazioneBurtData
+        pubblicazioneSitoUrl
+        pubblicazioneSitoData
+        osservazioniConcluse
+        conclusa
+        risorse(archiviata: false) {
+            ...Risorse
+        }
+}
+${RISORSE}
+`
+
+
 export const CONFERENZA_COPIANIFICAZIONE = gql`
 fragment CONFERENZA on ConferenzaCopianificazioneNode {
         uuid

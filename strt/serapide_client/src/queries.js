@@ -40,7 +40,19 @@ query GetAvvio($codice: String!) {
 ${FR.AVVIO}
 `
 
-
+export const GET_ADOZIONE = gql`
+query GetAdozione($codice: String!) {
+    procedureAdozione(piano_Codice: $codice) {
+        edges{
+          node{
+            ...ADOZIONE 
+            }
+            
+        }
+    }
+}
+${FR.ADOZIONE}
+`
 
 
 export const GET_CONSULTAZIONE_VAS = gql`
@@ -434,19 +446,44 @@ mutation InvioProtocolloGenioCivile($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
-// altre mutations
+// adozione
 
-export const CREATE_CONTATTO = gql`
-mutation CreaContatto($input: CreateContattoInput!){
-  createContatto(input: $input){
-    nuovoContatto{
-      ...Contatto
+export const ADOZIONE_FILE_UPLOAD = gql`
+mutation AdozioneUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    uploadRisorsaAdozione(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      proceduraAdozioneAggiornata {
+          ...ADOZIONE
+      }
+      fileName
     }
   }
-	
-}
-${FR.CONTATTO}
+  ${FR.ADOZIONE}
 `
+
+export const UPDATE_ADOZIONE = gql`
+mutation UpdateProceduraAdozione($input: UpdateProceduraAdozioneInput!) {
+    updateProceduraAdozione(input: $input) {
+        proceduraAdozioneAggiornata {
+            ...ADOZIONE
+        }
+    }
+}
+${FR.ADOZIONE}
+`
+
+export const DELETE_RISORSA_ADOZIONE = gql`
+mutation DeleteRisorsaAdozione($id: ID!, $codice: String!) {
+    deleteRisorsaAdozione(risorsaId: $id, codice: $codice){
+        success
+        proceduraAdozioneAggiornata {
+            ...ADOZIONE
+        }
+    }
+}
+${FR.ADOZIONE}
+`
+
 // Mutation avvio procedura
 
 export const AVVIO_FILE_UPLOAD = gql`
@@ -584,7 +621,19 @@ ${FR.AZIONI_PIANO}
 
 
 `
+// altre mutations
 
+export const CREATE_CONTATTO = gql`
+mutation CreaContatto($input: CreateContattoInput!){
+  createContatto(input: $input){
+    nuovoContatto{
+      ...Contatto
+    }
+  }
+	
+}
+${FR.CONTATTO}
+`
 
 // LOCAL STATE
 // example of local state query
