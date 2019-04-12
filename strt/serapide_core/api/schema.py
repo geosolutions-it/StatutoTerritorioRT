@@ -35,6 +35,7 @@ from serapide_core.api.graphene.mutations import (
     avvio,
     piano,
     uploads,
+    adozione,
 )
 
 logger = logging.getLogger(__name__)
@@ -148,11 +149,16 @@ class Mutation(object):
     richiesta_conferenza_copianificazione = avvio.RichiestaConferenzaCopianificazione.Field()
     chiusura_conferenza_copianificazione = avvio.ChiusuraConferenzaCopianificazione.Field()
 
+    create_procedura_adozione = adozione.CreateProceduraAdozione.Field()
+    update_procedura_adozione = adozione.UpdateProceduraAdozione.Field()
+
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
     upload_risorsa_vas = uploads.UploadRisorsaVAS.Field()
     delete_risorsa_vas = uploads.DeleteRisorsaVAS.Field()
     upload_risorsa_avvio = uploads.UploadRisorsaAvvio.Field()
     delete_risorsa_avvio = uploads.DeleteRisorsaAvvio.Field()
+    upload_risorsa_adozione = uploads.UploadRisorsaAdozione.Field()
+    delete_risorsa_adozione = uploads.DeleteRisorsaAdozione.Field()
     upload_risorsa_copianificazione = uploads.UploadRisorsaCopianificazione.Field()
     delete_risorsa_copianificazione = uploads.DeleteRisorsaCopianificazione.Field()

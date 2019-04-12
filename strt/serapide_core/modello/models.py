@@ -740,6 +740,60 @@ class RisorseCopianificazione(models.Model):
 
 
 # ############################################################################ #
+# - Adozione
+# ############################################################################ #
+class ProceduraAdozione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_delibera_adozione = models.DateTimeField(null=True, blank=True)
+    data_ricezione_osservazioni = models.DateTimeField(null=True, blank=True)
+    data_ricezione_pareri = models.DateTimeField(null=True, blank=True)
+
+    pubblicazione_burt_url = models.URLField(null=True, blank=True, default='')
+    pubblicazione_burt_data = models.DateTimeField(null=True, blank=True)
+    pubblicazione_sito_url = models.URLField(null=True, blank=True, default='')
+    pubblicazione_sito_data = models.DateTimeField(null=True, blank=True)
+
+    osservazioni_concluse = models.BooleanField(null=False, blank=False, default=False)
+
+    conclusa = models.BooleanField(null=False, blank=False, default=False)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorseAdozione')
+
+    ente = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_adozione"
+        verbose_name_plural = 'Procedure Adozione'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+
+
+class RisorseAdozione(models.Model):
+    procedura_adozione = models.ForeignKey(ProceduraAdozione, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_adozione_risorse"
+
+
+# ############################################################################ #
 # Model Signals
 # ############################################################################ #
 @receiver(post_delete, sender=Contatto)

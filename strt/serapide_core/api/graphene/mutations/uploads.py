@@ -34,10 +34,12 @@ from serapide_core.modello.models import (
     Risorsa,
     ProceduraVAS,
     ProceduraAvvio,
+    ProceduraAdozione,
     ConferenzaCopianificazione,
     RisorsePiano,
     RisorseVas,
     RisorseAvvio,
+    RisorseAdozione,
     RisorseCopianificazione,
 )
 
@@ -231,6 +233,50 @@ class UploadRisorsaAvvio(UploadBaseBase):
         return GraphQLError(_("Not Allowed"), code=405)
 
 
+class UploadRisorsaAdozione(UploadBaseBase):
+
+    success = graphene.Boolean()
+    procedura_adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
+    file_name = graphene.String()
+
+    @classmethod
+    def mutate(cls, root, info, file, **input):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _uuid_adozione = input['codice']
+            _tipo_file = input['tipo_file']
+
+            try:
+                # Validating 'Procedura VAS'
+                _procedura_adozione = ProceduraAdozione.objects.get(uuid=_uuid_adozione)
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_adozione.piano):
+                    _resources = UploadBaseBase.handle_uploaded_data(
+                        file,
+                        _uuid_adozione,
+                        _procedura_adozione.piano.fase,
+                        _tipo_file,
+                        info.context.user
+                    )
+                    _success = False
+                    if _resources and len(_resources) > 0:
+                        _success = True
+                        for _risorsa in _resources:
+                            RisorseAdozione(procedura_adozione=_procedura_adozione, risorsa=_risorsa).save()
+                    return UploadRisorsaAdozione(
+                        procedura_adozione_aggiornata=_procedura_adozione,
+                        success=_success,
+                        file_name=_resources[0].nome)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
+
+
 class UploadRisorsaCopianificazione(UploadBaseBase):
 
     success = graphene.Boolean()
@@ -395,6 +441,35 @@ class DeleteRisorsaAvvio(DeleteRisorsaBase):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaAvvio(procedura_avvio_aggiornata=_procedura_avvio, success=_success)
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+
+        # Something went wrong
+        return GraphQLError(_("Not Allowed"), code=405)
+
+
+class DeleteRisorsaAdozione(DeleteRisorsaBase):
+
+    success = graphene.Boolean()
+    procedura_adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+            # Fetching input arguments
+            _id = input['risorsa_id']
+            _uuid_adozione = input['codice']
+            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+            try:
+                _procedura_adozione = ProceduraAdozione.objects.get(uuid=_uuid_adozione)
+                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_adozione.piano):
+                    _risorsa = Risorsa.objects.get(uuid=_id)
+                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                    return DeleteRisorsaAdozione(procedura_adozione_aggiornata=_procedura_adozione, success=_success)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
