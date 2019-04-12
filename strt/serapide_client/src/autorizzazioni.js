@@ -35,7 +35,8 @@ const azioni = {
         "TRASMISSIONE_ADOZIONE": ["RUP", "OP"],
         "UPLOAD_OSSERVAZIONI_PRIVATI": ["RUP", "OP"],
         "OSSERVAZIONI_ENTI": ["*"],
-        "OSSERVAZIONI_REGIONE": ["TMP"]
+        "OSSERVAZIONI_REGIONE": ["TMP"],
+        "CONTRODEDUZIONI": ["RUP", "OP", "TMP"]
     }
 export const globalAuth = {
     _attore_attivo: "",
