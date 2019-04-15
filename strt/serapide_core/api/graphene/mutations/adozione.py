@@ -350,7 +350,9 @@ class Controdeduzioni(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
@@ -413,7 +415,9 @@ class PianoControdedotto(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
@@ -482,7 +486,9 @@ class ConvocazioneConferenzaPaesaggistica(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
@@ -538,7 +544,9 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
