@@ -11,7 +11,7 @@ import {Query} from 'react-apollo'
 import {GET_AVVIO,
     UPDATE_AVVIO,
     RICHIESTA_INTEGRAZIONI
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import {EnhancedSwitch} from '../../components/Switch'

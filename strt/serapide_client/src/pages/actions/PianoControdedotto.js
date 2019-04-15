@@ -12,7 +12,7 @@ import {Query} from 'react-apollo'
 import {GET_ADOZIONE,
     UPDATE_ADOZIONE,
      INVIO_PARERI_VERIFICA
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import  {showError, formatDate} from '../../utils'

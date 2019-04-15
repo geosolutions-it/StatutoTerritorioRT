@@ -13,7 +13,7 @@ import {Query} from 'react-apollo'
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD, UPLOAD_ELABORATI_VAS
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 
 import  {showError} from '../../utils'

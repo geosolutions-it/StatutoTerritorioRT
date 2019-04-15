@@ -24,7 +24,7 @@ import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     UPDATE_CONSULTAZIONE_VAS,
     AVVIO_CONSULTAZIONE_VAS, UPDATE_PIANO,
     GET_CONTATTI
-} from '../../queries'
+} from '../../graphql'
 
 
 

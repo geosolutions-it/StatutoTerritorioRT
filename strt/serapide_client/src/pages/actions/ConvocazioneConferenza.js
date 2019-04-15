@@ -14,7 +14,7 @@ import {
     AVVIO_FILE_UPLOAD,
     DELETE_RISORSA_AVVIO
 
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import {toggleControllableState} from '../../enhancers/utils'

@@ -13,7 +13,7 @@ import RichiestaConferenza from './RichiestaConferenza'
 import IntegrazioniRichieste from './IntegrazioniRichieste'
 import SvolgimentoConferenza from './SvolgimentoConfernza'
 import RichiestaIntegrazioni from './RichiestaIntegrazioni'
-import {INVIO_PARERI_VAS} from '../../queries'
+import {INVIO_PARERI_VAS, CONTRODEDUZIONI} from '../../graphql'
 import Adozione from './Adozione'
 import Osservazioni from './Osservazioni'
 import OsservazioniRegione from './OsservazioniRegione'
@@ -42,7 +42,7 @@ export default {
     trasmissioneAdozione: (props) => (<Adozione  {...props}/>),
     uploadOsservazioniPrivati: (props) => (<Osservazioni  {...props}/>),
     osservazioniEnti: (props) => (<Osservazioni disableSave={true} label="OSSERVAZIONI" titolo="Osservazioni Ente"  filterByUser={false} tipo="osservazioni_enti" {...props}/>),
-    controdeduzioni: (props) => (<Osservazioni showData={false} label="Carica Files" titolo="CONTRODEDUZIONI"   tipo="controdeduzioni" {...props}/>),
+    controdeduzioni: (props) => (<Osservazioni saveMutation={CONTRODEDUZIONI} showData={false} label="Carica Files" titolo="CONTRODEDUZIONI"   tipo="controdeduzioni" {...props}/>),
     osservazioniRegione: (props) => (<OsservazioniRegione  {...props}/>)
 }
 

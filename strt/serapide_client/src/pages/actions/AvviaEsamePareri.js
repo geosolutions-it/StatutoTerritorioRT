@@ -16,7 +16,7 @@ import className from "classnames"
 import {map} from 'lodash'
 import {GET_VAS,
     AVVIO_ESAME_PARERI_SCA
-} from '../../queries'
+} from '../../graphql'
 import  {showError, getNominativo} from '../../utils'
 import {toggleControllableState} from '../../enhancers/utils'
 

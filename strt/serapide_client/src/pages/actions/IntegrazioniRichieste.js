@@ -12,7 +12,7 @@ import {Query} from 'react-apollo'
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
     AVVIO_FILE_UPLOAD, INTEGRAZIONI_RICHIESTE
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import {EnhancedDateSelector} from '../../components/DateSelector'

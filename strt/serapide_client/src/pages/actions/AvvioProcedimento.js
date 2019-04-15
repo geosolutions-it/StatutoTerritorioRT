@@ -27,7 +27,7 @@ import {GET_AVVIO, UPDATE_AVVIO,
     AVVIO_FILE_UPLOAD, UPDATE_PIANO,
     GET_CONTATTI,
     AVVIA_PIANO
-} from '../../queries'
+} from '../../graphql'
 
 
 const getGaranteInput = (uuid) => (val) => ({

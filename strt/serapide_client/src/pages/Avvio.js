@@ -8,7 +8,7 @@
 import React from 'react'
 import Risorsa from '../components/Resource'
 import {formatDate, showError} from '../utils'
-import {GET_AVVIO, GET_CONFERENZA} from '../queries'
+import {GET_AVVIO, GET_CONFERENZA} from '../graphql'
 import {Query} from 'react-apollo'
 import {withControllableState} from '../enhancers/utils'
 import {Nav, NavItem,NavLink, TabContent,TabPane} from 'reactstrap'

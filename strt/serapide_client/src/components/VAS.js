@@ -12,7 +12,7 @@ import Button from './IconButton'
 import {formatDate, getNominativo, showError} from '../utils'
 import {EnhancedListSelector} from './ListSelector'
 import Resource from '../components/Resource'
-import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD, DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO, PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from '../queries'
+import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD, DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO, PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from '../graphql'
 import { Query, Mutation} from 'react-apollo';
 import { toast } from 'react-toastify'
 import AddContact from '../components/AddContact'

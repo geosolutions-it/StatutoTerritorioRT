@@ -26,7 +26,7 @@ import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
     DELETE_RISORSA_ADOZIONE,
     ADOZIONE_FILE_UPLOAD,
     TRASMISSIONE_ADOZIONE
-} from '../../queries'
+} from '../../graphql'
 
 
 const getInput = (uuid, field) => (val) => (

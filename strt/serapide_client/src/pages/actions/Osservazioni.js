@@ -11,7 +11,7 @@ import {Query} from 'react-apollo'
 import {GET_ADOZIONE,
     DELETE_RISORSA_ADOZIONE,
     ADOZIONE_FILE_UPLOAD, TRASMISSIONE_OSSERVAZIONI
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import  {showError, formatDate, daysSub} from '../../utils'

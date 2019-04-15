@@ -8,7 +8,7 @@ import React from 'react'
 import {Input} from 'reactstrap'
 import {Mutation, Query} from  "react-apollo"
 import classNames from "classnames"
-import {GET_ENTI, CREATE_CONTATTO, GET_CONTATTI, GET_TIPO_CONTATTO} from '../queries'
+import {GET_ENTI, CREATE_CONTATTO, GET_CONTATTI, GET_TIPO_CONTATTO} from '../graphql'
 
 import EnteSelector from "./EnteSelector"
 import { withStateHandlers, compose} from 'recompose';

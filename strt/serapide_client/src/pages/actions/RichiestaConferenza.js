@@ -11,7 +11,7 @@ import {
     UPDATE_PIANO,
     INVIO_PROTOCOLLO_GENIO,
     GET_AVVIO
-} from '../../queries'
+} from '../../graphql'
 import {FormGroup, Input, Label} from 'reactstrap'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'

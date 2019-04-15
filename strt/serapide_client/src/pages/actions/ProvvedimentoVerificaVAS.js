@@ -21,7 +21,7 @@ import {GET_VAS,
     VAS_FILE_UPLOAD,
     UPDATE_VAS,
     PROVVEDIMENTO_VERIFICA_VAS
-} from '../../queries'
+} from '../../graphql'
 import  {showError, formatDate,daysSub, getNominativo} from '../../utils'
 
 

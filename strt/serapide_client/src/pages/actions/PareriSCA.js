@@ -12,7 +12,7 @@ import {Query} from 'react-apollo'
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD, INVIO_PARERI_VERIFICA
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import RichiestaComune from '../../components/RichiestaComune'

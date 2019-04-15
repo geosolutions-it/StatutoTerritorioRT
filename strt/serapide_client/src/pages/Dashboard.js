@@ -14,7 +14,7 @@ import Button from '../components/IconButton'
 import {Query, Mutation} from "react-apollo"; 
 import TextWithTooltip from '../components/TextWithTooltip'
 import {toast} from 'react-toastify';
-import {GET_PIANI, DELETE_PIANO} from '../queries'
+import {GET_PIANI, DELETE_PIANO} from '../graphql'
 import IconButton from '../components/IconButton';
 import { toggleControllableState } from '../enhancers/utils';
 

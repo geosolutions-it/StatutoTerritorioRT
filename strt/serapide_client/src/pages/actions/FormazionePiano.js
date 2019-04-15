@@ -12,7 +12,7 @@ import {
     VAS_FILE_UPLOAD,
     DELETE_RISORSA_VAS,
     FORMAZIONE_PIANO
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import Input from '../../components/EnhancedInput'

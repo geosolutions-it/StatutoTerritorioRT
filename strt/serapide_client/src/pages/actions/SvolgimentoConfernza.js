@@ -11,7 +11,7 @@ import {Query} from 'react-apollo'
 import {GET_CONFERENZA,GET_AVVIO,
     DELETE_RISORSA_COPIANIFICAZIONE,UPDATE_AVVIO,
     CONFEREZA_FILE_UPLOAD, CHIUSURA_CONFERENZA_COPIANIFICAZIONE
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import {EnhancedSwitch} from '../../components/Switch'

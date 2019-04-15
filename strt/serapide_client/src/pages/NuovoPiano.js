@@ -14,7 +14,7 @@ import { Mutation, Query} from "react-apollo";
 import EnteSelector from "../components/EnteSelector"
 import { toast } from 'react-toastify'
 import  {rebuildTooltip} from '../enhancers/utils'
-import {CREA_PIANO, CREA_PIANO_PAGE, GET_PIANI} from '../queries'
+import {CREA_PIANO, CREA_PIANO_PAGE, GET_PIANI} from '../graphql'
 
 
 /** 

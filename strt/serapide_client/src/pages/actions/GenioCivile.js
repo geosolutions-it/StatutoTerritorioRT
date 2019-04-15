@@ -10,7 +10,7 @@ import {
     UPDATE_PIANO,
     INVIO_PROTOCOLLO_GENIO,
     GET_AVVIO
-} from '../../queries'
+} from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import Input from '../../components/EnhancedInput'
