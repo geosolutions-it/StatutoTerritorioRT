@@ -388,13 +388,16 @@ class PianoControdedotto(graphene.Mutation):
             _piano_controdedotto = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.piano_controdedotto).first()
 
-            if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna:
+            if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna and \
+            procedura_adozione.url_piano_controdedotto:
                 _piano_controdedotto.stato = STATO_AZIONE.nessuna
                 _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
                 _piano_controdedotto.save()
 
                 if not procedura_adozione.richiesta_conferenza_paesaggistica:
+
                     piano.chiudi_pendenti()
+
                     procedura_adozione.conclusa = True
                     procedura_adozione.save()
                 else:
@@ -551,6 +554,70 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
                 return EsitoConferenzaPaesaggistica(
+                    adozione_aggiornata=_procedura_adozione,
+                    errors=[]
+                )
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+
+        # Update Azioni Piano
+        # - Update Action state accordingly
+        if fase.nome == FASE.avvio:
+            _rev_piano_post_cp = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp).first()
+
+            if _rev_piano_post_cp and _rev_piano_post_cp.stato != STATO_AZIONE.nessuna and \
+            procedura_adozione.url_rev_piano_post_cp:
+                _rev_piano_post_cp.stato = STATO_AZIONE.nessuna
+                _rev_piano_post_cp.data = datetime.datetime.now(timezone.get_current_timezone())
+                _rev_piano_post_cp.save()
+
+                piano.chiudi_pendenti()
+
+                procedura_adozione.conclusa = True
+                procedura_adozione.save()
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
+        _piano = _procedura_adozione.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
+
+                    _piano.save()
+                    fase.promuovi_piano(_fase, _piano)
+
+                return RevisionePianoPostConfPaesaggistica(
                     adozione_aggiornata=_procedura_adozione,
                     errors=[]
                 )

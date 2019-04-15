@@ -773,6 +773,7 @@ class ProceduraAdozione(models.Model):
 
     richiesta_conferenza_paesaggistica = models.BooleanField(null=False, blank=False, default=False)
     url_piano_controdedotto = models.URLField(null=True, blank=True, default='')
+    url_rev_piano_post_cp = models.URLField(null=True, blank=True, default='')
 
     conclusa = models.BooleanField(null=False, blank=False, default=False)
 

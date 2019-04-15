@@ -172,3 +172,4 @@ class ProceduraAdozioneUpdateInput(InputObjectType):
     osservazioni_concluse = graphene.Boolean(required=False)
     richiesta_conferenza_paesaggistica = graphene.Boolean(required=False)
     url_piano_controdedotto = graphene.String(required=False)
+    url_rev_piano_post_cp = graphene.String(required=False)

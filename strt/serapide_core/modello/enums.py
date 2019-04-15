@@ -125,6 +125,8 @@ TIPOLOGIA_AZIONE = Choices(
         ('convocazione_conferenza_paesaggistica', _('Convocazione Conferenza Paesaggistica')),  # Regione
         ('esito_conferenza_paesaggistica', _('Esiti conferenza paesaggistica')),  # Regione
         ('rev_piano_post_cp', _('Revisione Piano post Conf. Paesaggistica')),  # Comune
+        # Approvazione
+        ('trasmissione_approvazione', _('Invio documentazione per Approvazione')),  # Comune
     )
 
 FASE_AZIONE = Choices(
@@ -158,6 +160,8 @@ FASE_AZIONE = Choices(
         ('convocazione_conferenza_paesaggistica', 'avvio'),
         ('esito_conferenza_paesaggistica', 'avvio'),
         ('rev_piano_post_cp', 'avvio'),
+        # Approvazione
+        ('trasmissione_approvazione', 'approvazione'),
     )
 
 TOOLTIP_AZIONE = Choices(
@@ -205,6 +209,12 @@ AZIONI_BASE = {
     FASE.avvio: [
         {
             "tipologia": TIPOLOGIA_AZIONE.trasmissione_adozione,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
+    ],
+    FASE.adozione: [
+        {
+            "tipologia": TIPOLOGIA_AZIONE.trasmissione_approvazione,
             "attore": TIPOLOGIA_ATTORE.comune
         },
     ]
