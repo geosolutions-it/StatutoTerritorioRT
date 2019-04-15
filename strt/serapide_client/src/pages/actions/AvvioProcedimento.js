@@ -8,6 +8,7 @@
 import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
 import UploadFiles from '../../components/UploadFiles'
+import Elaborati from '../../components/ElaboratiPiano'
 import  {showError} from '../../utils'
 
 import {Query, Mutation} from "react-apollo"
@@ -70,6 +71,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
             risorse: {edges=[]} = {}
             } = {}} = {}, 
         piano: {
+            tipo: tipoPiano = "",
             autoritaIstituzionali: {edges: aut =[]} = {},
             altriDestinatari: {edges: dest = []} = {},
             codice,    
@@ -110,14 +112,16 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     placeholder={(<span>Programma delle attività di informazione e di partecipazione<TextWithTooltip dataTip="art. 17, lett.e, L.R. 65/2014"/></span>)}
                     risorsa={programma} variables={{codice: uuid, tipo: "programma_attivita" }}/>
                 </div>
-                
-                <h4 className="font-weight-light pt-5 pl-2 pb-1">ALTRI ALLEGATI</h4>
-                <UploadFiles 
-                    {...fileProps}
-                    risorse={allegati} 
-                    variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
-                    />
-                
+
+
+                <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
+                <Elaborati 
+                           tipoPiano={tipoPiano.toLowerCase()} 
+                           resources={edges}
+                           mutation={AVVIO_FILE_UPLOAD}
+                           resourceMutation={DELETE_RISORSA_AVVIO}
+                           uuid={uuid}
+                           />   
                 
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
                 <Input getInput={getGaranteInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />

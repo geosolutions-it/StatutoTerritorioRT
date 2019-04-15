@@ -7,20 +7,20 @@
  */
 import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
-import UploadFiles from '../../components/UploadFiles'
+
 import  {showError, formatDate} from '../../utils'
 
 import {Query, Mutation} from "react-apollo"
 import Resource from '../../components/Resource'
-import {EnhancedListSelector} from '../../components/ListSelector'
+
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
-import AddContact from '../../components/AddContact'
-import Button from '../../components/IconButton'
+
 import TextWithTooltip from '../../components/TextWithTooltip'
 import {EnhancedDateSelector} from '../../components/DateSelector'
 import {rebuildTooltip} from '../../enhancers/utils'
 import Input from '../../components/EnhancedInput'
+import Elaborati from '../../components/ElaboratiPiano'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
     DELETE_RISORSA_ADOZIONE,
@@ -65,13 +65,13 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
             risorse: {edges=[]} = {}
             } = {}} = {}, 
         piano: {
+            tipo: tipoPiano = "",
             redazioneNormeTecnicheAttuazioneUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl,
             autoritaIstituzionali: {edges: aut =[]} = {},
             altriDestinatari: {edges: dest = []} = {}
             },
         back}) => {
 
-            
             const {node: rapportoAmbientale} = resVas.filter(({node: {tipo}}) => tipo === "rapporto_ambientale").shift() || {}
             const {node: deliberaAdozione} = edges.filter(({node: {tipo}}) => tipo === "delibera_adozione").shift() || {}
             const elaboratiAdozione = edges.filter(({node: {tipo}}) => tipo === "elaborati_adozione").map(({node}) => node)
@@ -130,12 +130,13 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 </div>
                 
                 <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
-                <UploadFiles 
-                    {...fileProps}
-                    risorse={elaboratiAdozione} 
-                    variables={{codice: uuid, tipo: "elaborati_adozione" }}
-                />
-                
+                <Elaborati 
+                           tipoPiano={tipoPiano.toLowerCase()} 
+                           resources={edges}
+                           mutation={ADOZIONE_FILE_UPLOAD}
+                           resourceMutation={DELETE_RISORSA_ADOZIONE}
+                           uuid={uuid}
+                           />               
                 <div className="w-100 border-top mt-3"></div>                
                 <h5 className="pt-4 font-weight-light">PUBBLICAZIONE</h5>
                 <div className="mt-2 row d-flex align-items-center">

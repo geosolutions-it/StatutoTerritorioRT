@@ -60,7 +60,9 @@ export const getAction = (stato) => {
     }
 }
 
-export const showError = (error) => {
-    toast.error(error.message,  {autoClose: true})
+export const showError = ({graphQLErrors, message, networkError: {result:{errors = []} = {}} = {}}) => {
+    const er = [...graphQLErrors, ...errors]
+    if(er) er.map(({message}) => toast.error(message,  {autoClose: true})) 
+    else toast.error(message,  {autoClose: true})
 }
 
