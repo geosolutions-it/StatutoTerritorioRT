@@ -47,7 +47,7 @@ const UI = ({
                         mutation={ADOZIONE_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_ADOZIONE}
                         variables={{codice: uuid, tipo: tipoDoc }}
-                        isLocked={false} getSuccess={({uploadRisorsaAdozione: {success}}) => success} getFileName={({uploadRisorsaAdozione: {fileName} = {}}) => fileName}/>
+                        isLocked={false}/>
                 
                 <div className="align-self-center mt-7">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={osservazioni.length> 0 && !disableSave}></SalvaInvia>

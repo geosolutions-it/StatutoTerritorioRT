@@ -50,9 +50,6 @@ const SwitchAssoggetamento = ({uuid, assoggettamento}) => (
 
 
 
-const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
-
-
 
 const UI = rebuildTooltip()(({back, vas: {node: {uuid, assoggettamento, relazioneMotivataVasSemplificata, documentoPreliminareVerifica, tipologia, risorse : {edges: resources = []} = {}} = {}} = {}, scadenza}) => {
     const IsSemplificata = tipologia === 'SEMPLIFICATA';
@@ -95,7 +92,7 @@ const UI = rebuildTooltip()(({back, vas: {node: {uuid, assoggettamento, relazion
                 <FileUpload 
                      className={`border-0 ${!provvedimento ? "flex-column": ""}`}
                     sz="sm" modal={false} showBtn={false} 
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
+                    mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={provvedimento} variables={{codice: uuid, tipo: "provvedimento_verifica_vas" }}/>
                 </div>

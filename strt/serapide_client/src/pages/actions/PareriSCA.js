@@ -19,7 +19,6 @@ import RichiestaComune from '../../components/RichiestaComune'
 import  {showError, formatDate, daysSub} from '../../utils'
 
 
-const getSuccess = ({uploadConsultazioneVas: {success}} = {}) => success
 
 
 const UI = ({
@@ -52,14 +51,13 @@ const UI = ({
                         mutation={VAS_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_VAS}
                         variables={{codice: uuid, tipo: tipoDoc }}
-                        isLocked={false} getSuccess={({uploadRisorsaVas: {success}}) => success} getFileName={({uploadRisorsaVas: {fileName} = {}}) => fileName}/>
+                        isLocked={false}/>
                     {/* Se dovessere essere un file singolo
                     <div style={{width: "100%"}} className="action-uploader d-flex align-self-start pb-5">
 
                     <FileUpload 
                         className="border-0 flex-column"
                         sz="sm" modal={false} showBtn={false} 
-                        getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                         isLocked={false} risorsa={docParere} variables={{codice: uuid, tipo: "parere_verifica_vas" }}/>
                     </div> */}

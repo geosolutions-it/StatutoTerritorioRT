@@ -47,12 +47,12 @@ const getDateInput = (uuid,field) => (val) => ({
         }
     }})
 
-const getSuccess = ({uploadRisorsaAdozione: {success}} = {}) => success
+
 
 // const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
 //     return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
 // }
-const fileProps = {className: `border-0`, getSuccess, mutation: ADOZIONE_FILE_UPLOAD,
+const fileProps = {className: `border-0`, mutation: ADOZIONE_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_ADOZIONE, disabled: false, isLocked: false}
 const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
     vas: {node:{ risorse: {edges: resVas =[]} = {}} = {}} = {},
@@ -134,7 +134,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     {...fileProps}
                     risorse={elaboratiAdozione} 
                     variables={{codice: uuid, tipo: "elaborati_adozione" }}
-                    getFileName={({uploadRisorsaAdozione: {fileName} = {}}) => fileName}/>
+                />
                 
                 <div className="w-100 border-top mt-3"></div>                
                 <h5 className="pt-4 font-weight-light">PUBBLICAZIONE</h5>

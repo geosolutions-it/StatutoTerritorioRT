@@ -19,9 +19,6 @@ import SalvaInvia from '../../components/SalvaInvia'
 import  {showError} from '../../utils'
 
 
-const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
-
-
 const UI = ({
     back, 
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}}
@@ -38,7 +35,7 @@ const UI = ({
                 <FileUpload 
                     className="border-0"
                     placeholder="Documento preliminare di VAS"
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
+                    mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
                 </div>
@@ -47,7 +44,7 @@ const UI = ({
                         mutation={VAS_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_VAS}
                         variables={{codice: uuid, tipo: "elaborati_vas" }}
-                        isLocked={false} getSuccess={({uploadRisorsaVas: {success}}) => success} getFileName={({uploadRisorsaVas: {fileName} = {}}) => fileName}/>
+                        isLocked={false} />
                 <div className="align-self-center mt-7">
                     <SalvaInvia onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto && elaborati.length > 0}></SalvaInvia>
                 </div>

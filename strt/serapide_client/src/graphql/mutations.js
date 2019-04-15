@@ -1,6 +1,9 @@
 import gql from "graphql-tag";
 import * as FR from './fragments'
 
+
+
+
 // Piano
 export const CREA_PIANO= gql`mutation CreatePiano($input: CreatePianoInput!) {
     createPiano(input: $input) {
@@ -38,30 +41,6 @@ export const DELETE_PIANO = gql`
         codicePiano
     }
 }
-`
-// Risorse Piano
-export const FILE_UPLOAD = gql`
-mutation UploadFile($file: Upload!, $codice: String!, $tipo: String!) {
-    upload(file: $file, codice: $codice, tipoFile: $tipo) {
-      success
-      pianoAggiornato {
-        ...Piano
-    }
-      fileName
-    }
-  }
-  ${FR.PIANO}
-`
-export const DELETE_RISORSA = gql`
-mutation($id: ID!, $codice: String!) {
-    deleteRisorsa(risorsaId: $id, codice: $codice){
-        success
-        pianoAggiornato {
-            ...Piano
-        }
-    }
-}
-${FR.PIANO}
 `
 
 // VAS
@@ -130,31 +109,7 @@ ${FR.AZIONI_PIANO}
 ${FR.VAS}
 `
 
-// Risorse VAS
-export const VAS_FILE_UPLOAD = gql`
-mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
-    uploadRisorsaVas(file: $file, codice: $codice, tipoFile: $tipo) {
-      success
-      proceduraVasAggiornata {
-          ...VAS
-      }
-      fileName
-    }
-  }
-  ${FR.VAS}
-`
 
-export const DELETE_RISORSA_VAS = gql`
-mutation($id: ID!, $codice: String!) {
-    deleteRisorsaVas(risorsaId: $id, codice: $codice){
-        success
-        proceduraVasAggiornata {
-            ...VAS
-        }
-    }
-}
-${FR.VAS}
-`
 
 export const PROVVEDIMENTO_VERIFICA_VAS = gql`
 mutation ProvveddimentoVerificaVAS($uuid: String!) {
@@ -306,32 +261,6 @@ mutation Contorodeduzioni($codice: String!){
 ${FR.AZIONI_PIANO}
 `
 
-// Risorse Adozione
-export const ADOZIONE_FILE_UPLOAD = gql`
-mutation AdozioneUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
-    uploadRisorsaAdozione(file: $file, codice: $codice, tipoFile: $tipo) {
-      success
-      proceduraAdozioneAggiornata {
-          ...ADOZIONE
-      }
-      fileName
-    }
-  }
-  ${FR.ADOZIONE}
-`
-
-export const DELETE_RISORSA_ADOZIONE = gql`
-mutation DeleteRisorsaAdozione($id: ID!, $codice: String!) {
-    deleteRisorsaAdozione(risorsaId: $id, codice: $codice){
-        success
-        proceduraAdozioneAggiornata {
-            ...ADOZIONE
-        }
-    }
-}
-${FR.ADOZIONE}
-`
-
 // Procedura Avvio
 
 export const UPDATE_AVVIO = gql`
@@ -386,31 +315,7 @@ mutation IntegrazioniRichieste($codice: String!) {
 }
 ${FR.AZIONI_PIANO}
 `
-// Risorse Avvio
-export const AVVIO_FILE_UPLOAD = gql`
-mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
-    uploadRisorsaAvvio(file: $file, codice: $codice, tipoFile: $tipo) {
-      success
-      proceduraAvvioAggiornata {
-          ...AVVIO
-      }
-      fileName
-    }
-  }
-  ${FR.AVVIO}
-`
 
-export const DELETE_RISORSA_AVVIO = gql`
-mutation DeleteRisorsaAvvio($id: ID!, $codice: String!) {
-    deleteRisorsaAvvio(risorsaId: $id, codice: $codice){
-        success
-        proceduraAvvioAggiornata {
-            ...AVVIO
-        }
-    }
-}
-${FR.AVVIO}
-`
 
 export const RICHIESTA_CONFERENZA_COPIANIFICAZIONE = gql`
 mutation RichiestaConferenzaCopianificazione($codice: String!) {
@@ -426,31 +331,7 @@ mutation RichiestaConferenzaCopianificazione($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
-// Risorse Confenrenza
-export const CONFEREZA_FILE_UPLOAD = gql`
-mutation ConferenzaUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
-  uploadRisorsaCopianificazione(file: $file, codice: $codice, tipoFile: $tipo) {
-      success
-      conferenzaCopianificazioneAggiornata {
-          ...CONFERENZA
-      }
-      fileName
-    }
-  }
-  ${FR.CONFERENZA_COPIANIFICAZIONE}
-`
 
-export const DELETE_RISORSA_COPIANIFICAZIONE = gql`
-mutation($id: ID!, $codice: String!) {
-    deleteRisorsaCopianificazione(risorsaId: $id, codice: $codice){
-        success
-        conferenzaCopianificazioneAggiornata {
-            ...CONFERENZA
-        }
-    }
-}
-${FR.CONFERENZA_COPIANIFICAZIONE}
-`
 
 export const CHIUSURA_CONFERENZA_COPIANIFICAZIONE = gql `
 mutation ChiusuraConferenzaCopianificazione($codice: String!) {
@@ -480,4 +361,137 @@ mutation CreaContatto($input: CreateContattoInput!){
 	
 }
 ${FR.CONTATTO}
+`
+
+
+// Gestione Risorse piano, vas, conferenza, avvio, adozione
+    
+  //Piano
+export const FILE_UPLOAD = gql`
+mutation UploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    upload(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      fileName
+      pianoAggiornato {
+          ...Piano
+      }
+    }
+  }
+  ${FR.PIANO}
+`
+
+export const DELETE_RISORSA = gql`
+mutation($id: ID!, $codice: String!) {
+    deleteRisorsa(risorsaId: $id, codice: $codice){
+        success
+        pianoAggiornato {
+            ...Piano
+        }
+    }
+}
+${FR.PIANO}
+`
+
+  //VAS
+export const VAS_FILE_UPLOAD = gql`
+mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    upload: uploadRisorsaVas(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      fileName
+      proceduraVasAggiornata {
+          ...VAS
+      }
+    }
+  }
+  ${FR.VAS}
+`
+
+export const DELETE_RISORSA_VAS = gql`
+mutation($id: ID!, $codice: String!) {
+    deleteRisorsa: deleteRisorsaVas(risorsaId: $id, codice: $codice){
+        success
+        proceduraVasAggiornata {
+            ...VAS
+        }
+    }
+}
+${FR.VAS}
+`
+
+  // Confenrenza Copianificazione
+export const CONFEREZA_FILE_UPLOAD = gql`
+mutation ConferenzaUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    upload: uploadRisorsaCopianificazione(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      fileName
+      conferenzaCopianificazioneAggiornata {
+          ...CONFERENZA
+      }
+    }
+  }
+  ${FR.CONFERENZA_COPIANIFICAZIONE}
+`
+
+export const DELETE_RISORSA_COPIANIFICAZIONE = gql`
+mutation($id: ID!, $codice: String!) {
+    deleteRisorsa: deleteRisorsaCopianificazione(risorsaId: $id, codice: $codice){
+        success
+        conferenzaCopianificazioneAggiornata {
+            ...CONFERENZA
+        }
+    }
+}
+${FR.CONFERENZA_COPIANIFICAZIONE}
+`
+
+  // Avvio
+export const AVVIO_FILE_UPLOAD = gql`
+mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    upload: uploadRisorsaAvvio(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      fileName
+      proceduraAvvioAggiornata {
+          ...AVVIO
+      }      
+    }
+  }
+  ${FR.AVVIO}
+`
+
+export const DELETE_RISORSA_AVVIO = gql`
+mutation DeleteRisorsaAvvio($id: ID!, $codice: String!) {
+    deleteRisorsa: deleteRisorsaAvvio(risorsaId: $id, codice: $codice){
+        success
+        proceduraAvvioAggiornata {
+            ...AVVIO
+        }
+    }
+}
+${FR.AVVIO}
+`
+
+  // Adozione
+export const ADOZIONE_FILE_UPLOAD = gql`
+mutation AdozioneUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    upload: uploadRisorsaAdozione(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      fileName
+      proceduraAdozioneAggiornata {
+          ...ADOZIONE
+      }
+    }
+  }
+  ${FR.ADOZIONE}
+`
+
+export const DELETE_RISORSA_ADOZIONE = gql`
+mutation DeleteRisorsaAdozione($id: ID!, $codice: String!) {
+    deleteRisorsa: deleteRisorsaAdozione(risorsaId: $id, codice: $codice){
+        success
+        proceduraAdozioneAggiornata {
+            ...ADOZIONE
+        }
+    }
+}
+${FR.ADOZIONE}
 `

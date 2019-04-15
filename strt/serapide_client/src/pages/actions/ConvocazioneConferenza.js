@@ -44,9 +44,7 @@ const getDataDeliberaInput = (codice) => (val) => ({
         codice}
     }})
 
-const getSuccess = ({uploadRisorsaAvvio: {success}} = {}) => success
-
-const fileProps = {className: `border-0`, getSuccess, mutation: AVVIO_FILE_UPLOAD,
+const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
     resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
 const Messaggio = () => (<React.Fragment>
         <h4>STAI PER SALVARE INCONTRO</h4>
@@ -147,8 +145,8 @@ const UI = enhancer(({ back,
                              <UploadFiles 
                                     {...fileProps}
                                     risorse={allegati} 
-                                     variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
-                                    getFileName={({uploadRisorsaAvvio: {fileName} = {}}) => fileName}/>
+                                    variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
+                                    />
                             </div>
                             <div className="col-5 offset-7  mt-7">
                             <SalvaInvia variables={{codice: uuid}} mutation={INVIO_PROTOCOLLO_GENIO} label="SALVA INCONTRO" messaggio={(<Messaggio/>)} canCommit={true}></SalvaInvia>

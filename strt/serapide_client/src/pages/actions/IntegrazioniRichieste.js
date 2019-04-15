@@ -53,8 +53,7 @@ const UI = ({
                         mutation={AVVIO_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_AVVIO}
                         variables={{codice: uuid, tipo: 'integrazioni' }}
-                        getFileName={({uploadRisorsaAvvio: {fileName} = {}}) => fileName}
-                        isLocked={false} getSuccess={({uploadRisorsaAvvio: {success}}) => success}/>
+                        isLocked={false}/>
                     <h5 className="font-weight-light pb-1 mt-5 mb-3">TERMINI SCADENZA PER LA RISPOSTA</h5>
                 <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
                 

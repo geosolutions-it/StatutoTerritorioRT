@@ -30,7 +30,7 @@ const getInput = (codice, field) => (val) => (
     {variables:{ input:{ 
     pianoOperativo: { [field]: val}, codice}
 }})
-const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
+
 
 const UI = ({ back, 
             piano: {codice, redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl} = {}, 
@@ -71,7 +71,7 @@ const UI = ({ back,
                 <FileUpload 
                     className="border-0"
                     placeholder="RAPPORTO AMBIENTALE"
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
+                    mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
                 </div>

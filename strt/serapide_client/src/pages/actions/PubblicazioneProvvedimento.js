@@ -16,8 +16,6 @@ import  {showError} from '../../utils'
 import {withControllableState} from '../../enhancers/utils'
 
 const enhancers = withControllableState("url", "onUrlChange","")
-const getSuccess = ({uploadConsultazioneVas: {success}} = {}) => success
-
 
 const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edges: resources = []} = {}} = {}}, utente: {attore}}) => {
     

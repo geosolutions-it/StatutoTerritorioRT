@@ -27,9 +27,6 @@ import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
 } from '../../graphql'
 
 
-
-
-const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
 const getVasTypeInput = (uuid) => (value) => ({
     variables: {
         input: { 
@@ -151,7 +148,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                 <FileUpload 
                     className={`border-0 ${!docPrelim ? "flex-column": ""}`}
                     sz="sm" modal={false} showBtn={false} 
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
+                    mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
                 </div>

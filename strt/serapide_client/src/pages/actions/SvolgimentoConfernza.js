@@ -18,15 +18,6 @@ import {EnhancedSwitch} from '../../components/Switch'
 import  {showError} from '../../utils'
 
 
-const getInput = (uuid) => (val) => ({
-    variables: {
-        input: { 
-            proceduraAvvio: {
-                richiestaIntegrazioni: !val}, 
-            uuid
-        }
-    }})
-
 const UI = ({
     back, 
     proceduraAvvio: {node: {uuid: avvioId, richiestaIntegrazioni} = {}} = {},
@@ -41,7 +32,7 @@ const UI = ({
                         mutation={CONFEREZA_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_COPIANIFICAZIONE}
                         variables={{codice: uuid, tipo: 'elaborati_conferenza' }}
-                        isLocked={false} getSuccess={({uploadRisorsaCopianificazione: {success}}) => success} getFileName={({uploadRisorsaCopianificazione: {fileName} = {}}) => fileName}/>
+                        isLocked={false}/>
                 {/* <div className="row pl-2 pt-5">
                     <div className="col-5 bg-serapide">Richiesta integrazioni</div> 
                     <div className="col-2 ml-2">

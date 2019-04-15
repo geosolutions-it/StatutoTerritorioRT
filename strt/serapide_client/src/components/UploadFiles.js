@@ -23,6 +23,7 @@ class UploadFiles extends React.PureComponent {
         mutation: PropTypes.object,
         resourceMutation: PropTypes.object,
         getSuccess: PropTypes.func,
+        getFileName: PropTypes.func,
         multiple: PropTypes.bool
     }
     static defaultProps = {

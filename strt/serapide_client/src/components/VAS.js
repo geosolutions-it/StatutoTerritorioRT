@@ -22,7 +22,7 @@ import  {rebuildTooltip} from '../enhancers/utils'
 import {map}  from 'lodash'
 
 
-const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
+
 const getVasTypeInput = (uuid) => (tipologia) => ({
     variables: {
         input: { 
@@ -51,7 +51,7 @@ const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifi
         return false
     }
 }
-const fileProps = {className:"col-xl-12", getSuccess: getSuccess,
+const fileProps = {className:"col-xl-12",
                     mutation: VAS_FILE_UPLOAD, resourceMutation: DELETE_RISORSA_VAS}
 
 

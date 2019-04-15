@@ -55,12 +55,12 @@ const getScadenzaInput = (uuid) => (val) => ({
         }
     }})
 
-const getSuccess = ({uploadRisorsaAvvio: {success}} = {}) => success
+
 
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
 }
-const fileProps = {className: `border-0`, getSuccess, mutation: AVVIO_FILE_UPLOAD,
+const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
 const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
     procedureAvvio: {node: {
@@ -116,7 +116,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     {...fileProps}
                     risorse={allegati} 
                     variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
-                    getFileName={({uploadRisorsaAvvio: {fileName} = {}}) => fileName}/>
+                    />
                 
                 
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
