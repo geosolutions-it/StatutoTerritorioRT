@@ -38,13 +38,7 @@ def promuovi_piano(fase, piano):
     procedura_vas = piano.procedura_vas
 
     # Update Azioni Piano
-    # - Complete Current Actions
-    _order = 0
-    for _a in piano.azioni.all():
-        # _a.stato = STATO_AZIONE.nessuna
-        _a.data = datetime.datetime.now(timezone.get_current_timezone())
-        _a.save()
-        _order += 1
+    _order = piano.azioni.count()
 
     # - Attach Actions Templates for the Next "Fase"
     for _a in AZIONI_BASE[fase.nome]:

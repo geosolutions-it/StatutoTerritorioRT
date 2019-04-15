@@ -465,9 +465,9 @@ class PromozionePiano(graphene.Mutation):
                 else:
                     return GraphQLError(_("Not Allowed"), code=405)
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -505,6 +505,9 @@ class FormazionePiano(graphene.Mutation):
 
                 if _protocollo_genio_civile and _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and \
                 _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna:
+
+                    piano.chiudi_pendenti()
+
                     procedura_avvio = ProceduraAvvio.objects.get(piano=piano)
                     procedura_avvio.conclusa = True
                     procedura_avvio.save()
@@ -541,8 +544,8 @@ class FormazionePiano(graphene.Mutation):
                         errors=[]
                     )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)

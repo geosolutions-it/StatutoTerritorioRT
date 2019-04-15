@@ -9,16 +9,17 @@
 #
 #########################################################################
 
+import pytz
 import uuid
 import rules
 import logging
 from datetime import datetime
 
-import pytz
 from django.db import models
+from django.utils import timezone
 from django.dispatch import receiver
-from django.db.models.signals import pre_delete, post_delete
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import pre_delete, post_delete
 
 from strt_users.models import (
     AppUser,
@@ -361,6 +362,14 @@ class Piano(models.Model):
         blank=True,
         null=True
     )
+
+    def chiudi_pendenti(self):
+        # - Complete Current Actions
+        _now = datetime.datetime.now(timezone.get_current_timezone())
+        self.azioni.filter(
+            stato=STATO_AZIONE.attesa).update(stato=STATO_AZIONE.nessuna, data=_now)
+        self.azioni.filter(
+            stato=STATO_AZIONE.necessaria).update(stato=STATO_AZIONE.nessuna, data=_now)
 
     @property
     def next_phase(self):

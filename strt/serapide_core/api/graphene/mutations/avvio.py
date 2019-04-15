@@ -24,6 +24,7 @@ from graphql_extensions.exceptions import GraphQLError
 
 from serapide_core.helpers import (
     is_RUP,
+    unslugify,
     update_create_instance)
 
 from serapide_core.signals import (
@@ -205,10 +206,12 @@ class AvvioPiano(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
             if _avvio_procedimento and _avvio_procedimento.stato != STATO_AZIONE.nessuna:
                 if not cls.autorita_ok(piano, TIPOLOGIA_CONTATTO.genio_civile):
-                    raise Exception("Missing %s" % TIPOLOGIA_CONTATTO.genio_civile)
+                    raise Exception(
+                        "Il %s non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_CONTATTO.genio_civile))
 
                 if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE.regione, contatto=False):
-                    raise Exception("Missing %s" % TIPOLOGIA_ATTORE.regione)
+                    raise Exception(
+                        "La %s non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_ATTORE.regione))
 
                 _avvio_procedimento.stato = STATO_AZIONE.nessuna
                 _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -330,9 +333,9 @@ class AvvioPiano(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -401,9 +404,9 @@ class RichiestaIntegrazioni(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -459,9 +462,9 @@ class IntegrazioniRichieste(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -506,6 +509,9 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                         tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
 
                     if _formazione_del_piano and _formazione_del_piano.stato == STATO_AZIONE.nessuna:
+
+                        piano.chiudi_pendenti()
+
                         procedura_avvio.conclusa = True
                         procedura_avvio.save()
 
@@ -541,9 +547,9 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -621,9 +627,9 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -721,8 +727,8 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)

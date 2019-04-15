@@ -26,12 +26,12 @@ from graphql_extensions.exceptions import GraphQLError
 
 from serapide_core.helpers import update_create_instance
 
-# from serapide_core.signals import (
-#     piano_phase_changed,
-# )
+from serapide_core.signals import (
+    piano_phase_changed,
+)
 
 from serapide_core.modello.models import (
-    # Fase,
+    Fase,
     Piano,
     Azione,
     AzioniPiano,
@@ -45,7 +45,7 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_ATTORE,
 )
 
-# from . import fase
+from . import fase
 from .. import types
 from .. import inputs
 
@@ -227,9 +227,9 @@ class TrasmissioneAdozione(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -298,7 +298,6 @@ class TrasmissioneOsservazioni(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
-        _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
@@ -308,9 +307,9 @@ class TrasmissioneOsservazioni(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -357,7 +356,6 @@ class Controdeduzioni(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
-        _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
@@ -367,9 +365,9 @@ class Controdeduzioni(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -402,8 +400,9 @@ class PianoControdedotto(graphene.Mutation):
                 _piano_controdedotto.save()
 
                 if not procedura_adozione.richiesta_conferenza_paesaggistica:
-                    # TODO: Close all and update Fase
-                    pass
+                    piano.chiudi_pendenti()
+                    procedura_adozione.conclusa = True
+                    procedura_adozione.save()
                 else:
                     _convocazione_cp = Azione(
                         tipologia=TIPOLOGIA_AZIONE.convocazione_conferenza_paesaggistica,
@@ -415,23 +414,37 @@ class PianoControdedotto(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_convocazione_cp, piano=piano)
 
+                    # TODO: send notifications to Regione
+
     @classmethod
     def mutate(cls, root, info, **input):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
-        _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
+
+                    _piano.save()
+                    fase.promuovi_piano(_fase, _piano)
 
                 return PianoControdedotto(
                     adozione_aggiornata=_procedura_adozione,
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)

@@ -201,6 +201,8 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
                 procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
 
+                    _piano.chiudi_pendenti()
+
                     procedura_vas_aggiornata.conclusa = True
                     procedura_vas_aggiornata.save()
 
@@ -303,9 +305,9 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -399,9 +401,9 @@ class AssoggettamentoVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -545,9 +547,9 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -707,9 +709,9 @@ class InvioPareriVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -773,9 +775,9 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -805,6 +807,8 @@ class UploadElaboratiVAS(graphene.Mutation):
                 _upload_elaborati_vas.stato = STATO_AZIONE.nessuna
                 _upload_elaborati_vas.data = datetime.datetime.now(timezone.get_current_timezone())
                 _upload_elaborati_vas.save()
+
+                piano.chiudi_pendenti()
 
                 procedura_vas.conclusa = True
                 procedura_vas.save()
@@ -839,8 +843,8 @@ class UploadElaboratiVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)

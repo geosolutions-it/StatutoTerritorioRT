@@ -20,7 +20,8 @@ from serapide_core.modello.enums import (
 from serapide_core.modello.models import (
     Piano,
     ProceduraVAS,
-    ProceduraAvvio)
+    ProceduraAvvio,
+    ProceduraAdozione)
 
 
 # ############################################################################ #
@@ -42,6 +43,16 @@ def is_anagrafica(user, obj):
         return obj.fase.nome == FASE.anagrafica
     elif isinstance(obj, ProceduraVAS):
         return obj.piano.fase.nome == FASE.anagrafica
+    else:
+        return False
+
+
+@rules.predicate
+def is_avvio(user, obj):
+    if isinstance(obj, Piano):
+        return obj.fase.nome == FASE.avvio
+    elif isinstance(obj, ProceduraVAS):
+        return obj.piano.fase.nome == FASE.avvio
     else:
         return False
 
@@ -83,6 +94,11 @@ def has_procedura_avvio(piano):
 
 
 @rules.predicate
+def has_procedura_adozione(piano):
+    return ProceduraAdozione.objects.filter(piano=piano).count() == 1
+
+
+@rules.predicate
 def protocollo_genio_inviato(piano):
     _protocollo_genio_civile = piano.azioni.filter(
         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
@@ -114,6 +130,12 @@ def formazione_piano_conclusa(piano):
 def avvio_piano_conclusa(piano):
     _avvio = ProceduraAvvio.objects.get(piano=piano)
     return _avvio.conclusa
+
+
+@rules.predicate
+def adozione_piano_conclusa(piano):
+    _adozione = ProceduraAdozione.objects.get(piano=piano)
+    return _adozione.conclusa
 
 
 @rules.predicate
