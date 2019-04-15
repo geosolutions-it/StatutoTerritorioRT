@@ -122,6 +122,8 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
         ('controdeduzioni', _('Controdeduzioni')),  # Comune
         ('piano_controdedotto', _('Piano Controdedotto')),  # Comune
+        ('convocazione_conferenza_paesaggistica', _('Convocazione Conferenza Paesaggistica')),  # Regione
+        ('esito_conferenza_paesaggistica', _('Esiti conferenza paesaggistica')),  # Regione
     )
 
 FASE_AZIONE = Choices(
@@ -152,6 +154,8 @@ FASE_AZIONE = Choices(
         ('upload_osservazioni_privati', 'avvio'),
         ('controdeduzioni', 'avvio'),
         ('piano_controdedotto', 'avvio'),
+        ('convocazione_conferenza_paesaggistica', 'avvio'),
+        ('esito_conferenza_paesaggistica', 'avvio'),
     )
 
 TOOLTIP_AZIONE = Choices(

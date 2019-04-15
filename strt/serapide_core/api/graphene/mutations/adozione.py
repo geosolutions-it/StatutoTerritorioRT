@@ -372,3 +372,66 @@ class Controdeduzioni(graphene.Mutation):
                     return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
+
+
+class PianoControdedotto(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = 0
+        for _a in piano.azioni.all():
+            _order += 1
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.avvio:
+            _piano_controdedotto = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.piano_controdedotto).first()
+
+            if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna:
+                _piano_controdedotto.stato = STATO_AZIONE.nessuna
+                _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
+                _piano_controdedotto.save()
+
+                if not procedura_adozione.richiesta_conferenza_paesaggistica:
+                    # TODO: Close all and update Fase
+                    pass
+                else:
+                    _convocazione_cp = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.convocazione_conferenza_paesaggistica,
+                        attore=TIPOLOGIA_ATTORE.regione,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa
+                    )
+                    _convocazione_cp.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_convocazione_cp, piano=piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
+        _piano = _procedura_adozione.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+
+                return PianoControdedotto(
+                    adozione_aggiornata=_procedura_adozione,
+                    errors=[]
+                )
+            except BaseException as e:
+                    tb = traceback.format_exc()
+                    logger.error(tb)
+                    return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
