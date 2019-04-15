@@ -171,3 +171,4 @@ class ProceduraAdozioneUpdateInput(InputObjectType):
     pubblicazione_sito_data = graphene.types.datetime.DateTime(required=False)
     osservazioni_concluse = graphene.Boolean(required=False)
     richiesta_conferenza_paesaggistica = graphene.Boolean(required=False)
+    url_piano_controdedotto = graphene.String(required=False)

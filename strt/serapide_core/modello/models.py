@@ -772,6 +772,7 @@ class ProceduraAdozione(models.Model):
     osservazioni_concluse = models.BooleanField(null=False, blank=False, default=False)
 
     richiesta_conferenza_paesaggistica = models.BooleanField(null=False, blank=False, default=False)
+    url_piano_controdedotto = models.URLField(null=True, blank=True, default='')
 
     conclusa = models.BooleanField(null=False, blank=False, default=False)
 
