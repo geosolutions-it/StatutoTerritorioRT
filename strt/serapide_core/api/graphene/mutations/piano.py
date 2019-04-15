@@ -484,11 +484,6 @@ class FormazionePiano(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
 
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _formazione_del_piano = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()

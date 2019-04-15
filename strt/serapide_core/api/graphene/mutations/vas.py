@@ -240,11 +240,6 @@ class InvioPareriVerificaVAS(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_vas):
 
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _pareri_verifica_sca = piano.azioni.filter(
@@ -325,9 +320,7 @@ class AssoggettamentoVAS(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -486,9 +479,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -567,9 +558,7 @@ class InvioPareriVAS(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -729,9 +718,7 @@ class AvvioEsamePareriSCA(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -794,11 +781,6 @@ class UploadElaboratiVAS(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_vas):
 
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _upload_elaborati_vas = piano.azioni.filter(

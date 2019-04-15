@@ -196,9 +196,7 @@ class AvvioPiano(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -352,9 +350,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -422,11 +418,6 @@ class IntegrazioniRichieste(graphene.Mutation):
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _integrazioni_richieste = piano.azioni.filter(
@@ -480,11 +471,6 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _protocollo_genio_civile = piano.azioni.filter(
@@ -566,9 +552,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -646,9 +630,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
