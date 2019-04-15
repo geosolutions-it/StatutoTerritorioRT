@@ -124,6 +124,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('piano_controdedotto', _('Piano Controdedotto')),  # Comune
         ('convocazione_conferenza_paesaggistica', _('Convocazione Conferenza Paesaggistica')),  # Regione
         ('esito_conferenza_paesaggistica', _('Esiti conferenza paesaggistica')),  # Regione
+        ('rev_piano_post_cp', _('Revisione Piano post Conf. Paesaggistica')),  # Comune
     )
 
 FASE_AZIONE = Choices(
@@ -156,6 +157,7 @@ FASE_AZIONE = Choices(
         ('piano_controdedotto', 'avvio'),
         ('convocazione_conferenza_paesaggistica', 'avvio'),
         ('esito_conferenza_paesaggistica', 'avvio'),
+        ('rev_piano_post_cp', 'avvio'),
     )
 
 TOOLTIP_AZIONE = Choices(

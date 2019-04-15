@@ -158,6 +158,8 @@ class Mutation(object):
     trasmissione_osservazioni = adozione.TrasmissioneOsservazioni.Field()
     controdeduzioni = adozione.Controdeduzioni.Field()
     piano_controdedotto = adozione.PianoControdedotto.Field()
+    convocazione_conferenza_paesaggistica = adozione.ConvocazioneConferenzaPaesaggistica.Field()
+    esito_conferenza_paesaggistica = adozione.EsitoConferenzaPaesaggistica.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()

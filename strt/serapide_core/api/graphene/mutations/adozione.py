@@ -496,3 +496,59 @@ class ConvocazioneConferenzaPaesaggistica(graphene.Mutation):
                 return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
+
+
+class EsitoConferenzaPaesaggistica(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = piano.azioni.count()
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.avvio:
+            _esito_cp = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica).first()
+
+            if _esito_cp and _esito_cp.stato != STATO_AZIONE.nessuna:
+                _esito_cp.stato = STATO_AZIONE.nessuna
+                _esito_cp.data = datetime.datetime.now(timezone.get_current_timezone())
+                _esito_cp.save()
+
+                _rev_piano_post_cp = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.necessaria
+                )
+                _rev_piano_post_cp.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_rev_piano_post_cp, piano=piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
+        _piano = _procedura_adozione.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+
+                return EsitoConferenzaPaesaggistica(
+                    adozione_aggiornata=_procedura_adozione,
+                    errors=[]
+                )
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
