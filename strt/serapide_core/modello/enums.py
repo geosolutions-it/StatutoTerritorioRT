@@ -121,6 +121,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('osservazioni_regione', _('Osservazioni Regione')),  # Regione
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
         ('controdeduzioni', _('Controdeduzioni')),  # Comune
+        ('piano_controdedotto', _('Piano Controdedotto')),  # Comune
     )
 
 FASE_AZIONE = Choices(
@@ -150,6 +151,7 @@ FASE_AZIONE = Choices(
         ('osservazioni_regione', 'avvio'),
         ('upload_osservazioni_privati', 'avvio'),
         ('controdeduzioni', 'avvio'),
+        ('piano_controdedotto', 'avvio'),
     )
 
 TOOLTIP_AZIONE = Choices(
