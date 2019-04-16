@@ -11,22 +11,14 @@
 
 from django import forms
 from django.core.validators import RegexValidator
-from strt_users.models import Organization
+from strt_users.models import Organization, MembershipType
 
 
 class UserAuthenticationForm(forms.Form):
 
-    first_name = forms.CharField(
-        label='Nome',
-        required=False,
-    )
-    last_name = forms.CharField(
-        label='Cognome',
-        required=False,
-    )
     fiscal_code = forms.CharField(
         label='Codice Fiscale',
-        required=False,
+        required=True,
         validators=[
             RegexValidator(
                 regex='^(?i)(?:(?:[B-DF-HJ-NP-TV-Z]|[AEIOU])[AEIOU][AEIOUX]|'
@@ -38,16 +30,17 @@ class UserAuthenticationForm(forms.Form):
             ),
         ]
     )
-    membership_type = forms.CharField(
-        label='Ruolo',
-        required=False,
-    )
-    hidden_orgs = forms.CharField(
-        widget=forms.HiddenInput(),
-        required=False
-    )
     organizations = forms.ModelChoiceField(
         label='Enti',
         queryset=Organization.objects.all(),
+        required=False
+    )
+    membership_type = forms.ModelChoiceField(
+        label='Ruolo',
+        queryset=MembershipType.objects.all(),
+        required=True,
+    )
+    hidden_orgs = forms.CharField(
+        widget=forms.HiddenInput(),
         required=False
     )

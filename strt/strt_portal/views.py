@@ -28,7 +28,7 @@ from django_currentuser.middleware import (
 from django.shortcuts import (
     render, redirect
 )
-from strt_users.models import Organization
+from strt_users.models import Organization, UserMembership
 
 
 def privateAreaView(request):
@@ -56,33 +56,53 @@ def privateAreaView(request):
                 ]
                 form_cleaned_data.pop('hidden_orgs')
                 form_cleaned_data['organizations'] = orgs
-                encoded_jwt = jwt.encode(
-                    payload=form_cleaned_data,
-                    key=settings.SECRET_KEY,
-                    algorithm='HS256'
-                )
-
-                try:
-                    user = authenticate(encoded_jwt)
-                    _organization = orgs.pop()['organization'].strip()
-                    organization = None
-                    try:
-                        # Organizations must be already registered
-                        organization = Organization._default_manager.get(
-                            code=_organization
-                        )
-                    except Organization.DoesNotExist:
-                        ve = forms.ValidationError(
-                            _("L'ente {} non risulta censito.".format(_organization))
-                        )
-                        form.add_error(None, ve)
-
-                    if user and organization:
-                        login(request, user)
-                        request.session['organization'] = organization.code
-                        return redirect('serapide')
-                except ValidationError as ve:
+                # TODO: MembershipType Check
+                _role = form_cleaned_data.pop('membership_type')
+                if not _role:
+                    ve = forms.ValidationError(
+                        _("Ruolo non valido.")
+                    )
                     form.add_error(None, ve)
+                else:
+                    encoded_jwt = jwt.encode(
+                        payload=form_cleaned_data,
+                        key=settings.SECRET_KEY,
+                        algorithm='HS256'
+                    )
+
+                    try:
+                        user = authenticate(encoded_jwt)
+                        _organization = orgs.pop()['organization'].strip()
+                        organization = None
+                        try:
+                            # Organizations must be already registered
+                            organization = Organization._default_manager.get(
+                                code=_organization
+                            )
+                        except Organization.DoesNotExist:
+                            ve = forms.ValidationError(
+                                _("L'ente {} non risulta censito.".format(_organization))
+                            )
+                            form.add_error(None, ve)
+
+                        if user and organization:
+                            try:
+                                membership = UserMembership._default_manager.get(
+                                    organization=_organization,
+                                    type=_role
+                                )
+
+                                login(request, user)
+                                request.session['organization'] = organization.code
+                                request.session['attore'] = membership.organization.type.name
+                                return redirect('serapide')
+                            except UserMembership.DoesNotExist:
+                                ve = forms.ValidationError(
+                                    _("Utente {} non valido.".format(user))
+                                )
+                                form.add_error(None, ve)
+                    except ValidationError as ve:
+                        form.add_error(None, ve)
         else:
             form = UserAuthenticationForm()
     context = {'form': form}

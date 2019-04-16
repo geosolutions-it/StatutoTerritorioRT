@@ -49,7 +49,6 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         ("integrazioni_richieste", _("Integrazioni Richieste"), _("Integrazioni Richieste"),),
         ("trasmissione_adozione", _("Trasmissione Adozione"), _("Trasmissione Adozione"),),
         ("piano_controdedotto", _("Piano Controdedotto"), _("Piano Controdedotto"),),
-        ("convocazione_conferenza_paesaggistica", _("Convocazione Conferenza Paesaggistica"), _("Convocazione Conferenza Paesaggistica"),),  # noqa
         ("esito_conferenza_paesaggistica", _("Esito Conferenza Paesaggistica"), _("Esito Conferenza Paesaggistica"),),
         ("rev_piano_post_cp", _("Revisione Piano post CP"), _("Revisione Piano post CP"),),
     )
