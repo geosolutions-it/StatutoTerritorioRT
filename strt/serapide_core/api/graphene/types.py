@@ -42,12 +42,14 @@ from serapide_core.modello.models import (
     FasePianoStorico,
     ProceduraAvvio,
     ProceduraAdozione,
+    PianoControdedotto,
     ConferenzaCopianificazione,
     RisorsePiano,
     RisorseVas,
     RisorseAvvio,
     RisorseAdozione,
     RisorseCopianificazione,
+    RisorsePianoControdedotto,
 )
 
 from serapide_core.modello.enums import (
@@ -223,6 +225,16 @@ class RisorseCopianificazioneType(DjangoObjectType):
 
     class Meta:
         model = RisorseCopianificazione
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorsePianoControdedottoType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorsePianoControdedotto
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -456,6 +468,19 @@ class ConferenzaCopianificazioneNode(DjangoObjectType):
         # Allow for some more advanced filtering here
         filter_fields = {
             'id_pratica': ['exact'],
+            'piano__codice': ['exact'],
+        }
+        interfaces = (relay.Node, )
+
+
+class PianoControdedottoNode(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorseCopianificazioneType)
+
+    class Meta:
+        model = PianoControdedotto
+        # Allow for some more advanced filtering here
+        filter_fields = {
             'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )

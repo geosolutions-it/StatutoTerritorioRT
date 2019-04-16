@@ -820,6 +820,34 @@ class RisorseAdozione(models.Model):
         db_table = "strt_core_adozione_risorse"
 
 
+class PianoControdedotto(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorsePianoControdedotto')
+
+    class Meta:
+        db_table = "strt_core_piano_controdedotto"
+        verbose_name_plural = 'Piano Controdedotto'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.piano.ente, self.uuid)
+
+
+class RisorsePianoControdedotto(models.Model):
+    piano_controdedotto = models.ForeignKey(PianoControdedotto, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_risorse_piano_controdedotto"
+
+
 # ############################################################################ #
 # Model Signals
 # ############################################################################ #
@@ -849,6 +877,9 @@ def delete_piano_associations(sender, instance, **kwargs):
     for _cc in ConferenzaCopianificazione.objects.filter(piano=instance):
         _cc.risorse.all().delete()
         RisorseCopianificazione.objects.filter(conferenza_copianificazione=_cc).delete()
+    for _pc in PianoControdedotto.objects.filter(piano=instance):
+        _pc.risorse.all().delete()
+        RisorsePianoControdedotto.objects.filter(piano_controdedotto=_pc).delete()
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
     for _t in PianoAuthTokens.objects.filter(piano=instance):

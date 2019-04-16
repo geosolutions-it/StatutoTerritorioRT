@@ -71,6 +71,8 @@ class Query(object):
 
     conferenza_copianificazione = DjangoFilterConnectionField(types.ConferenzaCopianificazioneNode)
 
+    piano_controdedotto = DjangoFilterConnectionField(types.PianoControdedottoNode)
+
     contatti = DjangoFilterConnectionField(types.ContattoNode,
                                            filterset_class=filters.EnteContattoMembershipFilter)
 
@@ -158,7 +160,6 @@ class Mutation(object):
     trasmissione_osservazioni = adozione.TrasmissioneOsservazioni.Field()
     controdeduzioni = adozione.Controdeduzioni.Field()
     piano_controdedotto = adozione.PianoControdedotto.Field()
-    convocazione_conferenza_paesaggistica = adozione.ConvocazioneConferenzaPaesaggistica.Field()
     esito_conferenza_paesaggistica = adozione.EsitoConferenzaPaesaggistica.Field()
     revisione_conferenza_paesaggistica = adozione.RevisionePianoPostConfPaesaggistica.Field()
 
@@ -172,3 +173,5 @@ class Mutation(object):
     delete_risorsa_adozione = uploads.DeleteRisorsaAdozione.Field()
     upload_risorsa_copianificazione = uploads.UploadRisorsaCopianificazione.Field()
     delete_risorsa_copianificazione = uploads.DeleteRisorsaCopianificazione.Field()
+    upload_risorsa_piano_controdedotto = uploads.UploadRisorsaPianoControdedotto.Field()
+    delete_risorsa_piano_controdedotto = uploads.DeleteRisorsaPianoControdedotto.Field()
