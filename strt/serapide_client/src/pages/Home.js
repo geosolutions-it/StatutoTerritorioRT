@@ -21,8 +21,8 @@ import {camelCase} from 'lodash'
 const getCurrentAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
-const showAdozione = (f) => f=== "AVVIO" || f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
-
+const showAdozione = (f) => f === "AVVIO" || f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
+const showApprovazione = (f) => f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 const NotAllowed = () => (<div className="p-6 text-danger"><h4>Azione non disponibile per stato o permessi utente</h4></div>)
 const NotAvailable = () => (<div className="p-6">Azione non implementata</div>)
 
@@ -45,6 +45,11 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_on</i><span>In attesa di risposta da altri attori</span></span>
                 <span className="d-flex"><i className="material-icons text-serapide mr-2">alarm_off</i><span>Nessuna azione richiesta</span></span>
             </div>
+            {showApprovazione(nomeFase) && (<FaseSwitch className="mt-3" initValue={nomeFase==="ADOZIONE"} fase="approvazione" goToSection={() => history.push(url.replace("home","approvazione"))}>
+                <div className="py-4">
+                    <Azioni azioni={azioni} filtroFase="adozione" onExecute={goToAction}/>
+                </div>
+            </FaseSwitch>)}
             {showAdozione(nomeFase) && (<FaseSwitch className="mt-3" initValue={nomeFase==="AVVIO"} fase="adozione" goToSection={() => history.push(url.replace("home","adozione"))}>
                 <div className="py-4">
                     <Azioni azioni={azioni} filtroFase="avvio" onExecute={goToAction}/>
