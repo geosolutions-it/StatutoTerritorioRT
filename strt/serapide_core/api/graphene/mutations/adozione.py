@@ -75,9 +75,14 @@ class CreateProceduraAdozione(relay.ClientIDMutation):
 
                 _procedura_adozione = ProceduraAdozione()
                 _procedura_adozione.piano = _piano
+                _procedura_adozione.ente = _piano.ente
                 _procedura_adozione_data['id'] = _procedura_adozione.id
                 _procedura_adozione_data['uuid'] = _procedura_adozione.uuid
                 nuova_procedura_adozione = update_create_instance(_procedura_adozione, _procedura_adozione_data)
+
+                _piano.procedura_adozione = nuova_procedura_adozione
+                _piano.save()
+
                 return cls(nuova_procedura_adozione=nuova_procedura_adozione)
             except BaseException as e:
                 tb = traceback.format_exc()

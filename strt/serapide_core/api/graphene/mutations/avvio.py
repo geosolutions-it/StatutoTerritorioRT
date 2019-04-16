@@ -81,9 +81,14 @@ class CreateProceduraAvvio(relay.ClientIDMutation):
 
                 _procedura_avvio = ProceduraAvvio()
                 _procedura_avvio.piano = _piano
+                _procedura_avvio.ente = _piano.ente
                 _procedura_avvio_data['id'] = _procedura_avvio.id
                 _procedura_avvio_data['uuid'] = _procedura_avvio.uuid
                 nuova_procedura_avvio = update_create_instance(_procedura_avvio, _procedura_avvio_data)
+
+                _piano.procedura_avvio = nuova_procedura_avvio
+                _piano.save()
+
                 return cls(nuova_procedura_avvio=nuova_procedura_avvio)
             except BaseException as e:
                 tb = traceback.format_exc()
@@ -205,11 +210,11 @@ class AvvioPiano(graphene.Mutation):
             if _avvio_procedimento and _avvio_procedimento.stato != STATO_AZIONE.nessuna:
                 if not cls.autorita_ok(piano, TIPOLOGIA_CONTATTO.genio_civile):
                     raise Exception(
-                        "Il %s non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_CONTATTO.genio_civile))
+                        "'%s' non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_CONTATTO.genio_civile))
 
                 if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE.regione, contatto=False):
                     raise Exception(
-                        "La %s non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_ATTORE.regione))
+                        "'%s' non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_ATTORE.regione))
 
                 _avvio_procedimento.stato = STATO_AZIONE.nessuna
                 _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -386,14 +391,11 @@ class RichiestaIntegrazioni(graphene.Mutation):
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
                 # Notify Users
-                """
-                TODO: Messaggio RichiestaIntegrazioni :TODO
-                """
-                # piano_phase_changed.send(
-                #     sender=Piano,
-                #     user=info.context.user,
-                #     piano=_piano,
-                #     message_type="piano_phase_changed")
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="richiesta_integrazioni")
 
                 return RichiestaIntegrazioni(
                     avvio_aggiornato=_procedura_avvio,
@@ -503,6 +505,9 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
 
                         procedura_adozione = ProceduraAdozione(piano=piano, ente=piano.ente)
                         procedura_adozione.save()
+
+                        piano.procedura_adozione = nuova_procedura_adozione
+                        piano.save()
 
     @classmethod
     def mutate(cls, root, info, **input):

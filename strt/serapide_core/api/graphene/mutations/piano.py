@@ -145,6 +145,7 @@ class CreatePiano(relay.ClientIDMutation):
                 _procedura_avvio.save()
 
                 nuovo_piano.procedura_vas = _procedura_vas
+                nuovo_piano.procedura_avvio = _procedura_avvio
                 nuovo_piano.save()
 
                 for _ap in _azioni_piano:
@@ -509,6 +510,9 @@ class FormazionePiano(graphene.Mutation):
 
                     procedura_adozione = ProceduraAdozione(piano=piano, ente=piano.ente)
                     procedura_adozione.save()
+
+                    piano.procedura_adozione = nuova_procedura_adozione
+                    piano.save()
 
     @classmethod
     def mutate(cls, root, info, **input):

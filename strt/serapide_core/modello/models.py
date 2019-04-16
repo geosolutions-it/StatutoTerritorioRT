@@ -312,6 +312,20 @@ class Piano(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='vas')
 
+    procedura_avvio = models.ForeignKey(
+        'ProceduraAvvio',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='avvio')
+
+    procedura_adozione = models.ForeignKey(
+        'ProceduraAdozione',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='adozione')
+
     autorita_competente_vas = models.ManyToManyField(
         Contatto,
         related_name='autorita_competente_vas',
@@ -365,7 +379,7 @@ class Piano(models.Model):
 
     def chiudi_pendenti(self):
         # - Complete Current Actions
-        _now = datetime.datetime.now(timezone.get_current_timezone())
+        _now = datetime.now(timezone.get_current_timezone())
         self.azioni.filter(
             stato=STATO_AZIONE.attesa).update(stato=STATO_AZIONE.nessuna, data=_now)
         self.azioni.filter(

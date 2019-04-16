@@ -45,6 +45,7 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         ("conferenza_copianificazione", _("Conferenza di Copianificazione"), _("Conferenza di Copianificazione"),),
         ("tutti_pareri_inviati", _("Pareri pronti per la verifica"), _("Pareri pronti per la verifica"),),
         ("protocollo_genio_civile", _("Protocollo Genio Civile"), _("Protocollo Genio Civile"),),
+        ("richiesta_integrazioni", _("Richiesta Integrazioni"), _("Richiesta Integrazioni"),),
     )
 
     name = 'serapide_core.modello'

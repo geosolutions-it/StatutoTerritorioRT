@@ -88,6 +88,7 @@ class CreateProceduraVAS(relay.ClientIDMutation):
                     _procedura_vas_data['note'] = _data[0]
                 _procedura_vas = ProceduraVAS()
                 _procedura_vas.piano = _piano
+                _procedura_vas.ente = _piano.ente
                 _procedura_vas_data['id'] = _procedura_vas.id
                 _procedura_vas_data['uuid'] = _procedura_vas.uuid
                 nuova_procedura_vas = update_create_instance(_procedura_vas, _procedura_vas_data)

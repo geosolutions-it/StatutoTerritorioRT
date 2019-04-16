@@ -69,7 +69,7 @@ TIPOLOGIA_PIANO = Choices(
         ('unknown', _('UNKNOWN')),
         ('operativo', _('OPERATIVO')),
         ('strutturale', _('STRUTTURALE')),
-        ('variante', _('VARIANTE')),
+        # ('variante', _('VARIANTE')),
     )
 
 TIPOLOGIA_VAS = Choices(
