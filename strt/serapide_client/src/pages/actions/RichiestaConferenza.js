@@ -8,8 +8,6 @@
 import React from 'react'
 import {
     RICHIESTA_CONFERENZA_COPIANIFICAZIONE,
-    UPDATE_PIANO,
-    INVIO_PROTOCOLLO_GENIO,
     GET_AVVIO
 } from '../../graphql'
 import {FormGroup, Input, Label} from 'reactstrap'
@@ -21,10 +19,6 @@ import {showError} from '../../utils'
 
 const enhancer = toggleControllableState("isChecked", "toggleCheck", false)
 
-const getInput = (codice) => (numeroProtocolloGenioCivile) => (
-    {variables:{ input:{ 
-    pianoOperativo: { numeroProtocolloGenioCivile}, codice}
-}})
 const UI = enhancer(({ back, 
     procedureAvvio: {node: {
         uuid}} = {},

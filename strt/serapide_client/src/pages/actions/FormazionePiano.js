@@ -17,7 +17,7 @@ import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import Input from '../../components/EnhancedInput'
 import {Query} from 'react-apollo'
-import {showError} from '../../utils'
+import {showError, getInputFactory} from '../../utils'
 import FileUpload from '../../components/UploadSingleFile'
 /*
 redazioneNormeTecnicheAttuazioneUrl
@@ -26,10 +26,7 @@ redazioneNormeTecnicheAttuazioneUrl
     monitoraggioUrbanisticoUrl
 */
 
-const getInput = (codice, field) => (val) => (
-    {variables:{ input:{ 
-    pianoOperativo: { [field]: val}, codice}
-}})
+const getInput = getInputFactory("pianoOperativo")
 
 
 const UI = ({ back, 

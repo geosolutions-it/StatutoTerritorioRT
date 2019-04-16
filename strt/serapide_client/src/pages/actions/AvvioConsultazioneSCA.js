@@ -7,7 +7,7 @@
  */
 import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
-import  {showError, formatDate} from '../../utils'
+import  {showError, formatDate, getInputFactory} from '../../utils'
 import {EnhancedSwitch} from '../../components/Switch'
 import AutoMutation from '../../components/AutoMutation'
 import {Query, Mutation} from "react-apollo"
@@ -26,15 +26,8 @@ import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     GET_CONTATTI
 } from '../../graphql'
 
+const getConsultazioneVasTypeInput = getInputFactory("consultazioneVas")
 
-const getVasTypeInput = (uuid) => (value) => ({
-    variables: {
-        input: { 
-            consultazioneVas: {avvioConsultazioniSca:!value}, 
-            uuid
-        }
-    }
-})
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
@@ -46,6 +39,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
             const docPrelim = edges.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").map(({node}) => node).shift()
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
+            const getInput = getConsultazioneVasTypeInput(uuid, "avvioConsultazioniSca")
             return (<React.Fragment>
                 <ActionTitle>Avvio Consultazioni SCA</ActionTitle>
                 {isFull ? (<React.Fragment>
@@ -158,8 +152,8 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                             <div className="col-12 d-flex pl-0">
                                 <i className="material-icons text-serapide pr-3">email</i>
                                 <div className="bg-serapide mb-auto px-2">Avvia consultazione SCA</div>
-                                <EnhancedSwitch value={avvioConsultazioniSca}
-                                    getInput={getVasTypeInput(uuid)}  
+                                <EnhancedSwitch value={!avvioConsultazioniSca}
+                                    getInput={getInput(uuid)}  
                                     ignoreChecked
                                     mutation={UPDATE_CONSULTAZIONE_VAS} checked={avvioConsultazioniSca} 
                                 /> 

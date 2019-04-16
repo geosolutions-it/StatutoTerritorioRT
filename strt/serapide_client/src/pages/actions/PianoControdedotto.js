@@ -15,7 +15,7 @@ import {Query} from "react-apollo"
 import {EnhancedSwitch} from "../../components/Switch"
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
-
+import {getInputFactory} from '../../utils' 
 import Input from '../../components/EnhancedInput'
 
 
@@ -24,14 +24,7 @@ import {GET_ADOZIONE, UPDATE_ADOZIONE,
 } from '../../graphql'
 
 
-const getInput = (uuid, field) => (val) => ({
-        variables: {
-            input: { 
-                proceduraAdozione: { [field]: val}, 
-                uuid
-            }
-        }
-    })
+const getInput = getInputFactory("proceduraAdozione")
 
 const UI = ({
     proceduraAdozione: {node: {

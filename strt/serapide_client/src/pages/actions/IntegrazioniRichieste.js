@@ -16,17 +16,10 @@ import {GET_AVVIO, UPDATE_AVVIO,
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import {EnhancedDateSelector} from '../../components/DateSelector'
-import  {showError, formatDate, daysSub} from '../../utils'
+import  {showError, getInputFactory} from '../../utils'
 
 
-const getScadenzaInput = (uuid) => (val) => ({
-    variables: {
-        input: { 
-            proceduraAvvio: {
-                dataScadenzaRisposta: val.toISOString()},
-            uuid
-        }
-    }})
+const getInput = getInputFactory("proceduraAvvio")
 
 const UI = ({
     back, 
@@ -55,7 +48,7 @@ const UI = ({
                         variables={{codice: uuid, tipo: 'integrazioni' }}
                         isLocked={false}/>
                     <h5 className="font-weight-light pb-1 mt-5 mb-3">TERMINI SCADENZA PER LA RISPOSTA</h5>
-                <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
+                <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getInput(uuid, "dataScadenzaRisposta")} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
                 
                 <div className="align-self-center mt-7">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={INTEGRAZIONI_RICHIESTE} canCommit={integrazioni.length> 0}></SalvaInvia>

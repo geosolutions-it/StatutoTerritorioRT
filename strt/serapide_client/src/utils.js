@@ -1,5 +1,5 @@
 import { format, parseISO, differenceInCalendarDays, subDays} from 'date-fns'
-import {isDate, find, includes} from 'lodash'
+import {isDate, find} from 'lodash'
 import { it } from 'date-fns/locale'
 import { toast } from 'react-toastify'
 import elaborati from './Elaborati'
@@ -72,3 +72,12 @@ export const elaboratiCompletati = (tipoPiano = "", risorse) => {
                  return !find(risorse, ({node: {tipo: t} = {}}) => {
                     return t === key})})
             }
+
+export const getInputFactory = (inputType) => (uuid, field) => (val) => ({
+    variables: {
+        input: { 
+            [inputType]: { [field]: isDate(val) ? val.toISOString : val }, 
+            uuid
+        }
+    }
+})
