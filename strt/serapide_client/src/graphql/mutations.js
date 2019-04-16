@@ -248,6 +248,22 @@ mutation TrasmissioneOsservazioni($codice: String!){
 }
 ${FR.AZIONI_PIANO}
 `
+
+export const ESITO_CONFERENZA_PAESAGGISTICA = gql`
+mutation EsitoConferenzaPaesaggistica($codice: String!){
+  esitoConferenzaPaesaggistica(uuid: $codice){
+      errors
+        adozioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
+
 export const CONTRODEDUZIONI = gql`
 mutation Contorodeduzioni($codice: String!){
   controdeduzioni(uuid: $codice){
