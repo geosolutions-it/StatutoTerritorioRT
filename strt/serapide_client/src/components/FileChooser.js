@@ -52,11 +52,11 @@ class FileChooser extends React.Component {
     getTitle = () => this.props.multiple ? "Trascina i Files qui" : "Trascina il File qui"
     getLabel = () => this.props.multiple ? "Seleziona i Files" : "Seleziona il File"
     renderChooser = () => (
-      
+
       <Dropzone disabled={this.props.isLocked} onDrop={this.onDrop} accept={this.props.fileType} multiple={this.props.multiple}>
         {({getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject,rejectedFiles = [],acceptedFiles =[]}) => {
           return (
-            <div 
+            <div
               {...getRootProps()}
               style={{width: this.props.width || "auto"}}
               className={classNames('d-flex','align-items-center', 'justify-content-around', 'dropzone', `${this.props.sz}`,

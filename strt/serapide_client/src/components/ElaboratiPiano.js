@@ -16,7 +16,7 @@ const getElaborato = (type, resources) => resources.filter( ({node: {tipo}}) => 
 
 // Due sezioni Elaborati testuali ed elaborati Cartografici
 export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMutation}) => {
-    
+
     return (
         <React.Fragment>
         <h6 className="mt-3 font-weight-light">Elaborati Testuali</h6>
@@ -26,11 +26,11 @@ export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMuta
                     mutation={mutation}
                     resourceMutation={resourceMutation}
                     placeholder={(<TextTooltip text={label} dataTip={tooltip}/>)}
-                    risorsa={getElaborato(tipo, resources)} 
+                    risorsa={getElaborato(tipo, resources)}
                     variables={{codice: uuid, tipo}}
                     className="border-0"
                     disabled={false}
-                    isLocked={false}/>  
+                    isLocked={false}/>
             ))) }
         </div>
         <h6 className="mt-3 font-weight-light">Elaborati Cartografici</h6>
@@ -39,14 +39,14 @@ export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMuta
                 <FileUpload key={tipo}
                     mutation={mutation}
                     resIcon="map"
-                    fileType="application/zip"
+                    fileType="application/zip,application/x-zip-compressed,.zip"
                     resourceMutation={resourceMutation}
                     placeholder={(<TextTooltip text={label} dataTip={tooltip}/>)}
-                    risorsa={getElaborato(tipo, resources)} 
+                    risorsa={getElaborato(tipo, resources)}
                     variables={{codice: uuid, tipo}}
                     className="border-0"
                     disabled={false}
-                    isLocked={false}/>  
+                    isLocked={false}/>
             ))) }
         </div>
 

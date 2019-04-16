@@ -48,6 +48,7 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         ("richiesta_integrazioni", _("Richiesta Integrazioni"), _("Richiesta Integrazioni"),),
         ("integrazioni_richieste", _("Integrazioni Richieste"), _("Integrazioni Richieste"),),
         ("trasmissione_adozione", _("Trasmissione Adozione"), _("Trasmissione Adozione"),),
+        ("piano_controdedotto", _("Piano Controdedotto"), _("Piano Controdedotto"),),
     )
 
     name = 'serapide_core.modello'

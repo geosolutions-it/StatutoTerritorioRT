@@ -423,8 +423,6 @@ class PianoControdedotto(graphene.Mutation):
                     _convocazione_cp.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_convocazione_cp, piano=piano)
-
-                    # TODO: send notifications to Regione
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -438,6 +436,13 @@ class PianoControdedotto(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="piano_controdedotto")
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
