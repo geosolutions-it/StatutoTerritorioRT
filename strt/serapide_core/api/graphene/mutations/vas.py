@@ -804,9 +804,9 @@ class UploadElaboratiVAS(graphene.Mutation):
                 _upload_elaborati_vas.save()
 
                 piano.chiudi_pendenti()
-
-                procedura_vas.conclusa = True
-                procedura_vas.save()
+                if piano.is_eligible_for_promotion:
+                    procedura_vas.conclusa = True
+                    procedura_vas.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 

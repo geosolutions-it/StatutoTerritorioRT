@@ -84,7 +84,6 @@ rules.add_rule(
     'strt_core.api.fase_adozione_completa',
     ~piano_rules.has_pending_alerts &
     piano_rules.is_avvio &
-    vas_rules.procedura_vas_is_valid &
     piano_rules.has_procedura_adozione &
     piano_rules.adozione_piano_conclusa
 )
