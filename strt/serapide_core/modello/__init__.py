@@ -46,6 +46,8 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         ("tutti_pareri_inviati", _("Pareri pronti per la verifica"), _("Pareri pronti per la verifica"),),
         ("protocollo_genio_civile", _("Protocollo Genio Civile"), _("Protocollo Genio Civile"),),
         ("richiesta_integrazioni", _("Richiesta Integrazioni"), _("Richiesta Integrazioni"),),
+        ("integrazioni_richieste", _("Integrazioni Richieste"), _("Integrazioni Richieste"),),
+        ("trasmissione_adozione", _("Trasmissione Adozione"), _("Trasmissione Adozione"),),
     )
 
     name = 'serapide_core.modello'

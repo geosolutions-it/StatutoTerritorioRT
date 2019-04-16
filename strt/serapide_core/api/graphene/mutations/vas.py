@@ -249,6 +249,8 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                 _pareri_verifica_sca.stato = STATO_AZIONE.nessuna
                 _pareri_verifica_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                 _pareri_verifica_sca.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -369,6 +371,8 @@ class AssoggettamentoVAS(graphene.Mutation):
                 _emissione_provvedimento_verifica.stato != STATO_AZIONE.nessuna:
                     _emissione_provvedimento_verifica.stato = STATO_AZIONE.nessuna
                     _emissione_provvedimento_verifica.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -520,6 +524,8 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                 _pareri_sca.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -634,6 +640,8 @@ class InvioPareriVAS(graphene.Mutation):
                     _avvio_esame_pareri_sca.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -744,6 +752,8 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                     _upload_elaborati_vas.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_upload_elaborati_vas, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -795,6 +805,8 @@ class UploadElaboratiVAS(graphene.Mutation):
 
                 procedura_vas.conclusa = True
                 procedura_vas.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):

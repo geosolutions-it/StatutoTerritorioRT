@@ -208,11 +208,8 @@ class TrasmissioneAdozione(graphene.Mutation):
                 _upload_osservazioni_privati.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
-
-                """
-                TODO: Trasmissione Comunicazioni (vedi interfaccia)
-                      - send_signal here!
-                """
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -224,6 +221,13 @@ class TrasmissioneAdozione(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="trasmissione_adozione")
 
                 return TrasmissioneAdozione(
                     adozione_aggiornata=_procedura_adozione,
@@ -293,6 +297,8 @@ class TrasmissioneOsservazioni(graphene.Mutation):
                 _controdeduzioni.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_controdeduzioni, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -349,6 +355,8 @@ class Controdeduzioni(graphene.Mutation):
                 _piano_controdedotto.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_piano_controdedotto, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -417,6 +425,8 @@ class PianoControdedotto(graphene.Mutation):
                     AzioniPiano.objects.get_or_create(azione=_convocazione_cp, piano=piano)
 
                     # TODO: send notifications to Regione
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -488,6 +498,8 @@ class ConvocazioneConferenzaPaesaggistica(graphene.Mutation):
                 _esito_cp.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_esito_cp, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -546,6 +558,8 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
                 _rev_piano_post_cp.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_rev_piano_post_cp, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -597,6 +611,8 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
 
                 procedura_adozione.conclusa = True
                 procedura_adozione.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):

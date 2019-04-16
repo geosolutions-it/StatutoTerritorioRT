@@ -1,0 +1,16 @@
+{% autoescape off %}{% load i18n %}Gentile {{ recipient }},
+
+Con riferimento al piano {{ piano.tipologia }} Codice: {{ piano.codice }} - "{{ piano.descrizione }}"
+
+Le notifichiamo che sono state inviate le Integrazioni richieste al piano dall'utente {{ user }}.
+
+Termini scadenza per la risposta: {{ piano.procedura_avvio.data_scadenza_risposta }}
+
+Potrebbero essere necessarie azioni e/o interventi sul piano in oggetto.
+
+{% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:
+{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}
+
+ATTENZIONE: Il token di accesso a lei assegnato, è personalizzato e ha validità fino a data: {{ t.expires }}.
+Conservare il token di accesso segreto e non condividere il link generato con alcuno.{% endif %}{% endfor %}
+{% endautoescape %}

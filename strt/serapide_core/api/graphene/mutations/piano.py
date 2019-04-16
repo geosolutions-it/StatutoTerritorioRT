@@ -499,8 +499,12 @@ class FormazionePiano(graphene.Mutation):
                 _protocollo_genio_civile_id = piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id).first()
 
+                _integrazioni_richieste = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste).first()
+
                 if _protocollo_genio_civile and _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and \
-                _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna:
+                _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna and \
+                _integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna:
 
                     piano.chiudi_pendenti()
 
@@ -513,6 +517,8 @@ class FormazionePiano(graphene.Mutation):
 
                     piano.procedura_adozione = procedura_adozione
                     piano.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
