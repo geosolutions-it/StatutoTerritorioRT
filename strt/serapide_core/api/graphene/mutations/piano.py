@@ -128,22 +128,18 @@ class CreatePiano(relay.ClientIDMutation):
                     _azioni_piano.append(_azione)
                     _order += 1
 
-                # Inizializzazione Procedura VAS
-                _procedura_vas = ProceduraVAS()
-                _procedura_vas.tipologia = TIPOLOGIA_VAS.semplificata
-
-                # Inizializzazione Procedura Avvio
-                _procedura_avvio = ProceduraAvvio()
-
                 nuovo_piano = update_create_instance(_piano, _piano_data)
 
-                _procedura_vas.piano = nuovo_piano
-                _procedura_vas.ente = nuovo_piano.ente
-                _procedura_vas.save()
+                # Inizializzazione Procedura VAS
+                _procedura_vas, created = ProceduraVAS.objects.get_or_create(
+                    piano=nuovo_piano,
+                    ente=nuovo_piano.ente,
+                    tipologia=TIPOLOGIA_VAS.semplificata)
 
-                _procedura_avvio.piano = nuovo_piano
-                _procedura_avvio.ente = nuovo_piano.ente
-                _procedura_avvio.save()
+                # Inizializzazione Procedura Avvio
+                _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
+                    piano=nuovo_piano,
+                    ente=nuovo_piano.ente)
 
                 nuovo_piano.procedura_vas = _procedura_vas
                 nuovo_piano.procedura_avvio = _procedura_avvio
@@ -513,11 +509,10 @@ class FormazionePiano(graphene.Mutation):
                     procedura_avvio.conclusa = True
                     procedura_avvio.save()
 
-                    procedura_adozione = ProceduraAdozione(piano=piano, ente=piano.ente)
-                    procedura_adozione.save()
+                    procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+                        piano=piano, ente=piano.ente)
 
-                    piano_controdedotto = PianoControdedotto(piano=piano)
-                    piano_controdedotto.save()
+                    piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
 
                     piano.procedura_adozione = procedura_adozione
                     piano.save()

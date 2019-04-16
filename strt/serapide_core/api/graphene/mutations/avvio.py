@@ -80,9 +80,9 @@ class CreateProceduraAvvio(relay.ClientIDMutation):
                 # Ente (M)
                 _procedura_avvio_data['ente'] = _piano.ente
 
-                _procedura_avvio = ProceduraAvvio()
-                _procedura_avvio.piano = _piano
-                _procedura_avvio.ente = _piano.ente
+                _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
+                    piano=_piano, ente=_piano.ente)
+
                 _procedura_avvio_data['id'] = _procedura_avvio.id
                 _procedura_avvio_data['uuid'] = _procedura_avvio.uuid
                 nuova_procedura_avvio = update_create_instance(_procedura_avvio, _procedura_avvio_data)
@@ -246,7 +246,7 @@ class AvvioPiano(graphene.Mutation):
                     procedura_avvio.notifica_genio_civile = False
                     procedura_avvio.save()
 
-                    _cc = ConferenzaCopianificazione(piano=piano)
+                    _cc, created = ConferenzaCopianificazione.objects.get_or_create(piano=piano)
                     _cc.data_richiesta_conferenza = datetime.datetime.now(timezone.get_current_timezone())
                     _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
                     _cc.save()
@@ -273,7 +273,7 @@ class AvvioPiano(graphene.Mutation):
                     procedura_avvio.notifica_genio_civile = False
                     procedura_avvio.save()
 
-                    _cc = ConferenzaCopianificazione(piano=piano)
+                    _cc, created = ConferenzaCopianificazione.objects.get_or_create(piano=piano)
                     _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
                     _cc.save()
 
@@ -437,11 +437,10 @@ class IntegrazioniRichieste(graphene.Mutation):
                 procedura_avvio.conclusa = True
                 procedura_avvio.save()
 
-                procedura_adozione = ProceduraAdozione(piano=piano, ente=piano.ente)
-                procedura_adozione.save()
+                procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+                    piano=piano, ente=piano.ente)
 
-                piano_controdedotto = PianoControdedotto(piano=piano)
-                piano_controdedotto.save()
+                piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
 
                 piano.procedura_adozione = procedura_adozione
                 piano.save()
@@ -536,11 +535,10 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                         procedura_avvio.conclusa = True
                         procedura_avvio.save()
 
-                        procedura_adozione = ProceduraAdozione(piano=piano, ente=piano.ente)
-                        procedura_adozione.save()
+                        procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+                            piano=piano, ente=piano.ente)
 
-                        piano_controdedotto = PianoControdedotto(piano=piano)
-                        piano_controdedotto.save()
+                        piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
 
                         piano.procedura_adozione = procedura_adozione
                         piano.save()

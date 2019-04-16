@@ -401,8 +401,7 @@ class PianoControdedotto(graphene.Mutation):
             _piano_controdedotto = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.piano_controdedotto).first()
 
-            if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna and \
-            procedura_adozione.url_piano_controdedotto:
+            if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna:
                 _piano_controdedotto.stato = STATO_AZIONE.nessuna
                 _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
                 _piano_controdedotto.save()
