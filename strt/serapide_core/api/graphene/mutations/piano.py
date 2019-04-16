@@ -505,7 +505,7 @@ class FormazionePiano(graphene.Mutation):
 
                     piano.chiudi_pendenti()
 
-                    procedura_avvio = ProceduraAvvio.objects.get(piano=piano)
+                    procedura_avvio, created = ProceduraAvvio.objects.get_or_create(piano=piano)
                     procedura_avvio.conclusa = True
                     procedura_avvio.save()
 

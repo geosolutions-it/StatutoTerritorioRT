@@ -159,7 +159,7 @@ FASE_AZIONE = Choices(
         ('esito_conferenza_paesaggistica', 'avvio'),
         ('rev_piano_post_cp', 'avvio'),
         # Approvazione
-        ('trasmissione_approvazione', 'approvazione'),
+        ('trasmissione_approvazione', 'adozione'),
     )
 
 TOOLTIP_AZIONE = Choices(

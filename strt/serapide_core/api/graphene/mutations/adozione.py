@@ -402,17 +402,16 @@ class PianoControdedotto(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.piano_controdedotto).first()
 
             if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna:
-                _piano_controdedotto.stato = STATO_AZIONE.nessuna
-                _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
-                _piano_controdedotto.save()
-
                 if not procedura_adozione.richiesta_conferenza_paesaggistica:
-
                     piano.chiudi_pendenti()
-
-                    procedura_adozione.conclusa = True
-                    procedura_adozione.save()
+                    if piano.is_eligible_for_promotion:
+                        procedura_adozione.conclusa = True
+                        procedura_adozione.save()
                 else:
+                    _piano_controdedotto.stato = STATO_AZIONE.nessuna
+                    _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
+                    _piano_controdedotto.save()
+
                     _convocazione_cp = Azione(
                         tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica,
                         attore=TIPOLOGIA_ATTORE.regione,
@@ -554,14 +553,10 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
 
             if _rev_piano_post_cp and _rev_piano_post_cp.stato != STATO_AZIONE.nessuna and \
             procedura_adozione.url_rev_piano_post_cp:
-                _rev_piano_post_cp.stato = STATO_AZIONE.nessuna
-                _rev_piano_post_cp.data = datetime.datetime.now(timezone.get_current_timezone())
-                _rev_piano_post_cp.save()
-
                 piano.chiudi_pendenti()
-
-                procedura_adozione.conclusa = True
-                procedura_adozione.save()
+                if piano.is_eligible_for_promotion:
+                    procedura_adozione.conclusa = True
+                    procedura_adozione.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
