@@ -19,6 +19,7 @@ import Osservazioni from './Osservazioni'
 import OsservazioniRegione from './OsservazioniRegione'
 import PianoControdedotto from './PianoControdedotto'
 import Controdeduzioni from './Controdeduzioni'
+import EsitoPae from './EsitoConferenzaPaeseggistica'
 
 // parametri passati di default piano, back, utente, scadenza
 
@@ -46,6 +47,8 @@ export default {
     osservazioniEnti: (props) => (<Osservazioni disableSave={true} label="OSSERVAZIONI" titolo="Osservazioni Ente"  filterByUser={false} tipo="osservazioni_enti" {...props}/>),
     controdeduzioni: (props) => (<Controdeduzioni saveMutation={CONTRODEDUZIONI} showData={false} label="Carica Files" titolo="CONTRODEDUZIONI"   tipo="controdeduzioni" {...props}/>),
     osservazioniRegione: (props) => (<OsservazioniRegione  {...props}/>),
-    pianoControdedotto: (props) => (<PianoControdedotto {...props}/>)
+    pianoControdedotto: (props) => (<PianoControdedotto {...props}/>),
+    esitoConferenzaPaesaggistica: (props) => (<EsitoPae {...props}/>)
+
 }
 

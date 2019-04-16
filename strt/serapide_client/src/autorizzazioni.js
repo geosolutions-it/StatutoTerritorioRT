@@ -37,7 +37,8 @@ const azioni = {
         "OSSERVAZIONI_ENTI": ["*"],
         "OSSERVAZIONI_REGIONE": ["TMP"],
         "CONTRODEDUZIONI": ["RUP", "OP", "TMP"],
-        "PIANO_CONTRODEDOTTO": ["RUP", "OP", "TMP"]
+        "PIANO_CONTRODEDOTTO": ["RUP", "OP", "TMP"],
+        "ESITO_CONFERENZA_PAESAGGISTICA": ["RUP", "OP", "TMP"]
     }
 export const globalAuth = {
     _attore_attivo: "",
