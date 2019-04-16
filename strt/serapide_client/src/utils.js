@@ -1,8 +1,8 @@
 import { format, parseISO, differenceInCalendarDays, subDays} from 'date-fns'
-import {isDate} from 'lodash'
+import {isDate, find, includes} from 'lodash'
 import { it } from 'date-fns/locale'
 import { toast } from 'react-toastify'
-
+import elaborati from './Elaborati'
 export const getEnteLabel = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `${tipoente} di ${name}`
 
 export const getEnteLabelID = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `ID ${tipoente} ${code}`
@@ -66,3 +66,9 @@ export const showError = ({graphQLErrors, message, networkError: {result:{errors
     else toast.error(message,  {autoClose: true})
 }
 
+export const elaboratiCompletati = (tipoPiano = "", risorse) => {
+            const tipo = tipoPiano.toLocaleLowerCase()
+             return  elaborati[tipo] && !find(elaborati[tipo]["testuali"], (el, key) => {
+                 return !find(risorse, ({node: {tipo: t} = {}}) => {
+                    return t === key})})
+            }

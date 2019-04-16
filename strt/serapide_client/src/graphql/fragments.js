@@ -246,6 +246,8 @@ fragment ADOZIONE on ProceduraAdozioneNode {
         pubblicazioneSitoData
         osservazioniConcluse
         conclusa
+        richiestaConferenzaPaesaggistica
+        urlPianoControdedotto
         risorse(archiviata: false) {
             ...Risorse
         }

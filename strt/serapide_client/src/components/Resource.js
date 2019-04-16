@@ -14,7 +14,7 @@ const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : 
 
 
 const ResourceTitle = ({resource: {downloadUrl, label = "", tooltip = "", nome} = {}, useLabel} = {}) => {
-    console.log(downloadUrl, label, tooltip, nome, useLabel)
+    
     const lab = useLabel && label ?  label : nome
     const tip = (<TextWithTooltip dataTip={tooltip} dataTipDisable={!useLabel} text={label}/>)
     return downloadUrl ?(

@@ -4,6 +4,7 @@ import * as FR from './fragments'
 
 
 
+
 // Piano
 export const CREA_PIANO= gql`mutation CreatePiano($input: CreatePianoInput!) {
     createPiano(input: $input) {
@@ -261,6 +262,21 @@ mutation Contorodeduzioni($codice: String!){
 ${FR.AZIONI_PIANO}
 `
 
+// Piano controdedotto
+
+export const PIANO_CONTRODEDOTTO = gql`
+mutation PianoControdedotto($codice: String!) {
+  pianoControdedotto(uuid: $codice){
+    errors
+    adozioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
 // Procedura Avvio
 
 export const UPDATE_AVVIO = gql`

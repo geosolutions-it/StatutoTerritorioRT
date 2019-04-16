@@ -8,9 +8,9 @@
 import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
 
-import  {showError, formatDate} from '../../utils'
+import  {showError, formatDate, elaboratiCompletati} from '../../utils'
 
-import {Query, Mutation} from "react-apollo"
+import {Query} from "react-apollo"
 import Resource from '../../components/Resource'
 
 import SalvaInvia from '../../components/SalvaInvia'
@@ -20,7 +20,8 @@ import TextWithTooltip from '../../components/TextWithTooltip'
 import {EnhancedDateSelector} from '../../components/DateSelector'
 import {rebuildTooltip} from '../../enhancers/utils'
 import Input from '../../components/EnhancedInput'
-import Elaborati from '../../components/ElaboratiPiano'
+
+import Elaborati from "../../components/ElaboratiPiano"
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
     DELETE_RISORSA_ADOZIONE,
@@ -54,7 +55,7 @@ const getDateInput = (uuid,field) => (val) => ({
 // }
 const fileProps = {className: `border-0`, mutation: ADOZIONE_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_ADOZIONE, disabled: false, isLocked: false}
-const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
+const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
     vas: {node:{ risorse: {edges: resVas =[]} = {}} = {}} = {},
     proceduraAdozione: {node: {
             uuid,
@@ -74,9 +75,8 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
 
             const {node: rapportoAmbientale} = resVas.filter(({node: {tipo}}) => tipo === "rapporto_ambientale").shift() || {}
             const {node: deliberaAdozione} = edges.filter(({node: {tipo}}) => tipo === "delibera_adozione").shift() || {}
-            const elaboratiAdozione = edges.filter(({node: {tipo}}) => tipo === "elaborati_adozione").map(({node}) => node)
-            // const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
-            // const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
+            const elaboratiCompleti = elaboratiCompletati(tipoPiano, edges)
+            console.log("Puppa", elaboratiCompleti)
             return (<React.Fragment>
                 <ActionTitle>
                    Trasmissione Adozione
@@ -131,12 +131,12 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 
                 <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
                 <Elaborati 
-                           tipoPiano={tipoPiano.toLowerCase()} 
-                           resources={edges}
-                           mutation={ADOZIONE_FILE_UPLOAD}
-                           resourceMutation={DELETE_RISORSA_ADOZIONE}
-                           uuid={uuid}
-                           />               
+                        tipoPiano={tipoPiano.toLowerCase()} 
+                        resources={edges}
+                        mutation={ADOZIONE_FILE_UPLOAD}
+                        resourceMutation={DELETE_RISORSA_ADOZIONE}
+                        uuid={uuid}
+                        />               
                 <div className="w-100 border-top mt-3"></div>                
                 <h5 className="pt-4 font-weight-light">PUBBLICAZIONE</h5>
                 <div className="mt-2 row d-flex align-items-center">
@@ -194,7 +194,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 <div className="w-100 border-top mt-3"></div> 
                 <div className="align-self-center mt-5">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_ADOZIONE} 
-                        canCommit={ deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData}></SalvaInvia>
+                        canCommit={ elaboratiCompleti && deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData}></SalvaInvia>
                 </div>
             </React.Fragment>)})
 

@@ -7,9 +7,9 @@
  */
 import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
-import UploadFiles from '../../components/UploadFiles'
+
 import Elaborati from '../../components/ElaboratiPiano'
-import  {showError} from '../../utils'
+import  {showError, elaboratiCompletati} from '../../utils'
 
 import {Query, Mutation} from "react-apollo"
 import Resource from '../../components/Resource'
@@ -83,10 +83,9 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
             const quadro = edges.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").map(({node}) => node).shift()
             const programma = edges.filter(({node: {tipo}}) => tipo === "programma_attivita").map(({node}) => node).shift()
             const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
-            const allegati = edges.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node)
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
-
+            const elaboratiCompletati = (tipoPiano, edges)
             return (<React.Fragment>
                 <ActionTitle>
                     Avvio del Procedimento<br/><small className="text-nowrap">(Atto di Avvio)<TextWithTooltip dataTip="art. 17 L.R. 65/2014"/></small>
@@ -116,11 +115,11 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
 
                 <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
                 <Elaborati 
-                           tipoPiano={tipoPiano.toLowerCase()} 
-                           resources={edges}
-                           mutation={AVVIO_FILE_UPLOAD}
-                           resourceMutation={DELETE_RISORSA_AVVIO}
-                           uuid={uuid}
+                            tipoPiano={tipoPiano.toLowerCase()} 
+                            resources={edges}
+                            mutation={AVVIO_FILE_UPLOAD}
+                            resourceMutation={DELETE_RISORSA_AVVIO}
+                            uuid={uuid}
                            />   
                 
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
@@ -268,7 +267,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     
                 
                 <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
+                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={elaboratiCompletati && obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
                 
                 </div>
             </React.Fragment>)})
