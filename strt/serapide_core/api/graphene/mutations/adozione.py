@@ -517,6 +517,13 @@ class ConvocazioneConferenzaPaesaggistica(graphene.Mutation):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="convocazione_conferenza_paesaggistica")
+
                 return ConvocazioneConferenzaPaesaggistica(
                     adozione_aggiornata=_procedura_adozione,
                     errors=[]
@@ -577,6 +584,13 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="esito_conferenza_paesaggistica")
+
                 return EsitoConferenzaPaesaggistica(
                     adozione_aggiornata=_procedura_adozione,
                     errors=[]
@@ -629,6 +643,13 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="rev_piano_post_cp")
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
