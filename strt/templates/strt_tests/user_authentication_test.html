@@ -28,23 +28,32 @@ LICENSE file in the root directory of this source tree.
         <h2>{% trans 'test autenticazione utente'|capfirst %}</h2>
         <hr class="border-warning border-bottom"></hr>
 
-        <p>La procedura di autenticazione prevede due casistiche:</p>
+        <p>La procedura di autenticazione:</p>
         <ol>
             <li>
                 <p>
-                    Utente con ruolo 'Responsabile ISIDE'
+                    Codice Fiscale
                     <br>
                     <small>
-                        Inserire Nome, Cognome, Codice Fiscale, Ruolo ('RI') e uno o più Enti attraverso il pulsante 'Aggiungi ente'.
+                        Inserire il Codice Fiscale associato all'utenza; deve essere registrato e valido.
                     </small>
                 </p>
             </li>
             <li>
                 <p>
-                    Utente creato dal Responsabile ISIDE e operante su SERAPIDE
+                    Ente
                     <br>
                     <small>
-                        Inserire unicamente il Codice Fiscale (l'utente deve essere già stato preventivamente registrato).
+                        Selezionare l'Ente al quale si vuole accedere dalla lista; l'utenza deve avere accesso all'Ente con un Ruolo valido.
+                    </small>
+                </p>
+            </li>
+            <li>
+                <p>
+                    Ruolo
+                    <br>
+                    <small>
+                        Selezionare il Ruolo dalla lista; il ruolo deve essere stato attivato per l'Ente selezionato.
                     </small>
                 </p>
             </li>
