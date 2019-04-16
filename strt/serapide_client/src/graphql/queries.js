@@ -201,3 +201,17 @@ query getAuth{
     }
 }
 `
+export const GET_RISORSE_PIANO_CONTRODEDOTTO = gql`
+query GetRisorsePianoControdedotto($codice: String!) {
+      pianoControdedotto(piano_Codice: $codice){
+          edges{node{
+            uuid
+          risorse {...Risorse}
+
+          }}        
+          
+      }
+}
+${FR.RISORSE}
+
+`

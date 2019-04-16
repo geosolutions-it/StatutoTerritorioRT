@@ -511,3 +511,38 @@ mutation DeleteRisorsaAdozione($id: ID!, $codice: String!) {
 }
 ${FR.ADOZIONE}
 `
+
+ // piano controdedotto 
+
+
+   // Adozione
+export const CONTRODEDOTTO_FILE_UPLOAD = gql`
+mutation ControdedottoUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    upload: uploadRisorsaPianoControdedotto(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      fileName
+      pianoControdedottoAggiornato {
+          uuid
+          risorse {
+            ...Risorse
+          }
+      }
+    }
+  }
+  ${FR.RISORSE}
+`
+
+export const DELETE_RISORSA_CONTRODEDOTTO = gql`
+mutation DeleteRisorsaControdedotto($id: ID!, $codice: String!) {
+    deleteRisorsa: deleteRisorsaPianoControdedotto(risorsaId: $id, codice: $codice){
+        success
+        pianoControdedottoAggiornatoAggiornato{
+            uuid
+            risorse {
+              ...Risorse
+            }
+        }
+    }
+}
+${FR.ADOZIONE}
+`

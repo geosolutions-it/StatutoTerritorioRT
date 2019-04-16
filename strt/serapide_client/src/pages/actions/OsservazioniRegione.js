@@ -26,7 +26,6 @@ const UI = ({
         conformazionePitPprUrl
         }
     }) => {
-        console.log(osservazioniConcluse)
         return (
             <React.Fragment>
                 <ActionTitle>Osservazione della Regione Toscana</ActionTitle>
@@ -55,7 +54,7 @@ const UI = ({
                 
                 <EnhancedSwitch 
                 ignoreChecked
-                value={osservazioniConcluse}
+                value={!osservazioniConcluse}
                 labelClassName="col-auto text-serapide"
                 className="mt-3"
                 checked={osservazioniConcluse}

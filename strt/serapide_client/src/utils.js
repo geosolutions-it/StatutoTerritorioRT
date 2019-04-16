@@ -76,7 +76,7 @@ export const elaboratiCompletati = (tipoPiano = "", risorse) => {
 export const getInputFactory = (inputType) => (uuid, field) => (val) => ({
     variables: {
         input: { 
-            [inputType]: { [field]: isDate(val) ? val.toISOString : val }, 
+            [inputType]: { [field]: isDate(val) ? val.toISOString() : val }, 
             uuid
         }
     }

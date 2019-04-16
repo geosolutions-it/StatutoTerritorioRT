@@ -8,7 +8,7 @@
 import React from 'react'
 
 
-import  {showError} from '../../utils'
+import  {showError, elaboratiCompletati} from '../../utils'
 
 import {Query} from "react-apollo"
 
@@ -16,59 +16,46 @@ import {EnhancedSwitch} from "../../components/Switch"
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import {getInputFactory} from '../../utils' 
-import Input from '../../components/EnhancedInput'
+
+import Elaborati from '../../components/ElaboratiPiano'
 
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE,
-    PIANO_CONTRODEDOTTO
+    PIANO_CONTRODEDOTTO,
+    GET_RISORSE_PIANO_CONTRODEDOTTO,
+    CONTRODEDOTTO_FILE_UPLOAD, DELETE_RISORSA_CONTRODEDOTTO
 } from '../../graphql'
 
 
 const getInput = getInputFactory("proceduraAdozione")
 
 const UI = ({
+    pianoControdedotto: {node: {
+        uuid: uuidContro,
+        risorse: {edges = []} ={} } = {}} = {},
     proceduraAdozione: {node: {
             uuid,
             urlPianoControdedotto,
             richiestaConferenzaPaesaggistica
             } = {}} = {}, 
         piano: {
-            redazioneNormeTecnicheAttuazioneUrl,
-            compilazioneRapportoAmbientaleUrl,
+            tipo: tipoPiano = ""
             },
         back}) => {
+            const elaboratiCpmpleti = elaboratiCompletati(tipoPiano, edges)
             return (<React.Fragment>
                 <ActionTitle>
                   Piano Controdedotto
                 </ActionTitle>
-                <div className="row">
-                    <div className="col-12 pt-2">
-                        {`A seguito delle Osservazioni il Comune redige il piano controdedotto utilizzando lo strumento per la redazione
-                        delle norme tecniche di attuazione e la compilazione del Rapporto Ambientale (Minerva). Una volta treminata la
-                        compilazione del piano controdedotto bisogna inserire  la url nel campo qui di seguito`}
-                    </div>
-                </div>
-                <h6 className="pt-5 font-weight-light">LINK AGLI STRUMENTI PER IL PIANO CONTRODEDOTTO</h6>
                 
-                <div className="mt-1 row d-flex align-items-center">
-                    <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><a href={redazioneNormeTecnicheAttuazioneUrl} target="_blank" className="pl-1 text-secondary">Redazione norme tecniche di attuazione</a>
-                    </div>
-                </div>
+                <Elaborati
+                    tipoPiano={tipoPiano.toLowerCase()} 
+                    resources={edges}
+                    mutation={CONTRODEDOTTO_FILE_UPLOAD}
+                    resourceMutation={DELETE_RISORSA_CONTRODEDOTTO}
+                    uuid={uuidContro}
                 
-                <div className="mt-1 row d-flex align-items-center">
-                    <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><a href={compilazioneRapportoAmbientaleUrl} target="_blank" className="pl-1 text-secondary">Compilazione del Rapporto Ambientale</a>
-                    </div>
-                </div>
-                
-                <div className="mt-4 row d-flex align-items-center">
-                    <div className="col-1">URL</div>
-                    <div className="col-11">
-                        <Input placeholder="copiare URL in questo campo" getInput={getInput(uuid, "urlPianoControdedotto")} mutation={UPDATE_ADOZIONE} disabled={false}  onChange={undefined} value={urlPianoControdedotto} type="text" />
-                    </div>
-                </div>
-
+                />
                              
 
                 <div className="w-100 border-top mt-3"></div> 
@@ -91,15 +78,16 @@ const UI = ({
                 <div className="w-100 border-top mt-3"></div> 
                 <div className="align-self-center mt-5">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={PIANO_CONTRODEDOTTO} 
-                        canCommit={urlPianoControdedotto}></SalvaInvia>
+                        canCommit={elaboratiCpmpleti}></SalvaInvia>
                 </div>
             </React.Fragment>)}
 
 export default ({back, piano}) => (
-    
-        <Query query={GET_ADOZIONE} variables={{codice: piano.codice}} onError={showError}>
+    <Query query={GET_RISORSE_PIANO_CONTRODEDOTTO} variables={{codice: piano.codice}} onError={showError}>
+        {({loadingContro, data: {pianoControdedotto: {edges: contro = []} = []} = {}}) => {
+        return (<Query query={GET_ADOZIONE} variables={{codice: piano.codice}} onError={showError}>
                 {({loading, data: {procedureAdozione: {edges = []} = []} = {}}) => {
-                        if(loading) {
+                        if(loading || loadingContro) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
                                     <div className="spinner-grow " role="status">
@@ -108,6 +96,7 @@ export default ({back, piano}) => (
                                 </div>)
                         }
                         return (
-                            <UI  proceduraAdozione={edges[0]} back={back} piano={piano}/>)}
+                            <UI  pianoControdedotto={contro[0]} proceduraAdozione={edges[0]} back={back} piano={piano}/>)}
                     }
-                </Query>)
+        </Query>)}}
+    </Query>)
