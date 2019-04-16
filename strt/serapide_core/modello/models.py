@@ -834,7 +834,7 @@ class PianoControdedotto(models.Model):
 
     class Meta:
         db_table = "strt_core_piano_controdedotto"
-        verbose_name_plural = 'Piano Controdedotto'
+        verbose_name_plural = 'Piani Controdedotti'
 
     def __str__(self):
         return '{} - {} [{}]'.format(self.piano.codice, self.piano.ente, self.uuid)
@@ -846,6 +846,34 @@ class RisorsePianoControdedotto(models.Model):
 
     class Meta:
         db_table = "strt_core_risorse_piano_controdedotto"
+
+
+class PianoRevPostCP(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorsePianoRevPostCP')
+
+    class Meta:
+        db_table = "strt_core_piano_rev_post_cp"
+        verbose_name_plural = 'Piani Rev. post CP'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.piano.ente, self.uuid)
+
+
+class RisorsePianoRevPostCP(models.Model):
+    piano_controdedotto = models.ForeignKey(PianoRevPostCP, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_risorse_piano_rev_post_cp"
 
 
 # ############################################################################ #
@@ -880,6 +908,9 @@ def delete_piano_associations(sender, instance, **kwargs):
     for _pc in PianoControdedotto.objects.filter(piano=instance):
         _pc.risorse.all().delete()
         RisorsePianoControdedotto.objects.filter(piano_controdedotto=_pc).delete()
+    for _pc in PianoRevPostCP.objects.filter(piano=instance):
+        _pc.risorse.all().delete()
+        RisorsePianoRevPostCP.objects.filter(piano_controdedotto=_pc).delete()
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
     for _t in PianoAuthTokens.objects.filter(piano=instance):

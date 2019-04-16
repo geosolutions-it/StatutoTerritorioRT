@@ -40,6 +40,7 @@ from serapide_core.modello.models import (
     ProceduraAvvio,
     ProceduraAdozione,
     PianoControdedotto,
+    PianoRevPostCP,
     ConferenzaCopianificazione
 )
 
@@ -441,6 +442,7 @@ class IntegrazioniRichieste(graphene.Mutation):
                     piano=piano, ente=piano.ente)
 
                 piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
+                piano_rev_post_cp, created = PianoRevPostCP.objects.get_or_create(piano=piano)
 
                 piano.procedura_adozione = procedura_adozione
                 piano.save()
@@ -539,6 +541,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                             piano=piano, ente=piano.ente)
 
                         piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
+                        piano_rev_post_cp, created = PianoRevPostCP.objects.get_or_create(piano=piano)
 
                         piano.procedura_adozione = procedura_adozione
                         piano.save()

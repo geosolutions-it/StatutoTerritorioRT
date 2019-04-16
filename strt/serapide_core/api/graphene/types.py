@@ -43,6 +43,7 @@ from serapide_core.modello.models import (
     ProceduraAvvio,
     ProceduraAdozione,
     PianoControdedotto,
+    PianoRevPostCP,
     ConferenzaCopianificazione,
     RisorsePiano,
     RisorseVas,
@@ -50,6 +51,7 @@ from serapide_core.modello.models import (
     RisorseAdozione,
     RisorseCopianificazione,
     RisorsePianoControdedotto,
+    RisorsePianoRevPostCP,
 )
 
 from serapide_core.modello.enums import (
@@ -235,6 +237,16 @@ class RisorsePianoControdedottoType(DjangoObjectType):
 
     class Meta:
         model = RisorsePianoControdedotto
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorsePianoRevPostCPType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorsePianoRevPostCP
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -479,6 +491,19 @@ class PianoControdedottoNode(DjangoObjectType):
 
     class Meta:
         model = PianoControdedotto
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'piano__codice': ['exact'],
+        }
+        interfaces = (relay.Node, )
+
+
+class PianoRevPostCPNode(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorseCopianificazioneType)
+
+    class Meta:
+        model = PianoRevPostCP
         # Allow for some more advanced filtering here
         filter_fields = {
             'piano__codice': ['exact'],

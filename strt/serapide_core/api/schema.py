@@ -73,6 +73,8 @@ class Query(object):
 
     piano_controdedotto = DjangoFilterConnectionField(types.PianoControdedottoNode)
 
+    piano_rev_post_cp = DjangoFilterConnectionField(types.PianoRevPostCPNode)
+
     contatti = DjangoFilterConnectionField(types.ContattoNode,
                                            filterset_class=filters.EnteContattoMembershipFilter)
 
@@ -175,3 +177,5 @@ class Mutation(object):
     delete_risorsa_copianificazione = uploads.DeleteRisorsaCopianificazione.Field()
     upload_risorsa_piano_controdedotto = uploads.UploadRisorsaPianoControdedotto.Field()
     delete_risorsa_piano_controdedotto = uploads.DeleteRisorsaPianoControdedotto.Field()
+    upload_risorsa_piano_rev_post_cp = uploads.UploadRisorsaPianoRevPostCP.Field()
+    delete_risorsa_piano_rev_post_cp = uploads.DeleteRisorsaPianoRevPostCP.Field()
