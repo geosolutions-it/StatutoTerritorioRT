@@ -66,7 +66,7 @@ const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
 const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
     procedureAvvio: {node: {
             uuid, conferenzaCopianificazione, 
-            dataCreazione, dataScadenzaRisposta,
+            dataScadenzaRisposta,
             garanteNominativo, garantePec,
             risorse: {edges=[]} = {}
             } = {}} = {}, 
@@ -85,7 +85,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
             const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
-            const elaboratiCompletati = (tipoPiano, edges)
+            const elaboratiCompleti = elaboratiCompletati(tipoPiano, edges)
             return (<React.Fragment>
                 <ActionTitle>
                     Avvio del Procedimento<br/><small className="text-nowrap">(Atto di Avvio)<TextWithTooltip dataTip="art. 17 L.R. 65/2014"/></small>
@@ -267,7 +267,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     
                 
                 <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={elaboratiCompletati && obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
+                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={elaboratiCompleti && obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
                 
                 </div>
             </React.Fragment>)})

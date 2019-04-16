@@ -15,18 +15,18 @@ import {GET_VAS,
     VAS_FILE_UPLOAD, UPLOAD_ELABORATI_VAS
 } from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
-
-import  {showError} from '../../utils'
+import Elaborati from '../../components/ElaboratiPiano'
+import  {showError, elaboratiCompletati} from '../../utils'
 
 
 const UI = ({
-    back, 
+    back,
+    piano: {tipo: tipoPiano} = {}, 
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}}
     }) => {
         
-        const elaborati =  resources.filter(({node: {tipo, user = {}}}) => tipo === 'elaborati_vas').map(({node}) => node)
         const rapporto = resources.filter(({node: {tipo, user = {}}}) => tipo === 'rapporto_ambientale').map(({node}) => node).shift()
-        
+        const elaboratiCompleti = elaboratiCompletati(tipoPiano, resources)
         return (
             <React.Fragment>
                 <ActionTitle>Upload Elaborati VAS</ActionTitle>
@@ -40,13 +40,15 @@ const UI = ({
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
                 </div>
                 <h4 className="font-weight-light pl-4 pb-1">Elaborati</h4>
-                <UploadFiles risorse={elaborati} 
-                        mutation={VAS_FILE_UPLOAD} 
+                <Elaborati
+                        tipoPiano={tipoPiano.toLowerCase()} 
+                        resources={resources}
+                        mutation={VAS_FILE_UPLOAD}
                         resourceMutation={DELETE_RISORSA_VAS}
-                        variables={{codice: uuid, tipo: "elaborati_vas" }}
-                        isLocked={false} />
+                        uuid={uuid}
+                />
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto && elaborati.length > 0}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto && elaboratiCompleti}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }
@@ -63,6 +65,6 @@ const UI = ({
                         </div>)
                 }
                 return (
-                    <UI back={back} vas={edges[0]}/>)}
+                    <UI piano={piano} back={back} vas={edges[0]}/>)}
             }
         </Query>)

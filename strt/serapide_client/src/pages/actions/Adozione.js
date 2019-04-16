@@ -76,7 +76,6 @@ const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
             const {node: rapportoAmbientale} = resVas.filter(({node: {tipo}}) => tipo === "rapporto_ambientale").shift() || {}
             const {node: deliberaAdozione} = edges.filter(({node: {tipo}}) => tipo === "delibera_adozione").shift() || {}
             const elaboratiCompleti = elaboratiCompletati(tipoPiano, edges)
-            console.log("Puppa", elaboratiCompleti)
             return (<React.Fragment>
                 <ActionTitle>
                    Trasmissione Adozione
