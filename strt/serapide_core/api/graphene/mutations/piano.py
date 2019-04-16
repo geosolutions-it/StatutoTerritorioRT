@@ -47,6 +47,7 @@ from serapide_core.modello.models import (
     ProceduraVAS,
     ProceduraAvvio,
     ProceduraAdozione,
+    PianoControdedotto,
     PianoAuthTokens,
     AutoritaCompetenteVAS,
     AutoritaIstituzionali,
@@ -514,6 +515,9 @@ class FormazionePiano(graphene.Mutation):
 
                     procedura_adozione = ProceduraAdozione(piano=piano, ente=piano.ente)
                     procedura_adozione.save()
+
+                    piano_controdedotto = PianoControdedotto(piano=piano)
+                    piano_controdedotto.save()
 
                     piano.procedura_adozione = procedura_adozione
                     piano.save()

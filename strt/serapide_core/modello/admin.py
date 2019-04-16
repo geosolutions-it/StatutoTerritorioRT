@@ -27,7 +27,9 @@ from .models import (
     PianoAuthTokens,
     ConsultazioneVAS, ParereVAS,
     ConferenzaCopianificazione,
-    RisorseCopianificazione
+    RisorseCopianificazione,
+    PianoControdedotto,
+    RisorsePianoControdedotto,
 )
 
 
@@ -53,6 +55,10 @@ class RisorseAdozioneInline(admin.TabularInline):
 
 class RisorseCopianificazioneInline(admin.TabularInline):
     model = RisorseCopianificazione
+
+
+class RisorsePianoControdedottoInline(admin.TabularInline):
+    model = RisorsePianoControdedotto
 
 
 class AutoritaCompetenteVASInline(admin.TabularInline):
@@ -109,6 +115,10 @@ class ConferenzaCopianificazioneAdmin(admin.ModelAdmin):
     inlines = [RisorseCopianificazioneInline, ]
 
 
+class PianoControdedottoAdmin(admin.ModelAdmin):
+    inlines = [RisorsePianoControdedottoInline, ]
+
+
 admin.site.register(Fase)
 admin.site.register(Azione)
 admin.site.register(Risorsa)
@@ -119,3 +129,4 @@ admin.site.register(ProceduraAvvio, ProceduraAvvioAdmin)
 admin.site.register(ProceduraAdozione, ProceduraAdozioneAdmin)
 admin.site.register(ConsultazioneVAS, ConsultazioneVASAdmin)
 admin.site.register(ConferenzaCopianificazione, ConferenzaCopianificazioneAdmin)
+admin.site.register(PianoControdedotto, PianoControdedottoAdmin)
