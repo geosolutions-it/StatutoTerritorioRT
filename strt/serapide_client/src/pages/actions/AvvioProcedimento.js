@@ -9,7 +9,7 @@ import React from 'react'
 import FileUpload from '../../components/UploadSingleFile'
 
 import Elaborati from '../../components/ElaboratiPiano'
-import  {showError, elaboratiCompletati} from '../../utils'
+import  {showError, elaboratiCompletati, getInputFactory} from '../../utils'
 
 import {Query, Mutation} from "react-apollo"
 import Resource from '../../components/Resource'
@@ -30,32 +30,7 @@ import {GET_AVVIO, UPDATE_AVVIO,
     AVVIA_PIANO
 } from '../../graphql'
 
-
-const getGaranteInput = (uuid) => (val) => ({
-    variables: {
-        input: { 
-            proceduraAvvio: {
-                garanteNominativo: val}, 
-            uuid
-        }
-    }})
-const getGarantePecInput = (uuid) => (val) => ({
-        variables: {
-            input: { 
-                proceduraAvvio: {
-                    garantePec: val}, 
-            uuid
-        }
-}})
-const getScadenzaInput = (uuid) => (val) => ({
-    variables: {
-        input: { 
-            proceduraAvvio: {
-                dataScadenzaRisposta: val.toISOString()},
-            uuid
-        }
-    }})
-
+const getProceduraAvvioInput = getInputFactory("proceduraAvvio")
 
 
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
@@ -123,8 +98,8 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                            />   
                 
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
-                <Input getInput={getGaranteInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />
-                <Input getInput={getGarantePecInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} className="mb-3 rounded-pill" placeholder="Indirizzo Pec" onChange={undefined} value={garantePec} type="url"/>
+                <Input getInput={getProceduraAvvioInput(uuid, "garanteNominativo")} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />
+                <Input getInput={getProceduraAvvioInput(uuid, "garantePec")} mutation={UPDATE_AVVIO} disabled={false} className="mb-3 rounded-pill" placeholder="Indirizzo Pec" onChange={undefined} value={garantePec} type="url"/>
                 <div className="action-uploader  align-self-start border-bottom ">
                 <FileUpload 
                     {...fileProps}
@@ -132,7 +107,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     risorsa={garante} variables={{codice: uuid, tipo: "individuazione_garante_informazione" }}/>
                 </div>
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">TERMINI SCADENZA PER LA RISPOSTA</h5>
-                <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
+                <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getProceduraAvvioInput(uuid, "dataScadenzaRisposta")} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
                 
                 <h5 className="font-weight-light pb-1 mt-5">SCELTA SOGGETTI ISTITUZIONALI</h5>
                 <h6 className="font-weight-light pb-1">

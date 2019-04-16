@@ -19,6 +19,7 @@ import Input from '../../components/EnhancedInput'
 import {Query} from 'react-apollo'
 import {showError} from '../../utils'
 import FileUpload from '../../components/UploadSingleFile'
+import {isDate} from "lodash"
 /*
 redazioneNormeTecnicheAttuazioneUrl
     compilazioneRapportoAmbientaleUrl
@@ -26,10 +27,15 @@ redazioneNormeTecnicheAttuazioneUrl
     monitoraggioUrbanisticoUrl
 */
 
-const getInput = (codice, field) => (val) => (
-    {variables:{ input:{ 
-    pianoOperativo: { [field]: val}, codice}
-}})
+const getInput = (codice, field) => (val) => ({
+    variables: {
+        input: { 
+            pianoOperativo: { [field]:  val }, 
+            codice
+        }
+    }
+})
+
 
 
 const UI = ({ back, 

@@ -21,18 +21,15 @@ import {toggleControllableState} from '../../enhancers/utils'
 import {Query, Mutation} from 'react-apollo'
 import AddContact from '../../components/AddContact'
 import {EnhancedListSelector} from '../../components/ListSelector'
-import {showError} from '../../utils'
+import {showError, getInputFactory} from '../../utils'
 import Button from '../../components/IconButton'
 import {EnhancedDateSelector} from "../../components/DateSelector"
 import UploadFiles from '../../components/UploadFiles'
 import Input from '../../components/EnhancedInput'
 
 const enhancer = toggleControllableState("isChecked", "toggleCheck", false)
+const  getPianoInput = getInputFactory("pianoOperativo")
 
-const getInput = (codice) => (numeroProtocolloGenioCivile) => (
-    {variables:{ input:{ 
-    pianoOperativo: { numeroProtocolloGenioCivile}, codice}
-}})
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
 }
@@ -115,7 +112,7 @@ const UI = enhancer(({ back,
                     <div className=" mt-3 px-4 pb-4 border container">
                     <div className="row pt-2">
                         <Input className="col border-bottom border-serapide bg-light border-top-0 border-left-0 border-right-0" 
-                               getInput={getInput(codice)} mutation={UPDATE_PIANO} disabled={false}  
+                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}  
                                onChange={undefined} 
                                value={numeroProtocolloGenioCivile} type="text"
                                placeholder="Titolo Incontro" />
@@ -131,13 +128,13 @@ const UI = enhancer(({ back,
                        
                             
                             <Input  className="col-12 h-auto p-2 pl-4 mb-3 rounded-0 flex-fill p-0 m-0 bg-light" 
-                               getInput={getInput(codice)} mutation={UPDATE_PIANO} disabled={false}  
+                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}  
                                onChange={undefined} 
                                value={numeroProtocolloGenioCivile} type="text"
                                placeholder="Luogo" />
                             
                             <Input  rows={5} className="col-12 p-2 pl-4 rounded-0 flex-fill p-0 m-0 bg-light" 
-                               getInput={getInput(codice)} mutation={UPDATE_PIANO} disabled={false}  
+                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}  
                                onChange={undefined} 
                                value={numeroProtocolloGenioCivile}
                                placeholder="Messaggio per partecipanti" />

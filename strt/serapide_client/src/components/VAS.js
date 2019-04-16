@@ -9,7 +9,7 @@ import React from 'react'
 import {EnhancedSwitch} from './Switch'
 import FileUpload from './UploadSingleFile'
 import Button from './IconButton'
-import {formatDate, getNominativo, showError} from '../utils'
+import {formatDate, getNominativo, showError, getInputFactory} from '../utils'
 import {EnhancedListSelector} from './ListSelector'
 import Resource from '../components/Resource'
 import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD, DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO, PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from '../graphql'
@@ -22,15 +22,8 @@ import  {rebuildTooltip} from '../enhancers/utils'
 import {map}  from 'lodash'
 
 
+const getVasTypeInput = getInputFactory("proceduraVas")
 
-const getVasTypeInput = (uuid) => (tipologia) => ({
-    variables: {
-        input: { 
-            proceduraVas: {
-            tipologia}, 
-        uuid}
-    }
-})
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
@@ -68,7 +61,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
     const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
     const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
     const canCommit = !isLocked && canUpdate && checkAnagrafica(tipologia, sP, auths, scas, semplificata, verifica, docProcSemp)
-
+    const getInputTipologia = getVasTypeInput(uuid, "tipologia")
     const pareriUser =  resources.filter(({node: {tipo}}) => tipo === "parere_sca").reduce((acc, {node}) => {
         if (acc[node.user.fiscalCode]) { 
             acc[node.user.fiscalCode].push(node)
@@ -87,7 +80,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
             è richiesto l’upload della Relazione Motivata; se viene selezionata la Richiesta di Verifica VAS è richiesto
     l’upload del documento preliminare di verifica; se si seleziona il Procedimento Vas si decide di seguire il procedimento VAS esteso.</span>)}
         <EnhancedSwitch isLocked={isLocked} 
-                        getInput={getVasTypeInput(uuid)} 
+                        getInput={getInputTipologia} 
                         mutation={UPDATE_VAS} 
                         value="semplificata" checked={tipologia === "SEMPLIFICATA"}  
                         label={(<TextWithTooltip dataTip="art.5 co.3ter L.R. 10/2010" text="PROCEDIMENTO DI VERIFICA SEMPLIFICATA"/>)}
@@ -104,7 +97,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
             }
         </EnhancedSwitch>
         <EnhancedSwitch  isLocked={isLocked}
-            getInput={getVasTypeInput(uuid)} 
+            getInput={getInputTipologia} 
             mutation={UPDATE_VAS} 
             value="verifica" 
             checked={tipologia === "VERIFICA"}  
@@ -119,7 +112,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                     </div>}
         </EnhancedSwitch>
         <EnhancedSwitch  isLocked={isLocked} 
-            getInput={getVasTypeInput(uuid)}
+            getInput={getInputTipologia}
             mutation={UPDATE_VAS}
             value="procedimento_semplificato"
             label={(<TextWithTooltip dataTip="art.8 co.5 L.R. 10/2010" text="PROCEDIMENTO SEMPLIFICATO"/>)}
@@ -134,7 +127,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                     </div>}
             </EnhancedSwitch>
         <EnhancedSwitch isLocked={isLocked} 
-            getInput={getVasTypeInput(uuid)}
+            getInput={getInputTipologia}
             mutation={UPDATE_VAS}
             value="procedimento"
             checked={tipologia === "PROCEDIMENTO"}
@@ -148,7 +141,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
             )}
         </EnhancedSwitch>
         <EnhancedSwitch  isLocked={isLocked}
-            getInput={getVasTypeInput(uuid)}
+            getInput={getInputTipologia}
             mutation={UPDATE_VAS}
             value="non_necessaria"
             checked={tipologia === "NON_NECESSARIA"}

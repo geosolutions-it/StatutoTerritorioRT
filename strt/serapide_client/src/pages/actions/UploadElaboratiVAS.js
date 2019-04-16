@@ -6,7 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import UploadFiles from '../../components/UploadFiles'
 import FileUpload from '../../components/UploadSingleFile'
 import ActionTitle from '../../components/ActionTitle'
 import {Query} from 'react-apollo'

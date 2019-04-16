@@ -6,22 +6,19 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import FileUpload from '../../components/UploadSingleFile'
-
-import  {showError, formatDate, elaboratiCompletati} from '../../utils'
-
 import {Query} from "react-apollo"
-import Resource from '../../components/Resource'
 
+import FileUpload from '../../components/UploadSingleFile'
+import Resource from '../../components/Resource'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
-
 import TextWithTooltip from '../../components/TextWithTooltip'
 import {EnhancedDateSelector} from '../../components/DateSelector'
-import {rebuildTooltip} from '../../enhancers/utils'
 import Input from '../../components/EnhancedInput'
-
 import Elaborati from "../../components/ElaboratiPiano"
+
+import  {showError, formatDate, elaboratiCompletati, getInputFactory} from '../../utils'
+import {rebuildTooltip} from '../../enhancers/utils'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
     DELETE_RISORSA_ADOZIONE,
@@ -30,31 +27,11 @@ import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
 } from '../../graphql'
 
 
-const getInput = (uuid, field) => (val) => (
-    {variables:
-        { input:{ 
-            proceduraAdozione: { [field]: val}, 
-            uuid
-        }
-}})
+const getInput = getInputFactory("proceduraAdozione")
 
-
-const getDateInput = (uuid,field) => (val) => ({
-    variables: {
-        input: { 
-            proceduraAdozione: {
-                [field]: val.toISOString()},
-            uuid
-        }
-    }})
-
-
-
-// const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-//     return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
-// }
 const fileProps = {className: `border-0`, mutation: ADOZIONE_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_ADOZIONE, disabled: false, isLocked: false}
+                    
 const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
     vas: {node:{ risorse: {edges: resVas =[]} = {}} = {}} = {},
     proceduraAdozione: {node: {
@@ -125,7 +102,7 @@ const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
                 </div>
                 <div className="row mt-4">
                     <div className="col-12 d-flex pl-4 align-items-center">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA ADOZIONE" selected={dataDeliberaAdozione ? new Date(dataDeliberaAdozione) : undefined} getInput={getDateInput(uuid,"dataDeliberaAdozione")} className="py-0" mutation={UPDATE_ADOZIONE}/></div>
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA ADOZIONE" selected={dataDeliberaAdozione ? new Date(dataDeliberaAdozione) : undefined} getInput={getInput(uuid,"dataDeliberaAdozione")} className="py-0" mutation={UPDATE_ADOZIONE}/></div>
                 </div>
                 
                 <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
@@ -144,7 +121,7 @@ const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
                         <Input placeholder="COPIA URL B.U.R.T." getInput={getInput(uuid, "pubblicazioneBurtUrl")} mutation={UPDATE_ADOZIONE} disabled={false}  onChange={undefined} value={pubblicazioneBurtUrl} type="text" />
                     </div>
                     <div className="col-9 mt-2 offset-3">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneBurtData ? new Date(pubblicazioneBurtData) : undefined} getInput={getDateInput(uuid, "pubblicazioneBurtData")} className="py-0 " mutation={UPDATE_ADOZIONE}/>
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneBurtData ? new Date(pubblicazioneBurtData) : undefined} getInput={getInput(uuid, "pubblicazioneBurtData")} className="py-0 " mutation={UPDATE_ADOZIONE}/>
                     </div>
 
                 </div>
@@ -154,7 +131,7 @@ const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
                         <Input placeholder="COPIA URL SITO" getInput={getInput(uuid, "pubblicazioneSitoUrl")} mutation={UPDATE_ADOZIONE} disabled={false}  onChange={undefined} value={pubblicazioneSitoUrl} type="text" />
                     </div>
                     <div className="col-9 mt-2 offset-3">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneSitoData ? new Date(pubblicazioneSitoData) : undefined} getInput={getDateInput(uuid, "pubblicazioneSitoData")} className="py-0 " mutation={UPDATE_ADOZIONE}/>
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneSitoData ? new Date(pubblicazioneSitoData) : undefined} getInput={getInput(uuid, "pubblicazioneSitoData")} className="py-0 " mutation={UPDATE_ADOZIONE}/>
                     </div>
 
                 </div>

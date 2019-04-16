@@ -15,15 +15,10 @@ import {GET_ADOZIONE,
 } from '../../graphql'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
-import  {showError, formatDate} from '../../utils'
+import  {showError, getInputFactory} from '../../utils'
 
-const getInput = (uuid, field) => (val) => (
-    {variables:
-        { input:{ 
-            proceduraAdozione: { [field]: !val}, 
-            uuid
-        }
-}})
+const getInput = getInputFactory("proceduraAdozione")
+
 const UI = ({
     back, 
     proceduraAdozione: { node: {uuid, osservazioniConcluse} = {}},
@@ -31,7 +26,6 @@ const UI = ({
         conformazionePitPprUrl
         }
     }) => {
-        console.log(osservazioniConcluse)
         return (
             <React.Fragment>
                 <ActionTitle>Osservazione della Regione Toscana</ActionTitle>
@@ -60,7 +54,7 @@ const UI = ({
                 
                 <EnhancedSwitch 
                 ignoreChecked
-                value={osservazioniConcluse}
+                value={!osservazioniConcluse}
                 labelClassName="col-auto text-serapide"
                 className="mt-3"
                 checked={osservazioniConcluse}
