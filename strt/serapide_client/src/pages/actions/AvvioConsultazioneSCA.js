@@ -35,7 +35,17 @@ const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
 
-const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dataRicezionePareri, dataScadenza, proceduraVas: {uuid: pVasUUID, dataAssoggettamento, tipologia, risorse: {edges=[]} = {} } = {}, uuid} = {}} = {}, piano: {codice, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, back}) => {
+const UI = ({
+    consultazioneSCA: { node: {
+        avvioConsultazioniSca,
+        dataCreazione,
+        dataRicezionePareri,
+        proceduraVas: {uuid: pVasUUID, dataAssoggettamento, tipologia, risorse: {edges=[]} = {} } = {},
+        uuid} = {}} = {}, 
+        piano: {
+            codice, 
+            autoritaCompetenteVas: {edges: aut =[]} = {},
+            soggettiSca: {edges: sca = []} = {}} = {}, back}) => {
             
             const isFull = tipologia === "SEMPLIFICATA" || tipologia === "VERIFICA"
             const provvedimentoVerificaVas  = edges.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
@@ -199,8 +209,8 @@ export default (props) => {
         const codice = getCodice(props)
         return (
                 <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
-                    {({loading, data: {consultazioneVas: {edges:[consultazioneSCA] = []} = []} = {}, error}) => {
-                        if (!loading && !error && !!consultazioneSCA && codice) {
+                    {({loading, data: {consultazioneVas: {edges: [consultazioneSCA] = []} = []} = {}, error}) => {
+                        if (!loading && !error && !consultazioneSCA && codice) {
                             return (
                                 <AutoMutation variables={{input: {codicePiano: codice}}} mutation={CREA_CONSULTAZIONE_VAS} onError={showError} update={updateCache(codice)}>
                                     {() => (
