@@ -6,19 +6,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-
-
-import  {showError, elaboratiCompletati} from '../../utils'
-
 import {Query} from "react-apollo"
 
 import {EnhancedSwitch} from "../../components/Switch"
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
-import {getInputFactory} from '../../utils' 
-
 import Elaborati from '../../components/ElaboratiPiano'
 
+import  {showError, elaboratiCompletati, getInputFactory, getCodide} from '../../utils'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE,
     PIANO_CONTRODEDOTTO,
@@ -26,16 +21,14 @@ import {GET_ADOZIONE, UPDATE_ADOZIONE,
     CONTRODEDOTTO_FILE_UPLOAD, DELETE_RISORSA_CONTRODEDOTTO
 } from '../../graphql'
 
-
 const getInput = getInputFactory("proceduraAdozione")
 
 const UI = ({
-    pianoControdedotto: {node: {
+    pianoContro: {node: {
         uuid: uuidContro,
         risorse: {edges = []} ={} } = {}} = {},
     proceduraAdozione: {node: {
             uuid,
-            urlPianoControdedotto,
             richiestaConferenzaPaesaggistica
             } = {}} = {}, 
         piano: {
@@ -82,11 +75,13 @@ const UI = ({
                 </div>
             </React.Fragment>)}
 
-export default ({back, piano}) => (
-    <Query query={GET_RISORSE_PIANO_CONTRODEDOTTO} variables={{codice: piano.codice}} onError={showError}>
-        {({loadingContro, data: {pianoControdedotto: {edges: contro = []} = []} = {}}) => {
-        return (<Query query={GET_ADOZIONE} variables={{codice: piano.codice}} onError={showError}>
-                {({loading, data: {procedureAdozione: {edges = []} = []} = {}}) => {
+export default (props) => {
+    const codice = getCodide(props)
+    return (
+    <Query query={GET_RISORSE_PIANO_CONTRODEDOTTO} variables={{codice}} onError={showError}>
+        {({loadingContro, data: {pianoControdedotto: {edges: [pianoContro] = []} = []} = {}}) => {
+        return (<Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
+                {({loading, data: {procedureAdozione: {edges: [proceduraAdozione ]= []} = []} = {}}) => {
                         if(loading || loadingContro) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
@@ -96,7 +91,8 @@ export default ({back, piano}) => (
                                 </div>)
                         }
                         return (
-                            <UI  pianoControdedotto={contro[0]} proceduraAdozione={edges[0]} back={back} piano={piano}/>)}
+                            <UI  {...props} pianoContro={pianoContro} proceduraAdozione={proceduraAdozione}/>)}
                     }
         </Query>)}}
     </Query>)
+}

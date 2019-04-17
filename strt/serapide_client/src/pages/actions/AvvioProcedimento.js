@@ -6,12 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import FileUpload from '../../components/UploadSingleFile'
-
-import Elaborati from '../../components/ElaboratiPiano'
-import  {showError, elaboratiCompletati, getInputFactory} from '../../utils'
-
 import {Query, Mutation} from "react-apollo"
+
+import FileUpload from '../../components/UploadSingleFile'
+import Elaborati from '../../components/ElaboratiPiano'
 import Resource from '../../components/Resource'
 import {EnhancedListSelector} from '../../components/ListSelector'
 import SalvaInvia from '../../components/SalvaInvia'
@@ -20,8 +18,10 @@ import AddContact from '../../components/AddContact'
 import Button from '../../components/IconButton'
 import TextWithTooltip from '../../components/TextWithTooltip'
 import {EnhancedDateSelector} from '../../components/DateSelector'
-import {rebuildTooltip} from '../../enhancers/utils'
 import Input from '../../components/EnhancedInput'
+
+import {rebuildTooltip} from '../../enhancers/utils'
+import  {showError, elaboratiCompletati, getInputFactory, getCodice} from '../../utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
@@ -39,7 +39,7 @@ const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
 const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
 const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
-    procedureAvvio: {node: {
+    proceduraAvvio: {node: {
             uuid, conferenzaCopianificazione, 
             dataScadenzaRisposta,
             garanteNominativo, garantePec,
@@ -247,9 +247,9 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 </div>
             </React.Fragment>)})
 
-export default ({back, piano}) => (
-                <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
-                    {({loading, data: {procedureAvvio: {edges = []} = []} = {}}) => {
+export default (props) => (
+                <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
+                    {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}}) => {
                         if(loading) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
@@ -259,6 +259,6 @@ export default ({back, piano}) => (
                                 </div>)
                         }
                         return (
-                            <UI procedureAvvio={edges[0]} back={back} piano={piano}/>)}
+                            <UI {...props} proceduraAvvio={proceduraAvvio}/>)}
                     }
                 </Query>)

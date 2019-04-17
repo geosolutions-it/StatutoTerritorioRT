@@ -6,16 +6,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import {EnhancedSwitch} from '../../components/Switch'
 import {Query} from 'react-apollo'
+
+import {EnhancedSwitch} from '../../components/Switch'
+import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
+
+import  {showError, getInputFactory, getCodice} from '../../utils'
 
 import {GET_ADOZIONE,
     UPDATE_ADOZIONE,
     TRASMISSIONE_OSSERVAZIONI
 } from '../../graphql'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import  {showError, getInputFactory} from '../../utils'
 
 const getInput = getInputFactory("proceduraAdozione")
 
@@ -67,18 +69,19 @@ const UI = ({
             </React.Fragment>)
     }
 
-    export default ({piano = {}, back}) => (
-        <Query query={GET_ADOZIONE} variables={{codice: piano.codice}} onError={showError}>
-             {({loading, data: {procedureAdozione: {edges = []} = []} = {}}) => {
-                if(loading) {
-                    return (
-                        <div className="flex-fill d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>)
-                }
+export default (props) => (
+    <Query query={GET_ADOZIONE} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureAdozione: {edges: [proceduraAdozione]= []} = []} = {}}) => {
+            if(loading) {
                 return (
-                    <UI back={back} proceduraAdozione={edges[0]} piano={piano} />)}
+                    <div className="flex-fill d-flex justify-content-center">
+                        <div className="spinner-grow " role="status">
+                            <span className="sr-only">Loading...</span>
+                        </div>
+                    </div>)
             }
-        </Query>)
+            return (
+                <UI {...props} proceduraAdozione={proceduraAdozione} />)}
+        }
+    </Query>)
+        

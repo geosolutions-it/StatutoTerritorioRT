@@ -45,11 +45,11 @@ export const globalAuth = {
     _attore_attivo: "",
     _ruolo: ""
 }
-
+// Attenzione OSSERVAZIONI ENTI PASSA DIRETTAMENTE NON HA CONTROLLO
 
 export const checkAttore = ( {attore = ""} = {}, attore_attivo = globalAuth._attore_attivo) => attore === attore_attivo
 
 export const canExecuteAction = ({tipologia = "", attore= ""} = {}, attore_attivo = globalAuth._attore_attivo, ruolo = globalAuth._ruolo) => {
   // console.log(attore_attivo, ruolo, tipologia, attore, includes((azioni[tipologia] || []), ruolo) );
-  return attore_attivo.toLowerCase() === attore.toLowerCase() && includes((azioni[tipologia] || []), ruolo) 
+  return tipologia === "OSSERVAZIONI_ENTI" || (attore_attivo.toLowerCase() === attore.toLowerCase() && includes((azioni[tipologia] || []), ruolo)) 
 }

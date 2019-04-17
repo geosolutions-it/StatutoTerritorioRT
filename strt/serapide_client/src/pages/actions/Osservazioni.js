@@ -6,27 +6,30 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import UploadFiles from '../../components/UploadFiles'
 import {Query} from 'react-apollo'
+
+import UploadFiles from '../../components/UploadFiles'
+import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
+
+import  {showError, formatDate, getCodice} from '../../utils'
+
 import {GET_ADOZIONE,
     DELETE_RISORSA_ADOZIONE,
     ADOZIONE_FILE_UPLOAD, TRASMISSIONE_OSSERVAZIONI
 } from '../../graphql'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import  {showError, formatDate, daysSub} from '../../utils'
-
 
 const UI = ({
-    disableSave,
-    showData,
+    disableSave = false,
+    hideSave = false,
+    showData = true,
+    filterByUser = true,
     back, 
     proceduraAdozione: { node: {uuid, dataRicezionePareri, risorse : {edges: resources = []} = {}} = {}},
     utente: {fiscalCode} = {},
     titolo = "Osservazioni Privati",
-    tipoDoc = "osservazioni_privati",
+    tipo: tipoDoc  = "osservazioni_privati",
     label = "CARICA I FILES DELLE OSSERVAZIONI DEI PRIVATI",
-    filterByUser = true,
     saveMutation = TRASMISSIONE_OSSERVAZIONI}) => {
         
         const osservazioni =  resources.filter(({node: {tipo, user = {}}}) => tipo === tipoDoc && (!filterByUser || fiscalCode === user.fiscalCode)).map(({node}) => node)
@@ -49,15 +52,15 @@ const UI = ({
                         variables={{codice: uuid, tipo: tipoDoc }}
                         isLocked={false}/>
                 
-                <div className="align-self-center mt-7">
+                {!hideSave && (<div className="align-self-center mt-7">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={osservazioni.length> 0 && !disableSave}></SalvaInvia>
-                </div>
+                </div>)}
             </React.Fragment>)
     }
 
-    export default ({piano = {}, showData = true, disableSave = false, filterByUser, titolo, utente, back, tipo, label, saveMutation}) => (
-        <Query query={GET_ADOZIONE} variables={{codice: piano.codice}} onError={showError}>
-             {({loading, data: {procedureAdozione: {edges = []} = []} = {}}) => {
+    export default (props) => (
+        <Query query={GET_ADOZIONE} variables={{codice: getCodice(props)}} onError={showError}>
+             {({loading, data: {procedureAdozione: {edges: [proceduraAdozione] = []} = []} = {}}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -67,6 +70,6 @@ const UI = ({
                         </div>)
                 }
                 return (
-                    <UI back={back} showData={showData} disableSave={disableSave} filterByUser={filterByUser}  titolo={titolo} proceduraAdozione={edges[0]} utente={utente} saveMutation={saveMutation} tipoDoc={tipo} label={label}/>)}
+                    <UI {...props} proceduraAdozione={proceduraAdozione}/>)}
             }
         </Query>)

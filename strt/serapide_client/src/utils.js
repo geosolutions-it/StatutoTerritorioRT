@@ -1,8 +1,11 @@
 import { format, parseISO, differenceInCalendarDays, subDays} from 'date-fns'
-import {isDate, find} from 'lodash'
+import {isDate, find, get} from 'lodash'
 import { it } from 'date-fns/locale'
 import { toast } from 'react-toastify'
 import elaborati from './Elaborati'
+
+export {get} from "lodash"
+
 export const getEnteLabel = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `${tipoente} di ${name}`
 
 export const getEnteLabelID = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `ID ${tipoente} ${code}`
@@ -81,3 +84,20 @@ export const getInputFactory = (inputType) => (uuid, field) => (val) => ({
         }
     }
 })
+
+export const getCodice = (props) => get(props, "props.piano.codice")
+
+
+
+// Raggruppa le risorse per utente
+export const groupResourcesByUser = (resources = []) => resources.reduce((acc, {node}) => {
+    if (acc[node.user.fiscalCode]) { 
+        acc[node.user.fiscalCode].push(node)
+    }
+    else {
+        acc[node.user.fiscalCode] = [node]
+    }
+    return acc
+} , {})
+
+export const filterAndGroupResourcesByUser = ( resources, type = "") => groupResourcesByUser(resources.filter(({node: {tipo}}) => tipo === type))

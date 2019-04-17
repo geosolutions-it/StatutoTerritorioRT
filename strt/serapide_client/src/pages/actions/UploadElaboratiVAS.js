@@ -6,22 +6,24 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+import {Query} from 'react-apollo'
+
 import FileUpload from '../../components/UploadSingleFile'
 import ActionTitle from '../../components/ActionTitle'
-import {Query} from 'react-apollo'
+import SalvaInvia from '../../components/SalvaInvia'
+import Elaborati from '../../components/ElaboratiPiano'
+
+import  {showError, elaboratiCompletati, getCodice} from '../../utils'
+
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD, UPLOAD_ELABORATI_VAS
 } from '../../graphql'
-import SalvaInvia from '../../components/SalvaInvia'
-import Elaborati from '../../components/ElaboratiPiano'
-import  {showError, elaboratiCompletati} from '../../utils'
-
 
 const UI = ({
     back,
     piano: {tipo: tipoPiano} = {}, 
-    vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}}
+    vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {}
     }) => {
         
         const rapporto = resources.filter(({node: {tipo, user = {}}}) => tipo === 'rapporto_ambientale').map(({node}) => node).shift()
@@ -52,9 +54,9 @@ const UI = ({
             </React.Fragment>)
     }
 
-    export default ({piano = {}, back}) => (
-        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []}, error}) => {
+    export default (props) => (
+        <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureVas: {edges: [vas] = []} = []}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -64,6 +66,6 @@ const UI = ({
                         </div>)
                 }
                 return (
-                    <UI piano={piano} back={back} vas={edges[0]}/>)}
+                    <UI {...props} vas={vas}/>)}
             }
         </Query>)

@@ -6,24 +6,25 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import UploadFiles from '../../components/UploadFiles'
-
 import {Query} from 'react-apollo'
+
+import UploadFiles from '../../components/UploadFiles'
+import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
+import {EnhancedDateSelector} from '../../components/DateSelector'
+
+import  {showError, getInputFactory, getCodice} from '../../utils'
+
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
     AVVIO_FILE_UPLOAD, INTEGRAZIONI_RICHIESTE
 } from '../../graphql'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import {EnhancedDateSelector} from '../../components/DateSelector'
-import  {showError, getInputFactory} from '../../utils'
-
 
 const getInput = getInputFactory("proceduraAvvio")
 
 const UI = ({
     back, 
-    procedureAvvio: {node: {
+    proceduraAvvio: {node: {
         uuid, 
         dataScadenzaRisposta,
         risorse: {edges=[]} = {}
@@ -56,9 +57,9 @@ const UI = ({
             </React.Fragment>)
     }
 
-    export default ({piano, back}) => (
-        <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureAvvio: {edges = []} = []} = {}}) => {
+    export default (props) => (
+        <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -68,6 +69,6 @@ const UI = ({
                         </div>)
                 }
                 return (
-                    <UI procedureAvvio={edges[0]} back={back} piano={piano}/>)}
+                    <UI {...props} proceduraAvvio={proceduraAvvio}/>)}
                     }
         </Query>)

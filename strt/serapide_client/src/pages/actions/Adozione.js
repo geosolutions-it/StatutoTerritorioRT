@@ -17,7 +17,7 @@ import {EnhancedDateSelector} from '../../components/DateSelector'
 import Input from '../../components/EnhancedInput'
 import Elaborati from "../../components/ElaboratiPiano"
 
-import  {showError, formatDate, elaboratiCompletati, getInputFactory} from '../../utils'
+import  {showError, formatDate, elaboratiCompletati, getInputFactory, getCodice} from '../../utils'
 import {rebuildTooltip} from '../../enhancers/utils'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
@@ -174,12 +174,14 @@ const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
                 </div>
             </React.Fragment>)})
 
-export default ({back, piano}) => (
-        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
-            {({loadingVas, data: {procedureVas: {edges: vasEdges = []} = []} = {}}) => (
-                <Query query={GET_ADOZIONE} variables={{codice: piano.codice}} onError={showError}>
-                    {({loading, data: {procedureAdozione: {edges = []} = []} = {}}) => {
-                        if(loading || loadingVas) {
+export default (props) => {
+    const codice = getCodice(props)
+    return (
+        <Query query={GET_VAS} variables={{codice}} onError={showError}>
+            {({loadingVas, data: {procedureVas: {edges: [vas] = []} = []} = {}}) => (
+                <Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
+                    {({loading, data: {procedureAdozione: {edges: [proceduraAdozione] = []} = []} = {}}) => {
+                        if (loading || loadingVas) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
                                     <div className="spinner-grow " role="status">
@@ -188,7 +190,7 @@ export default ({back, piano}) => (
                                 </div>)
                         }
                         return (
-                            <UI vas={vasEdges[0]} proceduraAdozione={edges[0]} back={back} piano={piano}/>)}
+                            <UI {...props} vas={vas} proceduraAdozione={proceduraAdozione} />)}
                     }
                 </Query>)}
-        </Query>)
+        </Query>)}

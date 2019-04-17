@@ -64,7 +64,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
         <div className={classNames("d-flex flex-column", {"ml-2  pl-3 flex-3 border-left": action})} style={action ? {minWidth: 500}: {}}>
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
-                {azioni.filter(({node: {attore}}) => attore.toLowerCase() === utente.attore.toLowerCase()).map(({node: {stato = "", tipologia = "",label = "", attore = ""}}) => {
+                {azioni.filter(({node: {attore, tipologia}}) => attore.toLowerCase() === utente.attore.toLowerCase() || tipologia === "OSSERVAZIONI_ENTI").map(({node: {stato = "", tipologia = "",label = "", attore = ""}}) => {
                     const tipo = tipologia.toLowerCase()
                     const El = components[camelCase(tipo)]
                     return El && (

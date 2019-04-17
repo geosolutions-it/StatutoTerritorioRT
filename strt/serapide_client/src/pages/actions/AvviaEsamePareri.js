@@ -6,41 +6,35 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+import {Query} from 'react-apollo'
+import className from "classnames"
+
 import Switch from '../../components/Switch'
 import Resource from '../../components/Resource'
-import {Query, Mutation} from 'react-apollo'
-
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
-import className from "classnames"
+
 import {map} from 'lodash'
+import  {showError, getNominativo, getCodice, filterAndGroupResourcesByUser} from '../../utils'
+import {toggleControllableState} from '../../enhancers/utils'
+
 import {GET_VAS,
     AVVIO_ESAME_PARERI_SCA
 } from '../../graphql'
-import  {showError, getNominativo} from '../../utils'
-import {toggleControllableState} from '../../enhancers/utils'
+
 
 const enhancer = toggleControllableState('checked', 'toggleSwitch', false)
 
 
-
-
 const UI = enhancer(({
     back, 
-    vas: {node: {uuid, assoggettamento, tipologia, risorse : {edges: resources = []} = {}} = {}} = {},
+    vas: {node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
     checked,
     toggleSwitch}) => {
-    const pareriUser =  resources.filter(({node: {tipo}}) => tipo === "parere_sca").reduce((acc, {node}) => {
-        if (acc[node.user.fiscalCode]) { 
-            acc[node.user.fiscalCode].push(node)
-        }
-        else {
-            acc[node.user.fiscalCode] = [node]
-        }
-        return acc
-    } , {})
-
-    const docpreliminare =  resources.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").map(({node}) => node).shift()
+        
+        const pareriUser =  filterAndGroupResourcesByUser(resources, "parere_sca")
+        const docpreliminare =  resources.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").map(({node}) => node).shift()
+    
     return (
         <React.Fragment>
             <ActionTitle>Avvia Esame Pareri SCA</ActionTitle>
@@ -84,9 +78,9 @@ const UI = enhancer(({
         </React.Fragment>)
     })
 
-    export default ({ piano = {}, scadenza, back}) => (
-        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []} = {}, error}) => {
+    export default (props) => (
+        <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureVas: {edges: [vas] = []} = []} = {}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -96,6 +90,6 @@ const UI = enhancer(({
                         </div>)
                 }
                 return (
-                    <UI back={back} vas={edges[0]} scadenza={scadenza}/>)}
+                    <UI {...props} vas={vas}/>)}
             }
         </Query>)

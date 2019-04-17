@@ -6,6 +6,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+import {Query} from 'react-apollo'
+
+import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
+import Input from '../../components/EnhancedInput'
+import FileUpload from '../../components/UploadSingleFile'
+
+import {showError, getCodice} from '../../utils'
+
 import {
     UPDATE_PIANO,
     GET_VAS,
@@ -13,19 +22,6 @@ import {
     DELETE_RISORSA_VAS,
     FORMAZIONE_PIANO
 } from '../../graphql'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Input from '../../components/EnhancedInput'
-import {Query} from 'react-apollo'
-import {showError} from '../../utils'
-import FileUpload from '../../components/UploadSingleFile'
-import {isDate} from "lodash"
-/*
-redazioneNormeTecnicheAttuazioneUrl
-    compilazioneRapportoAmbientaleUrl
-    conformazionePitPprUrl
-    monitoraggioUrbanisticoUrl
-*/
 
 const getInput = (codice, field) => (val) => ({
     variables: {
@@ -35,7 +31,6 @@ const getInput = (codice, field) => (val) => ({
         }
     }
 })
-
 
 
 const UI = ({ back, 
@@ -103,9 +98,9 @@ const UI = ({ back,
             </React.Fragment>)
     }
 
-export default ({back, piano}) => (
-        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []}, error}) => {
+export default (props) => (
+        <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureVas: {edges: [vas]= []} = []}}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -115,6 +110,6 @@ export default ({back, piano}) => (
                         </div>)
                 }
                 return (
-                    <UI vas={edges[0]} back={back} piano={piano}/>)}
+                    <UI {...props} vas={vas} />)}
             }
         </Query>)

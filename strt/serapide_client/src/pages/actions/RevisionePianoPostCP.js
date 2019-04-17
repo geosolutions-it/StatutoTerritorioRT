@@ -6,18 +6,19 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-
 import {Query} from 'react-apollo'
+
+import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
+import Elaborati from '../../components/ElaboratiPiano'
+
+import  {showError,elaboratiCompletati, getCodice} from '../../utils'
+
 import {GET_PIANO_REV_POST_CP,GET_ADOZIONE,
     PIANO_REV_POST_CP_FILE_UPLOAD,
     DELETE_RISORSA_PIANO_REV_POST_CP,
     REVISONE_CONFERENZA_PAESAGGISTICA
 } from '../../graphql'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Elaborati from '../../components/ElaboratiPiano'
-import  {showError,elaboratiCompletati} from '../../utils'
-
 
 const UI = ({
     back,
@@ -44,11 +45,13 @@ const UI = ({
             </React.Fragment>)
     }
 
-    export default ({piano = {}, back}) => (
-        <Query query={GET_ADOZIONE} variables={{codice: piano.codice}} onError={showError}>
+    export default (props) => {
+        const codice = getCodice(props)
+        return (
+        <Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
             {({loading: loadingOuter, data: {procedureAdozione: {edges: [adozione] = []} = []} = {}}) => (
-                <Query query={GET_PIANO_REV_POST_CP} variables={{codice: piano.codice}} onError={showError}>
-                    {({loading, data: {pianoRevPostCp: {edges = []} = []} = {}}) => {
+                <Query query={GET_PIANO_REV_POST_CP} variables={{codice}} onError={showError}>
+                    {({loading, data: {pianoRevPostCp: {edges: [pianoRev] = []} = []} = {}}) => {
                         if(loading || loadingOuter) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
@@ -58,7 +61,8 @@ const UI = ({
                                 </div>)
                         }
                         return (
-                            <UI back={back} piano={piano} adozione={adozione} pianoRev={edges[0]}/>)}
+                            <UI {...props} adozione={adozione} pianoRev={pianoRev}/>)}
                     }
                 </Query>)}
             </Query>)
+            }
