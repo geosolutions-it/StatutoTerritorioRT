@@ -190,17 +190,7 @@ query GetConferenzaCopianificazione($codice: String!) {
 ${FR.CONFERENZA_COPIANIFICAZIONE}
 `
 
-// LOCAL STATE
-// example of local state query
-export const GET_VAS_AUTHORITIES = gql`
-query getAuth{
-    authorities @client
-    {
-        value
-    label   
-    }
-}
-`
+
 export const GET_RISORSE_PIANO_CONTRODEDOTTO = gql`
 query GetRisorsePianoControdedotto($codice: String!) {
       pianoControdedotto(piano_Codice: $codice){
@@ -213,5 +203,31 @@ query GetRisorsePianoControdedotto($codice: String!) {
       }
 }
 ${FR.RISORSE}
+`
+export const GET_PIANO_REV_POST_CP = gql`
+query PianoRevPostCp($codice: String!){
+    pianoRevPostCp(piano_Codice: $codice){
+      edges{
+        node{
+          uuid
+          risorse {...Risorse}
+    }
+  }
+}}
+${FR.RISORSE}
+`
 
+
+
+
+// LOCAL STATE
+// example of local state query
+export const GET_VAS_AUTHORITIES = gql`
+query getAuth{
+    authorities @client
+    {
+        value
+    label   
+    }
+}
 `
