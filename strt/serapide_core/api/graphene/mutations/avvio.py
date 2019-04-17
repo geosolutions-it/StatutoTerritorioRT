@@ -436,7 +436,7 @@ class IntegrazioniRichieste(graphene.Mutation):
                 _integrazioni_richieste.data = datetime.datetime.now(timezone.get_current_timezone())
                 _integrazioni_richieste.save()
 
-                _procedura_vas = ProceduraVAS.objects.filter(piano=piano)
+                _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
                 if not _procedura_vas or _procedura_vas.conclusa:
                     piano.chiudi_pendenti()
                 procedura_avvio.conclusa = True
@@ -536,7 +536,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                     if _formazione_del_piano and _formazione_del_piano.stato == STATO_AZIONE.nessuna and \
                     _integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna:
 
-                        _procedura_vas = ProceduraVAS.objects.filter(piano=piano)
+                        _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
                         if not _procedura_vas or _procedura_vas.conclusa:
                             piano.chiudi_pendenti()
                         procedura_avvio.conclusa = True

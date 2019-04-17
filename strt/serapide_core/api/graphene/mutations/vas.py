@@ -204,7 +204,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
                 procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
-                    _procedura_avvio = ProceduraAvvio.objects.filter(piano=_piano)
+                    _procedura_avvio = ProceduraAvvio.objects.filter(piano=_piano).last()
                     if not _procedura_avvio or _procedura_avvio.conclusa:
                         _piano.chiudi_pendenti()
                     procedura_vas_aggiornata.conclusa = True
@@ -804,7 +804,7 @@ class UploadElaboratiVAS(graphene.Mutation):
                 _upload_elaborati_vas.data = datetime.datetime.now(timezone.get_current_timezone())
                 _upload_elaborati_vas.save()
 
-                _procedura_avvio = ProceduraAvvio.objects.filter(piano=piano)
+                _procedura_avvio = ProceduraAvvio.objects.filter(piano=piano).last()
                 if not _procedura_avvio or _procedura_avvio.conclusa:
                     piano.chiudi_pendenti()
                 procedura_vas.conclusa = True

@@ -429,7 +429,7 @@ class PianoControdedotto(graphene.Mutation):
 
             if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna:
                 if not procedura_adozione.richiesta_conferenza_paesaggistica:
-                    _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano)
+                    _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
                     if not _procedura_adozione_vas or _procedura_adozione_vas.conclusa:
                         piano.chiudi_pendenti()
                     procedura_adozione.conclusa = True
@@ -579,7 +579,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp).first()
 
             if _rev_piano_post_cp and _rev_piano_post_cp.stato != STATO_AZIONE.nessuna:
-                _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano)
+                _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
                 if not _procedura_adozione_vas or _procedura_adozione_vas.conclusa:
                     piano.chiudi_pendenti()
                 procedura_adozione.conclusa = True
@@ -768,7 +768,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
                 _parere_motivato_ac.data = datetime.datetime.now(timezone.get_current_timezone())
                 _parere_motivato_ac.save()
 
-                _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano)
+                _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
                 if procedura_adozione.conclusa:
                     piano.chiudi_pendenti()
                 _procedura_adozione_vas.conclusa = True
