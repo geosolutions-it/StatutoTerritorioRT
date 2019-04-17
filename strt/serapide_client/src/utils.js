@@ -70,7 +70,6 @@ export const showError = ({graphQLErrors, message, networkError: {result:{errors
 }
 
 export const elaboratiCompletati = (tipoPiano = "", risorse) => {
-            return true
             const tipo = tipoPiano.toLocaleLowerCase()
              return  elaborati[tipo] && !find(elaborati[tipo]["testuali"], (el, key) => {
                  return !find(risorse, ({node: {tipo: t} = {}}) => {

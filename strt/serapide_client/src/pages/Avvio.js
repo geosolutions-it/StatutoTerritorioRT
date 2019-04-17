@@ -157,7 +157,7 @@ const UI = enhancers(({
                                 <span className="pl-1">RICHIESTA CONFERENZA DI COPIANIFICAZIONE</span>
                             </div>
                             <div className="col-4">{!!dataRichiestaConferenza ? formatDate(dataRichiestaConferenza) : "Nessuna richiesta"}</div>
-                            <div class="w-100 border-top my-3 border-serapide"></div>
+                            <div className="w-100 border-top my-3 border-serapide"></div>
                             <div className="col-12 d-flex">
                                 <i className="material-icons text-serapide self-align-center">check_circle</i>
                                 <span className="pl-1 pb-2">ESITO</span>

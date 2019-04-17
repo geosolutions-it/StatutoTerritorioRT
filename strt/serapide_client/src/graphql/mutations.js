@@ -341,6 +341,19 @@ mutation InvioParereMotivatoAc($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
+export const UPLOAD_ELABORATI_ADOZIONE_VAS = gql`
+mutation UploadElaboratiAdozioneVAS($codice: String!) {
+    uploadElaboratiAdozioneVas(uuid: $codice){
+        errors
+        vasAggiornata {
+            piano{
+                ...AzioniPiano
+            }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
 
 // Procedura Avvio
 

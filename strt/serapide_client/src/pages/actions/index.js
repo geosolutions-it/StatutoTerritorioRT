@@ -23,7 +23,7 @@ import EsitoPae from './EsitoConferenzaPaeseggistica'
 import RevisionePianoCP from './RevisionePianoPostCP'
 import PareriAdozioneSCA from './PareriAdozioneSCA'
 import ParereMotivatoAc from './ParereMotivatoAdozione'
-
+import UploadElaboratiAdozioneVAS from './UploadElaboratiVASAdozione'
 // parametri passati di default piano, back, utente, scadenza
 
 export default {
@@ -54,7 +54,8 @@ export default {
     esitoConferenzaPaesaggistica: (props) => (<EsitoPae {...props}/>),
     revPianoPostCp: (props) => (<RevisionePianoCP {...props}/>),
     pareriAdozioneSca: (props) =>(<PareriAdozioneSCA {...props}/>),
-    parereMotivatoAc:(props) =>(<ParereMotivatoAc {...props}/>)
+    parereMotivatoAc: (props) =>(<ParereMotivatoAc {...props}/>),
+    uploadElaboratiAdozioneVas: (props) =>(<UploadElaboratiAdozioneVAS {...props}/>)
     
     
 

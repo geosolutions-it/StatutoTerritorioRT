@@ -69,7 +69,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                     const El = components[camelCase(tipo)]
                     return El && (
                             <Route key={tipo} path={`${path}/${tipo}`} >
-                                {getAction(stato) && canExecuteAction({attore, tipologia}) || true ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<NotAllowed/>)}
+                                {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<NotAllowed/>)}
                             </Route>)
                 })}
                 { action && (
