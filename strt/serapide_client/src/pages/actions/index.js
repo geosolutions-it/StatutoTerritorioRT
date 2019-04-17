@@ -20,6 +20,7 @@ import OsservazioniRegione from './OsservazioniRegione'
 import PianoControdedotto from './PianoControdedotto'
 import Controdeduzioni from './Controdeduzioni'
 import EsitoPae from './EsitoConferenzaPaeseggistica'
+import RevisionePianoCP from './RevisionePianoPostCP'
 
 // parametri passati di default piano, back, utente, scadenza
 
@@ -48,7 +49,9 @@ export default {
     controdeduzioni: (props) => (<Controdeduzioni saveMutation={CONTRODEDUZIONI} showData={false} label="Carica Files" titolo="CONTRODEDUZIONI"   tipo="controdeduzioni" {...props}/>),
     osservazioniRegione: (props) => (<OsservazioniRegione  {...props}/>),
     pianoControdedotto: (props) => (<PianoControdedotto {...props}/>),
-    esitoConferenzaPaesaggistica: (props) => (<EsitoPae {...props}/>)
+    esitoConferenzaPaesaggistica: (props) => (<EsitoPae {...props}/>),
+    revPianoPostCp: (props) => (<RevisionePianoCP {...props}/>)
+    
 
 }
 

@@ -293,6 +293,23 @@ mutation PianoControdedotto($codice: String!) {
 }
 ${FR.AZIONI_PIANO}
 `
+
+// Revisione piano post conferenza paesaggistica
+
+export const REVISONE_CONFERENZA_PAESAGGISTICA = gql`
+mutation RevisioneConferenzaPaesaggistica($codice: String!) {
+  revisioneConferenzaPaesaggistica(uuid: $codice){
+    errors
+    adozioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
 // Procedura Avvio
 
 export const UPDATE_AVVIO = gql`
@@ -530,8 +547,6 @@ ${FR.ADOZIONE}
 
  // piano controdedotto 
 
-
-   // Adozione
 export const CONTRODEDOTTO_FILE_UPLOAD = gql`
 mutation ControdedottoUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
     upload: uploadRisorsaPianoControdedotto(file: $file, codice: $codice, tipoFile: $tipo) {
@@ -553,6 +568,38 @@ mutation DeleteRisorsaControdedotto($id: ID!, $codice: String!) {
     deleteRisorsa: deleteRisorsaPianoControdedotto(risorsaId: $id, codice: $codice){
         success
         pianoControdedottoAggiornatoAggiornato{
+            uuid
+            risorse {
+              ...Risorse
+            }
+        }
+    }
+}
+${FR.ADOZIONE}
+`
+// revisione piano cp
+
+export const PIANO_REV_POST_CP_FILE_UPLOAD = gql`
+mutation PianoRevPortCpUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+    upload: uploadRisorsaPianoRevPostCp(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      fileName
+      pianoRevPostCpAggiornato {
+          uuid
+          risorse {
+            ...Risorse
+          }
+      }
+    }
+  }
+  ${FR.RISORSE}
+`
+
+export const DELETE_RISORSA_PIANO_REV_POST_CP = gql`
+mutation DeleteRisorsaPianoRevPostCp($id: ID!, $codice: String!) {
+    deleteRisorsa: deleteRisorsaPianoRevPostCp(risorsaId: $id, codice: $codice){
+        success
+        pianoRevPostCpAggiornato {
             uuid
             risorse {
               ...Risorse
