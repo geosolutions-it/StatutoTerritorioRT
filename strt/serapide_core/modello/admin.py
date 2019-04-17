@@ -25,7 +25,9 @@ from .models import (
     AltriDestinatari,
     SoggettiSCA,
     PianoAuthTokens,
-    ConsultazioneVAS, ParereVAS,
+    ParereVAS,
+    ConsultazioneVAS,
+    ParereAdozioneVAS,
     ConferenzaCopianificazione,
     RisorseCopianificazione,
     PianoControdedotto,
@@ -91,6 +93,10 @@ class ParereVASInline(admin.TabularInline):
     model = ParereVAS
 
 
+class ParereAdozioneVASInline(admin.TabularInline):
+    model = ParereAdozioneVAS
+
+
 class PianoAdmin(admin.ModelAdmin):
     inlines = [AzioniPianoInline,
                AutoritaCompetenteVASInline,
@@ -110,7 +116,7 @@ class ProceduraAvvioAdmin(admin.ModelAdmin):
 
 
 class ProceduraAdozioneAdmin(admin.ModelAdmin):
-    inlines = [RisorseAdozioneInline, ]
+    inlines = [ParereAdozioneVASInline, RisorseAdozioneInline, ]
 
 
 class ConsultazioneVASAdmin(admin.ModelAdmin):

@@ -203,9 +203,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
                 procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
-
                     _piano.chiudi_pendenti()
-
                     procedura_vas_aggiornata.conclusa = True
                     procedura_vas_aggiornata.save()
 
@@ -669,7 +667,7 @@ class InvioPareriVAS(graphene.Mutation):
                     procedura_vas=_procedura_vas,
                     consultazione_vas=_consultazione_vas
                 )
-                print('%s / %s' % (_pareri_vas_count.count(), _avvio_consultazioni_sca_count))
+
                 if _pareri_vas_count.count() == (_avvio_consultazioni_sca_count - 1):
                     _parere_vas = ParereVAS(
                         inviata=True,
@@ -804,9 +802,8 @@ class UploadElaboratiVAS(graphene.Mutation):
                 _upload_elaborati_vas.save()
 
                 piano.chiudi_pendenti()
-                if piano.is_eligible_for_promotion:
-                    procedura_vas.conclusa = True
-                    procedura_vas.save()
+                procedura_vas.conclusa = True
+                procedura_vas.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 

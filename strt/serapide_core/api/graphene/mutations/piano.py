@@ -530,25 +530,25 @@ class FormazionePiano(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
-                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
-                    if _piano.is_eligible_for_promotion:
-                        _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
 
-                        # Notify Users
-                        piano_phase_changed.send(
-                            sender=Piano,
-                            user=info.context.user,
-                            piano=_piano,
-                            message_type="piano_phase_changed")
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
 
-                        _piano.save()
-                        fase.promuovi_piano(_fase, _piano)
+                    _piano.save()
+                    fase.promuovi_piano(_fase, _piano)
 
-                    return FormazionePiano(
-                        piano_aggiornato=_piano,
-                        errors=[]
-                    )
+                return FormazionePiano(
+                    piano_aggiornato=_piano,
+                    errors=[]
+                )
             except BaseException as e:
                 tb = traceback.format_exc()
                 logger.error(tb)

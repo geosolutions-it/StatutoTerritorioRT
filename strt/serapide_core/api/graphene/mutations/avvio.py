@@ -533,9 +533,8 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                     _integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna:
 
                         piano.chiudi_pendenti()
-                        if piano.is_eligible_for_promotion:
-                            procedura_avvio.conclusa = True
-                            procedura_avvio.save()
+                        procedura_avvio.conclusa = True
+                        procedura_avvio.save()
 
                         procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
                             piano=piano, ente=piano.ente)

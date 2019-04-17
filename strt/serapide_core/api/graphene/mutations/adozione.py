@@ -404,9 +404,8 @@ class PianoControdedotto(graphene.Mutation):
             if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna:
                 if not procedura_adozione.richiesta_conferenza_paesaggistica:
                     piano.chiudi_pendenti()
-                    if piano.is_eligible_for_promotion:
-                        procedura_adozione.conclusa = True
-                        procedura_adozione.save()
+                    procedura_adozione.conclusa = True
+                    procedura_adozione.save()
                 else:
                     _piano_controdedotto.stato = STATO_AZIONE.nessuna
                     _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -553,9 +552,8 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
 
             if _rev_piano_post_cp and _rev_piano_post_cp.stato != STATO_AZIONE.nessuna:
                 piano.chiudi_pendenti()
-                if piano.is_eligible_for_promotion:
-                    procedura_adozione.conclusa = True
-                    procedura_adozione.save()
+                procedura_adozione.conclusa = True
+                procedura_adozione.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 

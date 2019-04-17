@@ -124,6 +124,9 @@ TIPOLOGIA_AZIONE = Choices(
         ('piano_controdedotto', _('Piano Controdedotto')),  # Comune
         ('esito_conferenza_paesaggistica', _('Esiti conferenza paesaggistica')),  # Regione
         ('rev_piano_post_cp', _('Revisione Piano post Conf. Paesaggistica')),  # Comune
+        # Adozione VAS
+        ('pareri_adozione_sca', _('Pareri SCA')),  # SCA
+
         # Approvazione
         ('trasmissione_approvazione', _('Invio documentazione per Approvazione')),  # Comune
     )
