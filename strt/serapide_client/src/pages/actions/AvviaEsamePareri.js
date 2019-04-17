@@ -56,7 +56,8 @@ const UI = enhancer(({
                     <div className="col-12 d-flex pl-0">
                         <i className="material-icons text-serapide pr-3">email</i>
                                 <div className="bg-serapide mb-auto px-2">Avvia esame pareri sca</div>
-                                <Switch 
+                                <Switch
+                                    labelClassName = "col-auto"
                                     checked={checked}
                                     toggleSwitch={toggleSwitch}
                                     ignoreChecked
