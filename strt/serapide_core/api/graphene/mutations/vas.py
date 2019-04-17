@@ -38,6 +38,7 @@ from serapide_core.modello.models import (
     ParereVAS,
     AzioniPiano,
     ProceduraVAS,
+    ProceduraAvvio,
     ConsultazioneVAS,
     ParereVerificaVAS,
 )
@@ -203,7 +204,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
                 procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
-                    _procedura_avvio = ProceduraAvvio.objects.filter(piano=piano)
+                    _procedura_avvio = ProceduraAvvio.objects.filter(piano=_piano)
                     if not _procedura_avvio or _procedura_avvio.conclusa:
                         _piano.chiudi_pendenti()
                     procedura_vas_aggiornata.conclusa = True
@@ -805,7 +806,7 @@ class UploadElaboratiVAS(graphene.Mutation):
 
                 _procedura_avvio = ProceduraAvvio.objects.filter(piano=piano)
                 if not _procedura_avvio or _procedura_avvio.conclusa:
-                    _piano.chiudi_pendenti()
+                    piano.chiudi_pendenti()
                 procedura_vas.conclusa = True
                 procedura_vas.save()
         else:
