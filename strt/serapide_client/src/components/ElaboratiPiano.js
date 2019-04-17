@@ -6,11 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+
 import FileUpload from './UploadSingleFile'
-import {map} from "lodash"
 import Elaborati from "../Elaborati"
 import TextTooltip from "./TextWithTooltip"
-import {rebuildTooltip} from "../enhancers/utils"
+
+import {map} from "lodash"
+
 const getElaborato = (type, resources) => resources.filter( ({node: {tipo}}) => tipo === type).map(({node}) => (node)).shift()
 
 

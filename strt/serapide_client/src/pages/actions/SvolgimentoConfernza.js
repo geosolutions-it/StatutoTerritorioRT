@@ -15,7 +15,7 @@ import ActionTitle from '../../components/ActionTitle'
 import  {showError, getCodice} from '../../utils'
 
 import {GET_CONFERENZA,GET_AVVIO,
-    DELETE_RISORSA_COPIANIFICAZIONE,UPDATE_AVVIO,
+    DELETE_RISORSA_COPIANIFICAZIONE,
     CONFEREZA_FILE_UPLOAD, CHIUSURA_CONFERENZA_COPIANIFICAZIONE
 } from '../../graphql'
 

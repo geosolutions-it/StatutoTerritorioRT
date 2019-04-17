@@ -6,20 +6,24 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+import { Query, Mutation} from 'react-apollo';
+
 import {EnhancedSwitch} from './Switch'
 import FileUpload from './UploadSingleFile'
 import Button from './IconButton'
-import {formatDate, getNominativo, showError, getInputFactory} from '../utils'
 import {EnhancedListSelector} from './ListSelector'
 import Resource from '../components/Resource'
-import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD, DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO, PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from '../graphql'
-import { Query, Mutation} from 'react-apollo';
-import { toast } from 'react-toastify'
 import AddContact from '../components/AddContact'
 import SalvaInvia from '../components/SalvaInvia'
 import TextWithTooltip from '../components/TextWithTooltip'
+
 import  {rebuildTooltip} from '../enhancers/utils'
 import {map}  from 'lodash'
+import {formatDate, getNominativo, showError, getInputFactory} from '../utils'
+
+import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD,
+    DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO,
+    PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from '../graphql'
 
 
 const getVasTypeInput = getInputFactory("proceduraVas")
@@ -52,7 +56,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
             
     const {node: {uuid, tipologia, dataAssoggettamento, assoggettamento,
         piano: {soggettoProponente: sP, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
-    const {node: {avvioConsultazioniSca, dataAvvioConsultazioniSca, dataRicezionePareri, dataScadenza} = {}} = consultazioneSCA
+    const {node: {avvioConsultazioniSca, dataAvvioConsultazioniSca} = {}} = consultazioneSCA
     const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
     const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
     const {node: docProcSemp} = resources.filter(({node: n}) => n.tipo === "doc_proc_semplificato").pop() || {};
@@ -255,8 +259,8 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
         { isLocked && (tipologia === "VERIFICA"  || tipologia === "SEMPLIFICATA") && (
             <div className="row pt-5">
                 <div className="col-5 d-flex">
-                        <i className="material-icons text-serapide self-align-center">{assoggettamento && "check_box" || "check_box_outline_blank"}</i>
-                        <span className="pl-1">ESITO: {assoggettamento && "Assoggettamento VAS" || "Esclusione VAS"}</span>
+                        <i className="material-icons text-serapide self-align-center">{assoggettamento ? "check_box" : "check_box_outline_blank"}</i>
+                        <span className="pl-1">ESITO: {assoggettamento ? "Assoggettamento VAS" : "Esclusione VAS"}</span>
                 </div>
                 <span className="col-4">{dataAssoggettamento && formatDate(dataAssoggettamento)}</span>            
             </div>)

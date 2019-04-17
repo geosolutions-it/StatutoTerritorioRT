@@ -61,20 +61,20 @@ const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
                 <h6 className="pt-3 font-weight-light">NORME TECHINICHE DI ATTUAZIONE E RAPPORTO AMBIENTALE</h6>
                 <div className="mt-1 row d-flex align-items-center">
                     <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><a href={redazioneNormeTecnicheAttuazioneUrl} target="_blank" className="pl-1 text-secondary">{redazioneNormeTecnicheAttuazioneUrl}</a>
+                        <i className="material-icons text-serapide">link</i><a href={redazioneNormeTecnicheAttuazioneUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{redazioneNormeTecnicheAttuazioneUrl}</a>
                     </div>
                 </div>
                 <Resource useLabel fileSize={false} className="border-0 mt-3" icon="attach_file" resource={rapportoAmbientale}/>
                 <h6 className="pt-3 font-weight-light">CONFORMAZIONE AL PIT-PPR</h6>
                 <div className="mt-1 row d-flex align-items-center">
                     <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><a href={conformazionePitPprUrl} target="_blank" className="pl-1 text-secondary">{conformazionePitPprUrl}</a>
+                        <i className="material-icons text-serapide">link</i><a href={conformazionePitPprUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{conformazionePitPprUrl}</a>
                     </div>
                 </div>
                 <h6 className="pt-3 font-weight-light">MONITORAGGIO URBANISTICO</h6>
                 <div className="mt-1 row d-flex align-items-center">
                     <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><a href={monitoraggioUrbanisticoUrl} target="_blank" className="pl-1 text-secondary">{monitoraggioUrbanisticoUrl}</a>
+                        <i className="material-icons text-serapide">link</i><a href={monitoraggioUrbanisticoUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{monitoraggioUrbanisticoUrl}</a>
                     </div>
                 </div>
                 <div className="w-100 border-top mt-3"></div>
