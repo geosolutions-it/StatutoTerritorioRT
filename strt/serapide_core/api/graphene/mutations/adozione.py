@@ -770,7 +770,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
             _parere_motivato_ac = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.parere_motivato_ac).first()
 
-            if _parere_motivato_ac and _parere_motivato_ac.stato != _parere_motivato_ac.nessuna:
+            if _parere_motivato_ac and _parere_motivato_ac.stato != STATO_AZIONE.nessuna:
                 _parere_motivato_ac.stato = STATO_AZIONE.nessuna
                 _parere_motivato_ac.data = datetime.datetime.now(timezone.get_current_timezone())
                 _parere_motivato_ac.save()
@@ -843,7 +843,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas).first()
 
             if _upload_elaborati_adozione_vas and \
-            _upload_elaborati_adozione_vas.stato != _upload_elaborati_adozione_vas.nessuna:
+            _upload_elaborati_adozione_vas.stato != STATO_AZIONE.nessuna:
                 _upload_elaborati_adozione_vas.stato = STATO_AZIONE.nessuna
                 _upload_elaborati_adozione_vas.data = datetime.datetime.now(timezone.get_current_timezone())
                 _upload_elaborati_adozione_vas.save()
