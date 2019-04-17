@@ -6,27 +6,24 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import {
-    RICHIESTA_CONFERENZA_COPIANIFICAZIONE,
-    UPDATE_PIANO,
-    INVIO_PROTOCOLLO_GENIO,
-    GET_AVVIO
-} from '../../queries'
+import {Query} from 'react-apollo'
 import {FormGroup, Input, Label} from 'reactstrap'
+
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
+
 import {toggleControllableState} from '../../enhancers/utils'
-import {Query} from 'react-apollo'
-import {showError} from '../../utils'
+import {showError, getCodice} from '../../utils'
+
+import {
+    RICHIESTA_CONFERENZA_COPIANIFICAZIONE,
+    GET_AVVIO
+} from '../../graphql'
 
 const enhancer = toggleControllableState("isChecked", "toggleCheck", false)
 
-const getInput = (codice) => (numeroProtocolloGenioCivile) => (
-    {variables:{ input:{ 
-    pianoOperativo: { numeroProtocolloGenioCivile}, codice}
-}})
 const UI = enhancer(({ back, 
-    procedureAvvio: {node: {
+    proceduraAvvio: {node: {
         uuid}} = {},
         isChecked,
         toggleCheck
@@ -50,9 +47,9 @@ const UI = enhancer(({ back,
             </React.Fragment>)
     })
 
-export default ({back, piano}) => (
-        <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureAvvio: {edges = []} = []} = {}, error}) => {
+export default (props) => (
+        <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -62,6 +59,6 @@ export default ({back, piano}) => (
                         </div>)
                 }
                 return (
-                    <UI procedureAvvio={edges[0]} back={back} piano={piano}/>)}
+                    <UI {...props} proceduraAvvio={proceduraAvvio}/>)}
             }
         </Query>)

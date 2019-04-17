@@ -19,14 +19,21 @@ from .models import (
     Piano, RisorsePiano,
     ProceduraVAS, RisorseVas,
     ProceduraAvvio, RisorseAvvio,
+    ProceduraAdozione, RisorseAdozione,
     AutoritaCompetenteVAS,
     AutoritaIstituzionali,
     AltriDestinatari,
     SoggettiSCA,
     PianoAuthTokens,
-    ConsultazioneVAS, ParereVAS,
+    ParereVAS,
+    ConsultazioneVAS,
+    ParereAdozioneVAS,
     ConferenzaCopianificazione,
-    RisorseCopianificazione
+    RisorseCopianificazione,
+    PianoControdedotto,
+    PianoRevPostCP,
+    RisorsePianoControdedotto,
+    RisorsePianoRevPostCP,
 )
 
 
@@ -46,8 +53,20 @@ class RisorseAvvioInline(admin.TabularInline):
     model = RisorseAvvio
 
 
+class RisorseAdozioneInline(admin.TabularInline):
+    model = RisorseAdozione
+
+
 class RisorseCopianificazioneInline(admin.TabularInline):
     model = RisorseCopianificazione
+
+
+class RisorsePianoControdedottoInline(admin.TabularInline):
+    model = RisorsePianoControdedotto
+
+
+class RisorsePianoRevPostCPInline(admin.TabularInline):
+    model = RisorsePianoRevPostCP
 
 
 class AutoritaCompetenteVASInline(admin.TabularInline):
@@ -74,6 +93,10 @@ class ParereVASInline(admin.TabularInline):
     model = ParereVAS
 
 
+class ParereAdozioneVASInline(admin.TabularInline):
+    model = ParereAdozioneVAS
+
+
 class PianoAdmin(admin.ModelAdmin):
     inlines = [AzioniPianoInline,
                AutoritaCompetenteVASInline,
@@ -92,12 +115,24 @@ class ProceduraAvvioAdmin(admin.ModelAdmin):
     inlines = [RisorseAvvioInline, ]
 
 
+class ProceduraAdozioneAdmin(admin.ModelAdmin):
+    inlines = [ParereAdozioneVASInline, RisorseAdozioneInline, ]
+
+
 class ConsultazioneVASAdmin(admin.ModelAdmin):
     inlines = [ParereVASInline, ]
 
 
 class ConferenzaCopianificazioneAdmin(admin.ModelAdmin):
     inlines = [RisorseCopianificazioneInline, ]
+
+
+class PianoControdedottoAdmin(admin.ModelAdmin):
+    inlines = [RisorsePianoControdedottoInline, ]
+
+
+class PianoRevPostCPAdmin(admin.ModelAdmin):
+    inlines = [RisorsePianoRevPostCPInline, ]
 
 
 admin.site.register(Fase)
@@ -107,5 +142,8 @@ admin.site.register(Contatto)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
 admin.site.register(ProceduraAvvio, ProceduraAvvioAdmin)
+admin.site.register(ProceduraAdozione, ProceduraAdozioneAdmin)
 admin.site.register(ConsultazioneVAS, ConsultazioneVASAdmin)
 admin.site.register(ConferenzaCopianificazione, ConferenzaCopianificazioneAdmin)
+admin.site.register(PianoControdedotto, PianoControdedottoAdmin)
+admin.site.register(PianoRevPostCP, PianoRevPostCPAdmin)

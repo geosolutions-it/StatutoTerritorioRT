@@ -32,17 +32,27 @@ const azioni = {
         "ESITO_CONFERENZA_COPIANIFICAZIONE": ["TMP"],
         "RICHIESTA_INTEGRAZIONI": ["TMP"],
         "INTEGRAZIONI_RICHIESTE": ["RUP", "OP"],
-        "TRASMISSIONE_ADOZIONE": ["RUP", "OP"]
+        "TRASMISSIONE_ADOZIONE": ["RUP", "OP"],
+        "UPLOAD_OSSERVAZIONI_PRIVATI": ["RUP", "OP"],
+        "OSSERVAZIONI_ENTI": ["*"],
+        "OSSERVAZIONI_REGIONE": ["TMP"],
+        "CONTRODEDUZIONI": ["RUP", "OP", "TMP"],
+        "PIANO_CONTRODEDOTTO": ["RUP", "OP", "TMP"],
+        "ESITO_CONFERENZA_PAESAGGISTICA": ["RUP", "OP", "TMP"],
+        "REV_PIANO_POST_CP": ["RUP", "OP", "TMP"],
+        "PARERI_ADOZIONE_SCA": ["TMP"],
+        "PARERE_MOTIVATO_AC": ["TMP"],
+        "UPLOAD_ELABORATI_ADOZIONE_VAS": ["RUP", "OP", "TMP"]
     }
 export const globalAuth = {
     _attore_attivo: "",
     _ruolo: ""
 }
-
+// Attenzione OSSERVAZIONI ENTI PASSA DIRETTAMENTE NON HA CONTROLLO
 
 export const checkAttore = ( {attore = ""} = {}, attore_attivo = globalAuth._attore_attivo) => attore === attore_attivo
 
 export const canExecuteAction = ({tipologia = "", attore= ""} = {}, attore_attivo = globalAuth._attore_attivo, ruolo = globalAuth._ruolo) => {
   // console.log(attore_attivo, ruolo, tipologia, attore, includes((azioni[tipologia] || []), ruolo) );
-  return attore_attivo.toLowerCase() === attore.toLowerCase() && includes((azioni[tipologia] || []), ruolo) 
+  return tipologia === "OSSERVAZIONI_ENTI" || (attore_attivo.toLowerCase() === attore.toLowerCase() && includes((azioni[tipologia] || []), ruolo)) 
 }

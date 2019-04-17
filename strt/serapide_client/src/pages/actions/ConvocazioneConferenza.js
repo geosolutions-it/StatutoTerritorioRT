@@ -6,6 +6,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+import {Query, Mutation} from 'react-apollo'
+
+import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
+import Button from '../../components/IconButton'
+import {EnhancedDateSelector} from "../../components/DateSelector"
+import UploadFiles from '../../components/UploadFiles'
+import Input from '../../components/EnhancedInput'
+import AddContact from '../../components/AddContact'
+import {EnhancedListSelector} from '../../components/ListSelector'
+
+import {toggleControllableState} from '../../enhancers/utils'
+import {showError, getCodice} from '../../utils'
+
 import {
     UPDATE_PIANO,
     INVIO_PROTOCOLLO_GENIO,
@@ -14,25 +28,18 @@ import {
     AVVIO_FILE_UPLOAD,
     DELETE_RISORSA_AVVIO
 
-} from '../../queries'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import {toggleControllableState} from '../../enhancers/utils'
-import {Query, Mutation} from 'react-apollo'
-import AddContact from '../../components/AddContact'
-import {EnhancedListSelector} from '../../components/ListSelector'
-import {showError} from '../../utils'
-import Button from '../../components/IconButton'
-import {EnhancedDateSelector} from "../../components/DateSelector"
-import UploadFiles from '../../components/UploadFiles'
-import Input from '../../components/EnhancedInput'
+} from '../../graphql'
 
 const enhancer = toggleControllableState("isChecked", "toggleCheck", false)
+const  getPianoInput = (codice, field) => (val) => ({
+    variables: {
+        input: { 
+            pianoOperativo: { [field]:  val }, 
+            codice
+        }
+    }
+})
 
-const getInput = (codice) => (numeroProtocolloGenioCivile) => (
-    {variables:{ input:{ 
-    pianoOperativo: { numeroProtocolloGenioCivile}, codice}
-}})
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
 }
@@ -44,9 +51,7 @@ const getDataDeliberaInput = (codice) => (val) => ({
         codice}
     }})
 
-const getSuccess = ({uploadRisorsaAvvio: {success}} = {}) => success
-
-const fileProps = {className: `border-0`, getSuccess, mutation: AVVIO_FILE_UPLOAD,
+const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
     resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
 const Messaggio = () => (<React.Fragment>
         <h4>STAI PER SALVARE INCONTRO</h4>
@@ -56,7 +61,7 @@ const Messaggio = () => (<React.Fragment>
 
 const UI = enhancer(({ back, 
     piano: {numeroProtocolloGenioCivile, codice} = {}, 
-    procedureAvvio: {node: {
+    proceduraAvvio: {node: {
         uuid}} = {},
         isChecked,
         toggleCheck
@@ -117,7 +122,7 @@ const UI = enhancer(({ back,
                     <div className=" mt-3 px-4 pb-4 border container">
                     <div className="row pt-2">
                         <Input className="col border-bottom border-serapide bg-light border-top-0 border-left-0 border-right-0" 
-                               getInput={getInput(codice)} mutation={UPDATE_PIANO} disabled={false}  
+                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}  
                                onChange={undefined} 
                                value={numeroProtocolloGenioCivile} type="text"
                                placeholder="Titolo Incontro" />
@@ -133,13 +138,13 @@ const UI = enhancer(({ back,
                        
                             
                             <Input  className="col-12 h-auto p-2 pl-4 mb-3 rounded-0 flex-fill p-0 m-0 bg-light" 
-                               getInput={getInput(codice)} mutation={UPDATE_PIANO} disabled={false}  
+                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}  
                                onChange={undefined} 
                                value={numeroProtocolloGenioCivile} type="text"
                                placeholder="Luogo" />
                             
                             <Input  rows={5} className="col-12 p-2 pl-4 rounded-0 flex-fill p-0 m-0 bg-light" 
-                               getInput={getInput(codice)} mutation={UPDATE_PIANO} disabled={false}  
+                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}  
                                onChange={undefined} 
                                value={numeroProtocolloGenioCivile}
                                placeholder="Messaggio per partecipanti" />
@@ -147,8 +152,8 @@ const UI = enhancer(({ back,
                              <UploadFiles 
                                     {...fileProps}
                                     risorse={allegati} 
-                                     variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
-                                    getFileName={({uploadRisorsaAvvio: {fileName} = {}}) => fileName}/>
+                                    variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
+                                    />
                             </div>
                             <div className="col-5 offset-7  mt-7">
                             <SalvaInvia variables={{codice: uuid}} mutation={INVIO_PROTOCOLLO_GENIO} label="SALVA INCONTRO" messaggio={(<Messaggio/>)} canCommit={true}></SalvaInvia>
@@ -161,9 +166,9 @@ const UI = enhancer(({ back,
             </React.Fragment>)
     })
 
-export default ({back, piano}) => (
-        <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureAvvio: {edges = []} = []} = {}, error}) => {
+export default (props) => (
+        <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -173,6 +178,6 @@ export default ({back, piano}) => (
                         </div>)
                 }
                 return (
-                    <UI procedureAvvio={edges[0]} back={back} piano={piano}/>)}
+                    <UI {...props} proceduraAvvio={proceduraAvvio}/>)}
             }
         </Query>)

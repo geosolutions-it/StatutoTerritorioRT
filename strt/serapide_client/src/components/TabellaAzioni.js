@@ -7,13 +7,16 @@
  */
 import React from 'react'
 import { Table } from 'reactstrap'
-import {formatDate, getActionIcon, getActionIconColor, getAction} from '../utils'
-import {canExecuteAction} from '../autorizzazioni'
-import {Button} from 'reactstrap'
+
 import TextWithTooltip from './TextWithTooltip'
+
+import {canExecuteAction} from '../autorizzazioni'
+import {formatDate, getActionIcon, getActionIconColor, getAction} from '../utils'
 import {rebuildTooltip} from '../enhancers/utils'
 
+
 const reverseOrder = ({node: {order: a}}, {node: {order: b}}) => (b - a)
+
 export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", className, onExecute = () => {}}) => {
     return (
     <Table size="sm" className={className} hover>

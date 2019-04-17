@@ -9,16 +9,17 @@
 #
 #########################################################################
 
+import pytz
 import uuid
 import rules
 import logging
 from datetime import datetime
 
-import pytz
 from django.db import models
+from django.utils import timezone
 from django.dispatch import receiver
-from django.db.models.signals import pre_delete, post_delete
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import pre_delete, post_delete
 
 from strt_users.models import (
     AppUser,
@@ -311,6 +312,20 @@ class Piano(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='vas')
 
+    procedura_avvio = models.ForeignKey(
+        'ProceduraAvvio',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='avvio')
+
+    procedura_adozione = models.ForeignKey(
+        'ProceduraAdozione',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='adozione')
+
     autorita_competente_vas = models.ManyToManyField(
         Contatto,
         related_name='autorita_competente_vas',
@@ -361,6 +376,14 @@ class Piano(models.Model):
         blank=True,
         null=True
     )
+
+    def chiudi_pendenti(self):
+        # - Complete Current Actions
+        _now = datetime.now(timezone.get_current_timezone())
+        self.azioni.filter(
+            stato=STATO_AZIONE.attesa).update(stato=STATO_AZIONE.nessuna, data=_now)
+        self.azioni.filter(
+            stato=STATO_AZIONE.necessaria).update(stato=STATO_AZIONE.nessuna, data=_now)
 
     @property
     def next_phase(self):
@@ -740,6 +763,204 @@ class RisorseCopianificazione(models.Model):
 
 
 # ############################################################################ #
+# - Adozione
+# ############################################################################ #
+class ProceduraAdozione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_delibera_adozione = models.DateTimeField(null=True, blank=True)
+    data_ricezione_osservazioni = models.DateTimeField(null=True, blank=True)
+    data_ricezione_pareri = models.DateTimeField(null=True, blank=True)
+
+    pubblicazione_burt_url = models.URLField(null=True, blank=True, default='')
+    pubblicazione_burt_data = models.DateTimeField(null=True, blank=True)
+    pubblicazione_sito_url = models.URLField(null=True, blank=True, default='')
+    pubblicazione_sito_data = models.DateTimeField(null=True, blank=True)
+
+    osservazioni_concluse = models.BooleanField(null=False, blank=False, default=False)
+
+    richiesta_conferenza_paesaggistica = models.BooleanField(null=False, blank=False, default=False)
+    url_piano_controdedotto = models.URLField(null=True, blank=True, default='')
+    url_rev_piano_post_cp = models.URLField(null=True, blank=True, default='')
+
+    conclusa = models.BooleanField(null=False, blank=False, default=False)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorseAdozione')
+
+    ente = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_adozione"
+        verbose_name_plural = 'Procedure Adozione'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+
+
+class RisorseAdozione(models.Model):
+    procedura_adozione = models.ForeignKey(ProceduraAdozione, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_adozione_risorse"
+
+
+class PianoControdedotto(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorsePianoControdedotto')
+
+    class Meta:
+        db_table = "strt_core_piano_controdedotto"
+        verbose_name_plural = 'Piani Controdedotti'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.piano.ente, self.uuid)
+
+
+class RisorsePianoControdedotto(models.Model):
+    piano_controdedotto = models.ForeignKey(PianoControdedotto, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_risorse_piano_controdedotto"
+
+
+class PianoRevPostCP(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorsePianoRevPostCP')
+
+    class Meta:
+        db_table = "strt_core_piano_rev_post_cp"
+        verbose_name_plural = 'Piani Rev. post CP'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.piano.ente, self.uuid)
+
+
+class RisorsePianoRevPostCP(models.Model):
+    piano_rev_post_cp = models.ForeignKey(PianoRevPostCP, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_risorse_piano_rev_post_cp"
+
+
+# ############################################################################ #
+# - Adozione VAS
+# ############################################################################ #
+class ParereAdozioneVAS(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_invio_parere = models.DateTimeField(null=True, blank=True)
+    data_ricezione_parere = models.DateTimeField(null=True, blank=True)
+
+    procedura_adozione = models.ForeignKey(ProceduraAdozione, on_delete=models.CASCADE)
+
+    inviata = models.BooleanField(null=False, blank=False, default=False)
+
+    user = models.ForeignKey(
+        to=AppUser,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        db_table = "strt_core_pareri_adozione_vas"
+        verbose_name_plural = 'Pareri Adozione VAS'
+
+    def __str__(self):
+        return '{} - [{}]'.format(self.procedura_adozione, self.uuid)
+
+
+class ProceduraAdozioneVAS(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    tipologia = models.CharField(
+        choices=TIPOLOGIA_VAS,
+        default=TIPOLOGIA_VAS.unknown,
+        max_length=50
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    last_update = models.DateTimeField(auto_now=True, blank=True)
+
+    conclusa = models.BooleanField(null=False, blank=False, default=False)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorseAdozioneVas')
+
+    ente = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_adozione_vas"
+        verbose_name_plural = 'Procedure Adozione VAS'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, TIPOLOGIA_VAS[self.tipologia], self.uuid)
+
+
+class RisorseAdozioneVas(models.Model):
+    procedura_adozione_vas = models.ForeignKey(ProceduraAdozioneVAS, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_adozione_vas_risorse"
+
+
+# ############################################################################ #
 # Model Signals
 # ############################################################################ #
 @receiver(post_delete, sender=Contatto)
@@ -759,16 +980,37 @@ def delete_piano_associations(sender, instance, **kwargs):
     SoggettiSCA.objects.filter(piano=instance).delete()
     instance.risorse.all().delete()
     RisorsePiano.objects.filter(piano=instance).delete()
+
     for _vas in ProceduraVAS.objects.filter(piano=instance):
         _vas.risorse.all().delete()
         RisorseVas.objects.filter(procedura_vas=_vas).delete()
+
     for _avvio in ProceduraAvvio.objects.filter(piano=instance):
         _avvio.risorse.all().delete()
         RisorseAvvio.objects.filter(procedura_avvio=_avvio).delete()
+
     for _cc in ConferenzaCopianificazione.objects.filter(piano=instance):
         _cc.risorse.all().delete()
         RisorseCopianificazione.objects.filter(conferenza_copianificazione=_cc).delete()
+
+    for _vas in ProceduraAdozioneVAS.objects.filter(piano=instance):
+        _vas.risorse.all().delete()
+        RisorseAdozioneVas.objects.filter(procedura_adozione_vas=_vas).delete()
+
+    for _adozione in ProceduraAdozione.objects.filter(piano=instance):
+        _adozione.risorse.all().delete()
+        RisorseAdozione.objects.filter(procedura_adozione=_adozione).delete()
+
+    for _pc in PianoControdedotto.objects.filter(piano=instance):
+        _pc.risorse.all().delete()
+        RisorsePianoControdedotto.objects.filter(piano_controdedotto=_pc).delete()
+
+    for _pc in PianoRevPostCP.objects.filter(piano=instance):
+        _pc.risorse.all().delete()
+        RisorsePianoRevPostCP.objects.filter(piano_rev_post_cp=_pc).delete()
+
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
+
     for _t in PianoAuthTokens.objects.filter(piano=instance):
         _t.token.delete()

@@ -69,7 +69,7 @@ TIPOLOGIA_PIANO = Choices(
         ('unknown', _('UNKNOWN')),
         ('operativo', _('OPERATIVO')),
         ('strutturale', _('STRUTTURALE')),
-        ('variante', _('VARIANTE')),
+        # ('variante', _('VARIANTE')),
     )
 
 TIPOLOGIA_VAS = Choices(
@@ -120,6 +120,16 @@ TIPOLOGIA_AZIONE = Choices(
         ('osservazioni_enti', _('Osservazioni Enti')),  # Enti
         ('osservazioni_regione', _('Osservazioni Regione')),  # Regione
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
+        ('controdeduzioni', _('Controdeduzioni')),  # Comune
+        ('piano_controdedotto', _('Piano Controdedotto')),  # Comune
+        ('esito_conferenza_paesaggistica', _('Esiti conferenza paesaggistica')),  # Regione
+        ('rev_piano_post_cp', _('Revisione Piano post Conf. Paesaggistica')),  # Comune
+        # Adozione VAS
+        ('pareri_adozione_sca', _('Pareri SCA')),  # SCA
+        ('parere_motivato_ac', _('Parere Motivato')),  # AC
+        ('upload_elaborati_adozione_vas', _('Upload elaborati VAS')),  # Comune
+        # Approvazione
+        ('trasmissione_approvazione', _('Invio documentazione per Approvazione')),  # Comune
     )
 
 FASE_AZIONE = Choices(
@@ -148,21 +158,42 @@ FASE_AZIONE = Choices(
         ('osservazioni_enti', 'avvio'),
         ('osservazioni_regione', 'avvio'),
         ('upload_osservazioni_privati', 'avvio'),
+        ('controdeduzioni', 'avvio'),
+        ('piano_controdedotto', 'avvio'),
+        ('esito_conferenza_paesaggistica', 'avvio'),
+        ('rev_piano_post_cp', 'avvio'),
+        # Adozione VAS
+        ('pareri_adozione_sca', 'avvio'),
+        ('parere_motivato_ac', 'avvio'),
+        ('upload_elaborati_adozione_vas', 'avvio'),
+        # Approvazione
+        ('trasmissione_approvazione', 'adozione'),
     )
 
 TOOLTIP_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
         # Procedura VAS
-        ('richiesta_verifica_vas', _('art 23  L.R. 10/2010')),
+        ('richiesta_verifica_vas', _('art.23 L.R. 10/2010')),
         ('emissione_provvedimento_verifica', _('art.22 L.R. 10/2010')),
         ('pubblicazione_provvedimento_verifica', _('art.22 L.R. 10/2010')),
-        ('avvio_consultazioni_sca', _('art.22  L.R. 10/2010')),
-        ('emissione_provvedimento_verifica', _('art 22  L.R. 10/2010')),
-        ('pubblicazione_provvedimento_verifica', _('art 22  L.R. 10/2010')),
+        ('avvio_consultazioni_sca', _('art.22 L.R. 10/2010')),
+        ('emissione_provvedimento_verifica', _('art.22 L.R. 10/2010')),
+        ('pubblicazione_provvedimento_verifica', _('art.22 L.R. 10/2010')),
         # Avvio
         ('avvio_procedimento', _('art. 17 L.R. 65/2014, comma 1, art. 21 Disciplina del Piano , PIT-PPR')),
         ('richiesta_conferenza_copianificazione', _('art.25 L.R. 65/2014')),
+        ('protocollo_genio_civile', _('art.65/104 RR')),
+        ('protocollo_genio_civile_id', _('art.65/104 RR')),
         ('esito_conferenza_copianificazione', _('art.25 L.R. 65/2014')),
+        # Adozione
+        ('trasmissione_adozione', _('art.19 L.R. 65/2014')),
+        ('osservazioni_enti', _('art.19 L.R. 65/2014')),
+        ('osservazioni_regione', _('art.19 L.R. 65/2014')),
+        ('upload_osservazioni_privati', _('art.19 L.R. 65/2014')),
+        ('controdeduzioni', _('art.19 L.R. 65/2014')),
+        ('piano_controdedotto', _('art.19 L.R. 65/2014')),
+        ('esito_conferenza_paesaggistica', _('art.19 L.R. 65/2014')),
+        ('rev_piano_post_cp', _('art.19 L.R. 65/2014')),
     )
 
 TIPOLOGIA_ATTORE = Choices(
@@ -195,6 +226,12 @@ AZIONI_BASE = {
     FASE.avvio: [
         {
             "tipologia": TIPOLOGIA_AZIONE.trasmissione_adozione,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
+    ],
+    FASE.adozione: [
+        {
+            "tipologia": TIPOLOGIA_AZIONE.trasmissione_approvazione,
             "attore": TIPOLOGIA_ATTORE.comune
         },
     ]

@@ -9,7 +9,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FileChooser from "./FileChooser"
 import FileLoader from "./EnhancedFileLoader"
-import {FILE_UPLOAD, DELETE_RISORSA} from "../queries"
+import {FILE_UPLOAD, DELETE_RISORSA} from "../graphql"
 import Resource from './EnhancedResource'
 
 class UploadFiles extends React.PureComponent {
@@ -23,6 +23,7 @@ class UploadFiles extends React.PureComponent {
         mutation: PropTypes.object,
         resourceMutation: PropTypes.object,
         getSuccess: PropTypes.func,
+        getFileName: PropTypes.func,
         multiple: PropTypes.bool
     }
     static defaultProps = {

@@ -1,7 +1,10 @@
 import { format, parseISO, differenceInCalendarDays, subDays} from 'date-fns'
-import {isDate} from 'lodash'
+import {isDate, find, get} from 'lodash'
 import { it } from 'date-fns/locale'
 import { toast } from 'react-toastify'
+import elaborati from './Elaborati'
+
+export {get} from "lodash"
 
 export const getEnteLabel = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `${tipoente} di ${name}`
 
@@ -60,7 +63,41 @@ export const getAction = (stato) => {
     }
 }
 
-export const showError = (error) => {
-    toast.error(error.message,  {autoClose: true})
+export const showError = ({graphQLErrors, message, networkError: {result:{errors = []} = {}} = {}}) => {
+    const er = [...graphQLErrors, ...errors]
+    if(er) er.map(({message}) => toast.error(message,  {autoClose: true})) 
+    else toast.error(message,  {autoClose: true})
 }
 
+export const elaboratiCompletati = (tipoPiano = "", risorse) => {
+            const tipo = tipoPiano.toLocaleLowerCase()
+             return  elaborati[tipo] && !find(elaborati[tipo]["testuali"], (el, key) => {
+                 return !find(risorse, ({node: {tipo: t} = {}}) => {
+                    return t === key})})
+            }
+
+export const getInputFactory = (inputType) => (uuid, field) => (val) => ({
+    variables: {
+        input: { 
+            [inputType]: { [field]: isDate(val) ? val.toISOString() : val }, 
+            uuid
+        }
+    }
+})
+
+export const getCodice = (props) => get(props, "piano.codice")
+
+
+
+// Raggruppa le risorse per utente
+export const groupResourcesByUser = (resources = []) => resources.reduce((acc, {node}) => {
+    if (acc[node.user.fiscalCode]) { 
+        acc[node.user.fiscalCode].push(node)
+    }
+    else {
+        acc[node.user.fiscalCode] = [node]
+    }
+    return acc
+} , {})
+
+export const filterAndGroupResourcesByUser = ( resources, type = "") => groupResourcesByUser(resources.filter(({node: {tipo}}) => tipo === type))

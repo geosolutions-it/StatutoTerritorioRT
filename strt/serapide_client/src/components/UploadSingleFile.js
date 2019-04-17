@@ -9,7 +9,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FileChooser from "./FileChooser"
 import FileLoader from "./EnhancedFileLoader"
-import {FILE_UPLOAD, DELETE_RISORSA} from "../queries"
+import {FILE_UPLOAD, DELETE_RISORSA} from "../graphql"
 import Resource from './EnhancedResource'
 
 
@@ -26,7 +26,8 @@ class SingleFile extends React.PureComponent {
         modal: PropTypes.bool,
         showBtn: PropTypes.bool,
         getSuccess: PropTypes.func,
-        sz: PropTypes.oneOf(["sm","lg"]) 
+        sz: PropTypes.oneOf(["sm","lg"]),
+        resIcon: PropTypes.string
     }
     static defaultProps = {
         placeholder: "",
@@ -62,8 +63,8 @@ class SingleFile extends React.PureComponent {
     render() {
         
         const {file} = this.state || {}
-        const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation, modal, showBtn, sz, className = ""} = this.props
-        return  risorsa ? (<Resource className={className} codice={variables.codice} mutation={resourceMutation} resource={risorsa} isLocked={isLocked}/>) : (
+        const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation, modal, showBtn, sz, className = "", fileType, resIcon} = this.props
+        return  risorsa ? (<Resource icon={resIcon} className={className} codice={variables.codice} mutation={resourceMutation} resource={risorsa} isLocked={isLocked}/>) : (
             <div style={{minHeight: "3.813rem"}} className={`${className} file-loader d-flex justify-content-between border-top border-bottom align-items-center`}>
                 <FileLoader
                     mutation={mutation}
@@ -76,7 +77,7 @@ class SingleFile extends React.PureComponent {
                         <FileChooser 
                             isLocked={disabled || !!loading || isLocked}
                             multiple={false}
-                            fileType="application/pdf"
+                            fileType={fileType}
                             onFilesChange={this.onFilesChange}
                             modal={modal}
                             showBtn={showBtn}

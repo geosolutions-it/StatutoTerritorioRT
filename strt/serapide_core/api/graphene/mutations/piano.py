@@ -46,6 +46,9 @@ from serapide_core.modello.models import (
     AzioniPiano,
     ProceduraVAS,
     ProceduraAvvio,
+    ProceduraAdozione,
+    PianoControdedotto,
+    PianoRevPostCP,
     PianoAuthTokens,
     AutoritaCompetenteVAS,
     AutoritaIstituzionali,
@@ -126,24 +129,21 @@ class CreatePiano(relay.ClientIDMutation):
                     _azioni_piano.append(_azione)
                     _order += 1
 
-                # Inizializzazione Procedura VAS
-                _procedura_vas = ProceduraVAS()
-                _procedura_vas.tipologia = TIPOLOGIA_VAS.semplificata
-
-                # Inizializzazione Procedura Avvio
-                _procedura_avvio = ProceduraAvvio()
-
                 nuovo_piano = update_create_instance(_piano, _piano_data)
 
-                _procedura_vas.piano = nuovo_piano
-                _procedura_vas.ente = nuovo_piano.ente
-                _procedura_vas.save()
+                # Inizializzazione Procedura VAS
+                _procedura_vas, created = ProceduraVAS.objects.get_or_create(
+                    piano=nuovo_piano,
+                    ente=nuovo_piano.ente,
+                    tipologia=TIPOLOGIA_VAS.semplificata)
 
-                _procedura_avvio.piano = nuovo_piano
-                _procedura_avvio.ente = nuovo_piano.ente
-                _procedura_avvio.save()
+                # Inizializzazione Procedura Avvio
+                _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
+                    piano=nuovo_piano,
+                    ente=nuovo_piano.ente)
 
                 nuovo_piano.procedura_vas = _procedura_vas
+                nuovo_piano.procedura_avvio = _procedura_avvio
                 nuovo_piano.save()
 
                 for _ap in _azioni_piano:
@@ -464,9 +464,9 @@ class PromozionePiano(graphene.Mutation):
                 else:
                     return GraphQLError(_("Not Allowed"), code=405)
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -483,11 +483,6 @@ class FormazionePiano(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
 
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _formazione_del_piano = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
@@ -496,17 +491,50 @@ class FormazionePiano(graphene.Mutation):
                 _formazione_del_piano.data = datetime.datetime.now(timezone.get_current_timezone())
                 _formazione_del_piano.save()
 
+                _conferenza_copianificazione_attiva = False
+
+                _richiesta_conferenza_copianificazione = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione).first()
+                if _richiesta_conferenza_copianificazione and \
+                _richiesta_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                    _conferenza_copianificazione_attiva = True
+
+                _esito_conferenza_copianificazione = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione).first()
+                if _esito_conferenza_copianificazione and \
+                _esito_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                    _conferenza_copianificazione_attiva = True
+
                 _protocollo_genio_civile = piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
 
                 _protocollo_genio_civile_id = piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id).first()
 
-                if _protocollo_genio_civile and _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and \
-                _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna:
-                    procedura_avvio = ProceduraAvvio.objects.get(piano=piano)
+                _integrazioni_richieste = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste).first()
+
+                if not _conferenza_copianificazione_attiva and \
+                _protocollo_genio_civile and _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and \
+                _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna and \
+                _integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna:
+
+                    if procedura_vas.conclusa:
+                        piano.chiudi_pendenti()
+                    procedura_avvio, created = ProceduraAvvio.objects.get_or_create(piano=piano)
                     procedura_avvio.conclusa = True
                     procedura_avvio.save()
+
+                    procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+                        piano=piano, ente=piano.ente)
+
+                    piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
+                    piano_rev_post_cp, created = PianoRevPostCP.objects.get_or_create(piano=piano)
+
+                    piano.procedura_adozione = procedura_adozione
+                    piano.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -517,28 +545,28 @@ class FormazionePiano(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
-                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
-                    if _piano.is_eligible_for_promotion:
-                        _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
 
-                        # Notify Users
-                        piano_phase_changed.send(
-                            sender=Piano,
-                            user=info.context.user,
-                            piano=_piano,
-                            message_type="piano_phase_changed")
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
 
-                        _piano.save()
-                        fase.promuovi_piano(_fase, _piano)
+                    _piano.save()
+                    fase.promuovi_piano(_fase, _piano)
 
-                    return FormazionePiano(
-                        piano_aggiornato=_piano,
-                        errors=[]
-                    )
+                return FormazionePiano(
+                    piano_aggiornato=_piano,
+                    errors=[]
+                )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)

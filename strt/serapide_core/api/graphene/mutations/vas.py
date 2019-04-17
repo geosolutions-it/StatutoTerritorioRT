@@ -38,6 +38,7 @@ from serapide_core.modello.models import (
     ParereVAS,
     AzioniPiano,
     ProceduraVAS,
+    ProceduraAvvio,
     ConsultazioneVAS,
     ParereVerificaVAS,
 )
@@ -86,8 +87,11 @@ class CreateProceduraVAS(relay.ClientIDMutation):
                 if 'note' in _procedura_vas_data:
                     _data = _procedura_vas_data.pop('note')
                     _procedura_vas_data['note'] = _data[0]
-                _procedura_vas = ProceduraVAS()
-                _procedura_vas.piano = _piano
+
+                _procedura_vas, created = ProceduraVAS.objects.get_or_create(
+                    piano=_piano,
+                    ente=_piano.ente)
+
                 _procedura_vas_data['id'] = _procedura_vas.id
                 _procedura_vas_data['uuid'] = _procedura_vas.uuid
                 nuova_procedura_vas = update_create_instance(_procedura_vas, _procedura_vas_data)
@@ -200,7 +204,9 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
                 procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
-
+                    _procedura_avvio = ProceduraAvvio.objects.filter(piano=_piano).last()
+                    if not _procedura_avvio or _procedura_avvio.conclusa:
+                        _piano.chiudi_pendenti()
                     procedura_vas_aggiornata.conclusa = True
                     procedura_vas_aggiornata.save()
 
@@ -238,11 +244,6 @@ class InvioPareriVerificaVAS(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_vas):
 
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _pareri_verifica_sca = piano.azioni.filter(
@@ -251,6 +252,8 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                 _pareri_verifica_sca.stato = STATO_AZIONE.nessuna
                 _pareri_verifica_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                 _pareri_verifica_sca.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -303,9 +306,9 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -323,9 +326,7 @@ class AssoggettamentoVAS(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -373,6 +374,8 @@ class AssoggettamentoVAS(graphene.Mutation):
                 _emissione_provvedimento_verifica.stato != STATO_AZIONE.nessuna:
                     _emissione_provvedimento_verifica.stato = STATO_AZIONE.nessuna
                     _emissione_provvedimento_verifica.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -399,9 +402,9 @@ class AssoggettamentoVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -484,9 +487,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -526,6 +527,8 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                 _pareri_sca.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -545,9 +548,9 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -565,9 +568,7 @@ class InvioPareriVAS(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -642,38 +643,8 @@ class InvioPareriVAS(graphene.Mutation):
                     _avvio_esame_pareri_sca.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
-
-                # TODO: Queste azioni qui sotto in realtà sono di AVVIO Prodedimento!
-
-                # _osservazioni_enti = Azione(
-                #     tipologia=TIPOLOGIA_AZIONE.osservazioni_enti,
-                #     attore=TIPOLOGIA_ATTORE.enti,
-                #     order=_order,
-                #     stato=STATO_AZIONE.necessaria
-                # )
-                # _osservazioni_enti.save()
-                # _order += 1
-                # AzioniPiano.objects.get_or_create(azione=_osservazioni_enti, piano=piano)
-                #
-                # _osservazioni_regione = Azione(
-                #     tipologia=TIPOLOGIA_AZIONE.osservazioni_regione,
-                #     attore=TIPOLOGIA_ATTORE.regione,
-                #     order=_order,
-                #     stato=STATO_AZIONE.attesa
-                # )
-                # _osservazioni_regione.save()
-                # _order += 1
-                # AzioniPiano.objects.get_or_create(azione=_osservazioni_regione, piano=piano)
-                #
-                # _upload_osservazioni_privati = Azione(
-                #     tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati,
-                #     attore=TIPOLOGIA_ATTORE.comune,
-                #     order=_order,
-                #     stato=STATO_AZIONE.necessaria
-                # )
-                # _upload_osservazioni_privati.save()
-                # _order += 1
-                # AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -699,7 +670,7 @@ class InvioPareriVAS(graphene.Mutation):
                     procedura_vas=_procedura_vas,
                     consultazione_vas=_consultazione_vas
                 )
-                print('%s / %s' % (_pareri_vas_count.count(), _avvio_consultazioni_sca_count))
+
                 if _pareri_vas_count.count() == (_avvio_consultazioni_sca_count - 1):
                     _parere_vas = ParereVAS(
                         inviata=True,
@@ -739,9 +710,9 @@ class InvioPareriVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -759,9 +730,7 @@ class AvvioEsamePareriSCA(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -786,6 +755,8 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                     _upload_elaborati_vas.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_upload_elaborati_vas, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -805,9 +776,9 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -824,11 +795,6 @@ class UploadElaboratiVAS(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_vas):
 
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _upload_elaborati_vas = piano.azioni.filter(
@@ -838,8 +804,13 @@ class UploadElaboratiVAS(graphene.Mutation):
                 _upload_elaborati_vas.data = datetime.datetime.now(timezone.get_current_timezone())
                 _upload_elaborati_vas.save()
 
+                _procedura_avvio = ProceduraAvvio.objects.filter(piano=piano).last()
+                if not _procedura_avvio or _procedura_avvio.conclusa:
+                    piano.chiudi_pendenti()
                 procedura_vas.conclusa = True
                 procedura_vas.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -871,8 +842,8 @@ class UploadElaboratiVAS(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)

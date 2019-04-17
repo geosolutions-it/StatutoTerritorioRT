@@ -41,11 +41,19 @@ from serapide_core.modello.models import (
     PianoAuthTokens,
     FasePianoStorico,
     ProceduraAvvio,
+    ProceduraAdozione,
+    ProceduraAdozioneVAS,
+    PianoControdedotto,
+    PianoRevPostCP,
     ConferenzaCopianificazione,
     RisorsePiano,
     RisorseVas,
     RisorseAvvio,
+    RisorseAdozione,
     RisorseCopianificazione,
+    RisorsePianoControdedotto,
+    RisorsePianoRevPostCP,
+    RisorseAdozioneVas,
 )
 
 from serapide_core.modello.enums import (
@@ -195,6 +203,16 @@ class RisorseVASType(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class RisorseAdozioneVASType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorseAdozioneVas
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
 class RisorseAvvioType(DjangoObjectType):
 
     risorsa = DjangoFilterConnectionField(RisorsaNode)
@@ -205,12 +223,42 @@ class RisorseAvvioType(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class RisorseAdozioneType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorseAdozione
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
 class RisorseCopianificazioneType(DjangoObjectType):
 
     risorsa = DjangoFilterConnectionField(RisorsaNode)
 
     class Meta:
         model = RisorseCopianificazione
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorsePianoControdedottoType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorsePianoControdedotto
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorsePianoRevPostCPType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorsePianoRevPostCP
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -367,6 +415,22 @@ class ProceduraVASNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class ProceduraAdozioneVASNode(DjangoObjectType):
+
+    ente = graphene.Field(EnteNode)
+    risorsa = DjangoFilterConnectionField(RisorseAdozioneVASType)
+
+    class Meta:
+        model = ProceduraAdozioneVAS
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'ente': ['exact'],
+            'piano__codice': ['exact'],
+            'tipologia': ['exact', 'icontains'],
+        }
+        interfaces = (relay.Node, )
+
+
 class ProceduraAvvioNode(DjangoObjectType):
 
     ente = graphene.Field(EnteNode)
@@ -374,6 +438,21 @@ class ProceduraAvvioNode(DjangoObjectType):
 
     class Meta:
         model = ProceduraAvvio
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'ente': ['exact'],
+            'piano__codice': ['exact'],
+        }
+        interfaces = (relay.Node, )
+
+
+class ProceduraAdozioneNode(DjangoObjectType):
+
+    ente = graphene.Field(EnteNode)
+    risorsa = DjangoFilterConnectionField(RisorseAdozioneType)
+
+    class Meta:
+        model = ProceduraAdozione
         # Allow for some more advanced filtering here
         filter_fields = {
             'ente': ['exact'],
@@ -429,6 +508,32 @@ class ConferenzaCopianificazioneNode(DjangoObjectType):
         # Allow for some more advanced filtering here
         filter_fields = {
             'id_pratica': ['exact'],
+            'piano__codice': ['exact'],
+        }
+        interfaces = (relay.Node, )
+
+
+class PianoControdedottoNode(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorseCopianificazioneType)
+
+    class Meta:
+        model = PianoControdedotto
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'piano__codice': ['exact'],
+        }
+        interfaces = (relay.Node, )
+
+
+class PianoRevPostCPNode(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorseCopianificazioneType)
+
+    class Meta:
+        model = PianoRevPostCP
+        # Allow for some more advanced filtering here
+        filter_fields = {
             'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )

@@ -6,28 +6,28 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+import {Query} from 'react-apollo'
+
 import UploadFiles from '../../components/UploadFiles'
 import Resource from '../../components/Resource'
-import {Query} from 'react-apollo'
-import {GET_VAS,
-    DELETE_RISORSA_VAS,
-    VAS_FILE_UPLOAD, INVIO_PARERI_VERIFICA
-} from '../../queries'
 import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import RichiestaComune from '../../components/RichiestaComune'
-import  {showError, formatDate, daysSub} from '../../utils'
 
+import  {showError, formatDate, daysSub, getCodice} from '../../utils'
 
-const getSuccess = ({uploadConsultazioneVas: {success}} = {}) => success
+import {GET_VAS,
+    DELETE_RISORSA_VAS,
+    VAS_FILE_UPLOAD, INVIO_PARERI_VERIFICA
+} from '../../graphql'
 
 
 const UI = ({
     back, 
-    vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}},
+    vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
     utente: {fiscalCode} = {},
     scadenza,
-    tipoDoc = "parere_verifica_vas",
+    tipo: tipoDoc = "parere_verifica_vas",
     tipoVas = "vas_verifica",
     label = "Pareri",
     saveMutation = INVIO_PARERI_VERIFICA}) => {
@@ -52,27 +52,16 @@ const UI = ({
                         mutation={VAS_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_VAS}
                         variables={{codice: uuid, tipo: tipoDoc }}
-                        isLocked={false} getSuccess={({uploadRisorsaVas: {success}}) => success} getFileName={({uploadRisorsaVas: {fileName} = {}}) => fileName}/>
-                    {/* Se dovessere essere un file singolo
-                    <div style={{width: "100%"}} className="action-uploader d-flex align-self-start pb-5">
-
-                    <FileUpload 
-                        className="border-0 flex-column"
-                        sz="sm" modal={false} showBtn={false} 
-                        getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
-                        resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
-                        isLocked={false} risorsa={docParere} variables={{codice: uuid, tipo: "parere_verifica_vas" }}/>
-                    </div> */}
-                
+                        isLocked={false}/>
                 <div className="align-self-center mt-7">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={docsPareri.length> 0}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }
 
-    export default ({piano = {},  utente, scadenza, back, tipo, label, tipoVas, saveMutation}) => (
-        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []}, error}) => {
+    export default (props) => (
+        <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureVas: {edges: [vas] = []} = []}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -82,6 +71,7 @@ const UI = ({
                         </div>)
                 }
                 return (
-                    <UI back={back} vas={edges[0]} utente={utente} tipoVas={tipoVas} saveMutation={saveMutation} scadenza={scadenza} tipoDoc={tipo} label={label}/>)}
+                    <UI {...props} vas={vas}  />)}
             }
         </Query>)
+        

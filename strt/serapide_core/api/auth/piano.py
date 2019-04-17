@@ -20,7 +20,9 @@ from serapide_core.modello.enums import (
 from serapide_core.modello.models import (
     Piano,
     ProceduraVAS,
-    ProceduraAvvio)
+    ProceduraAvvio,
+    ProceduraAdozione,
+    ProceduraAdozioneVAS)
 
 
 # ############################################################################ #
@@ -42,6 +44,16 @@ def is_anagrafica(user, obj):
         return obj.fase.nome == FASE.anagrafica
     elif isinstance(obj, ProceduraVAS):
         return obj.piano.fase.nome == FASE.anagrafica
+    else:
+        return False
+
+
+@rules.predicate
+def is_avvio(user, obj):
+    if isinstance(obj, Piano):
+        return obj.fase.nome == FASE.avvio
+    elif isinstance(obj, ProceduraVAS):
+        return obj.piano.fase.nome == FASE.avvio
     else:
         return False
 
@@ -74,12 +86,22 @@ def has_soggetto_proponente(piano):
 
 @rules.predicate
 def has_procedura_vas(piano):
-    return ProceduraVAS.objects.filter(piano=piano).count() == 1
+    return ProceduraVAS.objects.filter(piano=piano).count() > 0
 
 
 @rules.predicate
 def has_procedura_avvio(piano):
-    return ProceduraAvvio.objects.filter(piano=piano).count() == 1
+    return ProceduraAvvio.objects.filter(piano=piano).count() > 0
+
+
+@rules.predicate
+def has_procedura_adozione(piano):
+    return ProceduraAdozione.objects.filter(piano=piano).count() > 0
+
+
+@rules.predicate
+def has_procedura_adozione_vas(piano):
+    return ProceduraAdozioneVAS.objects.filter(piano=piano).count() > 0
 
 
 @rules.predicate
@@ -111,9 +133,27 @@ def formazione_piano_conclusa(piano):
 
 
 @rules.predicate
+def vas_piano_conclusa(piano):
+    _procedura_vas = ProceduraVAS.objects.get(piano=piano)
+    return _procedura_vas.conclusa
+
+
+@rules.predicate
 def avvio_piano_conclusa(piano):
-    _avvio = ProceduraAvvio.objects.get(piano=piano)
-    return _avvio.conclusa
+    _procedura_avvio = ProceduraAvvio.objects.get(piano=piano)
+    return _procedura_avvio.conclusa
+
+
+@rules.predicate
+def adozione_piano_conclusa(piano):
+    _procedura_adozione = ProceduraAdozione.objects.get(piano=piano)
+    return _procedura_adozione.conclusa
+
+
+@rules.predicate
+def adozione_vas_piano_conclusa(piano):
+    _procedura_adozione_vas = ProceduraAdozioneVAS.objects.get(piano=piano)
+    return _procedura_adozione_vas.conclusa
 
 
 @rules.predicate

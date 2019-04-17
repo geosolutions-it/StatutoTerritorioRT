@@ -12,7 +12,11 @@
 """Script defined to create helper functions for graphql schema."""
 
 from django.conf import settings
+from django.utils.text import slugify
+from inflector import Inflector, English
 from graphql_relay.node.node import from_global_id
+
+INFLECTOR = Inflector(English)
 
 
 def is_RUP(user):
@@ -52,3 +56,7 @@ def get_errors(e):
     messages = ['; '.join(m) for m in e.message_dict.values()]
     errors = [i for pair in zip(fields, messages) for i in pair]
     return errors
+
+
+def unslugify(value):
+    return INFLECTOR.titleize(slugify(value, allow_unicode=True))

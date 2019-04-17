@@ -6,30 +6,28 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import UploadFiles from '../../components/UploadFiles'
+import {Query} from 'react-apollo'
+
 import FileUpload from '../../components/UploadSingleFile'
 import ActionTitle from '../../components/ActionTitle'
-import {Query} from 'react-apollo'
+import SalvaInvia from '../../components/SalvaInvia'
+import Elaborati from '../../components/ElaboratiPiano'
+
+import  {showError, elaboratiCompletati, getCodice} from '../../utils'
+
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD, UPLOAD_ELABORATI_VAS
-} from '../../queries'
-import SalvaInvia from '../../components/SalvaInvia'
-
-import  {showError} from '../../utils'
-
-
-const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
-
+} from '../../graphql'
 
 const UI = ({
-    back, 
-    vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}}
+    back,
+    piano: {tipo: tipoPiano} = {}, 
+    vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {}
     }) => {
         
-        const elaborati =  resources.filter(({node: {tipo, user = {}}}) => tipo === 'elaborati_vas').map(({node}) => node)
         const rapporto = resources.filter(({node: {tipo, user = {}}}) => tipo === 'rapporto_ambientale').map(({node}) => node).shift()
-        
+        const elaboratiCompleti = elaboratiCompletati(tipoPiano, resources)
         return (
             <React.Fragment>
                 <ActionTitle>Upload Elaborati VAS</ActionTitle>
@@ -38,25 +36,27 @@ const UI = ({
                 <FileUpload 
                     className="border-0"
                     placeholder="Documento preliminare di VAS"
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
+                    mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
                 </div>
                 <h4 className="font-weight-light pl-4 pb-1">Elaborati</h4>
-                <UploadFiles risorse={elaborati} 
-                        mutation={VAS_FILE_UPLOAD} 
+                <Elaborati
+                        tipoPiano={tipoPiano.toLowerCase()} 
+                        resources={resources}
+                        mutation={VAS_FILE_UPLOAD}
                         resourceMutation={DELETE_RISORSA_VAS}
-                        variables={{codice: uuid, tipo: "elaborati_vas" }}
-                        isLocked={false} getSuccess={({uploadRisorsaVas: {success}}) => success} getFileName={({uploadRisorsaVas: {fileName} = {}}) => fileName}/>
+                        uuid={uuid}
+                />
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto && elaborati.length > 0}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto && elaboratiCompleti}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }
 
-    export default ({piano = {}, back}) => (
-        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []}, error}) => {
+    export default (props) => (
+        <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureVas: {edges: [vas] = []} = []}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -66,6 +66,6 @@ const UI = ({
                         </div>)
                 }
                 return (
-                    <UI back={back} vas={edges[0]}/>)}
+                    <UI {...props} vas={vas}/>)}
             }
         </Query>)

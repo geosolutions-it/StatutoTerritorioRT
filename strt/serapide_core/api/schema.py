@@ -35,6 +35,7 @@ from serapide_core.api.graphene.mutations import (
     avvio,
     piano,
     uploads,
+    adozione,
 )
 
 logger = logging.getLogger(__name__)
@@ -60,12 +61,22 @@ class Query(object):
     procedure_vas = DjangoFilterConnectionField(types.ProceduraVASNode,
                                                 filterset_class=filters.ProceduraVASMembershipFilter)
 
+    procedure_adozione_vas = DjangoFilterConnectionField(types.ProceduraAdozioneVASNode,
+                                                         filterset_class=filters.ProceduraVASMembershipFilter)
+
     procedure_avvio = DjangoFilterConnectionField(types.ProceduraAvvioNode,
                                                   filterset_class=filters.ProceduraAvvioMembershipFilter)
+
+    procedure_adozione = DjangoFilterConnectionField(types.ProceduraAdozioneNode,
+                                                     filterset_class=filters.ProceduraAdozioneMembershipFilter)
 
     consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
 
     conferenza_copianificazione = DjangoFilterConnectionField(types.ConferenzaCopianificazioneNode)
+
+    piano_controdedotto = DjangoFilterConnectionField(types.PianoControdedottoNode)
+
+    piano_rev_post_cp = DjangoFilterConnectionField(types.PianoRevPostCPNode)
 
     contatti = DjangoFilterConnectionField(types.ContattoNode,
                                            filterset_class=filters.EnteContattoMembershipFilter)
@@ -148,11 +159,32 @@ class Mutation(object):
     richiesta_conferenza_copianificazione = avvio.RichiestaConferenzaCopianificazione.Field()
     chiusura_conferenza_copianificazione = avvio.ChiusuraConferenzaCopianificazione.Field()
 
+    create_procedura_adozione = adozione.CreateProceduraAdozione.Field()
+    update_procedura_adozione = adozione.UpdateProceduraAdozione.Field()
+    trasmissione_adozione = adozione.TrasmissioneAdozione.Field()
+    trasmissione_osservazioni = adozione.TrasmissioneOsservazioni.Field()
+    controdeduzioni = adozione.Controdeduzioni.Field()
+    piano_controdedotto = adozione.PianoControdedotto.Field()
+    esito_conferenza_paesaggistica = adozione.EsitoConferenzaPaesaggistica.Field()
+    revisione_conferenza_paesaggistica = adozione.RevisionePianoPostConfPaesaggistica.Field()
+
+    invio_pareri_adozione_vas = adozione.InvioPareriAdozioneVAS.Field()
+    invio_parere_motivato_ac = adozione.InvioParereMotivatoAC.Field()
+    upload_elaborati_adozione_vas = adozione.UploadElaboratiAdozioneVAS.Field()
+
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
     upload_risorsa_vas = uploads.UploadRisorsaVAS.Field()
     delete_risorsa_vas = uploads.DeleteRisorsaVAS.Field()
     upload_risorsa_avvio = uploads.UploadRisorsaAvvio.Field()
     delete_risorsa_avvio = uploads.DeleteRisorsaAvvio.Field()
+    upload_risorsa_adozione = uploads.UploadRisorsaAdozione.Field()
+    delete_risorsa_adozione = uploads.DeleteRisorsaAdozione.Field()
     upload_risorsa_copianificazione = uploads.UploadRisorsaCopianificazione.Field()
     delete_risorsa_copianificazione = uploads.DeleteRisorsaCopianificazione.Field()
+    upload_risorsa_piano_controdedotto = uploads.UploadRisorsaPianoControdedotto.Field()
+    delete_risorsa_piano_controdedotto = uploads.DeleteRisorsaPianoControdedotto.Field()
+    upload_risorsa_piano_rev_post_cp = uploads.UploadRisorsaPianoRevPostCP.Field()
+    delete_risorsa_piano_rev_post_cp = uploads.DeleteRisorsaPianoRevPostCP.Field()
+    upload_risorsa_adozione_vas = uploads.UploadRisorsaAdozioneVAS.Field()
+    delete_risorsa_adozione_vas = uploads.DeleteRisorsaAdozioneVAS.Field()

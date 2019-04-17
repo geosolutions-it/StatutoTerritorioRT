@@ -34,8 +34,7 @@ rules.add_rule(
 
 rules.add_rule(
     'strt_core.api.can_edit_piano',
-    (user_rules.can_access_piano & is_RUP) |
-    (user_rules.can_access_piano & piano_rules.is_anagrafica)
+    is_RUP | user_rules.can_access_piano
 )
 
 rules.add_rule(
@@ -74,9 +73,18 @@ rules.add_rule(
     'strt_core.api.fase_avvio_completa',
     ~piano_rules.has_pending_alerts &
     piano_rules.is_anagrafica &
-    vas_rules.procedura_vas_is_valid &
-    piano_rules.has_procedura_avvio &
     piano_rules.protocollo_genio_inviato &
     piano_rules.formazione_piano_conclusa &
-    piano_rules.avvio_piano_conclusa
+    piano_rules.has_procedura_avvio &
+    piano_rules.avvio_piano_conclusa &
+    (~piano_rules.has_procedura_vas | piano_rules.vas_piano_conclusa)
+)
+
+rules.add_rule(
+    'strt_core.api.fase_adozione_completa',
+    ~piano_rules.has_pending_alerts &
+    piano_rules.is_avvio &
+    piano_rules.has_procedura_adozione &
+    piano_rules.adozione_piano_conclusa &
+    (~piano_rules.has_procedura_adozione_vas | piano_rules.adozione_vas_piano_conclusa)
 )

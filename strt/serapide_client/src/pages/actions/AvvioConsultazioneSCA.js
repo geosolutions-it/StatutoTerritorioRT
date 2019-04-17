@@ -6,11 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+import {Query, Mutation} from "react-apollo"
+
 import FileUpload from '../../components/UploadSingleFile'
-import  {showError, formatDate} from '../../utils'
 import {EnhancedSwitch} from '../../components/Switch'
 import AutoMutation from '../../components/AutoMutation'
-import {Query, Mutation} from "react-apollo"
 import Resource from '../../components/Resource'
 import {EnhancedListSelector} from '../../components/ListSelector'
 import SalvaInvia from '../../components/SalvaInvia'
@@ -18,37 +18,41 @@ import ActionTitle from '../../components/ActionTitle'
 import AddContact from '../../components/AddContact'
 import Button from '../../components/IconButton'
 import RichiestaComune from '../../components/RichiestaComune'
+
+import  {showError, formatDate, getInputFactory, getCodice} from '../../utils'
+
 import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
     UPDATE_CONSULTAZIONE_VAS,
     AVVIO_CONSULTAZIONE_VAS, UPDATE_PIANO,
     GET_CONTATTI
-} from '../../queries'
+} from '../../graphql'
 
+const getConsultazioneVasTypeInput = getInputFactory("consultazioneVas")
 
-
-
-const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
-const getVasTypeInput = (uuid) => (value) => ({
-    variables: {
-        input: { 
-            consultazioneVas: {avvioConsultazioniSca:!value}, 
-            uuid
-        }
-    }
-})
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
 
-const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dataRicezionePareri, dataScadenza, proceduraVas: {uuid: pVasUUID, dataAssoggettamento, tipologia, risorse: {edges=[]} = {} } = {}, uuid} = {}} = {}, piano: {codice, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, back}) => {
+const UI = ({
+    consultazioneSCA: { node: {
+        avvioConsultazioniSca,
+        dataCreazione,
+        dataRicezionePareri,
+        proceduraVas: {uuid: pVasUUID, dataAssoggettamento, tipologia, risorse: {edges=[]} = {} } = {},
+        uuid} = {}} = {}, 
+        piano: {
+            codice, 
+            autoritaCompetenteVas: {edges: aut =[]} = {},
+            soggettiSca: {edges: sca = []} = {}} = {}, back}) => {
             
             const isFull = tipologia === "SEMPLIFICATA" || tipologia === "VERIFICA"
             const provvedimentoVerificaVas  = edges.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
             const docPrelim = edges.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").map(({node}) => node).shift()
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
+            const getInput = getConsultazioneVasTypeInput(uuid, "avvioConsultazioniSca")
             return (<React.Fragment>
                 <ActionTitle>Avvio Consultazioni SCA</ActionTitle>
                 {isFull ? (<React.Fragment>
@@ -151,7 +155,7 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                 <FileUpload 
                     className={`border-0 ${!docPrelim ? "flex-column": ""}`}
                     sz="sm" modal={false} showBtn={false} 
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
+                    mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
                 </div>
@@ -161,9 +165,10 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                             <div className="col-12 d-flex pl-0">
                                 <i className="material-icons text-serapide pr-3">email</i>
                                 <div className="bg-serapide mb-auto px-2">Avvia consultazione SCA</div>
-                                <EnhancedSwitch value={avvioConsultazioniSca}
-                                    getInput={getVasTypeInput(uuid)}  
+                                <EnhancedSwitch value={!avvioConsultazioniSca}
+                                    getInput={getInput}  
                                     ignoreChecked
+                                    labelClassName="col-auto"
                                     mutation={UPDATE_CONSULTAZIONE_VAS} checked={avvioConsultazioniSca} 
                                 /> 
                             </div>
@@ -200,12 +205,14 @@ const updateCache =(codice) => (cache, { data: {createConsultazioneVas : { nuova
                     })
     }
 }
-export default ({back, piano = {}}) => (
-                <Query query={GET_CONSULTAZIONE_VAS} variables={{codice: piano.codice}} onError={showError}>
-                    {({loading, data: {consultazioneVas: {edges = []} = []} = {}, error}) => {
-                        if (!loading && !error && edges.length === 0 && piano.codice) {
+export default (props) => {
+        const codice = getCodice(props)
+        return (
+                <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
+                    {({loading, data: {consultazioneVas: {edges: [consultazioneSCA] = []} = []} = {}, error}) => {
+                        if (!loading && !error && !consultazioneSCA && codice) {
                             return (
-                                <AutoMutation variables={{input: {codicePiano: piano.codice}}} mutation={CREA_CONSULTAZIONE_VAS} onError={showError} update={updateCache(piano.codice)}>
+                                <AutoMutation variables={{input: {codicePiano: codice}}} mutation={CREA_CONSULTAZIONE_VAS} onError={showError} update={updateCache(codice)}>
                                     {() => (
                                         <div className="flex-fill d-flex justify-content-center">
                                             <div className="spinner-grow " role="status">
@@ -223,6 +230,7 @@ export default ({back, piano = {}}) => (
                                 </div>)
                         }
                         return (
-                            <UI consultazioneSCA={edges[0]} back={back} piano={piano}/>)}
+                            <UI {...props} consultazioneSCA={consultazioneSCA}/>)}
                     }
                 </Query>)
+    }

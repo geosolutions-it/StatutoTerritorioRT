@@ -24,6 +24,7 @@ from graphql_extensions.exceptions import GraphQLError
 
 from serapide_core.helpers import (
     is_RUP,
+    unslugify,
     update_create_instance)
 
 from serapide_core.signals import (
@@ -36,7 +37,11 @@ from serapide_core.modello.models import (
     Azione,
     Contatto,
     AzioniPiano,
+    ProceduraVAS,
     ProceduraAvvio,
+    ProceduraAdozione,
+    PianoControdedotto,
+    PianoRevPostCP,
     ConferenzaCopianificazione
 )
 
@@ -77,11 +82,16 @@ class CreateProceduraAvvio(relay.ClientIDMutation):
                 # Ente (M)
                 _procedura_avvio_data['ente'] = _piano.ente
 
-                _procedura_avvio = ProceduraAvvio()
-                _procedura_avvio.piano = _piano
+                _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
+                    piano=_piano, ente=_piano.ente)
+
                 _procedura_avvio_data['id'] = _procedura_avvio.id
                 _procedura_avvio_data['uuid'] = _procedura_avvio.uuid
                 nuova_procedura_avvio = update_create_instance(_procedura_avvio, _procedura_avvio_data)
+
+                _piano.procedura_avvio = nuova_procedura_avvio
+                _piano.save()
+
                 return cls(nuova_procedura_avvio=nuova_procedura_avvio)
             except BaseException as e:
                 tb = traceback.format_exc()
@@ -194,9 +204,7 @@ class AvvioPiano(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -204,10 +212,12 @@ class AvvioPiano(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
             if _avvio_procedimento and _avvio_procedimento.stato != STATO_AZIONE.nessuna:
                 if not cls.autorita_ok(piano, TIPOLOGIA_CONTATTO.genio_civile):
-                    raise Exception("Missing %s" % TIPOLOGIA_CONTATTO.genio_civile)
+                    raise Exception(
+                        "'%s' non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_CONTATTO.genio_civile))
 
                 if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE.regione, contatto=False):
-                    raise Exception("Missing %s" % TIPOLOGIA_ATTORE.regione)
+                    raise Exception(
+                        "'%s' non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_ATTORE.regione))
 
                 _avvio_procedimento.stato = STATO_AZIONE.nessuna
                 _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -238,7 +248,7 @@ class AvvioPiano(graphene.Mutation):
                     procedura_avvio.notifica_genio_civile = False
                     procedura_avvio.save()
 
-                    _cc = ConferenzaCopianificazione(piano=piano)
+                    _cc, created = ConferenzaCopianificazione.objects.get_or_create(piano=piano)
                     _cc.data_richiesta_conferenza = datetime.datetime.now(timezone.get_current_timezone())
                     _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
                     _cc.save()
@@ -265,7 +275,7 @@ class AvvioPiano(graphene.Mutation):
                     procedura_avvio.notifica_genio_civile = False
                     procedura_avvio.save()
 
-                    _cc = ConferenzaCopianificazione(piano=piano)
+                    _cc, created = ConferenzaCopianificazione.objects.get_or_create(piano=piano)
                     _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
                     _cc.save()
 
@@ -312,6 +322,8 @@ class AvvioPiano(graphene.Mutation):
                         user=user,
                         piano=piano,
                         message_type="protocollo_genio_civile")
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -329,9 +341,9 @@ class AvvioPiano(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -348,9 +360,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -373,6 +383,8 @@ class RichiestaIntegrazioni(graphene.Mutation):
                     _integrazioni_richieste.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_integrazioni_richieste, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -386,23 +398,20 @@ class RichiestaIntegrazioni(graphene.Mutation):
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
                 # Notify Users
-                """
-                TODO: Messaggio RichiestaIntegrazioni :TODO
-                """
-                # piano_phase_changed.send(
-                #     sender=Piano,
-                #     user=info.context.user,
-                #     piano=_piano,
-                #     message_type="piano_phase_changed")
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="richiesta_integrazioni")
 
                 return RichiestaIntegrazioni(
                     avvio_aggiornato=_procedura_avvio,
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -418,11 +427,6 @@ class IntegrazioniRichieste(graphene.Mutation):
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _integrazioni_richieste = piano.azioni.filter(
@@ -431,6 +435,38 @@ class IntegrazioniRichieste(graphene.Mutation):
                 _integrazioni_richieste.stato = STATO_AZIONE.nessuna
                 _integrazioni_richieste.data = datetime.datetime.now(timezone.get_current_timezone())
                 _integrazioni_richieste.save()
+
+                _conferenza_copianificazione_attiva = False
+
+                _richiesta_conferenza_copianificazione = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione).first()
+                if _richiesta_conferenza_copianificazione and \
+                _richiesta_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                    _conferenza_copianificazione_attiva = True
+
+                _esito_conferenza_copianificazione = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione).first()
+                if _esito_conferenza_copianificazione and \
+                _esito_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                    _conferenza_copianificazione_attiva = True
+
+                _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
+                if not _procedura_vas or _procedura_vas.conclusa:
+                    if not _conferenza_copianificazione_attiva:
+                        piano.chiudi_pendenti()
+                procedura_avvio.conclusa = True
+                procedura_avvio.save()
+
+                procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+                    piano=piano, ente=piano.ente)
+
+                piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
+                piano_rev_post_cp, created = PianoRevPostCP.objects.get_or_create(piano=piano)
+
+                piano.procedura_adozione = procedura_adozione
+                piano.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -444,23 +480,33 @@ class IntegrazioniRichieste(graphene.Mutation):
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
                 # Notify Users
-                """
-                TODO
-                """
-                # piano_phase_changed.send(
-                #     sender=Piano,
-                #     user=info.context.user,
-                #     piano=_piano,
-                #     message_type="piano_phase_changed")
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="integrazioni_richieste")
+
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
+
+                    _piano.save()
+                    fase.promuovi_piano(_fase, _piano)
 
                 return IntegrazioniRichieste(
                     avvio_aggiornato=_procedura_avvio,
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -476,11 +522,6 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
-        # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
-
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _protocollo_genio_civile = piano.azioni.filter(
@@ -504,9 +545,28 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                     _formazione_del_piano = piano.azioni.filter(
                         tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
 
-                    if _formazione_del_piano and _formazione_del_piano.stato == STATO_AZIONE.nessuna:
+                    _integrazioni_richieste = piano.azioni.filter(
+                        tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste).first()
+
+                    if _formazione_del_piano and _formazione_del_piano.stato == STATO_AZIONE.nessuna and \
+                    _integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna:
+
+                        _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
+                        if not _procedura_vas or _procedura_vas.conclusa:
+                            piano.chiudi_pendenti()
                         procedura_avvio.conclusa = True
                         procedura_avvio.save()
+
+                        procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+                            piano=piano, ente=piano.ente)
+
+                        piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
+                        piano_rev_post_cp, created = PianoRevPostCP.objects.get_or_create(piano=piano)
+
+                        piano.procedura_adozione = procedura_adozione
+                        piano.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -537,9 +597,9 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -556,9 +616,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -600,6 +658,8 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                             user=user,
                             piano=piano,
                             message_type="conferenza_copianificazione")
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -617,9 +677,9 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)
 
@@ -636,9 +696,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = 0
-        for _a in piano.azioni.all():
-            _order += 1
+        _order = piano.azioni.count()
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
@@ -687,6 +745,8 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                         user=user,
                         piano=piano,
                         message_type="protocollo_genio_civile")
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -717,8 +777,8 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                     errors=[]
                 )
             except BaseException as e:
-                    tb = traceback.format_exc()
-                    logger.error(tb)
-                    return GraphQLError(e, code=500)
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
         else:
             return GraphQLError(_("Forbidden"), code=403)

@@ -146,3 +146,30 @@ class ProceduraAvvioUpdateInput(InputObjectType):
     notifica_genio_civile = graphene.Boolean(required=False)
     richiesta_integrazioni = graphene.Boolean(required=False)
     messaggio_integrazione = graphene.String(required=False)
+
+
+class ProceduraAdozioneCreateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    piano = graphene.InputField(PianoUpdateInput, required=False)
+    data_creazione = graphene.types.datetime.DateTime(required=False)
+
+
+class ProceduraAdozioneUpdateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    data_delibera_adozione = graphene.types.datetime.DateTime(required=False)
+    data_ricezione_osservazioni = graphene.types.datetime.DateTime(required=False)
+    data_ricezione_pareri = graphene.types.datetime.DateTime(required=False)
+    pubblicazione_burt_url = graphene.String(required=False)
+    pubblicazione_burt_data = graphene.types.datetime.DateTime(required=False)
+    pubblicazione_sito_url = graphene.String(required=False)
+    pubblicazione_sito_data = graphene.types.datetime.DateTime(required=False)
+    osservazioni_concluse = graphene.Boolean(required=False)
+    richiesta_conferenza_paesaggistica = graphene.Boolean(required=False)
+    url_piano_controdedotto = graphene.String(required=False)
+    url_rev_piano_post_cp = graphene.String(required=False)

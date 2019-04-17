@@ -1,0 +1,23 @@
+{% autoescape off %}{% load i18n %}Gentile {{ recipient }},
+
+Con riferimento al piano {{ piano.tipologia }} Codice: {{ piano.codice }} - "{{ piano.descrizione }}"
+
+Le notifichiamo che è stata trasmessa l'adozione del piano da parte dell'utente {{ user }}.
+
+Pubblicazione:
+
+ - B.U.R.T.: {{ piano.procedura_adozione.pubblicazione_burt_url }} in data {{ piano.procedura_adozione.pubblicazione_burt_data }}
+ - SITO: {{ piano.procedura_adozione.pubblicazione_sito_url }} in data {{ piano.procedura_adozione.pubblicazione_sito_data }}
+
+Scadenza per la ricezione delle Osservazioni: {{ piano.procedura_adozione.data_ricezione_osservazioni }}
+
+Scadenza per la ricezione dei Pareri: {{ piano.procedura_adozione.data_ricezione_pareri }}
+
+Potrebbero essere necessarie azioni e/o interventi sul piano in oggetto.
+
+{% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:
+{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}
+
+ATTENZIONE: Il token di accesso a lei assegnato, è personalizzato e ha validità fino a data: {{ t.expires }}.
+Conservare il token di accesso segreto e non condividere il link generato con alcuno.{% endif %}{% endfor %}
+{% endautoescape %}

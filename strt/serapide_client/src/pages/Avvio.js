@@ -8,7 +8,7 @@
 import React from 'react'
 import Risorsa from '../components/Resource'
 import {formatDate, showError} from '../utils'
-import {GET_AVVIO, GET_CONFERENZA} from '../queries'
+import {GET_AVVIO, GET_CONFERENZA} from '../graphql'
 import {Query} from 'react-apollo'
 import {withControllableState} from '../enhancers/utils'
 import {Nav, NavItem,NavLink, TabContent,TabPane} from 'reactstrap'
@@ -148,7 +148,7 @@ const UI = enhancers(({
                                     </div>
                                 </div>)
                         }
-                        const {node: {dataRichiestaConferenza, risorse: {edges: elabConf = []}} = {}} = edges[0] || {}
+                        const {node: {dataRichiestaConferenza, risorse: {edges: elabConf = []} = {}} = {}} = edges[0] || {}
                         const elaboratiConferenza =  elabConf.filter(({node: {tipo, user = {}}}) => tipo === 'elaborati_conferenza').map(({node}) => node)
                         return (
                         <div className="row pt-4">
@@ -157,7 +157,7 @@ const UI = enhancers(({
                                 <span className="pl-1">RICHIESTA CONFERENZA DI COPIANIFICAZIONE</span>
                             </div>
                             <div className="col-4">{!!dataRichiestaConferenza ? formatDate(dataRichiestaConferenza) : "Nessuna richiesta"}</div>
-                            <div class="w-100 border-top my-3 border-serapide"></div>
+                            <div className="w-100 border-top my-3 border-serapide"></div>
                             <div className="col-12 d-flex">
                                 <i className="material-icons text-serapide self-align-center">check_circle</i>
                                 <span className="pl-1 pb-2">ESITO</span>

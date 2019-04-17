@@ -6,18 +6,19 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import {Input} from 'reactstrap'
-import Resource from '../../components/Resource'
 import {Query} from 'react-apollo'
-import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from '../../queries'
+import {Input} from 'reactstrap'
+
+import Resource from '../../components/Resource'
 import ActionTitle from '../../components/ActionTitle'
 import SalvaInvia from '../../components/SalvaInvia'
-import  {showError} from '../../utils'
+
+import  {showError, getCodice} from '../../utils'
 import {withControllableState} from '../../enhancers/utils'
 
-const enhancers = withControllableState("url", "onUrlChange","")
-const getSuccess = ({uploadConsultazioneVas: {success}} = {}) => success
+import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from '../../graphql'
 
+const enhancers = withControllableState("url", "onUrlChange","")
 
 const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edges: resources = []} = {}} = {}}, utente: {attore}}) => {
     
@@ -39,9 +40,9 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
         </React.Fragment>)
     })
 
-    export default ({piano = {}, utente, back}) => (
-        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []}, error}) => {
+    export default (props) => (
+        <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureVas: {edges: [vas] = []} = []}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -51,6 +52,6 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
                         </div>)
                 }
                 return (
-                    <UI vas={edges[0]} utente={utente} back={back}/>)}
+                    <UI {...props} vas={vas}/>)}
             }
         </Query>)

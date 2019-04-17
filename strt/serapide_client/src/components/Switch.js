@@ -13,7 +13,7 @@ import {isFunction} from 'lodash'
 import {toggleControllableState} from '../enhancers/utils'
 
 const enhancer = toggleControllableState('checked', 'toggleSwitch', false)
-const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)}, className, children, checked }) => {
+const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)}, className, children, checked, labelClassName = "col-xl-4 col-lg-6 col-md-6 col-10"}) => {
     const toggle = () => { 
         if(!isLocked) {
             toggleSwitch(!checked, value)
@@ -22,7 +22,7 @@ const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)},
     return !isLocked || checked ? (
         <React.Fragment>
             <div key={value}  className={classeNames('strt-switch','row', className, {"mt-3": isLocked})}>
-                <span className="col-xl-4 col-lg-5 col-md-5 col-10">{label}</span>
+                <span className={labelClassName}>{label}</span>
                 {!isLocked && (
                 <div  className="switch-label custom-control custom-switch col-1">
                     <label  onClick={toggle} style={{cursor: isLocked ? 'not-allowed' : 'pointer'}} className={classeNames('custom-control-label', {"border-serapide bg-serapide": checked, checked})}></label>
@@ -38,7 +38,7 @@ const showError = (error, onError) => {
 }
 const _getInput = () => ({variables: {input: {}}})
 
-export const EnhancedSwitch  = ({isLocked, mutation, update, getInput = _getInput, label, value, className, children, checked, ignoreChecked = false, ...mutationProps}) => {
+export const EnhancedSwitch  = ({isLocked, mutation, update, getInput = _getInput, label, value, className, children, checked, labelClassName, ignoreChecked = false, ...mutationProps}) => {
     return (
     <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
         {(onChange, m_props) => {
@@ -48,7 +48,7 @@ export const EnhancedSwitch  = ({isLocked, mutation, update, getInput = _getInpu
                 }
             }
             return (
-                <Switch isLocked={isLocked} toggleSwitch={toggleSwitch} label={label} value={value} className={className} children={children} checked={checked}/>
+                <Switch isLocked={isLocked} toggleSwitch={toggleSwitch} label={label} value={value} className={className} children={children} checked={checked} labelClassName={labelClassName}/>
             )
         }}
     </Mutation>)

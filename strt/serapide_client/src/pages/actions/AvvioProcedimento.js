@@ -6,11 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import FileUpload from '../../components/UploadSingleFile'
-import UploadFiles from '../../components/UploadFiles'
-import  {showError} from '../../utils'
-
 import {Query, Mutation} from "react-apollo"
+
+import FileUpload from '../../components/UploadSingleFile'
+import Elaborati from '../../components/ElaboratiPiano'
 import Resource from '../../components/Resource'
 import {EnhancedListSelector} from '../../components/ListSelector'
 import SalvaInvia from '../../components/SalvaInvia'
@@ -19,57 +18,35 @@ import AddContact from '../../components/AddContact'
 import Button from '../../components/IconButton'
 import TextWithTooltip from '../../components/TextWithTooltip'
 import {EnhancedDateSelector} from '../../components/DateSelector'
-import {rebuildTooltip} from '../../enhancers/utils'
 import Input from '../../components/EnhancedInput'
+
+import {rebuildTooltip} from '../../enhancers/utils'
+import  {showError, elaboratiCompletati, getInputFactory, getCodice} from '../../utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
     AVVIO_FILE_UPLOAD, UPDATE_PIANO,
     GET_CONTATTI,
     AVVIA_PIANO
-} from '../../queries'
+} from '../../graphql'
 
+const getProceduraAvvioInput = getInputFactory("proceduraAvvio")
 
-const getGaranteInput = (uuid) => (val) => ({
-    variables: {
-        input: { 
-            proceduraAvvio: {
-                garanteNominativo: val}, 
-            uuid
-        }
-    }})
-const getGarantePecInput = (uuid) => (val) => ({
-        variables: {
-            input: { 
-                proceduraAvvio: {
-                    garantePec: val}, 
-            uuid
-        }
-}})
-const getScadenzaInput = (uuid) => (val) => ({
-    variables: {
-        input: { 
-            proceduraAvvio: {
-                dataScadenzaRisposta: val.toISOString()},
-            uuid
-        }
-    }})
-
-const getSuccess = ({uploadRisorsaAvvio: {success}} = {}) => success
 
 const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
 }
-const fileProps = {className: `border-0`, getSuccess, mutation: AVVIO_FILE_UPLOAD,
+const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
 const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
-    procedureAvvio: {node: {
+    proceduraAvvio: {node: {
             uuid, conferenzaCopianificazione, 
-            dataCreazione, dataScadenzaRisposta,
+            dataScadenzaRisposta,
             garanteNominativo, garantePec,
             risorse: {edges=[]} = {}
             } = {}} = {}, 
         piano: {
+            tipo: tipoPiano = "",
             autoritaIstituzionali: {edges: aut =[]} = {},
             altriDestinatari: {edges: dest = []} = {},
             codice,    
@@ -81,10 +58,9 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
             const quadro = edges.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").map(({node}) => node).shift()
             const programma = edges.filter(({node: {tipo}}) => tipo === "programma_attivita").map(({node}) => node).shift()
             const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
-            const allegati = edges.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node)
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
-
+            const elaboratiCompleti = elaboratiCompletati(tipoPiano, edges)
             return (<React.Fragment>
                 <ActionTitle>
                     Avvio del Procedimento<br/><small className="text-nowrap">(Atto di Avvio)<TextWithTooltip dataTip="art. 17 L.R. 65/2014"/></small>
@@ -110,18 +86,20 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     placeholder={(<span>Programma delle attività di informazione e di partecipazione<TextWithTooltip dataTip="art. 17, lett.e, L.R. 65/2014"/></span>)}
                     risorsa={programma} variables={{codice: uuid, tipo: "programma_attivita" }}/>
                 </div>
-                
-                <h4 className="font-weight-light pt-5 pl-2 pb-1">ALTRI ALLEGATI</h4>
-                <UploadFiles 
-                    {...fileProps}
-                    risorse={allegati} 
-                    variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
-                    getFileName={({uploadRisorsaAvvio: {fileName} = {}}) => fileName}/>
-                
+
+
+                <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
+                <Elaborati 
+                            tipoPiano={tipoPiano.toLowerCase()} 
+                            resources={edges}
+                            mutation={AVVIO_FILE_UPLOAD}
+                            resourceMutation={DELETE_RISORSA_AVVIO}
+                            uuid={uuid}
+                           />   
                 
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
-                <Input getInput={getGaranteInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />
-                <Input getInput={getGarantePecInput(uuid)} mutation={UPDATE_AVVIO} disabled={false} className="mb-3 rounded-pill" placeholder="Indirizzo Pec" onChange={undefined} value={garantePec} type="url"/>
+                <Input getInput={getProceduraAvvioInput(uuid, "garanteNominativo")} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />
+                <Input getInput={getProceduraAvvioInput(uuid, "garantePec")} mutation={UPDATE_AVVIO} disabled={false} className="mb-3 rounded-pill" placeholder="Indirizzo Pec" onChange={undefined} value={garantePec} type="url"/>
                 <div className="action-uploader  align-self-start border-bottom ">
                 <FileUpload 
                     {...fileProps}
@@ -129,7 +107,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     risorsa={garante} variables={{codice: uuid, tipo: "individuazione_garante_informazione" }}/>
                 </div>
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">TERMINI SCADENZA PER LA RISPOSTA</h5>
-                <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getScadenzaInput(uuid)} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
+                <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getProceduraAvvioInput(uuid, "dataScadenzaRisposta")} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
                 
                 <h5 className="font-weight-light pb-1 mt-5">SCELTA SOGGETTI ISTITUZIONALI</h5>
                 <h6 className="font-weight-light pb-1">
@@ -264,14 +242,14 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                     
                 
                 <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
+                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={elaboratiCompleti && obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
                 
                 </div>
             </React.Fragment>)})
 
-export default ({back, piano}) => (
-                <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
-                    {({loading, data: {procedureAvvio: {edges = []} = []} = {}}) => {
+export default (props) => (
+                <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
+                    {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}}) => {
                         if(loading) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
@@ -281,6 +259,6 @@ export default ({back, piano}) => (
                                 </div>)
                         }
                         return (
-                            <UI procedureAvvio={edges[0]} back={back} piano={piano}/>)}
+                            <UI {...props} proceduraAvvio={proceduraAvvio}/>)}
                     }
                 </Query>)

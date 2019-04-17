@@ -6,11 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import Button from '../components/IconButton'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
 import {Mutation} from  "react-apollo"
 import { toast } from 'react-toastify'
+import Button from '../components/IconButton'
 
 const _getInput = (val) => { return {variables: {input: {data: val.toISOString()}}}}
 
@@ -33,7 +33,7 @@ class CustomInput extends React.PureComponent {
 
 class DateTimeInput extends React.PureComponent {
     render () {
-        const {onClick, value = "", disabled, readOnly, className} = this.props 
+        const {onClick, value = ""} = this.props 
         const data = value.trim().split(" ").slice(0, 1).pop()
         const ora = value.trim().split(" ").slice(1).join(" ")
         console.log(value)

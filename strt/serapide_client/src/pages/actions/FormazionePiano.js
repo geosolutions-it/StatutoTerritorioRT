@@ -6,31 +6,32 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
+import {Query} from 'react-apollo'
+
+import SalvaInvia from '../../components/SalvaInvia'
+import ActionTitle from '../../components/ActionTitle'
+import Input from '../../components/EnhancedInput'
+import FileUpload from '../../components/UploadSingleFile'
+
+import {showError, getCodice} from '../../utils'
+
 import {
     UPDATE_PIANO,
     GET_VAS,
     VAS_FILE_UPLOAD,
     DELETE_RISORSA_VAS,
     FORMAZIONE_PIANO
-} from '../../queries'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Input from '../../components/EnhancedInput'
-import {Query} from 'react-apollo'
-import {showError} from '../../utils'
-import FileUpload from '../../components/UploadSingleFile'
-/*
-redazioneNormeTecnicheAttuazioneUrl
-    compilazioneRapportoAmbientaleUrl
-    conformazionePitPprUrl
-    monitoraggioUrbanisticoUrl
-*/
+} from '../../graphql'
 
-const getInput = (codice, field) => (val) => (
-    {variables:{ input:{ 
-    pianoOperativo: { [field]: val}, codice}
-}})
-const getSuccess = ({uploadRisorsaVas: {success}} = {}) => success
+const getInput = (codice, field) => (val) => ({
+    variables: {
+        input: { 
+            pianoOperativo: { [field]:  val }, 
+            codice
+        }
+    }
+})
+
 
 const UI = ({ back, 
             piano: {codice, redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl} = {}, 
@@ -71,7 +72,7 @@ const UI = ({ back,
                 <FileUpload 
                     className="border-0"
                     placeholder="RAPPORTO AMBIENTALE"
-                    getSuccess={getSuccess} mutation={VAS_FILE_UPLOAD} 
+                    mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
                 </div>
@@ -97,9 +98,9 @@ const UI = ({ back,
             </React.Fragment>)
     }
 
-export default ({back, piano}) => (
-        <Query query={GET_VAS} variables={{codice: piano.codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []}, error}) => {
+export default (props) => (
+        <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {procedureVas: {edges: [vas]= []} = []}}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -109,6 +110,6 @@ export default ({back, piano}) => (
                         </div>)
                 }
                 return (
-                    <UI vas={edges[0]} back={back} piano={piano}/>)}
+                    <UI {...props} vas={vas} />)}
             }
         </Query>)

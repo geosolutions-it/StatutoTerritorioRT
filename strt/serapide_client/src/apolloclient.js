@@ -18,14 +18,18 @@ const _axios = axios.create({xsrfCookieName: 'csrftoken',xsrfHeaderName: "X-CSRF
 const cache = new InMemoryCache({fragmentMatcher,
         dataIdFromObject: object => {
           switch (object.__typename) {
-            case 'PianoNode': return object.codice; // use `key` as the primary key
-            case 'ProceduraVASNode': return object.uuid;
-            case 'RisorsaNode': return object.uuid;
-            case 'ContattoNode': return object.uuid;
-            case 'ConsultazioneVASNode': return object.uuid;
-            case 'ProceduraAvvioNode': return object.uuid;
-            case 'ConferenzaCopianificazioneNode': return object.uuid;
-            default: return defaultDataIdFromObject(object); // fall back to default handling
+            case 'PianoNode': return object.codice // use `key` as the primary key
+            case 'ProceduraVASNode': return object.uuid
+            case 'RisorsaNode': return object.uuid
+            case 'ContattoNode': return object.uuid
+            case 'ConsultazioneVASNode': return object.uuid
+            case 'ProceduraAvvioNode': return object.uuid
+            case 'ConferenzaCopianificazioneNode': return object.uuid
+            case 'ProceduraAdozioneNode': return object.uuid
+            case 'PianoControdedottoNode': return object.uuid
+            case 'PianoRevPostCPNode': return object.uuid
+            case 'ProceduraAdozioneVASNode': return object.uuid
+            default: return defaultDataIdFromObject(object) // fall back to default handling
           }
         }
       })
