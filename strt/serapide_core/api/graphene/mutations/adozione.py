@@ -215,16 +215,25 @@ class TrasmissioneAdozione(graphene.Mutation):
                     _expire_days = getattr(settings, 'ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', 60)
                     _alert_delta = datetime.timedelta(days=_expire_days)
                     _pareri_adozione_sca_expire = procedura_adozione.pubblicazione_burt_data + _alert_delta
-                    _pareri_adozione_sca = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca,
-                        attore=TIPOLOGIA_ATTORE.sca,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=_pareri_adozione_sca_expire
+
+                    _procedura_adozione_vas, created = ProceduraAdozioneVAS.objects.get_or_create(
+                        piano=piano,
+                        ente=piano.ente
                     )
-                    _pareri_adozione_sca.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_pareri_adozione_sca, piano=piano)
+
+                    if _procedura_adozione_vas:
+                        _pareri_adozione_sca = Azione(
+                            tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca,
+                            attore=TIPOLOGIA_ATTORE.sca,
+                            order=_order,
+                            stato=STATO_AZIONE.attesa,
+                            data=_pareri_adozione_sca_expire
+                        )
+                        _pareri_adozione_sca.save()
+                        _order += 1
+                        AzioniPiano.objects.get_or_create(azione=_pareri_adozione_sca, piano=piano)
+                    else:
+                        raise Exception(_("Impossibile istanziare 'Procedura Adozione VAS'."))
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
