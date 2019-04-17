@@ -869,7 +869,7 @@ class PianoRevPostCP(models.Model):
 
 
 class RisorsePianoRevPostCP(models.Model):
-    piano_controdedotto = models.ForeignKey(PianoRevPostCP, on_delete=models.CASCADE)
+    piano_rev_post_cp = models.ForeignKey(PianoRevPostCP, on_delete=models.CASCADE)
     risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
 
     class Meta:
@@ -910,7 +910,7 @@ def delete_piano_associations(sender, instance, **kwargs):
         RisorsePianoControdedotto.objects.filter(piano_controdedotto=_pc).delete()
     for _pc in PianoRevPostCP.objects.filter(piano=instance):
         _pc.risorse.all().delete()
-        RisorsePianoRevPostCP.objects.filter(piano_controdedotto=_pc).delete()
+        RisorsePianoRevPostCP.objects.filter(piano_rev_post_cp=_pc).delete()
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
     for _t in PianoAuthTokens.objects.filter(piano=instance):
