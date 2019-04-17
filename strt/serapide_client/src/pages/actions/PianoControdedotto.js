@@ -13,7 +13,7 @@ import SalvaInvia from '../../components/SalvaInvia'
 import ActionTitle from '../../components/ActionTitle'
 import Elaborati from '../../components/ElaboratiPiano'
 
-import  {showError, elaboratiCompletati, getInputFactory, getCodide} from '../../utils'
+import  {showError, elaboratiCompletati, getInputFactory, getCodice} from '../../utils'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE,
     PIANO_CONTRODEDOTTO,
@@ -76,7 +76,7 @@ const UI = ({
             </React.Fragment>)}
 
 export default (props) => {
-    const codice = getCodide(props)
+    const codice = getCodice(props)
     return (
     <Query query={GET_RISORSE_PIANO_CONTRODEDOTTO} variables={{codice}} onError={showError}>
         {({loadingContro, data: {pianoControdedotto: {edges: [pianoContro] = []} = []} = {}}) => {
