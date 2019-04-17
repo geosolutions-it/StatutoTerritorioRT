@@ -212,6 +212,8 @@ PARERI_VAS_EXPIRE_DAYS = EnvUtil.get_env_var('PARERI_VAS_EXPIRE_DAYS', type=int,
 
 ADOZIONE_RICEZIONE_PARERI_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_RICEZIONE_PARERI_EXPIRE_DAYS', type=int, default=30)
 ADOZIONE_RICEZIONE_OSSERVAZIONI_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_RICEZIONE_OSSERVAZIONI_EXPIRE_DAYS', type=int, default=60)
+ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', type=int, default=60)
+ADOZIONE_VAS_PARERE_MOTIVATO_AC_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_VAS_PARERE_MOTIVATO_AC_EXPIRE_DAYS', type=int, default=30)
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/

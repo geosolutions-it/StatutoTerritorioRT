@@ -42,6 +42,7 @@ from serapide_core.modello.models import (
     FasePianoStorico,
     ProceduraAvvio,
     ProceduraAdozione,
+    ProceduraAdozioneVAS,
     PianoControdedotto,
     PianoRevPostCP,
     ConferenzaCopianificazione,
@@ -52,6 +53,7 @@ from serapide_core.modello.models import (
     RisorseCopianificazione,
     RisorsePianoControdedotto,
     RisorsePianoRevPostCP,
+    RisorseAdozioneVas,
 )
 
 from serapide_core.modello.enums import (
@@ -197,6 +199,16 @@ class RisorseVASType(DjangoObjectType):
 
     class Meta:
         model = RisorseVas
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorseAdozioneVASType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorseAdozioneVas
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -398,6 +410,22 @@ class ProceduraVASNode(DjangoObjectType):
             'ente': ['exact'],
             'piano__codice': ['exact'],
             'note': ['exact', 'icontains'],
+            'tipologia': ['exact', 'icontains'],
+        }
+        interfaces = (relay.Node, )
+
+
+class ProceduraAdozioneVASNode(DjangoObjectType):
+
+    ente = graphene.Field(EnteNode)
+    risorsa = DjangoFilterConnectionField(RisorseAdozioneVASType)
+
+    class Meta:
+        model = ProceduraAdozioneVAS
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'ente': ['exact'],
+            'piano__codice': ['exact'],
             'tipologia': ['exact', 'icontains'],
         }
         interfaces = (relay.Node, )

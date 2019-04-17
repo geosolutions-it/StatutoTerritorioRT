@@ -61,6 +61,9 @@ class Query(object):
     procedure_vas = DjangoFilterConnectionField(types.ProceduraVASNode,
                                                 filterset_class=filters.ProceduraVASMembershipFilter)
 
+    procedure_adozione_vas = DjangoFilterConnectionField(types.ProceduraAdozioneVASNode,
+                                                         filterset_class=filters.ProceduraVASMembershipFilter)
+
     procedure_avvio = DjangoFilterConnectionField(types.ProceduraAvvioNode,
                                                   filterset_class=filters.ProceduraAvvioMembershipFilter)
 
@@ -165,6 +168,8 @@ class Mutation(object):
     esito_conferenza_paesaggistica = adozione.EsitoConferenzaPaesaggistica.Field()
     revisione_conferenza_paesaggistica = adozione.RevisionePianoPostConfPaesaggistica.Field()
 
+    invio_pareri_adozione_vas = adozione.InvioPareriAdozioneVAS.Field()
+
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
     upload_risorsa_vas = uploads.UploadRisorsaVAS.Field()
@@ -179,3 +184,5 @@ class Mutation(object):
     delete_risorsa_piano_controdedotto = uploads.DeleteRisorsaPianoControdedotto.Field()
     upload_risorsa_piano_rev_post_cp = uploads.UploadRisorsaPianoRevPostCP.Field()
     delete_risorsa_piano_rev_post_cp = uploads.DeleteRisorsaPianoRevPostCP.Field()
+    upload_risorsa_adozione_vas = uploads.UploadRisorsaAdozioneVAS.Field()
+    delete_risorsa_adozione_vas = uploads.DeleteRisorsaAdozioneVAS.Field()

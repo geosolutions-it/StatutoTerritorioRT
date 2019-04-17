@@ -126,6 +126,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('rev_piano_post_cp', _('Revisione Piano post Conf. Paesaggistica')),  # Comune
         # Adozione VAS
         ('pareri_adozione_sca', _('Pareri SCA')),  # SCA
+        ('parere_motivato_ac', _('Parere Motivato')),  # AC
         # Approvazione
         ('trasmissione_approvazione', _('Invio documentazione per Approvazione')),  # Comune
     )
@@ -162,6 +163,7 @@ FASE_AZIONE = Choices(
         ('rev_piano_post_cp', 'avvio'),
         # Adozione VAS
         ('pareri_adozione_sca', 'avvio'),
+        ('parere_motivato_ac', 'avvio'),
         # Approvazione
         ('trasmissione_approvazione', 'adozione'),
     )

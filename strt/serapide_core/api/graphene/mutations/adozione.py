@@ -16,8 +16,8 @@ import graphene
 import traceback
 
 from django.conf import settings
-
 from django.utils import timezone
+from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
 from graphene import relay
@@ -36,6 +36,8 @@ from serapide_core.modello.models import (
     Azione,
     AzioniPiano,
     ProceduraAdozione,
+    ParereAdozioneVAS,
+    ProceduraAdozioneVAS,
 )
 
 from serapide_core.modello.enums import (
@@ -208,6 +210,21 @@ class TrasmissioneAdozione(graphene.Mutation):
                 _upload_osservazioni_privati.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
+
+                if procedura_adozione.pubblicazione_burt_data:
+                    _expire_days = getattr(settings, 'ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', 60)
+                    _alert_delta = datetime.timedelta(days=_expire_days)
+                    _pareri_adozione_sca_expire = procedura_adozione.pubblicazione_burt_data + _alert_delta
+                    _pareri_adozione_sca = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca,
+                        attore=TIPOLOGIA_ATTORE.sca,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa,
+                        data=_pareri_adozione_sca_expire
+                    )
+                    _pareri_adozione_sca.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_pareri_adozione_sca, piano=piano)
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -590,6 +607,123 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
 
                 return RevisionePianoPostConfPaesaggistica(
                     adozione_aggiornata=_procedura_adozione,
+                    errors=[]
+                )
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class InvioPareriAdozioneVAS(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    vas_aggiornata = graphene.Field(types.ProceduraAdozioneVASNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = piano.azioni.count()
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.avvio:
+            _pareri_sca = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca)
+            for _psca in _pareri_sca:
+                if _psca.stato != STATO_AZIONE.nessuna:
+                    _pareri_sca = _psca
+                    break
+
+            if _pareri_sca and \
+            (isinstance(_pareri_sca, QuerySet) or
+             _pareri_sca.stato != STATO_AZIONE.nessuna):
+                if isinstance(_pareri_sca, QuerySet):
+                    _pareri_sca = _pareri_sca.last()
+
+                _pareri_sca.stato = STATO_AZIONE.nessuna
+                _pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+                _pareri_sca.save()
+
+                _expire_days = getattr(settings, 'ADOZIONE_VAS_PARERE_MOTIVATO_AC_EXPIRE_DAYS', 30)
+                _alert_delta = datetime.timedelta(days=_expire_days)
+                _parere_motivato_ac_expire = procedura_adozione.pubblicazione_burt_data + _alert_delta
+
+                _parere_motivato_ac = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.parere_motivato_ac,
+                    attore=TIPOLOGIA_ATTORE.ac,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=_parere_motivato_ac_expire
+                )
+                _parere_motivato_ac.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_parere_motivato_ac, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=input['uuid'])
+        _piano = _procedura_vas.piano
+        _procedura_adozione = ProceduraAdozione.objects.get(piano=_piano)
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and \
+        _procedura_adozione.pubblicazione_burt_data and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
+            try:
+                if _procedura_vas.risorse.filter(
+                tipo='parere_sca', archiviata=False, user=info.context.user).count() == 0:
+                    return GraphQLError(_("Forbidden"), code=403)
+
+                _pareri_vas_count = ParereAdozioneVAS.objects.filter(
+                    user=info.context.user,
+                    procedura_adozione=_procedura_adozione
+                )
+
+                if _pareri_vas_count.count() == 0:
+                    _parere_vas = ParereAdozioneVAS(
+                        inviata=True,
+                        user=info.context.user,
+                        procedura_adozione=_procedura_adozione
+                    )
+                    _parere_vas.save()
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+
+                _tutti_pareri_inviati = True
+                for _sca in _piano.soggetti_sca.all():
+                    _pareri_vas_count = ParereAdozioneVAS.objects.filter(
+                        user=_sca.user,
+                        procedura_adozione=_procedura_adozione
+                    ).count()
+
+                    if _pareri_vas_count == 0:
+                        _tutti_pareri_inviati = False
+                        break
+
+                if _tutti_pareri_inviati:
+
+                    # TODO
+                    # Notify Users
+                    # piano_phase_changed.send(
+                    #     sender=Piano,
+                    #     user=info.context.user,
+                    #     piano=_piano,
+                    #     message_type="tutti_pareri_inviati")
+
+                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+
+                return InvioPareriAdozioneVAS(
+                    vas_aggiornata=_procedura_vas,
                     errors=[]
                 )
             except BaseException as e:
