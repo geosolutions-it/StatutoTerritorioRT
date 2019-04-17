@@ -169,6 +169,7 @@ class Mutation(object):
     revisione_conferenza_paesaggistica = adozione.RevisionePianoPostConfPaesaggistica.Field()
 
     invio_pareri_adozione_vas = adozione.InvioPareriAdozioneVAS.Field()
+    invio_parere_motivato_ac = adozione.InvioParereMotivatoAC.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
