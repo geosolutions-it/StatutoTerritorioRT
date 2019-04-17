@@ -768,7 +768,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
         # - Update Action state accordingly
         if fase.nome == FASE.avvio:
             _parere_motivato_ac = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.parere_motivato_ac)
+                tipologia=TIPOLOGIA_AZIONE.parere_motivato_ac).first()
 
             if _parere_motivato_ac and _parere_motivato_ac.stato != _parere_motivato_ac.nessuna:
                 _parere_motivato_ac.stato = STATO_AZIONE.nessuna
@@ -784,12 +784,6 @@ class InvioParereMotivatoAC(graphene.Mutation):
                 _upload_elaborati_adozione_vas.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_upload_elaborati_adozione_vas, piano=piano)
-
-                # _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
-                # if procedura_adozione.conclusa:
-                #     piano.chiudi_pendenti()
-                # _procedura_adozione_vas.conclusa = True
-                # _procedura_adozione_vas.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -819,19 +813,6 @@ class InvioParereMotivatoAC(graphene.Mutation):
                 if _tutti_pareri_inviati:
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
-                # if _piano.is_eligible_for_promotion:
-                #     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
-                #
-                #     # Notify Users
-                #     piano_phase_changed.send(
-                #         sender=Piano,
-                #         user=info.context.user,
-                #         piano=_piano,
-                #         message_type="piano_phase_changed")
-                #
-                #     _piano.save()
-                #     fase.promuovi_piano(_fase, _piano)
-
                 return InvioParereMotivatoAC(
                     vas_aggiornata=_procedura_vas,
                     errors=[]
@@ -859,7 +840,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
         # - Update Action state accordingly
         if fase.nome == FASE.avvio:
             _upload_elaborati_adozione_vas = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas)
+                tipologia=TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas).first()
 
             if _upload_elaborati_adozione_vas and \
             _upload_elaborati_adozione_vas.stato != _upload_elaborati_adozione_vas.nessuna:
