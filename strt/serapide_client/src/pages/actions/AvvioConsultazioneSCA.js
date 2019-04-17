@@ -156,8 +156,9 @@ const UI = ({consultazioneSCA: {node: {avvioConsultazioniSca, dataCreazione, dat
                                 <i className="material-icons text-serapide pr-3">email</i>
                                 <div className="bg-serapide mb-auto px-2">Avvia consultazione SCA</div>
                                 <EnhancedSwitch value={!avvioConsultazioniSca}
-                                    getInput={getInput(uuid)}  
+                                    getInput={getInput}  
                                     ignoreChecked
+                                    labelClassName="col-auto"
                                     mutation={UPDATE_CONSULTAZIONE_VAS} checked={avvioConsultazioniSca} 
                                 /> 
                             </div>
