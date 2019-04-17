@@ -491,6 +491,20 @@ class FormazionePiano(graphene.Mutation):
                 _formazione_del_piano.data = datetime.datetime.now(timezone.get_current_timezone())
                 _formazione_del_piano.save()
 
+                _conferenza_copianificazione_attiva = False
+
+                _richiesta_conferenza_copianificazione = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione).first()
+                if _richiesta_conferenza_copianificazione and \
+                _richiesta_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                    _conferenza_copianificazione_attiva = True
+
+                _esito_conferenza_copianificazione = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione).first()
+                if _esito_conferenza_copianificazione and \
+                _esito_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                    _conferenza_copianificazione_attiva = True
+
                 _protocollo_genio_civile = piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
 
@@ -500,7 +514,8 @@ class FormazionePiano(graphene.Mutation):
                 _integrazioni_richieste = piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste).first()
 
-                if _protocollo_genio_civile and _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and \
+                if not _conferenza_copianificazione_attiva and \
+                _protocollo_genio_civile and _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and \
                 _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna and \
                 _integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna:
 

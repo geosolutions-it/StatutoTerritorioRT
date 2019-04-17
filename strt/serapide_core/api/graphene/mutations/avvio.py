@@ -436,9 +436,24 @@ class IntegrazioniRichieste(graphene.Mutation):
                 _integrazioni_richieste.data = datetime.datetime.now(timezone.get_current_timezone())
                 _integrazioni_richieste.save()
 
+                _conferenza_copianificazione_attiva = False
+
+                _richiesta_conferenza_copianificazione = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione).first()
+                if _richiesta_conferenza_copianificazione and \
+                _richiesta_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                    _conferenza_copianificazione_attiva = True
+
+                _esito_conferenza_copianificazione = piano.azioni.filter(
+                    tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione).first()
+                if _esito_conferenza_copianificazione and \
+                _esito_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                    _conferenza_copianificazione_attiva = True
+
                 _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
                 if not _procedura_vas or _procedura_vas.conclusa:
-                    piano.chiudi_pendenti()
+                    if not _conferenza_copianificazione_attiva:
+                        piano.chiudi_pendenti()
                 procedura_avvio.conclusa = True
                 procedura_avvio.save()
 

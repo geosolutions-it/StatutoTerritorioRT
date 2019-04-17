@@ -579,6 +579,10 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp).first()
 
             if _rev_piano_post_cp and _rev_piano_post_cp.stato != STATO_AZIONE.nessuna:
+                _rev_piano_post_cp.stato = STATO_AZIONE.nessuna
+                _rev_piano_post_cp.data = datetime.datetime.now(timezone.get_current_timezone())
+                _rev_piano_post_cp.save()
+
                 _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
                 if not _procedura_adozione_vas or _procedura_adozione_vas.conclusa:
                     piano.chiudi_pendenti()
