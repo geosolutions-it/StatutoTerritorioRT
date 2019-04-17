@@ -85,7 +85,7 @@ export const getInputFactory = (inputType) => (uuid, field) => (val) => ({
     }
 })
 
-export const getCodice = (props) => get(props, "props.piano.codice")
+export const getCodice = (props) => get(props, "piano.codice")
 
 
 
