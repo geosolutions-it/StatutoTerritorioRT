@@ -196,7 +196,7 @@ query GetRisorsePianoControdedotto($codice: String!) {
       pianoControdedotto(piano_Codice: $codice){
           edges{node{
             uuid
-          risorse {...Risorse}
+          risorse(archiviata: false){...Risorse}
 
           }}        
           
@@ -210,15 +210,27 @@ query PianoRevPostCp($codice: String!){
       edges{
         node{
           uuid
-          risorse {...Risorse}
+          risorse(archiviata: false){...Risorse}
     }
   }
 }}
 ${FR.RISORSE}
 `
 
+// Vas adozione
 
-
+export const GET_ADOZIONE_VAS = gql`
+query AdozioneVas($codice: String!){
+  procedureAdozioneVas(piano_Codice: $codice){
+      edges{
+        node{
+          uuid
+          risorse(archiviata: false) {...Risorse}
+    }
+  }
+}}
+${FR.RISORSE}
+`
 
 // LOCAL STATE
 // example of local state query
