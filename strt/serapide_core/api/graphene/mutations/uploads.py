@@ -648,7 +648,7 @@ class DeleteRisorsaPianoControdedotto(DeleteRisorsaBase):
 class DeleteRisorsaPianoRevPostCP(DeleteRisorsaBase):
 
     success = graphene.Boolean()
-    piano_rev_post_cp_aggiornato_aggiornato = graphene.Field(types.PianoRevPostCPNode)
+    piano_rev_post_cp_aggiornato = graphene.Field(types.PianoRevPostCPNode)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -665,7 +665,7 @@ class DeleteRisorsaPianoRevPostCP(DeleteRisorsaBase):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaPianoRevPostCP(
-                        piano_rev_post_cp_aggiornato_aggiornato=_piano_rev_post_cp, success=_success)
+                        piano_rev_post_cp_aggiornato=_piano_rev_post_cp, success=_success)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
