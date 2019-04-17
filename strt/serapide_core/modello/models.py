@@ -820,6 +820,39 @@ class RisorseAdozione(models.Model):
         db_table = "strt_core_adozione_risorse"
 
 
+class ParereAdozioneVAS(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_invio_parere = models.DateTimeField(null=True, blank=True)
+    data_ricezione_parere = models.DateTimeField(null=True, blank=True)
+
+    procedura_adozione = models.ForeignKey(ProceduraAdozione, on_delete=models.CASCADE)
+
+    inviata = models.BooleanField(null=False, blank=False, default=False)
+
+    user = models.ForeignKey(
+        to=AppUser,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        db_table = "strt_core_pareri_adozione_vas"
+        verbose_name_plural = 'Pareri Adozione VAS'
+
+    def __str__(self):
+        return '{} - [{}]'.format(self.procedura_adozione, self.uuid)
+
+
 class PianoControdedotto(models.Model):
 
     uuid = models.UUIDField(

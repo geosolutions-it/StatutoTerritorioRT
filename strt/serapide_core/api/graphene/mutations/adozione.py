@@ -551,8 +551,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
             _rev_piano_post_cp = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp).first()
 
-            if _rev_piano_post_cp and _rev_piano_post_cp.stato != STATO_AZIONE.nessuna and \
-            procedura_adozione.url_rev_piano_post_cp:
+            if _rev_piano_post_cp and _rev_piano_post_cp.stato != STATO_AZIONE.nessuna:
                 piano.chiudi_pendenti()
                 if piano.is_eligible_for_promotion:
                     procedura_adozione.conclusa = True
