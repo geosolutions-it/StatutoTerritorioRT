@@ -35,7 +35,7 @@ export default {
     emissioneProvvedimentoVerifica: (props) => (<ProvvedimentoVerificaVAS {...props}/>),
     pubblicazioneProvvedimentoVerifica: (props) => (<PubblicazioneProvv {...props}/>),
     avvioProcedimento: (props) => (<AvvioProcedimento {...props}/>),
-    avvioEsamePareri_sca: (props) => (<AvviaEsamePareri {...props}/>),
+    avvioEsamePareriSca: (props) => (<AvviaEsamePareri {...props}/>),
     uploadElaboratiVas: (props) => (<UploadElaboratiVAS {...props}/>),
     protocolloGenioCivileId: (props) => (<GenioCivile {...props}/>),
     formazioneDelPiano: (props) => (<FormazionePiano {...props}/>),
