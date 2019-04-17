@@ -380,7 +380,7 @@ class UploadRisorsaPianoControdedotto(UploadBaseBase):
 class UploadRisorsaPianoRevPostCP(UploadBaseBase):
 
     success = graphene.Boolean()
-    piano_controdedotto_aggiornato = graphene.Field(types.PianoRevPostCPNode)
+    piano_rev_post_cp_aggiornato = graphene.Field(types.PianoRevPostCPNode)
     file_name = graphene.String()
 
     @classmethod
@@ -392,14 +392,14 @@ class UploadRisorsaPianoRevPostCP(UploadBaseBase):
 
             try:
                 # Validating 'Procedura VAS'
-                _piano_controdedotto = PianoRevPostCP.objects.get(uuid=_uuid_cc)
+                _piano_rev_post_cp = PianoRevPostCP.objects.get(uuid=_uuid_cc)
                 if rules.test_rule('strt_core.api.can_edit_piano',
                                    info.context.user,
-                                   _piano_controdedotto.piano):
+                                   _piano_rev_post_cp.piano):
                     _resources = UploadBaseBase.handle_uploaded_data(
                         file,
                         _uuid_cc,
-                        _piano_controdedotto.piano.fase,
+                        _piano_rev_post_cp.piano.fase,
                         _tipo_file,
                         info.context.user
                     )
@@ -408,10 +408,10 @@ class UploadRisorsaPianoRevPostCP(UploadBaseBase):
                         _success = True
                         for _risorsa in _resources:
                             RisorsePianoRevPostCP(
-                                piano_controdedotto=_piano_controdedotto,
+                                piano_rev_post_cp=_piano_rev_post_cp,
                                 risorsa=_risorsa).save()
                     return UploadRisorsaPianoRevPostCP(
-                        piano_controdedotto_aggiornato=_piano_controdedotto,
+                        piano_rev_post_cp_aggiornato=_piano_rev_post_cp,
                         success=_success,
                         file_name=_resources[0].nome)
                 else:
@@ -648,7 +648,7 @@ class DeleteRisorsaPianoControdedotto(DeleteRisorsaBase):
 class DeleteRisorsaPianoRevPostCP(DeleteRisorsaBase):
 
     success = graphene.Boolean()
-    piano_controdedotto_aggiornato_aggiornato = graphene.Field(types.PianoRevPostCPNode)
+    piano_rev_post_cp_aggiornato_aggiornato = graphene.Field(types.PianoRevPostCPNode)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -658,14 +658,14 @@ class DeleteRisorsaPianoRevPostCP(DeleteRisorsaBase):
             _uuid_cc = input['codice']
             # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
             try:
-                _piano_controdedotto = PianoRevPostCP.objects.get(uuid=_uuid_cc)
+                _piano_rev_post_cp = PianoRevPostCP.objects.get(uuid=_uuid_cc)
                 if rules.test_rule('strt_core.api.can_edit_piano',
                                    info.context.user,
-                                   _piano_controdedotto.piano):
+                                   _piano_rev_post_cp.piano):
                     _risorsa = Risorsa.objects.get(uuid=_id)
                     _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
                     return DeleteRisorsaPianoRevPostCP(
-                        piano_controdedotto_aggiornato_aggiornato=_piano_controdedotto, success=_success)
+                        piano_rev_post_cp_aggiornato_aggiornato=_piano_rev_post_cp, success=_success)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
             except BaseException as e:
