@@ -133,6 +133,12 @@ def formazione_piano_conclusa(piano):
 
 
 @rules.predicate
+def vas_piano_conclusa(piano):
+    _procedura_vas = ProceduraVAS.objects.get(piano=piano)
+    return _procedura_vas.conclusa
+
+
+@rules.predicate
 def avvio_piano_conclusa(piano):
     _procedura_avvio = ProceduraAvvio.objects.get(piano=piano)
     return _procedura_avvio.conclusa

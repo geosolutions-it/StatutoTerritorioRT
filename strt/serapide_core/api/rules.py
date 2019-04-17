@@ -73,11 +73,11 @@ rules.add_rule(
     'strt_core.api.fase_avvio_completa',
     ~piano_rules.has_pending_alerts &
     piano_rules.is_anagrafica &
-    vas_rules.procedura_vas_is_valid &
-    piano_rules.has_procedura_avvio &
     piano_rules.protocollo_genio_inviato &
     piano_rules.formazione_piano_conclusa &
-    piano_rules.avvio_piano_conclusa
+    piano_rules.has_procedura_avvio &
+    piano_rules.avvio_piano_conclusa &
+    (~piano_rules.has_procedura_vas | piano_rules.vas_piano_conclusa)
 )
 
 rules.add_rule(

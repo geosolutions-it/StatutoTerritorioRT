@@ -504,8 +504,8 @@ class FormazionePiano(graphene.Mutation):
                 _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna and \
                 _integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna:
 
-                    piano.chiudi_pendenti()
-
+                    if procedura_vas.conclusa:
+                        piano.chiudi_pendenti()
                     procedura_avvio, created = ProceduraAvvio.objects.get_or_create(piano=piano)
                     procedura_avvio.conclusa = True
                     procedura_avvio.save()
