@@ -30,9 +30,9 @@ const getInput = (codice) => (numeroProtocolloGenioCivile) => ({
     })
 
 const UI = ({ back, 
-    piano: {numeroProtocolloGenioCivile, codice} = {}, 
-    proceduraAvvio: {node: {uuid}} = {}}) => {
-        
+        piano: {numeroProtocolloGenioCivile, codice} = {}, 
+        proceduraAvvio: {node: {uuid} = {}} = {}}
+    ) => {
         return (
             <React.Fragment>
                 <ActionTitle>Protocollo Genio Civile</ActionTitle>
@@ -65,6 +65,6 @@ export default (props) => (
                         </div>)
                 }
                 return (
-                    <UI {...props} procedureAvvio={proceduraAvvio}/>)}
+                    <UI {...props} proceduraAvvio={proceduraAvvio}/>)}
             }
         </Query>)
