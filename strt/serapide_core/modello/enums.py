@@ -127,6 +127,7 @@ TIPOLOGIA_AZIONE = Choices(
         # Adozione VAS
         ('pareri_adozione_sca', _('Pareri SCA')),  # SCA
         ('parere_motivato_ac', _('Parere Motivato')),  # AC
+        ('upload_elaborati_adozione_vas', _('Upload elaborati VAS')),  # Comune
         # Approvazione
         ('trasmissione_approvazione', _('Invio documentazione per Approvazione')),  # Comune
     )
@@ -164,6 +165,7 @@ FASE_AZIONE = Choices(
         # Adozione VAS
         ('pareri_adozione_sca', 'avvio'),
         ('parere_motivato_ac', 'avvio'),
+        ('upload_elaborati_adozione_vas', 'avvio'),
         # Approvazione
         ('trasmissione_approvazione', 'adozione'),
     )

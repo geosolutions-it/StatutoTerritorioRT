@@ -762,6 +762,9 @@ class InvioParereMotivatoAC(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
 
         # Update Azioni Piano
+        # - Complete Current Actions
+        _order = piano.azioni.count()
+
         # - Update Action state accordingly
         if fase.nome == FASE.avvio:
             _parere_motivato_ac = piano.azioni.filter(
@@ -772,11 +775,21 @@ class InvioParereMotivatoAC(graphene.Mutation):
                 _parere_motivato_ac.data = datetime.datetime.now(timezone.get_current_timezone())
                 _parere_motivato_ac.save()
 
-                _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
-                if procedura_adozione.conclusa:
-                    piano.chiudi_pendenti()
-                _procedura_adozione_vas.conclusa = True
-                _procedura_adozione_vas.save()
+                _upload_elaborati_adozione_vas = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa
+                )
+                _upload_elaborati_adozione_vas.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_upload_elaborati_adozione_vas, piano=piano)
+
+                # _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
+                # if procedura_adozione.conclusa:
+                #     piano.chiudi_pendenti()
+                # _procedura_adozione_vas.conclusa = True
+                # _procedura_adozione_vas.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -806,6 +819,76 @@ class InvioParereMotivatoAC(graphene.Mutation):
                 if _tutti_pareri_inviati:
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
+                # if _piano.is_eligible_for_promotion:
+                #     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                #
+                #     # Notify Users
+                #     piano_phase_changed.send(
+                #         sender=Piano,
+                #         user=info.context.user,
+                #         piano=_piano,
+                #         message_type="piano_phase_changed")
+                #
+                #     _piano.save()
+                #     fase.promuovi_piano(_fase, _piano)
+
+                return InvioParereMotivatoAC(
+                    vas_aggiornata=_procedura_vas,
+                    errors=[]
+                )
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class UploadElaboratiAdozioneVAS(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    vas_aggiornata = graphene.Field(types.ProceduraAdozioneVASNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+
+        # Update Azioni Piano
+        # - Update Action state accordingly
+        if fase.nome == FASE.avvio:
+            _upload_elaborati_adozione_vas = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas)
+
+            if _upload_elaborati_adozione_vas and \
+            _upload_elaborati_adozione_vas.stato != _upload_elaborati_adozione_vas.nessuna:
+                _upload_elaborati_adozione_vas.stato = STATO_AZIONE.nessuna
+                _upload_elaborati_adozione_vas.data = datetime.datetime.now(timezone.get_current_timezone())
+                _upload_elaborati_adozione_vas.save()
+
+                _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
+                if procedura_adozione.conclusa:
+                    piano.chiudi_pendenti()
+                _procedura_adozione_vas.conclusa = True
+                _procedura_adozione_vas.save()
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=input['uuid'])
+        _piano = _procedura_vas.piano
+        _procedura_adozione = ProceduraAdozione.objects.get(piano=_piano)
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and \
+        _procedura_adozione.pubblicazione_burt_data and \
+        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
 
@@ -819,7 +902,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
                     _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
-                return InvioParereMotivatoAC(
+                return UploadElaboratiAdozioneVAS(
                     vas_aggiornata=_procedura_vas,
                     errors=[]
                 )

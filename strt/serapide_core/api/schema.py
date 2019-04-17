@@ -170,6 +170,7 @@ class Mutation(object):
 
     invio_pareri_adozione_vas = adozione.InvioPareriAdozioneVAS.Field()
     invio_parere_motivato_ac = adozione.InvioParereMotivatoAC.Field()
+    upload_elaborati_adozione_vas = adozione.UploadElaboratiAdozioneVAS.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
