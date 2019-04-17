@@ -21,6 +21,8 @@ import PianoControdedotto from './PianoControdedotto'
 import Controdeduzioni from './Controdeduzioni'
 import EsitoPae from './EsitoConferenzaPaeseggistica'
 import RevisionePianoCP from './RevisionePianoPostCP'
+import PareriAdozioneSCA from './PareriAdozioneSCA'
+import ParereMotivatoAc from './ParereMotivatoAdozione'
 
 // parametri passati di default piano, back, utente, scadenza
 
@@ -50,7 +52,10 @@ export default {
     osservazioniRegione: (props) => (<OsservazioniRegione  {...props}/>),
     pianoControdedotto: (props) => (<PianoControdedotto {...props}/>),
     esitoConferenzaPaesaggistica: (props) => (<EsitoPae {...props}/>),
-    revPianoPostCp: (props) => (<RevisionePianoCP {...props}/>)
+    revPianoPostCp: (props) => (<RevisionePianoCP {...props}/>),
+    pareriAdozioneSca: (props) =>(<PareriAdozioneSCA {...props}/>),
+    parereMotivatoAc:(props) =>(<ParereMotivatoAc {...props}/>)
+    
     
 
 }

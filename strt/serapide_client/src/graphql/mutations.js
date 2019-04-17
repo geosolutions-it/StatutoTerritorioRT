@@ -310,6 +310,38 @@ mutation RevisioneConferenzaPaesaggistica($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
+
+// Vas Adozione
+
+export const INVIO_PARERI_ADOZIONE = gql`
+mutation InvioPareriAdozione($codice: String!) {
+  invioPareriAdozioneVas(uuid: $codice){
+    errors
+    vasAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
+export const INVIO_PARERE_MOTIVATO_AC = gql`
+mutation InvioParereMotivatoAc($codice: String!) {
+    invioParereMotivatoAc(uuid: $codice){
+        errors
+        vasAggiornata {
+            piano{
+                ...AzioniPiano
+            }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
+
 // Procedura Avvio
 
 export const UPDATE_AVVIO = gql`
@@ -554,7 +586,7 @@ mutation ControdedottoUploadFile($file: Upload!, $codice: String!, $tipo: String
       fileName
       pianoControdedottoAggiornato {
           uuid
-          risorse {
+          risorse(archiviata: false){
             ...Risorse
           }
       }
@@ -569,13 +601,13 @@ mutation DeleteRisorsaControdedotto($id: ID!, $codice: String!) {
         success
         pianoControdedottoAggiornatoAggiornato{
             uuid
-            risorse {
+            risorse(archiviata: false){
               ...Risorse
             }
         }
     }
 }
-${FR.ADOZIONE}
+${FR.RISORSE}
 `
 // revisione piano cp
 
@@ -586,7 +618,7 @@ mutation PianoRevPortCpUploadFile($file: Upload!, $codice: String!, $tipo: Strin
       fileName
       pianoRevPostCpAggiornato {
           uuid
-          risorse {
+          risorse(archiviata: false){
             ...Risorse
           }
       }
@@ -601,11 +633,44 @@ mutation DeleteRisorsaPianoRevPostCp($id: ID!, $codice: String!) {
         success
         pianoRevPostCpAggiornato {
             uuid
-            risorse {
+            risorse(archiviata: false){
               ...Risorse
             }
         }
     }
 }
-${FR.ADOZIONE}
+${FR.RISORSE}
+`
+
+// adozione vas
+
+export const ADOZIONE_VAS_FILE_UPLOAD = gql`
+mutation AozioneVasFileUpload($file: Upload!, $codice: String!, $tipo: String!) {
+    upload: uploadRisorsaAdozioneVas(file: $file, codice: $codice, tipoFile: $tipo) {
+      success
+      fileName
+      proceduraVasAggiornata{
+          uuid
+          risorse(archiviata: false){
+            ...Risorse
+          }
+      }
+    }
+  }
+  ${FR.RISORSE}
+`
+
+export const DELETE_RISORSA_ADOZIONE_VAS = gql`
+mutation DeleteRisorsaPianoRevPostCp($id: ID!, $codice: String!) {
+    deleteRisorsa: deleteRisorsaAdozioneVas(risorsaId: $id, codice: $codice){
+            success
+            proceduraVasAggiornata{
+                uuid
+                risorse(archiviata: false){
+                  ...Risorse
+                }
+            }
+    }
+}
+${FR.RISORSE}
 `

@@ -224,7 +224,7 @@ class UploadRisorsaAdozioneVAS(UploadBaseBase):
                     if _resources and len(_resources) > 0:
                         _success = True
                         for _risorsa in _resources:
-                            RisorseAdozioneVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
+                            RisorseAdozioneVas(procedura_adozione_vas=_procedura_vas, risorsa=_risorsa).save()
                     return UploadRisorsaAdozioneVAS(
                         procedura_vas_aggiornata=_procedura_vas,
                         success=_success,
