@@ -11,8 +11,9 @@ import {Button} from 'reactstrap'
 
 
 const getFileSize = (file) => file.size ? `${Math.round(file.size/100000)/10} MB` : null
+
 const UI = ({placeholder, isLoading, progress, icon = "picture_as_pdf", onCancel, file = {}, error = false, onRetry}) => (
-        <div className="file-loader d-flex justify-content-between align-items-center" >
+        <div className="file-loader d-flex justify-content-between align-items-center flex-1 " >
             <div className="d-flex">
                 {file.name && (<i className="material-icons text-serapide">{icon}</i>)}
             <div className="pl-1 d-flex flex-column justify-content-between">
