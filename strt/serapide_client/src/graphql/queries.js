@@ -232,6 +232,23 @@ query AdozioneVas($codice: String!){
 ${FR.RISORSE}
 `
 
+// Approvazione
+
+
+export const GET_APPROVAZIONE = gql`
+query GetApprovazione($codice: String!) {
+  procedureApprovazione(piano_Codice: $codice) {
+        edges{
+          node{
+            ...APPROVAZIONE 
+            }  
+        }
+    }
+}
+${FR.APPROVAZIONE}
+`
+
+
 // LOCAL STATE
 // example of local state query
 export const GET_VAS_AUTHORITIES = gql`

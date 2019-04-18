@@ -15,6 +15,7 @@ import ActionTitle from 'components/ActionTitle'
 import RichiestaComune from 'components/RichiestaComune'
 
 import  {showError, formatDate, daysSub, getCodice} from 'utils'
+import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE_VAS,
     DELETE_RISORSA_ADOZIONE_VAS,
@@ -22,7 +23,7 @@ import {GET_ADOZIONE_VAS,
 } from 'schema'
 
 
-const UI = ({
+const UI = rebuildTooltip()(({
     back, 
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
     utente: {fiscalCode} = {},
@@ -56,7 +57,7 @@ const UI = ({
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={parere}></SalvaInvia>
                 </div>
             </React.Fragment>)
-    }
+    })
 
     export default (props) => (
         <Query query={GET_ADOZIONE_VAS} variables={{codice: getCodice(props)}} onError={showError}>

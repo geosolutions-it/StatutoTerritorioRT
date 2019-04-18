@@ -20,7 +20,7 @@ import Button from 'components/IconButton'
 import RichiestaComune from 'components/RichiestaComune'
 
 import {rebuildTooltip} from 'enhancers'
-import  {showError, formatDate, getInputFactory, getCodice} from 'utils'
+import  {showError, formatDate, getInputFactory, getCodice, getContatti} from 'utils'
 
 import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     DELETE_RISORSA_VAS,
@@ -31,10 +31,6 @@ import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
 } from 'schema'
 
 const getConsultazioneVasTypeInput = getInputFactory("consultazioneVas")
-
-const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
-}
 
 const UI = rebuildTooltip()(({
     consultazioneSCA: { node: {
@@ -85,11 +81,8 @@ const UI = rebuildTooltip()(({
                                 <EnhancedListSelector
                                     selected={auths}
                                     query={GET_CONTATTI}
-                                    getList={getAuthorities}
-                                    onChange={changed}
-                                    variables={{tipo: "acvas"}}
-                                    size="lg"
-                                    label="SELEZIONA AUTORITA’ COMPETENTE VAS"
+                                size="lg"
+                                label="SELEZIONA AUTORITA’ COMPETENTE VAS"
                                     btn={(toggleOpen) => (
                                         <div className="row">
                                             <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="text-serapide rounded-pill" color="dark" icon="add_circle" label="Autorità competente VAS (AC)"/>
@@ -126,11 +119,8 @@ const UI = rebuildTooltip()(({
                                 selected={scas}
                                 query={GET_CONTATTI}
                                 variables={{tipo: "sca"}}
-                                getList={getAuthorities}
-                                label="DEFINISCI SCA"
-                                size="lg"
-                                onChange={changed}
-                                btn={(toggleOpen) => (
+                            onChange={changed}
+                            btn={(toggleOpen) => (
                                     <div className="row">
                                         <Button 
                                             fontSize="60%"  

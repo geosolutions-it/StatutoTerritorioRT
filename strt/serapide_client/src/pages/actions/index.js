@@ -13,7 +13,7 @@ import RichiestaConferenza from './RichiestaConferenza'
 import IntegrazioniRichieste from './IntegrazioniRichieste'
 import SvolgimentoConferenza from './SvolgimentoConfernza'
 import RichiestaIntegrazioni from './RichiestaIntegrazioni'
-import {INVIO_PARERI_VAS, CONTRODEDUZIONI} from 'schema'
+
 import Adozione from './Adozione'
 import Osservazioni from './Osservazioni'
 import OsservazioniRegione from './OsservazioniRegione'
@@ -24,6 +24,10 @@ import RevisionePianoCP from './RevisionePianoPostCP'
 import PareriAdozioneSCA from './PareriAdozioneSCA'
 import ParereMotivatoAc from './ParereMotivatoAdozione'
 import UploadElaboratiAdozioneVAS from './UploadElaboratiVASAdozione'
+import Approvazione from './Approvazione'
+
+import {INVIO_PARERI_VAS, CONTRODEDUZIONI} from 'schema'
+
 
 // parametri passati di default piano, back, utente, scadenza
 
@@ -56,9 +60,9 @@ export default {
     revPianoPostCp: (props) => (<RevisionePianoCP {...props}/>),
     pareriAdozioneSca: (props) =>(<PareriAdozioneSCA {...props}/>),
     parereMotivatoAc: (props) =>(<ParereMotivatoAc {...props}/>),
-    uploadElaboratiAdozioneVas: (props) =>(<UploadElaboratiAdozioneVAS {...props}/>)
+    uploadElaboratiAdozioneVas: (props) => (<UploadElaboratiAdozioneVAS {...props}/>),
+    trasmissioneApprovazione: (props) => (<Approvazione {...props}/>)
     
     
-
 }
 

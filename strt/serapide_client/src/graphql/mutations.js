@@ -440,9 +440,35 @@ mutation ChiusuraConferenzaCopianificazione($codice: String!) {
   }
 }
 ${FR.AZIONI_PIANO}
-
-
 `
+
+// Approvazione
+
+export const UPDATE_APPROVAZIONE = gql`
+mutation UpdateApprovazione($input: UpdateProceduraApprovazioneInput!) {
+  updateProceduraApprovazione(input: $input) {
+    proceduraApprovazioneAggiornata {
+            ...APPROVAZIONE
+        }
+    }
+}
+${FR.APPROVAZIONE}
+`
+
+export const TRASMISSIONE_APPROVAZIONE = gql`
+mutation TrasmissioneApprovazione($codice: String!){
+  trasmissioneApprovazione(uuid: $codice){
+      errors
+      approvazioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
 // altre mutations
 
 export const CREATE_CONTATTO = gql`

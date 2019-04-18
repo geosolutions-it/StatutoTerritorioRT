@@ -19,7 +19,7 @@ import TextWithTooltip from 'components/TextWithTooltip'
 
 import  {rebuildTooltip} from 'enhancers'
 import {map}  from 'lodash'
-import {formatDate, getNominativo, showError, getInputFactory} from 'utils'
+import {formatDate, getNominativo, showError, getInputFactory, getContatti} from 'utils'
 
 import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD,
     DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO,
@@ -28,9 +28,8 @@ import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD,
 
 const getVasTypeInput = getInputFactory("proceduraVas")
 
-const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
-}
+
+
 
 const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifica, docProcSemp) => {
     switch (tipologia.toLowerCase()) {
@@ -171,7 +170,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             selected={sP ? [sP.uuid] : []}
                             query={GET_CONTATTI}
                             variables={{tipo: "generico"}}
-                            getList={getAuthorities}
+                            getList={getContatti}
                             label="DEFINISCI SOGGETTO PROPONENTE"
                             size="lg"
                             onChange={changed}
@@ -199,7 +198,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         <EnhancedListSelector
                             selected={auths}
                             query={GET_CONTATTI}
-                            getList={getAuthorities}
+                            getList={getContatti}
                             onChange={changed}
                             variables={{tipo: "acvas"}}
                             size="lg"
@@ -234,7 +233,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         selected={scas}
                         query={GET_CONTATTI}
                         variables={{tipo: "sca"}}
-                        getList={getAuthorities}
+                        getList={getContatti}
                         label="DEFINISCI SCA"
                         size="lg"
                         onChange={changed}

@@ -79,7 +79,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                 </div>
                 <div className="w-100 border-top mt-3"></div>
                 <h5 className="pt-4 font-weight-light">DESTINATARI</h5>
-                <h6 className="font-weight-light pb-1 mt-2">SCELTA SOGGETTI ISTITUZIONALI</h6>
+                <h6 className="font-weight-light pb-1 mt-2">SOGGETTI ISTITUZIONALI</h6>
                 <div className="row">  
                     {aut.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
                                  <i className="material-icons text-serapide">bookmark</i>

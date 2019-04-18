@@ -21,7 +21,7 @@ import {EnhancedDateSelector} from 'components/DateSelector'
 import Input from 'components/EnhancedInput'
 
 import {rebuildTooltip} from 'enhancers'
-import  {showError, elaboratiCompletati, getInputFactory, getCodice} from 'utils'
+import  {showError, elaboratiCompletati, getInputFactory, getCodice, getContatti} from 'utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
@@ -32,12 +32,10 @@ import {GET_AVVIO, UPDATE_AVVIO,
 
 const getProceduraAvvioInput = getInputFactory("proceduraAvvio")
 
-
-const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
-}
 const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
+
+
 const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
     proceduraAvvio: {node: {
             uuid, conferenzaCopianificazione, 
@@ -137,9 +135,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                 <EnhancedListSelector
                                     selected={auths}
                                     query={GET_CONTATTI}
-                                    getList={getAuthorities}
-                                    onChange={changed}
-                                    variables={{}}
+                            
                                     size="lg"
                                     label="SOGGETTI ISTITUZIONALI"
                                     btn={(toggleOpen) => (
@@ -179,9 +175,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                 selected={dests}
                                 query={GET_CONTATTI}
                                 variables={{}}
-                                getList={getAuthorities}
-                                label="SOGGETTI NON ISTITUZIONALI"
-                                size="lg"
+                        
                                 onChange={changed}
                                 btn={(toggleOpen) => (
                                     <div className="row">

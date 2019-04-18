@@ -217,10 +217,43 @@ export const ADOZIONE_VAS_FILE_UPLOAD = gql`
   `
 
 export const DELETE_RISORSA_ADOZIONE_VAS = gql`
-  mutation DeleteRisorsaPianoRevPostCp($id: ID!, $codice: String!) {
+  mutation DeleteRisorsaAdozioneVas($id: ID!, $codice: String!) {
       deleteRisorsa: deleteRisorsaAdozioneVas(risorsaId: $id, codice: $codice){
               success
               proceduraVasAggiornata{
+                  uuid
+                  risorse(archiviata: false){
+                    ...Risorse
+                  }
+              }
+      }
+  }
+  ${FR.RISORSE}
+  `
+  
+  // Approvazione 
+
+  export const APPROVAZIONE_FILE_UPLOAD = gql`
+  mutation ApprovazioneFileUpload($file: Upload!, $codice: String!, $tipo: String!) {
+      upload: uploadRisorsaApprovazione(file: $file, codice: $codice, tipoFile: $tipo) {
+        success
+        fileName
+        proceduraApprovazioneAggiornata{
+            uuid
+            risorse(archiviata: false){
+              ...Risorse
+            }
+        }
+      }
+    }
+    ${FR.RISORSE}
+  `
+
+export const DELETE_RISORSA_APPROVAZIONE = gql`
+  mutation DeleteRisorsaApprovazione($id: ID!, $codice: String!) {
+      deleteRisorsa: deleteRisorsaApprovazione(risorsaId: $id, codice: $codice){
+              success
+              proceduraApprovazioneAggiornata{
                   uuid
                   risorse(archiviata: false){
                     ...Risorse

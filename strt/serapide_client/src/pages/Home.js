@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route, Redirect} from 'react-router-dom'
 import Azioni from 'components/TabellaAzioni'
 import FaseSwitch from 'components/FaseSwitch'
 import components from './actions'
@@ -69,7 +69,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                     const El = components[camelCase(tipo)]
                     return El && (
                             <Route key={tipo} path={`${path}/${tipo}`} >
-                                {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<NotAllowed/>)}
+                                {getAction(stato) && canExecuteAction({attore, tipologia})  ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
                             </Route>)
                 })}
                 { action && (

@@ -18,7 +18,7 @@ import AddContact from 'components/AddContact'
 import {EnhancedListSelector} from 'components/ListSelector'
 
 import {toggleControllableState} from 'enhancers'
-import {showError, getCodice} from 'utils'
+import {showError, getCodice, getContatti} from 'utils'
 
 import {
     UPDATE_PIANO,
@@ -40,9 +40,7 @@ const  getPianoInput = (codice, field) => (val) => ({
     }
 })
 
-const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
-}
+
 const getDataDeliberaInput = (codice) => (val) => ({
     variables: {
         input: { 
@@ -53,6 +51,7 @@ const getDataDeliberaInput = (codice) => (val) => ({
 
 const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
     resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
+
 const Messaggio = () => (<React.Fragment>
         <h4>STAI PER SALVARE INCONTRO</h4>
         <h4>IL MESSAGGIO VERRA'</h4>
@@ -95,9 +94,7 @@ const UI = enhancer(({ back,
                                         <EnhancedListSelector
                                             selected={auths}
                                             query={GET_CONTATTI}
-                                            getList={getAuthorities}
-                                            onChange={changed}
-                                            variables={{}}
+                                            
                                             size="lg"
                                             label="SOGGETTI ISTITUZIONALI"
                                             btn={(toggleOpen) => (
