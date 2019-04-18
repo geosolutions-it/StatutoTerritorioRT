@@ -12,7 +12,7 @@ import classNames from "classnames"
 import {capitalize} from 'lodash'
 import {rebuildTooltip} from '../enhancers/utils'
 
-export default  rebuildTooltip({onUpdate: true, log: true, comp: "Stato Progres"})(({
+export default  rebuildTooltip({onUpdate: true, log: false, comp: "Stato Progres"})(({
     stato: {nome = "Unknown", codice},
     className= "stato-progress",
     legend= false}) => {

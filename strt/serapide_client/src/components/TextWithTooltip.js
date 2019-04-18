@@ -8,21 +8,22 @@
 import React from 'react'
 
 
-const OneWord = (word, className, dataTip, dataTipDisable) => (
+const OneWord = (word, className, dataTip, dataTipDisable, color) => (
         <span className={`text-nowrap ${className}`}>
-            {word[0]}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>
+            {word[0]}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className={`material-icons text-${color} align-top icon-12`}>info</i>
         </span>)
-const ManyWords = (words, className, dataTip, dataTipDisable) => (
+const ManyWords = (words, className, dataTip, dataTipDisable, color) => (
     <span className={className}>
         {words.slice(0, -1).join(" ")}
         <span className="text-nowrap">
             {" "}
-            {words.slice(-1)}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>
+            {words.slice(-1)}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className={`material-icons text-${color} align-top icon-12`}>info</i>
         </span>
     </span>
 )
-const getComp = (words = "", className, dataTip = "", dataTipDisable) => (words.length > 1 ? ManyWords(words, className, dataTip, dataTipDisable) : OneWord(words, className, dataTip, dataTipDisable))
-export default ({dataTip, dataTipDisable, text = "", className}) => {
+const getComp = (words = "", className, dataTip = "", dataTipDisable, color) => (words.length > 1 ? ManyWords(words, className, dataTip, dataTipDisable, color) : OneWord(words, className, dataTip, dataTipDisable, color))
+
+export default ({dataTip, dataTipDisable, text = "", className, color="serapide"}) => {
     const words = text.replace(/ +(?= )/g,'').split(" ")
-    return text ? getComp(words, className, dataTip, dataTipDisable) : (<i data-tip={dataTip} data-tip-disable={dataTipDisable} className="material-icons text-serapide align-top icon-12">info</i>)
+    return text ? getComp(words, className, dataTip, dataTipDisable, color) : (<i data-tip={dataTip} data-tip-disable={dataTipDisable} className={`material-icons text-${color} align-top icon-12`}>info</i>)
 }

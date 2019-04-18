@@ -12,20 +12,22 @@ import {Mutation} from 'react-apollo'
 import {toggleControllableState} from '../enhancers/utils'
 import {showError}  from "../utils"
 import Button from './IconButton'
+import TextWithTooltip from './TextWithTooltip'
 import {Modal, ModalBody, ModalHeader} from 'reactstrap'
 const enhancer = toggleControllableState("isOpen", "toggleOpen", false)
 const Messaggio = () => (<React.Fragment>
                     <h4>STAI PER INVIARE I DOCUMENTI</h4>
                     <h4> AL SISTEMA</h4>
                     </React.Fragment>)
-export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = false, onCompleted, label="SALVA ED INVIA", messaggio = (<Messaggio/>) }) => (
-
+export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = false, onCompleted, label="SALVA ED INVIA", messaggio = (<Messaggio/>) }) => {
+    const lab = !canCommit ? (<TextWithTooltip color="danger" dataTip="Informazioni mancanti" text={label}/>) : label
+    return (
             <Mutation mutation={mutation} onError={showError} onCompleted={onCompleted}>
                     {(onConfirm, {loading}) => {
                         const updatePiano = () => {onConfirm({variables})}
                       return (
                         <React.Fragment>
-                            <Button isLoading={loading} onClick={toggleOpen} className="my-auto text-uppercase" disabled={!canCommit} color="serapide"  label={label}></Button>
+                            <Button isLoading={loading} onClick={toggleOpen} className="my-auto text-uppercase" disabled={!canCommit} color="serapide"  label={lab}></Button>
                             {isOpen && (
                                 <Modal isOpen={isOpen} centered size="md" wrapClassName="serapide" autoFocus={true}>
                                     <ModalHeader className="d-flex justify-content-center"><i className="material-icons text-serapide icon-34">notifications_active</i></ModalHeader>
@@ -40,4 +42,4 @@ export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = f
                         </React.Fragment>)
                     }}
                     </Mutation>
-))
+)})
