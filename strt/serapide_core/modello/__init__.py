@@ -51,6 +51,8 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         ("piano_controdedotto", _("Piano Controdedotto"), _("Piano Controdedotto"),),
         ("esito_conferenza_paesaggistica", _("Esito Conferenza Paesaggistica"), _("Esito Conferenza Paesaggistica"),),
         ("rev_piano_post_cp", _("Revisione Piano post CP"), _("Revisione Piano post CP"),),
+        ("trasmissione_approvazione", _("Trasmissione Approvazione"), _("Trasmissione Approvazione"),),
+        ("attribuzione_conformita_pit", _("Attribuzione Conformità PIT"), _("Attribuzione Conformità PIT"),),
     )
 
     name = 'serapide_core.modello'

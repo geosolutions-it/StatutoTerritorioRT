@@ -15,6 +15,7 @@ import rules
 from serapide_core.modello.enums import (
     FASE,
     STATO_AZIONE,
+    TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,)
 
 from serapide_core.modello.models import (
@@ -134,25 +135,31 @@ def formazione_piano_conclusa(piano):
 
 @rules.predicate
 def vas_piano_conclusa(piano):
-    _procedura_vas = ProceduraVAS.objects.get(piano=piano)
+    _procedura_vas = ProceduraVAS.objects.filter(piano=piano).first()
+    if not _procedura_vas or \
+    _procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+        return True
     return _procedura_vas.conclusa
 
 
 @rules.predicate
 def avvio_piano_conclusa(piano):
-    _procedura_avvio = ProceduraAvvio.objects.get(piano=piano)
+    _procedura_avvio = ProceduraAvvio.objects.filter(piano=piano).first()
     return _procedura_avvio.conclusa
 
 
 @rules.predicate
 def adozione_piano_conclusa(piano):
-    _procedura_adozione = ProceduraAdozione.objects.get(piano=piano)
+    _procedura_adozione = ProceduraAdozione.objects.filter(piano=piano).first()
     return _procedura_adozione.conclusa
 
 
 @rules.predicate
 def adozione_vas_piano_conclusa(piano):
-    _procedura_adozione_vas = ProceduraAdozioneVAS.objects.get(piano=piano)
+    _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).first()
+    if not _procedura_adozione_vas or \
+    _procedura_adozione_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+        return True
     return _procedura_adozione_vas.conclusa
 
 

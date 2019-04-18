@@ -38,6 +38,7 @@ from serapide_core.modello.models import (
     ProceduraAdozione,
     ParereAdozioneVAS,
     ProceduraAdozioneVAS,
+    ProceduraApprovazione,
 )
 
 from serapide_core.modello.enums import (
@@ -434,6 +435,11 @@ class PianoControdedotto(graphene.Mutation):
                         piano.chiudi_pendenti()
                     procedura_adozione.conclusa = True
                     procedura_adozione.save()
+
+                    procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
+                        piano=piano, ente=piano.ente)
+                    piano.procedura_approvazione = procedura_approvazione
+                    piano.save()
                 else:
                     _piano_controdedotto.stato = STATO_AZIONE.nessuna
                     _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -588,6 +594,11 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
                     piano.chiudi_pendenti()
                 procedura_adozione.conclusa = True
                 procedura_adozione.save()
+
+                procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
+                    piano=piano, ente=piano.ente)
+                piano.procedura_approvazione = procedura_approvazione
+                piano.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -860,6 +871,11 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
                     piano.chiudi_pendenti()
                 _procedura_adozione_vas.conclusa = True
                 _procedura_adozione_vas.save()
+
+                procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
+                    piano=piano, ente=piano.ente)
+                piano.procedura_approvazione = procedura_approvazione
+                piano.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
