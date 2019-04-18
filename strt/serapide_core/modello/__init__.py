@@ -50,6 +50,8 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         ("trasmissione_adozione", _("Trasmissione Adozione"), _("Trasmissione Adozione"),),
         ("piano_controdedotto", _("Piano Controdedotto"), _("Piano Controdedotto"),),
         ("esito_conferenza_paesaggistica", _("Esito Conferenza Paesaggistica"), _("Esito Conferenza Paesaggistica"),),
+        ("parere_motivato_ac", _("Parere Motivato AC"), _("Parere Motivato AC"),),
+        ("upload_elaborati_adozione_vas", _("Elaborati Adozione VAS"), _("Elaborati Adozione VAS"),),
         ("rev_piano_post_cp", _("Revisione Piano post CP"), _("Revisione Piano post CP"),),
         ("trasmissione_approvazione", _("Trasmissione Approvazione"), _("Trasmissione Approvazione"),),
         ("attribuzione_conformita_pit", _("Attribuzione Conformità PIT"), _("Attribuzione Conformità PIT"),),
