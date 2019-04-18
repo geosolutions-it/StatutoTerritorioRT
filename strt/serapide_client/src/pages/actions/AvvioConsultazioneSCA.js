@@ -81,8 +81,10 @@ const UI = rebuildTooltip()(({
                                 <EnhancedListSelector
                                     selected={auths}
                                     query={GET_CONTATTI}
-                                size="lg"
-                                label="SELEZIONA AUTORITA’ COMPETENTE VAS"
+                                    getList={getContatti}	                               
+                                    onChange={changed}	        
+                                    variables={{tipo: "acvas"}}	
+                                    size="lg"
                                     btn={(toggleOpen) => (
                                         <div className="row">
                                             <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="text-serapide rounded-pill" color="dark" icon="add_circle" label="Autorità competente VAS (AC)"/>
@@ -119,8 +121,11 @@ const UI = rebuildTooltip()(({
                                 selected={scas}
                                 query={GET_CONTATTI}
                                 variables={{tipo: "sca"}}
-                            onChange={changed}
-                            btn={(toggleOpen) => (
+                                onChange={changed}
+                                getList={getContatti}	                        
+                                label="DEFINISCI SCA"	                        
+                                size="lg"
+                                btn={(toggleOpen) => (
                                     <div className="row">
                                         <Button 
                                             fontSize="60%"  

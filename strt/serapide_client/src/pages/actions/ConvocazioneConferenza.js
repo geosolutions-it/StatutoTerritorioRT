@@ -17,7 +17,8 @@ import Input from 'components/EnhancedInput'
 import AddContact from 'components/AddContact'
 import {EnhancedListSelector} from 'components/ListSelector'
 
-import {toggleControllableState} from 'enhancers'
+import {compose} from 'recompose'
+import {toggleControllableState, rebuildTooltip} from 'enhancers'
 import {showError, getCodice, getContatti} from 'utils'
 
 import {
@@ -30,7 +31,8 @@ import {
 
 } from 'schema'
 
-const enhancer = toggleControllableState("isChecked", "toggleCheck", false)
+const enhancer = compose(rebuildTooltip(), toggleControllableState("isChecked", "toggleCheck", false))
+
 const  getPianoInput = (codice, field) => (val) => ({
     variables: {
         input: { 
@@ -94,7 +96,9 @@ const UI = enhancer(({ back,
                                         <EnhancedListSelector
                                             selected={auths}
                                             query={GET_CONTATTI}
-                                            
+                                            getList={getContatti}	                                            
+                                            onChange={changed}	
+                                            variables={{}}
                                             size="lg"
                                             label="SOGGETTI ISTITUZIONALI"
                                             btn={(toggleOpen) => (

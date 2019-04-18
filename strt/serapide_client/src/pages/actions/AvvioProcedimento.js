@@ -135,7 +135,9 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                 <EnhancedListSelector
                                     selected={auths}
                                     query={GET_CONTATTI}
-                            
+                                    variables={{}}
+                                    getList={getContatti}
+                                    onChange={changed}
                                     size="lg"
                                     label="SOGGETTI ISTITUZIONALI"
                                     btn={(toggleOpen) => (
@@ -175,7 +177,9 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                 selected={dests}
                                 query={GET_CONTATTI}
                                 variables={{}}
-                        
+                                getList={getContatti}
+                                label="SOGGETTI NON ISTITUZIONALI"	
+                                size="lg"
                                 onChange={changed}
                                 btn={(toggleOpen) => (
                                     <div className="row">
