@@ -130,6 +130,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_elaborati_adozione_vas', _('Upload elaborati VAS')),  # Comune
         # Approvazione
         ('trasmissione_approvazione', _('Invio documentazione per Approvazione')),  # Comune
+        ('attribuzione_conformita_pit', _('Attribuzione Conformità PIT')),  # Regione
     )
 
 FASE_AZIONE = Choices(
@@ -168,6 +169,7 @@ FASE_AZIONE = Choices(
         ('upload_elaborati_adozione_vas', 'avvio'),
         # Approvazione
         ('trasmissione_approvazione', 'adozione'),
+        ('attribuzione_conformita_pit', 'adozione'),
     )
 
 TOOLTIP_AZIONE = Choices(

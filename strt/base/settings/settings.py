@@ -215,6 +215,8 @@ ADOZIONE_RICEZIONE_OSSERVAZIONI_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_RICE
 ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', type=int, default=60)
 ADOZIONE_VAS_PARERE_MOTIVATO_AC_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_VAS_PARERE_MOTIVATO_AC_EXPIRE_DAYS', type=int, default=30)
 
+ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS = EnvUtil.get_env_var('ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS', type=int, default=30)
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 LANGUAGE_CODE = EnvUtil.get_env_var('LANGUAGE_CODE', default='it')

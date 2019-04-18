@@ -368,8 +368,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni).first()
             if _richiesta_integrazioni and _richiesta_integrazioni.stato != STATO_AZIONE.nessuna:
                 if procedura_avvio.messaggio_integrazione and \
-                len(procedura_avvio.messaggio_integrazione) > 0 and \
-                procedura_avvio.richiesta_integrazioni:
+                len(procedura_avvio.messaggio_integrazione) > 0:
                     _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
                     _richiesta_integrazioni.data = datetime.datetime.now(timezone.get_current_timezone())
                     _richiesta_integrazioni.save()

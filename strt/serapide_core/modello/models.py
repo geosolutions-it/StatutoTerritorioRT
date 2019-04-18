@@ -326,6 +326,13 @@ class Piano(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='adozione')
 
+    procedura_approvazione = models.ForeignKey(
+        'ProceduraApprovazione',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='approvazione')
+
     autorita_competente_vas = models.ManyToManyField(
         Contatto,
         related_name='autorita_competente_vas',
@@ -961,6 +968,54 @@ class RisorseAdozioneVas(models.Model):
 
 
 # ############################################################################ #
+# - Approvazione
+# ############################################################################ #
+class ProceduraApprovazione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_delibera_approvazione = models.DateTimeField(null=True, blank=True)
+
+    richiesta_conferenza_paesaggistica = models.BooleanField(null=False, blank=False, default=False)
+    url_piano_pubblicato = models.URLField(null=True, blank=True, default='')
+
+    conclusa = models.BooleanField(null=False, blank=False, default=False)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorseApprovazione')
+
+    ente = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_approvazione"
+        verbose_name_plural = 'Procedure Approvazione'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+
+
+class RisorseApprovazione(models.Model):
+    procedura_approvazione = models.ForeignKey(ProceduraApprovazione, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_approvazione_risorse"
+
+
+# ############################################################################ #
 # Model Signals
 # ############################################################################ #
 @receiver(post_delete, sender=Contatto)
@@ -1008,6 +1063,10 @@ def delete_piano_associations(sender, instance, **kwargs):
     for _pc in PianoRevPostCP.objects.filter(piano=instance):
         _pc.risorse.all().delete()
         RisorsePianoRevPostCP.objects.filter(piano_rev_post_cp=_pc).delete()
+
+    for _approvazione in ProceduraApprovazione.objects.filter(piano=instance):
+        _approvazione.risorse.all().delete()
+        RisorseApprovazione.objects.filter(procedura_adozione=_approvazione).delete()
 
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
