@@ -813,6 +813,13 @@ class InvioParereMotivatoAC(graphene.Mutation):
                 if _tutti_pareri_inviati:
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="parere_motivato_ac")
+
                 return InvioParereMotivatoAC(
                     vas_aggiornata=_procedura_vas,
                     errors=[]
@@ -869,6 +876,13 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="upload_elaborati_adozione_vas")
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
