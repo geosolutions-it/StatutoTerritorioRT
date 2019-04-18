@@ -9,16 +9,16 @@ import React from 'react'
 import {Query} from 'react-apollo'
 import {FormGroup, Input, Label} from 'reactstrap'
 
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
-import {toggleControllableState} from '../../enhancers/utils'
-import {showError, getCodice} from '../../utils'
+import {toggleControllableState} from 'enhancers'
+import {showError, getCodice} from 'utils'
 
 import {
     RICHIESTA_CONFERENZA_COPIANIFICAZIONE,
     GET_AVVIO
-} from '../../graphql'
+} from 'schema'
 
 const enhancer = toggleControllableState("isChecked", "toggleCheck", false)
 

@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import  {formatDate} from '../utils'
+import  {formatDate} from 'utils'
 
 export default ({scadenza, formato = "dd MMMM yyyy", label = "Richiesta Comune", icon = "check_circle_outline", className = "row d-flex mb-3 mt-3"} ) => (
     <div className={className}>

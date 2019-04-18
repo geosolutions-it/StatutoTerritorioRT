@@ -8,7 +8,7 @@
 import React from 'react'
 import { Table } from 'reactstrap'
 import StatoProgress from './StatoProgress'
-import {formatDate} from '../utils'
+import {formatDate} from 'utils'
 import { toast } from 'react-toastify'
 import Confirm from './ConfirmToast'
 

@@ -6,14 +6,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import Risorsa from '../components/Resource'
-import {formatDate, showError} from '../utils'
-import {GET_AVVIO, GET_CONFERENZA} from '../graphql'
+import Risorsa from 'components/Resource'
+import {formatDate, showError} from 'utils'
+import {GET_AVVIO, GET_CONFERENZA} from 'schema'
 import {Query} from 'react-apollo'
-import {withControllableState} from '../enhancers/utils'
+import {withControllableState} from 'enhancers'
 import {Nav, NavItem,NavLink, TabContent,TabPane} from 'reactstrap'
 import classnames from 'classnames'
-import VAS from '../components/VAS'
+import VAS from 'components/VAS'
 const enhancers = withControllableState('section', 'toggleSection', 'vas')
 
 const UI = enhancers(({

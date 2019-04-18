@@ -7,7 +7,7 @@
  */
 import React from 'react'
 import {Modal, ModalBody, ModalHeader, ModalFooter, ListGroup, ListGroupItem} from 'reactstrap'
-import {toggleControllableState} from '../enhancers/utils'
+import {toggleControllableState} from 'enhancers'
 import {Query} from 'react-apollo'
 import {toast} from 'react-toastify'
 import classNames from 'classnames'

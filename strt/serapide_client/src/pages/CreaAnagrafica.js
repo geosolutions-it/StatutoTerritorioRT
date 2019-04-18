@@ -10,15 +10,15 @@ import React from 'react'
 import { toast } from 'react-toastify'
 
 import {Query} from "react-apollo"
-import {getEnteLabel, getEnteLabelID} from "../utils"
-import {GET_PIANI, UPDATE_PIANO} from "../graphql"
+import {getEnteLabel, getEnteLabelID} from "utils"
+import {GET_PIANI, UPDATE_PIANO} from "schema"
 
-import {EnhancedDateSelector} from "../components/DateSelector"
+import {EnhancedDateSelector} from "components/DateSelector"
 
-import Delibera from '../components/UploadSingleFile'
-import UploadFiles from '../components/UploadFiles'
-import VAS from '../components/VAS'
-import EnhanchedInput from '../components/EnhancedInput'
+import Delibera from 'components/UploadSingleFile'
+import UploadFiles from 'components/UploadFiles'
+import VAS from 'components/VAS'
+import EnhanchedInput from 'components/EnhancedInput'
 
 const getPianoLabel = (tipo) => tipo === "variante" ? `${tipo} piano` : `piano ${tipo}`
 

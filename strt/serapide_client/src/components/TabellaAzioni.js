@@ -11,8 +11,8 @@ import { Table } from 'reactstrap'
 import TextWithTooltip from './TextWithTooltip'
 
 import {canExecuteAction} from '../autorizzazioni'
-import {formatDate, getActionIcon, getActionIconColor, getAction} from '../utils'
-import {rebuildTooltip} from '../enhancers/utils'
+import {formatDate, getActionIcon, getActionIconColor, getAction} from 'utils'
+import {rebuildTooltip} from 'enhancers'
 
 
 const reverseOrder = ({node: {order: a}}, {node: {order: b}}) => (b - a)

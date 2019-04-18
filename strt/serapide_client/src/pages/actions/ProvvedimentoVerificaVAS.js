@@ -8,24 +8,24 @@
 import React from 'react'
 import {Query, Mutation} from 'react-apollo'
 
-import FileUpload from '../../components/UploadSingleFile'
-import Resource from '../../components/Resource'
-import RichiestaComune from '../../components/RichiestaComune'
-import SalvaInvia from '../../components/SalvaInvia'
+import FileUpload from 'components/UploadSingleFile'
+import Resource from 'components/Resource'
+import RichiestaComune from 'components/RichiestaComune'
+import SalvaInvia from 'components/SalvaInvia'
 import className from "classnames"
-import ActionTitle from '../../components/ActionTitle'
-import TextWithTooltip from '../../components/TextWithTooltip'
+import ActionTitle from 'components/ActionTitle'
+import TextWithTooltip from 'components/TextWithTooltip'
 
-import {rebuildTooltip} from '../../enhancers/utils'
+import {rebuildTooltip} from 'enhancers'
 import {map} from 'lodash'
-import  {showError, formatDate,daysSub, getNominativo, filterAndGroupResourcesByUser, getCodice} from '../../utils'
+import  {showError, formatDate,daysSub, getNominativo, filterAndGroupResourcesByUser, getCodice} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
     UPDATE_VAS,
     PROVVEDIMENTO_VERIFICA_VAS
-} from '../../graphql'
+} from 'schema'
 
 
 

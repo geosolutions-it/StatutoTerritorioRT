@@ -13,11 +13,11 @@ import {Query} from "react-apollo"
 import Anagrafica from './Anagrafica'
 import Formazione from './Formazione'
 import Avvio from './Avvio'
-import {getEnteLabel, getPianoLabel} from "../utils"
-import {GET_PIANI} from "../graphql"
-import Injector from '../components/Injector'
-import SideBar from '../components/SideBarMenu'
-import StatoProgress from '../components/StatoProgress'
+import {getEnteLabel, getPianoLabel} from "utils"
+import {GET_PIANI} from "schema"
+import Injector from 'components/Injector'
+import SideBar from 'components/SideBarMenu'
+import StatoProgress from 'components/StatoProgress'
 import Home from "./Home"
 
 

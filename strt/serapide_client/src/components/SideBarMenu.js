@@ -9,7 +9,7 @@ import React from 'react'
 import MenuItem from './MenuItem'
 import ReactTooltip from 'react-tooltip'
 // import {Badge} from 'reactstrap'
-import {toggleControllableState} from '../enhancers/utils'
+import {toggleControllableState} from 'enhancers'
 const enhancer = toggleControllableState("expanded", "toggleOpen", true)
 
 export default enhancer(({piano = {}, expanded, url, active, toggleOpen, unreadMessages = 0}) => (

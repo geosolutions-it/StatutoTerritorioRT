@@ -8,17 +8,18 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Input from '../../components/EnhancedInput'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import Input from 'components/EnhancedInput'
 
-import {showError, getCodice} from '../../utils'
+import {rebuildTooltip} from 'enhancers'
+import {showError, getCodice} from 'utils'
 
 import {
     UPDATE_PIANO,
     INVIO_PROTOCOLLO_GENIO,
     GET_AVVIO
-} from '../../graphql'
+} from 'schema'
 
 const getInput = (codice) => (numeroProtocolloGenioCivile) => ({
     variables: {
@@ -29,7 +30,7 @@ const getInput = (codice) => (numeroProtocolloGenioCivile) => ({
         }
     })
 
-const UI = ({ back, 
+const UI = rebuildTooltip()(({ back, 
         piano: {numeroProtocolloGenioCivile, codice} = {}, 
         proceduraAvvio: {node: {uuid} = {}} = {}}
     ) => {
@@ -48,10 +49,10 @@ const UI = ({ back,
                 </div>
                 
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={INVIO_PROTOCOLLO_GENIO} canCommit={!!numeroProtocolloGenioCivile}></SalvaInvia>
+                    <SalvaInvia tipIconColor="w" onCompleted={back} variables={{codice: uuid}} mutation={INVIO_PROTOCOLLO_GENIO} canCommit={!!numeroProtocolloGenioCivile}></SalvaInvia>
                 </div>
             </React.Fragment>)
-    }
+    })
 
 export default (props) => (
         <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>

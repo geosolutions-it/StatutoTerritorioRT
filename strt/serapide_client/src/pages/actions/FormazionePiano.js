@@ -8,12 +8,13 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Input from '../../components/EnhancedInput'
-import FileUpload from '../../components/UploadSingleFile'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import Input from 'components/EnhancedInput'
+import FileUpload from 'components/UploadSingleFile'
 
-import {showError, getCodice} from '../../utils'
+import {rebuildTooltip} from 'enhancers'
+import {showError, getCodice} from 'utils'
 
 import {
     UPDATE_PIANO,
@@ -21,7 +22,7 @@ import {
     VAS_FILE_UPLOAD,
     DELETE_RISORSA_VAS,
     FORMAZIONE_PIANO
-} from '../../graphql'
+} from 'schema'
 
 const getInput = (codice, field) => (val) => ({
     variables: {
@@ -33,7 +34,7 @@ const getInput = (codice, field) => (val) => ({
 })
 
 
-const UI = ({ back, 
+const UI = rebuildTooltip()(({ back, 
             piano: {codice, redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl} = {}, 
             vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}}
             }) => {
@@ -96,7 +97,7 @@ const UI = ({ back,
                     <SalvaInvia onCompleted={back} variables={{codice}} mutation={FORMAZIONE_PIANO} canCommit={!!rapporto && !!redazioneNormeTecnicheAttuazioneUrl && !!compilazioneRapportoAmbientaleUrl && !!conformazionePitPprUrl && !!monitoraggioUrbanisticoUrl}></SalvaInvia>
                 </div>
             </React.Fragment>)
-    }
+    })
 
 export default (props) => (
         <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>

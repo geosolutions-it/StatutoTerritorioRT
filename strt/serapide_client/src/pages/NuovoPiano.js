@@ -6,15 +6,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import Button from '../components/IconButton'
+import Button from 'components/IconButton'
 import {withPropsOnChange, withStateHandlers, compose} from 'recompose'
-import SelectTipo from '../components/SelectTipo'
-import TextWithTooltip from '../components/TextWithTooltip'
+import SelectTipo from 'components/SelectTipo'
+import TextWithTooltip from 'components/TextWithTooltip'
 import { Mutation, Query} from "react-apollo";
-import EnteSelector from "../components/EnteSelector"
+import EnteSelector from "components/EnteSelector"
 import { toast } from 'react-toastify'
-import  {rebuildTooltip} from '../enhancers/utils'
-import {CREA_PIANO, CREA_PIANO_PAGE, GET_PIANI} from '../graphql'
+import  {rebuildTooltip} from 'enhancers'
+import {CREA_PIANO, CREA_PIANO_PAGE, GET_PIANI} from 'schema'
 
 
 /** 

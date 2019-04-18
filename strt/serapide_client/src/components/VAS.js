@@ -12,18 +12,18 @@ import {EnhancedSwitch} from './Switch'
 import FileUpload from './UploadSingleFile'
 import Button from './IconButton'
 import {EnhancedListSelector} from './ListSelector'
-import Resource from '../components/Resource'
-import AddContact from '../components/AddContact'
-import SalvaInvia from '../components/SalvaInvia'
-import TextWithTooltip from '../components/TextWithTooltip'
+import Resource from 'components/Resource'
+import AddContact from 'components/AddContact'
+import SalvaInvia from 'components/SalvaInvia'
+import TextWithTooltip from 'components/TextWithTooltip'
 
-import  {rebuildTooltip} from '../enhancers/utils'
+import  {rebuildTooltip} from 'enhancers'
 import {map}  from 'lodash'
-import {formatDate, getNominativo, showError, getInputFactory} from '../utils'
+import {formatDate, getNominativo, showError, getInputFactory} from 'utils'
 
 import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD,
     DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO,
-    PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from '../graphql'
+    PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from 'schema'
 
 
 const getVasTypeInput = getInputFactory("proceduraVas")

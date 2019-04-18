@@ -10,7 +10,7 @@ import classeNames from 'classnames'
 import {Mutation} from  "react-apollo"
 import { toast } from 'react-toastify'
 import {isFunction} from 'lodash'
-import {toggleControllableState} from '../enhancers/utils'
+import {toggleControllableState} from 'enhancers'
 
 const enhancer = toggleControllableState('checked', 'toggleSwitch', false)
 const Switch = ({isLocked, label, value, toggleSwitch = (k) => {console.log(k)}, className, children, checked, labelClassName = "col-xl-4 col-lg-6 col-md-6 col-10"}) => {

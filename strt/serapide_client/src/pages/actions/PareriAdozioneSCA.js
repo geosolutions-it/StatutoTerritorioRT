@@ -8,17 +8,17 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import UploadFiles from '../../components/UploadFiles'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import RichiestaComune from '../../components/RichiestaComune'
+import UploadFiles from 'components/UploadFiles'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import RichiestaComune from 'components/RichiestaComune'
 
-import  {showError, formatDate, daysSub, getCodice} from '../../utils'
+import  {showError, formatDate, daysSub, getCodice} from 'utils'
 
 import {GET_ADOZIONE_VAS,
     DELETE_RISORSA_ADOZIONE_VAS,
     ADOZIONE_VAS_FILE_UPLOAD, INVIO_PARERI_ADOZIONE
-} from '../../graphql'
+} from 'schema'
 
 
 const UI = ({

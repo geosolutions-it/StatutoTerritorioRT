@@ -7,7 +7,7 @@
  */
 import React from 'react'
 import { Table } from 'reactstrap'
-import {formatDate} from '../utils'
+import {formatDate} from 'utils'
 export default ({title, messaggi = []}) => (
         <Table className="pb-4" size="sm" hover>
             <tbody>

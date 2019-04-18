@@ -8,18 +8,18 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import UploadFiles from '../../components/UploadFiles'
-import Resource from '../../components/Resource'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import RichiestaComune from '../../components/RichiestaComune'
+import UploadFiles from 'components/UploadFiles'
+import Resource from 'components/Resource'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import RichiestaComune from 'components/RichiestaComune'
 
-import  {showError, formatDate, daysSub, getCodice} from '../../utils'
+import  {showError, formatDate, daysSub, getCodice} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD, INVIO_PARERI_VERIFICA
-} from '../../graphql'
+} from 'schema'
 
 
 const UI = ({

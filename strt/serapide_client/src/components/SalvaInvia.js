@@ -9,8 +9,8 @@
  */
 import React from 'react'
 import {Mutation} from 'react-apollo'
-import {toggleControllableState} from '../enhancers/utils'
-import {showError}  from "../utils"
+import {toggleControllableState} from 'enhancers'
+import {showError}  from "utils"
 import Button from './IconButton'
 import TextWithTooltip from './TextWithTooltip'
 import {Modal, ModalBody, ModalHeader} from 'reactstrap'
@@ -19,8 +19,8 @@ const Messaggio = () => (<React.Fragment>
                     <h4>STAI PER INVIARE I DOCUMENTI</h4>
                     <h4> AL SISTEMA</h4>
                     </React.Fragment>)
-export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = false, onCompleted, label="SALVA ED INVIA", messaggio = (<Messaggio/>) }) => {
-    const lab = !canCommit ? (<TextWithTooltip color="danger" dataTip="Informazioni mancanti" text={label}/>) : label
+export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = false, onCompleted, label="SALVA ED INVIA", tipIconColor = "danger", messaggio = (<Messaggio/>) }) => {
+    const lab = !canCommit ? (<TextWithTooltip color={tipIconColor} dataTip="Informazioni mancanti" text={label}/>) : label
     return (
             <Mutation mutation={mutation} onError={showError} onCompleted={onCompleted}>
                     {(onConfirm, {loading}) => {

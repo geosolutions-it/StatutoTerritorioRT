@@ -12,7 +12,7 @@ import {
 import LinkWithIcon from './LinkWithIcon'
 
 import Messaggi from './MenuMessaggi'
-import {toggleControllableState} from '../enhancers/utils'
+import {toggleControllableState} from 'enhancers'
 import classNames from "classnames"
 
 export default toggleControllableState("isOpen", "toggle", false) (({roleType, isOpen= false, toggle = () =>{}, user = {}, messaggi = [], alertsCount = 0}) => (

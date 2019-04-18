@@ -8,23 +8,23 @@
 import React from 'react'
 import {Query} from "react-apollo"
 
-import FileUpload from '../../components/UploadSingleFile'
-import Resource from '../../components/Resource'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import TextWithTooltip from '../../components/TextWithTooltip'
-import {EnhancedDateSelector} from '../../components/DateSelector'
-import Input from '../../components/EnhancedInput'
-import Elaborati from "../../components/ElaboratiPiano"
+import FileUpload from 'components/UploadSingleFile'
+import Resource from 'components/Resource'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import TextWithTooltip from 'components/TextWithTooltip'
+import {EnhancedDateSelector} from 'components/DateSelector'
+import Input from 'components/EnhancedInput'
+import Elaborati from "components/ElaboratiPiano"
 
-import  {showError, formatDate, elaboratiCompletati, getInputFactory, getCodice} from '../../utils'
-import {rebuildTooltip} from '../../enhancers/utils'
+import  {showError, formatDate, elaboratiCompletati, getInputFactory, getCodice} from 'utils'
+import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
     DELETE_RISORSA_ADOZIONE,
     ADOZIONE_FILE_UPLOAD,
     TRASMISSIONE_ADOZIONE
-} from '../../graphql'
+} from 'schema'
 
 
 const getInput = getInputFactory("proceduraAdozione")
@@ -32,7 +32,7 @@ const getInput = getInputFactory("proceduraAdozione")
 const fileProps = {className: `border-0`, mutation: ADOZIONE_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_ADOZIONE, disabled: false, isLocked: false}
                     
-const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
+const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})(({
     vas: {node:{ risorse: {edges: resVas =[]} = {}} = {}} = {},
     proceduraAdozione: {node: {
             uuid,

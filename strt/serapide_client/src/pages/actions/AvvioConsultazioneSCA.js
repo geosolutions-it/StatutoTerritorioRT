@@ -8,18 +8,19 @@
 import React from 'react'
 import {Query, Mutation} from "react-apollo"
 
-import FileUpload from '../../components/UploadSingleFile'
-import {EnhancedSwitch} from '../../components/Switch'
-import AutoMutation from '../../components/AutoMutation'
-import Resource from '../../components/Resource'
-import {EnhancedListSelector} from '../../components/ListSelector'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import AddContact from '../../components/AddContact'
-import Button from '../../components/IconButton'
-import RichiestaComune from '../../components/RichiestaComune'
+import FileUpload from 'components/UploadSingleFile'
+import {EnhancedSwitch} from 'components/Switch'
+import AutoMutation from 'components/AutoMutation'
+import Resource from 'components/Resource'
+import {EnhancedListSelector} from 'components/ListSelector'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import AddContact from 'components/AddContact'
+import Button from 'components/IconButton'
+import RichiestaComune from 'components/RichiestaComune'
 
-import  {showError, formatDate, getInputFactory, getCodice} from '../../utils'
+import {rebuildTooltip} from 'enhancers'
+import  {showError, formatDate, getInputFactory, getCodice} from 'utils'
 
 import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     DELETE_RISORSA_VAS,
@@ -27,7 +28,7 @@ import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     UPDATE_CONSULTAZIONE_VAS,
     AVVIO_CONSULTAZIONE_VAS, UPDATE_PIANO,
     GET_CONTATTI
-} from '../../graphql'
+} from 'schema'
 
 const getConsultazioneVasTypeInput = getInputFactory("consultazioneVas")
 
@@ -35,7 +36,7 @@ const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
 }
 
-const UI = ({
+const UI = rebuildTooltip()(({
     consultazioneSCA: { node: {
         avvioConsultazioniSca,
         dataCreazione,
@@ -193,7 +194,7 @@ const UI = ({
                 <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIO_CONSULTAZIONE_VAS} canCommit={avvioConsultazioniSca && docPrelim && (!isFull || (auths.length > 0 && scas.length > 0))}></SalvaInvia>
                 
                 </div>
-            </React.Fragment>)}
+            </React.Fragment>)})
 
 const updateCache =(codice) => (cache, { data: {createConsultazioneVas : { nuovaConsultazioneVas: node}}  = {}} = {}) => {
     if (node) {

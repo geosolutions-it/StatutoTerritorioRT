@@ -8,17 +8,17 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Elaborati from '../../components/ElaboratiPiano'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import Elaborati from 'components/ElaboratiPiano'
 
-import  {showError,elaboratiCompletati, getCodice} from '../../utils'
+import  {showError,elaboratiCompletati, getCodice} from 'utils'
 
 import {GET_PIANO_REV_POST_CP,GET_ADOZIONE,
     PIANO_REV_POST_CP_FILE_UPLOAD,
     DELETE_RISORSA_PIANO_REV_POST_CP,
     REVISONE_CONFERENZA_PAESAGGISTICA
-} from '../../graphql'
+} from 'schema'
 
 const UI = ({
     back,

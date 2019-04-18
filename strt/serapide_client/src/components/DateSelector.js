@@ -10,7 +10,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
 import {Mutation} from  "react-apollo"
 import { toast } from 'react-toastify'
-import Button from '../components/IconButton'
+import Button from 'components/IconButton'
 
 const _getInput = (val) => { return {variables: {input: {data: val.toISOString()}}}}
 

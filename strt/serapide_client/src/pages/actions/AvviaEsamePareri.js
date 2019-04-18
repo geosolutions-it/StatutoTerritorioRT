@@ -9,18 +9,18 @@ import React from 'react'
 import {Query} from 'react-apollo'
 import className from "classnames"
 
-import Switch from '../../components/Switch'
-import Resource from '../../components/Resource'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import Switch from 'components/Switch'
+import Resource from 'components/Resource'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
 import {map} from 'lodash'
-import  {showError, getNominativo, getCodice, filterAndGroupResourcesByUser} from '../../utils'
-import {toggleControllableState} from '../../enhancers/utils'
+import  {showError, getNominativo, getCodice, filterAndGroupResourcesByUser} from 'utils'
+import {toggleControllableState} from 'enhancers'
 
 import {GET_VAS,
     AVVIO_ESAME_PARERI_SCA
-} from '../../graphql'
+} from 'schema'
 
 
 const enhancer = toggleControllableState('checked', 'toggleSwitch', false)

@@ -8,16 +8,16 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import UploadFiles from '../../components/UploadFiles'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import UploadFiles from 'components/UploadFiles'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
-import  {showError, getCodice} from '../../utils'
+import  {showError, getCodice} from 'utils'
 
 import {GET_CONFERENZA,GET_AVVIO,
     DELETE_RISORSA_COPIANIFICAZIONE,
     CONFEREZA_FILE_UPLOAD, CHIUSURA_CONFERENZA_COPIANIFICAZIONE
-} from '../../graphql'
+} from 'schema'
 
 const UI = ({
     back, 

@@ -9,7 +9,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FileChooser from "./FileChooser"
 import FileLoader from "./EnhancedFileLoader"
-import {FILE_UPLOAD, DELETE_RISORSA} from "../graphql"
+import {FILE_UPLOAD, DELETE_RISORSA} from "schema"
 import Resource from './EnhancedResource'
 
 

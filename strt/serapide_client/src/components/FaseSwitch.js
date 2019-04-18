@@ -7,7 +7,7 @@
  */
 import React from 'react'
 import classNames from 'classnames'
-import {toggleControllableState} from '../enhancers/utils'
+import {toggleControllableState} from 'enhancers'
 
 const enhancer = toggleControllableState("checked", "toggle", false)
 export default enhancer(({fase, className, checked, toggle, goToSection, children}) => (

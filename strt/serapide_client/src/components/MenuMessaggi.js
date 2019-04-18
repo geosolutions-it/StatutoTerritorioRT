@@ -11,7 +11,7 @@ import {
     DropdownToggle,
     DropdownMenu} from 'reactstrap'
 import LinkWithIcon from './LinkWithIcon'
-import {formatDate} from '../utils'
+import {formatDate} from 'utils'
 
 export default ({disabled, messaggi= []}) => (
     <UncontrolledDropdown tag="li" className="first menumessaggi text-white" inNavbar>

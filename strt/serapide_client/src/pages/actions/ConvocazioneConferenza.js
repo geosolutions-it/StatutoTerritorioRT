@@ -8,17 +8,17 @@
 import React from 'react'
 import {Query, Mutation} from 'react-apollo'
 
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Button from '../../components/IconButton'
-import {EnhancedDateSelector} from "../../components/DateSelector"
-import UploadFiles from '../../components/UploadFiles'
-import Input from '../../components/EnhancedInput'
-import AddContact from '../../components/AddContact'
-import {EnhancedListSelector} from '../../components/ListSelector'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import Button from 'components/IconButton'
+import {EnhancedDateSelector} from "components/DateSelector"
+import UploadFiles from 'components/UploadFiles'
+import Input from 'components/EnhancedInput'
+import AddContact from 'components/AddContact'
+import {EnhancedListSelector} from 'components/ListSelector'
 
-import {toggleControllableState} from '../../enhancers/utils'
-import {showError, getCodice} from '../../utils'
+import {toggleControllableState} from 'enhancers'
+import {showError, getCodice} from 'utils'
 
 import {
     UPDATE_PIANO,
@@ -28,7 +28,7 @@ import {
     AVVIO_FILE_UPLOAD,
     DELETE_RISORSA_AVVIO
 
-} from '../../graphql'
+} from 'schema'
 
 const enhancer = toggleControllableState("isChecked", "toggleCheck", false)
 const  getPianoInput = (codice, field) => (val) => ({

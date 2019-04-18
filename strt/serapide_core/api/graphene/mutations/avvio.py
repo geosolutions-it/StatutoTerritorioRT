@@ -529,8 +529,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
             _protocollo_genio_civile_id = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id).first()
             if _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato != STATO_AZIONE.nessuna:
-                if piano.numero_protocollo_genio_civile and \
-                piano.data_protocollo_genio_civile is None:
+                if piano.numero_protocollo_genio_civile:
                     piano.data_protocollo_genio_civile = datetime.datetime.now(timezone.get_current_timezone())
                     piano.save()
 

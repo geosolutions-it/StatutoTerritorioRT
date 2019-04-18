@@ -8,15 +8,15 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import UploadFiles from '../../components/UploadFiles'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import UploadFiles from 'components/UploadFiles'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
-import  {showError, getCodice} from '../../utils'
+import  {showError, getCodice} from 'utils'
 
 import {GET_ADOZIONE,ADOZIONE_FILE_UPLOAD,
     DELETE_RISORSA_ADOZIONE,ESITO_CONFERENZA_PAESAGGISTICA
-} from '../../graphql'
+} from 'schema'
 
 const UI = ({
     back, 

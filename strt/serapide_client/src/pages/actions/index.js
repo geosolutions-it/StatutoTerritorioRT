@@ -13,7 +13,7 @@ import RichiestaConferenza from './RichiestaConferenza'
 import IntegrazioniRichieste from './IntegrazioniRichieste'
 import SvolgimentoConferenza from './SvolgimentoConfernza'
 import RichiestaIntegrazioni from './RichiestaIntegrazioni'
-import {INVIO_PARERI_VAS, CONTRODEDUZIONI} from '../../graphql'
+import {INVIO_PARERI_VAS, CONTRODEDUZIONI} from 'schema'
 import Adozione from './Adozione'
 import Osservazioni from './Osservazioni'
 import OsservazioniRegione from './OsservazioniRegione'
@@ -24,6 +24,7 @@ import RevisionePianoCP from './RevisionePianoPostCP'
 import PareriAdozioneSCA from './PareriAdozioneSCA'
 import ParereMotivatoAc from './ParereMotivatoAdozione'
 import UploadElaboratiAdozioneVAS from './UploadElaboratiVASAdozione'
+
 // parametri passati di default piano, back, utente, scadenza
 
 export default {

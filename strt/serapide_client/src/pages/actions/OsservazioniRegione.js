@@ -8,20 +8,21 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import {EnhancedSwitch} from '../../components/Switch'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import {EnhancedSwitch} from 'components/Switch'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
-import  {showError, getInputFactory, getCodice} from '../../utils'
+import  {showError, getInputFactory, getCodice} from 'utils'
+import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE,
     UPDATE_ADOZIONE,
     TRASMISSIONE_OSSERVAZIONI
-} from '../../graphql'
+} from 'schema'
 
 const getInput = getInputFactory("proceduraAdozione")
 
-const UI = ({
+const UI = rebuildTooltip()(({
     back, 
     proceduraAdozione: { node: {uuid, osservazioniConcluse} = {}},
     piano: {
@@ -64,10 +65,10 @@ const UI = ({
                 mutation={UPDATE_ADOZIONE} getInput={getInput(uuid, "osservazioniConcluse")}></EnhancedSwitch>
                 
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_OSSERVAZIONI} canCommit={true}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_OSSERVAZIONI} canCommit={osservazioniConcluse}></SalvaInvia>
                 </div>
             </React.Fragment>)
-    }
+    })
 
 export default (props) => (
     <Query query={GET_ADOZIONE} variables={{codice: getCodice(props)}} onError={showError}>

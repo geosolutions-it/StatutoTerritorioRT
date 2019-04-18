@@ -8,17 +8,17 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import FileUpload from '../../components/UploadSingleFile'
-import ActionTitle from '../../components/ActionTitle'
-import SalvaInvia from '../../components/SalvaInvia'
-import Elaborati from '../../components/ElaboratiPiano'
+import FileUpload from 'components/UploadSingleFile'
+import ActionTitle from 'components/ActionTitle'
+import SalvaInvia from 'components/SalvaInvia'
+import Elaborati from 'components/ElaboratiPiano'
 
-import  {showError, elaboratiCompletati, getCodice} from '../../utils'
+import  {showError, elaboratiCompletati, getCodice} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD, UPLOAD_ELABORATI_VAS
-} from '../../graphql'
+} from 'schema'
 
 const UI = ({
     back,

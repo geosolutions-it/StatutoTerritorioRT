@@ -8,27 +8,27 @@
 import React from 'react'
 import {Query, Mutation} from "react-apollo"
 
-import FileUpload from '../../components/UploadSingleFile'
-import Elaborati from '../../components/ElaboratiPiano'
-import Resource from '../../components/Resource'
-import {EnhancedListSelector} from '../../components/ListSelector'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import AddContact from '../../components/AddContact'
-import Button from '../../components/IconButton'
-import TextWithTooltip from '../../components/TextWithTooltip'
-import {EnhancedDateSelector} from '../../components/DateSelector'
-import Input from '../../components/EnhancedInput'
+import FileUpload from 'components/UploadSingleFile'
+import Elaborati from 'components/ElaboratiPiano'
+import Resource from 'components/Resource'
+import {EnhancedListSelector} from 'components/ListSelector'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import AddContact from 'components/AddContact'
+import Button from 'components/IconButton'
+import TextWithTooltip from 'components/TextWithTooltip'
+import {EnhancedDateSelector} from 'components/DateSelector'
+import Input from 'components/EnhancedInput'
 
-import {rebuildTooltip} from '../../enhancers/utils'
-import  {showError, elaboratiCompletati, getInputFactory, getCodice} from '../../utils'
+import {rebuildTooltip} from 'enhancers'
+import  {showError, elaboratiCompletati, getInputFactory, getCodice} from 'utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
     AVVIO_FILE_UPLOAD, UPDATE_PIANO,
     GET_CONTATTI,
     AVVIA_PIANO
-} from '../../graphql'
+} from 'schema'
 
 const getProceduraAvvioInput = getInputFactory("proceduraAvvio")
 
@@ -38,7 +38,7 @@ const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
 }
 const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
-const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
+const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
     proceduraAvvio: {node: {
             uuid, conferenzaCopianificazione, 
             dataScadenzaRisposta,
@@ -99,7 +99,7 @@ const UI = rebuildTooltip({onUpdate: true, log: true, comp: "AvvioProc"})(({
                 
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
                 <Input getInput={getProceduraAvvioInput(uuid, "garanteNominativo")} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />
-                <Input getInput={getProceduraAvvioInput(uuid, "garantePec")} mutation={UPDATE_AVVIO} disabled={false} className="mb-3 rounded-pill" placeholder="Indirizzo Pec" onChange={undefined} value={garantePec} type="url"/>
+                <Input getInput={getProceduraAvvioInput(uuid, "garantePec")} mutation={UPDATE_AVVIO} disabled={false} className="mb-3 rounded-pill" placeholder="Indirizzo Pec" onChange={undefined} value={garantePec} type="email"/>
                 <div className="action-uploader  align-self-start border-bottom ">
                 <FileUpload 
                     {...fileProps}

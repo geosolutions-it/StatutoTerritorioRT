@@ -9,14 +9,14 @@ import React from 'react'
 import {Query} from 'react-apollo'
 import {Input} from 'reactstrap'
 
-import Resource from '../../components/Resource'
-import ActionTitle from '../../components/ActionTitle'
-import SalvaInvia from '../../components/SalvaInvia'
+import Resource from 'components/Resource'
+import ActionTitle from 'components/ActionTitle'
+import SalvaInvia from 'components/SalvaInvia'
 
-import  {showError, getCodice} from '../../utils'
-import {withControllableState} from '../../enhancers/utils'
+import  {showError, getCodice} from 'utils'
+import {withControllableState} from 'enhancers'
 
-import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from '../../graphql'
+import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from 'schema'
 
 const enhancers = withControllableState("url", "onUrlChange","")
 

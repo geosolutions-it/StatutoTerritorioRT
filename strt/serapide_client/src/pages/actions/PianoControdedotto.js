@@ -8,18 +8,18 @@
 import React from 'react'
 import {Query} from "react-apollo"
 
-import {EnhancedSwitch} from "../../components/Switch"
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Elaborati from '../../components/ElaboratiPiano'
+import {EnhancedSwitch} from "components/Switch"
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import Elaborati from 'components/ElaboratiPiano'
 
-import  {showError, elaboratiCompletati, getInputFactory, getCodice} from '../../utils'
+import  {showError, elaboratiCompletati, getInputFactory, getCodice} from 'utils'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE,
     PIANO_CONTRODEDOTTO,
     GET_RISORSE_PIANO_CONTRODEDOTTO,
     CONTRODEDOTTO_FILE_UPLOAD, DELETE_RISORSA_CONTRODEDOTTO
-} from '../../graphql'
+} from 'schema'
 
 const getInput = getInputFactory("proceduraAdozione")
 

@@ -7,12 +7,12 @@
  */
 import React from 'react'
 import {Switch, Route} from 'react-router-dom'
-import Azioni from '../components/TabellaAzioni'
-import FaseSwitch from '../components/FaseSwitch'
+import Azioni from 'components/TabellaAzioni'
+import FaseSwitch from 'components/FaseSwitch'
 import components from './actions'
 
 import classNames from 'classnames'
-import { getAction} from '../utils'
+import { getAction} from 'utils'
 import {canExecuteAction} from '../autorizzazioni'
 
 import {camelCase} from 'lodash'
