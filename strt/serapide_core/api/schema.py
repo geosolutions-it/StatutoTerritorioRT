@@ -36,6 +36,7 @@ from serapide_core.api.graphene.mutations import (
     piano,
     uploads,
     adozione,
+    approvazione,
 )
 
 logger = logging.getLogger(__name__)
@@ -69,6 +70,9 @@ class Query(object):
 
     procedure_adozione = DjangoFilterConnectionField(types.ProceduraAdozioneNode,
                                                      filterset_class=filters.ProceduraAdozioneMembershipFilter)
+
+    procedure_approvazione = DjangoFilterConnectionField(types.ProceduraApprovazioneNode,
+                                                         filterset_class=filters.ProceduraApprovazioneMembershipFilter)
 
     consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
 
@@ -172,6 +176,10 @@ class Mutation(object):
     invio_parere_motivato_ac = adozione.InvioParereMotivatoAC.Field()
     upload_elaborati_adozione_vas = adozione.UploadElaboratiAdozioneVAS.Field()
 
+    create_procedura_approvazione = approvazione.CreateProceduraApprovazione.Field()
+    update_procedura_approvazione = approvazione.UpdateProceduraApprovazione.Field()
+    trasmissione_approvazione = approvazione.TrasmissioneApprovazione.Field()
+
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
     upload_risorsa_vas = uploads.UploadRisorsaVAS.Field()
@@ -188,3 +196,5 @@ class Mutation(object):
     delete_risorsa_piano_rev_post_cp = uploads.DeleteRisorsaPianoRevPostCP.Field()
     upload_risorsa_adozione_vas = uploads.UploadRisorsaAdozioneVAS.Field()
     delete_risorsa_adozione_vas = uploads.DeleteRisorsaAdozioneVAS.Field()
+    upload_risorsa_approvazione = uploads.UploadRisorsaApprovazione.Field()
+    delete_risorsa_approvazione = uploads.DeleteRisorsaApprovazione.Field()

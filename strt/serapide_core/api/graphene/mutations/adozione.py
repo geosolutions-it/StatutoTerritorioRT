@@ -44,6 +44,7 @@ from serapide_core.modello.models import (
 from serapide_core.modello.enums import (
     FASE,
     STATO_AZIONE,
+    TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
     TIPOLOGIA_ATTORE,
 )
@@ -212,7 +213,8 @@ class TrasmissioneAdozione(graphene.Mutation):
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
 
-                if procedura_adozione.pubblicazione_burt_data:
+                if procedura_adozione.pubblicazione_burt_data and \
+                piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
                     _expire_days = getattr(settings, 'ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', 60)
                     _alert_delta = datetime.timedelta(days=_expire_days)
                     _pareri_adozione_sca_expire = procedura_adozione.pubblicazione_burt_data + _alert_delta
@@ -661,7 +663,8 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase.nome == FASE.avvio and \
+        piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
             _pareri_sca = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca)
             for _psca in _pareri_sca:
@@ -777,7 +780,8 @@ class InvioParereMotivatoAC(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase.nome == FASE.avvio and \
+        piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
             _parere_motivato_ac = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.parere_motivato_ac).first()
 

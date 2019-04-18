@@ -78,7 +78,8 @@ class CreateProceduraApprovazione(relay.ClientIDMutation):
                 _procedura_approvazione.ente = _piano.ente
                 _procedura_approvazione_data['id'] = _procedura_approvazione.id
                 _procedura_approvazione_data['uuid'] = _procedura_approvazione.uuid
-                nuova_procedura_approvazione = update_create_instance(_procedura_approvazione, _procedura_approvazione_data)
+                nuova_procedura_approvazione = update_create_instance(
+                    _procedura_approvazione, _procedura_approvazione_data)
 
                 _piano.procedura_approvazione = nuova_procedura_approvazione
                 _piano.save()
@@ -127,7 +128,8 @@ class UpdateProceduraApprovazione(relay.ClientIDMutation):
                     _procedura_approvazione_data.pop('ente')
                     # This cannot be changed
 
-                procedura_approvazione_aggiornata = update_create_instance(_procedura_approvazione, _procedura_approvazione_data)
+                procedura_approvazione_aggiornata = update_create_instance(
+                    _procedura_approvazione, _procedura_approvazione_data)
                 return cls(procedura_approvazione_aggiornata=procedura_approvazione_aggiornata)
             except BaseException as e:
                 tb = traceback.format_exc()
