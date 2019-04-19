@@ -71,7 +71,7 @@ const UI = ({
                 <div className="w-100 border-top mt-3"></div> 
                 <div className="align-self-center mt-5">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={PIANO_CONTRODEDOTTO} 
-                        canCommit={elaboratiCpmpleti}></SalvaInvia>
+                        canCommit></SalvaInvia>
                 </div>
             </React.Fragment>)}
 

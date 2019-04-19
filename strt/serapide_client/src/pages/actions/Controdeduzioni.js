@@ -26,8 +26,7 @@ const UI = rebuildTooltip()(({
     disableSave = false,
     showData = true ,
     back, 
-    piano: {
-        tipo: tipoPiano = ""} = {},
+    // piano: {tipo: tipoPiano = ""} = {},
     proceduraAdozione: { node: {uuid, dataRicezionePareri, risorse : {edges: resources = []} = {}} = {}} = {},
     utente: {fiscalCode} = {},
     titolo = "Osservazioni Privati",
@@ -55,14 +54,14 @@ const UI = rebuildTooltip()(({
                         resourceMutation={DELETE_RISORSA_ADOZIONE}
                         variables={{codice: uuid, tipo: tipoDoc }}
                         isLocked={false}/>
-                <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
+                {/* <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
                 <Elaborati 
                     tipoPiano={tipoPiano.toLowerCase()} 
                     resources={resources}
                     mutation={ADOZIONE_FILE_UPLOAD}
                     resourceMutation={DELETE_RISORSA_ADOZIONE}
                     uuid={uuid}
-                           />        
+                           />         */}
                 <div className="align-self-center mt-7">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={osservazioni.length> 0 && !disableSave}></SalvaInvia>
                 </div>

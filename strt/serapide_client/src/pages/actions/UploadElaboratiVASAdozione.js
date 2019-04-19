@@ -22,13 +22,13 @@ import {GET_ADOZIONE_VAS,
 
 const UI = ({
     back,
-    piano: {tipo: tipoPiano} = {}, 
+    // piano: {tipo: tipoPiano} = {}, 
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {}
     }) => {
         
         const [{node: sintesi} = {}] = resources.filter(({node: {tipo}}) => tipo === 'documento_sintesi')
         const [{node: rapporto} = {}] = resources.filter(({node: {tipo}}) => tipo === 'rapporto_ambientale')
-        const elaboratiCompleti = elaboratiCompletati(tipoPiano, resources)
+    // const elaboratiCompleti = elaboratiCompletati(tipoPiano, resources)
         return (
             <React.Fragment>
                 <ActionTitle>Upload Elaborati VAS</ActionTitle>
@@ -49,14 +49,14 @@ const UI = ({
                     resourceMutation={DELETE_RISORSA_ADOZIONE_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
                 </div>
-                <h4 className="font-weight-light pl-4 pb-1">Elaborati</h4>
+                {/* <h4 className="font-weight-light pl-4 pb-1">Elaborati</h4>
                 <Elaborati
                         tipoPiano={tipoPiano.toLowerCase()} 
                         resources={resources}
                         mutation={ADOZIONE_VAS_FILE_UPLOAD}
                         resourceMutation={DELETE_RISORSA_ADOZIONE_VAS}
                         uuid={uuid}
-                />
+                /> */}
                 <div className="align-self-center mt-7">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={UPLOAD_ELABORATI_ADOZIONE_VAS} canCommit={rapporto && sintesi && elaboratiCompleti}></SalvaInvia>
                 </div>
