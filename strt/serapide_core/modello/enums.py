@@ -131,6 +131,8 @@ TIPOLOGIA_AZIONE = Choices(
         # Approvazione
         ('trasmissione_approvazione', _('Invio documentazione per Approvazione')),  # Comune
         ('attribuzione_conformita_pit', _('Attribuzione Conformità PIT')),  # Regione
+        ('esito_conferenza_paesaggistica_ap', _('Conferenza Paesaggistica')),  # Regione
+        ('rev_piano_post_cp_ap', _('Revisione Piano post Conf. Paesaggistica')),  # Comune
     )
 
 FASE_AZIONE = Choices(
@@ -170,6 +172,8 @@ FASE_AZIONE = Choices(
         # Approvazione
         ('trasmissione_approvazione', 'adozione'),
         ('attribuzione_conformita_pit', 'adozione'),
+        ('esito_conferenza_paesaggistica_ap', 'adozione'),
+        ('rev_piano_post_cp_ap', 'adozione'),
     )
 
 TOOLTIP_AZIONE = Choices(
