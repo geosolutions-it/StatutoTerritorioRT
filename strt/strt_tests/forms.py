@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #########################################################################
 #
-# Copyright 2018, GeoSolutions Sas.
+# Copyright 2019, GeoSolutions SAS.
 # All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
@@ -11,7 +11,17 @@
 
 from django import forms
 from django.core.validators import RegexValidator
-from strt_users.models import Organization, MembershipType
+
+from strt_users.models import (
+    Organization,
+    # MembershipType
+)
+
+
+class ChoiceFieldNoValidation(forms.ChoiceField):
+
+    def validate(self, value):
+        pass
 
 
 class UserAuthenticationForm(forms.Form):
@@ -35,11 +45,12 @@ class UserAuthenticationForm(forms.Form):
         queryset=Organization.objects.all(),
         required=False
     )
-    membership_type = forms.ModelChoiceField(
+
+    membership_type = ChoiceFieldNoValidation(
         label='Ruolo',
-        queryset=MembershipType.objects.all(),
         required=True,
     )
+
     hidden_orgs = forms.CharField(
         widget=forms.HiddenInput(),
         required=False

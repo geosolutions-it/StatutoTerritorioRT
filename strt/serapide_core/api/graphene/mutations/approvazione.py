@@ -175,7 +175,6 @@ class TrasmissioneApprovazione(graphene.Mutation):
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_attribuzione_conformita_pit, piano=piano)
 
-                # TODO: Check Conferenza Paesaggistica and Create correct notifications
                 if not piano.procedura_adozione.richiesta_conferenza_paesaggistica:
                     # Se non è stata fatta prima, va fatta ora...
                     procedura_approvazione.richiesta_conferenza_paesaggistica = True
