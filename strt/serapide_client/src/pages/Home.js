@@ -23,7 +23,8 @@ const getCurrentAction = (url = "", pathname = "") => {
 }
 const showAdozione = (f) => f === "AVVIO" || f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 const showApprovazione = (f) => f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
-const NotAllowed = () => (<div className="p-6 text-danger"><h4>Azione non disponibile per stato o permessi utente</h4></div>)
+
+
 const NotAvailable = () => (<div className="p-6">Azione non implementata</div>)
 
 

@@ -178,6 +178,9 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                 query={GET_CONTATTI}
                                 getList={getContatti}
                                 variables={{}}
+                                getList={getContatti}
+                                label="SOGGETTI NON ISTITUZIONALI"	
+                                size="lg"
                                 onChange={changed}
                                 btn={(toggleOpen) => (
                                     <div className="row">
