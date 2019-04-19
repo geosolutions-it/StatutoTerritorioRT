@@ -58,7 +58,7 @@ const UI = ({
                         uuid={uuid}
                 /> */}
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={UPLOAD_ELABORATI_ADOZIONE_VAS} canCommit={rapporto && sintesi && elaboratiCompleti}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={UPLOAD_ELABORATI_ADOZIONE_VAS} canCommit={rapporto && sintesi}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }
