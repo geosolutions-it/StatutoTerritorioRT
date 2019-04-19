@@ -167,7 +167,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
                 _alert_delta = datetime.timedelta(days=_expire_days)
                 _attribuzione_conformita_pit = Azione(
                     tipologia=TIPOLOGIA_AZIONE.attribuzione_conformita_pit,
-                    attore=TIPOLOGIA_ATTORE.enti,
+                    attore=TIPOLOGIA_ATTORE.regione,
                     order=_order,
                     stato=STATO_AZIONE.attesa,
                     data=_trasmissione_approvazione.data + _alert_delta
@@ -175,6 +175,8 @@ class TrasmissioneApprovazione(graphene.Mutation):
                 _attribuzione_conformita_pit.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_attribuzione_conformita_pit, piano=piano)
+
+                # TODO: Check Conferenza Paesaggistica and Create correct notifications
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
