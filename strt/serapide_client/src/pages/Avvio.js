@@ -6,14 +6,23 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import Risorsa from 'components/Resource'
-import {formatDate, showError} from 'utils'
-import {GET_AVVIO, GET_CONFERENZA} from 'schema'
 import {Query} from 'react-apollo'
-import {withControllableState} from 'enhancers'
 import {Nav, NavItem,NavLink, TabContent,TabPane} from 'reactstrap'
-import classnames from 'classnames'
+
+import Risorsa from 'components/Resource'
 import VAS from 'components/VAS'
+import Elaborati from 'components/ElaboratiPiano'
+
+import classnames from 'classnames'
+import {withControllableState} from 'enhancers'
+import {formatDate, showError} from 'utils'
+
+import {GET_AVVIO, GET_CONFERENZA} from 'schema'
+
+
+
+
+
 const enhancers = withControllableState('section', 'toggleSection', 'vas')
 
 const UI = enhancers(({
@@ -41,7 +50,7 @@ const UI = enhancers(({
         const {node: quadro} = risorseAvvio.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").shift() || {}
         const {node: programma} = risorseAvvio.filter(({node: {tipo}}) => tipo === "programma_attivita").shift() || {}
         const {node: garante } = risorseAvvio.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").shift() || {}
-        const allegati = risorseAvvio.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node) 
+        // const allegati = risorseAvvio.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node) 
         const integrazioni = risorseAvvio.filter(({node: {tipo}}) => tipo === "integrazioni").map(({node}) => node) 
     return (
         <div className="d-flex flex-column pb-4 pt-5">
@@ -71,21 +80,19 @@ const UI = enhancers(({
                 </div>
                 <div className="col-12 py-2">
                     <Risorsa fileSize={false} useLabel resource={garante} isLocked={true}/> 
-                </div></React.Fragment>) : (<div className="col-12 py-2">Nessun elaborato presente</div>)}
+                </div>
+                <div className="col-12 pt-4">
+                    <Elaborati upload={false} resources={risorseAvvio}></Elaborati>
+                </div>
+                </React.Fragment>) : (<div className="col-12 py-2">Nessun elaborato presente</div>)}
                 {integrazioni.length > 0 && (<div className="col-12 pt-4">INTEGRAZIONI
                 {integrazioni.map(doc => (
                     <div key={doc.uuid} className="col-12 px-0 py-2">
                         <Risorsa fileSize={false}  resource={doc} isLocked={true}/> 
                 </div>))}
                 </div>)}
-                <div className="col-7 pt-4">ALTRI ALLEGATI
-                {allegati.map(doc => (
-                    <div key={doc.uuid} className="col-12 px-0 py-2">
-                        <Risorsa fileSize={false}  resource={doc} isLocked={true}/> 
-                </div>))}
-                </div>
                 
-                <div className="col-5 pt-4">GARANTE DELL'INFORMAZIONE E DELLA PARTECIAPZIONE
+                <div className="col-12 pt-4">GARANTE DELL'INFORMAZIONE E DELLA PARTECIAPZIONE
                 <div className="col-12 pt-2 pb-1">{garanteNominativo}</div>
                 <div className="col-12">{garantePec}</div>
                 </div>

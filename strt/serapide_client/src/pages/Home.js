@@ -15,7 +15,7 @@ import classNames from 'classnames'
 import { getAction} from 'utils'
 import {canExecuteAction} from '../autorizzazioni'
 
-import {camelCase} from 'lodash'
+import {camelCase, map, snakeCase} from 'lodash'
 
 
 const getCurrentAction = (url = "", pathname = "") => {
@@ -70,9 +70,17 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                     const El = components[camelCase(tipo)]
                     return El && (
                             <Route key={tipo} path={`${path}/${tipo}`} >
-                                {getAction(stato) && canExecuteAction({attore, tipologia})  ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
+                                {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
                             </Route>)
                 })}
+                {/* {map(components, (El, key) => {
+                    const tipo = snakeCase(key)
+                    
+                    return El && (
+                            <Route key={key} path={`${path}/${tipo}`} >
+                                <El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>
+                            </Route>)
+                })} */}
                 { action && (
                 <Route path={path}>
                     <NotAvailable/>

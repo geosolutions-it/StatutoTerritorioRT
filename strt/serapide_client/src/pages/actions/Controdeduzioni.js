@@ -11,7 +11,7 @@ import {Query} from 'react-apollo'
 import UploadFiles from 'components/UploadFiles'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
-import Elaborati from "components/ElaboratiPiano"
+//import Elaborati from "components/ElaboratiPiano"
 
 import  {showError, formatDate, getCodice} from 'utils'
 import {rebuildTooltip} from 'enhancers'

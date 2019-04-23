@@ -13,7 +13,7 @@ import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import Elaborati from 'components/ElaboratiPiano'
 
-import  {showError, elaboratiCompletati, getInputFactory, getCodice} from 'utils'
+import  {showError, getInputFactory, getCodice} from 'utils'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE,
     PIANO_CONTRODEDOTTO,
@@ -35,7 +35,7 @@ const UI = ({
             tipo: tipoPiano = ""
             },
         back}) => {
-            const elaboratiCpmpleti = elaboratiCompletati(tipoPiano, edges)
+            // const elaboratiCpmpleti = elaboratiCompletati(tipoPiano, edges)
             return (<React.Fragment>
                 <ActionTitle>
                   Piano Controdedotto

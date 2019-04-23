@@ -28,7 +28,7 @@ const UI = rebuildTooltip()(({
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
     utente: {fiscalCode} = {},
     scadenza,
-    tipo: tipoDoc = "parere_moticato",
+    tipo: tipoDoc = "parere_motivato",
     label = "PARERE MOTIVATO AC",
     saveMutation = INVIO_PARERE_MOTIVATO_AC}) => {
         

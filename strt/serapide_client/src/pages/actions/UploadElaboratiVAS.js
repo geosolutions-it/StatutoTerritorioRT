@@ -11,9 +11,9 @@ import {Query} from 'react-apollo'
 import FileUpload from 'components/UploadSingleFile'
 import ActionTitle from 'components/ActionTitle'
 import SalvaInvia from 'components/SalvaInvia'
-import Elaborati from 'components/ElaboratiPiano'
+// import Elaborati from 'components/ElaboratiPiano'
 
-import  {showError, elaboratiCompletati, getCodice} from 'utils'
+import  {showError, getCodice} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,

@@ -4,7 +4,7 @@ import { it } from 'date-fns/locale'
 import { toast } from 'react-toastify'
 import elaborati from './Elaborati'
 
-export {get} from "lodash"
+export {get, map} from "lodash"
 
 export const getEnteLabel = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `${tipoente} di ${name}`
 

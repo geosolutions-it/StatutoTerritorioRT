@@ -249,6 +249,47 @@ ${FR.APPROVAZIONE}
 `
 
 
+export const GET_ADOZIONE_PAGE = gql`
+
+query RisorsePaginaAdozione($codice: String!){
+  pianoRevPostCp(piano_Codice: $codice){
+      edges{
+        node{
+          uuid
+          risorse(archiviata: false){...Risorse}
+        }
+    }
+  }
+  pianoControdedotto(piano_Codice: $codice){
+      edges{
+        node{
+            uuid
+            risorse(archiviata: false){...Risorse}
+            }
+      }        
+  }
+
+  procedureAdozione(piano_Codice: $codice) {
+      edges{
+          node{
+            ...ADOZIONE 
+            }
+            
+        }
+    }
+  procedureAdozioneVas(piano_Codice: $codice){
+      edges{
+        node{
+            uuid
+            risorse(archiviata: false) {...Risorse}
+        }
+      }
+    }
+}
+${FR.ADOZIONE}
+${FR.RISORSE}
+`
+
 // LOCAL STATE
 // example of local state query
 export const GET_VAS_AUTHORITIES = gql`

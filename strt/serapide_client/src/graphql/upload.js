@@ -83,7 +83,7 @@ export const DELETE_RISORSA_COPIANIFICAZIONE = gql`
 
 // Avvio
 export const AVVIO_FILE_UPLOAD = gql`
-  mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+  mutation AvvioUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
       upload: uploadRisorsaAvvio(file: $file, codice: $codice, tipoFile: $tipo) {
         success
         fileName

@@ -6,20 +6,21 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-
+import { Route, Switch} from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Route, Switch} from 'react-router-dom';
 import {Query} from "react-apollo"
+
 import Anagrafica from './Anagrafica'
+import Home from "./Home"
 import Formazione from './Formazione'
 import Avvio from './Avvio'
-import {getEnteLabel, getPianoLabel} from "utils"
-import {GET_PIANI} from "schema"
+import Adozione from './Adozione'
 import Injector from 'components/Injector'
 import SideBar from 'components/SideBarMenu'
 import StatoProgress from 'components/StatoProgress'
-import Home from "./Home"
 
+import {getEnteLabel, getPianoLabel} from "utils"
+import {GET_PIANI} from "schema"
 
 const getActive = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
@@ -66,6 +67,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                             <Route  path={`${path}/avvio`} >
                                 <Avvio piano={piano}></Avvio>
                             </Route>
+                            <Route  path={`${path}/adozione`} >
+                                <Adozione piano={piano}></Adozione>
+                            </Route>
                             <Route  path={`${path}/home`} render={(props) => <Home utente={utente} azioni={azioni} piano={piano} {...props}></Home>}/>
                             <Route path={path}>
                                 <div className="p-6"><h1> Works in progress </h1> 
@@ -76,11 +80,8 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                                     </div>
                                 </div>
                             </Route>       
-                        </Switch>
-                        
-                            
+                        </Switch>      
                     </div>
-                   
                 </div>
             </React.Fragment>
             )}
