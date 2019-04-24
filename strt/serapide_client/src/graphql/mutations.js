@@ -311,6 +311,39 @@ mutation RevisioneConferenzaPaesaggistica($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
+// Revisione piano post conferenza paesaggistica in approvazione
+
+export const REVISONE_CONFERENZA_PAESAGGISTICA_AP = gql`
+mutation RevisioneConferenzaPaesaggisticaAp($codice: String!) {
+  revisioneConferenzaPaesaggisticaAp(uuid: $codice){
+    errors
+    approvazioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
+
+export const ATTRIBUZIONE_CONFORMITA_PIT = gql`
+mutation  AttribuzioneConformitaPit($codice: String!) {
+  attribuzioneConformitaPit(uuid: $codice){
+    errors
+    approvazioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
+
+
 
 // Vas Adozione
 

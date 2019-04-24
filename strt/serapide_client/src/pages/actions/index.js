@@ -25,10 +25,13 @@ import PareriAdozioneSCA from './PareriAdozioneSCA'
 import ParereMotivatoAc from './ParereMotivatoAdozione'
 import UploadElaboratiAdozioneVAS from './UploadElaboratiVASAdozione'
 import Approvazione from './Approvazione'
+import UploadFile from "./UploadFile"
 
 import {INVIO_PARERI_VAS, CONTRODEDUZIONI,
         GET_APPROVAZIONE, APPROVAZIONE_FILE_UPLOAD,
-        DELETE_RISORSA_APPROVAZIONE, ESITO_CONFERENZA_PAESAGGISTICA_AP} from 'schema'
+        DELETE_RISORSA_APPROVAZIONE, ESITO_CONFERENZA_PAESAGGISTICA_AP,
+        REVISONE_CONFERENZA_PAESAGGISTICA_AP,
+        ATTRIBUZIONE_CONFORMITA_PIT} from 'schema'
 
 
 // parametri passati di default piano, back, utente, scadenza
@@ -69,7 +72,17 @@ export default {
                                                           uploadM={APPROVAZIONE_FILE_UPLOAD}
                                                           deleteM={DELETE_RISORSA_APPROVAZIONE}
                                                           {...props}/>),
-    
+    revPianoPostCpAp: (props) => (<RevisionePianoCP outerQuery={GET_APPROVAZIONE} 
+                                                    saveM={REVISONE_CONFERENZA_PAESAGGISTICA_AP} {...props}/>),
+    attribuzioneConformitaPit: (props) => (<UploadFile  title="Conformità PIT"
+                                                        placeholder="Documento di conformità Pit"
+                                                        fileType="conformita-pit"
+                                                        subTitle="Caricare il file di conformità"
+                                                        query={GET_APPROVAZIONE} 
+                                                        deleteRes={DELETE_RISORSA_APPROVAZIONE} 
+                                                        uploadRes={APPROVAZIONE_FILE_UPLOAD}
+                                                        closeAction={ATTRIBUZIONE_CONFORMITA_PIT}
+                                                        {...props}/>)
     
 }
 
