@@ -431,6 +431,10 @@ class PianoControdedotto(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.piano_controdedotto).first()
 
             if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna:
+                _piano_controdedotto.stato = STATO_AZIONE.nessuna
+                _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
+                _piano_controdedotto.save()
+
                 if not procedura_adozione.richiesta_conferenza_paesaggistica:
                     _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
                     if not _procedura_adozione_vas or _procedura_adozione_vas.conclusa:
@@ -443,10 +447,6 @@ class PianoControdedotto(graphene.Mutation):
                     piano.procedura_approvazione = procedura_approvazione
                     piano.save()
                 else:
-                    _piano_controdedotto.stato = STATO_AZIONE.nessuna
-                    _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
-                    _piano_controdedotto.save()
-
                     _convocazione_cp = Azione(
                         tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica,
                         attore=TIPOLOGIA_ATTORE.regione,
