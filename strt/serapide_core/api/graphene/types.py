@@ -44,6 +44,7 @@ from serapide_core.modello.models import (
     ProceduraAdozione,
     ProceduraAdozioneVAS,
     ProceduraApprovazione,
+    ProceduraPubblicazione,
     PianoControdedotto,
     PianoRevPostCP,
     ConferenzaCopianificazione,
@@ -56,6 +57,7 @@ from serapide_core.modello.models import (
     RisorsePianoRevPostCP,
     RisorseAdozioneVas,
     RisorseApprovazione,
+    RisorsePubblicazione,
 )
 
 from serapide_core.modello.enums import (
@@ -241,6 +243,16 @@ class RisorseApprovazioneType(DjangoObjectType):
 
     class Meta:
         model = RisorseApprovazione
+        filter_fields = ['risorsa__fase__codice']
+        interfaces = (relay.Node, )
+
+
+class RisorsePubblicazioneType(DjangoObjectType):
+
+    risorsa = DjangoFilterConnectionField(RisorsaNode)
+
+    class Meta:
+        model = RisorsePubblicazione
         filter_fields = ['risorsa__fase__codice']
         interfaces = (relay.Node, )
 
@@ -480,6 +492,21 @@ class ProceduraApprovazioneNode(DjangoObjectType):
 
     class Meta:
         model = ProceduraApprovazione
+        # Allow for some more advanced filtering here
+        filter_fields = {
+            'ente': ['exact'],
+            'piano__codice': ['exact'],
+        }
+        interfaces = (relay.Node, )
+
+
+class ProceduraPubblicazioneNode(DjangoObjectType):
+
+    ente = graphene.Field(EnteNode)
+    risorsa = DjangoFilterConnectionField(RisorsePubblicazioneType)
+
+    class Meta:
+        model = ProceduraPubblicazione
         # Allow for some more advanced filtering here
         filter_fields = {
             'ente': ['exact'],

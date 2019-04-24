@@ -74,6 +74,10 @@ class Query(object):
     procedure_approvazione = DjangoFilterConnectionField(types.ProceduraApprovazioneNode,
                                                          filterset_class=filters.ProceduraApprovazioneMembershipFilter)
 
+    procedure_pubblicazione = DjangoFilterConnectionField(
+        types.ProceduraPubblicazioneNode,
+        filterset_class=filters.ProceduraPubblicazioneMembershipFilter)
+
     consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
 
     conferenza_copianificazione = DjangoFilterConnectionField(types.ConferenzaCopianificazioneNode)
@@ -181,6 +185,7 @@ class Mutation(object):
     trasmissione_approvazione = approvazione.TrasmissioneApprovazione.Field()
     esito_conferenza_paesaggistica_ap = approvazione.EsitoConferenzaPaesaggisticaAP.Field()
     revisione_conferenza_paesaggistica_ap = approvazione.RevisionePianoPostConfPaesaggisticaAP.Field()
+    attribuzione_conformita_pit = approvazione.AttribuzioneConformitaPIT.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
@@ -190,13 +195,15 @@ class Mutation(object):
     delete_risorsa_avvio = uploads.DeleteRisorsaAvvio.Field()
     upload_risorsa_adozione = uploads.UploadRisorsaAdozione.Field()
     delete_risorsa_adozione = uploads.DeleteRisorsaAdozione.Field()
+    upload_risorsa_adozione_vas = uploads.UploadRisorsaAdozioneVAS.Field()
+    delete_risorsa_adozione_vas = uploads.DeleteRisorsaAdozioneVAS.Field()
+    upload_risorsa_approvazione = uploads.UploadRisorsaApprovazione.Field()
+    delete_risorsa_approvazione = uploads.DeleteRisorsaApprovazione.Field()
+    upload_risorsa_pubblicazione = uploads.UploadRisorsaPubblicazione.Field()
+    delete_risorsa_pubblicazione = uploads.DeleteRisorsaPubblicazione.Field()
     upload_risorsa_copianificazione = uploads.UploadRisorsaCopianificazione.Field()
     delete_risorsa_copianificazione = uploads.DeleteRisorsaCopianificazione.Field()
     upload_risorsa_piano_controdedotto = uploads.UploadRisorsaPianoControdedotto.Field()
     delete_risorsa_piano_controdedotto = uploads.DeleteRisorsaPianoControdedotto.Field()
     upload_risorsa_piano_rev_post_cp = uploads.UploadRisorsaPianoRevPostCP.Field()
     delete_risorsa_piano_rev_post_cp = uploads.DeleteRisorsaPianoRevPostCP.Field()
-    upload_risorsa_adozione_vas = uploads.UploadRisorsaAdozioneVAS.Field()
-    delete_risorsa_adozione_vas = uploads.DeleteRisorsaAdozioneVAS.Field()
-    upload_risorsa_approvazione = uploads.UploadRisorsaApprovazione.Field()
-    delete_risorsa_approvazione = uploads.DeleteRisorsaApprovazione.Field()
