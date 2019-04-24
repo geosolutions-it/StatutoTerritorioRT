@@ -185,6 +185,7 @@ class Mutation(object):
     trasmissione_approvazione = approvazione.TrasmissioneApprovazione.Field()
     esito_conferenza_paesaggistica_ap = approvazione.EsitoConferenzaPaesaggisticaAP.Field()
     revisione_conferenza_paesaggistica_ap = approvazione.RevisionePianoPostConfPaesaggisticaAP.Field()
+    attribuzione_conformita_pit = approvazione.AttribuzioneConformitaPIT.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()

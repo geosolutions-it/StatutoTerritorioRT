@@ -163,19 +163,6 @@ class TrasmissioneApprovazione(graphene.Mutation):
                 _trasmissione_approvazione.data = datetime.datetime.now(timezone.get_current_timezone())
                 _trasmissione_approvazione.save()
 
-                _expire_days = getattr(settings, 'ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS', 30)
-                _alert_delta = datetime.timedelta(days=_expire_days)
-                _attribuzione_conformita_pit = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.attribuzione_conformita_pit,
-                    attore=TIPOLOGIA_ATTORE.regione,
-                    order=_order,
-                    stato=STATO_AZIONE.attesa,
-                    data=_trasmissione_approvazione.data + _alert_delta
-                )
-                _attribuzione_conformita_pit.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_attribuzione_conformita_pit, piano=piano)
-
                 if not piano.procedura_adozione.richiesta_conferenza_paesaggistica:
                     # Se non è stata fatta prima, va fatta ora...
                     procedura_approvazione.richiesta_conferenza_paesaggistica = True
@@ -302,8 +289,14 @@ class RevisionePianoPostConfPaesaggisticaAP(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user, token):
 
         # Update Azioni Piano
+        # - Complete Current Actions
+        _order = piano.azioni.count()
+
         # - Update Action state accordingly
         if fase.nome == FASE.adozione:
+            _trasmissione_approvazione = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.trasmissione_approvazione).first()
+
             _rev_piano_post_cp = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp_ap).first()
 
@@ -311,6 +304,72 @@ class RevisionePianoPostConfPaesaggisticaAP(graphene.Mutation):
                 _rev_piano_post_cp.stato = STATO_AZIONE.nessuna
                 _rev_piano_post_cp.data = datetime.datetime.now(timezone.get_current_timezone())
                 _rev_piano_post_cp.save()
+
+                _expire_days = getattr(settings, 'ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS', 30)
+                _alert_delta = datetime.timedelta(days=_expire_days)
+                _attribuzione_conformita_pit = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.attribuzione_conformita_pit,
+                    attore=TIPOLOGIA_ATTORE.regione,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=_trasmissione_approvazione.data + _alert_delta
+                )
+                _attribuzione_conformita_pit.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_attribuzione_conformita_pit, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=input['uuid'])
+        _piano = _procedura_approvazione.piano
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user, _token)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="rev_piano_post_cp")
+
+                return RevisionePianoPostConfPaesaggisticaAP(
+                    approvazione_aggiornata=_procedura_approvazione,
+                    errors=[]
+                )
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class AttribuzioneConformitaPIT(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    approvazione_aggiornata = graphene.Field(types.ProceduraApprovazioneNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user, token):
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.adozione:
+            _attribuzione_conformita_pit = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.attribuzione_conformita_pit).first()
+
+            if _attribuzione_conformita_pit and _attribuzione_conformita_pit.stato != STATO_AZIONE.nessuna:
+                _attribuzione_conformita_pit.stato = STATO_AZIONE.nessuna
+                _attribuzione_conformita_pit.data = datetime.datetime.now(timezone.get_current_timezone())
+                _attribuzione_conformita_pit.save()
 
             if not procedura_approvazione.conclusa:
                 piano.chiudi_pendenti()
@@ -335,13 +394,6 @@ class RevisionePianoPostConfPaesaggisticaAP(graphene.Mutation):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user, _token)
 
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=info.context.user,
-                    piano=_piano,
-                    message_type="rev_piano_post_cp")
-
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
 
@@ -355,7 +407,7 @@ class RevisionePianoPostConfPaesaggisticaAP(graphene.Mutation):
                     _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
-                return RevisionePianoPostConfPaesaggisticaAP(
+                return AttribuzioneConformitaPIT(
                     approvazione_aggiornata=_procedura_approvazione,
                     errors=[]
                 )
