@@ -23,7 +23,8 @@ from serapide_core.modello.models import (
     ProceduraVAS,
     ProceduraAvvio,
     ProceduraAdozione,
-    ProceduraAdozioneVAS)
+    ProceduraAdozioneVAS,
+    ProceduraApprovazione,)
 
 
 # ############################################################################ #
@@ -55,6 +56,16 @@ def is_avvio(user, obj):
         return obj.fase.nome == FASE.avvio
     elif isinstance(obj, ProceduraVAS):
         return obj.piano.fase.nome == FASE.avvio
+    else:
+        return False
+
+
+@rules.predicate
+def is_adozione(user, obj):
+    if isinstance(obj, Piano):
+        return obj.fase.nome == FASE.adozione
+    elif isinstance(obj, ProceduraVAS):
+        return obj.piano.fase.nome == FASE.adozione
     else:
         return False
 
@@ -103,6 +114,11 @@ def has_procedura_adozione(piano):
 @rules.predicate
 def has_procedura_adozione_vas(piano):
     return ProceduraAdozioneVAS.objects.filter(piano=piano).count() > 0
+
+
+@rules.predicate
+def has_procedura_approvazione(piano):
+    return ProceduraApprovazione.objects.filter(piano=piano).count() > 0
 
 
 @rules.predicate
@@ -161,6 +177,12 @@ def adozione_vas_piano_conclusa(piano):
     _procedura_adozione_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
         return True
     return _procedura_adozione_vas.conclusa
+
+
+@rules.predicate
+def approvazione_piano_conclusa(piano):
+    _procedura_approvazione = ProceduraApprovazione.objects.filter(piano=piano).first()
+    return _procedura_approvazione.conclusa
 
 
 @rules.predicate
