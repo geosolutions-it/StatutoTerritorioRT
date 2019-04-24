@@ -35,6 +35,7 @@ from serapide_core.modello.models import (
     Azione,
     AzioniPiano,
     ProceduraApprovazione,
+    ProceduraPubblicazione,
 )
 
 from serapide_core.modello.enums import (
@@ -311,15 +312,15 @@ class RevisionePianoPostConfPaesaggisticaAP(graphene.Mutation):
                 _rev_piano_post_cp.data = datetime.datetime.now(timezone.get_current_timezone())
                 _rev_piano_post_cp.save()
 
+            if not procedura_approvazione.conclusa:
                 piano.chiudi_pendenti()
                 procedura_approvazione.conclusa = True
                 procedura_approvazione.save()
 
-                # TODO: Procedura Pubblicazione
-                # procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
-                #     piano=piano, ente=piano.ente)
-                # piano.procedura_approvazione = procedura_approvazione
-                # piano.save()
+                procedura_pubblicazione, created = ProceduraPubblicazione.objects.get_or_create(
+                    piano=piano, ente=piano.ente)
+                piano.procedura_pubblicazione = procedura_pubblicazione
+                piano.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 

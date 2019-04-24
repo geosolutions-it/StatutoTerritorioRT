@@ -134,6 +134,10 @@ TIPOLOGIA_AZIONE = Choices(
         ('attribuzione_conformita_pit', _('Attribuzione Conformità PIT')),  # Regione
         ('esito_conferenza_paesaggistica_ap', _('Convocazione CP')),  # Regione
         ('rev_piano_post_cp_ap', _('Pubblicazione Approvazione')),  # Comune
+        # Pubblicazione
+        ('convocazione_commissione_paritetica', _('Convocazione Commissione Paritetica')),  # Comune
+        ('compilazione_finale_monitoraggio_urbanistico', _('Compilazione Finale Monitoraggio Urbanistico')),  # Comune
+        ('pubblicazione_piano', _('Pubblicazione Piano')),  # Comune
     )
 
 FASE_AZIONE = Choices(
@@ -175,6 +179,10 @@ FASE_AZIONE = Choices(
         ('attribuzione_conformita_pit', 'adozione'),
         ('esito_conferenza_paesaggistica_ap', 'adozione'),
         ('rev_piano_post_cp_ap', 'adozione'),
+        # Pubblicazione
+        ('convocazione_commissione_paritetica', 'approvazione'),
+        ('compilazione_finale_monitoraggio_urbanistico', 'approvazione'),
+        ('pubblicazione_piano', 'approvazione'),
     )
 
 TOOLTIP_AZIONE = Choices(
@@ -239,6 +247,20 @@ AZIONI_BASE = {
     FASE.adozione: [
         {
             "tipologia": TIPOLOGIA_AZIONE.trasmissione_approvazione,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
+    ],
+    FASE.approvazione: [
+        {
+            "tipologia": TIPOLOGIA_AZIONE.convocazione_commissione_paritetica,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
+        {
+            "tipologia": TIPOLOGIA_AZIONE.compilazione_finale_monitoraggio_urbanistico,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
+        {
+            "tipologia": TIPOLOGIA_AZIONE.pubblicazione_piano,
             "attore": TIPOLOGIA_ATTORE.comune
         },
     ]

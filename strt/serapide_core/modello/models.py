@@ -333,6 +333,13 @@ class Piano(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='approvazione')
 
+    procedura_pubblicazione = models.ForeignKey(
+        'ProceduraPubblicazione',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='pubblicazione')
+
     autorita_competente_vas = models.ManyToManyField(
         Contatto,
         related_name='autorita_competente_vas',
@@ -1020,6 +1027,53 @@ class RisorseApprovazione(models.Model):
 
 
 # ############################################################################ #
+# - Pubblicazione
+# ############################################################################ #
+class ProceduraPubblicazione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_pubblicazione = models.DateTimeField(null=True, blank=True)
+
+    url = models.URLField(null=True, blank=True, default='')
+
+    conclusa = models.BooleanField(null=False, blank=False, default=False)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorsePubblicazione')
+
+    ente = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_pubblicazione"
+        verbose_name_plural = 'Procedure Pubblicazione'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+
+
+class RisorsePubblicazione(models.Model):
+    procedura_pubblicazione = models.ForeignKey(ProceduraPubblicazione, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_pubblicazione_risorse"
+
+
+# ############################################################################ #
 # Model Signals
 # ############################################################################ #
 @receiver(post_delete, sender=Contatto)
@@ -1059,6 +1113,10 @@ def delete_piano_associations(sender, instance, **kwargs):
     for _adozione in ProceduraAdozione.objects.filter(piano=instance):
         _adozione.risorse.all().delete()
         RisorseAdozione.objects.filter(procedura_adozione=_adozione).delete()
+
+    for _pubblicazione in ProceduraPubblicazione.objects.filter(piano=instance):
+        _pubblicazione.risorse.all().delete()
+        RisorsePubblicazione.objects.filter(procedura_pubblicazione=_pubblicazione).delete()
 
     for _pc in PianoControdedotto.objects.filter(piano=instance):
         _pc.risorse.all().delete()
