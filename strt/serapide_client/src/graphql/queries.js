@@ -28,7 +28,7 @@ query GetTipoContatto{
 
 export const GET_AVVIO = gql`
 query GetAvvio($codice: String!) {
-    procedureAvvio(piano_Codice: $codice) {
+    modello: procedureAvvio(piano_Codice: $codice) {
         edges{
           node{
             ...AVVIO 
@@ -57,7 +57,7 @@ ${FR.ADOZIONE}
 
 export const GET_CONSULTAZIONE_VAS = gql`
 query ConsultazioniVas($codice: String){
-  consultazioneVas(proceduraVas_Piano_Codice: $codice){
+  modello: consultazioneVas(proceduraVas_Piano_Codice: $codice){
   edges{
     node{
       ...ConsultazioneVAS

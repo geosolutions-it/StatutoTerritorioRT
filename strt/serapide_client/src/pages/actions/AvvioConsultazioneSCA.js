@@ -196,7 +196,7 @@ const updateCache =(codice) => (cache, { data: {createConsultazioneVas : { nuova
         const consultazioneVas = {__typename: "ConsultazioneVASNodeConnection", edges: [{__typename: "ConsultazioneVASNodeEdge", node}]}
         cache.writeQuery({
                         query: GET_CONSULTAZIONE_VAS,
-                        data: { consultazioneVas},
+                        data: { modello: consultazioneVas},
                         variables: {codice}
                     })
     }
@@ -205,7 +205,7 @@ export default (props) => {
         const codice = getCodice(props)
         return (
                 <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
-                    {({loading, data: {consultazioneVas: {edges: [consultazioneSCA] = []} = []} = {}, error}) => {
+                    {({loading, data: {modello: {edges: [consultazioneSCA] = []} = []} = {}, error}) => {
                         if (!loading && !error && !consultazioneSCA && codice) {
                             return (
                                 <AutoMutation variables={{input: {codicePiano: codice}}} mutation={CREA_CONSULTAZIONE_VAS} onError={showError} update={updateCache(codice)}>

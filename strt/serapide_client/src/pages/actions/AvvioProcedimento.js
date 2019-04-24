@@ -247,7 +247,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
 
 export default (props) => (
                 <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
-                    {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}}) => {
+                    {({loading, data: {modello: {edges: [proceduraAvvio] = []} = {}} = {}}) => {
                         if(loading) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">

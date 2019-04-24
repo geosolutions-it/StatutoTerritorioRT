@@ -45,7 +45,7 @@ const UI = ({
         const codice = getCodice(props)
         return (
         <Query query={GET_AVVIO} variables={{codice}} onError={showError}>
-            {({loding: loadingOut, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}}) => {
+            {({loding: loadingOut, data: {modello: {edges: [proceduraAvvio] = []} = {}} = {}}) => {
             return (
         <Query query={GET_CONFERENZA} variables={{codice}} onError={showError}>
             {({loading, data: {modello: {edges: [conferenza] = []} = []} = {}}) => {

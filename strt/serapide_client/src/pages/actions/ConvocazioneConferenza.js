@@ -169,7 +169,7 @@ const UI = enhancer(({ back,
 
 export default (props) => (
         <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}, error}) => {
+            {({loading, data: {modello: {edges: [proceduraAvvio] = []} = {}} = {}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
