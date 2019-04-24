@@ -15,11 +15,12 @@ import Home from "./Home"
 import Formazione from './Formazione'
 import Avvio from './Avvio'
 import Adozione from './Adozione'
+import Approvazione from './Approvazione'
 import Injector from 'components/Injector'
 import SideBar from 'components/SideBarMenu'
 import StatoProgress from 'components/StatoProgress'
 
-import {getEnteLabel, getPianoLabel} from "utils"
+import {getEnteLabel, getPianoLabel, pollingInterval} from "utils"
 import {GET_PIANI} from "schema"
 
 const getActive = (url = "", pathname = "") => {
@@ -27,7 +28,7 @@ const getActive = (url = "", pathname = "") => {
 }
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
     const activeLocation = getActive(url, pathname)
-    return (<Query query={GET_PIANI} pollInterval={2000} variables={{codice: code}}>
+    return (<Query query={GET_PIANI} pollInterval={pollingInterval} variables={{codice: code}}>
 
         {({loading, data: {piani: {edges = []} = []} = {}, startPolling, stopPolling }) => {
             if(loading){
@@ -69,6 +70,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                             </Route>
                             <Route  path={`${path}/adozione`} >
                                 <Adozione piano={piano}></Adozione>
+                            </Route>
+                            <Route  path={`${path}/approvazione`} >
+                                <Approvazione piano={piano}></Approvazione>
                             </Route>
                             <Route  path={`${path}/home`} render={(props) => <Home startPolling={startPolling} stopPolling={stopPolling} utente={utente} azioni={azioni} piano={piano} {...props}></Home>}/>
                             <Route path={path}>

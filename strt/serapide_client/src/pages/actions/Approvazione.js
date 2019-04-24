@@ -47,7 +47,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
         back}) => {
 
             
-            const [{node: deliberaApprovazione} = {}] = edges.filter(({node: {tipo}}) => tipo === "delibera_apporvazione")
+            const [{node: deliberaApprovazione} = {}] = edges.filter(({node: {tipo}}) => tipo === "delibera_approvazione")
             const elaboratiCompleti = elaboratiCompletati(tipoPiano, edges)
             
             return (<React.Fragment>
@@ -58,7 +58,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
                 <FileUpload 
                     {...fileProps}
                     placeholder="DELIBERA DI APPROVAZIONE"
-                    risorsa={deliberaApprovazione} variables={{codice: uuid, tipo: "delibera_apporvazione" }}/>                
+                    risorsa={deliberaApprovazione} variables={{codice: uuid, tipo: "delibera_approvazione" }}/>                
                 </div>
                 <div className="row mt-4">
                     <div className="col-12 d-flex pl-4 align-items-center">

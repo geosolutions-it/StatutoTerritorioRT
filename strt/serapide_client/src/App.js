@@ -24,13 +24,13 @@ import ReactTooltip from 'react-tooltip'
 
 import '../node_modules/react-toastify/dist/ReactToastify.min.css'
 import {GET_UTENTE} from "./graphql"
-
+import {pollingInterval} from 'utils'
 export default () => {
 return (
     <ApolloProvider client={client}>
         <ToastContainer/>
         
-        <Query query={GET_UTENTE} pollInterval={20000}>
+        <Query query={GET_UTENTE} pollInterval={pollingInterval}>
         {({loading, data: {utenti: {edges = [{}]} = {}} = {}, error}) => {
             const {node: utente = {}} = edges[0]
             const {attore: themeClass, role: {type: ruolo} = {} } = utente

@@ -178,7 +178,7 @@ const UI = enhancers(({
                     {richiestaConferenzaPaesaggistica ? (
                     <div className="row">
                         <div className="col-auto pt-4">ELABORATI CONFERENZA PAESAGGISTICA ANTE</div>
-                        {elaboratiConferenza.map(({node: r}) => (
+                        {elaboratiConferenza.map(r => (
                             <div  key={r.uuid} className="col-12">
                             <Risorsa className="border-0 mt-2" resource={r}/>
                             </div>

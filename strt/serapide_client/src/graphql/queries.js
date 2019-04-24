@@ -290,6 +290,41 @@ ${FR.ADOZIONE}
 ${FR.RISORSE}
 `
 
+export const GET_APPROVAZIONE_PAGE = gql`
+
+query RisorsePaginaApprovazione($codice: String!){
+  pianoRevPostCp(piano_Codice: $codice){
+      edges{
+        node{
+          uuid
+          risorse(archiviata: false){...Risorse}
+        }
+    }
+  }
+  procedureAdozione(piano_Codice: $codice) {
+      edges{
+          node{
+            ...ADOZIONE 
+            }
+            
+        }
+    }
+  procedureApprovazione(piano_Codice: $codice) {
+      edges{
+          node{
+            ...APPROVAZIONE 
+            }
+            
+        }
+    }
+}
+${FR.ADOZIONE}
+${FR.APPROVAZIONE}
+${FR.RISORSE}
+`
+
+
+
 // LOCAL STATE
 // example of local state query
 export const GET_VAS_AUTHORITIES = gql`

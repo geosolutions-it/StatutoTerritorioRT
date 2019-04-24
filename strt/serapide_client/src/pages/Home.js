@@ -12,11 +12,11 @@ import FaseSwitch from 'components/FaseSwitch'
 import components from './actions'
 
 import classNames from 'classnames'
-import { getAction} from 'utils'
+import { getAction, pollingInterval} from 'utils'
 import {canExecuteAction} from '../autorizzazioni'
 
-import {camelCase, map, snakeCase} from 'lodash'
-
+import {camelCase} from 'lodash'
+//import {map, snakeCase} from 'lodash'
 
 const getCurrentAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
@@ -39,7 +39,7 @@ export default class Home extends React.PureComponent{
         this._startStopPolling()
     }
     componentWillUnmount() {
-        this.props.startPolling(2000)
+        this.props.startPolling(pollingInterval)
     }
     _startStopPolling = () => {
         const {match: {url} = {},location: {pathname} = {} } = this.props;        
@@ -47,7 +47,7 @@ export default class Home extends React.PureComponent{
         if ( action ){ 
             this.props.stopPolling()
         }else {
-            this.props.startPolling(2000)
+            this.props.startPolling(pollingInterval)
         }
         
     }
