@@ -27,9 +27,9 @@ const getActive = (url = "", pathname = "") => {
 }
 export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
     const activeLocation = getActive(url, pathname)
-    return (<Query query={GET_PIANI} pollInterval={10000} variables={{codice: code}}>
+    return (<Query query={GET_PIANI} pollInterval={2000} variables={{codice: code}}>
 
-        {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
+        {({loading, data: {piani: {edges = []} = []} = {}, startPolling, stopPolling }) => {
             if(loading){
                 return (
                         <div className="d-flex justify-content-center">
@@ -70,7 +70,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                             <Route  path={`${path}/adozione`} >
                                 <Adozione piano={piano}></Adozione>
                             </Route>
-                            <Route  path={`${path}/home`} render={(props) => <Home utente={utente} azioni={azioni} piano={piano} {...props}></Home>}/>
+                            <Route  path={`${path}/home`} render={(props) => <Home startPolling={startPolling} stopPolling={stopPolling} utente={utente} azioni={azioni} piano={piano} {...props}></Home>}/>
                             <Route path={path}>
                                 <div className="p-6"><h1> Works in progress </h1> 
                                     <div className="d-flex justify-content-center">

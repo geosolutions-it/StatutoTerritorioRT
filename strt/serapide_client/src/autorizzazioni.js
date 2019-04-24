@@ -43,7 +43,9 @@ const azioni = {
         "PARERI_ADOZIONE_SCA": ["TMP"],
         "PARERE_MOTIVATO_AC": ["TMP"],
         "UPLOAD_ELABORATI_ADOZIONE_VAS": ["RUP", "OP", "TMP"],
-        "TRASMISSIONE_APPROVAZIONE": ["RUP", "OP", "TMP"]
+        "TRASMISSIONE_APPROVAZIONE": ["RUP", "OP", "TMP"],
+        "ESITO_CONFERENZA_PAESAGGISTICA_AP": ["RUP", "OP", "TMP"],
+        "REV_PIANO_POST_CP_AP": ["RUP", "OP", "TMP"]
     }
 export const globalAuth = {
     _attore_attivo: "",

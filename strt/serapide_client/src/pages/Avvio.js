@@ -146,7 +146,7 @@ const UI = enhancers(({
                 <TabPane tabId="conferenza">
                 {section === 'conferenza' && (
                     <Query query={GET_CONFERENZA} variables={{codice}} onError={showError}>
-                    {({loading, data: {modello: {edges = []} = []} = {}, error}) => {
+                    {({loading, data: {modello: {edges: [conferenza] = []} = {}} = {}, error}) => {
                         if(loading) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
@@ -155,8 +155,8 @@ const UI = enhancers(({
                                     </div>
                                 </div>)
                         }
-                        const {node: {dataRichiestaConferenza, risorse: {edges: elabConf = []} = {}} = {}} = edges[0] || {}
-                        const elaboratiConferenza =  elabConf.filter(({node: {tipo, user = {}}}) => tipo === 'elaborati_conferenza').map(({node}) => node)
+                        const {node: {dataRichiestaConferenza, risorse: {edges: elabConf = []} = {}} = {}} = conferenza
+                        const elaboratiConferenza =  elabConf.filter(({node: {tipo}}) => tipo === 'elaborati_conferenza').map(({node}) => node)
                         return (
                         <div className="row pt-4">
                             <div className="col-8 d-flex">
@@ -169,10 +169,11 @@ const UI = enhancers(({
                                 <i className="material-icons text-serapide self-align-center">check_circle</i>
                                 <span className="pl-1 pb-2">ESITO</span>
                             </div>
-                            {elaboratiConferenza.map(doc => (
+                            <div className="col-auto smoll mb-2">Allegati e Verbali</div>
+                            {elaboratiConferenza.length > 0 ? elaboratiConferenza.map(doc => (
                                 <div key={doc.uuid} className="col-12 px-0 py-2">
                                     <Risorsa className="border-0" fileSize={false}  resource={doc} isLocked={true}/> 
-                                </div>))}
+                                </div>)): (<div className="col-12 px-0 py-2">Nessun documento presente</div>)}
                         </div>)}}
                     </Query>)}
                 </TabPane>

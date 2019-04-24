@@ -28,7 +28,30 @@ const showApprovazione = (f) => f === "ADOZIONE" || f === "APPROVAZIONE" || f ==
 const NotAvailable = () => (<div className="p-6">Azione non implementata</div>)
 
 
-export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, piano = {}, azioni = []}) => {
+export default class Home extends React.PureComponent{
+
+    componentDidMount() {
+        this._startStopPolling()
+    }
+    componentDidUpdate() {
+        this._startStopPolling()
+    }
+    componentWillUnmount() {
+        this.props.startPolling(2000)
+    }
+    _startStopPolling = () => {
+        const {match: {url} = {},location: {pathname} = {} } = this.props;        
+        const action = getCurrentAction(url, pathname)
+        if ( action ){ 
+            this.props.stopPolling()
+        }else {
+            this.props.startPolling(2000)
+        }
+        
+    }
+render () {
+
+const {match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, piano = {}, azioni = []} = this.props;
     
     const action = getCurrentAction(url, pathname)
     const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data, }}) => data).shift()
@@ -36,7 +59,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
         history.push(`${url}/${action.toLowerCase().replace(" ","_")}`)
     }
     const {fase: {nome: nomeFase}} = piano
-    const goBack = () => history.push(url)
+    const goBack = () => {
+        history.push(url)
+    }
     return (
     <div className="d-flex pb-4 pt-5">
         <div className={classNames("d-flex flex-column flex-1", {"flex-fill": !action})}>
@@ -89,3 +114,5 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
         </div>
     </div>
 )}
+
+}

@@ -15,7 +15,7 @@ import Elaborati from 'components/ElaboratiAdozione'
 
 import classnames from 'classnames'
 import {withControllableState} from 'enhancers'
-import {formatDate, showError, getNominativo, filterAndGroupResourcesByUser, map} from 'utils'
+import {formatDate, showError, getNominativo, filterAndGroupResourcesByUser, map, isEmpty} from 'utils'
 
 import {GET_ADOZIONE_PAGE} from 'schema'
 
@@ -126,7 +126,7 @@ const UI = enhancers(({
                     <div className="row">
                         <div className="col-auto pt-4">OSSERVAZIONI ENTI</div>
                         <div className="col-12 pt-1">
-                        {osservazioniEnti ? map(osservazioniEnti, (u) => (
+                        {!isEmpty(osservazioniEnti) ? map(osservazioniEnti, (u) => (
                             <div key={u[0].user.fiscalCode} className="mb-4">
                                 <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(u[0].user)}</span></div>
                                 {u.map(parere => (<Risorsa key={parere.uuid} className="border-0 mt-2" icon="attach_file" resource={parere}></Risorsa>))}
