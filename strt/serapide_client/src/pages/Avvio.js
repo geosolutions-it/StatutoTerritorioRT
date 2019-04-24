@@ -146,7 +146,7 @@ const UI = enhancers(({
                 <TabPane tabId="conferenza">
                 {section === 'conferenza' && (
                     <Query query={GET_CONFERENZA} variables={{codice}} onError={showError}>
-                    {({loading, data: {conferenzaCopianificazione: {edges = []} = []} = {}, error}) => {
+                    {({loading, data: {modello: {edges = []} = []} = {}, error}) => {
                         if(loading) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">

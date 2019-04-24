@@ -104,7 +104,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
 
 export default (props) => (
                 <Query query={GET_APPROVAZIONE} variables={{codice: getCodice(props)}} onError={showError}>
-                    {({loading, data: {procedureApprovazione: {edges: [{node: proceduraApprovazione} = {}] = []} = []} = {}}) => {
+                    {({loading, data: {modello: {edges: [{node: procedura} = {}] = []} = []} = {}}) => {
                         if (loading) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
@@ -114,6 +114,6 @@ export default (props) => (
                                 </div>)
                         }
                         return (
-                            <UI {...props} proceduraApprovazione={proceduraApprovazione} />)}
+                            <UI {...props} proceduraApprovazione={procedura} />)}
                     }
                 </Query>)

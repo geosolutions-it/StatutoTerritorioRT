@@ -469,6 +469,20 @@ mutation TrasmissioneApprovazione($codice: String!){
 ${FR.AZIONI_PIANO}
 `
 
+export const ESITO_CONFERENZA_PAESAGGISTICA_AP = gql`
+mutation EsitoConferenzaPaesaggisticaAp($codice: String!){
+  esitoConferenzaPaesaggisticaAp(uuid: $codice){
+    errors
+    approvazioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
 // altre mutations
 
 export const CREATE_CONTATTO = gql`

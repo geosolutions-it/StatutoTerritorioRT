@@ -49,9 +49,9 @@ const UI = ({
         const codice = getCodice(props)
         return (
         <Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
-            {({loading: loadingOuter, data: {procedureAdozione: {edges: [adozione] = []} = []} = {}}) => (
+            {({loading: loadingOuter, data: {modello: {edges: [adozione] = []} = []} = {}}) => (
                 <Query query={GET_PIANO_REV_POST_CP} variables={{codice}} onError={showError}>
-                    {({loading, data: {pianoRevPostCp: {edges: [pianoRev] = []} = []} = {}}) => {
+                    {({loading, data: {modello: {edges: [pianoRev] = []} = []} = {}}) => {
                         if(loading || loadingOuter) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">

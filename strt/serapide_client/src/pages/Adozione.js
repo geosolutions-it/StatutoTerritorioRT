@@ -17,7 +17,7 @@ import classnames from 'classnames'
 import {withControllableState} from 'enhancers'
 import {formatDate, showError, getNominativo, filterAndGroupResourcesByUser, map} from 'utils'
 
-import {GET_ADOZIONE_PAGE, GET_CONFERENZA} from 'schema'
+import {GET_ADOZIONE_PAGE} from 'schema'
 
 
 

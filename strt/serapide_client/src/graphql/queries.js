@@ -42,7 +42,7 @@ ${FR.AVVIO}
 
 export const GET_ADOZIONE = gql`
 query GetAdozione($codice: String!) {
-    procedureAdozione(piano_Codice: $codice) {
+    modello: procedureAdozione(piano_Codice: $codice) {
         edges{
           node{
             ...ADOZIONE 
@@ -152,7 +152,7 @@ query getPiani($faseCodice: String, $codice: String){
 
 export const GET_VAS = gql`
 query getVas($codice: String!) {
-    procedureVas(piano_Codice: $codice) {
+    modello: procedureVas(piano_Codice: $codice) {
         edges{
           node{
             ...VAS 
@@ -179,7 +179,7 @@ query getContatti($tipo: String){
 
 export const GET_CONFERENZA = gql`
 query GetConferenzaCopianificazione($codice: String!) {
-    conferenzaCopianificazione(piano_Codice: $codice) {
+    modello: conferenzaCopianificazione(piano_Codice: $codice) {
           edges {
               node {
                   ...CONFERENZA
@@ -193,7 +193,7 @@ ${FR.CONFERENZA_COPIANIFICAZIONE}
 
 export const GET_RISORSE_PIANO_CONTRODEDOTTO = gql`
 query GetRisorsePianoControdedotto($codice: String!) {
-      pianoControdedotto(piano_Codice: $codice){
+      modello: pianoControdedotto(piano_Codice: $codice){
           edges{node{
             uuid
           risorse(archiviata: false){...Risorse}
@@ -206,7 +206,7 @@ ${FR.RISORSE}
 `
 export const GET_PIANO_REV_POST_CP = gql`
 query PianoRevPostCp($codice: String!){
-    pianoRevPostCp(piano_Codice: $codice){
+    modello: pianoRevPostCp(piano_Codice: $codice){
       edges{
         node{
           uuid
@@ -221,7 +221,7 @@ ${FR.RISORSE}
 
 export const GET_ADOZIONE_VAS = gql`
 query AdozioneVas($codice: String!){
-  procedureAdozioneVas(piano_Codice: $codice){
+  modello: procedureAdozioneVas(piano_Codice: $codice){
       edges{
         node{
           uuid
@@ -237,7 +237,7 @@ ${FR.RISORSE}
 
 export const GET_APPROVAZIONE = gql`
 query GetApprovazione($codice: String!) {
-  procedureApprovazione(piano_Codice: $codice) {
+  modello: procedureApprovazione(piano_Codice: $codice) {
         edges{
           node{
             ...APPROVAZIONE 

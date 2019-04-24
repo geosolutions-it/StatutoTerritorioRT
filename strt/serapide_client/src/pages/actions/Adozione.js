@@ -178,9 +178,9 @@ export default (props) => {
     const codice = getCodice(props)
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
-            {({loadingVas, data: {procedureVas: {edges: [vas] = []} = []} = {}}) => (
+            {({loadingVas, data: {modello: {edges: [vas] = []} = {}} = {}}) => (
                 <Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
-                    {({loading, data: {procedureAdozione: {edges: [proceduraAdozione] = []} = []} = {}}) => {
+                    {({loading, data: {modello: {edges: [proceduraAdozione] = []} = []} = {}}) => {
                         if (loading || loadingVas) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">

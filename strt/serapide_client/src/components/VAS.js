@@ -289,7 +289,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
 export default ({codice, canUpdate, isLocked}) => {
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []} = {}}) => (
+            {({loading, data: {modello: {edges: [vas] = []} = {}} = {}}) => (
                 <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
                 {({loadingC, data: {consultazioneVas: {edges: cons = []} = []} = {}}) => {
                 if(loading || loadingC){
@@ -302,7 +302,7 @@ export default ({codice, canUpdate, isLocked}) => {
                     </div>
                     </div>)
                 }
-            return <UI codice={codice}  consultazioneSCA={cons[0]} canUpdate={canUpdate} isLocked={isLocked} Vas={edges[0]}/>
+            return <UI codice={codice}  consultazioneSCA={cons[0]} canUpdate={canUpdate} isLocked={isLocked} Vas={vas}/>
             }}
             </Query>)}
         </Query>)

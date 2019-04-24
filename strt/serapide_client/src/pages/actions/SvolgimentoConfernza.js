@@ -48,7 +48,7 @@ const UI = ({
             {({loding: loadingOut, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}}) => {
             return (
         <Query query={GET_CONFERENZA} variables={{codice}} onError={showError}>
-            {({loading, data: {conferenzaCopianificazione: {edges: [conferenza] = []} = []} = {}}) => {
+            {({loading, data: {modello: {edges: [conferenza] = []} = []} = {}}) => {
                 if(loading || loadingOut) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
