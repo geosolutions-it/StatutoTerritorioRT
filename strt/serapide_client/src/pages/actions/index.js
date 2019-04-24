@@ -26,7 +26,9 @@ import ParereMotivatoAc from './ParereMotivatoAdozione'
 import UploadElaboratiAdozioneVAS from './UploadElaboratiVASAdozione'
 import Approvazione from './Approvazione'
 
-import {INVIO_PARERI_VAS, CONTRODEDUZIONI} from 'schema'
+import {INVIO_PARERI_VAS, CONTRODEDUZIONI,
+        GET_APPROVAZIONE, APPROVAZIONE_FILE_UPLOAD,
+        DELETE_RISORSA_APPROVAZIONE, ESITO_CONFERENZA_PAESAGGISTICA_AP} from 'schema'
 
 
 // parametri passati di default piano, back, utente, scadenza
@@ -61,7 +63,12 @@ export default {
     pareriAdozioneSca: (props) =>(<PareriAdozioneSCA {...props}/>),
     parereMotivatoAc: (props) =>(<ParereMotivatoAc {...props}/>),
     uploadElaboratiAdozioneVas: (props) => (<UploadElaboratiAdozioneVAS {...props}/>),
-    trasmissioneApprovazione: (props) => (<Approvazione {...props}/>)
+    trasmissioneApprovazione: (props) => (<Approvazione {...props}/>),
+    esitoConferenzaPaesaggisticaAp: (props) => (<EsitoPae getM={GET_APPROVAZIONE}
+                                                          saveM={ESITO_CONFERENZA_PAESAGGISTICA_AP}
+                                                          uploadM={APPROVAZIONE_FILE_UPLOAD}
+                                                          deleteM={DELETE_RISORSA_APPROVAZIONE}
+                                                          {...props}/>),
     
     
 }

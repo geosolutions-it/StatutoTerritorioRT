@@ -42,7 +42,7 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
 
     export default (props) => (
         <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureVas: {edges: [vas] = []} = []}, error}) => {
+            {({loading, data: {modello: {edges: [vas] = []} = {}}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

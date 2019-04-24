@@ -61,7 +61,7 @@ const UI = rebuildTooltip()(({
 
     export default (props) => (
         <Query query={GET_ADOZIONE_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureAdozioneVas: {edges: [adozioneVas] = []} = []}, error}) => {
+            {({loading, data: {modello: {edges: [adozioneVas] = []} = []}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

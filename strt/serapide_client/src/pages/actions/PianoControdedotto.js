@@ -79,9 +79,9 @@ export default (props) => {
     const codice = getCodice(props)
     return (
     <Query query={GET_RISORSE_PIANO_CONTRODEDOTTO} variables={{codice}} onError={showError}>
-        {({loadingContro, data: {pianoControdedotto: {edges: [pianoContro] = []} = []} = {}}) => {
+        {({loadingContro, data: {modello: {edges: [pianoContro] = []} = []} = {}}) => {
         return (<Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
-                {({loading, data: {procedureAdozione: {edges: [proceduraAdozione ]= []} = []} = {}}) => {
+                {({loading, data: {modello: {edges: [proceduraAdozione]= []} = []} = {}}) => {
                         if(loading || loadingContro) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
