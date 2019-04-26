@@ -1129,7 +1129,7 @@ def delete_piano_associations(sender, instance, **kwargs):
 
     for _approvazione in ProceduraApprovazione.objects.filter(piano=instance):
         _approvazione.risorse.all().delete()
-        RisorseApprovazione.objects.filter(procedura_adozione=_approvazione).delete()
+        RisorseApprovazione.objects.filter(procedura_approvazione=_approvazione).delete()
 
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()
