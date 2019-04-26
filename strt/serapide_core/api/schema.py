@@ -37,6 +37,7 @@ from serapide_core.api.graphene.mutations import (
     uploads,
     adozione,
     approvazione,
+    pubblicazione,
 )
 
 logger = logging.getLogger(__name__)
@@ -186,6 +187,9 @@ class Mutation(object):
     esito_conferenza_paesaggistica_ap = approvazione.EsitoConferenzaPaesaggisticaAP.Field()
     pubblicazione_approvazione = approvazione.PubblicazioneApprovazione.Field()
     attribuzione_conformita_pit = approvazione.AttribuzioneConformitaPIT.Field()
+
+    create_procedura_pubblicazione = pubblicazione.CreateProceduraPubblicazione.Field()
+    update_procedura_pubblicazione = pubblicazione.UpdateProceduraPubblicazione.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
