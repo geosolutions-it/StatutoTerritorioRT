@@ -11,9 +11,11 @@
 
 import rules
 import logging
+import datetime
 import graphene
 import traceback
 
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from graphene import relay
@@ -27,10 +29,7 @@ from serapide_core.signals import (
 )
 
 from serapide_core.modello.models import (
-    Fase,
     Piano,
-    Azione,
-    AzioniPiano,
     ProceduraPubblicazione,
 )
 
@@ -38,7 +37,6 @@ from serapide_core.modello.enums import (
     FASE,
     STATO_AZIONE,
     TIPOLOGIA_AZIONE,
-    TIPOLOGIA_ATTORE,
 )
 
 from .. import types
@@ -140,46 +138,32 @@ class PubblicazionePiano(graphene.Mutation):
         uuid = graphene.String(required=True)
 
     errors = graphene.List(graphene.String)
-    pubblicazione_aggiornata = graphene.Field(types.ProceduraApprovazioneNode)
+    pubblicazione_aggiornata = graphene.Field(types.ProceduraPubblicazioneNode)
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_pubblicazione, user, token):
 
-        # Update Azioni Piano
-        # - Complete Current Actions
-        _order = piano.azioni.count()
-
         # - Update Action state accordingly
-        if fase.nome == FASE.adozione:
-            _trasmissione_pubblicazione = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.trasmissione_pubblicazione).first()
+        if fase.nome == FASE.approvazione:
+            _pubblicazione_piano = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.pubblicazione_piano).first()
 
-            _pubblicazione_pubblicazione = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.pubblicazione_pubblicazione).first()
+            if _pubblicazione_piano and _pubblicazione_piano.stato != STATO_AZIONE.nessuna:
+                _pubblicazione_piano.stato = STATO_AZIONE.nessuna
+                _pubblicazione_piano.data = datetime.datetime.now(timezone.get_current_timezone())
+                _pubblicazione_piano.save()
 
-            if _pubblicazione_pubblicazione and _pubblicazione_pubblicazione.stato != STATO_AZIONE.nessuna:
-                _pubblicazione_pubblicazione.stato = STATO_AZIONE.nessuna
-                _pubblicazione_pubblicazione.data = datetime.datetime.now(timezone.get_current_timezone())
-                _pubblicazione_pubblicazione.save()
-
-                _expire_days = getattr(settings, 'ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS', 30)
-                _alert_delta = datetime.timedelta(days=_expire_days)
-                _attribuzione_conformita_pit = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.attribuzione_conformita_pit,
-                    attore=TIPOLOGIA_ATTORE.regione,
-                    order=_order,
-                    stato=STATO_AZIONE.attesa,
-                    data=_trasmissione_pubblicazione.data + _alert_delta
-                )
-                _attribuzione_conformita_pit.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_attribuzione_conformita_pit, piano=piano)
+            if not procedura_pubblicazione.conclusa:
+                piano.chiudi_pendenti()
+                procedura_pubblicazione.conclusa = True
+                procedura_pubblicazione.save()
+                piano.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
     @classmethod
     def mutate(cls, root, info, **input):
-        _procedura_pubblicazione = ProceduraApprovazione.objects.get(uuid=input['uuid'])
+        _procedura_pubblicazione = ProceduraPubblicazione.objects.get(uuid=input['uuid'])
         _piano = _procedura_pubblicazione.piano
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -193,7 +177,7 @@ class PubblicazionePiano(graphene.Mutation):
                     sender=Piano,
                     user=info.context.user,
                     piano=_piano,
-                    message_type="rev_piano_post_cp")
+                    message_type="pubblicazione_piano")
 
                 return PubblicazionePiano(
                     pubblicazione_aggiornata=_procedura_pubblicazione,

@@ -190,6 +190,7 @@ class Mutation(object):
 
     create_procedura_pubblicazione = pubblicazione.CreateProceduraPubblicazione.Field()
     update_procedura_pubblicazione = pubblicazione.UpdateProceduraPubblicazione.Field()
+    pubblicazione_piano = pubblicazione.PubblicazionePiano.Field()
 
     upload = uploads.UploadFile.Field()
     delete_risorsa = uploads.DeleteRisorsa.Field()
