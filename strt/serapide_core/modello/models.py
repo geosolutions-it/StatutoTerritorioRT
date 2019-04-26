@@ -988,8 +988,8 @@ class ProceduraApprovazione(models.Model):
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     data_delibera_approvazione = models.DateTimeField(null=True, blank=True)
 
-    pubblicazione_sito_url = models.URLField(null=True, blank=True, default='')
-    pubblicazione_sito_data = models.DateTimeField(null=True, blank=True)
+    pubblicazione_url = models.URLField(null=True, blank=True, default='')
+    pubblicazione_url_data = models.DateTimeField(null=True, blank=True)
 
     richiesta_conferenza_paesaggistica = models.BooleanField(null=False, blank=False, default=False)
     url_piano_pubblicato = models.URLField(null=True, blank=True, default='')
@@ -1040,7 +1040,8 @@ class ProceduraPubblicazione(models.Model):
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     data_pubblicazione = models.DateTimeField(null=True, blank=True)
 
-    url = models.URLField(null=True, blank=True, default='')
+    pubblicazione_url = models.URLField(null=True, blank=True, default='')
+    pubblicazione_url_data = models.DateTimeField(null=True, blank=True)
 
     conclusa = models.BooleanField(null=False, blank=False, default=False)
 

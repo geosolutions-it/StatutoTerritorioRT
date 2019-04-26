@@ -190,8 +190,8 @@ class ProceduraApprovazioneUpdateInput(InputObjectType):
     from the interactive graphql console.
     """
     data_delibera_approvazione = graphene.types.datetime.DateTime(required=False)
-    pubblicazione_sito_url = graphene.String(required=False)
-    pubblicazione_sito_data = graphene.types.datetime.DateTime(required=False)
+    pubblicazione_url = graphene.String(required=False)
+    pubblicazione_url_data = graphene.types.datetime.DateTime(required=False)
     richiesta_conferenza_paesaggistica = graphene.Boolean(required=False)
     url_piano_pubblicato = graphene.String(required=False)
     url_rev_piano_post_cp = graphene.String(required=False)
@@ -212,4 +212,5 @@ class ProceduraPubblicazioneUpdateInput(InputObjectType):
     from the interactive graphql console.
     """
     data_pubblicazione = graphene.types.datetime.DateTime(required=False)
-    url = graphene.String(required=False)
+    pubblicazione_url = graphene.String(required=False)
+    pubblicazione_url_data = graphene.types.datetime.DateTime(required=False)
