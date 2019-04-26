@@ -1,0 +1,16 @@
+{% autoescape off %}{% load i18n %}Gentile {{ recipient }},
+
+Con riferimento al piano {{ piano.tipologia }} Codice: {{ piano.codice }} - "{{ piano.descrizione }}"
+
+Le notifichiamo che il piano è stato Pubblicato da parte dell'utente {{ user }}.
+
+Pubblicazione:
+
+ - URL: {{ piano.procedura_pubblicazione.pubblicazione_url }} in data {{ piano.procedura_pubblicazione.pubblicazione_url_data }}
+
+{% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:
+{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}
+
+ATTENZIONE: Il token di accesso a lei assegnato, è personalizzato e ha validità fino a data: {{ t.expires }}.
+Conservare il token di accesso segreto e non condividere il link generato con alcuno.{% endif %}{% endfor %}
+{% endautoescape %}
