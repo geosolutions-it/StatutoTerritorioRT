@@ -235,15 +235,15 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
                 _esito_cp.data = datetime.datetime.now(timezone.get_current_timezone())
                 _esito_cp.save()
 
-                _rev_piano_post_cp = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp_ap,
+                _pubblicazione_approvazione = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione,
                     attore=TIPOLOGIA_ATTORE.comune,
                     order=_order,
                     stato=STATO_AZIONE.necessaria
                 )
-                _rev_piano_post_cp.save()
+                _pubblicazione_approvazione.save()
                 _order += 1
-                AzioniPiano.objects.get_or_create(azione=_rev_piano_post_cp, piano=piano)
+                AzioniPiano.objects.get_or_create(azione=_pubblicazione_approvazione, piano=piano)
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -277,7 +277,7 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
             return GraphQLError(_("Forbidden"), code=403)
 
 
-class RevisionePianoPostConfPaesaggisticaAP(graphene.Mutation):
+class PubblicazioneApprovazione(graphene.Mutation):
 
     class Arguments:
         uuid = graphene.String(required=True)
@@ -297,13 +297,13 @@ class RevisionePianoPostConfPaesaggisticaAP(graphene.Mutation):
             _trasmissione_approvazione = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.trasmissione_approvazione).first()
 
-            _rev_piano_post_cp = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp_ap).first()
+            _pubblicazione_approvazione = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione).first()
 
-            if _rev_piano_post_cp and _rev_piano_post_cp.stato != STATO_AZIONE.nessuna:
-                _rev_piano_post_cp.stato = STATO_AZIONE.nessuna
-                _rev_piano_post_cp.data = datetime.datetime.now(timezone.get_current_timezone())
-                _rev_piano_post_cp.save()
+            if _pubblicazione_approvazione and _pubblicazione_approvazione.stato != STATO_AZIONE.nessuna:
+                _pubblicazione_approvazione.stato = STATO_AZIONE.nessuna
+                _pubblicazione_approvazione.data = datetime.datetime.now(timezone.get_current_timezone())
+                _pubblicazione_approvazione.save()
 
                 _expire_days = getattr(settings, 'ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS', 30)
                 _alert_delta = datetime.timedelta(days=_expire_days)
@@ -338,7 +338,7 @@ class RevisionePianoPostConfPaesaggisticaAP(graphene.Mutation):
                     piano=_piano,
                     message_type="rev_piano_post_cp")
 
-                return RevisionePianoPostConfPaesaggisticaAP(
+                return PubblicazioneApprovazione(
                     approvazione_aggiornata=_procedura_approvazione,
                     errors=[]
                 )
