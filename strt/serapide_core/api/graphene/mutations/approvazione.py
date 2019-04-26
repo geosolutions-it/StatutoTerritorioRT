@@ -165,9 +165,6 @@ class TrasmissioneApprovazione(graphene.Mutation):
 
                 if not piano.procedura_adozione.richiesta_conferenza_paesaggistica:
                     # Se non è stata fatta prima, va fatta ora...
-                    procedura_approvazione.richiesta_conferenza_paesaggistica = True
-                    procedura_approvazione.save()
-
                     _convocazione_cp = Azione(
                         tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica_ap,
                         attore=TIPOLOGIA_ATTORE.regione,
@@ -177,6 +174,19 @@ class TrasmissioneApprovazione(graphene.Mutation):
                     _convocazione_cp.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_convocazione_cp, piano=piano)
+                else:
+                    _pubblicazione_approvazione = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.necessaria
+                    )
+                    _pubblicazione_approvazione.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_pubblicazione_approvazione, piano=piano)
+
+                procedura_approvazione.richiesta_conferenza_paesaggistica = True
+                procedura_approvazione.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
