@@ -27,27 +27,27 @@ import {GET_PIANI} from "schema"
 const getActive = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
-export default ({match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, utente = {}, ...props}) => {
-    const activeLocation = getActive(url, pathname)
-    return (<Query query={GET_PIANI} pollInterval={pollingInterval} variables={{codice: code}}>
 
-        {({loading, data: {piani: {edges = []} = []} = {}, startPolling, stopPolling }) => {
-            if(loading){
-                return (
-                        <div className="d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>
-                    )
-            } else if(edges.length === 0) {
-                toast.error(`Impossibile trovare il piano: ${code}`,  {autoClose: true, onClose: () => (window.location.assign(window.location.href.replace(pathname, "")))})
-                return <div></div>
-            }
-            const {node: piano = {}} = edges[0] || {}
-            const {edges: azioni} = piano.azioni || {}
-            return(
-            <React.Fragment>
+class Piano extends React.PureComponent {
+
+    componentDidMount() {
+       
+    }
+    componentDidUpdate() {
+       
+    }
+    componentWillUnmount() {
+        
+        this.props.stopPolling(pollingInterval)
+    }
+
+    render() {
+
+        const {piano, url, path,location: {pathname} = {}, utente = {}, startPolling, stopPolling} = this.props;
+
+        const activeLocation = getActive(url, pathname)
+        const {edges: azioni} = piano.azioni || {}
+    return (<React.Fragment>
                 <Injector el="serapide-sidebar">
                     <SideBar url={url} piano={piano} active={activeLocation} unreadMessages={utente.unreadThreadsCount}></SideBar>
                 </Injector>
@@ -56,7 +56,7 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                         <div className="d-flex justify-content-between align-items-center ">
                             <div className="pr-3">
                                 <h4 className="text-uppercase">{getEnteLabel(piano.ente)}</h4>  
-                                <h2 className="mb-0 text-capitalize">{`${getPianoLabel(piano.tipo)} ${code}`}</h2>  
+                                <h2 className="mb-0 text-capitalize">{`${getPianoLabel(piano.tipo)} ${piano.codice}`}</h2>  
                                 <div className="pr-4">{piano.descrizione}</div>  
                             </div>
                             <StatoProgress className="stato-progress-xxl" stato={piano.fase} legend></StatoProgress>
@@ -92,7 +92,32 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                     </div>
                 </div>
             </React.Fragment>
-            )}
-        }
-    </Query>)
+            )
+    
     }
+}
+
+
+export default ({match: {url, path, params: {code} = {}} = {}, history, ...props}) => (
+    <Query query={GET_PIANI} pollInterval={pollingInterval} variables={{codice: code}}>
+        {({loading, data: {piani: {edges: [{node: piano} = {}] = []} = {}} = {}, error, networkStatus, ...queryProps}) => {
+            if(loading && networkStatus !== 6){
+                return (
+                        <div className="d-flex justify-content-center">
+                            <div className="spinner-grow " role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    )
+            } else if(!piano) {
+                toast.error(`Impossibile trovare il piano: ${code}`,  {autoClose: true, onClose: () => (history.back())})
+                return <div></div>
+            }
+            return (<Piano {...props} {...queryProps} piano={piano} url={url} path={path}/>)}
+        }
+    
+    </Query>
+
+
+
+)

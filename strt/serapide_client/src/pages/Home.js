@@ -14,9 +14,13 @@ import components from './actions'
 import classNames from 'classnames'
 import { getAction, pollingInterval} from 'utils'
 import {canExecuteAction} from '../autorizzazioni'
+import {stopStartPolling} from 'enhancers'
 
 import {camelCase} from 'lodash'
 // import {map, snakeCase} from 'lodash'
+
+
+const polling = stopStartPolling(pollingInterval)
 
 const getCurrentAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
@@ -26,34 +30,16 @@ const showAdozione = (f) => f === "AVVIO" || f === "ADOZIONE" || f === "APPROVAZ
 const showApprovazione = (f) => f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 const showPubblicazione = (f) => f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 
-
 const NotAvailable = () => (<div className="p-6">Azione non implementata</div>)
-
 
 export default class Home extends React.PureComponent{
 
-    componentDidMount() {
-        this._startStopPolling()
-    }
-    componentDidUpdate() {
-        this._startStopPolling()
-    }
-    componentWillUnmount() {
-        this.props.startPolling(pollingInterval)
-    }
-    _startStopPolling = () => {
-        const {match: {url} = {},location: {pathname} = {} } = this.props;        
-        const action = getCurrentAction(url, pathname)
-        if ( action ){ 
-            this.props.stopPolling()
-        }else {
-            this.props.startPolling(pollingInterval)
-        }
-        
-    }
 render () {
 
-const {match: {url, path} = {},location: {pathname} = {}, history, utente = {}, piano = {}, azioni = []} = this.props;
+    const {match: {url, path} = {},
+           location: {pathname} = {}, history, utente = {}, piano = {},
+           azioni = [],
+           startPolling, stopPolling} = this.props;
     
     const action = getCurrentAction(url, pathname)
     const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data, }}) => data).shift()
@@ -99,10 +85,10 @@ const {match: {url, path} = {},location: {pathname} = {}, history, utente = {}, 
             <Switch>
                 {azioni.filter(({node: {attore, tipologia}}) => attore.toLowerCase() === utente.attore.toLowerCase() || tipologia === "OSSERVAZIONI_ENTI").map(({node: {stato = "", tipologia = "",label = "", attore = ""}}) => {
                     const tipo = tipologia.toLowerCase()
-                    const El = components[camelCase(tipo)]
+                    const El = components[camelCase(tipo)] && polling(components[camelCase(tipo)])
                     return El && (
                             <Route key={tipo} path={`${path}/${tipo}`} >
-                                {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
+                                {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
                             </Route>)
                 })}
                 {/* {map(components, (El, key) => {

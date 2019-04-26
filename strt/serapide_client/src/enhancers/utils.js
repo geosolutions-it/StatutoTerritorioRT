@@ -55,12 +55,25 @@ export const rebuildTooltip = ({onUpdate = false, log = false, comp = ""} = {}) 
     }}
 ))}
     
-
+export const stopStartPolling = (pollingInterval) => lifecycle({
+    componentDidMount() {
+      //console.log("did mount stop", this.props.stopPolling)
+      this.props.stopPolling && this.props.stopPolling()
+    },
+    componentDidUpdate() {
+        //console.log("did update stop", this.props.stopPolling)
+        this.props.stopPolling && this.props.stopPolling()
+    },
+    componentWillUnmount() {
+        //console.log("will unmount start", this.props.startPolling)
+        this.props.startPolling && this.props.startPolling(pollingInterval)
+    }})
 
 export default {
         withControllableState,
         toggleControllableState,
-        rebuildTooltip
+        rebuildTooltip,
+        stopStartPolling
 }
 
   
