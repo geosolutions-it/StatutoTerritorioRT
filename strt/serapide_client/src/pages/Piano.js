@@ -16,6 +16,7 @@ import Formazione from './Formazione'
 import Avvio from './Avvio'
 import Adozione from './Adozione'
 import Approvazione from './Approvazione'
+import Pubblicazione from './Pubblicazione'
 import Injector from 'components/Injector'
 import SideBar from 'components/SideBarMenu'
 import StatoProgress from 'components/StatoProgress'
@@ -73,6 +74,9 @@ export default ({match: {url, path, params: {code} = {}} = {},location: {pathnam
                             </Route>
                             <Route  path={`${path}/approvazione`} >
                                 <Approvazione piano={piano}></Approvazione>
+                            </Route>
+                            <Route  path={`${path}/pubblicazione`} >
+                                <Pubblicazione piano={piano}></Pubblicazione>
                             </Route>
                             <Route  path={`${path}/home`} render={(props) => <Home startPolling={startPolling} stopPolling={stopPolling} utente={utente} azioni={azioni} piano={piano} {...props}></Home>}/>
                             <Route path={path}>

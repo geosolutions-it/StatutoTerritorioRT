@@ -26,12 +26,14 @@ import ParereMotivatoAc from './ParereMotivatoAdozione'
 import UploadElaboratiAdozioneVAS from './UploadElaboratiVASAdozione'
 import Approvazione from './Approvazione'
 import UploadFile from "./UploadFile"
+import Pubblicazione from "./Pubblicazione"
 
 import {INVIO_PARERI_VAS, CONTRODEDUZIONI,
-        GET_APPROVAZIONE, APPROVAZIONE_FILE_UPLOAD,
+        GET_APPROVAZIONE, APPROVAZIONE_FILE_UPLOAD, UPDATE_APPROVAZIONE,
         DELETE_RISORSA_APPROVAZIONE, ESITO_CONFERENZA_PAESAGGISTICA_AP,
-        REVISONE_CONFERENZA_PAESAGGISTICA_AP,
-        ATTRIBUZIONE_CONFORMITA_PIT} from 'schema'
+        PUBBLICAZIONE_APPROVAZIONE, ATTRIBUZIONE_CONFORMITA_PIT,
+        GET_PUBBLICAZIONE, UPDATE_PUBBLICAZIONE, PUBBLICAZIONE_PIANO
+} from 'schema'
 
 
 // parametri passati di default piano, back, utente, scadenza
@@ -72,8 +74,12 @@ export default {
                                                           uploadM={APPROVAZIONE_FILE_UPLOAD}
                                                           deleteM={DELETE_RISORSA_APPROVAZIONE}
                                                           {...props}/>),
-    revPianoPostCpAp: (props) => (<RevisionePianoCP outerQuery={GET_APPROVAZIONE} 
-                                                    saveM={REVISONE_CONFERENZA_PAESAGGISTICA_AP} {...props}/>),
+    pubblicazioneApprovazione: (props) => (<Pubblicazione 
+                                        title="Pubblicazione Approvazione"
+                                        query={GET_APPROVAZIONE}
+                                        closeAction={PUBBLICAZIONE_APPROVAZIONE}
+                                        updateM={UPDATE_APPROVAZIONE}
+                                        {...props}/>),
     attribuzioneConformitaPit: (props) => (<UploadFile  title="Conformità PIT"
                                                         placeholder="Documento di conformità Pit"
                                                         fileType="conformita-pit"
@@ -82,7 +88,13 @@ export default {
                                                         deleteRes={DELETE_RISORSA_APPROVAZIONE} 
                                                         uploadRes={APPROVAZIONE_FILE_UPLOAD}
                                                         closeAction={ATTRIBUZIONE_CONFORMITA_PIT}
-                                                        {...props}/>)
+                                                        {...props}/>),
+   pubblicazionePiano: (props) => (<Pubblicazione title="Pubblicazione Piano"
+                                                procedura="proceduraPubblicazione"
+                                                query={GET_PUBBLICAZIONE}
+                                                updateM={UPDATE_PUBBLICAZIONE}
+                                                closeAction={PUBBLICAZIONE_PIANO}
+                                                {...props}/>)
     
 }
 

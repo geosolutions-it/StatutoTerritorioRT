@@ -16,7 +16,7 @@ import { getAction, pollingInterval} from 'utils'
 import {canExecuteAction} from '../autorizzazioni'
 
 import {camelCase} from 'lodash'
-//import {map, snakeCase} from 'lodash'
+// import {map, snakeCase} from 'lodash'
 
 const getCurrentAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
@@ -53,7 +53,7 @@ export default class Home extends React.PureComponent{
     }
 render () {
 
-const {match: {url, path, params: {code} = {}} = {},location: {pathname} = {}, history, utente = {}, piano = {}, azioni = []} = this.props;
+const {match: {url, path} = {},location: {pathname} = {}, history, utente = {}, piano = {}, azioni = []} = this.props;
     
     const action = getCurrentAction(url, pathname)
     const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data, }}) => data).shift()

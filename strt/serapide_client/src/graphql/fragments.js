@@ -266,12 +266,27 @@ fragment APPROVAZIONE on ProceduraApprovazioneNode {
         dataDeliberaApprovazione
         richiestaConferenzaPaesaggistica
         urlPianoPubblicato
+        pubblicazioneUrl
+        pubblicazioneUrlData
         risorse(archiviata: false) {
             ...Risorse
         }
 }
 ${RISORSE}
 `
+
+export const PUBBLICAZIONE = gql`
+fragment PUBBLICAZIONE on ProceduraPubblicazioneNode {
+        uuid
+        pubblicazioneUrl
+        pubblicazioneUrlData
+        risorse(archiviata: false) {
+            ...Risorse
+        }
+}
+${RISORSE}
+`
+
 
 export const CONFERENZA_COPIANIFICAZIONE = gql`
 fragment CONFERENZA on ConferenzaCopianificazioneNode {

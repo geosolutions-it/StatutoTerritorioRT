@@ -249,6 +249,21 @@ ${FR.APPROVAZIONE}
 `
 
 
+// Pubblicazione 
+export const GET_PUBBLICAZIONE = gql`
+query GetPubblicazione($codice: String!) {
+  modello: procedurePubblicazione(piano_Codice: $codice) {
+        edges{
+          node{
+            ...PUBBLICAZIONE 
+            }  
+        }
+    }
+}
+${FR.PUBBLICAZIONE}
+`
+
+
 export const GET_ADOZIONE_PAGE = gql`
 
 query RisorsePaginaAdozione($codice: String!){

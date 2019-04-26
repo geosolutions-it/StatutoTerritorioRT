@@ -95,6 +95,7 @@ mutation InvioPareriVerifica($codice: String!) {
 ${FR.AZIONI_PIANO}
 ${FR.VAS}
 `
+
 export const INVIO_PARERI_VAS = gql`
 mutation InvioPareriVAS($codice: String!) {
   invioPareriVas(uuid: $codice) {
@@ -313,9 +314,9 @@ ${FR.AZIONI_PIANO}
 
 // Revisione piano post conferenza paesaggistica in approvazione
 
-export const REVISONE_CONFERENZA_PAESAGGISTICA_AP = gql`
-mutation RevisioneConferenzaPaesaggisticaAp($codice: String!) {
-  revisioneConferenzaPaesaggisticaAp(uuid: $codice){
+export const PUBBLICAZIONE_APPROVAZIONE = gql`
+mutation PubblicazioneApprovazione($codice: String!) {
+  pubblicazioneApprovazione(uuid: $codice){
     errors
     approvazioneAggiornata {
               piano{
@@ -516,6 +517,34 @@ mutation EsitoConferenzaPaesaggisticaAp($codice: String!){
 }
 ${FR.AZIONI_PIANO}
 `
+
+// Pubblicazione
+export const UPDATE_PUBBLICAZIONE = gql`
+mutation UpdatePubblicazione($input: UpdateProceduraPubblicazioneInput!) {
+  updateProceduraPubblicazione(input: $input) {
+    proceduraPubblicazioneAggiornata {
+            ...PUBBLICAZIONE
+        }
+    }
+}
+${FR.PUBBLICAZIONE}
+`
+
+export const PUBBLICAZIONE_PIANO = gql`
+mutation PubblicazionePiano($codice: String!) {
+  pubblicazionePiano(uuid: $codice){
+    errors
+    pubblicazioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
+
 
 // altre mutations
 

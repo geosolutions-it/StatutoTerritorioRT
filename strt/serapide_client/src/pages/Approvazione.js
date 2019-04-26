@@ -7,39 +7,30 @@
  */
 import React from 'react'
 import {Query} from 'react-apollo'
-import {Nav, NavItem,NavLink, TabContent,TabPane} from 'reactstrap'
 
 import Risorsa from 'components/Resource'
+import Elaborati from 'components/ElaboratiPiano'
 
-import Elaborati from 'components/ElaboratiApprovazione'
-
-import classnames from 'classnames'
-import {withControllableState} from 'enhancers'
-import {formatDate, showError, getNominativo, filterAndGroupResourcesByUser, map, isEmpty} from 'utils'
+import {formatDate, showError} from 'utils'
 
 import {GET_APPROVAZIONE_PAGE} from 'schema'
 
-
-
-
-
-const enhancers = withControllableState('section', 'toggleSection', 'art')
-
-const UI = enhancers(({
+const UI = ({
     approvazione: {
         dataDeliberaApprovazione,
         urlPianoPubblicato,
+        pubblicazioneUrl,
+        pubblicazioneUrlData,
         risorse: {edges: risorseApprovazione=[]} = {}
         } = {}, 
     adozione: {
         richiestaConferenzaPaesaggistica
         } = {}, 
-    pianoRev: {risorse : {edges: risorsePostCP = []} = {}} = {},
     piano: {
         autoritaIstituzionali: {edges: aut =[]} = {},
         altriDestinatari: {edges: dest = []} = {}
     } = {}
-    , toggleSection, section} = {}) => {
+    } = {}) => {
 
     
     const [{node: deliberaApprovazione} = {}]= risorseApprovazione.filter(({node: {tipo}}) => tipo === "delibera_approvazione")
@@ -60,7 +51,7 @@ const UI = enhancers(({
                 </div>
                 <div className="col-12 mt-3 py-2">ELABORATI PIANO</div>
                 <div className="col-12 pt-3">
-                    <Elaborati upload={false} risorseApprovazione={risorseApprovazione} risorsePostCP={risorsePostCP}></Elaborati>
+                    <Elaborati upload={false} resources={risorseApprovazione}></Elaborati>
                 </div>
                 <div className="border-top w-100 my-5"></div>  
                 <div className="col-12 pt-3">DESTINATARI</div>
@@ -83,6 +74,12 @@ const UI = enhancers(({
                     <a href={urlPianoPubblicato} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{urlPianoPubblicato}</a>
                 </div>
                 <div className="col-2"></div>
+                <div className="col-5">PUBBLICAZIONE APPROVAZIONE</div>
+                <div className="col-5 d-flex">
+                    <i className="material-icons text-serapide">link</i>
+                    <a href={pubblicazioneUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{pubblicazioneUrl}</a>
+                </div>
+                <div className="col-2">{formatDate(pubblicazioneUrlData)}</div>
                 <div className="border-serapide border-top w-100 my-4"></div>
             </div>
                     
@@ -102,7 +99,7 @@ const UI = enhancers(({
            
                 
         </div>
-)})
+)}
 
 
 
