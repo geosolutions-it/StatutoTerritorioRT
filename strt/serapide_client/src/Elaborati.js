@@ -33,7 +33,7 @@ export default {
         "testuali":{
             ...testuali,
             "piani_attuativi_beni_paseaggistici": {label: "SCHEDE NORMA PIANI ATTUATIVI BENI PAESAGGISTICI", tooltip: "art. 4 comma 5 Accordo MIBACT-Regione Toscana del 16.12.2016"},
-            "indagini_geologiche_idrauliche_sismiche": {label: "RELAZIONE INDAGINI GEOLOGICHE-IDRAULICHE-SISMICHE", tooltip: "art.104 comma 9 l.r. 65/2014"}
+            "indagini_geologiche_idrauliche_sismiche": {label: "RELAZIONE INDAGINI GEOLOGICHE IDRAULICHE SISMICHE", tooltip: "art.104 comma 9 l.r. 65/2014"}
         },
         cartografici
     },
