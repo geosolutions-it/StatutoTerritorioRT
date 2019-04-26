@@ -367,21 +367,20 @@ class RichiestaIntegrazioni(graphene.Mutation):
             _richiesta_integrazioni = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni).first()
             if _richiesta_integrazioni and _richiesta_integrazioni.stato != STATO_AZIONE.nessuna:
-                if procedura_avvio.messaggio_integrazione:
-                    _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
-                    _richiesta_integrazioni.data = datetime.datetime.now(timezone.get_current_timezone())
-                    _richiesta_integrazioni.save()
+                _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
+                _richiesta_integrazioni.data = datetime.datetime.now(timezone.get_current_timezone())
+                _richiesta_integrazioni.save()
 
-                    if procedura_avvio.richiesta_integrazioni:
-                        _integrazioni_richieste = Azione(
-                            tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
-                            attore=TIPOLOGIA_ATTORE.comune,
-                            order=_order,
-                            stato=STATO_AZIONE.attesa
-                        )
-                        _integrazioni_richieste.save()
-                        _order += 1
-                        AzioniPiano.objects.get_or_create(azione=_integrazioni_richieste, piano=piano)
+                if procedura_avvio.richiesta_integrazioni:
+                    _integrazioni_richieste = Azione(
+                        tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
+                        attore=TIPOLOGIA_ATTORE.comune,
+                        order=_order,
+                        stato=STATO_AZIONE.attesa
+                    )
+                    _integrazioni_richieste.save()
+                    _order += 1
+                    AzioniPiano.objects.get_or_create(azione=_integrazioni_richieste, piano=piano)
                 else:
                     _conferenza_copianificazione_attiva = False
 
