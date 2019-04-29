@@ -214,9 +214,8 @@ class TrasmissioneAdozione(graphene.Mutation):
                 AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
 
                 if procedura_adozione.pubblicazione_burt_data and \
-                piano.procedura_vas and \
-                (piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria or
-                 not piano.procedura_vas.non_necessaria):
+                piano.procedura_vas and not piano.procedura_vas.non_necessaria and \
+                piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
                     _expire_days = getattr(settings, 'ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', 60)
                     _alert_delta = datetime.timedelta(days=_expire_days)
                     _pareri_adozione_sca_expire = procedura_adozione.pubblicazione_burt_data + _alert_delta
