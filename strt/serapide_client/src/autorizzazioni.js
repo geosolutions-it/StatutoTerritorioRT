@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -42,7 +42,13 @@ const azioni = {
         "REV_PIANO_POST_CP": ["RUP", "OP", "TMP"],
         "PARERI_ADOZIONE_SCA": ["TMP"],
         "PARERE_MOTIVATO_AC": ["TMP"],
-        "UPLOAD_ELABORATI_ADOZIONE_VAS": ["RUP", "OP", "TMP"]
+        "UPLOAD_ELABORATI_ADOZIONE_VAS": ["RUP", "OP", "TMP"],
+        "TRASMISSIONE_APPROVAZIONE": ["RUP", "OP", "TMP"],
+        "ESITO_CONFERENZA_PAESAGGISTICA_AP": ["RUP", "OP", "TMP"],
+        "REV_PIANO_POST_CP_AP": ["RUP", "OP", "TMP"],
+        "ATTRIBUZIONE_CONFORMITA_PIT": ["RUP", "OP", "TMP"],
+        "PUBBLICAZIONE_APPROVAZIONE": ["RUP", "OP", "TMP"],
+        "PUBBLICAZIONE_PIANO": ["RUP", "OP", "TMP"]
     }
 export const globalAuth = {
     _attore_attivo: "",

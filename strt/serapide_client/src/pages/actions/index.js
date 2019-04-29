@@ -13,7 +13,7 @@ import RichiestaConferenza from './RichiestaConferenza'
 import IntegrazioniRichieste from './IntegrazioniRichieste'
 import SvolgimentoConferenza from './SvolgimentoConfernza'
 import RichiestaIntegrazioni from './RichiestaIntegrazioni'
-import {INVIO_PARERI_VAS, CONTRODEDUZIONI} from '../../graphql'
+
 import Adozione from './Adozione'
 import Osservazioni from './Osservazioni'
 import OsservazioniRegione from './OsservazioniRegione'
@@ -24,6 +24,18 @@ import RevisionePianoCP from './RevisionePianoPostCP'
 import PareriAdozioneSCA from './PareriAdozioneSCA'
 import ParereMotivatoAc from './ParereMotivatoAdozione'
 import UploadElaboratiAdozioneVAS from './UploadElaboratiVASAdozione'
+import Approvazione from './Approvazione'
+import UploadFile from "./UploadFile"
+import Pubblicazione from "./Pubblicazione"
+
+import {INVIO_PARERI_VAS, CONTRODEDUZIONI,
+        GET_APPROVAZIONE, APPROVAZIONE_FILE_UPLOAD, UPDATE_APPROVAZIONE,
+        DELETE_RISORSA_APPROVAZIONE, ESITO_CONFERENZA_PAESAGGISTICA_AP,
+        PUBBLICAZIONE_APPROVAZIONE, ATTRIBUZIONE_CONFORMITA_PIT,
+        GET_PUBBLICAZIONE, UPDATE_PUBBLICAZIONE, PUBBLICAZIONE_PIANO
+} from 'schema'
+
+
 // parametri passati di default piano, back, utente, scadenza
 
 export default {
@@ -48,16 +60,41 @@ export default {
     trasmissioneAdozione: (props) => (<Adozione  {...props}/>),
     uploadOsservazioniPrivati: (props) => (<Osservazioni  {...props}/>),
     osservazioniEnti: (props) => (<Osservazioni hideSave={true} disableSave={true} label="OSSERVAZIONI" titolo="Osservazioni Ente"  filterByUser={false} tipo="osservazioni_enti" {...props}/>),
-    controdeduzioni: (props) => (<Controdeduzioni saveMutation={CONTRODEDUZIONI} showData={false} label="Carica Files" titolo="CONTRODEDUZIONI"   tipo="controdeduzioni" {...props}/>),
+    controdeduzioni: (props) => (<Controdeduzioni filterByUser={false} saveMutation={CONTRODEDUZIONI} showData={false} label="Carica Files" titolo="CONTRODEDUZIONI"   tipo="controdeduzioni" {...props}/>),
     osservazioniRegione: (props) => (<OsservazioniRegione  {...props}/>),
     pianoControdedotto: (props) => (<PianoControdedotto {...props}/>),
     esitoConferenzaPaesaggistica: (props) => (<EsitoPae {...props}/>),
     revPianoPostCp: (props) => (<RevisionePianoCP {...props}/>),
     pareriAdozioneSca: (props) =>(<PareriAdozioneSCA {...props}/>),
     parereMotivatoAc: (props) =>(<ParereMotivatoAc {...props}/>),
-    uploadElaboratiAdozioneVas: (props) =>(<UploadElaboratiAdozioneVAS {...props}/>)
+    uploadElaboratiAdozioneVas: (props) => (<UploadElaboratiAdozioneVAS {...props}/>),
+    trasmissioneApprovazione: (props) => (<Approvazione {...props}/>),
+    esitoConferenzaPaesaggisticaAp: (props) => (<EsitoPae getM={GET_APPROVAZIONE}
+                                                          saveM={ESITO_CONFERENZA_PAESAGGISTICA_AP}
+                                                          uploadM={APPROVAZIONE_FILE_UPLOAD}
+                                                          deleteM={DELETE_RISORSA_APPROVAZIONE}
+                                                          {...props}/>),
+    pubblicazioneApprovazione: (props) => (<Pubblicazione 
+                                        title="Pubblicazione Approvazione"
+                                        query={GET_APPROVAZIONE}
+                                        closeAction={PUBBLICAZIONE_APPROVAZIONE}
+                                        updateM={UPDATE_APPROVAZIONE}
+                                        {...props}/>),
+    attribuzioneConformitaPit: (props) => (<UploadFile  title="Conformità PIT"
+                                                        placeholder="Documento di conformità Pit"
+                                                        fileType="conformita-pit"
+                                                        subTitle="Caricare il file di conformità"
+                                                        query={GET_APPROVAZIONE} 
+                                                        deleteRes={DELETE_RISORSA_APPROVAZIONE} 
+                                                        uploadRes={APPROVAZIONE_FILE_UPLOAD}
+                                                        closeAction={ATTRIBUZIONE_CONFORMITA_PIT}
+                                                        {...props}/>),
+   pubblicazionePiano: (props) => (<Pubblicazione title="Pubblicazione Piano"
+                                                procedura="proceduraPubblicazione"
+                                                query={GET_PUBBLICAZIONE}
+                                                updateM={UPDATE_PUBBLICAZIONE}
+                                                closeAction={PUBBLICAZIONE_PIANO}
+                                                {...props}/>)
     
-    
-
 }
 

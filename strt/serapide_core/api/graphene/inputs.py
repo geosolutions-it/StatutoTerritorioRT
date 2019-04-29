@@ -173,3 +173,44 @@ class ProceduraAdozioneUpdateInput(InputObjectType):
     richiesta_conferenza_paesaggistica = graphene.Boolean(required=False)
     url_piano_controdedotto = graphene.String(required=False)
     url_rev_piano_post_cp = graphene.String(required=False)
+
+
+class ProceduraApprovazioneCreateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    piano = graphene.InputField(PianoUpdateInput, required=False)
+    data_creazione = graphene.types.datetime.DateTime(required=False)
+
+
+class ProceduraApprovazioneUpdateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    data_delibera_approvazione = graphene.types.datetime.DateTime(required=False)
+    pubblicazione_url = graphene.String(required=False)
+    pubblicazione_url_data = graphene.types.datetime.DateTime(required=False)
+    richiesta_conferenza_paesaggistica = graphene.Boolean(required=False)
+    url_piano_pubblicato = graphene.String(required=False)
+    url_rev_piano_post_cp = graphene.String(required=False)
+
+
+class ProceduraPubblicazioneCreateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    piano = graphene.InputField(PianoUpdateInput, required=False)
+    data_creazione = graphene.types.datetime.DateTime(required=False)
+
+
+class ProceduraPubblicazioneUpdateInput(InputObjectType):
+    """
+    Class created to accept input data
+    from the interactive graphql console.
+    """
+    data_pubblicazione = graphene.types.datetime.DateTime(required=False)
+    pubblicazione_url = graphene.String(required=False)
+    pubblicazione_url_data = graphene.types.datetime.DateTime(required=False)

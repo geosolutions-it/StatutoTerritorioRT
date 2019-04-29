@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,24 +8,25 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import UploadFiles from '../../components/UploadFiles'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Elaborati from "../../components/ElaboratiPiano"
+import UploadFiles from 'components/UploadFiles'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+//import Elaborati from "components/ElaboratiPiano"
 
-import  {showError, formatDate, getCodice} from '../../utils'
+import  {showError, formatDate, getCodice} from 'utils'
+import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE,
     DELETE_RISORSA_ADOZIONE,
     ADOZIONE_FILE_UPLOAD, TRASMISSIONE_OSSERVAZIONI
-} from '../../graphql'
+} from 'schema'
 
-const UI = ({
+
+const UI = rebuildTooltip()(({
     disableSave = false,
     showData = true ,
     back, 
-    piano: {
-        tipo: tipoPiano = ""} = {},
+    // piano: {tipo: tipoPiano = ""} = {},
     proceduraAdozione: { node: {uuid, dataRicezionePareri, risorse : {edges: resources = []} = {}} = {}} = {},
     utente: {fiscalCode} = {},
     titolo = "Osservazioni Privati",
@@ -53,23 +54,23 @@ const UI = ({
                         resourceMutation={DELETE_RISORSA_ADOZIONE}
                         variables={{codice: uuid, tipo: tipoDoc }}
                         isLocked={false}/>
-                <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
+                {/* <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
                 <Elaborati 
                     tipoPiano={tipoPiano.toLowerCase()} 
                     resources={resources}
                     mutation={ADOZIONE_FILE_UPLOAD}
                     resourceMutation={DELETE_RISORSA_ADOZIONE}
                     uuid={uuid}
-                           />        
+                           />         */}
                 <div className="align-self-center mt-7">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={osservazioni.length> 0 && !disableSave}></SalvaInvia>
                 </div>
             </React.Fragment>)
-    }
+    })
 
     export default (props) => (
         <Query query={GET_ADOZIONE} variables={{codice: getCodice(props)}} onError={showError}>
-             {({loading, data: {procedureAdozione: {edges: [proceduraAdozione] = []} = []} = {}}) => {
+             {({loading, data: {modello: {edges: [proceduraAdozione] = []} = []} = {}}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

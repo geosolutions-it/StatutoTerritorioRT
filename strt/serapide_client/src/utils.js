@@ -4,7 +4,8 @@ import { it } from 'date-fns/locale'
 import { toast } from 'react-toastify'
 import elaborati from './Elaborati'
 
-export {get} from "lodash"
+export const pollingInterval = 10000
+export {get, map, isEmpty} from "lodash"
 
 export const getEnteLabel = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `${tipoente} di ${name}`
 
@@ -71,7 +72,7 @@ export const showError = ({graphQLErrors, message, networkError: {result:{errors
 
 export const elaboratiCompletati = (tipoPiano = "", risorse) => {
             const tipo = tipoPiano.toLocaleLowerCase()
-             return  elaborati[tipo] && !find(elaborati[tipo]["testuali"], (el, key) => {
+             return elaborati[tipo] && !find(elaborati[tipo]["testuali"], (el, key) => {
                  return !find(risorse, ({node: {tipo: t} = {}}) => {
                     return t === key})})
             }
@@ -101,3 +102,8 @@ export const groupResourcesByUser = (resources = []) => resources.reduce((acc, {
 } , {})
 
 export const filterAndGroupResourcesByUser = ( resources, type = "") => groupResourcesByUser(resources.filter(({node: {tipo}}) => tipo === type))
+
+
+export const getContatti = ({contatti: {edges = []} = {}} = {}) => {
+    return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
+}

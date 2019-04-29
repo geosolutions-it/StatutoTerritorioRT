@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #########################################################################
 #
-# Copyright 2018, GeoSolutions Sas.
+# Copyright 2019, GeoSolutions SAS.
 # All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
@@ -69,7 +69,8 @@ TIPOLOGIA_PIANO = Choices(
         ('unknown', _('UNKNOWN')),
         ('operativo', _('OPERATIVO')),
         ('strutturale', _('STRUTTURALE')),
-        # ('variante', _('VARIANTE')),
+        ('variante_operativo', _('VARIANTE_OPERATIVO')),
+        ('variante_strutturale', _('VARIANTE_STRUTTURALE')),
     )
 
 TIPOLOGIA_VAS = Choices(
@@ -130,6 +131,13 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_elaborati_adozione_vas', _('Upload elaborati VAS')),  # Comune
         # Approvazione
         ('trasmissione_approvazione', _('Invio documentazione per Approvazione')),  # Comune
+        ('attribuzione_conformita_pit', _('Attribuzione Conformità PIT')),  # Regione
+        ('esito_conferenza_paesaggistica_ap', _('Convocazione CP')),  # Regione
+        ('pubblicazione_approvazione', _('Pubblicazione Approvazione')),  # Comune
+        # Pubblicazione
+        ('convocazione_commissione_paritetica', _('Convocazione Commissione Paritetica')),  # Comune
+        ('compilazione_finale_monitoraggio_urbanistico', _('Compilazione Finale Monitoraggio Urbanistico')),  # Comune
+        ('pubblicazione_piano', _('Pubblicazione Piano')),  # Comune
     )
 
 FASE_AZIONE = Choices(
@@ -168,6 +176,13 @@ FASE_AZIONE = Choices(
         ('upload_elaborati_adozione_vas', 'avvio'),
         # Approvazione
         ('trasmissione_approvazione', 'adozione'),
+        ('attribuzione_conformita_pit', 'adozione'),
+        ('esito_conferenza_paesaggistica_ap', 'adozione'),
+        ('pubblicazione_approvazione', 'adozione'),
+        # Pubblicazione
+        ('convocazione_commissione_paritetica', 'approvazione'),
+        ('compilazione_finale_monitoraggio_urbanistico', 'approvazione'),
+        ('pubblicazione_piano', 'approvazione'),
     )
 
 TOOLTIP_AZIONE = Choices(
@@ -232,6 +247,20 @@ AZIONI_BASE = {
     FASE.adozione: [
         {
             "tipologia": TIPOLOGIA_AZIONE.trasmissione_approvazione,
+            "attore": TIPOLOGIA_ATTORE.comune
+        },
+    ],
+    FASE.approvazione: [
+        # {
+        #     "tipologia": TIPOLOGIA_AZIONE.convocazione_commissione_paritetica,
+        #     "attore": TIPOLOGIA_ATTORE.comune
+        # },
+        # {
+        #     "tipologia": TIPOLOGIA_AZIONE.compilazione_finale_monitoraggio_urbanistico,
+        #     "attore": TIPOLOGIA_ATTORE.comune
+        # },
+        {
+            "tipologia": TIPOLOGIA_AZIONE.pubblicazione_piano,
             "attore": TIPOLOGIA_ATTORE.comune
         },
     ]

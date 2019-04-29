@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -7,12 +7,12 @@
  */
 import React from 'react'
 import shortid from "shortid"
-import {fasi} from "../utils"
+import {fasi} from "utils"
 import classNames from "classnames"
 import {capitalize} from 'lodash'
-import {rebuildTooltip} from '../enhancers/utils'
+import {rebuildTooltip} from 'enhancers'
 
-export default  rebuildTooltip({onUpdate: true, log: true, comp: "Stato Progres"})(({
+export default  rebuildTooltip({onUpdate: true, log: false, comp: "Stato Progres"})(({
     stato: {nome = "Unknown", codice},
     className= "stato-progress",
     legend= false}) => {

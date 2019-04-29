@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,21 +8,22 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import {EnhancedSwitch} from '../../components/Switch'
-import Input from '../../components/EnhancedInput'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import {EnhancedSwitch} from 'components/Switch'
+import Input from 'components/EnhancedInput'
 
-import  {showError, getCodice, getInputFactory} from '../../utils'
+import {rebuildTooltip} from 'enhancers'
+import  {showError, getCodice, getInputFactory} from 'utils'
 
 import {GET_AVVIO,
     UPDATE_AVVIO,
     RICHIESTA_INTEGRAZIONI
-} from '../../graphql'
+} from 'schema'
 
 const getInput = getInputFactory("proceduraAvvio")
 
-const UI = ({
+const UI = rebuildTooltip()(({
     back, 
     proceduraAvvio: {node: {uuid, richiestaIntegrazioni, messaggioIntegrazione} = {}} = {},
     }) => {    
@@ -47,11 +48,11 @@ const UI = ({
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={RICHIESTA_INTEGRAZIONI} canCommit={!!messaggioIntegrazione}></SalvaInvia>
                 </div>
             </React.Fragment>)
-    }
+    })
 
     export default (props) => (
         <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
-        {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}}) => {
+        {({loading, data: {modello: {edges: [proceduraAvvio] = []} = {}} = {}}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

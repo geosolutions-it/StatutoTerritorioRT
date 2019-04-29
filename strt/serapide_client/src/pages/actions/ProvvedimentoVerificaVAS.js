@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,24 +8,24 @@
 import React from 'react'
 import {Query, Mutation} from 'react-apollo'
 
-import FileUpload from '../../components/UploadSingleFile'
-import Resource from '../../components/Resource'
-import RichiestaComune from '../../components/RichiestaComune'
-import SalvaInvia from '../../components/SalvaInvia'
+import FileUpload from 'components/UploadSingleFile'
+import Resource from 'components/Resource'
+import RichiestaComune from 'components/RichiestaComune'
+import SalvaInvia from 'components/SalvaInvia'
 import className from "classnames"
-import ActionTitle from '../../components/ActionTitle'
-import TextWithTooltip from '../../components/TextWithTooltip'
+import ActionTitle from 'components/ActionTitle'
+import TextWithTooltip from 'components/TextWithTooltip'
 
-import {rebuildTooltip} from '../../enhancers/utils'
+import {rebuildTooltip} from 'enhancers'
 import {map} from 'lodash'
-import  {showError, formatDate,daysSub, getNominativo, filterAndGroupResourcesByUser, getCodice} from '../../utils'
+import  {showError, formatDate,daysSub, getNominativo, filterAndGroupResourcesByUser, getCodice} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
     UPDATE_VAS,
     PROVVEDIMENTO_VERIFICA_VAS
-} from '../../graphql'
+} from 'schema'
 
 
 
@@ -106,7 +106,7 @@ const UI = rebuildTooltip()(({
 
 export default (props) => (
     <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-        {({loading, data: {procedureVas: {edges: [vas] = []} = []} = {}}) => {
+        {({loading, data: {modello: {edges: [vas] = []} = {}} = {}}) => {
             if(loading) {
                 return (
                     <div className="flex-fill d-flex justify-content-center">

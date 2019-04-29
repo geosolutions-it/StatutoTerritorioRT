@@ -12,25 +12,24 @@ import {EnhancedSwitch} from './Switch'
 import FileUpload from './UploadSingleFile'
 import Button from './IconButton'
 import {EnhancedListSelector} from './ListSelector'
-import Resource from '../components/Resource'
-import AddContact from '../components/AddContact'
-import SalvaInvia from '../components/SalvaInvia'
-import TextWithTooltip from '../components/TextWithTooltip'
+import Resource from 'components/Resource'
+import AddContact from 'components/AddContact'
+import SalvaInvia from 'components/SalvaInvia'
+import TextWithTooltip from 'components/TextWithTooltip'
 
-import  {rebuildTooltip} from '../enhancers/utils'
+import  {rebuildTooltip} from 'enhancers'
 import {map}  from 'lodash'
-import {formatDate, getNominativo, showError, getInputFactory} from '../utils'
+import {formatDate, getNominativo, showError, getInputFactory, getContatti} from 'utils'
 
 import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD,
     DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO,
-    PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from '../graphql'
+    PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from 'schema'
 
 
 const getVasTypeInput = getInputFactory("proceduraVas")
 
-const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
-}
+
+
 
 const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifica, docProcSemp) => {
     switch (tipologia.toLowerCase()) {
@@ -171,7 +170,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             selected={sP ? [sP.uuid] : []}
                             query={GET_CONTATTI}
                             variables={{tipo: "generico"}}
-                            getList={getAuthorities}
+                            getList={getContatti}
                             label="DEFINISCI SOGGETTO PROPONENTE"
                             size="lg"
                             onChange={changed}
@@ -199,7 +198,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         <EnhancedListSelector
                             selected={auths}
                             query={GET_CONTATTI}
-                            getList={getAuthorities}
+                            getList={getContatti}
                             onChange={changed}
                             variables={{tipo: "acvas"}}
                             size="lg"
@@ -234,7 +233,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         selected={scas}
                         query={GET_CONTATTI}
                         variables={{tipo: "sca"}}
-                        getList={getAuthorities}
+                        getList={getContatti}
                         label="DEFINISCI SCA"
                         size="lg"
                         onChange={changed}
@@ -290,9 +289,9 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
 export default ({codice, canUpdate, isLocked}) => {
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
-            {({loading, data: {procedureVas: {edges = []} = []} = {}}) => (
+            {({loading, data: {modello: {edges: [vas] = []} = {}} = {}}) => (
                 <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
-                {({loadingC, data: {consultazioneVas: {edges: cons = []} = []} = {}}) => {
+                {({loadingC, data: {modello: {edges: cons = []} = {}} = {}}) => {
                 if(loading || loadingC){
                     return (
                     <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
@@ -303,7 +302,7 @@ export default ({codice, canUpdate, isLocked}) => {
                     </div>
                     </div>)
                 }
-            return <UI codice={codice}  consultazioneSCA={cons[0]} canUpdate={canUpdate} isLocked={isLocked} Vas={edges[0]}/>
+            return <UI codice={codice}  consultazioneSCA={cons[0]} canUpdate={canUpdate} isLocked={isLocked} Vas={vas}/>
             }}
             </Query>)}
         </Query>)

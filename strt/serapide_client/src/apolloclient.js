@@ -29,6 +29,8 @@ const cache = new InMemoryCache({fragmentMatcher,
             case 'PianoControdedottoNode': return object.uuid
             case 'PianoRevPostCPNode': return object.uuid
             case 'ProceduraAdozioneVASNode': return object.uuid
+            case 'ProceduraApprovazioneNode': return object.uuid
+            case 'ProceduraPubblicazioneNode': return object.uuid
             default: return defaultDataIdFromObject(object) // fall back to default handling
           }
         }

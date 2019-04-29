@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #########################################################################
 #
-# Copyright 2018, GeoSolutions Sas.
+# Copyright 2019, GeoSolutions SAS.
 # All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
@@ -214,6 +214,8 @@ ADOZIONE_RICEZIONE_PARERI_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_RICEZIONE_
 ADOZIONE_RICEZIONE_OSSERVAZIONI_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_RICEZIONE_OSSERVAZIONI_EXPIRE_DAYS', type=int, default=60)
 ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', type=int, default=60)
 ADOZIONE_VAS_PARERE_MOTIVATO_AC_EXPIRE_DAYS = EnvUtil.get_env_var('ADOZIONE_VAS_PARERE_MOTIVATO_AC_EXPIRE_DAYS', type=int, default=30)
+
+ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS = EnvUtil.get_env_var('ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS', type=int, default=30)
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/

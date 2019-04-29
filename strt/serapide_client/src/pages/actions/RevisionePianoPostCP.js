@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,23 +8,26 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Elaborati from '../../components/ElaboratiPiano'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import Elaborati from 'components/ElaboratiPiano'
 
-import  {showError,elaboratiCompletati, getCodice} from '../../utils'
+import  {showError,elaboratiCompletati, getCodice} from 'utils'
 
-import {GET_PIANO_REV_POST_CP,GET_ADOZIONE,
+import {GET_PIANO_REV_POST_CP, GET_ADOZIONE,
     PIANO_REV_POST_CP_FILE_UPLOAD,
     DELETE_RISORSA_PIANO_REV_POST_CP,
     REVISONE_CONFERENZA_PAESAGGISTICA
-} from '../../graphql'
+} from 'schema'
 
 const UI = ({
     back,
-    adozione: {node: {uuid: uuidAdo} = {}} = {},
+    deleteRes = DELETE_RISORSA_PIANO_REV_POST_CP,
+    uploadRes = PIANO_REV_POST_CP_FILE_UPLOAD,
+    saveM = REVISONE_CONFERENZA_PAESAGGISTICA,
+    procedura: {node: {uuid: uuidProcedura} = {}} = {},
     piano: {tipo: tipoPiano = ""},
-    pianoRev: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
+    elab: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
     }) => {
         const elaboratiCompleti = elaboratiCompletati(tipoPiano, resources)
         return (
@@ -34,24 +37,24 @@ const UI = ({
                     <Elaborati 
                         tipoPiano={tipoPiano.toLowerCase()} 
                         resources={resources}
-                        mutation={PIANO_REV_POST_CP_FILE_UPLOAD}
-                        resourceMutation={DELETE_RISORSA_PIANO_REV_POST_CP}
+                        mutation={uploadRes}
+                        resourceMutation={deleteRes}
                         uuid={uuid}    
                     />
 
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuidAdo}} mutation={REVISONE_CONFERENZA_PAESAGGISTICA} canCommit={elaboratiCompleti}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{codice: uuidProcedura}} mutation={saveM} canCommit={elaboratiCompleti}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }
 
-    export default (props) => {
+    export default ({outerQuery = GET_ADOZIONE, query = GET_PIANO_REV_POST_CP, ...props}) => {
         const codice = getCodice(props)
         return (
-        <Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
-            {({loading: loadingOuter, data: {procedureAdozione: {edges: [adozione] = []} = []} = {}}) => (
-                <Query query={GET_PIANO_REV_POST_CP} variables={{codice}} onError={showError}>
-                    {({loading, data: {pianoRevPostCp: {edges: [pianoRev] = []} = []} = {}}) => {
+        <Query query={outerQuery} variables={{codice}} onError={showError}>
+            {({loading: loadingOuter, data: {modello: {edges: [procedura] = []} = []} = {}}) => (
+                <Query query={query} variables={{codice}} onError={showError}>
+                    {({loading, data: {modello: {edges: [elab] = []} = []} = {}}) => {
                         if(loading || loadingOuter) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
@@ -61,7 +64,7 @@ const UI = ({
                                 </div>)
                         }
                         return (
-                            <UI {...props} adozione={adozione} pianoRev={pianoRev}/>)}
+                            <UI {...props} procedura={procedura} elab={elab}/>)}
                     }
                 </Query>)}
             </Query>)

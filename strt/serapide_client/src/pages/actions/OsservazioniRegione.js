@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,20 +8,21 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import {EnhancedSwitch} from '../../components/Switch'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import {EnhancedSwitch} from 'components/Switch'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
-import  {showError, getInputFactory, getCodice} from '../../utils'
+import  {showError, getInputFactory, getCodice} from 'utils'
+import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE,
     UPDATE_ADOZIONE,
     TRASMISSIONE_OSSERVAZIONI
-} from '../../graphql'
+} from 'schema'
 
 const getInput = getInputFactory("proceduraAdozione")
 
-const UI = ({
+const UI = rebuildTooltip()(({
     back, 
     proceduraAdozione: { node: {uuid, osservazioniConcluse} = {}},
     piano: {
@@ -64,14 +65,14 @@ const UI = ({
                 mutation={UPDATE_ADOZIONE} getInput={getInput(uuid, "osservazioniConcluse")}></EnhancedSwitch>
                 
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_OSSERVAZIONI} canCommit={true}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_OSSERVAZIONI} canCommit={osservazioniConcluse}></SalvaInvia>
                 </div>
             </React.Fragment>)
-    }
+    })
 
 export default (props) => (
     <Query query={GET_ADOZIONE} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureAdozione: {edges: [proceduraAdozione]= []} = []} = {}}) => {
+            {({loading, data: {modello: {edges: [proceduraAdozione]= []} = []} = {}}) => {
             if(loading) {
                 return (
                     <div className="flex-fill d-flex justify-content-center">

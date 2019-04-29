@@ -8,14 +8,14 @@ import React from 'react'
 import {Input} from 'reactstrap'
 import {Mutation, Query} from  "react-apollo"
 import classNames from "classnames"
-import {GET_ENTI, CREATE_CONTATTO, GET_CONTATTI, GET_TIPO_CONTATTO} from '../graphql'
+import {GET_ENTI, CREATE_CONTATTO, GET_CONTATTI, GET_TIPO_CONTATTO} from 'schema'
 
 import EnteSelector from "./EnteSelector"
 import { withStateHandlers, compose} from 'recompose';
-import { withControllableState} from '../enhancers/utils';
+import { withControllableState} from 'enhancers';
 import {isEmail} from "validator"
 import SelectTipo from './SelectTipo';
-import {showError} from '../utils'
+import {showError} from 'utils'
 
 const enhancer = compose(withStateHandlers({email: "", nome: ""}, 
     {

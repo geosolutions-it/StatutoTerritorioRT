@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,23 +8,23 @@
 import React from 'react'
 import {Query} from "react-apollo"
 
-import FileUpload from '../../components/UploadSingleFile'
-import Resource from '../../components/Resource'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import TextWithTooltip from '../../components/TextWithTooltip'
-import {EnhancedDateSelector} from '../../components/DateSelector'
-import Input from '../../components/EnhancedInput'
-import Elaborati from "../../components/ElaboratiPiano"
+import FileUpload from 'components/UploadSingleFile'
+import Resource from 'components/Resource'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import TextWithTooltip from 'components/TextWithTooltip'
+import {EnhancedDateSelector} from 'components/DateSelector'
+import Input from 'components/EnhancedInput'
+import Elaborati from "components/ElaboratiPiano"
 
-import  {showError, formatDate, elaboratiCompletati, getInputFactory, getCodice} from '../../utils'
-import {rebuildTooltip} from '../../enhancers/utils'
+import  {showError, formatDate, elaboratiCompletati, getInputFactory, getCodice} from 'utils'
+import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
     DELETE_RISORSA_ADOZIONE,
     ADOZIONE_FILE_UPLOAD,
     TRASMISSIONE_ADOZIONE
-} from '../../graphql'
+} from 'schema'
 
 
 const getInput = getInputFactory("proceduraAdozione")
@@ -32,7 +32,7 @@ const getInput = getInputFactory("proceduraAdozione")
 const fileProps = {className: `border-0`, mutation: ADOZIONE_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_ADOZIONE, disabled: false, isLocked: false}
                     
-const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
+const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})(({
     vas: {node:{ risorse: {edges: resVas =[]} = {}} = {}} = {},
     proceduraAdozione: {node: {
             uuid,
@@ -79,7 +79,7 @@ const UI = rebuildTooltip({onUpdate: true, log: false, comp: "AdozioneProc"})(({
                 </div>
                 <div className="w-100 border-top mt-3"></div>
                 <h5 className="pt-4 font-weight-light">DESTINATARI</h5>
-                <h6 className="font-weight-light pb-1 mt-2">SCELTA SOGGETTI ISTITUZIONALI</h6>
+                <h6 className="font-weight-light pb-1 mt-2">SOGGETTI ISTITUZIONALI</h6>
                 <div className="row">  
                     {aut.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
                                  <i className="material-icons text-serapide">bookmark</i>
@@ -178,9 +178,9 @@ export default (props) => {
     const codice = getCodice(props)
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
-            {({loadingVas, data: {procedureVas: {edges: [vas] = []} = []} = {}}) => (
+            {({loadingVas, data: {modello: {edges: [vas] = []} = {}} = {}}) => (
                 <Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
-                    {({loading, data: {procedureAdozione: {edges: [proceduraAdozione] = []} = []} = {}}) => {
+                    {({loading, data: {modello: {edges: [proceduraAdozione] = []} = []} = {}}) => {
                         if (loading || loadingVas) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">

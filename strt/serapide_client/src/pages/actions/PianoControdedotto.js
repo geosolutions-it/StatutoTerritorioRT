@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,18 +8,18 @@
 import React from 'react'
 import {Query} from "react-apollo"
 
-import {EnhancedSwitch} from "../../components/Switch"
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Elaborati from '../../components/ElaboratiPiano'
+import {EnhancedSwitch} from "components/Switch"
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import Elaborati from 'components/ElaboratiPiano'
 
-import  {showError, elaboratiCompletati, getInputFactory, getCodice} from '../../utils'
+import  {showError, getInputFactory, getCodice} from 'utils'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE,
     PIANO_CONTRODEDOTTO,
     GET_RISORSE_PIANO_CONTRODEDOTTO,
     CONTRODEDOTTO_FILE_UPLOAD, DELETE_RISORSA_CONTRODEDOTTO
-} from '../../graphql'
+} from 'schema'
 
 const getInput = getInputFactory("proceduraAdozione")
 
@@ -35,7 +35,7 @@ const UI = ({
             tipo: tipoPiano = ""
             },
         back}) => {
-            const elaboratiCpmpleti = elaboratiCompletati(tipoPiano, edges)
+            // const elaboratiCpmpleti = elaboratiCompletati(tipoPiano, edges)
             return (<React.Fragment>
                 <ActionTitle>
                   Piano Controdedotto
@@ -71,7 +71,7 @@ const UI = ({
                 <div className="w-100 border-top mt-3"></div> 
                 <div className="align-self-center mt-5">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={PIANO_CONTRODEDOTTO} 
-                        canCommit={elaboratiCpmpleti}></SalvaInvia>
+                        canCommit></SalvaInvia>
                 </div>
             </React.Fragment>)}
 
@@ -79,9 +79,9 @@ export default (props) => {
     const codice = getCodice(props)
     return (
     <Query query={GET_RISORSE_PIANO_CONTRODEDOTTO} variables={{codice}} onError={showError}>
-        {({loadingContro, data: {pianoControdedotto: {edges: [pianoContro] = []} = []} = {}}) => {
+        {({loadingContro, data: {modello: {edges: [pianoContro] = []} = []} = {}}) => {
         return (<Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
-                {({loading, data: {procedureAdozione: {edges: [proceduraAdozione ]= []} = []} = {}}) => {
+                {({loading, data: {modello: {edges: [proceduraAdozione]= []} = []} = {}}) => {
                         if(loading || loadingContro) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">

@@ -65,6 +65,11 @@ ${RISORSA}`
 export const AZIONI_PIANO = gql`
 fragment AzioniPiano on PianoNode {
   codice
+  fase{
+        nome
+        codice
+        descrizione
+  }  
   azioni {
       ...Azioni
   }
@@ -248,6 +253,33 @@ fragment ADOZIONE on ProceduraAdozioneNode {
         conclusa
         richiestaConferenzaPaesaggistica
         urlPianoControdedotto
+        risorse(archiviata: false) {
+            ...Risorse
+        }
+}
+${RISORSE}
+`
+export const APPROVAZIONE = gql`
+fragment APPROVAZIONE on ProceduraApprovazioneNode {
+        uuid
+        dataCreazione
+        dataDeliberaApprovazione
+        richiestaConferenzaPaesaggistica
+        urlPianoPubblicato
+        pubblicazioneUrl
+        pubblicazioneUrlData
+        risorse(archiviata: false) {
+            ...Risorse
+        }
+}
+${RISORSE}
+`
+
+export const PUBBLICAZIONE = gql`
+fragment PUBBLICAZIONE on ProceduraPubblicazioneNode {
+        uuid
+        pubblicazioneUrl
+        pubblicazioneUrlData
         risorse(archiviata: false) {
             ...Risorse
         }

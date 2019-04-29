@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #########################################################################
 #
-# Copyright 2018, GeoSolutions Sas.
+# Copyright 2019, GeoSolutions SAS.
 # All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
@@ -325,6 +325,20 @@ class Piano(models.Model):
         blank=True,
         on_delete=models.DO_NOTHING,
         related_name='adozione')
+
+    procedura_approvazione = models.ForeignKey(
+        'ProceduraApprovazione',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='approvazione')
+
+    procedura_pubblicazione = models.ForeignKey(
+        'ProceduraPubblicazione',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='pubblicazione')
 
     autorita_competente_vas = models.ManyToManyField(
         Contatto,
@@ -961,6 +975,106 @@ class RisorseAdozioneVas(models.Model):
 
 
 # ############################################################################ #
+# - Approvazione
+# ############################################################################ #
+class ProceduraApprovazione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_delibera_approvazione = models.DateTimeField(null=True, blank=True)
+
+    pubblicazione_url = models.URLField(null=True, blank=True, default='')
+    pubblicazione_url_data = models.DateTimeField(null=True, blank=True)
+
+    richiesta_conferenza_paesaggistica = models.BooleanField(null=False, blank=False, default=False)
+    url_piano_pubblicato = models.URLField(null=True, blank=True, default='')
+    url_rev_piano_post_cp = models.URLField(null=True, blank=True, default='')
+
+    conclusa = models.BooleanField(null=False, blank=False, default=False)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorseApprovazione')
+
+    ente = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_approvazione"
+        verbose_name_plural = 'Procedure Approvazione'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+
+
+class RisorseApprovazione(models.Model):
+    procedura_approvazione = models.ForeignKey(ProceduraApprovazione, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_approvazione_risorse"
+
+
+# ############################################################################ #
+# - Pubblicazione
+# ############################################################################ #
+class ProceduraPubblicazione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=True
+    )
+
+    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
+    data_pubblicazione = models.DateTimeField(null=True, blank=True)
+
+    pubblicazione_url = models.URLField(null=True, blank=True, default='')
+    pubblicazione_url_data = models.DateTimeField(null=True, blank=True)
+
+    conclusa = models.BooleanField(null=False, blank=False, default=False)
+
+    risorse = models.ManyToManyField(Risorsa, through='RisorsePubblicazione')
+
+    ente = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name=_('ente'),
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_pubblicazione"
+        verbose_name_plural = 'Procedure Pubblicazione'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+
+
+class RisorsePubblicazione(models.Model):
+    procedura_pubblicazione = models.ForeignKey(ProceduraPubblicazione, on_delete=models.CASCADE)
+    risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_pubblicazione_risorse"
+
+
+# ############################################################################ #
 # Model Signals
 # ############################################################################ #
 @receiver(post_delete, sender=Contatto)
@@ -1001,6 +1115,10 @@ def delete_piano_associations(sender, instance, **kwargs):
         _adozione.risorse.all().delete()
         RisorseAdozione.objects.filter(procedura_adozione=_adozione).delete()
 
+    for _pubblicazione in ProceduraPubblicazione.objects.filter(piano=instance):
+        _pubblicazione.risorse.all().delete()
+        RisorsePubblicazione.objects.filter(procedura_pubblicazione=_pubblicazione).delete()
+
     for _pc in PianoControdedotto.objects.filter(piano=instance):
         _pc.risorse.all().delete()
         RisorsePianoControdedotto.objects.filter(piano_controdedotto=_pc).delete()
@@ -1008,6 +1126,10 @@ def delete_piano_associations(sender, instance, **kwargs):
     for _pc in PianoRevPostCP.objects.filter(piano=instance):
         _pc.risorse.all().delete()
         RisorsePianoRevPostCP.objects.filter(piano_rev_post_cp=_pc).delete()
+
+    for _approvazione in ProceduraApprovazione.objects.filter(piano=instance):
+        _approvazione.risorse.all().delete()
+        RisorseApprovazione.objects.filter(procedura_approvazione=_approvazione).delete()
 
     for _a in AzioniPiano.objects.filter(piano=instance):
         _a.azione.delete()

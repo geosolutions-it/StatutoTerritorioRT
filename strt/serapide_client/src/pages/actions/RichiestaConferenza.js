@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,16 +9,16 @@ import React from 'react'
 import {Query} from 'react-apollo'
 import {FormGroup, Input, Label} from 'reactstrap'
 
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
-import {toggleControllableState} from '../../enhancers/utils'
-import {showError, getCodice} from '../../utils'
+import {toggleControllableState} from 'enhancers'
+import {showError, getCodice} from 'utils'
 
 import {
     RICHIESTA_CONFERENZA_COPIANIFICAZIONE,
     GET_AVVIO
-} from '../../graphql'
+} from 'schema'
 
 const enhancer = toggleControllableState("isChecked", "toggleCheck", false)
 
@@ -49,7 +49,7 @@ const UI = enhancer(({ back,
 
 export default (props) => (
         <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}, error}) => {
+            {({loading, data: {modello: {edges: [proceduraAvvio] = []} = {}} = {}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

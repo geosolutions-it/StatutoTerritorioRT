@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,16 +8,16 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import UploadFiles from '../../components/UploadFiles'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import UploadFiles from 'components/UploadFiles'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
-import  {showError, getCodice} from '../../utils'
+import  {showError, getCodice} from 'utils'
 
 import {GET_CONFERENZA,GET_AVVIO,
     DELETE_RISORSA_COPIANIFICAZIONE,
     CONFEREZA_FILE_UPLOAD, CHIUSURA_CONFERENZA_COPIANIFICAZIONE
-} from '../../graphql'
+} from 'schema'
 
 const UI = ({
     back, 
@@ -45,10 +45,10 @@ const UI = ({
         const codice = getCodice(props)
         return (
         <Query query={GET_AVVIO} variables={{codice}} onError={showError}>
-            {({loding: loadingOut, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}}) => {
+            {({loding: loadingOut, data: {modello: {edges: [proceduraAvvio] = []} = {}} = {}}) => {
             return (
         <Query query={GET_CONFERENZA} variables={{codice}} onError={showError}>
-            {({loading, data: {conferenzaCopianificazione: {edges: [conferenza] = []} = []} = {}}) => {
+            {({loading, data: {modello: {edges: [conferenza] = []} = []} = {}}) => {
                 if(loading || loadingOut) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

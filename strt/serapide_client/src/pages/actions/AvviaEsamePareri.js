@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,18 +9,18 @@ import React from 'react'
 import {Query} from 'react-apollo'
 import className from "classnames"
 
-import Switch from '../../components/Switch'
-import Resource from '../../components/Resource'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import Switch from 'components/Switch'
+import Resource from 'components/Resource'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
 import {map} from 'lodash'
-import  {showError, getNominativo, getCodice, filterAndGroupResourcesByUser} from '../../utils'
-import {toggleControllableState} from '../../enhancers/utils'
+import  {showError, getNominativo, getCodice, filterAndGroupResourcesByUser} from 'utils'
+import {toggleControllableState} from 'enhancers'
 
 import {GET_VAS,
     AVVIO_ESAME_PARERI_SCA
-} from '../../graphql'
+} from 'schema'
 
 
 const enhancer = toggleControllableState('checked', 'toggleSwitch', false)
@@ -81,7 +81,7 @@ const UI = enhancer(({
 
     export default (props) => (
         <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureVas: {edges: [vas] = []} = []} = {}, error}) => {
+            {({loading, data: {modello: {edges: [vas] = []} = {}} = {}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

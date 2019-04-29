@@ -364,6 +364,7 @@ class AssoggettamentoVAS(graphene.Mutation):
                 _pubblicazione_vas_ac.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_pubblicazione_vas_ac, piano=piano)
+                procedura_vas.non_necessaria = True
                 procedura_vas.verifica_effettuata = True
                 procedura_vas.save()
 

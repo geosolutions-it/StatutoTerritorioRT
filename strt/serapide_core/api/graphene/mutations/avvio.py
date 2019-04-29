@@ -367,13 +367,11 @@ class RichiestaIntegrazioni(graphene.Mutation):
             _richiesta_integrazioni = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni).first()
             if _richiesta_integrazioni and _richiesta_integrazioni.stato != STATO_AZIONE.nessuna:
-                if procedura_avvio.messaggio_integrazione and \
-                len(procedura_avvio.messaggio_integrazione) > 0 and \
-                procedura_avvio.richiesta_integrazioni:
-                    _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
-                    _richiesta_integrazioni.data = datetime.datetime.now(timezone.get_current_timezone())
-                    _richiesta_integrazioni.save()
+                _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
+                _richiesta_integrazioni.data = datetime.datetime.now(timezone.get_current_timezone())
+                _richiesta_integrazioni.save()
 
+                if procedura_avvio.richiesta_integrazioni:
                     _integrazioni_richieste = Azione(
                         tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
                         attore=TIPOLOGIA_ATTORE.comune,
@@ -383,6 +381,36 @@ class RichiestaIntegrazioni(graphene.Mutation):
                     _integrazioni_richieste.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_integrazioni_richieste, piano=piano)
+                else:
+                    _conferenza_copianificazione_attiva = False
+
+                    _richiesta_conferenza_copianificazione = piano.azioni.filter(
+                        tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione).first()
+                    if _richiesta_conferenza_copianificazione and \
+                    _richiesta_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                        _conferenza_copianificazione_attiva = True
+
+                    _esito_conferenza_copianificazione = piano.azioni.filter(
+                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione).first()
+                    if _esito_conferenza_copianificazione and \
+                    _esito_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
+                        _conferenza_copianificazione_attiva = True
+
+                    _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
+                    if not _procedura_vas or _procedura_vas.conclusa:
+                        if not _conferenza_copianificazione_attiva:
+                            piano.chiudi_pendenti()
+                    procedura_avvio.conclusa = True
+                    procedura_avvio.save()
+
+                    procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+                        piano=piano, ente=piano.ente)
+
+                    piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
+                    piano_rev_post_cp, created = PianoRevPostCP.objects.get_or_create(piano=piano)
+
+                    piano.procedura_adozione = procedura_adozione
+                    piano.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -403,6 +431,19 @@ class RichiestaIntegrazioni(graphene.Mutation):
                     user=info.context.user,
                     piano=_piano,
                     message_type="richiesta_integrazioni")
+
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
+
+                    _piano.save()
+                    fase.promuovi_piano(_fase, _piano)
 
                 return RichiestaIntegrazioni(
                     avvio_aggiornato=_procedura_avvio,
@@ -529,8 +570,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
             _protocollo_genio_civile_id = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id).first()
             if _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato != STATO_AZIONE.nessuna:
-                if piano.numero_protocollo_genio_civile and \
-                piano.data_protocollo_genio_civile is None:
+                if piano.numero_protocollo_genio_civile:
                     piano.data_protocollo_genio_civile = datetime.datetime.now(timezone.get_current_timezone())
                     piano.save()
 
@@ -549,7 +589,8 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                         tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste).first()
 
                     if _formazione_del_piano and _formazione_del_piano.stato == STATO_AZIONE.nessuna and \
-                    _integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna:
+                    (not procedura_avvio.richiesta_integrazioni or
+                     (_integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna)):
 
                         _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
                         if not _procedura_vas or _procedura_vas.conclusa:

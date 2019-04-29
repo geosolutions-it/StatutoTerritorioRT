@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -11,8 +11,8 @@ import { Table } from 'reactstrap'
 import TextWithTooltip from './TextWithTooltip'
 
 import {canExecuteAction} from '../autorizzazioni'
-import {formatDate, getActionIcon, getActionIconColor, getAction} from '../utils'
-import {rebuildTooltip} from '../enhancers/utils'
+import {formatDate, getActionIcon, getActionIconColor, getAction} from 'utils'
+import {rebuildTooltip} from 'enhancers'
 
 
 const reverseOrder = ({node: {order: a}}, {node: {order: b}}) => (b - a)

@@ -9,7 +9,7 @@ import React from 'react'
 import {Mutation} from  "react-apollo"
 import { toast } from 'react-toastify'
 import Risorsa from "./Resource"
-import {DELETE_RISORSA} from "../graphql"
+import {DELETE_RISORSA} from "schema"
 
 export default ({ className, icon, resource, codice, isLocked, mutation = DELETE_RISORSA, ...mutationProps}) => (
             <Mutation mutation={mutation} {...mutationProps}>

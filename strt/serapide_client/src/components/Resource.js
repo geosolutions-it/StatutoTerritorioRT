@@ -8,7 +8,7 @@
 import React from 'react'
 import { toast } from 'react-toastify'
 import Confirm from './ConfirmToast'
-import {formatDate} from '../utils'
+import {formatDate} from 'utils'
 import TextWithTooltip from './TextWithTooltip'
 const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : null
 

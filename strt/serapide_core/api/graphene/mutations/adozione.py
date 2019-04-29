@@ -38,11 +38,13 @@ from serapide_core.modello.models import (
     ProceduraAdozione,
     ParereAdozioneVAS,
     ProceduraAdozioneVAS,
+    ProceduraApprovazione,
 )
 
 from serapide_core.modello.enums import (
     FASE,
     STATO_AZIONE,
+    TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
     TIPOLOGIA_ATTORE,
 )
@@ -211,7 +213,9 @@ class TrasmissioneAdozione(graphene.Mutation):
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_upload_osservazioni_privati, piano=piano)
 
-                if procedura_adozione.pubblicazione_burt_data:
+                if procedura_adozione.pubblicazione_burt_data and \
+                piano.procedura_vas and not piano.procedura_vas.non_necessaria and \
+                piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
                     _expire_days = getattr(settings, 'ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', 60)
                     _alert_delta = datetime.timedelta(days=_expire_days)
                     _pareri_adozione_sca_expire = procedura_adozione.pubblicazione_burt_data + _alert_delta
@@ -428,17 +432,22 @@ class PianoControdedotto(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.piano_controdedotto).first()
 
             if _piano_controdedotto and _piano_controdedotto.stato != STATO_AZIONE.nessuna:
+                _piano_controdedotto.stato = STATO_AZIONE.nessuna
+                _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
+                _piano_controdedotto.save()
+
                 if not procedura_adozione.richiesta_conferenza_paesaggistica:
                     _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
                     if not _procedura_adozione_vas or _procedura_adozione_vas.conclusa:
                         piano.chiudi_pendenti()
                     procedura_adozione.conclusa = True
                     procedura_adozione.save()
-                else:
-                    _piano_controdedotto.stato = STATO_AZIONE.nessuna
-                    _piano_controdedotto.data = datetime.datetime.now(timezone.get_current_timezone())
-                    _piano_controdedotto.save()
 
+                    procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
+                        piano=piano, ente=piano.ente)
+                    piano.procedura_approvazione = procedura_approvazione
+                    piano.save()
+                else:
                     _convocazione_cp = Azione(
                         tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica,
                         attore=TIPOLOGIA_ATTORE.regione,
@@ -588,6 +597,11 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
                     piano.chiudi_pendenti()
                 procedura_adozione.conclusa = True
                 procedura_adozione.save()
+
+                procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
+                    piano=piano, ente=piano.ente)
+                piano.procedura_approvazione = procedura_approvazione
+                piano.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -650,7 +664,8 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase.nome == FASE.avvio and \
+        piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
             _pareri_sca = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca)
             for _psca in _pareri_sca:
@@ -766,7 +781,8 @@ class InvioParereMotivatoAC(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase.nome == FASE.avvio and \
+        piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
             _parere_motivato_ac = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.parere_motivato_ac).first()
 
@@ -860,6 +876,11 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
                     piano.chiudi_pendenti()
                 _procedura_adozione_vas.conclusa = True
                 _procedura_adozione_vas.save()
+
+                procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
+                    piano=piano, ente=piano.ente)
+                piano.procedura_approvazione = procedura_approvazione
+                piano.save()
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 

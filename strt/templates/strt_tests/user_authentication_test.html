@@ -1,6 +1,6 @@
 <!--
 
-Copyright 2018, GeoSolutions Sas.
+Copyright 2019, GeoSolutions SAS.
 All rights reserved.
 
 This source code is licensed under the BSD-style license found in the
@@ -76,34 +76,36 @@ LICENSE file in the root directory of this source tree.
 
     <script>
 
-        $('#id_organization').change(function () {
+        $('#id_organizations').change(function () {
 
-            var type_select = $('#id_type');
+            var type_select = $('#id_membership_type');
 
             type_select.empty();
             type_select.append('<option value="" selected="">---------</option>')
 
             var url = $('#user-membership').attr('membership-type-data-url');
+            var user_id = $('#id_fiscal_code').val();
             var org_id = $(this).val();
 
             $.ajax({
                 url: url,
                 data: {
+                    'user_id': user_id,
                     'selected_org': org_id
                 },
                 dataType: 'json',
                 success: function (data) {
                     data.forEach( function(m_type) {
-                            $('#id_type').append(
+                            $('#id_membership_type').append(
                                 '<option value="'
-                                    .concat(m_type.id)
+                                    .concat(m_type.type.id)
                                     .concat('">')
-                                    .concat(m_type.name)
+                                    .concat(m_type.description)
                                     .concat('</option>')
                             );
                         }
                     );
-                    $('#id_type').attr('disabled', false);
+                    $('#id_membership_type').attr('disabled', false);
                 }
             });
         });

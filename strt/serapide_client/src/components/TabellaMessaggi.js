@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -7,7 +7,7 @@
  */
 import React from 'react'
 import { Table } from 'reactstrap'
-import {formatDate} from '../utils'
+import {formatDate} from 'utils'
 export default ({title, messaggi = []}) => (
         <Table className="pb-4" size="sm" hover>
             <tbody>

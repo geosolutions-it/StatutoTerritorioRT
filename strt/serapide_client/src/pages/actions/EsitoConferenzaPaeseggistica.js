@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,19 +8,23 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import UploadFiles from '../../components/UploadFiles'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
+import UploadFiles from 'components/UploadFiles'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
 
-import  {showError, getCodice} from '../../utils'
+import  {showError, getCodice} from 'utils'
 
 import {GET_ADOZIONE,ADOZIONE_FILE_UPLOAD,
     DELETE_RISORSA_ADOZIONE,ESITO_CONFERENZA_PAESAGGISTICA
-} from '../../graphql'
+} from 'schema'
+
 
 const UI = ({
-    back, 
-    proceduraAdozione: {node: {
+    back,
+    saveM = ESITO_CONFERENZA_PAESAGGISTICA,
+    uploadM = ADOZIONE_FILE_UPLOAD,
+    deleteM = DELETE_RISORSA_ADOZIONE,
+    procedura: {node: {
         uuid,
         risorse: {edges=[]} = {}
         } = {}} = {}
@@ -31,21 +35,19 @@ const UI = ({
                 <ActionTitle>Esisto Conferenza Paesaggistica</ActionTitle>
                 <h4 className="mt-5 font-weight-light pl-4 pb-1">Verbali e Allegati</h4>
                 <UploadFiles risorse={docsAllegati} 
-                        mutation={ADOZIONE_FILE_UPLOAD} 
-                        resourceMutation={DELETE_RISORSA_ADOZIONE}
+                        mutation={uploadM} 
+                        resourceMutation={deleteM}
                         variables={{codice: uuid, tipo: 'elaborati_conferenza_paesaggistica' }}
                         isLocked={false}/>
-
-
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={ESITO_CONFERENZA_PAESAGGISTICA} canCommit={docsAllegati.length> 0}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveM} canCommit={docsAllegati.length> 0}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }
 
-    export default (props) => (
-        <Query query={GET_ADOZIONE} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureAdozione: {edges: [proceduraAdozione] = []} = []} = {}}) => {
+    export default ({getM = GET_ADOZIONE, ...props}) => (
+        <Query query={getM} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {modello: {edges: [procedura] = []} = []} = {}}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">
@@ -55,6 +57,6 @@ const UI = ({
                         </div>)
                 }
                 return (
-                    <UI {...props} proceduraAdozione={proceduraAdozione}/>)}
+                    <UI {...props} procedura={procedura}/>)}
             }
         </Query>)

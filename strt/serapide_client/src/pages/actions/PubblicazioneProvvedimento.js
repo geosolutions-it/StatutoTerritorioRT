@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,14 +9,14 @@ import React from 'react'
 import {Query} from 'react-apollo'
 import {Input} from 'reactstrap'
 
-import Resource from '../../components/Resource'
-import ActionTitle from '../../components/ActionTitle'
-import SalvaInvia from '../../components/SalvaInvia'
+import Resource from 'components/Resource'
+import ActionTitle from 'components/ActionTitle'
+import SalvaInvia from 'components/SalvaInvia'
 
-import  {showError, getCodice} from '../../utils'
-import {withControllableState} from '../../enhancers/utils'
+import  {showError, getCodice} from 'utils'
+import {withControllableState} from 'enhancers'
 
-import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from '../../graphql'
+import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from 'schema'
 
 const enhancers = withControllableState("url", "onUrlChange","")
 
@@ -42,7 +42,7 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
 
     export default (props) => (
         <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureVas: {edges: [vas] = []} = []}, error}) => {
+            {({loading, data: {modello: {edges: [vas] = []} = {}}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

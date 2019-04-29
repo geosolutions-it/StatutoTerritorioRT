@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #########################################################################
 #
-# Copyright 2018, GeoSolutions Sas.
+# Copyright 2019, GeoSolutions SAS.
 # All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
@@ -18,8 +18,11 @@ from .models import (
     Azione, AzioniPiano,
     Piano, RisorsePiano,
     ProceduraVAS, RisorseVas,
+    ProceduraAdozioneVAS, RisorseAdozioneVas,
     ProceduraAvvio, RisorseAvvio,
     ProceduraAdozione, RisorseAdozione,
+    ProceduraApprovazione, RisorseApprovazione,
+    ProceduraPubblicazione, RisorsePubblicazione,
     AutoritaCompetenteVAS,
     AutoritaIstituzionali,
     AltriDestinatari,
@@ -49,12 +52,24 @@ class RisorseVasInline(admin.TabularInline):
     model = RisorseVas
 
 
+class RisorseAdozioneVasInline(admin.TabularInline):
+    model = RisorseAdozioneVas
+
+
 class RisorseAvvioInline(admin.TabularInline):
     model = RisorseAvvio
 
 
 class RisorseAdozioneInline(admin.TabularInline):
     model = RisorseAdozione
+
+
+class RisorseApprovazioneInline(admin.TabularInline):
+    model = RisorseApprovazione
+
+
+class RisorsePubblicazioneInline(admin.TabularInline):
+    model = RisorsePubblicazione
 
 
 class RisorseCopianificazioneInline(admin.TabularInline):
@@ -111,12 +126,24 @@ class ProceduraVASAdmin(admin.ModelAdmin):
     inlines = [RisorseVasInline, ]
 
 
+class ProceduraAdozioneVASAdmin(admin.ModelAdmin):
+    inlines = [RisorseAdozioneVasInline, ]
+
+
 class ProceduraAvvioAdmin(admin.ModelAdmin):
     inlines = [RisorseAvvioInline, ]
 
 
 class ProceduraAdozioneAdmin(admin.ModelAdmin):
     inlines = [ParereAdozioneVASInline, RisorseAdozioneInline, ]
+
+
+class ProceduraApprovazioneAdmin(admin.ModelAdmin):
+    inlines = [RisorseApprovazioneInline, ]
+
+
+class ProceduraPubblicazioneAdmin(admin.ModelAdmin):
+    inlines = [RisorsePubblicazioneInline, ]
 
 
 class ConsultazioneVASAdmin(admin.ModelAdmin):
@@ -141,8 +168,11 @@ admin.site.register(Risorsa)
 admin.site.register(Contatto)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
+admin.site.register(ProceduraAdozioneVAS, ProceduraAdozioneVASAdmin)
 admin.site.register(ProceduraAvvio, ProceduraAvvioAdmin)
 admin.site.register(ProceduraAdozione, ProceduraAdozioneAdmin)
+admin.site.register(ProceduraApprovazione, ProceduraApprovazioneAdmin)
+admin.site.register(ProceduraPubblicazione, ProceduraPubblicazioneAdmin)
 admin.site.register(ConsultazioneVAS, ConsultazioneVASAdmin)
 admin.site.register(ConferenzaCopianificazione, ConferenzaCopianificazioneAdmin)
 admin.site.register(PianoControdedotto, PianoControdedottoAdmin)

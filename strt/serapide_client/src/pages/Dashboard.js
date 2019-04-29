@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,12 +9,12 @@ import React from 'react'
 import {Query, Mutation} from "react-apollo"; 
 import {toast} from 'react-toastify';
 
-import TabellaPiani from '../components/TabellaPiani'
-import TabellaMessaggi from '../components/TabellaMessaggi'
-import Button from '../components/IconButton'
-import TextWithTooltip from '../components/TextWithTooltip'
+import TabellaPiani from 'components/TabellaPiani'
+import TabellaMessaggi from 'components/TabellaMessaggi'
+import Button from 'components/IconButton'
+import TextWithTooltip from 'components/TextWithTooltip'
 
-import {GET_PIANI, DELETE_PIANO} from '../graphql'
+import {GET_PIANI, DELETE_PIANO} from 'schema'
 
 const showError = (error) => {
     toast.error(error.message,  {autoClose: true})

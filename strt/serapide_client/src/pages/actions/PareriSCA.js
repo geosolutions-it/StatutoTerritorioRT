@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,18 +8,18 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import UploadFiles from '../../components/UploadFiles'
-import Resource from '../../components/Resource'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import RichiestaComune from '../../components/RichiestaComune'
+import UploadFiles from 'components/UploadFiles'
+import Resource from 'components/Resource'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import RichiestaComune from 'components/RichiestaComune'
 
-import  {showError, formatDate, daysSub, getCodice} from '../../utils'
+import  {showError, formatDate, daysSub, getCodice} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD, INVIO_PARERI_VERIFICA
-} from '../../graphql'
+} from 'schema'
 
 
 const UI = ({
@@ -61,7 +61,7 @@ const UI = ({
 
     export default (props) => (
         <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureVas: {edges: [vas] = []} = []}, error}) => {
+            {({loading, data: {modello: {edges: [vas] = []} = {}}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

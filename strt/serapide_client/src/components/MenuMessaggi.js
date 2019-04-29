@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -11,7 +11,7 @@ import {
     DropdownToggle,
     DropdownMenu} from 'reactstrap'
 import LinkWithIcon from './LinkWithIcon'
-import {formatDate} from '../utils'
+import {formatDate} from 'utils'
 
 export default ({disabled, messaggi= []}) => (
     <UncontrolledDropdown tag="li" className="first menumessaggi text-white" inNavbar>

@@ -74,6 +74,8 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
   return loaders;
 };
 
+
+
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
@@ -148,6 +150,10 @@ module.exports = {
       .map(ext => `.${ext}`)
       .filter(ext => useTypeScript || !ext.includes('ts')),
     alias: {
+      'schema': path.resolve(__dirname, '..','src', 'graphql', 'index'),
+      'components':  path.resolve(__dirname, '..', 'src','components'),
+      'enhancers': path.resolve(__dirname, '..','src', 'enhancers', 'utils'),
+      'utils': path.resolve(__dirname, '..', 'src', 'utils'),
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',

@@ -4,7 +4,7 @@ import React from 'react'
 import {Input} from 'reactstrap'
 import "react-datepicker/dist/react-datepicker.css"
 import {Mutation} from  "react-apollo"
-import {showError} from '../utils'
+import {showError} from 'utils'
 import {debounce} from 'lodash'
 
 

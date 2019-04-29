@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,26 +8,26 @@
 import React from 'react'
 import {Query} from 'react-apollo'
 
-import FileUpload from '../../components/UploadSingleFile'
-import ActionTitle from '../../components/ActionTitle'
-import SalvaInvia from '../../components/SalvaInvia'
-import Elaborati from '../../components/ElaboratiPiano'
+import FileUpload from 'components/UploadSingleFile'
+import ActionTitle from 'components/ActionTitle'
+import SalvaInvia from 'components/SalvaInvia'
+// import Elaborati from 'components/ElaboratiPiano'
 
-import  {showError, elaboratiCompletati, getCodice} from '../../utils'
+import  {showError, getCodice} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD, UPLOAD_ELABORATI_VAS
-} from '../../graphql'
+} from 'schema'
 
 const UI = ({
     back,
-    piano: {tipo: tipoPiano} = {}, 
+    // piano: {tipo: tipoPiano} = {}, 
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {}
     }) => {
         
         const rapporto = resources.filter(({node: {tipo, user = {}}}) => tipo === 'rapporto_ambientale').map(({node}) => node).shift()
-        const elaboratiCompleti = elaboratiCompletati(tipoPiano, resources)
+        // const elaboratiCompleti = elaboratiCompletati(tipoPiano, resources)
         return (
             <React.Fragment>
                 <ActionTitle>Upload Elaborati VAS</ActionTitle>
@@ -40,23 +40,23 @@ const UI = ({
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
                 </div>
-                <h4 className="font-weight-light pl-4 pb-1">Elaborati</h4>
+                {/* <h4 className="font-weight-light pl-4 pb-1">Elaborati</h4>
                 <Elaborati
                         tipoPiano={tipoPiano.toLowerCase()} 
                         resources={resources}
                         mutation={VAS_FILE_UPLOAD}
                         resourceMutation={DELETE_RISORSA_VAS}
                         uuid={uuid}
-                />
+                /> */}
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto && elaboratiCompleti}></SalvaInvia>
+                    <SalvaInvia onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }
 
     export default (props) => (
         <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureVas: {edges: [vas] = []} = []}, error}) => {
+            {({loading, data: {modello: {edges: [vas] = []} = {}}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,17 +8,18 @@
 import React from 'react'
 import {Query, Mutation} from 'react-apollo'
 
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import Button from '../../components/IconButton'
-import {EnhancedDateSelector} from "../../components/DateSelector"
-import UploadFiles from '../../components/UploadFiles'
-import Input from '../../components/EnhancedInput'
-import AddContact from '../../components/AddContact'
-import {EnhancedListSelector} from '../../components/ListSelector'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import Button from 'components/IconButton'
+import {EnhancedDateSelector} from "components/DateSelector"
+import UploadFiles from 'components/UploadFiles'
+import Input from 'components/EnhancedInput'
+import AddContact from 'components/AddContact'
+import {EnhancedListSelector} from 'components/ListSelector'
 
-import {toggleControllableState} from '../../enhancers/utils'
-import {showError, getCodice} from '../../utils'
+import {compose} from 'recompose'
+import {toggleControllableState, rebuildTooltip} from 'enhancers'
+import {showError, getCodice, getContatti} from 'utils'
 
 import {
     UPDATE_PIANO,
@@ -28,9 +29,10 @@ import {
     AVVIO_FILE_UPLOAD,
     DELETE_RISORSA_AVVIO
 
-} from '../../graphql'
+} from 'schema'
 
-const enhancer = toggleControllableState("isChecked", "toggleCheck", false)
+const enhancer = compose(rebuildTooltip(), toggleControllableState("isChecked", "toggleCheck", false))
+
 const  getPianoInput = (codice, field) => (val) => ({
     variables: {
         input: { 
@@ -40,9 +42,7 @@ const  getPianoInput = (codice, field) => (val) => ({
     }
 })
 
-const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
-}
+
 const getDataDeliberaInput = (codice) => (val) => ({
     variables: {
         input: { 
@@ -53,6 +53,7 @@ const getDataDeliberaInput = (codice) => (val) => ({
 
 const fileProps = {className: `border-0`, mutation: AVVIO_FILE_UPLOAD,
     resourceMutation: DELETE_RISORSA_AVVIO, disabled: false, isLocked: false}
+
 const Messaggio = () => (<React.Fragment>
         <h4>STAI PER SALVARE INCONTRO</h4>
         <h4>IL MESSAGGIO VERRA'</h4>
@@ -95,8 +96,8 @@ const UI = enhancer(({ back,
                                         <EnhancedListSelector
                                             selected={auths}
                                             query={GET_CONTATTI}
-                                            getList={getAuthorities}
-                                            onChange={changed}
+                                            getList={getContatti}	                                            
+                                            onChange={changed}	
                                             variables={{}}
                                             size="lg"
                                             label="SOGGETTI ISTITUZIONALI"
@@ -168,7 +169,7 @@ const UI = enhancer(({ back,
 
 export default (props) => (
         <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {procedureAvvio: {edges: [proceduraAvvio] = []} = []} = {}, error}) => {
+            {({loading, data: {modello: {edges: [proceduraAvvio] = []} = {}} = {}, error}) => {
                 if(loading) {
                     return (
                         <div className="flex-fill d-flex justify-content-center">

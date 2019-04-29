@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,18 +8,19 @@
 import React from 'react'
 import {Query, Mutation} from "react-apollo"
 
-import FileUpload from '../../components/UploadSingleFile'
-import {EnhancedSwitch} from '../../components/Switch'
-import AutoMutation from '../../components/AutoMutation'
-import Resource from '../../components/Resource'
-import {EnhancedListSelector} from '../../components/ListSelector'
-import SalvaInvia from '../../components/SalvaInvia'
-import ActionTitle from '../../components/ActionTitle'
-import AddContact from '../../components/AddContact'
-import Button from '../../components/IconButton'
-import RichiestaComune from '../../components/RichiestaComune'
+import FileUpload from 'components/UploadSingleFile'
+import {EnhancedSwitch} from 'components/Switch'
+import AutoMutation from 'components/AutoMutation'
+import Resource from 'components/Resource'
+import {EnhancedListSelector} from 'components/ListSelector'
+import SalvaInvia from 'components/SalvaInvia'
+import ActionTitle from 'components/ActionTitle'
+import AddContact from 'components/AddContact'
+import Button from 'components/IconButton'
+import RichiestaComune from 'components/RichiestaComune'
 
-import  {showError, formatDate, getInputFactory, getCodice} from '../../utils'
+import {rebuildTooltip} from 'enhancers'
+import  {showError, formatDate, getInputFactory, getCodice, getContatti} from 'utils'
 
 import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     DELETE_RISORSA_VAS,
@@ -27,15 +28,11 @@ import {GET_CONSULTAZIONE_VAS, CREA_CONSULTAZIONE_VAS,
     UPDATE_CONSULTAZIONE_VAS,
     AVVIO_CONSULTAZIONE_VAS, UPDATE_PIANO,
     GET_CONTATTI
-} from '../../graphql'
+} from 'schema'
 
 const getConsultazioneVasTypeInput = getInputFactory("consultazioneVas")
 
-const getAuthorities = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid}}) => ({label: nome, value: uuid}))
-}
-
-const UI = ({
+const UI = rebuildTooltip()(({
     consultazioneSCA: { node: {
         avvioConsultazioniSca,
         dataCreazione,
@@ -84,11 +81,10 @@ const UI = ({
                                 <EnhancedListSelector
                                     selected={auths}
                                     query={GET_CONTATTI}
-                                    getList={getAuthorities}
-                                    onChange={changed}
-                                    variables={{tipo: "acvas"}}
+                                    getList={getContatti}	                               
+                                    onChange={changed}	        
+                                    variables={{tipo: "acvas"}}	
                                     size="lg"
-                                    label="SELEZIONA AUTORITA’ COMPETENTE VAS"
                                     btn={(toggleOpen) => (
                                         <div className="row">
                                             <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="text-serapide rounded-pill" color="dark" icon="add_circle" label="Autorità competente VAS (AC)"/>
@@ -125,10 +121,10 @@ const UI = ({
                                 selected={scas}
                                 query={GET_CONTATTI}
                                 variables={{tipo: "sca"}}
-                                getList={getAuthorities}
-                                label="DEFINISCI SCA"
-                                size="lg"
                                 onChange={changed}
+                                getList={getContatti}	                        
+                                label="DEFINISCI SCA"	                        
+                                size="lg"
                                 btn={(toggleOpen) => (
                                     <div className="row">
                                         <Button 
@@ -193,14 +189,14 @@ const UI = ({
                 <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIO_CONSULTAZIONE_VAS} canCommit={avvioConsultazioniSca && docPrelim && (!isFull || (auths.length > 0 && scas.length > 0))}></SalvaInvia>
                 
                 </div>
-            </React.Fragment>)}
+            </React.Fragment>)})
 
 const updateCache =(codice) => (cache, { data: {createConsultazioneVas : { nuovaConsultazioneVas: node}}  = {}} = {}) => {
     if (node) {
         const consultazioneVas = {__typename: "ConsultazioneVASNodeConnection", edges: [{__typename: "ConsultazioneVASNodeEdge", node}]}
         cache.writeQuery({
                         query: GET_CONSULTAZIONE_VAS,
-                        data: { consultazioneVas},
+                        data: { modello: consultazioneVas},
                         variables: {codice}
                     })
     }
@@ -209,7 +205,7 @@ export default (props) => {
         const codice = getCodice(props)
         return (
                 <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
-                    {({loading, data: {consultazioneVas: {edges: [consultazioneSCA] = []} = []} = {}, error}) => {
+                    {({loading, data: {modello: {edges: [consultazioneSCA] = []} = []} = {}, error}) => {
                         if (!loading && !error && !consultazioneSCA && codice) {
                             return (
                                 <AutoMutation variables={{input: {codicePiano: codice}}} mutation={CREA_CONSULTAZIONE_VAS} onError={showError} update={updateCache(codice)}>

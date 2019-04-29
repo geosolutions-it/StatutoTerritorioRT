@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, GeoSolutions Sas.
+ * Copyright 2019, GeoSolutions SAS.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,7 +8,7 @@
 import React from 'react'
 import { Table } from 'reactstrap'
 import StatoProgress from './StatoProgress'
-import {formatDate} from '../utils'
+import {formatDate} from 'utils'
 import { toast } from 'react-toastify'
 import Confirm from './ConfirmToast'
 
