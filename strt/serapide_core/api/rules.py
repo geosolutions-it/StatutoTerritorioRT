@@ -85,8 +85,8 @@ rules.add_rule(
     ~piano_rules.has_pending_alerts &
     piano_rules.is_avvio &
     piano_rules.has_procedura_adozione &
-    piano_rules.adozione_piano_conclusa &
-    (~piano_rules.has_procedura_adozione_vas | piano_rules.adozione_vas_piano_conclusa)
+    piano_rules.adozione_piano_conclusa
+    # (~piano_rules.has_procedura_adozione_vas | piano_rules.adozione_vas_piano_conclusa)
 )
 
 rules.add_rule(
