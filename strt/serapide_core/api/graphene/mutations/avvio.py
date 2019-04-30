@@ -479,6 +479,7 @@ class IntegrazioniRichieste(graphene.Mutation):
 
                 _conferenza_copianificazione_attiva = False
 
+                _formazione_del_piano = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
                 _richiesta_conferenza_copianificazione = piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione).first()
                 if _richiesta_conferenza_copianificazione and \
@@ -493,7 +494,8 @@ class IntegrazioniRichieste(graphene.Mutation):
 
                 _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
                 if not _procedura_vas or _procedura_vas.conclusa:
-                    if not _conferenza_copianificazione_attiva:
+                    if not _conferenza_copianificazione_attiva and \
+                    _formazione_del_piano.stato == STATO_AZIONE.nessuna:
                         piano.chiudi_pendenti()
                 procedura_avvio.conclusa = True
                 procedura_avvio.save()
