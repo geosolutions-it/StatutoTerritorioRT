@@ -36,7 +36,7 @@ export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", classN
                     <td>{tooltip ? (<TextWithTooltip dataTip={tooltip} dataTipDisable={!tooltip} text={label}/>) : label}</td>
                     <td>{attore}</td>
                     <td className={`${stato === "ATTESA" ? "text-serapide" : ""}`}><span className="d-flex">{stato === "ATTESA" && <i className="material-icons text-serapide" style={{width: 28}}>notifications_activex</i>} {data && formatDate(data)}</span></td>
-                    <td className={`${getAction(stato) && canExecuteAction({attore, tipologia})  ? "pointer": ""}`}>{getAction(stato) && canExecuteAction({attore, tipologia}) && <i className="material-icons text-serapide" onClick={() => onExecute(tipologia)}>play_circle_filled</i>}</td>
+                    <td className={`${getAction(stato) && canExecuteAction({attore, tipologia})  ? "pointer": ""}`}>{getAction(stato) && canExecuteAction({attore, tipologia}) && <i className="material-icons text-serapide" onClick={() => onExecute(tipologia, uuid)}>play_circle_filled</i>}</td>
                 </tr>))}
         </tbody>
     </Table>
