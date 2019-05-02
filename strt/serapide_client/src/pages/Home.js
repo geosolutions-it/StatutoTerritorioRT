@@ -43,8 +43,8 @@ render () {
     
     const action = getCurrentAction(url, pathname)
     const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data, }}) => data).shift()
-    const goToAction = (action = "") => {
-        history.push(`${url}/${action.toLowerCase().replace(" ","_")}`)
+    const goToAction = (action = "", uuid) => {
+        history.push(`${url}/${action.toLowerCase().replace(" ","_")}/${uuid}`)
     }
     const {fase: {nome: nomeFase}} = piano
     const goBack = () => {
@@ -83,11 +83,11 @@ render () {
         <div className={classNames("d-flex flex-column", {"ml-2  pl-3 flex-3 border-left": action})} style={action ? {minWidth: 500}: {}}>
             {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
             <Switch>
-                {azioni.filter(({node: {attore, tipologia}}) => attore.toLowerCase() === utente.attore.toLowerCase() || tipologia === "OSSERVAZIONI_ENTI").map(({node: {stato = "", tipologia = "",label = "", attore = ""}}) => {
+                {azioni.filter(({node: {attore, tipologia}}) => attore.toLowerCase() === utente.attore.toLowerCase() || tipologia === "OSSERVAZIONI_ENTI").map(({node: {uuid, stato = "", tipologia = "",label = "", attore = ""}}) => {
                     const tipo = tipologia.toLowerCase()
                     const El = components[camelCase(tipo)] && polling(components[camelCase(tipo)])
                     return El && (
-                            <Route key={tipo} path={`${path}/${tipo}`} >
+                            <Route exact key={tipo} path={`${path}/${tipo}/${uuid}`} >
                                 {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
                             </Route>)
                 })}
