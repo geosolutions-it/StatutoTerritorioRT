@@ -1,0 +1,3561 @@
+[
+    {
+        "model": "strt_users.organizationtype",
+        "pk": "C",
+        "fields": {
+            "name": "Comune",
+            "description": null
+        }
+    },
+    {
+        "model": "strt_users.organizationtype",
+        "pk": "R",
+        "fields": {
+            "name": "Regione",
+            "description": null
+        }
+    },
+    {
+        "model": "strt_users.organization",
+        "pk": "FI",
+        "fields": {
+            "name": "Firenze",
+            "description": null,
+            "type": "C"
+        }
+    },
+    {
+        "model": "strt_users.organization",
+        "pk": "LU",
+        "fields": {
+            "name": "Lucca",
+            "description": null,
+            "type": "C"
+        }
+    },
+    {
+        "model": "strt_users.organization",
+        "pk": "PI",
+        "fields": {
+            "name": "Pisa",
+            "description": null,
+            "type": "C"
+        }
+    },
+    {
+        "model": "strt_users.organization",
+        "pk": "RT",
+        "fields": {
+            "name": "Toscana",
+            "description": null,
+            "type": "R"
+        }
+    },
+    {
+        "model": "strt_users.organization",
+        "pk": "SCND_FI",
+        "fields": {
+            "name": "Scandicci",
+            "description": "Comune di Scandicci",
+            "type": "C"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 1,
+        "fields": {
+            "code": "RUP",
+            "name": "Responsabile Unico del Procedimento",
+            "description": "Responsabile Unico del Procedimento per l'ente Comune",
+            "organization_type": "C"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 2,
+        "fields": {
+            "code": "RUP",
+            "name": "Responsabile Unico del Procedimento",
+            "description": "Responsabile Unico del Procedimento per l'ente Regione",
+            "organization_type": "R"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 3,
+        "fields": {
+            "code": "IVAS",
+            "name": "Ispettore VAS",
+            "description": "Ispettore VAS per l'ente Comune",
+            "organization_type": "R"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 4,
+        "fields": {
+            "code": "IPIT",
+            "name": "Ispettore PIT",
+            "description": "Ispettore PIT per l'ente Regione",
+            "organization_type": "R"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 5,
+        "fields": {
+            "code": "OP",
+            "name": "Operatore",
+            "description": "Operatore per l'ente Comune",
+            "organization_type": "C"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 6,
+        "fields": {
+            "code": "RI",
+            "name": "Responsabile ISIDE",
+            "description": "Responsabile ISIDE per l'ente Comune",
+            "organization_type": "C"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 7,
+        "fields": {
+            "code": "RI",
+            "name": "Responsabile ISIDE",
+            "description": "Responsabile ISIDE per l'ente Comune",
+            "organization_type": "R"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 8,
+        "fields": {
+            "code": "RO",
+            "name": "Read-Only",
+            "description": "Read-Only Users per l'ente Comune",
+            "organization_type": "C"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 9,
+        "fields": {
+            "code": "RO",
+            "name": "Read-Only",
+            "description": "Read-Only Users per l'ente Regione",
+            "organization_type": "R"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 10,
+        "fields": {
+            "code": "TMP",
+            "name": "Temporary",
+            "description": "Temporary Users per l'ente Comune",
+            "organization_type": "C"
+        }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 11,
+        "fields": {
+            "code": "TMP",
+            "name": "Temporary",
+            "description": "Temporary Users per l'ente Regione",
+            "organization_type": "R"
+        }
+    },
+    {
+        "model": "sites.site",
+        "pk": 1,
+        "fields": {
+            "domain": "example.com",
+            "name": "example.com"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 5,
+        "fields": {
+            "app_label": "strt_portal",
+            "model": "home"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 6,
+        "fields": {
+            "app_label": "strt_users",
+            "model": "appuser"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 7,
+        "fields": {
+            "app_label": "strt_users",
+            "model": "organization"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 8,
+        "fields": {
+            "app_label": "strt_users",
+            "model": "organizationtype"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 9,
+        "fields": {
+            "app_label": "strt_users",
+            "model": "membershiptype"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 10,
+        "fields": {
+            "app_label": "strt_users",
+            "model": "usermembership"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 11,
+        "fields": {
+            "app_label": "strt_users",
+            "model": "token"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 12,
+        "fields": {
+            "app_label": "auth",
+            "model": "permission"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 13,
+        "fields": {
+            "app_label": "auth",
+            "model": "group"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 14,
+        "fields": {
+            "app_label": "admin",
+            "model": "logentry"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 15,
+        "fields": {
+            "app_label": "sites",
+            "model": "site"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 16,
+        "fields": {
+            "app_label": "sessions",
+            "model": "session"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 17,
+        "fields": {
+            "app_label": "contenttypes",
+            "model": "contenttype"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 18,
+        "fields": {
+            "app_label": "pinax_messages",
+            "model": "message"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 19,
+        "fields": {
+            "app_label": "pinax_messages",
+            "model": "thread"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 20,
+        "fields": {
+            "app_label": "pinax_messages",
+            "model": "userthread"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 21,
+        "fields": {
+            "app_label": "pinax_notifications",
+            "model": "noticequeuebatch"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 22,
+        "fields": {
+            "app_label": "pinax_notifications",
+            "model": "noticesetting"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 23,
+        "fields": {
+            "app_label": "pinax_notifications",
+            "model": "noticetype"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 40,
+        "fields": {
+            "app_label": "modello",
+            "model": "fase"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 41,
+        "fields": {
+            "app_label": "modello",
+            "model": "fasepianostorico"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 42,
+        "fields": {
+            "app_label": "modello",
+            "model": "piano"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 43,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorsa"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 44,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorsepiano"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 45,
+        "fields": {
+            "app_label": "modello",
+            "model": "proceduravas"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 46,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorsevas"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 47,
+        "fields": {
+            "app_label": "modello",
+            "model": "autoritacompetentevas"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 48,
+        "fields": {
+            "app_label": "modello",
+            "model": "contatto"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 49,
+        "fields": {
+            "app_label": "modello",
+            "model": "soggettisca"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 50,
+        "fields": {
+            "app_label": "modello",
+            "model": "pianoauthtokens"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 51,
+        "fields": {
+            "app_label": "modello",
+            "model": "azione"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 52,
+        "fields": {
+            "app_label": "modello",
+            "model": "azionipiano"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 53,
+        "fields": {
+            "app_label": "modello",
+            "model": "consultazionevas"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 54,
+        "fields": {
+            "app_label": "modello",
+            "model": "parerevas"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 55,
+        "fields": {
+            "app_label": "modello",
+            "model": "parereverificavas"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 56,
+        "fields": {
+            "app_label": "modello",
+            "model": "proceduraavvio"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 57,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorseavvio"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 58,
+        "fields": {
+            "app_label": "modello",
+            "model": "altridestinatari"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 59,
+        "fields": {
+            "app_label": "modello",
+            "model": "autoritaistituzionali"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 60,
+        "fields": {
+            "app_label": "modello",
+            "model": "conferenzacopianificazione"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 61,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorsecopianificazione"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 62,
+        "fields": {
+            "app_label": "modello",
+            "model": "proceduraadozione"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 63,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorseadozione"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 64,
+        "fields": {
+            "app_label": "modello",
+            "model": "pianocontrodedotto"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 65,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorsepianocontrodedotto"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 66,
+        "fields": {
+            "app_label": "modello",
+            "model": "pianorevpostcp"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 67,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorsepianorevpostcp"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 68,
+        "fields": {
+            "app_label": "modello",
+            "model": "parereadozionevas"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 69,
+        "fields": {
+            "app_label": "modello",
+            "model": "proceduraadozionevas"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 70,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorseadozionevas"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 71,
+        "fields": {
+            "app_label": "modello",
+            "model": "proceduraapprovazione"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 72,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorseapprovazione"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 73,
+        "fields": {
+            "app_label": "modello",
+            "model": "procedurapubblicazione"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 74,
+        "fields": {
+            "app_label": "modello",
+            "model": "risorsepubblicazione"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP000",
+        "fields": {
+            "nome": "unknown",
+            "descrizione": "Unknown"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP001",
+        "fields": {
+            "nome": "anagrafica",
+            "descrizione": "Anagrafica"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP002",
+        "fields": {
+            "nome": "avvio",
+            "descrizione": "Avvio"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP003",
+        "fields": {
+            "nome": "adozione",
+            "descrizione": "Adozione"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP004",
+        "fields": {
+            "nome": "approvazione",
+            "descrizione": "Approvazione"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP005",
+        "fields": {
+            "nome": "pubblicazione",
+            "descrizione": "Pubblicazione"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP255",
+        "fields": {
+            "nome": "draft",
+            "descrizione": "Draft"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 1,
+        "fields": {
+            "name": "Can access Wagtail admin",
+            "content_type": 2,
+            "codename": "access_admin"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 2,
+        "fields": {
+            "name": "Can add document",
+            "content_type": 3,
+            "codename": "add_document"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 3,
+        "fields": {
+            "name": "Can change document",
+            "content_type": 3,
+            "codename": "change_document"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 4,
+        "fields": {
+            "name": "Can delete document",
+            "content_type": 3,
+            "codename": "delete_document"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 5,
+        "fields": {
+            "name": "Can add image",
+            "content_type": 4,
+            "codename": "add_image"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 6,
+        "fields": {
+            "name": "Can change image",
+            "content_type": 4,
+            "codename": "change_image"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 7,
+        "fields": {
+            "name": "Can delete image",
+            "content_type": 4,
+            "codename": "delete_image"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 8,
+        "fields": {
+            "name": "Can add home",
+            "content_type": 5,
+            "codename": "add_home"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 9,
+        "fields": {
+            "name": "Can change home",
+            "content_type": 5,
+            "codename": "change_home"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 10,
+        "fields": {
+            "name": "Can delete home",
+            "content_type": 5,
+            "codename": "delete_home"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 11,
+        "fields": {
+            "name": "Can add utente",
+            "content_type": 6,
+            "codename": "add_appuser"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 12,
+        "fields": {
+            "name": "Can change utente",
+            "content_type": 6,
+            "codename": "change_appuser"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 13,
+        "fields": {
+            "name": "Can delete utente",
+            "content_type": 6,
+            "codename": "delete_appuser"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 14,
+        "fields": {
+            "name": "Can add ente",
+            "content_type": 7,
+            "codename": "add_organization"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 15,
+        "fields": {
+            "name": "Can change ente",
+            "content_type": 7,
+            "codename": "change_organization"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 16,
+        "fields": {
+            "name": "Can delete ente",
+            "content_type": 7,
+            "codename": "delete_organization"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 17,
+        "fields": {
+            "name": "Can add tipo di ente",
+            "content_type": 8,
+            "codename": "add_organizationtype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 18,
+        "fields": {
+            "name": "Can change tipo di ente",
+            "content_type": 8,
+            "codename": "change_organizationtype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 19,
+        "fields": {
+            "name": "Can delete tipo di ente",
+            "content_type": 8,
+            "codename": "delete_organizationtype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 20,
+        "fields": {
+            "name": "Can add tipo di ruolo",
+            "content_type": 9,
+            "codename": "add_membershiptype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 21,
+        "fields": {
+            "name": "Can change tipo di ruolo",
+            "content_type": 9,
+            "codename": "change_membershiptype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 22,
+        "fields": {
+            "name": "Can delete tipo di ruolo",
+            "content_type": 9,
+            "codename": "delete_membershiptype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 23,
+        "fields": {
+            "name": "Can add ruolo",
+            "content_type": 10,
+            "codename": "add_usermembership"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 24,
+        "fields": {
+            "name": "Can change ruolo",
+            "content_type": 10,
+            "codename": "change_usermembership"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 25,
+        "fields": {
+            "name": "Can delete ruolo",
+            "content_type": 10,
+            "codename": "delete_usermembership"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 26,
+        "fields": {
+            "name": "Can add token",
+            "content_type": 11,
+            "codename": "add_token"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 27,
+        "fields": {
+            "name": "Can change token",
+            "content_type": 11,
+            "codename": "change_token"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 28,
+        "fields": {
+            "name": "Can delete token",
+            "content_type": 11,
+            "codename": "delete_token"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 29,
+        "fields": {
+            "name": "Can add permission",
+            "content_type": 12,
+            "codename": "add_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 30,
+        "fields": {
+            "name": "Can change permission",
+            "content_type": 12,
+            "codename": "change_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 31,
+        "fields": {
+            "name": "Can delete permission",
+            "content_type": 12,
+            "codename": "delete_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 32,
+        "fields": {
+            "name": "Can add group",
+            "content_type": 13,
+            "codename": "add_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 33,
+        "fields": {
+            "name": "Can change group",
+            "content_type": 13,
+            "codename": "change_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 34,
+        "fields": {
+            "name": "Can delete group",
+            "content_type": 13,
+            "codename": "delete_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 35,
+        "fields": {
+            "name": "Can add log entry",
+            "content_type": 14,
+            "codename": "add_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 36,
+        "fields": {
+            "name": "Can change log entry",
+            "content_type": 14,
+            "codename": "change_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 37,
+        "fields": {
+            "name": "Can delete log entry",
+            "content_type": 14,
+            "codename": "delete_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 38,
+        "fields": {
+            "name": "Can add site",
+            "content_type": 15,
+            "codename": "add_site"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 39,
+        "fields": {
+            "name": "Can change site",
+            "content_type": 15,
+            "codename": "change_site"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 40,
+        "fields": {
+            "name": "Can delete site",
+            "content_type": 15,
+            "codename": "delete_site"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 41,
+        "fields": {
+            "name": "Can add session",
+            "content_type": 16,
+            "codename": "add_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 42,
+        "fields": {
+            "name": "Can change session",
+            "content_type": 16,
+            "codename": "change_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 43,
+        "fields": {
+            "name": "Can delete session",
+            "content_type": 16,
+            "codename": "delete_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 44,
+        "fields": {
+            "name": "Can add content type",
+            "content_type": 17,
+            "codename": "add_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 45,
+        "fields": {
+            "name": "Can change content type",
+            "content_type": 17,
+            "codename": "change_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 46,
+        "fields": {
+            "name": "Can delete content type",
+            "content_type": 17,
+            "codename": "delete_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 47,
+        "fields": {
+            "name": "Can add message",
+            "content_type": 18,
+            "codename": "add_message"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 48,
+        "fields": {
+            "name": "Can change message",
+            "content_type": 18,
+            "codename": "change_message"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 49,
+        "fields": {
+            "name": "Can delete message",
+            "content_type": 18,
+            "codename": "delete_message"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 50,
+        "fields": {
+            "name": "Can add thread",
+            "content_type": 19,
+            "codename": "add_thread"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 51,
+        "fields": {
+            "name": "Can change thread",
+            "content_type": 19,
+            "codename": "change_thread"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 52,
+        "fields": {
+            "name": "Can delete thread",
+            "content_type": 19,
+            "codename": "delete_thread"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 53,
+        "fields": {
+            "name": "Can add user thread",
+            "content_type": 20,
+            "codename": "add_userthread"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 54,
+        "fields": {
+            "name": "Can change user thread",
+            "content_type": 20,
+            "codename": "change_userthread"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 55,
+        "fields": {
+            "name": "Can delete user thread",
+            "content_type": 20,
+            "codename": "delete_userthread"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 56,
+        "fields": {
+            "name": "Can add notice queue batch",
+            "content_type": 21,
+            "codename": "add_noticequeuebatch"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 57,
+        "fields": {
+            "name": "Can change notice queue batch",
+            "content_type": 21,
+            "codename": "change_noticequeuebatch"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 58,
+        "fields": {
+            "name": "Can delete notice queue batch",
+            "content_type": 21,
+            "codename": "delete_noticequeuebatch"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 59,
+        "fields": {
+            "name": "Can add notice setting",
+            "content_type": 22,
+            "codename": "add_noticesetting"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 60,
+        "fields": {
+            "name": "Can change notice setting",
+            "content_type": 22,
+            "codename": "change_noticesetting"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 61,
+        "fields": {
+            "name": "Can delete notice setting",
+            "content_type": 22,
+            "codename": "delete_noticesetting"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 62,
+        "fields": {
+            "name": "Can add notice type",
+            "content_type": 23,
+            "codename": "add_noticetype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 63,
+        "fields": {
+            "name": "Can change notice type",
+            "content_type": 23,
+            "codename": "change_noticetype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 64,
+        "fields": {
+            "name": "Can delete notice type",
+            "content_type": 23,
+            "codename": "delete_noticetype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 65,
+        "fields": {
+            "name": "Can add form submission",
+            "content_type": 24,
+            "codename": "add_formsubmission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 66,
+        "fields": {
+            "name": "Can change form submission",
+            "content_type": 24,
+            "codename": "change_formsubmission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 67,
+        "fields": {
+            "name": "Can delete form submission",
+            "content_type": 24,
+            "codename": "delete_formsubmission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 68,
+        "fields": {
+            "name": "Can add redirect",
+            "content_type": 25,
+            "codename": "add_redirect"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 69,
+        "fields": {
+            "name": "Can change redirect",
+            "content_type": 25,
+            "codename": "change_redirect"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 70,
+        "fields": {
+            "name": "Can delete redirect",
+            "content_type": 25,
+            "codename": "delete_redirect"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 71,
+        "fields": {
+            "name": "Can add embed",
+            "content_type": 26,
+            "codename": "add_embed"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 72,
+        "fields": {
+            "name": "Can change embed",
+            "content_type": 26,
+            "codename": "change_embed"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 73,
+        "fields": {
+            "name": "Can delete embed",
+            "content_type": 26,
+            "codename": "delete_embed"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 74,
+        "fields": {
+            "name": "Can add user profile",
+            "content_type": 27,
+            "codename": "add_userprofile"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 75,
+        "fields": {
+            "name": "Can change user profile",
+            "content_type": 27,
+            "codename": "change_userprofile"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 76,
+        "fields": {
+            "name": "Can delete user profile",
+            "content_type": 27,
+            "codename": "delete_userprofile"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 77,
+        "fields": {
+            "name": "Can add rendition",
+            "content_type": 28,
+            "codename": "add_rendition"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 78,
+        "fields": {
+            "name": "Can change rendition",
+            "content_type": 28,
+            "codename": "change_rendition"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 79,
+        "fields": {
+            "name": "Can delete rendition",
+            "content_type": 28,
+            "codename": "delete_rendition"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 80,
+        "fields": {
+            "name": "Can add query",
+            "content_type": 29,
+            "codename": "add_query"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 81,
+        "fields": {
+            "name": "Can change query",
+            "content_type": 29,
+            "codename": "change_query"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 82,
+        "fields": {
+            "name": "Can delete query",
+            "content_type": 29,
+            "codename": "delete_query"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 83,
+        "fields": {
+            "name": "Can add Query Daily Hits",
+            "content_type": 30,
+            "codename": "add_querydailyhits"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 84,
+        "fields": {
+            "name": "Can change Query Daily Hits",
+            "content_type": 30,
+            "codename": "change_querydailyhits"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 85,
+        "fields": {
+            "name": "Can delete Query Daily Hits",
+            "content_type": 30,
+            "codename": "delete_querydailyhits"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 86,
+        "fields": {
+            "name": "Can add page",
+            "content_type": 1,
+            "codename": "add_page"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 87,
+        "fields": {
+            "name": "Can change page",
+            "content_type": 1,
+            "codename": "change_page"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 88,
+        "fields": {
+            "name": "Can delete page",
+            "content_type": 1,
+            "codename": "delete_page"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 89,
+        "fields": {
+            "name": "Can add group page permission",
+            "content_type": 31,
+            "codename": "add_grouppagepermission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 90,
+        "fields": {
+            "name": "Can change group page permission",
+            "content_type": 31,
+            "codename": "change_grouppagepermission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 91,
+        "fields": {
+            "name": "Can delete group page permission",
+            "content_type": 31,
+            "codename": "delete_grouppagepermission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 92,
+        "fields": {
+            "name": "Can add page revision",
+            "content_type": 32,
+            "codename": "add_pagerevision"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 93,
+        "fields": {
+            "name": "Can change page revision",
+            "content_type": 32,
+            "codename": "change_pagerevision"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 94,
+        "fields": {
+            "name": "Can delete page revision",
+            "content_type": 32,
+            "codename": "delete_pagerevision"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 95,
+        "fields": {
+            "name": "Can add page view restriction",
+            "content_type": 33,
+            "codename": "add_pageviewrestriction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 96,
+        "fields": {
+            "name": "Can change page view restriction",
+            "content_type": 33,
+            "codename": "change_pageviewrestriction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 97,
+        "fields": {
+            "name": "Can delete page view restriction",
+            "content_type": 33,
+            "codename": "delete_pageviewrestriction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 98,
+        "fields": {
+            "name": "Can add site",
+            "content_type": 34,
+            "codename": "add_site"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 99,
+        "fields": {
+            "name": "Can change site",
+            "content_type": 34,
+            "codename": "change_site"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 100,
+        "fields": {
+            "name": "Can delete site",
+            "content_type": 34,
+            "codename": "delete_site"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 101,
+        "fields": {
+            "name": "Can add collection",
+            "content_type": 35,
+            "codename": "add_collection"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 102,
+        "fields": {
+            "name": "Can change collection",
+            "content_type": 35,
+            "codename": "change_collection"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 103,
+        "fields": {
+            "name": "Can delete collection",
+            "content_type": 35,
+            "codename": "delete_collection"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 104,
+        "fields": {
+            "name": "Can add group collection permission",
+            "content_type": 36,
+            "codename": "add_groupcollectionpermission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 105,
+        "fields": {
+            "name": "Can change group collection permission",
+            "content_type": 36,
+            "codename": "change_groupcollectionpermission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 106,
+        "fields": {
+            "name": "Can delete group collection permission",
+            "content_type": 36,
+            "codename": "delete_groupcollectionpermission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 107,
+        "fields": {
+            "name": "Can add collection view restriction",
+            "content_type": 37,
+            "codename": "add_collectionviewrestriction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 108,
+        "fields": {
+            "name": "Can change collection view restriction",
+            "content_type": 37,
+            "codename": "change_collectionviewrestriction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 109,
+        "fields": {
+            "name": "Can delete collection view restriction",
+            "content_type": 37,
+            "codename": "delete_collectionviewrestriction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 110,
+        "fields": {
+            "name": "Can add Tag",
+            "content_type": 38,
+            "codename": "add_tag"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 111,
+        "fields": {
+            "name": "Can change Tag",
+            "content_type": 38,
+            "codename": "change_tag"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 112,
+        "fields": {
+            "name": "Can delete Tag",
+            "content_type": 38,
+            "codename": "delete_tag"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 113,
+        "fields": {
+            "name": "Can add Tagged Item",
+            "content_type": 39,
+            "codename": "add_taggeditem"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 114,
+        "fields": {
+            "name": "Can change Tagged Item",
+            "content_type": 39,
+            "codename": "change_taggeditem"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 115,
+        "fields": {
+            "name": "Can delete Tagged Item",
+            "content_type": 39,
+            "codename": "delete_taggeditem"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 116,
+        "fields": {
+            "name": "Can add fase",
+            "content_type": 40,
+            "codename": "add_fase"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 117,
+        "fields": {
+            "name": "Can change fase",
+            "content_type": 40,
+            "codename": "change_fase"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 118,
+        "fields": {
+            "name": "Can delete fase",
+            "content_type": 40,
+            "codename": "delete_fase"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 119,
+        "fields": {
+            "name": "Can add fase piano storico",
+            "content_type": 41,
+            "codename": "add_fasepianostorico"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 120,
+        "fields": {
+            "name": "Can change fase piano storico",
+            "content_type": 41,
+            "codename": "change_fasepianostorico"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 121,
+        "fields": {
+            "name": "Can delete fase piano storico",
+            "content_type": 41,
+            "codename": "delete_fasepianostorico"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 122,
+        "fields": {
+            "name": "Can add piano",
+            "content_type": 42,
+            "codename": "add_piano"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 123,
+        "fields": {
+            "name": "Can change piano",
+            "content_type": 42,
+            "codename": "change_piano"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 124,
+        "fields": {
+            "name": "Can delete piano",
+            "content_type": 42,
+            "codename": "delete_piano"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 125,
+        "fields": {
+            "name": "Can add risorsa",
+            "content_type": 43,
+            "codename": "add_risorsa"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 126,
+        "fields": {
+            "name": "Can change risorsa",
+            "content_type": 43,
+            "codename": "change_risorsa"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 127,
+        "fields": {
+            "name": "Can delete risorsa",
+            "content_type": 43,
+            "codename": "delete_risorsa"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 128,
+        "fields": {
+            "name": "Can add risorse piano",
+            "content_type": 44,
+            "codename": "add_risorsepiano"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 129,
+        "fields": {
+            "name": "Can change risorse piano",
+            "content_type": 44,
+            "codename": "change_risorsepiano"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 130,
+        "fields": {
+            "name": "Can delete risorse piano",
+            "content_type": 44,
+            "codename": "delete_risorsepiano"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 131,
+        "fields": {
+            "name": "Can add procedura vas",
+            "content_type": 45,
+            "codename": "add_proceduravas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 132,
+        "fields": {
+            "name": "Can change procedura vas",
+            "content_type": 45,
+            "codename": "change_proceduravas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 133,
+        "fields": {
+            "name": "Can delete procedura vas",
+            "content_type": 45,
+            "codename": "delete_proceduravas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 134,
+        "fields": {
+            "name": "Can add risorse vas",
+            "content_type": 46,
+            "codename": "add_risorsevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 135,
+        "fields": {
+            "name": "Can change risorse vas",
+            "content_type": 46,
+            "codename": "change_risorsevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 136,
+        "fields": {
+            "name": "Can delete risorse vas",
+            "content_type": 46,
+            "codename": "delete_risorsevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 137,
+        "fields": {
+            "name": "Can add autorita competente vas",
+            "content_type": 47,
+            "codename": "add_autoritacompetentevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 138,
+        "fields": {
+            "name": "Can change autorita competente vas",
+            "content_type": 47,
+            "codename": "change_autoritacompetentevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 139,
+        "fields": {
+            "name": "Can delete autorita competente vas",
+            "content_type": 47,
+            "codename": "delete_autoritacompetentevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 140,
+        "fields": {
+            "name": "Can add contatto",
+            "content_type": 48,
+            "codename": "add_contatto"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 141,
+        "fields": {
+            "name": "Can change contatto",
+            "content_type": 48,
+            "codename": "change_contatto"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 142,
+        "fields": {
+            "name": "Can delete contatto",
+            "content_type": 48,
+            "codename": "delete_contatto"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 143,
+        "fields": {
+            "name": "Can add soggetti sca",
+            "content_type": 49,
+            "codename": "add_soggettisca"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 144,
+        "fields": {
+            "name": "Can change soggetti sca",
+            "content_type": 49,
+            "codename": "change_soggettisca"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 145,
+        "fields": {
+            "name": "Can delete soggetti sca",
+            "content_type": 49,
+            "codename": "delete_soggettisca"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 146,
+        "fields": {
+            "name": "Can add piano auth tokens",
+            "content_type": 50,
+            "codename": "add_pianoauthtokens"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 147,
+        "fields": {
+            "name": "Can change piano auth tokens",
+            "content_type": 50,
+            "codename": "change_pianoauthtokens"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 148,
+        "fields": {
+            "name": "Can delete piano auth tokens",
+            "content_type": 50,
+            "codename": "delete_pianoauthtokens"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 149,
+        "fields": {
+            "name": "Can add azione",
+            "content_type": 51,
+            "codename": "add_azione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 150,
+        "fields": {
+            "name": "Can change azione",
+            "content_type": 51,
+            "codename": "change_azione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 151,
+        "fields": {
+            "name": "Can delete azione",
+            "content_type": 51,
+            "codename": "delete_azione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 152,
+        "fields": {
+            "name": "Can add azioni piano",
+            "content_type": 52,
+            "codename": "add_azionipiano"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 153,
+        "fields": {
+            "name": "Can change azioni piano",
+            "content_type": 52,
+            "codename": "change_azionipiano"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 154,
+        "fields": {
+            "name": "Can delete azioni piano",
+            "content_type": 52,
+            "codename": "delete_azionipiano"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 155,
+        "fields": {
+            "name": "Can add consultazione vas",
+            "content_type": 53,
+            "codename": "add_consultazionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 156,
+        "fields": {
+            "name": "Can change consultazione vas",
+            "content_type": 53,
+            "codename": "change_consultazionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 157,
+        "fields": {
+            "name": "Can delete consultazione vas",
+            "content_type": 53,
+            "codename": "delete_consultazionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 158,
+        "fields": {
+            "name": "Can add parere vas",
+            "content_type": 54,
+            "codename": "add_parerevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 159,
+        "fields": {
+            "name": "Can change parere vas",
+            "content_type": 54,
+            "codename": "change_parerevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 160,
+        "fields": {
+            "name": "Can delete parere vas",
+            "content_type": 54,
+            "codename": "delete_parerevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 161,
+        "fields": {
+            "name": "Can add parere verifica vas",
+            "content_type": 55,
+            "codename": "add_parereverificavas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 162,
+        "fields": {
+            "name": "Can change parere verifica vas",
+            "content_type": 55,
+            "codename": "change_parereverificavas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 163,
+        "fields": {
+            "name": "Can delete parere verifica vas",
+            "content_type": 55,
+            "codename": "delete_parereverificavas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 164,
+        "fields": {
+            "name": "Can add procedura avvio",
+            "content_type": 56,
+            "codename": "add_proceduraavvio"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 165,
+        "fields": {
+            "name": "Can change procedura avvio",
+            "content_type": 56,
+            "codename": "change_proceduraavvio"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 166,
+        "fields": {
+            "name": "Can delete procedura avvio",
+            "content_type": 56,
+            "codename": "delete_proceduraavvio"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 167,
+        "fields": {
+            "name": "Can add risorse avvio",
+            "content_type": 57,
+            "codename": "add_risorseavvio"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 168,
+        "fields": {
+            "name": "Can change risorse avvio",
+            "content_type": 57,
+            "codename": "change_risorseavvio"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 169,
+        "fields": {
+            "name": "Can delete risorse avvio",
+            "content_type": 57,
+            "codename": "delete_risorseavvio"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 170,
+        "fields": {
+            "name": "Can add altri destinatari",
+            "content_type": 58,
+            "codename": "add_altridestinatari"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 171,
+        "fields": {
+            "name": "Can change altri destinatari",
+            "content_type": 58,
+            "codename": "change_altridestinatari"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 172,
+        "fields": {
+            "name": "Can delete altri destinatari",
+            "content_type": 58,
+            "codename": "delete_altridestinatari"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 173,
+        "fields": {
+            "name": "Can add autorita istituzionali",
+            "content_type": 59,
+            "codename": "add_autoritaistituzionali"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 174,
+        "fields": {
+            "name": "Can change autorita istituzionali",
+            "content_type": 59,
+            "codename": "change_autoritaistituzionali"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 175,
+        "fields": {
+            "name": "Can delete autorita istituzionali",
+            "content_type": 59,
+            "codename": "delete_autoritaistituzionali"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 176,
+        "fields": {
+            "name": "Can add conferenza copianificazione",
+            "content_type": 60,
+            "codename": "add_conferenzacopianificazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 177,
+        "fields": {
+            "name": "Can change conferenza copianificazione",
+            "content_type": 60,
+            "codename": "change_conferenzacopianificazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 178,
+        "fields": {
+            "name": "Can delete conferenza copianificazione",
+            "content_type": 60,
+            "codename": "delete_conferenzacopianificazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 179,
+        "fields": {
+            "name": "Can add risorse copianificazione",
+            "content_type": 61,
+            "codename": "add_risorsecopianificazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 180,
+        "fields": {
+            "name": "Can change risorse copianificazione",
+            "content_type": 61,
+            "codename": "change_risorsecopianificazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 181,
+        "fields": {
+            "name": "Can delete risorse copianificazione",
+            "content_type": 61,
+            "codename": "delete_risorsecopianificazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 182,
+        "fields": {
+            "name": "Can add procedura adozione",
+            "content_type": 62,
+            "codename": "add_proceduraadozione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 183,
+        "fields": {
+            "name": "Can change procedura adozione",
+            "content_type": 62,
+            "codename": "change_proceduraadozione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 184,
+        "fields": {
+            "name": "Can delete procedura adozione",
+            "content_type": 62,
+            "codename": "delete_proceduraadozione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 185,
+        "fields": {
+            "name": "Can add risorse adozione",
+            "content_type": 63,
+            "codename": "add_risorseadozione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 186,
+        "fields": {
+            "name": "Can change risorse adozione",
+            "content_type": 63,
+            "codename": "change_risorseadozione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 187,
+        "fields": {
+            "name": "Can delete risorse adozione",
+            "content_type": 63,
+            "codename": "delete_risorseadozione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 188,
+        "fields": {
+            "name": "Can add piano controdedotto",
+            "content_type": 64,
+            "codename": "add_pianocontrodedotto"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 189,
+        "fields": {
+            "name": "Can change piano controdedotto",
+            "content_type": 64,
+            "codename": "change_pianocontrodedotto"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 190,
+        "fields": {
+            "name": "Can delete piano controdedotto",
+            "content_type": 64,
+            "codename": "delete_pianocontrodedotto"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 191,
+        "fields": {
+            "name": "Can add risorse piano controdedotto",
+            "content_type": 65,
+            "codename": "add_risorsepianocontrodedotto"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 192,
+        "fields": {
+            "name": "Can change risorse piano controdedotto",
+            "content_type": 65,
+            "codename": "change_risorsepianocontrodedotto"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 193,
+        "fields": {
+            "name": "Can delete risorse piano controdedotto",
+            "content_type": 65,
+            "codename": "delete_risorsepianocontrodedotto"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 194,
+        "fields": {
+            "name": "Can add piano rev post cp",
+            "content_type": 66,
+            "codename": "add_pianorevpostcp"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 195,
+        "fields": {
+            "name": "Can change piano rev post cp",
+            "content_type": 66,
+            "codename": "change_pianorevpostcp"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 196,
+        "fields": {
+            "name": "Can delete piano rev post cp",
+            "content_type": 66,
+            "codename": "delete_pianorevpostcp"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 197,
+        "fields": {
+            "name": "Can add risorse piano rev post cp",
+            "content_type": 67,
+            "codename": "add_risorsepianorevpostcp"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 198,
+        "fields": {
+            "name": "Can change risorse piano rev post cp",
+            "content_type": 67,
+            "codename": "change_risorsepianorevpostcp"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 199,
+        "fields": {
+            "name": "Can delete risorse piano rev post cp",
+            "content_type": 67,
+            "codename": "delete_risorsepianorevpostcp"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 200,
+        "fields": {
+            "name": "Can add parere adozione vas",
+            "content_type": 68,
+            "codename": "add_parereadozionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 201,
+        "fields": {
+            "name": "Can change parere adozione vas",
+            "content_type": 68,
+            "codename": "change_parereadozionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 202,
+        "fields": {
+            "name": "Can delete parere adozione vas",
+            "content_type": 68,
+            "codename": "delete_parereadozionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 203,
+        "fields": {
+            "name": "Can add procedura adozione vas",
+            "content_type": 69,
+            "codename": "add_proceduraadozionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 204,
+        "fields": {
+            "name": "Can change procedura adozione vas",
+            "content_type": 69,
+            "codename": "change_proceduraadozionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 205,
+        "fields": {
+            "name": "Can delete procedura adozione vas",
+            "content_type": 69,
+            "codename": "delete_proceduraadozionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 206,
+        "fields": {
+            "name": "Can add risorse adozione vas",
+            "content_type": 70,
+            "codename": "add_risorseadozionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 207,
+        "fields": {
+            "name": "Can change risorse adozione vas",
+            "content_type": 70,
+            "codename": "change_risorseadozionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 208,
+        "fields": {
+            "name": "Can delete risorse adozione vas",
+            "content_type": 70,
+            "codename": "delete_risorseadozionevas"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 209,
+        "fields": {
+            "name": "Can add procedura approvazione",
+            "content_type": 71,
+            "codename": "add_proceduraapprovazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 210,
+        "fields": {
+            "name": "Can change procedura approvazione",
+            "content_type": 71,
+            "codename": "change_proceduraapprovazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 211,
+        "fields": {
+            "name": "Can delete procedura approvazione",
+            "content_type": 71,
+            "codename": "delete_proceduraapprovazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 212,
+        "fields": {
+            "name": "Can add risorse approvazione",
+            "content_type": 72,
+            "codename": "add_risorseapprovazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 213,
+        "fields": {
+            "name": "Can change risorse approvazione",
+            "content_type": 72,
+            "codename": "change_risorseapprovazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 214,
+        "fields": {
+            "name": "Can delete risorse approvazione",
+            "content_type": 72,
+            "codename": "delete_risorseapprovazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 215,
+        "fields": {
+            "name": "Can add procedura pubblicazione",
+            "content_type": 73,
+            "codename": "add_procedurapubblicazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 216,
+        "fields": {
+            "name": "Can change procedura pubblicazione",
+            "content_type": 73,
+            "codename": "change_procedurapubblicazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 217,
+        "fields": {
+            "name": "Can delete procedura pubblicazione",
+            "content_type": 73,
+            "codename": "delete_procedurapubblicazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 218,
+        "fields": {
+            "name": "Can add risorse pubblicazione",
+            "content_type": 74,
+            "codename": "add_risorsepubblicazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 219,
+        "fields": {
+            "name": "Can change risorse pubblicazione",
+            "content_type": 74,
+            "codename": "change_risorsepubblicazione"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 220,
+        "fields": {
+            "name": "Can delete risorse pubblicazione",
+            "content_type": 74,
+            "codename": "delete_risorsepubblicazione"
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$pGKZ4RRLdeyt$vsJS82yd0kJJCqJ+Kc2ZsQjPO22aF/fg5GqiWtOOsMY=",
+            "last_login": "2019-05-03T07:40:58.223Z",
+            "is_superuser": true,
+            "fiscal_code": "VRDPLA87E05F205U",
+            "first_name": "Paolo",
+            "last_name": "Verdi",
+            "email": "testserapide@gmail.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2019-04-10T13:32:32.442Z",
+            "date_updated": "2019-04-10T13:32:32.442Z",
+            "created_by": null,
+            "updated_by": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$Ws468cj2pzf4$Wtv1/1/bQ9eV3yRtvxYwy95qyknChwz9Nwgn6tM8MuU=",
+            "last_login": "2019-04-10T14:00:12.316Z",
+            "is_superuser": false,
+            "fiscal_code": "RSSMRA80A01H501U",
+            "first_name": "Mario",
+            "last_name": "Rossi",
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-04-10T13:57:46.196Z",
+            "date_updated": "2019-04-10T13:58:48.712Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$UMftAEh6GDCX$U+0zeRKv/t4brnVnMcfkPVpoIBBl+JQDefKMeoFE4NE=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "CMNNNU19C28B962C",
+            "first_name": "Unione Comuni",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:49:48.985Z",
+            "date_updated": "2019-05-03T11:50:16.061Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$nrH8K4WnHkk9$k8NeaNw/n+Ka2He6HrpzprLBeiaNKVF2tph0a2bn2Nw=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "CNFCMN19B19D612P",
+            "first_name": "Comuni confinante: Firenze",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:50:50.954Z",
+            "date_updated": "2019-05-03T11:51:13.789Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 5,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$aJoYSbyDYuIq$bIb8pc+YsldNWwFcj2ybA31R2i4qI6RxWhind7ecFeM=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "DIXTRT19B19D612L",
+            "first_name": "Autorità di Bacino distrettuale dell'Appennino Settentrionale",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:51:41.328Z",
+            "date_updated": "2019-05-03T11:51:54.239Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 6,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$03Y5gWEwZWjZ$f61YAHoLPi0r6HJbYOkIhJwUYLJGxEID1tuIc/nFv/A=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "DLECMS19B19D612Q",
+            "first_name": "Commissione del Paesaggio integrata",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:52:37.748Z",
+            "date_updated": "2019-05-03T11:52:49.626Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 7,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$q5EH2grTX1rt$dQFbfPS0ZJUH6BZj33MF0mkiBTwq/QtrEIRH9sfspKg=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "DLZSTR19B19B962Y",
+            "first_name": "Settore Edilizia e Urbanistica",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:53:08.117Z",
+            "date_updated": "2019-05-03T11:53:20.524Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 8,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$DSrTgm8jOojM$YFY2PyAGsZrkmeNdZ2vgpxhvwmfywSeKbBvI3n11wpk=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "DRCTRT19B19D612A",
+            "first_name": "Autorità Idrica Toscana",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:53:44.421Z",
+            "date_updated": "2019-05-03T11:53:55.258Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 9,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$lNM6nETnCJpu$zGRG0yIU3n4H1ZVLfhatYRy2Co5ArnmwIwJfuhdWh40=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "MBNSTR19B19D612N",
+            "first_name": "Settore Ambiente",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:54:24.671Z",
+            "date_updated": "2019-05-03T11:54:34.803Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 10,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$S9Iia901ci29$RKYtz02/cewnmrIlxRJVK3OFB4tqSZ97FVwx78XXTvc=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "MTRCTT19B19D612F",
+            "first_name": "Città Metropolitana di Firenze",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:54:55.940Z",
+            "date_updated": "2019-05-03T11:55:07.021Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 11,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$GleEY4vevfMO$Go3j8asL7UiAvkRNDAA4W7vu2h3p/aTB3xVnItgqdZc=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "PPOPVV19B19D612A",
+            "first_name": "Provveditorato OOPP Toscana e Umbria",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:55:26.320Z",
+            "date_updated": "2019-05-03T11:55:35.287Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 12,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$bPQz1MY63Vkd$pbH7lx4uzP5+mVxZi2sIE6CMKmpTZX8xFL+FDQQ+uYY=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "RAERPT19B19D612H",
+            "first_name": "ARPAT Area Vasta Centro - Firenze - Prato - Pistoia",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:56:03.496Z",
+            "date_updated": "2019-05-03T11:56:19.533Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 13,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$S6Mpf1xPcA9u$Dm7H+MOXI4ZejuosFcMtKytbKNuiZ5jYfTv7PrlVFvw=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "RBNDZN19C28B962G",
+            "first_name": "direzione urbanistica",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:56:58.683Z",
+            "date_updated": "2019-05-03T11:57:10.778Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 14,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$TDw1Ke2uZlnW$lYFeQ1Q3pO2CE42kAwWthl0+sWkhIe6I8SnrIMC6u5Q=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "RCHSRN19B19D612R",
+            "first_name": "Soprintendenza Archeologica Belle Arti e Paesaggio province di Firenze Prato e Pistoia",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:57:35.779Z",
+            "date_updated": "2019-05-03T11:57:47.965Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 15,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$fl6v2lDGQyJ6$HbFiinhiMfnMRnvyoykJCsIW/GPz+dog+ieKK3CdviQ=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "RGNRGN19T04D612F",
+            "first_name": "Regione",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:58:21.806Z",
+            "date_updated": "2019-05-03T11:58:36.038Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 16,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$mgnnCd2aKRJY$kmO+liCj34fusaaWFetP1PbhTuX0XDSRrpPxJXHriXo=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "SLUZND19B19D612M",
+            "first_name": "Azienda USL Toscana Centro",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:59:13.202Z",
+            "date_updated": "2019-05-03T11:59:25.573Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 17,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$ledDrafQGsOU$W/Ptj6vW1B9jB/33W5V2N8wkmelA1sJ7K/znAH5CxFI=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "VVSNCL19B19D612X",
+            "first_name": "Nucleo VIA-VAS",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T11:59:43.546Z",
+            "date_updated": "2019-05-03T11:59:53.463Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 18,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$ucOwszO5Qbnp$mdy8Pm/EBZ+pZNmG3evfkkJVLmk0TB4aVdjna7dkPdw=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "XXXGNE19C27B962N",
+            "first_name": "Genio Civile",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T12:00:19.872Z",
+            "date_updated": "2019-05-03T12:00:30.315Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.appuser",
+        "pk": 19,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$hca0uF0ts98e$ppo0Aarfiv2+Pn5vcHNiV69b1xxGwI9AuZE2QMpYGHQ=",
+            "last_login": null,
+            "is_superuser": false,
+            "fiscal_code": "TSCTAO19B19D612W",
+            "first_name": "ATO Toscana Centro - Consorzio comuni ATO gestione rifiuti",
+            "last_name": null,
+            "email": "testserapide@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-05-03T12:06:48.938Z",
+            "date_updated": "2019-05-03T12:07:02.468Z",
+            "created_by": 1,
+            "updated_by": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 1,
+        "fields": {
+            "name": "FI_ISIDE",
+            "description": "Referente ISIDE per il Comune di Firenze",
+            "member": 1,
+            "organization": "FI",
+            "type": 6,
+            "date_joined": "2019-04-10T13:59:34.297Z",
+            "date_updated": "2019-04-10T13:59:34.297Z",
+            "created_by": null,
+            "updated_by": null
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 2,
+        "fields": {
+            "name": "FI_RUP",
+            "description": "Responsabile Unico del Procedimento per il Comune di Firenze",
+            "member": 2,
+            "organization": "FI",
+            "type": 1,
+            "date_joined": "2019-04-10T13:59:34.297Z",
+            "date_updated": "2019-04-10T13:59:34.297Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 3,
+        "fields": {
+            "name": "RGNRGN19T04D612F-RT-membership",
+            "description": "",
+            "member": 15,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:01:16.798Z",
+            "date_updated": "2019-05-03T12:01:16.798Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 4,
+        "fields": {
+            "name": "CMNNNU19C28B962C-FI-membership",
+            "description": "",
+            "member": 3,
+            "organization": "FI",
+            "type": 10,
+            "date_joined": "2019-05-03T12:01:45.963Z",
+            "date_updated": "2019-05-03T12:01:45.963Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 5,
+        "fields": {
+            "name": "RBNDZN19C28B962G-FI-membership",
+            "description": "",
+            "member": 13,
+            "organization": "FI",
+            "type": 10,
+            "date_joined": "2019-05-03T12:02:34.391Z",
+            "date_updated": "2019-05-03T12:02:34.391Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 6,
+        "fields": {
+            "name": "XXXGNE19C27B962N-FI-membership",
+            "description": "",
+            "member": 18,
+            "organization": "FI",
+            "type": 10,
+            "date_joined": "2019-05-03T12:03:03.823Z",
+            "date_updated": "2019-05-03T12:03:03.824Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 7,
+        "fields": {
+            "name": "CNFCMN19B19D612P-FI-membership",
+            "description": "",
+            "member": 4,
+            "organization": "FI",
+            "type": 10,
+            "date_joined": "2019-05-03T12:05:19.868Z",
+            "date_updated": "2019-05-03T12:05:19.868Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 8,
+        "fields": {
+            "name": "PPOPVV19B19D612A-RT-membership",
+            "description": "",
+            "member": 11,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:05:46.110Z",
+            "date_updated": "2019-05-03T12:05:46.110Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 9,
+        "fields": {
+            "name": "TSCTAO19B19D612W-RT-membership",
+            "description": "",
+            "member": 19,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:07:59.300Z",
+            "date_updated": "2019-05-03T12:07:59.301Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 10,
+        "fields": {
+            "name": "DRCTRT19B19D612A-RT-membership",
+            "description": "",
+            "member": 8,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:08:33.745Z",
+            "date_updated": "2019-05-03T12:08:33.746Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 11,
+        "fields": {
+            "name": "DIXTRT19B19D612L-RT-membership",
+            "description": "",
+            "member": 5,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:09:03.647Z",
+            "date_updated": "2019-05-03T12:09:03.648Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 12,
+        "fields": {
+            "name": "SLUZND19B19D612M-RT-membership",
+            "description": "",
+            "member": 16,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:09:42.567Z",
+            "date_updated": "2019-05-03T12:09:42.567Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 13,
+        "fields": {
+            "name": "RAERPT19B19D612H-RT-membership",
+            "description": "",
+            "member": 12,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:10:06.691Z",
+            "date_updated": "2019-05-03T12:10:06.691Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 14,
+        "fields": {
+            "name": "RCHSRN19B19D612R-RT-membership",
+            "description": "",
+            "member": 14,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:10:29.504Z",
+            "date_updated": "2019-05-03T12:10:29.505Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 15,
+        "fields": {
+            "name": "DLECMS19B19D612Q-RT-membership",
+            "description": "",
+            "member": 6,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:10:54.901Z",
+            "date_updated": "2019-05-03T12:10:54.902Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 16,
+        "fields": {
+            "name": "MBNSTR19B19D612N-RT-membership",
+            "description": "",
+            "member": 9,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:11:16.817Z",
+            "date_updated": "2019-05-03T12:11:16.817Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 17,
+        "fields": {
+            "name": "VVSNCL19B19D612X-RT-membership",
+            "description": "",
+            "member": 17,
+            "organization": "RT",
+            "type": 11,
+            "date_joined": "2019-05-03T12:11:41.987Z",
+            "date_updated": "2019-05-03T12:11:41.987Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 18,
+        "fields": {
+            "name": "MTRCTT19B19D612F-FI-membership",
+            "description": "",
+            "member": 10,
+            "organization": "FI",
+            "type": 10,
+            "date_joined": "2019-05-03T12:12:01.865Z",
+            "date_updated": "2019-05-03T12:12:01.865Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "strt_users.usermembership",
+        "pk": 19,
+        "fields": {
+            "name": "DLZSTR19B19B962Y-SCND_FI-membership",
+            "description": "",
+            "member": 7,
+            "organization": "FI",
+            "type": 10,
+            "date_joined": "2019-05-03T12:12:22.261Z",
+            "date_updated": "2019-05-03T12:12:22.261Z",
+            "created_by": 1,
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 1,
+        "fields": {
+            "uuid": "e6b830dd-32e8-4641-8098-2bbaa8445458",
+            "nome": "Mario Rossi",
+            "tipologia": "generico",
+            "email": "testserapide@gmail.com",
+            "ente": "FI",
+            "user": 2
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 2,
+        "fields": {
+            "uuid": "7362725e-94c8-419e-97e0-beca2e5475e2",
+            "nome": "Regione",
+            "tipologia": "ente",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 15
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 3,
+        "fields": {
+            "uuid": "2a243ba2-e173-4264-b102-ee74abf58188",
+            "nome": "Unione Comuni",
+            "tipologia": "acvas",
+            "email": "testserapide@gmail.com",
+            "ente": "FI",
+            "user": 3
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 4,
+        "fields": {
+            "uuid": "d07f87fc-42c9-4b9e-9d14-92c38ad09544",
+            "nome": "direzione urbanistica",
+            "tipologia": "generico",
+            "email": "testserapide@gmail.com",
+            "ente": "FI",
+            "user": 13
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 5,
+        "fields": {
+            "uuid": "3f1fb25a-88cb-4259-8274-7e84b4cbf24a",
+            "nome": "Genio Civile",
+            "tipologia": "genio_civile",
+            "email": "testserapide@gmail.com",
+            "ente": "FI",
+            "user": 18
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 6,
+        "fields": {
+            "uuid": "b8d26c34-493f-4414-8fa1-0e4d2c10f3c1",
+            "nome": "Comune confinante: Firenze",
+            "tipologia": "sca",
+            "email": "testserapide@gmail.com",
+            "ente": "FI",
+            "user": 4
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 7,
+        "fields": {
+            "uuid": "11ed2087-7b8c-4fce-9147-a6b350420037",
+            "nome": "Provveditorato OOPP Toscana e Umbria",
+            "tipologia": "sca",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 11
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 8,
+        "fields": {
+            "uuid": "80815a8d-78b8-4b65-85fb-819397f149ee",
+            "nome": "ATO Toscana Centro - Consorzio comuni ATO gestione rifiuti",
+            "tipologia": "sca",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 19
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 9,
+        "fields": {
+            "uuid": "fbeda41c-20ac-4ccb-8288-b98efcb07628",
+            "nome": "Autorità Idrica Toscana",
+            "tipologia": "sca",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 8
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 10,
+        "fields": {
+            "uuid": "55d18e44-3808-4669-855a-9a7ce93030fe",
+            "nome": "Autorità di Bacino distrettuale dell'Appennino Settentrionale",
+            "tipologia": "sca",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 5
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 11,
+        "fields": {
+            "uuid": "a90351a6-83cd-4c5d-8fd1-21bb572588a3",
+            "nome": "Azienda USL Toscana Centro",
+            "tipologia": "sca",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 16
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 12,
+        "fields": {
+            "uuid": "4654423b-5e01-4879-a12f-db18a94ae03a",
+            "nome": "ARPAT Area Vasta Centro - Firenze - Prato - Pistoia",
+            "tipologia": "sca",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 12
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 13,
+        "fields": {
+            "uuid": "92bc288b-e566-4dbb-a3f6-537b43e2faad",
+            "nome": "Città Metropolitana di Firenze",
+            "tipologia": "sca",
+            "email": "testserapide@gmail.com",
+            "ente": "FI",
+            "user": 10
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 14,
+        "fields": {
+            "uuid": "22d79a82-fac4-4e10-bce3-e8828949384f",
+            "nome": "Soprintendenza Archeologica Belle Arti e Paesaggio province di Firenze Prato e Pistoia",
+            "tipologia": "sca",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 14
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 15,
+        "fields": {
+            "uuid": "9332b08a-5254-423f-9046-aaf36b0088d8",
+            "nome": "Commissione del Paesaggio integrata",
+            "tipologia": "acvas",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 6
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 16,
+        "fields": {
+            "uuid": "736e7384-401c-444b-8b66-200aae9106bb",
+            "nome": "Settore Ambiente",
+            "tipologia": "acvas",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 9
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 17,
+        "fields": {
+            "uuid": "efab6288-0a58-49a3-8d5c-968f4e010fb9",
+            "nome": "Nucleo VIA-VAS",
+            "tipologia": "acvas",
+            "email": "testserapide@gmail.com",
+            "ente": "RT",
+            "user": 17
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 18,
+        "fields": {
+            "uuid": "52f0a57a-6aac-4776-ba0d-ce02e4dfcfe3",
+            "nome": "Città Metropolitana di Firenze",
+            "tipologia": "acvas",
+            "email": "testserapide@gmail.com",
+            "ente": "FI",
+            "user": 10
+        }
+    },
+    {
+        "model": "modello.contatto",
+        "pk": 19,
+        "fields": {
+            "uuid": "044ed5ff-ff46-4742-8cdc-490110c8f4d4",
+            "nome": "Settore Edilizia e Urbanistica",
+            "tipologia": "generico",
+            "email": "testserapide@gmail.com",
+            "ente": "FI",
+            "user": 7
+        }
+    }
+]

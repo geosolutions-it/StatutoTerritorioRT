@@ -339,3 +339,6 @@ LOGGING = {
             "handlers": ["console"], "level": "ERROR", },
     },
 }
+
+# Snapshot test
+TEST_RUNNER = 'snapshottest.django.TestRunner'

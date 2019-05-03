@@ -38,3 +38,5 @@ pyflakes==1.6.0
 pytz==2018.5
 flake8==3.5.0
 python-codicefiscale==0.3.4
+snapshottest==0.5.0
+
