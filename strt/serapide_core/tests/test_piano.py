@@ -120,7 +120,7 @@ class TestPianoGraphQlAPI(APITestCase):
         redazioneNormeTecnicheAttuazioneUrl
         compilazioneRapportoAmbientaleUrl
         conformazionePitPprUrl
-        monitoraggioUrbanisticoUrl 
+        monitoraggioUrbanisticoUrl
         azioni {{
             ...Azioni
         }}
@@ -163,7 +163,7 @@ class TestPianoGraphQlAPI(APITestCase):
                 }}
             }}
         }}
-        altriDestinatari {{ 
+        altriDestinatari {{
             edges {{
                 node {{
                     ...Contatto
@@ -190,7 +190,7 @@ class TestPianoGraphQlAPI(APITestCase):
         return request
 
     def test_api_piano_operativo(self):
-        """Testing the API for CREATE_PIANO"""
+        """Testing the API for_PIANO OPERATIVO"""
         # Mario Rossi - RUP Firenze
         user = UserModel.objects.get(
             fiscal_code='RSSMRA80A01H501U'
@@ -266,7 +266,7 @@ class TestPianoGraphQlAPI(APITestCase):
         # UpdateProceduraVas (PROCEDIMENTO DI VERIFICA SEMPLIFICATA, RICHIESTA VERIFICA DI ASSOGGETTABILITA',
         # PROCEDIMENTO SEMPLIFICATO, PROCEDIMENTO VAS (AVVIO), VAS NON NECESSARIA)
         # TODO
-        # VasUploadFile (Relazione motivata per VAS semplificata, Documento preliminare,
+        # VasUploadFile (Relazione motivata per VAS semplificata, Documento preliminare)
         # TODO
         # PromozionePiano
         # TODO
