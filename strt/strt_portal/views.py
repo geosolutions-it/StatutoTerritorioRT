@@ -87,10 +87,10 @@ def privateAreaView(request):
 
                         if user and organization:
                             try:
-                                membership = UserMembership._default_manager.get(
+                                membership = UserMembership._default_manager.filter(
                                     organization=_organization,
                                     type=_role
-                                )
+                                ).first()
 
                                 login(request, user)
                                 request.session['organization'] = organization.code
