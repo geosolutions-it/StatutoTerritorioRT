@@ -1,23 +1,28 @@
-{% autoescape off %}{% load i18n %}Gentile {{ recipient }},
+{% load i18n %}
+{% autoescape off %}
+<p>Gentile <i>{{ recipient }}</i>,</p>
 
-Con riferimento al piano {{ piano.tipologia }} Codice: {{ piano.codice }} - "{{ piano.descrizione }}"
+<p>Con riferimento al piano <strong>{{ piano.tipologia }}</strong> Codice: <strong>{{ piano.codice }}</strong> - <i>"{{ piano.descrizione }}"</i></p>
 
-Le notifichiamo che è stata trasmessa l'adozione del piano da parte dell'utente {{ user }}.
-
+<p>Le notifichiamo che è stata trasmessa l'adozione del piano da parte dell'utente <strong>{{ user }}</strong>.</p>
+<p>
 Pubblicazione:
+<ul>
+ <li>B.U.R.T.: {{ piano.procedura_adozione.pubblicazione_burt_url }} in data {{ piano.procedura_adozione.pubblicazione_burt_data }}</li>
+ <li>SITO: {{ piano.procedura_adozione.pubblicazione_sito_url }} in data {{ piano.procedura_adozione.pubblicazione_sito_data }}</li>
+</ul>
+</p>
+<p>Scadenza per la ricezione delle Osservazioni: {{ piano.procedura_adozione.data_ricezione_osservazioni }}</p>
 
- - B.U.R.T.: {{ piano.procedura_adozione.pubblicazione_burt_url }} in data {{ piano.procedura_adozione.pubblicazione_burt_data }}
- - SITO: {{ piano.procedura_adozione.pubblicazione_sito_url }} in data {{ piano.procedura_adozione.pubblicazione_sito_data }}
+<p>Scadenza per la ricezione dei Pareri: {{ piano.procedura_adozione.data_ricezione_pareri }}</p>
 
-Scadenza per la ricezione delle Osservazioni: {{ piano.procedura_adozione.data_ricezione_osservazioni }}
-
-Scadenza per la ricezione dei Pareri: {{ piano.procedura_adozione.data_ricezione_pareri }}
-
-Potrebbero essere necessarie azioni e/o interventi sul piano in oggetto.
-
-{% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:
-{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}
-
-ATTENZIONE: Il token di accesso a lei assegnato, è personalizzato e ha validità fino a data: {{ t.expires }}.
+<p>Potrebbero essere necessarie azioni e/o interventi sul piano in oggetto.</p>
+<p>
+{% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:<br/>
+<a href="{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}">{{ t.key }}</a>
+</p>
+<p>
+<strong>ATTENZIONE:</strong> Il token di accesso <strong>{{ t.key }}</strong> a lei assegnato, è personalizzato e ha validità fino a data: {{ t.expires }}.<br/>
 Conservare il token di accesso segreto e non condividere il link generato con alcuno.{% endif %}{% endfor %}
+</p>
 {% endautoescape %}

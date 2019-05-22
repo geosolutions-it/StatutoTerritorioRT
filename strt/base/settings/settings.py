@@ -77,7 +77,8 @@ NOTIFICATIONS_MODULE = EnvUtil.get_env_var("NOTIFICATIONS_MODULE", default='pina
 if EMAIL_ENABLE:
     # (media_id, backend, spam_sensitivity)
     PINAX_NOTIFICATIONS_BACKENDS = [
-        ('email', 'pinax.notifications.backends.email.EmailBackend', 0),
+        # ('email', 'pinax.notifications.backends.email.EmailBackend', 0),
+        ('email', 'serapide_core.notifications_backends.EmailBackend', 0),
     ]
 PINAX_NOTIFICATIONS_HOOKSET = "pinax.notifications.hooks.DefaultHookSet"
 

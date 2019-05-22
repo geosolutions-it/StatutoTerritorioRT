@@ -1,16 +1,20 @@
-{% autoescape off %}{% load i18n %}Gentile {{ recipient }},
+{% load i18n %}
+{% autoescape off %}
+<p>Gentile <i>{{ recipient }}</i>,</p>
 
-Con riferimento al piano {{ piano.tipologia }} Codice: {{ piano.codice }} - "{{ piano.descrizione }}"
+<p>Con riferimento al piano <strong>{{ piano.tipologia }}</strong> Codice: <strong>{{ piano.codice }}</strong> - <i>"{{ piano.descrizione }}"</i></p>
 
-Le notifichiamo che sono state inviate le Integrazioni richieste al piano dall'utente {{ user }}.
+<p>Le notifichiamo che sono state inviate le Integrazioni richieste al piano dall'utente <strong>{{ user }}</strong>.</p>
 
-Termini scadenza per la risposta: {{ piano.procedura_avvio.data_scadenza_risposta }}
+<p>Termini scadenza per la risposta: {{ piano.procedura_avvio.data_scadenza_risposta }}</p>
 
-Potrebbero essere necessarie azioni e/o interventi sul piano in oggetto.
-
-{% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:
-{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}
-
-ATTENZIONE: Il token di accesso a lei assegnato, è personalizzato e ha validità fino a data: {{ t.expires }}.
+<p>Potrebbero essere necessarie azioni e/o interventi sul piano in oggetto.</p>
+<p>
+{% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:<br/>
+<a href="{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}">{{ t.key }}</a>
+</p>
+<p>
+<strong>ATTENZIONE:</strong> Il token di accesso <strong>{{ t.key }}</strong> a lei assegnato, è personalizzato e ha validità fino a data: {{ t.expires }}.<br/>
 Conservare il token di accesso segreto e non condividere il link generato con alcuno.{% endif %}{% endfor %}
+</p>
 {% endautoescape %}

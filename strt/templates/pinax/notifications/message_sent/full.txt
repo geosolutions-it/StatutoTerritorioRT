@@ -1,5 +1,10 @@
-{% autoescape off %}{% load i18n %}{% if reply %}Risposta{% else %}Messaggio{% endif %} da {{ from_user }}
-
-Subject: {{ thread.subject }}
-
-{{ message.content }}{% endautoescape %}
+{% load i18n %}
+{% autoescape off %}
+<p>{% if reply %}Risposta{% else %}Messaggio{% endif %} da {{ from_user }}</p>
+<p>
+<i>Subject:</i> <strong>{{ thread.subject }}</strong>
+</p>
+<p>
+{{ message.content }}
+</p>
+{% endautoescape %}

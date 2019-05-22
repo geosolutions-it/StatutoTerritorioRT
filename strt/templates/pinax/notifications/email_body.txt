@@ -1,6 +1,10 @@
-{% load i18n %}{% url "pinax_notifications:notice_settings" as notices_url %}{% blocktrans %}Nuova notifica da {{ current_site }}
---------------------------------------------------------------------------------
+{% load i18n %}
+<body>
+{% url "pinax_notifications:notice_settings" as notices_url %}
+<p>
+{% blocktrans %}Nuova notifica da {{ current_site }}{% endblocktrans %}
+</p>
+<p>
 {{ message }}
---------------------------------------------------------------------------------
-Per cambiare la modalità di ricezione delle notifiche, perfaovre connettersi a {{ default_http_protocol }}://{{ current_site }}{{ notices_url }}
-{% endblocktrans %}
+</p>
+</body>
