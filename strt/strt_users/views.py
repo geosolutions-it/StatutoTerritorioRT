@@ -9,6 +9,8 @@
 #
 #########################################################################
 
+from django.conf import settings
+from django.db.models import Q
 from django.shortcuts import (
     render, redirect, get_object_or_404
 )
@@ -21,6 +23,20 @@ from django_currentuser.middleware import (
 )
 from django.contrib.auth.decorators import login_required
 from rules.contrib.views import permission_required
+
+
+def get_managed_users(current_user, current_role, organization, organizazions_enabled):
+    managed_users = AppUser.objects.filter(
+        Q(usermembership__organization__in=organizazions_enabled) |
+        Q(created_by=current_user))
+    managed_roles = []
+    if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
+        managed_roles = [settings.RUP_CODE]
+    elif current_role.code == settings.RUP_CODE:
+        managed_roles = [settings.READ_ONLY_USER_CODE]
+    managed_users = managed_users.filter(
+        Q(usermembership__type__code__in=managed_roles)).exclude(pk__in=[current_user.pk, ])
+    return managed_users
 
 
 @login_required
@@ -40,8 +56,13 @@ def userProfileDetailView(request):
 
 @permission_required('strt_users.can_manage_users')
 def usersListView(request):
-    current_user = get_current_authenticated_user()
-    managed_users = AppUser.objects.filter(created_by=current_user)
+    managed_users = []
+    if 'organization' in request.session and request.session['organization']:
+        current_user = get_current_authenticated_user()
+        organization = request.session['organization']
+        organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
+        current_role = current_user.memberships.filter(organization=organization).first().type
+        managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled)
     context = {
         'managed_users': managed_users
     }
@@ -50,9 +71,14 @@ def usersListView(request):
 
 @permission_required('strt_users.can_manage_users')
 def usersMembershipsListView(request):
-    current_user = get_current_authenticated_user()
-    managed_users = AppUser.objects.filter(created_by=current_user)
-    managed_users_membership = UserMembership.objects.filter(member__in=managed_users)
+    managed_users = []
+    if 'organization' in request.session and request.session['organization']:
+        current_user = get_current_authenticated_user()
+        organization = request.session['organization']
+        organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
+        current_role = current_user.memberships.filter(organization=organization).first().type
+        managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled)
+        managed_users_membership = UserMembership.objects.filter(member__in=managed_users)
     context = {
         'managed_users_membership': managed_users_membership
     }
@@ -63,21 +89,44 @@ def usersMembershipsListView(request):
 def userRegistrationView(request):
     if request.method == "POST":
         form = AppUserForm(request.POST)
-        if form.is_valid():
-            fiscal_code = form.cleaned_data['fiscal_code']
-            email = form.cleaned_data['email']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            AppUser.objects.create_user(
-                fiscal_code=fiscal_code.upper(),
-                email=email,
-                first_name=first_name.title(),
-                last_name=last_name.title(),
-                is_active=False
-            )
-            return redirect('users_list')
+        if 'organization' in request.session and request.session['organization']:
+            current_user = get_current_authenticated_user()
+            organization = request.session['organization']
+            organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
+            current_role = current_user.memberships.filter(organization=organization).first().type
+            if form.is_valid():
+                fiscal_code = form.cleaned_data['fiscal_code']
+                email = form.cleaned_data['email']
+                first_name = form.cleaned_data['first_name']
+                last_name = form.cleaned_data['last_name']
+                new_user = AppUser.objects.create_user(
+                    fiscal_code=fiscal_code.upper(),
+                    email=email,
+                    first_name=first_name.title(),
+                    last_name=last_name.title(),
+                    is_active=False
+                )
+                new_role = MembershipType.objects.get(
+                    code=settings.READ_ONLY_USER_CODE,
+                    organization_type=current_role.organization_type)
+                UserMembership.objects.create(
+                    name=new_role.name,
+                    member=new_user,
+                    organization=Organization.objects.get(code=organization),
+                    type=new_role,
+                    created_by=current_user
+                )
+                return redirect('users_list')
     else:
+        managed_users = []
+        if 'organization' in request.session and request.session['organization']:
+            current_user = get_current_authenticated_user()
+            organization = request.session['organization']
+            organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
+            current_role = current_user.memberships.filter(organization=organization).first().type
+            managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled)
         form = AppUserForm()
+        form.fields[AppUser.USERNAME_FIELD].queryset = AppUser.objects.filter(pk__in=managed_users)
     context = {'form': form}
     return render(request, 'strt_users/user_registration.html', context)
 
@@ -101,11 +150,27 @@ def userMembershipRegistrationView(request):
             return redirect('users_membership_list')
     else:
         form = UserMembershipForm()
-        current_user = get_current_authenticated_user()
-        form.fields['member'].queryset = AppUser.objects.filter(created_by=current_user)
-        organizations = UserMembership.objects.filter(member=current_user).values_list('organization')
-        form.fields['organization'].queryset = Organization.objects.filter(pk__in=organizations)
-        form.fields['type'].widget.attrs['disabled'] = True
+        managed_users = []
+        if 'organization' in request.session and request.session['organization']:
+            current_user = get_current_authenticated_user()
+            organization = request.session['organization']
+            organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
+            current_role = current_user.memberships.filter(organization=organization).first().type
+            managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled)
+            managed_roles = []
+            if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
+                managed_roles = [settings.RUP_CODE]
+            elif current_role.code == settings.RUP_CODE:
+                managed_roles = [settings.READ_ONLY_USER_CODE, settings.TEMP_USER_CODE, settings.OPERATOR_USER_CODE]
+            form.fields['member'].queryset = AppUser.objects.filter(pk__in=managed_users)
+            form.fields['organization'].queryset = Organization.objects.filter(pk__in=organizazions_enabled)
+            form.fields['type'].queryset = MembershipType.objects.filter(
+                code__in=managed_roles,
+                organization_type=current_role.organization_type)
+        else:
+            form.fields['member'].widget.attrs['disabled'] = True
+            form.fields['organization'].widget.attrs['disabled'] = True
+            form.fields['type'].widget.attrs['disabled'] = True
     context = {'form': form}
     return render(request, 'strt_users/user_membership_registration.html', context)
 

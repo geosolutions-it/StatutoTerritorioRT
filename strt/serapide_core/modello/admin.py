@@ -112,6 +112,11 @@ class ParereAdozioneVASInline(admin.TabularInline):
     model = ParereAdozioneVAS
 
 
+class ContattoAdmin(admin.ModelAdmin):
+    exclude = ('email',)
+    list_display = ('nome', 'tipologia', 'ente', 'user', )
+
+
 class PianoAdmin(admin.ModelAdmin):
     inlines = [AzioniPianoInline,
                AutoritaCompetenteVASInline,
@@ -165,7 +170,7 @@ class PianoRevPostCPAdmin(admin.ModelAdmin):
 admin.site.register(Fase)
 admin.site.register(Azione)
 admin.site.register(Risorsa)
-admin.site.register(Contatto)
+admin.site.register(Contatto, ContattoAdmin)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
 admin.site.register(ProceduraAdozioneVAS, ProceduraAdozioneVASAdmin)

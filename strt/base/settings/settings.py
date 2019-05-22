@@ -197,10 +197,13 @@ AUTHENTICATION_BACKENDS = (
 
 TOKEN_EXPIRE_DAYS = 60
 
-RUP_CODE = EnvUtil.get_env_var('RUP_CODE', default='RUP')
 RESPONSABILE_ISIDE_CODE = EnvUtil.get_env_var('RESPONSABILE_ISIDE_CODE', default='RI')
+RUP_CODE = EnvUtil.get_env_var('RUP_CODE', default='RUP')
+
 TEMP_USER_CODE = EnvUtil.get_env_var('TEMP_USER_CODE', default='TMP')
 READ_ONLY_USER_CODE = EnvUtil.get_env_var('READ_ONLY_USER_CODE', default='RO')
+OPERATOR_USER_CODE = EnvUtil.get_env_var('OPERATOR_USER_CODE', default='OP')
+
 DEFAULT_MUNICIPALITY = EnvUtil.get_env_var('DEFAULT_MUNICIPALITY', default='Firenze')
 
 VERIFICA_VAS_EXPIRE_DAYS = EnvUtil.get_env_var('VERIFICA_VAS_EXPIRE_DAYS', type=int, default=90)
