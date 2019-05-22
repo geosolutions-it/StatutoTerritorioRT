@@ -93,6 +93,7 @@ def privateAreaView(request):
                                 ).first()
 
                                 login(request, user)
+                                request.session['role'] = membership.pk
                                 request.session['organization'] = organization.code
                                 request.session['attore'] = membership.organization.type.name
                                 return redirect('serapide')

@@ -354,8 +354,11 @@ class AppUserNode(DjangoObjectType):
     def resolve_attore(self, info, **args):
         organization = info.context.session.get('organization', None)
         token = info.context.session.get('token', None)
+        role = info.context.session.get('role', None)
         _attore = None
-        if token:
+        if role:
+            _attore = Contatto.attore(self, role=role)
+        elif token:
             _attore = Contatto.attore(self, token=token)
         elif organization:
             _attore = Contatto.attore(self, organization=organization)

@@ -235,7 +235,7 @@ class MembershipType(models.Model):
         verbose_name_plural = _('tipi di ruolo')
 
     def __str__(self):
-        return '{} [{}]'.format(self.name, self.organization_type)
+        return '{}'.format(self.name)
 
 
 class UserMembership(models.Model):

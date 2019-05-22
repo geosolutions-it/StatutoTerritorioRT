@@ -75,6 +75,7 @@ class SessionControlMiddleware(object):
             request.user.is_anonymous:
                 self.redirect_to_login(request)
             else:
+                role = request.session['role'] if 'role' in request.session else None
                 token = request.session['token'] if 'token' in request.session else None
                 if token:
                     try:
@@ -100,7 +101,9 @@ class SessionControlMiddleware(object):
                 attore = request.session['attore'] if 'attore' in request.session else None
                 if not attore:
                     try:
-                        if token:
+                        if role:
+                            attore = Contatto.attore(request.user, role=role)
+                        elif token:
                             attore = Contatto.attore(request.user, token=token)
                         elif organization:
                             attore = Contatto.attore(request.user, organization=organization)

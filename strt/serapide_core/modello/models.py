@@ -168,10 +168,16 @@ class Contatto(models.Model):
         return contact_type
 
     @classmethod
-    def attore(cls, user, organization=None, token=None, tipologia=None):
+    def attore(cls, user, role=None, organization=None, token=None, tipologia=None):
         attore = ""
         if user:
-            if tipologia:
+            if role:
+                membership = user.memberships.filter(pk=role).first()
+                if membership and membership.organization:
+                    attore = membership.organization.type.name
+                else:
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+            elif tipologia:
                 membership = user.memberships.filter(organization__type__name=tipologia).first()
                 if membership and membership.organization:
                     attore = membership.organization.type.name
