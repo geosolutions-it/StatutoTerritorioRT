@@ -185,14 +185,27 @@ def userMembershipUpdateView(request, code):
             return redirect('users_membership_list')
     else:
         form = UserMembershipForm(instance=instance)
-        current_user = get_current_authenticated_user()
-        form.fields['member'].queryset = AppUser.objects.filter(created_by=current_user)
-        organizations = UserMembership.objects.filter(member=current_user).values_list('organization')
-        form.fields['organization'].queryset = Organization.objects.filter(pk__in=organizations)
-        organizations_types = Organization.objects.filter(pk=instance.organization.code).values_list('type')
-        form.fields['type'].queryset = MembershipType.objects.filter(
-            organization_type__in=organizations_types
-        )
+        managed_users = []
+        if 'organization' in request.session and request.session['organization']:
+            current_user = get_current_authenticated_user()
+            organization = request.session['organization']
+            organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
+            current_role = current_user.memberships.filter(organization=organization).first().type
+            managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled)
+            managed_roles = []
+            if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
+                managed_roles = [settings.RUP_CODE]
+            elif current_role.code == settings.RUP_CODE:
+                managed_roles = [settings.READ_ONLY_USER_CODE, settings.TEMP_USER_CODE, settings.OPERATOR_USER_CODE]
+            form.fields['member'].queryset = AppUser.objects.filter(pk__in=managed_users)
+            form.fields['organization'].queryset = Organization.objects.filter(pk__in=organizazions_enabled)
+            form.fields['type'].queryset = MembershipType.objects.filter(
+                code__in=managed_roles,
+                organization_type=current_role.organization_type)
+        else:
+            form.fields['member'].widget.attrs['disabled'] = True
+            form.fields['organization'].widget.attrs['disabled'] = True
+            form.fields['type'].widget.attrs['disabled'] = True
     context = {
         'form': form,
         'action': 'update'
