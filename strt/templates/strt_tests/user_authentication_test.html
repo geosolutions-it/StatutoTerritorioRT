@@ -59,7 +59,7 @@ LICENSE file in the root directory of this source tree.
             </li>
         </ol>
 
-        <form method="POST" novalidate id="user-membership" class="col-12 col-lg-5"
+        <form method="POST" novalidate id="user-membership" class="col-12 col-lg-12"
             membership-type-data-url="{% url 'membership_type_data' %}">
             {% csrf_token %}
             {{ form|crispy }}
@@ -100,7 +100,7 @@ LICENSE file in the root directory of this source tree.
                                 '<option value="'
                                     .concat(m_type.type.id)
                                     .concat('">')
-                                    .concat(m_type.description)
+                                    .concat(m_type.type.name)
                                     .concat('</option>')
                             );
                         }

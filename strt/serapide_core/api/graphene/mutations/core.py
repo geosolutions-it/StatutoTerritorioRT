@@ -18,7 +18,7 @@ import traceback
 from codicefiscale import codicefiscale
 
 from django.conf import settings
-
+from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -157,16 +157,26 @@ class CreateContatto(relay.ClientIDMutation):
                             else settings.DEFAULT_MUNICIPALITY
                     )
 
-                    nuovo_contatto.user, created = AppUser.objects.get_or_create(
-                        fiscal_code=fiscal_code,
-                        defaults={
-                            'first_name': nuovo_contatto.nome,
-                            'last_name': None,
-                            'email': nuovo_contatto.email,
-                            'is_staff': False,
-                            'is_active': True
-                        }
-                    )
+                    user = AppUser.objects.filter(
+                        Q(fiscal_code=fiscal_code) |
+                        Q(first_name=first_name) |
+                        Q(last_name=last_name)).last()
+                    if not user:
+                        user = AppUser.objects.filter(email=nuovo_contatto.email).last()
+
+                    if user:
+                        nuovo_contatto.user = user
+                    else:
+                        nuovo_contatto.user, created = AppUser.objects.get_or_create(
+                            fiscal_code=fiscal_code,
+                            defaults={
+                                'first_name': first_name,
+                                'last_name': last_name,
+                                'email': nuovo_contatto.email,
+                                'is_staff': False,
+                                'is_active': True
+                            }
+                        )
 
                     _new_role_type = MembershipType.objects.get(
                         code=settings.TEMP_USER_CODE,

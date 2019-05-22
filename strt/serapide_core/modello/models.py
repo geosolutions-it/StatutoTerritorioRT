@@ -19,7 +19,7 @@ from django.db import models
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import pre_delete, post_delete
+from django.db.models.signals import pre_delete  # , post_delete
 
 from strt_users.models import (
     AppUser,
@@ -139,7 +139,7 @@ class Contatto(models.Model):
         max_length=20
     )
 
-    email = models.EmailField(null=False, blank=False)
+    email = models.EmailField(null=True, blank=True)
 
     ente = models.ForeignKey(
         to=Organization,
@@ -1077,13 +1077,13 @@ class RisorsePubblicazione(models.Model):
 # ############################################################################ #
 # Model Signals
 # ############################################################################ #
-@receiver(post_delete, sender=Contatto)
-def delete_roles_and_users(sender, instance, **kwargs):
-    if instance.user is not None:
-        try:
-            instance.user.delete()
-        except BaseException:
-            pass
+# @receiver(post_delete, sender=Contatto)
+# def delete_roles_and_users(sender, instance, **kwargs):
+#     try:
+#         if instance.user is not None:
+#             instance.user.delete()
+#     except BaseException:
+#         pass
 
 
 @receiver(pre_delete, sender=Piano)
