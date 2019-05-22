@@ -41,10 +41,10 @@ LICENSE file in the root directory of this source tree.
                 <h5>
                     {% for m in request.user.memberships %}
                         {% if m.pk == request.session.role %}
-                        <span class="d-block role role-item text-white">{{ request.user }} - {{ m.organization.description|default:m.organization.name }}</span>
-                        {% if request.session.attore != 'UNKNOWN' %}
-                        <span class="d-block role role-item text-white" style="font-size: 12px"><em>{{ m.type.description|default:m.type.name }}</em></span>
-                        {% endif %}
+                          <span class="d-block role role-item text-white">{{ request.user }} - {{ m.organization.description|default:m.organization.name }}</span>
+                          {% if request.session.attore != 'UNKNOWN' %}
+                            <span class="d-block role role-item text-white" style="font-size: 12px"><em>{{ m.type.description|default:m.type.name }}</em></span>
+                          {% endif %}
                         {% endif %}
                     {% endfor %}
                 </h5>
