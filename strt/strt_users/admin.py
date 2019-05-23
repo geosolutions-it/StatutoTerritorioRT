@@ -9,6 +9,8 @@
 #
 #########################################################################
 
+from django import forms
+from django.forms import ModelChoiceField
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import (AppUser, Token,
@@ -31,8 +33,21 @@ class OrganizationTypeModelAdmin(admin.ModelAdmin):
     list_filter = ['name', 'code', 'description']
 
 
+
+class MyModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return f"{obj.name} ({obj.organization_type})"
+
+
+class UserMembershipModelAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserMembershipModelAdminForm, self).__init__(*args, **kwargs)
+        self.fields['type'] = MyModelChoiceField(queryset=self.fields['type'].queryset)
+
+
 @admin.register(UserMembership)
 class UserMembershipModelAdmin(admin.ModelAdmin):
+    form = UserMembershipModelAdminForm
     list_display = ['name', 'description', 'member', 'organization', 'type']
     search_fields = ['name', 'description', 'member', 'organization', 'type']
     list_filter = ['name', 'description', 'member', 'organization', 'type']
