@@ -101,6 +101,8 @@ def privateAreaView(request):
                                 request.session['role'] = membership.pk
                                 request.session['organization'] = organization.code
                                 request.session['attore'] = membership.organization.type.name
+                                if membership.type.code == settings.RESPONSABILE_ISIDE_CODE:
+                                    return redirect('users_list')
                                 return redirect('serapide')
                             except UserMembership.DoesNotExist:
                                 ve = forms.ValidationError(

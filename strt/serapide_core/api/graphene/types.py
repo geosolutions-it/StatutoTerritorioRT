@@ -306,10 +306,13 @@ class AppUserNode(DjangoObjectType):
     def resolve_role(self, info, **args):
         _org = info.context.session.get('organization', None)
         token = info.context.session.get('token', None)
-        if token:
+        role = info.context.session.get('role', None)
+        if role:
+            return self.memberships.filter(pk=role).first()
+        elif token:
             return self.memberships.all().first()
         else:
-            return self.memberships.get(organization__code=_org)
+            return self.memberships.filter(organization__code=_org).first()
 
     def resolve_alerts_count(self, info, **args):
         _alerts_count = 0
