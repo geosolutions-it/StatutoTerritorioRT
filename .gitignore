@@ -25,6 +25,7 @@ wheels/
 *.egg
 media
 MANIFEST
+manage.sh
 
 
 # PyInstaller
