@@ -18,6 +18,7 @@ from django.forms import ValidationError
 from django.views.generic.base import TemplateView
 from django.contrib.auth import authenticate, login
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth import logout
 
 from strt_tests.forms import UserAuthenticationForm
 from rules.contrib.views import permission_required
@@ -34,12 +35,16 @@ from strt_users.models import Organization, UserMembership
 def privateAreaView(request):
     current_user = get_current_authenticated_user()
     if current_user:
+        if 'role' in request.session and request.session['role']:
+            current_role = current_user.memberships.filter(pk=request.session['role']).first()
+            if current_role:
+                if current_role.type.code == settings.RESPONSABILE_ISIDE_CODE:
+                    return redirect('users_list')
         if current_user.has_perm('strt_users.can_access_serapide'):
             return redirect('serapide')
-        elif current_user.has_perm('strt_users.can_manage_users'):
-            return redirect('users_list')
         else:
-            return redirect('')
+            logout(request)
+            return redirect('user_registration')
     else:
         # TODO: redirect to RT SSO service endpoint
         if request.method == "POST":

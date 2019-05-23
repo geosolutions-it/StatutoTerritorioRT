@@ -69,7 +69,7 @@ rules.add_perm(
 
 rules.add_perm(
     'strt_users.can_access_serapide',
-    is_recognizable & is_member & ~is_responsabile_ISIDE
+    is_recognizable & is_member
 )
 
 rules.add_rule(
