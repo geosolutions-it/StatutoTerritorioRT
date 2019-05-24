@@ -121,12 +121,18 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
         if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
             _memberships = self.request.user.memberships
             if _memberships:
-                for _m in _memberships.all():
-                    if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
-                        # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
-                        continue
-                    else:
-                        _enti.append(_m.organization.code)
+                _is_iside = self.request.user.memberships.filter(type__code=settings.RESPONSABILE_ISIDE_CODE)
+                _is_regione = self.request.user.memberships.filter(type__organization_type__code='R')
+                if _is_regione and not _is_iside:
+                    for _o in Organization.objects.filter(type__code='C'):
+                        _enti.append(_o.code)
+                else:
+                    for _m in _memberships.all():
+                        if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
+                            # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
+                            continue
+                        else:
+                            _enti.append(_m.organization.code)
 
         token = self.request.session.get('token', None)
         if token:
