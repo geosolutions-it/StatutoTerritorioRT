@@ -32,6 +32,7 @@ class TokenMiddleware(object):
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
+        role = request.GET.get('role', None)
         token = request.GET.get('token', None)
 
         if token is None:
@@ -49,7 +50,8 @@ class TokenMiddleware(object):
                 request.user = request._cached_user = user
                 organization = _allowed_pianos[0].ente
                 request.session['organization'] = organization.code
-                request.session['role'] = user.memberships.all().first().pk if user.memberships.all().first() else None
+                if not role:
+                    request.session['role'] = user.memberships.all().first().pk if user.memberships.all().first() else None
                 auth.login(request, user)
 
         # ------------------------

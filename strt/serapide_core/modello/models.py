@@ -190,9 +190,11 @@ class Contatto(models.Model):
             (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown],
              TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.comune],
              TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
+                kw = None
                 membership = None
                 if role:
                     membership = user.memberships.filter(pk=role).first()
+                    kw = membership.name
                 elif token:
                     membership = user.memberships.all().first()
                 elif organization:
@@ -202,6 +204,19 @@ class Contatto(models.Model):
                     attore = membership.organization.type.name
 
                 for contact in Contatto.objects.filter(user=user):
+                    if kw and kw.startswith("AC_") and contact.tipologia == 'acvas':
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
+                        break
+                    if kw and kw.startswith("SCA_") and contact.tipologia == 'sca':
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
+                        break
+                    if kw and kw.startswith("GENIO_CIVILE"):
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
+                        break
+                    if kw and kw.startswith("REGIONE_"):
+                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]
+                        break
+
                     if contact.tipologia == 'acvas':
                         attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
                     elif contact.tipologia == 'sca':
