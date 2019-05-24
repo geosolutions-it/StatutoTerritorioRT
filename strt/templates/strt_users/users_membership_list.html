@@ -35,8 +35,9 @@ LICENSE file in the root directory of this source tree.
                     <th scope="col">{% trans 'cognome'|upper %}</th>
                     <th scope="col">{% trans 'codice fiscale'|upper %}</th>
                     <th scope="col">{% trans 'email'|upper %}</th>
-                    <th scope="col">{% trans 'ruolo'|upper %}</th>
                     <th scope="col">{% trans 'ente'|upper %}</th>
+                    <th scope="col">{% trans 'ruolo'|upper %}</th>
+                    <th scope="col">{% trans 'attore'|upper %}</th>
                     <th scope="col">{% trans 'data creazione'|upper %}</th>
                     <th scope="col">{% trans 'data ultima modifica'|upper %}</th>
                     <th scope="col"></th>
@@ -50,8 +51,9 @@ LICENSE file in the root directory of this source tree.
                         <td scope="col">{{ mum.member.last_name|capfirst }}</td>
                         <td scope="col">{{ mum.member.fiscal_code|upper }}</td>
                         <td scope="col">{{ mum.member.email }}</td>
-                        <td scope="col">{{ mum.description|capfirst }}</td>
                         <td scope="col">{{ mum.organization|capfirst }}</td>
+                        <td scope="col">{{ mum.description|default:mum.name }}</td>
+                        <td scope="col">{{ mum.attore|upper }}</td>
                         <td scope="col">{{ mum.date_joined|date:'d-m-y H:i:s' }}</td>
                         <td scope="col">{{ mum.date_updated|date:'d-m-y H:i:s' }}</td>
                         <td scope="col" class="p-0 m-0">
@@ -97,4 +99,3 @@ LICENSE file in the root directory of this source tree.
     </script>
 
 {% endblock add_script %}
-

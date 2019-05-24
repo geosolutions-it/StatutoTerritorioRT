@@ -25,6 +25,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_currentuser.db.models import CurrentUserField
 
 from .managers import AppUserManager
+from serapide_core.modello.enums import TIPOLOGIA_ATTORE
 
 logger = logging.getLogger(__name__)
 
@@ -277,6 +278,11 @@ class UserMembership(models.Model):
     updated_by = CurrentUserField(
         verbose_name=_('modificato da'), editable=False,
         related_name='%(class)s_updated'
+    )
+    attore = models.CharField(
+        choices=TIPOLOGIA_ATTORE,
+        default=TIPOLOGIA_ATTORE.unknown,
+        max_length=80
     )
 
     class Meta:

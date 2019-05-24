@@ -26,6 +26,7 @@ class OrganizationModelAdmin(admin.ModelAdmin):
     list_filter = ['name', 'code', 'description', 'type']
 
 
+
 @admin.register(OrganizationType)
 class OrganizationTypeModelAdmin(admin.ModelAdmin):
     list_display = ['name', 'code', 'description']
@@ -36,7 +37,7 @@ class OrganizationTypeModelAdmin(admin.ModelAdmin):
 
 class MyModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
-        return f"{obj.name} ({obj.organization_type})"
+        return("%s (%s)" % (obj.name, obj.organization_type))
 
 
 class UserMembershipModelAdminForm(forms.ModelForm):
@@ -48,9 +49,9 @@ class UserMembershipModelAdminForm(forms.ModelForm):
 @admin.register(UserMembership)
 class UserMembershipModelAdmin(admin.ModelAdmin):
     form = UserMembershipModelAdminForm
-    list_display = ['name', 'description', 'member', 'organization', 'type']
-    search_fields = ['name', 'description', 'member', 'organization', 'type']
-    list_filter = ['name', 'description', 'member', 'organization', 'type']
+    list_display = ['name', 'description', 'member', 'attore', 'organization', 'type']
+    search_fields = ['name', 'description', 'member', 'attore', 'organization', 'type']
+    list_filter = ['name', 'description', 'member', 'attore', 'organization', 'type']
 
 
 @admin.register(MembershipType)

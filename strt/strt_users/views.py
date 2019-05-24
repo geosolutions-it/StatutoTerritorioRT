@@ -103,6 +103,8 @@ def userRegistrationView(request):
                 email = form.cleaned_data['email']
                 first_name = form.cleaned_data['first_name']
                 last_name = form.cleaned_data['last_name']
+                name = 'TMP_%s' % fiscal_code
+
                 new_user = AppUser.objects.create_user(
                     fiscal_code=fiscal_code.upper(),
                     email=email,
@@ -114,12 +116,14 @@ def userRegistrationView(request):
                     code=settings.READ_ONLY_USER_CODE,
                     organization_type=current_role.organization_type)
                 UserMembership.objects.create(
-                    name=new_role.name,
+                    name=name,
+                    description=name,
                     member=new_user,
                     organization=Organization.objects.get(code=organization),
                     type=new_role,
                     created_by=current_user
                 )
+
                 return redirect('users_list')
     else:
         managed_users = []
@@ -144,13 +148,18 @@ def userMembershipRegistrationView(request):
             member = form.cleaned_data['member']
             organization = form.cleaned_data['organization']
             type = form.cleaned_data['type']
-            UserMembership.objects.create(
-                name='{} {}'.format(type, organization),
-                description=description,
-                member=member,
-                organization=organization,
-                type=type
-            )
+            attore = form.cleaned_data['attore']
+            name = '{}_{}_{}'.format(attore, type, organization).upper()
+            role, created = UserMembership.objects.get_or_create(
+                name='TMP_%s' % member.fiscal_code)
+            role.name = name
+            role.description = description or '{} - {} {}'.format(str(attore).upper(), type, organization)
+            role.member = member
+            role.organization = organization
+            role.type = type
+            role.attore = attore
+            role.save()
+
             return redirect('users_membership_list')
     else:
         form = UserMembershipForm()
@@ -234,7 +243,9 @@ def userUpdateView(request, fiscal_code):
 
 @permission_required('strt_users.can_manage_users')
 def userMembershipDeleteView(request, code):
-    UserMembership.objects.filter(code=code).delete()
+    member = UserMembership.objects.get(code=code).member
+    if UserMembership.objects.filter(member=member).count() > 1:
+        UserMembership.objects.filter(code=code).delete()
     return redirect('users_membership_list')
 
 
