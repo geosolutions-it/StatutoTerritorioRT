@@ -43,8 +43,9 @@ def privateAreaView(request):
         if current_user.has_perm('strt_users.can_access_serapide'):
             return redirect('serapide')
         else:
-            logout(request)
-            return redirect('user_registration')
+            return redirect('/')
+        #    logout(request)
+        #    return redirect('user_registration')
     else:
         # TODO: redirect to RT SSO service endpoint
         if request.method == "POST":

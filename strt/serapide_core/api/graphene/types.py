@@ -308,6 +308,7 @@ class AppUserNode(DjangoObjectType):
         token = info.context.session.get('token', None)
         role = info.context.session.get('role', None)
         if role:
+            print(self.memberships.filter(pk=role).first())
             return self.memberships.filter(pk=role).first()
         elif token:
             return self.memberships.all().first()
@@ -359,12 +360,15 @@ class AppUserNode(DjangoObjectType):
         token = info.context.session.get('token', None)
         role = info.context.session.get('role', None)
         _attore = None
-        if role:
-            _attore = Contatto.attore(self, role=role)
-        elif token:
-            _attore = Contatto.attore(self, token=token)
-        elif organization:
-            _attore = Contatto.attore(self, organization=organization)
+        try:
+            if role:
+                _attore = Contatto.attore(self, role=role)
+            elif token:
+                _attore = Contatto.attore(self, token=token)
+            elif organization:
+                _attore = Contatto.attore(self, organization=organization)
+        except Exception as e:
+            logger.exception(e)
         return _attore
 
     class Meta:
