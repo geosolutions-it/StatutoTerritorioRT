@@ -308,7 +308,6 @@ class AppUserNode(DjangoObjectType):
         token = info.context.session.get('token', None)
         role = info.context.session.get('role', None)
         if role:
-            print(self.memberships.filter(pk=role).first())
             return self.memberships.filter(pk=role).first()
         elif token:
             return self.memberships.all().first()

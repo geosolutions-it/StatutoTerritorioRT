@@ -87,7 +87,7 @@ class CreatePiano(relay.ClientIDMutation):
             _piano_data = input.get('piano_operativo')
             # Ente (M)
             _data = _piano_data.pop('ente')
-            _ente = Organization.objects.get(usermembership__member=info.context.user, code=_data['code'])
+            _ente = Organization.objects.get(code=_data['code'])
             _piano_data['ente'] = _ente
             if info.context.user and rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente):
 

@@ -121,10 +121,7 @@ class CreateContatto(relay.ClientIDMutation):
             # Ente (M)
             if 'ente' in _data:
                 _ente = _data.pop('ente')
-                if is_RUP(info.context.user):
-                    _ente = Organization.objects.get(code=_ente['code'])
-                else:
-                    _ente = Organization.objects.get(usermembership__member=info.context.user, code=_ente['code'])
+                _ente = Organization.objects.get(code=_ente['code'])
                 _data['ente'] = _ente
             _token = info.context.session['token'] if 'token' in info.context.session else None
 
@@ -162,7 +159,10 @@ class CreateContatto(relay.ClientIDMutation):
                         Q(first_name=first_name) |
                         Q(last_name=last_name)).last()
                     if not user:
-                        user = AppUser.objects.filter(email=nuovo_contatto.email).last()
+                        user = AppUser.objects.filter(
+                            first_name=first_name,
+                            last_name=last_name,
+                            email=nuovo_contatto.email).last()
 
                     if user:
                         nuovo_contatto.user = user
@@ -178,7 +178,7 @@ class CreateContatto(relay.ClientIDMutation):
                             }
                         )
 
-                    _new_role_type = MembershipType.objects.get(
+                    _new_role_type, created = MembershipType.objects.get_or_create(
                         code=settings.TEMP_USER_CODE,
                         organization_type=nuovo_contatto.ente.type
                     )
@@ -186,6 +186,7 @@ class CreateContatto(relay.ClientIDMutation):
                     _new_role, created = UserMembership.objects.get_or_create(
                         name=_new_role_name,
                         defaults={
+                            'description': '%s - %s' % (_new_role_type.description, nuovo_contatto.ente.name),
                             'member': nuovo_contatto.user,
                             'organization': nuovo_contatto.ente,
                             'type': _new_role_type

@@ -191,10 +191,12 @@ class Contatto(models.Model):
              TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.comune],
              TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
                 membership = None
-                if token:
+                if role:
+                    membership = user.memberships.filter(pk=role).first()
+                elif token:
                     membership = user.memberships.all().first()
                 elif organization:
-                    membership = user.memberships.get(organization__code=organization)
+                    membership = user.memberships.filter(organization__code=organization).first()
                 if attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] and \
                 membership and membership.organization and membership.organization.type:
                     attore = membership.organization.type.name

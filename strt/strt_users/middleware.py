@@ -49,7 +49,7 @@ class TokenMiddleware(object):
                 request.user = request._cached_user = user
                 organization = _allowed_pianos[0].ente
                 request.session['organization'] = organization.code
-                request.session['role'] = user.memberships.all().first().pk
+                request.session['role'] = user.memberships.all().first().pk if user.memberships.all().first() else None
                 auth.login(request, user)
 
         # ------------------------
