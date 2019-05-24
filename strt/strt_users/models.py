@@ -230,7 +230,7 @@ class MembershipType(models.Model):
     )
 
     class Meta:
-        unique_together = ('code', 'organization_type')
+        unique_together = ('code', 'name', 'organization_type')
         verbose_name = _('tipo di ruolo')
         verbose_name_plural = _('tipi di ruolo')
 
@@ -280,7 +280,7 @@ class UserMembership(models.Model):
     )
 
     class Meta:
-        unique_together = ('member', 'organization', 'type')
+        unique_together = ('code', 'member', 'organization', 'type')
         verbose_name = _('ruolo')
         verbose_name_plural = _('ruoli')
 
