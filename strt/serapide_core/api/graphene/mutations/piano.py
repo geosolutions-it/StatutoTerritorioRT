@@ -188,12 +188,10 @@ class UpdatePiano(relay.ClientIDMutation):
         _new_role, created = UserMembership.objects.get_or_create(
             name=_new_role_name,
             attore=actor,
-            defaults={
-                'description': '%s - %s' % (_new_role_type.description, contact.ente.name),
-                'member': contact.user,
-                'organization': contact.ente,
-                'type': _new_role_type
-            }
+            description='%s - %s' % (_new_role_type.description, contact.ente.name),
+            member=contact.user,
+            organization=contact.ente,
+            type=_new_role_type
         )
         return _new_role
 
@@ -313,21 +311,6 @@ class UpdatePiano(relay.ClientIDMutation):
                         if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
                             _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
                             _attore = TIPOLOGIA_ATTORE.unknown
-                            _tipologia = TIPOLOGIA_ATTORE.unknown
-                            if _soggetto_proponente.tipologia == TIPOLOGIA_CONTATTO.acvas:
-                                _tipologia = TIPOLOGIA_ATTORE.ac
-                                _attore = Contatto.attore(_soggetto_proponente.user, tipologia=_tipologia)
-                            elif _soggetto_proponente.tipologia == TIPOLOGIA_CONTATTO.sca:
-                                _tipologia = TIPOLOGIA_ATTORE.sca
-                                _attore = Contatto.attore(_soggetto_proponente.user, tipologia=_tipologia)
-                            elif _soggetto_proponente.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
-                                _tipologia = TIPOLOGIA_ATTORE.genio_civile
-                                _attore = Contatto.attore(_soggetto_proponente.user, tipologia=_tipologia)
-                            elif _soggetto_proponente.ente.type.name == 'Regione':
-                                _attore = TIPOLOGIA_ATTORE.regione
-                            elif _soggetto_proponente.ente.type.name == 'Comune':
-                                _attore = TIPOLOGIA_ATTORE.comune
-
                             _new_role = UpdatePiano.get_role(_soggetto_proponente, _attore)
                             UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
                             _piano.soggetto_proponente = _soggetto_proponente

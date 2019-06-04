@@ -185,12 +185,10 @@ class CreateContatto(relay.ClientIDMutation):
                     _new_role_name = '%s-%s-membership' % (fiscal_code, nuovo_contatto.ente.code)
                     _new_role, created = UserMembership.objects.get_or_create(
                         name=_new_role_name,
-                        defaults={
-                            'description': '%s - %s' % (_new_role_type.description, nuovo_contatto.ente.name),
-                            'member': nuovo_contatto.user,
-                            'organization': nuovo_contatto.ente,
-                            'type': _new_role_type
-                        }
+                        description='%s - %s' % (_new_role_type.description, nuovo_contatto.ente.name),
+                        member=nuovo_contatto.user,
+                        organization=nuovo_contatto.ente,
+                        type=_new_role_type
                     )
 
                     _new_role.save()
