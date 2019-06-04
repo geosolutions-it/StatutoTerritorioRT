@@ -300,7 +300,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
 
             _organization = piano.ente
 
-            if rules.test_rule('strt_core.api.is_actor', token or (user, _organization), 'Regione'):
+            if rules.test_rule('strt_core.api.is_actor', token or (user, role) or (user, _organization), 'Regione'):
                 if _osservazioni_regione and _osservazioni_regione.stato != STATO_AZIONE.nessuna:
                     _osservazioni_regione.stato = STATO_AZIONE.nessuna
                     _osservazioni_regione.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -548,10 +548,11 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Regione'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
@@ -710,12 +711,13 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
         _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
         _procedura_adozione = ProceduraAdozione.objects.get(piano=_piano)
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         _procedura_adozione.pubblicazione_burt_data and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'SCA'):
             try:
                 if _procedura_vas.risorse.filter(
                 tipo='parere_sca', archiviata=False, user=info.context.user).count() == 0:
@@ -813,12 +815,13 @@ class InvioParereMotivatoAC(graphene.Mutation):
         _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
         _procedura_adozione = ProceduraAdozione.objects.get(piano=_piano)
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         _procedura_adozione.pubblicazione_burt_data and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC'):
             try:
                 _tutti_pareri_inviati = True
                 for _sca in _piano.soggetti_sca.all():
