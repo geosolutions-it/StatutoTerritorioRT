@@ -310,8 +310,7 @@ class UpdatePiano(relay.ClientIDMutation):
 
                         if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
                             _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
-                            _attore = TIPOLOGIA_ATTORE.unknown
-                            _new_role = UpdatePiano.get_role(_soggetto_proponente, _attore)
+                            _new_role = UpdatePiano.get_role(_soggetto_proponente, TIPOLOGIA_ATTORE.unknown)
                             UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
                             _piano.soggetto_proponente = _soggetto_proponente
                     else:
@@ -330,7 +329,9 @@ class UpdatePiano(relay.ClientIDMutation):
                                 UpdatePiano.delete_token(_ac.user, _piano)
 
                             if len(_autorita_competente_vas) > 0:
+
                                 _autorita_competenti = []
+
                                 for _contatto_uuid in _autorita_competente_vas:
                                     _autorita_competenti.append(AutoritaCompetenteVAS(
                                         piano=_piano,
@@ -357,7 +358,9 @@ class UpdatePiano(relay.ClientIDMutation):
                                 UpdatePiano.delete_token(_sca.user, _piano)
 
                             if len(_soggetti_sca_uuid) > 0:
+
                                 _soggetti_sca = []
+
                                 for _contatto_uuid in _soggetti_sca_uuid:
                                     _soggetti_sca.append(SoggettiSCA(
                                         piano=_piano,
@@ -379,11 +382,14 @@ class UpdatePiano(relay.ClientIDMutation):
                         _piano.autorita_istituzionali.clear()
 
                         if _autorita_istituzionali:
+
                             for _ac in _piano.autorita_istituzionali.all():
                                 UpdatePiano.delete_token(_ac.user, _piano)
 
                             if len(_autorita_istituzionali) > 0:
+
                                 _autorita_competenti = []
+
                                 for _contatto_uuid in _autorita_istituzionali:
                                     _autorita_competenti.append(AutoritaIstituzionali(
                                         piano=_piano,
@@ -391,7 +397,7 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _ac in _autorita_competenti:
-                                    _new_role = UpdatePiano.get_role(_ac.autorita_istituzionale, TIPOLOGIA_ATTORE.ac)
+                                    _new_role = UpdatePiano.get_role(_ac.autorita_istituzionale, TIPOLOGIA_ATTORE.unknown)
                                     UpdatePiano.get_or_create_token(_ac.autorita_istituzionale.user, _piano, _new_role)
                                     _ac.save()
 
@@ -407,7 +413,9 @@ class UpdatePiano(relay.ClientIDMutation):
                                 UpdatePiano.delete_token(_ac.user, _piano)
 
                             if len(_altri_destinatari) > 0:
+
                                 _autorita_competenti = []
+
                                 for _contatto_uuid in _altri_destinatari:
                                     _autorita_competenti.append(AltriDestinatari(
                                         piano=_piano,
@@ -415,7 +423,7 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _ac in _autorita_competenti:
-                                    _new_role = UpdatePiano.get_role(_ac.altro_destinatario, TIPOLOGIA_ATTORE.ac)
+                                    _new_role = UpdatePiano.get_role(_ac.altro_destinatario, TIPOLOGIA_ATTORE.unknown)
                                     UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano, _new_role)
                                     _ac.save()
 
