@@ -166,7 +166,7 @@ ${FR.VAS}
 
 export const GET_CONTATTI = gql`
 query getContatti($tipo: String){
-    contatti(tipologia: $tipo) {
+    contatti(tipologiain: $tipo) {
       edges {
         node{
           ...Contatto

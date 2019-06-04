@@ -81,14 +81,18 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
             return super(EnteUserMembershipFilter, self).qs.none()
 
 
+class CharInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
+    pass
+
 class EnteContattoMembershipFilter(django_filters.FilterSet):
 
     # Do case-insensitive lookups on 'name'
     name = django_filters.CharFilter(lookup_expr='iexact')
+    tipologiain = CharInFilter(field_name='tipologia', lookup_expr='in')
 
     class Meta:
         model = Contatto
-        fields = ['name', 'email', 'ente', 'tipologia', ]
+        fields = ['name', 'email', 'ente', 'tipologia','tipologiain']
 
     @property
     def qs(self):
