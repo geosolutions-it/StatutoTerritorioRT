@@ -32,14 +32,11 @@ def get_managed_users(current_user, current_role, organization, organizazions_en
     managed_roles = []
     if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
         managed_roles = [settings.RUP_CODE]
+        managed_users = managed_users.filter(
+            Q(usermembership__type__code__in=managed_roles)).exclude(
+                pk__in=[current_user.pk, ]).distinct()
     elif current_role.code == settings.RUP_CODE:
-        managed_roles = [
-            settings.READ_ONLY_USER_CODE,
-            # settings.TEMP_USER_CODE,
-            settings.OPERATOR_USER_CODE
-        ]
-    managed_users = managed_users.filter(
-        Q(usermembership__type__code__in=managed_roles)).exclude(pk__in=[current_user.pk, ]).distinct()
+        managed_users = managed_users.exclude(pk__in=[current_user.pk, ]).distinct()
     return managed_users
 
 

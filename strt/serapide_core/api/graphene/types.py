@@ -374,10 +374,10 @@ class AppUserNode(DjangoObjectType):
         role = info.context.session.get('role', None)
         _attore = None
         try:
-            if token:
-                _attore = Contatto.attore(self, token=token)
-            elif role:
+            if role:
                 _attore = Contatto.attore(self, role=role)
+            elif token:
+                _attore = Contatto.attore(self, token=token)
             elif organization:
                 _attore = Contatto.attore(self, organization=organization)
         except Exception as e:

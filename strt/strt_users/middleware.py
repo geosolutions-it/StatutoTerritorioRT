@@ -89,6 +89,7 @@ class SessionControlMiddleware(object):
                             if not request.user.is_superuser:
                                 return self.redirect_to_login(request)
                     except BaseException:
+                        del request.session['token']
                         traceback.print_exc()
 
                 organization = request.session['organization'] if 'organization' in request.session else None
