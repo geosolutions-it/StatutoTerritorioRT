@@ -136,7 +136,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                     selected={auths}
                                     query={GET_CONTATTI}
                                     getList={getContatti}
-                                    variables={{}}
+                                    variables={{tipo: "ente"}}
                                     onChange={changed}
                                     size="lg"
                                     label="SOGGETTI ISTITUZIONALI"
@@ -146,7 +146,8 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                         </div>
                                         )}
                                     >
-                                    <AddContact className="mt-2"></AddContact>
+                                    {/*<AddContact
+                                     className="mt-2"></AddContact>*/}
                                     </EnhancedListSelector>)}
                         }
                         </Mutation>
@@ -178,7 +179,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                 query={GET_CONTATTI}
                                 getList={getContatti}
                                 variables={{}}
-                                label="SOGGETTI NON ISTITUZIONALI"	
+                                label="SOGGETTI NON ISTITUZIONALI"
                                 size="lg"
                                 onChange={changed}
                                 btn={(toggleOpen) => (
@@ -186,7 +187,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                         <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="rounded-pill" color="serapide" icon="add_circle" label="Aggiungi soggetti non istituzionali"/>
                                     </div>)}
                             >
-                            <AddContact className="mt-2"></AddContact>
+                            {/*<AddContact className="mt-2"></AddContact>*/}
                             </EnhancedListSelector>)}
                         }
                         </Mutation>

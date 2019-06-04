@@ -52,21 +52,21 @@ const fileProps = {className:"col-xl-12",
 
 
 const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, canUpdate, isLocked, Vas = {}}) => {
-            
+
     const {node: {uuid, tipologia, dataAssoggettamento, assoggettamento,
         piano: {soggettoProponente: sP, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
     const {node: {avvioConsultazioniSca, dataAvvioConsultazioniSca} = {}} = consultazioneSCA
     const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
     const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
     const {node: docProcSemp} = resources.filter(({node: n}) => n.tipo === "doc_proc_semplificato").pop() || {};
-    
+
     const disableSCA = tipologia === "SEMPLIFICATA" || tipologia === "NON_NECESSARIA"
     const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
     const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
     const canCommit = !isLocked && canUpdate && checkAnagrafica(tipologia, sP, auths, scas, semplificata, verifica, docProcSemp)
     const getInputTipologia = getVasTypeInput(uuid, "tipologia")
     const pareriUser =  resources.filter(({node: {tipo}}) => tipo === "parere_sca").reduce((acc, {node}) => {
-        if (acc[node.user.fiscalCode]) { 
+        if (acc[node.user.fiscalCode]) {
             acc[node.user.fiscalCode].push(node)
         }
         else {
@@ -82,28 +82,28 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
         {!isLocked && (<span className="p-3 pb-5">NOTA : Le opzioni sono escludenti. Se viene selezionata la richiesta della VAS semplificata
             è richiesto l’upload della Relazione Motivata; se viene selezionata la Richiesta di Verifica VAS è richiesto
     l’upload del documento preliminare di verifica; se si seleziona il Procedimento Vas si decide di seguire il procedimento VAS esteso.</span>)}
-        <EnhancedSwitch isLocked={isLocked} 
-                        getInput={getInputTipologia} 
-                        mutation={UPDATE_VAS} 
-                        value="semplificata" checked={tipologia === "SEMPLIFICATA"}  
+        <EnhancedSwitch isLocked={isLocked}
+                        getInput={getInputTipologia}
+                        mutation={UPDATE_VAS}
+                        value="semplificata" checked={tipologia === "SEMPLIFICATA"}
                         label={(<TextWithTooltip dataTip="art.5 co.3ter L.R. 10/2010" text="PROCEDIMENTO DI VERIFICA SEMPLIFICATA"/>)}
                         className="mt-5 mb-4">
             {(checked) =>
                 <div className="row">
                 <FileUpload  {...fileProps}
-                                disabled={!checked} 
+                                disabled={!checked}
                                 isLocked={!checked || isLocked}
-                                risorsa={semplificata} 
+                                risorsa={semplificata}
                                 placeholder={(<TextWithTooltip dataTip="art.5 co.3ter L.R. 10/2010" text="Relazione motivata per VAS semplificata"/>)}
                                 variables={{codice: uuid, tipo: "vas_semplificata" }}/>
                 </div>
             }
         </EnhancedSwitch>
         <EnhancedSwitch  isLocked={isLocked}
-            getInput={getInputTipologia} 
-            mutation={UPDATE_VAS} 
-            value="verifica" 
-            checked={tipologia === "VERIFICA"}  
+            getInput={getInputTipologia}
+            mutation={UPDATE_VAS}
+            value="verifica"
+            checked={tipologia === "VERIFICA"}
             label={(<TextWithTooltip dataTip="art.22 L.R. 10/2010" text="RICHIESTA VERIFICA DI  ASSOGGETTABILITA'"/>)}
             className="mt-5 mb-4">
             {(checked) => <div className="row">
@@ -114,7 +114,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             variables={{codice: uuid, tipo: "vas_verifica" }}/>
                     </div>}
         </EnhancedSwitch>
-        <EnhancedSwitch  isLocked={isLocked} 
+        <EnhancedSwitch  isLocked={isLocked}
             getInput={getInputTipologia}
             mutation={UPDATE_VAS}
             value="procedimento_semplificato"
@@ -129,7 +129,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             variables={{codice: uuid, tipo: "doc_proc_semplificato" }}/>
                     </div>}
             </EnhancedSwitch>
-        <EnhancedSwitch isLocked={isLocked} 
+        <EnhancedSwitch isLocked={isLocked}
             getInput={getInputTipologia}
             mutation={UPDATE_VAS}
             value="procedimento"
@@ -140,7 +140,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                 <div className="row">
                 <span className="p-3 col-xl-12">Scegliendo “Procedura VAS” verrà inviata una comunicazione all’autorità procedente e proponente (AP/P)
             che avvierà le consultazioni degli Soggetti Competenti in Materia Ambientale (SCA)</span></div>
-                
+
             )}
         </EnhancedSwitch>
         <EnhancedSwitch  isLocked={isLocked}
@@ -161,7 +161,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             if(sP && sP.uuid === val){
                                 soggettoProponenteUuid = ""
                             }
-                            onChange({variables:{ input:{ 
+                            onChange({variables:{ input:{
                                         pianoOperativo: { soggettoProponenteUuid}, codice}
                                 }})
                         }
@@ -176,7 +176,8 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             onChange={changed}
                             btn={(toggleOpen) => (<Button fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="my-auto text-uppercase" color="serapide" icon="add_circle" label="SOGGETTO PROPONENTE"></Button>)}
                         >
-                        <AddContact className="mt-2" tipologia="generico"></AddContact>
+                        {/*<AddContact className="mt-2"
+                         tipologia="generico"></AddContact>*/}
                         </EnhancedListSelector>)}
                     }
                 </Mutation>) : (<span>SOGGETTO PROPONENTE</span>) }
@@ -190,7 +191,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                 {(onChange) => {
                     const changed = (val) => {
                         const autoritaCompetenteVas = auths.indexOf(val) !== -1 ? [] : [val]
-                        onChange({variables:{ input:{ 
+                        onChange({variables:{ input:{
                                     pianoOperativo: { autoritaCompetenteVas}, codice}
                             }})
                     }
@@ -205,7 +206,8 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             label="SELEZIONA AUTORITA’ COMPETENTE VAS"
                             btn={(toggleOpen) => (<Button  fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="text-uppercase" color="serapide" icon="add_circle" label="AUTORITA’ COMPETENTE VAS (AC)"/>)}
                             >
-                            <AddContact className="mt-2" tipologia="acvas"></AddContact>
+                            {/*<AddContact className="mt-2"
+                             tipologia="acvas"></AddContact>*/}
                             </EnhancedListSelector>)}
                 }
                 </Mutation>) : (<span>AUTORITA’ COMPETENTE VAS</span>) }
@@ -224,7 +226,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         }else {
                             nscas = scas.concat(val)
                         }
-                        onChange({variables:{ input:{ 
+                        onChange({variables:{ input:{
                                     pianoOperativo: { soggettiSca: nscas}, codice}
                             }})
                     }
@@ -239,7 +241,8 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         onChange={changed}
                         btn={(toggleOpen) => (<Button fontSize="60%" onClick={toggleOpen} className="my-auto text-uppercase" disabled={disableSCA || isLocked} color="serapide" icon="add_circle" label="SOGGETTI COMPETENTI IN MATERIA AMBIENTALE (SCA)"></Button>)}
                     >
-                    <AddContact className="mt-2" tipologia="sca"></AddContact>
+                    {/*<AddContact className="mt-2"
+                     tipologia="sca"></AddContact>*/}
                     </EnhancedListSelector>)}
                 }
                 </Mutation>) : (<span>SOGGETTI COMPETENTI IN MATERIA AMBIENALE</span>) }
@@ -252,7 +255,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
         {!isLocked && (<div className="d-flex mt-5 pt-5  justify-content-end">
                 <SalvaInvia mutation={PROMUOVI_PIANO} variables={{codice}} canCommit={canCommit}></SalvaInvia>
         </div>)}
-            {/* Mosrta il resto delle aprocedura vas quando simo in riassunot  i casi sono molteplici, 
+            {/* Mosrta il resto delle aprocedura vas quando simo in riassunot  i casi sono molteplici,
                 ho richiesta di verifica, ho richiesta verifica semplificata, richiesta procedimento richiesta procedimento semplificato, se la vas non è necessaia non aggiungo nulla
             */}
         { isLocked && (tipologia === "VERIFICA"  || tipologia === "SEMPLIFICATA") && (
@@ -261,7 +264,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         <i className="material-icons text-serapide self-align-center">{assoggettamento ? "check_box" : "check_box_outline_blank"}</i>
                         <span className="pl-1">ESITO: {assoggettamento ? "Assoggettamento VAS" : "Esclusione VAS"}</span>
                 </div>
-                <span className="col-4">{dataAssoggettamento && formatDate(dataAssoggettamento)}</span>            
+                <span className="col-4">{dataAssoggettamento && formatDate(dataAssoggettamento)}</span>
             </div>)
         }
         { avvioConsultazioniSca && (
@@ -270,7 +273,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                     <i className="material-icons text-serapide self-align-center">check_box</i>
                         <span className="pl-1">Avvio Consultazioni SCA</span>
                 </div>
-                <span className="col-4">{dataAvvioConsultazioniSca && formatDate(dataAvvioConsultazioniSca)}</span> 
+                <span className="col-4">{dataAvvioConsultazioniSca && formatDate(dataAvvioConsultazioniSca)}</span>
             <div className="col-12 pt-2"></div>
             {map(pareriUser, (u) => (
                 <div key={u[0].user.fiscalCode} className="col-12 pt-4">
@@ -306,4 +309,4 @@ export default ({codice, canUpdate, isLocked}) => {
             }}
             </Query>)}
         </Query>)
-    } 
+    }

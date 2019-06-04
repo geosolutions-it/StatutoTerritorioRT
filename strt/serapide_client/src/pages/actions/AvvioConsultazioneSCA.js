@@ -38,12 +38,12 @@ const UI = rebuildTooltip()(({
         dataCreazione,
         dataRicezionePareri,
         proceduraVas: {uuid: pVasUUID, dataAssoggettamento, tipologia, risorse: {edges=[]} = {} } = {},
-        uuid} = {}} = {}, 
+        uuid} = {}} = {},
         piano: {
-            codice, 
+            codice,
             autoritaCompetenteVas: {edges: aut =[]} = {},
             soggettiSca: {edges: sca = []} = {}} = {}, back}) => {
-            
+
             const isFull = tipologia === "SEMPLIFICATA" || tipologia === "VERIFICA"
             const provvedimentoVerificaVas  = edges.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
             const docPrelim = edges.filter(({node: {tipo}}) => tipo === "documento_preliminare_vas").map(({node}) => node).shift()
@@ -73,7 +73,7 @@ const UI = rebuildTooltip()(({
                         {(onChange) => {
                             const changed = (val) => {
                                 const autoritaCompetenteVas = auths.indexOf(val) !== -1 ? [] : [val]
-                                    onChange({variables:{ input:{ 
+                                    onChange({variables:{ input:{
                                             pianoOperativo: { autoritaCompetenteVas}, codice}
                                     }})
                             }
@@ -81,9 +81,9 @@ const UI = rebuildTooltip()(({
                                 <EnhancedListSelector
                                     selected={auths}
                                     query={GET_CONTATTI}
-                                    getList={getContatti}	                               
-                                    onChange={changed}	        
-                                    variables={{tipo: "acvas"}}	
+                                    getList={getContatti}
+                                    onChange={changed}
+                                    variables={{tipo: "acvas"}}
                                     size="lg"
                                     btn={(toggleOpen) => (
                                         <div className="row">
@@ -92,7 +92,8 @@ const UI = rebuildTooltip()(({
                                         )}
 
                                     >
-                                    <AddContact className="mt-2" tipologia="acvas"></AddContact>
+                                    {/*<AddContact className="mt-2"
+                                     tipologia="acvas"></AddContact>*/}
                                     </EnhancedListSelector>)}
                         }
                         </Mutation>
@@ -112,7 +113,7 @@ const UI = rebuildTooltip()(({
                                 }else {
                                     nscas = scas.concat(val)
                                 }
-                                onChange({variables:{ input:{ 
+                                onChange({variables:{ input:{
                                             pianoOperativo: { soggettiSca: nscas}, codice}
                                     }})
                             }
@@ -122,72 +123,73 @@ const UI = rebuildTooltip()(({
                                 query={GET_CONTATTI}
                                 variables={{tipo: "sca"}}
                                 onChange={changed}
-                                getList={getContatti}	                        
-                                label="DEFINISCI SCA"	                        
+                                getList={getContatti}
+                                label="DEFINISCI SCA"
                                 size="lg"
                                 btn={(toggleOpen) => (
                                     <div className="row">
-                                        <Button 
-                                            fontSize="60%"  
-                                            classNameLabel="py-0" 
-                                            onClick={toggleOpen} 
-                                            className="text-serapide rounded-pill" 
-                                            color="dark" icon="add_circle" 
+                                        <Button
+                                            fontSize="60%"
+                                            classNameLabel="py-0"
+                                            onClick={toggleOpen}
+                                            className="text-serapide rounded-pill"
+                                            color="dark" icon="add_circle"
                                             label="Soggetti competenti in materia ambientale (SCA)"/>
                                     </div>)}
                             >
-                            <AddContact className="mt-2" tipologia="sca"></AddContact>
+                            {/*<AddContact className="mt-2"
+                             tipologia="sca"></AddContact>*/}
                             </EnhancedListSelector>)}
                         }
                         </Mutation>
                         </div>
                     </React.Fragment>
                     ) : (
-                        <RichiestaComune   scadenza={dataCreazione}/> 
+                        <RichiestaComune   scadenza={dataCreazione}/>
                         )}
-                
+
                 <h4 className="font-weight-light pt-4 pl-2 pb-1">DOCUMENTO PRELIMINARE</h4>
                 <div className="action-uploader  align-self-start pl-2 pb-5">
-                <FileUpload 
+                <FileUpload
                     className={`border-0 ${!docPrelim ? "flex-column": ""}`}
-                    sz="sm" modal={false} showBtn={false} 
-                    mutation={VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
+                    sz="sm" modal={false} showBtn={false}
+                    mutation={VAS_FILE_UPLOAD}
+                    resourceMutation={DELETE_RISORSA_VAS} disabled={false}
                     isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
                 </div>
-                
+
                     <div className="row pl-2">
                         <div className="col-8">
                             <div className="col-12 d-flex pl-0">
                                 <i className="material-icons text-serapide pr-3">email</i>
                                 <div className="bg-serapide mb-auto px-2">Avvia consultazione SCA</div>
                                 <EnhancedSwitch value={!avvioConsultazioniSca}
-                                    getInput={getInput}  
+                                    getInput={getInput}
                                     ignoreChecked
                                     labelClassName="col-auto"
-                                    mutation={UPDATE_CONSULTAZIONE_VAS} checked={avvioConsultazioniSca} 
-                                /> 
+                                    mutation={UPDATE_CONSULTAZIONE_VAS} checked={avvioConsultazioniSca}
+                                />
                             </div>
-                            
+
                             <div className="col-12 pt-2">Selezionando l’opzione e cliccando “Salva e Invia” verrà inviata comunicazione e
                             documento preliminare agli SCA selezionati e per conoscenza all’Autorità Competente
                             in materia ambientale identificati all’atto di creazione del Piano.</div>
-                        
+
                         </div>
                         <div className="col-4 d-flex">
-                            <i className="material-icons pr-3">event_busy</i> 
+                            <i className="material-icons pr-3">event_busy</i>
                             <div className="d-flex flex-column">
                                 <span>{dataRicezionePareri && formatDate(dataRicezionePareri, "dd MMMM yyyy")}</span>
                                 <span style={{maxWidth: 150}}>90 giorni per ricevere i pareri sca</span>
                             </div>
                         </div>
-                      </div> 
-                    
-                    
-                
+                      </div>
+
+
+
                 <div className="align-self-center mt-7">
                 <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIO_CONSULTAZIONE_VAS} canCommit={avvioConsultazioniSca && docPrelim && (!isFull || (auths.length > 0 && scas.length > 0))}></SalvaInvia>
-                
+
                 </div>
             </React.Fragment>)})
 

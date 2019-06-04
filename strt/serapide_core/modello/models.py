@@ -207,6 +207,7 @@ class Contatto(models.Model):
             else:
                 attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
 
+            # print(" IN. -------------------------- ATTORE: %s" % attore)
             if attore in \
             (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown],
              TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.comune],
@@ -239,21 +240,22 @@ class Contatto(models.Model):
                         attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]
                         break
 
-                    if contact.tipologia == 'acvas':
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
-                    elif contact.tipologia == 'sca':
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
-                    elif contact.tipologia == 'generico' and \
-                    attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-                    elif contact.tipologia == 'ente' and \
-                    (attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] or
-                     attore != TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
-                    elif contact.tipologia == 'genio_civile':
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
+                    if not kw:
+                        if contact.tipologia == 'acvas':
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
+                        elif contact.tipologia == 'sca':
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
+                        elif contact.tipologia == 'generico' and \
+                        attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+                        elif contact.tipologia == 'ente' and \
+                        (attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] or
+                         attore != TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
+                        elif contact.tipologia == 'genio_civile':
+                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
 
-        # print(" -------------------------- ATTORE: %s" % attore)
+        # print(" FIN. -------------------------- ATTORE: %s" % attore)
         return attore
 
     class Meta:

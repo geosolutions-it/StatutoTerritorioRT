@@ -65,7 +65,6 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
     TIPOLOGIA_ATTORE,
-    TIPOLOGIA_CONTATTO,
 )
 
 from . import fase
