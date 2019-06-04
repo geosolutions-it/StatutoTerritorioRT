@@ -25,20 +25,20 @@ from django.contrib.auth.decorators import login_required
 from rules.contrib.views import permission_required
 
 
-def get_managed_users(current_user, current_role, organization, organizazions_enabled):
+def get_managed_users(current_user, current_role, organization, organizazions_enabled, full=False):
     managed_users = AppUser.objects.filter(
         Q(usermembership__organization__in=organizazions_enabled) |
         Q(created_by=current_user))
     managed_roles = []
-    if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
+    if current_role.code == settings.RESPONSABILE_ISIDE_CODE and not full:
         managed_roles = [settings.RUP_CODE]
         managed_users = managed_users.filter(
             Q(usermembership__type__code__in=managed_roles)).exclude(
                 pk__in=[current_user.pk, ]).distinct()
-    elif current_role.code == settings.RUP_CODE:
+    elif current_role.code == settings.RUP_CODE or full:
         managed_users = managed_users.exclude(pk__in=[current_user.pk, ]).distinct()
-    return managed_users
 
+    return managed_users
 
 @login_required
 def userProfileDetailView(request):
@@ -169,7 +169,7 @@ def userMembershipRegistrationView(request):
             organization = request.session['organization']
             organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
             current_role = current_user.memberships.filter(organization=organization).first().type
-            managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled)
+            managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled, full=True)
             managed_roles = []
             if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
                 managed_roles = [settings.RUP_CODE]
@@ -206,7 +206,7 @@ def userMembershipUpdateView(request, code):
             organization = request.session['organization']
             organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
             current_role = current_user.memberships.filter(organization=organization).first().type
-            managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled)
+            managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled, full=True)
             managed_roles = []
             if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
                 managed_roles = [settings.RUP_CODE]
