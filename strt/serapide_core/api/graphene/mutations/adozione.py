@@ -245,10 +245,11 @@ class TrasmissioneAdozione(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
@@ -280,7 +281,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
     adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
 
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token, role):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -310,7 +311,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
                         _osservazioni_enti.data = datetime.datetime.now(timezone.get_current_timezone())
                         _osservazioni_enti.save()
 
-            if rules.test_rule('strt_core.api.is_actor', token or (user, _organization), 'Comune'):
+            if rules.test_rule('strt_core.api.is_actor', token or (user, role) or (user, _organization), 'Comune'):
                 if _upload_osservazioni_privati and _upload_osservazioni_privati.stato != STATO_AZIONE.nessuna:
                     _upload_osservazioni_privati.stato = STATO_AZIONE.nessuna
                     _upload_osservazioni_privati.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -334,10 +335,11 @@ class TrasmissioneOsservazioni(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token, _role)
 
                 return TrasmissioneOsservazioni(
                     adozione_aggiornata=_procedura_adozione,
@@ -392,10 +394,11 @@ class Controdeduzioni(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
@@ -464,10 +467,11 @@ class PianoControdedotto(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
@@ -609,10 +613,11 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 
@@ -889,12 +894,13 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
         _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
         _procedura_adozione = ProceduraAdozione.objects.get(piano=_piano)
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         _procedura_adozione.pubblicazione_burt_data and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
 

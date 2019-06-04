@@ -56,6 +56,21 @@ def is_actor_for_token(token, actor):
 
 
 @rules.predicate
+def is_actor_for_role(user_info, actor):
+    _user = user_info[0]
+    _role = user_info[1]
+    _attore = None
+    if _user and \
+    _role and not isinstance(_role, Organization):
+        _attore = Contatto.attore(_user, role=_role)
+
+    if _attore is None:
+        return False
+    else:
+        return (_attore.lower() == actor.lower())
+
+
+@rules.predicate
 def is_actor_for_organization(user_info, actor):
     _user = user_info[0]
     _organization = user_info[1]
