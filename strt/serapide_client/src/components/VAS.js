@@ -176,8 +176,8 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             onChange={changed}
                             btn={(toggleOpen) => (<Button fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="my-auto text-uppercase" color="serapide" icon="add_circle" label="SOGGETTO PROPONENTE"></Button>)}
                         >
-                        <!--<AddContact className="mt-2"
-                         tipologia="generico"></AddContact>-->
+                        /*<AddContact className="mt-2"
+                         tipologia="generico"></AddContact>*/
                         </EnhancedListSelector>)}
                     }
                 </Mutation>) : (<span>SOGGETTO PROPONENTE</span>) }
@@ -206,8 +206,8 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             label="SELEZIONA AUTORITA’ COMPETENTE VAS"
                             btn={(toggleOpen) => (<Button  fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="text-uppercase" color="serapide" icon="add_circle" label="AUTORITA’ COMPETENTE VAS (AC)"/>)}
                             >
-                            <!--<AddContact className="mt-2"
-                             tipologia="acvas"></AddContact>-->
+                            /*<AddContact className="mt-2"
+                             tipologia="acvas"></AddContact>*/
                             </EnhancedListSelector>)}
                 }
                 </Mutation>) : (<span>AUTORITA’ COMPETENTE VAS</span>) }
@@ -241,8 +241,8 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         onChange={changed}
                         btn={(toggleOpen) => (<Button fontSize="60%" onClick={toggleOpen} className="my-auto text-uppercase" disabled={disableSCA || isLocked} color="serapide" icon="add_circle" label="SOGGETTI COMPETENTI IN MATERIA AMBIENTALE (SCA)"></Button>)}
                     >
-                    <!--<AddContact className="mt-2"
-                     tipologia="sca"></AddContact>-->
+                    /*<AddContact className="mt-2"
+                     tipologia="sca"></AddContact>*/
                     </EnhancedListSelector>)}
                 }
                 </Mutation>) : (<span>SOGGETTI COMPETENTI IN MATERIA AMBIENALE</span>) }
