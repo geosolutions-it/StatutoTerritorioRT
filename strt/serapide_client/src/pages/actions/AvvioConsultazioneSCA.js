@@ -92,7 +92,8 @@ const UI = rebuildTooltip()(({
                                         )}
 
                                     >
-                                    <AddContact className="mt-2" tipologia="acvas"></AddContact>
+                                    <!--<AddContact className="mt-2"
+                                     tipologia="acvas"></AddContact>-->
                                     </EnhancedListSelector>)}
                         }
                         </Mutation>
@@ -136,7 +137,8 @@ const UI = rebuildTooltip()(({
                                             label="Soggetti competenti in materia ambientale (SCA)"/>
                                     </div>)}
                             >
-                            <AddContact className="mt-2" tipologia="sca"></AddContact>
+                            <!--<AddContact className="mt-2"
+                             tipologia="sca"></AddContact>-->
                             </EnhancedListSelector>)}
                         }
                         </Mutation>
