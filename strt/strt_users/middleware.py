@@ -34,7 +34,6 @@ class TokenMiddleware(object):
         # the view (and later middleware) are called.
         role = request.GET.get('role', None)
         token = request.GET.get('token', None)
-
         if token is None:
             auth_header = request.META.get('HTTP_AUTHORIZATION', b'').split()
             if auth_header and auth_header[0].lower() == b'token':
@@ -51,7 +50,10 @@ class TokenMiddleware(object):
                 organization = _allowed_pianos[0].ente
                 request.session['organization'] = organization.code
                 if not role:
-                    request.session['role'] = user.memberships.all().first().pk if user.memberships.all().first() else None
+                    request.session['role'] = user.memberships.all().first().pk if user.memberships.all().first() \
+                    else None
+                attore = Contatto.attore(user, token=token)
+                request.session['attore'] = attore
                 auth.login(request, user)
 
         # ------------------------
@@ -104,10 +106,10 @@ class SessionControlMiddleware(object):
                 attore = request.session['attore'] if 'attore' in request.session else None
                 if not attore:
                     try:
-                        if role:
-                            attore = Contatto.attore(request.user, role=role)
-                        elif token:
+                        if token:
                             attore = Contatto.attore(request.user, token=token)
+                        elif role:
+                            attore = Contatto.attore(request.user, role=role)
                         elif organization:
                             attore = Contatto.attore(request.user, organization=organization)
                         request.session['attore'] = attore

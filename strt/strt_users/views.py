@@ -35,7 +35,7 @@ def get_managed_users(current_user, current_role, organization, organizazions_en
     elif current_role.code == settings.RUP_CODE:
         managed_roles = [
             settings.READ_ONLY_USER_CODE,
-            settings.TEMP_USER_CODE,
+            # settings.TEMP_USER_CODE,
             settings.OPERATOR_USER_CODE
         ]
     managed_users = managed_users.filter(
@@ -46,9 +46,11 @@ def get_managed_users(current_user, current_role, organization, organizazions_en
 @login_required
 def userProfileDetailView(request):
     current_user = get_current_authenticated_user()
-    current_user_memberships = UserMembership.objects.filter(member=current_user)
+    current_user_memberships = UserMembership.objects.filter(
+        member=current_user).exclude(type__code__in=[settings.TEMP_USER_CODE])
     managed_users = AppUser.objects.filter(created_by=current_user)
-    managed_users_memberships = UserMembership.objects.filter(member__in=managed_users)
+    managed_users_memberships = UserMembership.objects.filter(
+        member__in=managed_users).exclude(type__code__in=[settings.TEMP_USER_CODE])
     context = {
         'current_user': current_user,
         'current_user_memberships': current_user_memberships,
@@ -82,7 +84,8 @@ def usersMembershipsListView(request):
         organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
         current_role = current_user.memberships.filter(organization=organization).first().type
         managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled)
-        managed_users_membership = UserMembership.objects.filter(member__in=managed_users)
+        managed_users_membership = UserMembership.objects.filter(
+            member__in=managed_users).exclude(type__code__in=[settings.TEMP_USER_CODE])
     context = {
         'managed_users_membership': managed_users_membership
     }
@@ -174,7 +177,9 @@ def userMembershipRegistrationView(request):
             if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
                 managed_roles = [settings.RUP_CODE]
             elif current_role.code == settings.RUP_CODE:
-                managed_roles = [settings.READ_ONLY_USER_CODE, settings.TEMP_USER_CODE, settings.OPERATOR_USER_CODE]
+                managed_roles = [settings.READ_ONLY_USER_CODE,
+                                 # settings.TEMP_USER_CODE,
+                                 settings.OPERATOR_USER_CODE]
             form.fields['member'].queryset = AppUser.objects.filter(pk__in=managed_users)
             form.fields['organization'].queryset = Organization.objects.filter(pk__in=organizazions_enabled)
             form.fields['type'].queryset = MembershipType.objects.filter(
@@ -209,7 +214,9 @@ def userMembershipUpdateView(request, code):
             if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
                 managed_roles = [settings.RUP_CODE]
             elif current_role.code == settings.RUP_CODE:
-                managed_roles = [settings.READ_ONLY_USER_CODE, settings.TEMP_USER_CODE, settings.OPERATOR_USER_CODE]
+                managed_roles = [settings.READ_ONLY_USER_CODE,
+                                 # settings.TEMP_USER_CODE,
+                                 settings.OPERATOR_USER_CODE]
             form.fields['member'].queryset = AppUser.objects.filter(pk__in=managed_users)
             form.fields['organization'].queryset = Organization.objects.filter(pk__in=organizazions_enabled)
             form.fields['type'].queryset = MembershipType.objects.filter(

@@ -135,7 +135,8 @@ class Token(models.Model):
     This is essentially the same as the token model from Django REST Framework
     """
     key = models.CharField(max_length=40, primary_key=True)
-    user = models.ForeignKey(AppUser, related_name="token", on_delete=models.CASCADE)
+    user = models.ForeignKey(AppUser, related_name="user", on_delete=models.CASCADE)
+    membership = models.ForeignKey('UserMembership', related_name="role", on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     expires = models.DateTimeField()
 

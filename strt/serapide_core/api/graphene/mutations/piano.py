@@ -27,6 +27,8 @@ from graphql_extensions.exceptions import GraphQLError
 from strt_users.models import (
     Organization,
     Token,
+    MembershipType,
+    UserMembership,
 )
 
 from serapide_core.helpers import (
@@ -62,6 +64,8 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
+    TIPOLOGIA_ATTORE,
+    TIPOLOGIA_CONTATTO,
 )
 
 from . import fase
@@ -174,6 +178,26 @@ class UpdatePiano(relay.ClientIDMutation):
     piano_aggiornato = graphene.Field(types.PianoNode)
 
     @staticmethod
+    def get_role(contact, actor):
+        _new_role_type, created = MembershipType.objects.get_or_create(
+            code=settings.TEMP_USER_CODE,
+            organization_type=contact.ente.type
+        )
+        _new_role_name = '%s-%s-membership' % (contact.user.fiscal_code,
+                                               contact.ente.code)
+        _new_role, created = UserMembership.objects.get_or_create(
+            name=_new_role_name,
+            attore=actor,
+            defaults={
+                'description': '%s - %s' % (_new_role_type.description, contact.ente.name),
+                'member': contact.user,
+                'organization': contact.ente,
+                'type': _new_role_type
+            }
+        )
+        return _new_role
+
+    @staticmethod
     def make_token_expiration(days=365):
         _expire_days = getattr(settings, 'TOKEN_EXPIRE_DAYS', days)
         _expire_time = datetime.datetime.now(timezone.get_current_timezone())
@@ -181,8 +205,8 @@ class UpdatePiano(relay.ClientIDMutation):
         return _expire_time + _expire_delta
 
     @staticmethod
-    def get_or_create_token(user, piano):
-        _allowed_tokens = Token.objects.filter(user=user)
+    def get_or_create_token(user, piano, role):
+        _allowed_tokens = Token.objects.filter(user=user, membership=role)
         _auth_token = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
         if not _auth_token:
             _token_key = Token.generate_key()
@@ -190,6 +214,7 @@ class UpdatePiano(relay.ClientIDMutation):
                 key=_token_key,
                 defaults={
                     'user': user,
+                    'membership': role,
                     'expires': UpdatePiano.make_token_expiration()
                 }
             )
@@ -280,13 +305,31 @@ class UpdatePiano(relay.ClientIDMutation):
                     _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
                     rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+
                         if _piano.soggetto_proponente:
                             UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
                             _piano.soggetto_proponente = None
 
                         if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
                             _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
-                            UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano)
+                            _attore = TIPOLOGIA_ATTORE.unknown
+                            _tipologia = TIPOLOGIA_ATTORE.unknown
+                            if _soggetto_proponente.tipologia == TIPOLOGIA_CONTATTO.acvas:
+                                _tipologia = TIPOLOGIA_ATTORE.ac
+                                _attore = Contatto.attore(_soggetto_proponente.user, tipologia=_tipologia)
+                            elif _soggetto_proponente.tipologia == TIPOLOGIA_CONTATTO.sca:
+                                _tipologia = TIPOLOGIA_ATTORE.sca
+                                _attore = Contatto.attore(_soggetto_proponente.user, tipologia=_tipologia)
+                            elif _soggetto_proponente.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
+                                _tipologia = TIPOLOGIA_ATTORE.genio_civile
+                                _attore = Contatto.attore(_soggetto_proponente.user, tipologia=_tipologia)
+                            elif _soggetto_proponente.ente.type.name == 'Regione':
+                                _attore = TIPOLOGIA_ATTORE.regione
+                            elif _soggetto_proponente.ente.type.name == 'Comune':
+                                _attore = TIPOLOGIA_ATTORE.comune
+
+                            _new_role = UpdatePiano.get_role(_soggetto_proponente, _attore)
+                            UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
                             _piano.soggetto_proponente = _soggetto_proponente
                     else:
                         return GraphQLError(_("Forbidden"), code=403)
@@ -296,7 +339,9 @@ class UpdatePiano(relay.ClientIDMutation):
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
                     rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+
                         _piano.autorita_competente_vas.clear()
+
                         if _autorita_competente_vas:
                             for _ac in _piano.autorita_competente_vas.all():
                                 UpdatePiano.delete_token(_ac.user, _piano)
@@ -310,7 +355,8 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _ac in _autorita_competenti:
-                                    UpdatePiano.get_or_create_token(_ac.autorita_competente.user, _piano)
+                                    _new_role = UpdatePiano.get_role(_ac.autorita_competente, TIPOLOGIA_ATTORE.ac)
+                                    UpdatePiano.get_or_create_token(_ac.autorita_competente.user, _piano, _new_role)
                                     _ac.save()
                     else:
                         return GraphQLError(_("Forbidden"), code=403)
@@ -320,7 +366,9 @@ class UpdatePiano(relay.ClientIDMutation):
                     _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
                     rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+
                         _piano.soggetti_sca.clear()
+
                         if _soggetti_sca_uuid:
                             for _sca in _piano.soggetti_sca.all():
                                 UpdatePiano.delete_token(_sca.user, _piano)
@@ -334,7 +382,8 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _sca in _soggetti_sca:
-                                    UpdatePiano.get_or_create_token(_sca.soggetto_sca.user, _piano)
+                                    _new_role = UpdatePiano.get_role(_sca.soggetto_sca, TIPOLOGIA_ATTORE.sca)
+                                    UpdatePiano.get_or_create_token(_sca.soggetto_sca.user, _piano, _new_role)
                                     _sca.save()
                     else:
                         return GraphQLError(_("Forbidden"), code=403)
@@ -343,7 +392,9 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'autorita_istituzionali' in _piano_data:
                     _autorita_istituzionali = _piano_data.pop('autorita_istituzionali')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+
                         _piano.autorita_istituzionali.clear()
+
                         if _autorita_istituzionali:
                             for _ac in _piano.autorita_istituzionali.all():
                                 UpdatePiano.delete_token(_ac.user, _piano)
@@ -357,14 +408,17 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _ac in _autorita_competenti:
-                                    UpdatePiano.get_or_create_token(_ac.autorita_istituzionale.user, _piano)
+                                    _new_role = UpdatePiano.get_role(_ac.autorita_istituzionale, TIPOLOGIA_ATTORE.ac)
+                                    UpdatePiano.get_or_create_token(_ac.autorita_istituzionale.user, _piano, _new_role)
                                     _ac.save()
 
                 # Altri Destinatari (O)
                 if 'altri_destinatari' in _piano_data:
                     _altri_destinatari = _piano_data.pop('altri_destinatari')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+
                         _piano.altri_destinatari.clear()
+
                         if _altri_destinatari:
                             for _ac in _piano.altri_destinatari.all():
                                 UpdatePiano.delete_token(_ac.user, _piano)
@@ -378,7 +432,8 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _ac in _autorita_competenti:
-                                    UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano)
+                                    _new_role = UpdatePiano.get_role(_ac.altro_destinatario, TIPOLOGIA_ATTORE.ac)
+                                    UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano, _new_role)
                                     _ac.save()
 
                 # Protocollo Genio Civile

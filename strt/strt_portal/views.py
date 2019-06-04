@@ -18,7 +18,7 @@ from django.forms import ValidationError
 from django.views.generic.base import TemplateView
 from django.contrib.auth import authenticate, login
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import logout
+# from django.contrib.auth import logout
 
 from strt_tests.forms import UserAuthenticationForm
 from rules.contrib.views import permission_required

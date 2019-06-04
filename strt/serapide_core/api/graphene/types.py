@@ -24,6 +24,7 @@ from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
 from strt_users.models import (
+    Token,
     AppUser,
     Organization,
     OrganizationType,
@@ -307,10 +308,10 @@ class AppUserNode(DjangoObjectType):
         _org = info.context.session.get('organization', None)
         token = info.context.session.get('token', None)
         role = info.context.session.get('role', None)
-        if role:
+        if token:
+            return Token.objects.get(key=token).membership
+        elif role:
             return self.memberships.filter(pk=role).first()
-        elif token:
-            return self.memberships.all().first()
         else:
             return self.memberships.filter(organization__code=_org).first()
 
@@ -352,7 +353,20 @@ class AppUserNode(DjangoObjectType):
         return unread_messages
 
     def resolve_contact_type(self, info, **args):
-        return Contatto.tipologia_contatto(self)
+        organization = info.context.session.get('organization', None)
+        token = info.context.session.get('token', None)
+        role = info.context.session.get('role', None)
+        _tipologia_contatto = None
+        try:
+            if token:
+                _tipologia_contatto = Contatto.tipologia_contatto(self, token=token)
+            elif role:
+                _tipologia_contatto = Contatto.tipologia_contatto(self, role=role)
+            elif organization:
+                _tipologia_contatto = Contatto.tipologia_contatto(self, organization=organization)
+        except Exception as e:
+            logger.exception(e)
+        return _tipologia_contatto
 
     def resolve_attore(self, info, **args):
         organization = info.context.session.get('organization', None)
@@ -360,10 +374,10 @@ class AppUserNode(DjangoObjectType):
         role = info.context.session.get('role', None)
         _attore = None
         try:
-            if role:
-                _attore = Contatto.attore(self, role=role)
-            elif token:
+            if token:
                 _attore = Contatto.attore(self, token=token)
+            elif role:
+                _attore = Contatto.attore(self, role=role)
             elif organization:
                 _attore = Contatto.attore(self, organization=organization)
         except Exception as e:

@@ -26,13 +26,11 @@ class OrganizationModelAdmin(admin.ModelAdmin):
     list_filter = ['name', 'code', 'description', 'type']
 
 
-
 @admin.register(OrganizationType)
 class OrganizationTypeModelAdmin(admin.ModelAdmin):
     list_display = ['name', 'code', 'description']
     search_fields = ['name', 'code', 'description']
     list_filter = ['name', 'code', 'description']
-
 
 
 class MyModelChoiceField(ModelChoiceField):

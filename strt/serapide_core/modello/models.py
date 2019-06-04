@@ -159,19 +159,40 @@ class Contatto(models.Model):
     )
 
     @classmethod
-    def tipologia_contatto(cls, user):
+    def tipologia_contatto(cls, user, role=None, organization=None, token=None):
         contact_type = ""
         if user:
-            contact = Contatto.objects.filter(user=user).first()
+            membership = None
+            if token:
+                membership = Token.objects.get(key=token).membership
+            elif role:
+                membership = user.memberships.filter(pk=role).first()
+
+            if membership:
+                _tipologia = TIPOLOGIA_CONTATTO.unknown
+                if membership.attore == TIPOLOGIA_ATTORE.ac:
+                    _tipologia = TIPOLOGIA_CONTATTO.acvas
+
+                contact = Contatto.objects.filter(
+                    user=user,
+                    tipologia=_tipologia).first()
+
             if contact:
                 contact_type = TIPOLOGIA_CONTATTO[contact.tipologia]
+
         return contact_type
 
     @classmethod
     def attore(cls, user, role=None, organization=None, token=None, tipologia=None):
         attore = ""
         if user:
-            if role:
+            if token:
+                membership = Token.objects.get(key=token).membership
+                if membership and membership.organization:
+                    attore = membership.organization.type.name
+                else:
+                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
+            elif role:
                 membership = user.memberships.filter(pk=role).first()
                 if membership and membership.organization:
                     attore = membership.organization.type.name
@@ -192,11 +213,12 @@ class Contatto(models.Model):
              TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
                 kw = None
                 membership = None
-                if role:
+                if token:
+                    membership = Token.objects.get(key=token).membership
+                    kw = membership.attore
+                elif role:
                     membership = user.memberships.filter(pk=role).first()
                     kw = membership.attore
-                elif token:
-                    membership = user.memberships.all().first()
                 elif organization:
                     membership = user.memberships.filter(organization__code=organization).first()
                 if attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] and \
@@ -231,7 +253,7 @@ class Contatto(models.Model):
                     elif contact.tipologia == 'genio_civile':
                         attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
 
-        print(" -------------------------- ATTORE: %s" % attore)
+        # print(" -------------------------- ATTORE: %s" % attore)
         return attore
 
     class Meta:

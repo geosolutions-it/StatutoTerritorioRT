@@ -9,7 +9,7 @@
 #
 #########################################################################
 
-# from django.conf import settings
+from django.conf import settings
 from django.contrib.auth import get_user_model
 
 from rest_framework.views import APIView
@@ -50,7 +50,8 @@ class UserMembershipDataView(APIView):
             # m_types = MembershipType.objects.filter(
             #     organization_type__in=organizations_types
             # ).exclude(code=settings.RESPONSABILE_ISIDE_CODE).exclude(code=settings.RUP_CODE)
-            m_types = user.memberships.filter(organization=organization)
+            m_types = user.memberships.filter(
+                organization=organization).exclude(type__code__in=[settings.TEMP_USER_CODE])
             # serialized_m_types = MembershipTypeSerializer(m_types, many=True)
             serialized_m_types = UserMembershipSerializer(m_types, many=True)
             return Response(serialized_m_types.data)
