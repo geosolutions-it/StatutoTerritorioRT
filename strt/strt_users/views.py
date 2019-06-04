@@ -40,6 +40,7 @@ def get_managed_users(current_user, current_role, organization, organizazions_en
 
     return managed_users
 
+
 @login_required
 def userProfileDetailView(request):
     current_user = get_current_authenticated_user()
@@ -169,7 +170,12 @@ def userMembershipRegistrationView(request):
             organization = request.session['organization']
             organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
             current_role = current_user.memberships.filter(organization=organization).first().type
-            managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled, full=True)
+            managed_users = get_managed_users(
+                current_user,
+                current_role,
+                organization,
+                organizazions_enabled,
+                full=True)
             managed_roles = []
             if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
                 managed_roles = [settings.RUP_CODE]
@@ -206,7 +212,12 @@ def userMembershipUpdateView(request, code):
             organization = request.session['organization']
             organizazions_enabled = UserMembership.objects.filter(member=current_user).values_list('organization')
             current_role = current_user.memberships.filter(organization=organization).first().type
-            managed_users = get_managed_users(current_user, current_role, organization, organizazions_enabled, full=True)
+            managed_users = get_managed_users(
+                current_user,
+                current_role,
+                organization,
+                organizazions_enabled,
+                full=True)
             managed_roles = []
             if current_role.code == settings.RESPONSABILE_ISIDE_CODE:
                 managed_roles = [settings.RUP_CODE]

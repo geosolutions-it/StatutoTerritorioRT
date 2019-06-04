@@ -35,8 +35,8 @@ const enhancer = compose(rebuildTooltip(), toggleControllableState("isChecked", 
 
 const  getPianoInput = (codice, field) => (val) => ({
     variables: {
-        input: { 
-            pianoOperativo: { [field]:  val }, 
+        input: {
+            pianoOperativo: { [field]:  val },
             codice
         }
     }
@@ -45,9 +45,9 @@ const  getPianoInput = (codice, field) => (val) => ({
 
 const getDataDeliberaInput = (codice) => (val) => ({
     variables: {
-        input: { 
+        input: {
             pianoOperativo: {
-            dataDelibera: val.toISOString()}, 
+            dataDelibera: val.toISOString()},
         codice}
     }})
 
@@ -60,8 +60,8 @@ const Messaggio = () => (<React.Fragment>
         <h4>NOTIFICATO AI PARTECIPANTI</h4>
         </React.Fragment>)
 
-const UI = enhancer(({ back, 
-    piano: {numeroProtocolloGenioCivile, codice} = {}, 
+const UI = enhancer(({ back,
+    piano: {numeroProtocolloGenioCivile, codice} = {},
     proceduraAvvio: {node: {
         uuid}} = {},
         isChecked,
@@ -73,7 +73,7 @@ const UI = enhancer(({ back,
         return (
             <React.Fragment>
                 <ActionTitle>Convocazione Conf. di copianificazione</ActionTitle>
-                
+
                 <div className="row align-items-center mt-3 pl-4 pb-4">
                     <div className="col-auto px-0">
                         <i className="material-icons p-1 rounded-pill border">person_outline</i>
@@ -88,7 +88,7 @@ const UI = enhancer(({ back,
                                         }else {
                                             autoritaIstituzionali = auths.concat(val)
                                         }
-                                            onChange({variables:{ input:{ 
+                                            onChange({variables:{ input:{
                                                     pianoOperativo: { autoritaIstituzionali}, codice}
                                             }})
                                     }
@@ -96,8 +96,8 @@ const UI = enhancer(({ back,
                                         <EnhancedListSelector
                                             selected={auths}
                                             query={GET_CONTATTI}
-                                            getList={getContatti}	                                            
-                                            onChange={changed}	
+                                            getList={getContatti}
+                                            onChange={changed}
                                             variables={{}}
                                             size="lg"
                                             label="SOGGETTI ISTITUZIONALI"
@@ -107,24 +107,24 @@ const UI = enhancer(({ back,
                                                 </div>
                                                 )}
                                             >
-                                            <AddContact className="mt-2"></AddContact>
+                                            {/*<AddContact className="mt-2"></AddContact>*/}
                                             </EnhancedListSelector>)}
                                 }
                                 </Mutation>
                         </div>
                     </div>
-                   
+
                     <div className="row align-items-center mt-3 pl-4 pb-4">
                         <div className="col-auto px-0">
                             <i className="material-icons text-serapide icon-34">add_circle</i>
                         </div>
                         <h5 className="col-auto text-serapide">CREA INCONTRO</h5>
-                    </div> 
+                    </div>
                     <div className=" mt-3 px-4 pb-4 border container">
                     <div className="row pt-2">
-                        <Input className="col border-bottom border-serapide bg-light border-top-0 border-left-0 border-right-0" 
-                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}  
-                               onChange={undefined} 
+                        <Input className="col border-bottom border-serapide bg-light border-top-0 border-left-0 border-right-0"
+                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}
+                               onChange={undefined}
                                value={numeroProtocolloGenioCivile} type="text"
                                placeholder="Titolo Incontro" />
                     </div>
@@ -136,30 +136,30 @@ const UI = enhancer(({ back,
                                 selected={dataDelibera ? new Date(dataDelibera) : undefined}
                                 mutation={UPDATE_PIANO} getInput={getDataDeliberaInput(codice)}/>
                             </div>
-                       
-                            
-                            <Input  className="col-12 h-auto p-2 pl-4 mb-3 rounded-0 flex-fill p-0 m-0 bg-light" 
-                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}  
-                               onChange={undefined} 
+
+
+                            <Input  className="col-12 h-auto p-2 pl-4 mb-3 rounded-0 flex-fill p-0 m-0 bg-light"
+                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}
+                               onChange={undefined}
                                value={numeroProtocolloGenioCivile} type="text"
                                placeholder="Luogo" />
-                            
-                            <Input  rows={5} className="col-12 p-2 pl-4 rounded-0 flex-fill p-0 m-0 bg-light" 
-                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}  
-                               onChange={undefined} 
+
+                            <Input  rows={5} className="col-12 p-2 pl-4 rounded-0 flex-fill p-0 m-0 bg-light"
+                               getInput={getPianoInput(codice, "numeroProtocolloGenioCivile")} mutation={UPDATE_PIANO} disabled={false}
+                               onChange={undefined}
                                value={numeroProtocolloGenioCivile}
                                placeholder="Messaggio per partecipanti" />
-                             <h5 className="col-12 mt-4 pl-1 text-serapide">ALLEGATI</h5>  
-                             <UploadFiles 
+                             <h5 className="col-12 mt-4 pl-1 text-serapide">ALLEGATI</h5>
+                             <UploadFiles
                                     {...fileProps}
-                                    risorse={allegati} 
+                                    risorse={allegati}
                                     variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
                                     />
                             </div>
                             <div className="col-5 offset-7  mt-7">
                             <SalvaInvia variables={{codice: uuid}} mutation={INVIO_PROTOCOLLO_GENIO} label="SALVA INCONTRO" messaggio={(<Messaggio/>)} canCommit={true}></SalvaInvia>
                             </div>
-                     </div>  
+                     </div>
 
                 <div className="align-self-center mt-7">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={INVIO_PROTOCOLLO_GENIO} canCommit={isChecked}></SalvaInvia>
