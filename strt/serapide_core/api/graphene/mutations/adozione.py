@@ -300,14 +300,13 @@ class TrasmissioneOsservazioni(graphene.Mutation):
                 tipologia=TIPOLOGIA_AZIONE.controdeduzioni).first()
 
             _organization = piano.ente
-
-            if rules.test_rule('strt_core.api.is_actor', token or (user, role) or (user, _organization), 'Regione'):
+            if rules.test_rule('strt_core.api.is_actor', token or (user.fiscal_code, role) or (user.fiscal_code, _organization), 'Regione'):
                 if _osservazioni_regione and _osservazioni_regione.stato != STATO_AZIONE.nessuna:
                     _osservazioni_regione.stato = STATO_AZIONE.nessuna
                     _osservazioni_regione.data = datetime.datetime.now(timezone.get_current_timezone())
                     _osservazioni_regione.save()
 
-            if rules.test_rule('strt_core.api.is_actor', token or (user, role) or (user, _organization), 'Comune'):
+            if rules.test_rule('strt_core.api.is_actor', token or (user.fiscal_code, role) or (user.fiscal_code, _organization), 'Comune'):
                 if _upload_osservazioni_privati and _upload_osservazioni_privati.stato != STATO_AZIONE.nessuna:
                     _upload_osservazioni_privati.stato = STATO_AZIONE.nessuna
                     _upload_osservazioni_privati.data = datetime.datetime.now(timezone.get_current_timezone())
