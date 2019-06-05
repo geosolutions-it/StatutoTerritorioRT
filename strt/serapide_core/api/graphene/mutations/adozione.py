@@ -289,14 +289,15 @@ class TrasmissioneOsservazioni(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase.nome == FASE.avvio:
-            _osservazioni_enti = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.osservazioni_enti).first()
 
             _osservazioni_regione = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.osservazioni_regione).first()
 
             _upload_osservazioni_privati = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati).first()
+
+            _controdeduzioni = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.controdeduzioni).first()
 
             _organization = piano.ente
 
@@ -306,19 +307,13 @@ class TrasmissioneOsservazioni(graphene.Mutation):
                     _osservazioni_regione.data = datetime.datetime.now(timezone.get_current_timezone())
                     _osservazioni_regione.save()
 
-                    if _osservazioni_enti and _osservazioni_enti.stato != STATO_AZIONE.nessuna:
-                        _osservazioni_enti.stato = STATO_AZIONE.nessuna
-                        _osservazioni_enti.data = datetime.datetime.now(timezone.get_current_timezone())
-                        _osservazioni_enti.save()
-
             if rules.test_rule('strt_core.api.is_actor', token or (user, role) or (user, _organization), 'Comune'):
                 if _upload_osservazioni_privati and _upload_osservazioni_privati.stato != STATO_AZIONE.nessuna:
                     _upload_osservazioni_privati.stato = STATO_AZIONE.nessuna
                     _upload_osservazioni_privati.data = datetime.datetime.now(timezone.get_current_timezone())
                     _upload_osservazioni_privati.save()
 
-            if _upload_osservazioni_privati.stato == STATO_AZIONE.nessuna and \
-            _osservazioni_regione.stato == STATO_AZIONE.nessuna:
+            if not _controdeduzioni:
                 _controdeduzioni = Azione(
                     tipologia=TIPOLOGIA_AZIONE.controdeduzioni,
                     attore=TIPOLOGIA_ATTORE.comune,
@@ -373,10 +368,18 @@ class Controdeduzioni(graphene.Mutation):
             _controdeduzioni = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.controdeduzioni).first()
 
+            _osservazioni_enti = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.osservazioni_enti).first()
+
             if _controdeduzioni and _controdeduzioni.stato != STATO_AZIONE.nessuna:
                 _controdeduzioni.stato = STATO_AZIONE.nessuna
                 _controdeduzioni.data = datetime.datetime.now(timezone.get_current_timezone())
                 _controdeduzioni.save()
+
+                if _osservazioni_enti and _osservazioni_enti.stato != STATO_AZIONE.nessuna:
+                    _osservazioni_enti.stato = STATO_AZIONE.nessuna
+                    _osservazioni_enti.data = datetime.datetime.now(timezone.get_current_timezone())
+                    _osservazioni_enti.save()
 
                 _piano_controdedotto = Azione(
                     tipologia=TIPOLOGIA_AZIONE.piano_controdedotto,
@@ -880,10 +883,12 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
                 _upload_elaborati_adozione_vas.save()
 
                 _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
-                if procedura_adozione.conclusa:
-                    piano.chiudi_pendenti()
                 _procedura_adozione_vas.conclusa = True
                 _procedura_adozione_vas.save()
+                if not procedura_adozione.conclusa:
+                    piano.chiudi_pendenti()
+                    procedura_adozione.conclusa = True
+                    procedura_adozione.save()
 
                 procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
                     piano=piano, ente=piano.ente)
