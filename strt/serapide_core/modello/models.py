@@ -24,6 +24,7 @@ from django.db.models.signals import pre_delete  # , post_delete
 from strt_users.models import (
     AppUser,
     Organization,
+    UserMembership,
     Token,
 )
 
@@ -185,7 +186,11 @@ class Contatto(models.Model):
     @classmethod
     def attore(cls, user, role=None, organization=None, token=None, tipologia=None):
         attore = ""
-        if user:
+        if isinstance(user, str):
+            user_membership = UserMembership._default_manager.filter(member__fiscal_code=user).first()
+        else:
+            user_membership = UserMembership._default_manager.filter(member=user).first()
+        if user_membership or token:
             if token:
                 membership = Token.objects.get(key=token).membership
                 if membership and membership.organization:
@@ -193,12 +198,14 @@ class Contatto(models.Model):
                 else:
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
             elif role:
+                user = user_membership.member
                 membership = user.memberships.filter(pk=role).first()
                 if membership and membership.organization:
                     attore = membership.organization.type.name
                 else:
                     attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
             elif tipologia:
+                user = user_membership.member
                 membership = user.memberships.filter(organization__type__name=tipologia).first()
                 if membership and membership.organization:
                     attore = membership.organization.type.name

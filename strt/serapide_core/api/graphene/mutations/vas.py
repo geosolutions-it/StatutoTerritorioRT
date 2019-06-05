@@ -167,7 +167,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap:
                     if rules.test_rule('strt_users.is_superuser', info.context.user) or \
                     is_RUP(info.context.user) or \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune'):
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune'):
                         _pubblicazione_provvedimento_verifica_ap = _piano.azioni.filter(
                             tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
                             attore=TIPOLOGIA_ATTORE.comune).first()

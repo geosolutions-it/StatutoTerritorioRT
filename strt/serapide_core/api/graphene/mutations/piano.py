@@ -65,6 +65,7 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
     TIPOLOGIA_ATTORE,
+    TIPOLOGIA_CONTATTO,
 )
 
 from . import fase
@@ -184,8 +185,10 @@ class UpdatePiano(relay.ClientIDMutation):
         )
         _new_role_name = '%s-%s-membership' % (contact.user.fiscal_code,
                                                contact.ente.code)
+        _cnt = UserMembership.objects.filter(name=_new_role_name).count()
+        _suffix = '%s' % _cnt if _cnt > 0 else ''
         _new_role, created = UserMembership.objects.get_or_create(
-            name=_new_role_name,
+            name=_new_role_name + _suffix,
             attore=actor,
             description='%s - %s' % (_new_role_type.description, contact.ente.name),
             member=contact.user,
@@ -316,7 +319,7 @@ class UpdatePiano(relay.ClientIDMutation):
                     else:
                         return GraphQLError(_("Forbidden"), code=403)
 
-                # Autorità Competente VAS (O)
+                # Autorita' Competente VAS (O)
                 if 'autorita_competente_vas' in _piano_data:
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
@@ -374,7 +377,7 @@ class UpdatePiano(relay.ClientIDMutation):
                     else:
                         return GraphQLError(_("Forbidden"), code=403)
 
-                # Autorità Istituzionali (O)
+                # Autorita' Istituzionali (O)
                 if 'autorita_istituzionali' in _piano_data:
                     _autorita_istituzionali = _piano_data.pop('autorita_istituzionali')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
@@ -397,7 +400,16 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _ac in _autorita_competenti:
-                                    _new_role = UpdatePiano.get_role(_ac.autorita_istituzionale, TIPOLOGIA_ATTORE.unknown)
+                                    _tipologia = TIPOLOGIA_ATTORE.unknown
+                                    if _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
+                                        _tipologia = TIPOLOGIA_ATTORE.genio_civile
+                                    elif _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.acvas:
+                                        _tipologia = TIPOLOGIA_ATTORE.ac
+                                    elif _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.sca:
+                                        _tipologia = TIPOLOGIA_ATTORE.sca
+                                    elif _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.ente:
+                                        _tipologia = TIPOLOGIA_ATTORE.enti
+                                    _new_role = UpdatePiano.get_role(_ac.autorita_istituzionale, _tipologia)
                                     UpdatePiano.get_or_create_token(_ac.autorita_istituzionale.user, _piano, _new_role)
                                     _ac.save()
 
@@ -423,7 +435,16 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _ac in _autorita_competenti:
-                                    _new_role = UpdatePiano.get_role(_ac.altro_destinatario, TIPOLOGIA_ATTORE.unknown)
+                                    _tipologia = TIPOLOGIA_ATTORE.unknown
+                                    if _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
+                                        _tipologia = TIPOLOGIA_ATTORE.genio_civile
+                                    elif _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.acvas:
+                                        _tipologia = TIPOLOGIA_ATTORE.ac
+                                    elif _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.sca:
+                                        _tipologia = TIPOLOGIA_ATTORE.sca
+                                    elif _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.ente:
+                                        _tipologia = TIPOLOGIA_ATTORE.enti
+                                    _new_role = UpdatePiano.get_role(_ac.altro_destinatario, _tipologia)
                                     UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano, _new_role)
                                     _ac.save()
 
