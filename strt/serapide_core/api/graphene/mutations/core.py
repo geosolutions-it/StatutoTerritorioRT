@@ -123,11 +123,12 @@ class CreateContatto(relay.ClientIDMutation):
                 _ente = _data.pop('ente')
                 _ente = Organization.objects.get(code=_ente['code'])
                 _data['ente'] = _ente
+            _role = info.context.session['role'] if 'role' in info.context.session else None
             _token = info.context.session['token'] if 'token' in info.context.session else None
 
             if info.context.user and not info.context.user.is_anonymous and \
             (rules.test_rule('strt_users.is_superuser', info.context.user) or is_RUP(info.context.user) or
-             rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune')):
+             rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune')):
 
                 # Tipologia (M)
                 if 'tipologia' in _data:

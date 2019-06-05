@@ -166,10 +166,11 @@ class PubblicazionePiano(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_pubblicazione = ProceduraPubblicazione.objects.get(uuid=input['uuid'])
         _piano = _procedura_pubblicazione.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_pubblicazione, info.context.user, _token)
 

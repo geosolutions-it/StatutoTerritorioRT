@@ -118,6 +118,7 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
             # This cannot be changed
             _procedura_avvio_data.pop('piano')
         _piano = _procedura_avvio.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _ente = _piano.ente
         if info.context.user and \
@@ -139,7 +140,7 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
                 # Tipologia (O)
                 if 'conferenza_copianificazione' in _procedura_avvio_data and \
                 (rules.test_rule('strt_users.is_superuser', info.context.user) or is_RUP(info.context.user) or
-                 rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune')):
+                 rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune')):
                     _conferenza_copianificazione = _procedura_avvio_data.pop('conferenza_copianificazione')
                     if _conferenza_copianificazione and _conferenza_copianificazione in TIPOLOGIA_CONF_COPIANIFIZAZIONE:
                         _procedura_avvio_data['conferenza_copianificazione'] = _conferenza_copianificazione
@@ -329,10 +330,11 @@ class AvvioPiano(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -418,10 +420,11 @@ class RichiestaIntegrazioni(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Regione'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -515,10 +518,11 @@ class IntegrazioniRichieste(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -615,10 +619,11 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'GENIO_CIVILE'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'GENIO_CIVILE'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -708,10 +713,11 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -795,10 +801,11 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Regione'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 

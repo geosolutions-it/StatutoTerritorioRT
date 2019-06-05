@@ -70,6 +70,7 @@ class CreateProceduraVAS(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas_data = input.get('procedura_vas')
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _ente = _piano.ente
         if info.context.user and \
@@ -77,7 +78,7 @@ class CreateProceduraVAS(relay.ClientIDMutation):
         rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
         (rules.test_rule('strt_users.is_superuser', info.context.user) or
          is_RUP(info.context.user) or
-         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune')):
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune')):
             try:
                 # ProceduraVAS (M)
                 _procedura_vas_data['piano'] = _piano
@@ -125,6 +126,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # This cannot be changed
             _procedura_vas_data.pop('piano')
         _piano = _procedura_vas.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _ente = _piano.ente
         if info.context.user and \
@@ -259,11 +261,12 @@ class InvioPareriVerificaVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'SCA'):
             try:
                 _pareri_vas_count = ParereVerificaVAS.objects.filter(
                     user=info.context.user,
@@ -382,11 +385,12 @@ class AssoggettamentoVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC'):
             try:
                 _pareri_verifica_sca = _piano.azioni.filter(
                     tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca).first()
@@ -421,12 +425,13 @@ class CreateConsultazioneVAS(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
-         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC')):
             try:
                 nuova_consultazione_vas = ConsultazioneVAS()
                 nuova_consultazione_vas.user = info.context.user
@@ -458,12 +463,13 @@ class UpdateConsultazioneVAS(relay.ClientIDMutation):
         _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
         _consultazione_vas_data = input.get('consultazione_vas')
         _piano = _consultazione_vas.procedura_vas.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
-         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC')):
             try:
                 consultazione_vas_aggiornata = update_create_instance(_consultazione_vas, _consultazione_vas_data)
                 return cls(consultazione_vas_aggiornata=consultazione_vas_aggiornata)
@@ -536,11 +542,12 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
         _procedura_vas = _consultazione_vas.procedura_vas
         _piano = _procedura_vas.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
-         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC')):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _consultazione_vas, info.context.user)
 
@@ -653,11 +660,12 @@ class InvioPareriVAS(graphene.Mutation):
         _consultazione_vas = ConsultazioneVAS.objects.filter(
             procedura_vas=_procedura_vas).order_by('data_creazione').first()
         _piano = _procedura_vas.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'SCA'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'SCA'):
             try:
                 if _procedura_vas.risorse.filter(
                 tipo='parere_sca', archiviata=False, user=info.context.user).count() == 0:
@@ -763,12 +771,13 @@ class AvvioEsamePareriSCA(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune') or
-         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'AC')):
+        (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune') or
+         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC')):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
@@ -817,11 +826,12 @@ class UploadElaboratiVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 

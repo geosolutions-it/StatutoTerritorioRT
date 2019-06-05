@@ -236,6 +236,7 @@ class UpdatePiano(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
         _piano_data = input.get('piano_operativo')
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
@@ -301,7 +302,7 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'soggetto_proponente_uuid' in _piano_data:
                     _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
 
                         if _piano.soggetto_proponente:
                             UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
@@ -309,8 +310,7 @@ class UpdatePiano(relay.ClientIDMutation):
 
                         if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
                             _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
-                            _attore = TIPOLOGIA_ATTORE.unknown
-                            _new_role = UpdatePiano.get_role(_soggetto_proponente, _attore)
+                            _new_role = UpdatePiano.get_role(_soggetto_proponente, TIPOLOGIA_ATTORE.unknown)
                             UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
                             _piano.soggetto_proponente = _soggetto_proponente
                     else:
@@ -320,7 +320,7 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'autorita_competente_vas' in _piano_data:
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
 
                         _piano.autorita_competente_vas.clear()
 
@@ -329,7 +329,9 @@ class UpdatePiano(relay.ClientIDMutation):
                                 UpdatePiano.delete_token(_ac.user, _piano)
 
                             if len(_autorita_competente_vas) > 0:
+
                                 _autorita_competenti = []
+
                                 for _contatto_uuid in _autorita_competente_vas:
                                     _autorita_competenti.append(AutoritaCompetenteVAS(
                                         piano=_piano,
@@ -347,7 +349,7 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'soggetti_sca' in _piano_data:
                     _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
 
                         _piano.soggetti_sca.clear()
 
@@ -356,7 +358,9 @@ class UpdatePiano(relay.ClientIDMutation):
                                 UpdatePiano.delete_token(_sca.user, _piano)
 
                             if len(_soggetti_sca_uuid) > 0:
+
                                 _soggetti_sca = []
+
                                 for _contatto_uuid in _soggetti_sca_uuid:
                                     _soggetti_sca.append(SoggettiSCA(
                                         piano=_piano,
@@ -378,11 +382,14 @@ class UpdatePiano(relay.ClientIDMutation):
                         _piano.autorita_istituzionali.clear()
 
                         if _autorita_istituzionali:
+
                             for _ac in _piano.autorita_istituzionali.all():
                                 UpdatePiano.delete_token(_ac.user, _piano)
 
                             if len(_autorita_istituzionali) > 0:
+
                                 _autorita_competenti = []
+
                                 for _contatto_uuid in _autorita_istituzionali:
                                     _autorita_competenti.append(AutoritaIstituzionali(
                                         piano=_piano,
@@ -390,7 +397,7 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _ac in _autorita_competenti:
-                                    _new_role = UpdatePiano.get_role(_ac.autorita_istituzionale, TIPOLOGIA_ATTORE.ac)
+                                    _new_role = UpdatePiano.get_role(_ac.autorita_istituzionale, TIPOLOGIA_ATTORE.unknown)
                                     UpdatePiano.get_or_create_token(_ac.autorita_istituzionale.user, _piano, _new_role)
                                     _ac.save()
 
@@ -406,7 +413,9 @@ class UpdatePiano(relay.ClientIDMutation):
                                 UpdatePiano.delete_token(_ac.user, _piano)
 
                             if len(_altri_destinatari) > 0:
+
                                 _autorita_competenti = []
+
                                 for _contatto_uuid in _altri_destinatari:
                                     _autorita_competenti.append(AltriDestinatari(
                                         piano=_piano,
@@ -414,7 +423,7 @@ class UpdatePiano(relay.ClientIDMutation):
                                     )
 
                                 for _ac in _autorita_competenti:
-                                    _new_role = UpdatePiano.get_role(_ac.altro_destinatario, TIPOLOGIA_ATTORE.ac)
+                                    _new_role = UpdatePiano.get_role(_ac.altro_destinatario, TIPOLOGIA_ATTORE.unknown)
                                     UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano, _new_role)
                                     _ac.save()
 
@@ -425,8 +434,7 @@ class UpdatePiano(relay.ClientIDMutation):
 
                 if 'numero_protocollo_genio_civile' in _piano_data:
                     if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) or \
-                    not rules.test_rule('strt_core.api.is_actor', _token or
-                                        (info.context.user, _organization), 'genio_civile'):
+                    not rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'genio_civile'):
                         _piano_data.pop('numero_protocollo_genio_civile')
                         # This can be changed only by Genio Civile
 
@@ -577,10 +585,11 @@ class FormazionePiano(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
+        _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
