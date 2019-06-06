@@ -15,11 +15,12 @@ import {formatDate, getActionIcon, getActionIconColor, getAction} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
 const adjustStato = (stato, attore, tipologia) => {
-    if(stato !== "NECESSARIA") {
+    
+    if(stato === "NESSUNA") {
         return stato
     }
     if(canExecuteAction({attore, tipologia})) {
-        return stato
+        return "NECESSARIA"
     }
      return "ATTESA"
 }
