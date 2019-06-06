@@ -149,7 +149,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                         }
                         </Mutation>
                         </div>
-                        <h5 className="font-weight-light pb-1 mt-5">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h5>
+                        {/* <h5 className="font-weight-light pb-1 mt-5">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h5>
                         <div className="row">
                             {dest.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
                                     <i className="material-icons text-serapide">bookmark</i>
@@ -184,11 +184,11 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                         <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="rounded-pill" color="serapide" icon="add_circle" label="Aggiungi soggetti non istituzionali"/>
                                     </div>)}
                             >
-                            {/*<AddContact className="mt-2"></AddContact>*/}
+                            <AddContact className="mt-2"></AddContact>
                             </EnhancedListSelector>)}
                         }
                         </Mutation>
-                        </div>
+                        </div> */}
                         <h5 className="font-weight-light pb-1 mt-5">RICHIESTA CONFERENZA DI COPIANIFICAZIONE<TextWithTooltip dataTip="art. 25 L.R. 65/2014"/></h5>
                         <div className="row pl-2">
                             <div className="col-12 pt-2">
