@@ -872,6 +872,12 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
         # Update Azioni Piano
         # - Update Action state accordingly
         if fase.nome == FASE.avvio:
+            _osservazioni_regione = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.osservazioni_regione).first()
+
+            _controdeduzioni = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.controdeduzioni).first()
+
             _upload_elaborati_adozione_vas = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas).first()
 
@@ -885,9 +891,11 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
                 _procedura_adozione_vas.conclusa = True
                 _procedura_adozione_vas.save()
                 if not procedura_adozione.conclusa:
-                    piano.chiudi_pendenti()
-                    procedura_adozione.conclusa = True
-                    procedura_adozione.save()
+                    if not _controdeduzioni or _controdeduzioni.stato == STATO_AZIONE.nessuna:
+                        if not _osservazioni_regione or _osservazioni_regione.stato == STATO_AZIONE.nessuna:
+                            piano.chiudi_pendenti()
+                            procedura_adozione.conclusa = True
+                            procedura_adozione.save()
 
                 procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
                     piano=piano, ente=piano.ente)
