@@ -4,7 +4,7 @@
 
 <p>Con riferimento al piano <strong>{{ piano.tipologia }}</strong> Codice: <strong>{{ piano.codice }}</strong> - <i>"{{ piano.descrizione }}"</i></p>
 
-<p>Le notifichiamo che il piano è stato promosso alla fase "{{ piano.fase.descrizione }}" dall'utente <strong>{{ user }}</strong>.</p>
+<p>Le notifichiamo che il piano è stato promosso alla fase <strong>"{{ piano.fase.descrizione }}"</strong> dall'utente <strong>{{ user }}</strong>.</p>
 <p>
 {% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:<br/>
 <a href="{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}">{{ t.key }}</a>

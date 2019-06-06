@@ -511,6 +511,7 @@ class PromozionePiano(graphene.Mutation):
             try:
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -519,7 +520,6 @@ class PromozionePiano(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
                     return PromozionePiano(
@@ -615,6 +615,7 @@ class FormazionePiano(graphene.Mutation):
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -623,7 +624,6 @@ class FormazionePiano(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
                 return FormazionePiano(

@@ -486,6 +486,7 @@ class PianoControdedotto(graphene.Mutation):
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -494,7 +495,6 @@ class PianoControdedotto(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
                 return PianoControdedotto(
@@ -633,6 +633,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -641,7 +642,6 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
                 return RevisionePianoPostConfPaesaggistica(
@@ -928,6 +928,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -936,7 +937,6 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
                 return UploadElaboratiAdozioneVAS(

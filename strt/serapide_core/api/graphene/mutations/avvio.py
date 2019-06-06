@@ -439,6 +439,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -447,7 +448,6 @@ class RichiestaIntegrazioni(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
                 return RichiestaIntegrazioni(
@@ -537,6 +537,7 @@ class IntegrazioniRichieste(graphene.Mutation):
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -545,7 +546,6 @@ class IntegrazioniRichieste(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
                 return IntegrazioniRichieste(
@@ -631,6 +631,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -639,7 +640,6 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
                 return InvioProtocolloGenioCivile(
@@ -813,6 +813,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -821,7 +822,6 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    _piano.save()
                     fase.promuovi_piano(_fase, _piano)
 
                 return ChiusuraConferenzaCopianificazione(
