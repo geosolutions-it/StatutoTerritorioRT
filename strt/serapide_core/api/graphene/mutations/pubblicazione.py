@@ -154,7 +154,7 @@ class PubblicazionePiano(graphene.Mutation):
                 _pubblicazione_piano.save()
 
             if not procedura_pubblicazione.conclusa:
-                piano.chiudi_pendenti()
+                piano.chiudi_pendenti(attesa=True, necessaria=True)
                 procedura_pubblicazione.data_pubblicazione = _pubblicazione_piano.data
                 procedura_pubblicazione.conclusa = True
                 procedura_pubblicazione.save()

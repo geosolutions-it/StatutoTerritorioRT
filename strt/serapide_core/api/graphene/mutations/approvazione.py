@@ -385,7 +385,7 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
                 _attribuzione_conformita_pit.save()
 
             if not procedura_approvazione.conclusa:
-                piano.chiudi_pendenti()
+                piano.chiudi_pendenti(attesa=True, necessaria=False)
                 procedura_approvazione.conclusa = True
                 procedura_approvazione.save()
 

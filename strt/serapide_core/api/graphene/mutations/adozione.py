@@ -444,7 +444,7 @@ class PianoControdedotto(graphene.Mutation):
                 if not procedura_adozione.richiesta_conferenza_paesaggistica:
                     _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
                     if not _procedura_adozione_vas or _procedura_adozione_vas.conclusa:
-                        piano.chiudi_pendenti()
+                        piano.chiudi_pendenti(attesa=True, necessaria=False)
                     procedura_adozione.conclusa = True
                     procedura_adozione.save()
 
@@ -601,7 +601,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
 
                 _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
                 if not _procedura_adozione_vas or _procedura_adozione_vas.conclusa:
-                    piano.chiudi_pendenti()
+                    piano.chiudi_pendenti(attesa=True, necessaria=False)
                 procedura_adozione.conclusa = True
                 procedura_adozione.save()
 
@@ -893,7 +893,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
 
                 if not procedura_adozione.conclusa and _controdeduzioni.stato == STATO_AZIONE.nessuna and \
                 _osservazioni_regione.stato == STATO_AZIONE.nessuna:
-                    piano.chiudi_pendenti()
+                    piano.chiudi_pendenti(attesa=True, necessaria=False)
                     procedura_adozione.conclusa = True
                     procedura_adozione.save()
 

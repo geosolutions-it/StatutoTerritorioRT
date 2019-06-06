@@ -403,7 +403,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
                     if not _procedura_vas or _procedura_vas.conclusa:
                         if not _conferenza_copianificazione_attiva and \
                         _formazione_del_piano.stato == STATO_AZIONE.nessuna:
-                            piano.chiudi_pendenti()
+                            piano.chiudi_pendenti(attesa=True, necessaria=False)
                     procedura_avvio.conclusa = True
                     procedura_avvio.save()
 
@@ -501,7 +501,7 @@ class IntegrazioniRichieste(graphene.Mutation):
                 if not _procedura_vas or _procedura_vas.conclusa:
                     if not _conferenza_copianificazione_attiva and \
                     _formazione_del_piano.stato == STATO_AZIONE.nessuna:
-                        piano.chiudi_pendenti()
+                        piano.chiudi_pendenti(attesa=True, necessaria=False)
                 procedura_avvio.conclusa = True
                 procedura_avvio.save()
 
@@ -582,14 +582,6 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                     piano.data_protocollo_genio_civile = datetime.datetime.now(timezone.get_current_timezone())
                     piano.save()
 
-                    _protocollo_genio_civile.stato = STATO_AZIONE.nessuna
-                    _protocollo_genio_civile.data = datetime.datetime.now(timezone.get_current_timezone())
-                    _protocollo_genio_civile.save()
-
-                    _protocollo_genio_civile_id.stato = STATO_AZIONE.nessuna
-                    _protocollo_genio_civile_id.data = datetime.datetime.now(timezone.get_current_timezone())
-                    _protocollo_genio_civile_id.save()
-
                     _formazione_del_piano = piano.azioni.filter(
                         tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
 
@@ -600,9 +592,17 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                     (not procedura_avvio.richiesta_integrazioni or
                      (_integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna)):
 
+                        _protocollo_genio_civile.stato = STATO_AZIONE.nessuna
+                        _protocollo_genio_civile.data = datetime.datetime.now(timezone.get_current_timezone())
+                        _protocollo_genio_civile.save()
+
+                        _protocollo_genio_civile_id.stato = STATO_AZIONE.nessuna
+                        _protocollo_genio_civile_id.data = datetime.datetime.now(timezone.get_current_timezone())
+                        _protocollo_genio_civile_id.save()
+
                         _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
                         if not _procedura_vas or _procedura_vas.conclusa:
-                            piano.chiudi_pendenti()
+                            piano.chiudi_pendenti(attesa=True, necessaria=False)
                         procedura_avvio.conclusa = True
                         procedura_avvio.save()
 

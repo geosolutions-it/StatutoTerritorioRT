@@ -446,13 +446,15 @@ class Piano(models.Model):
         null=True
     )
 
-    def chiudi_pendenti(self):
+    def chiudi_pendenti(self, attesa=True, necessaria=True):
         # - Complete Current Actions
         _now = datetime.now(timezone.get_current_timezone())
-        self.azioni.filter(
-            stato=STATO_AZIONE.attesa).update(stato=STATO_AZIONE.nessuna, data=_now)
-        self.azioni.filter(
-            stato=STATO_AZIONE.necessaria).update(stato=STATO_AZIONE.nessuna, data=_now)
+        if attesa:
+            self.azioni.filter(
+                stato=STATO_AZIONE.attesa).update(stato=STATO_AZIONE.nessuna, data=_now)
+        if necessaria:
+            self.azioni.filter(
+                stato=STATO_AZIONE.necessaria).update(stato=STATO_AZIONE.nessuna, data=_now)
 
     @property
     def next_phase(self):
