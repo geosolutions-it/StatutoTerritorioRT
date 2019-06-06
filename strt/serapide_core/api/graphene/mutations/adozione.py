@@ -890,12 +890,12 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
                 _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
                 _procedura_adozione_vas.conclusa = True
                 _procedura_adozione_vas.save()
-                if not procedura_adozione.conclusa:
-                    if not _controdeduzioni or _controdeduzioni.stato == STATO_AZIONE.nessuna:
-                        if not _osservazioni_regione or _osservazioni_regione.stato == STATO_AZIONE.nessuna:
-                            piano.chiudi_pendenti()
-                            procedura_adozione.conclusa = True
-                            procedura_adozione.save()
+
+                if not procedura_adozione.conclusa and _controdeduzioni.stato == STATO_AZIONE.nessuna and \
+                _osservazioni_regione.stato == STATO_AZIONE.nessuna:
+                    piano.chiudi_pendenti()
+                    procedura_adozione.conclusa = True
+                    procedura_adozione.save()
 
                 procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
                     piano=piano, ente=piano.ente)
