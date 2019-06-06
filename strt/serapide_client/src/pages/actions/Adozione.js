@@ -57,7 +57,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                    Trasmissione Adozione
                 </ActionTitle>
                 <h5 className="pt-5 font-weight-light">RIFERIMENTI DOCUMENTALI</h5>
-                <h6 className="pt-3 font-weight-light">NORME TECHINICHE DI ATTUAZIONE E RAPPORTO AMBIENTALE</h6>
+                <h6 className="pt-3 font-weight-light">NORME TECNICHE DI ATTUAZIONE E RAPPORTO AMBIENTALE</h6>
                 <div className="mt-1 row d-flex align-items-center">
                     <div className="col-12 d-flex">
                         <i className="material-icons text-serapide">link</i><a href={redazioneNormeTecnicheAttuazioneUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{redazioneNormeTecnicheAttuazioneUrl}</a>
@@ -144,7 +144,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                 
                 
                 <div className="col-12 pt-2">
-                    {`Il sistema invierà i link ai Soggetti Compententi in materina ambientale e all'Autorità compentente
+                    {`Il sistema invierà i link ai Soggetti Compententi in materia ambientale e all'Autorità compentente
                     in materia ambientale (già selezionati nella fase di avvio) la documentazione necessaria affinché i destinatari
                     possano formulare i pareri entro 60gg dall'adozione`}
                 </div>
