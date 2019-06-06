@@ -14,7 +14,15 @@ import {canExecuteAction} from '../autorizzazioni'
 import {formatDate, getActionIcon, getActionIconColor, getAction} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
-
+const adjustStato = (stato, attore, tipologia) => {
+    if(stato !== "NECESSARIA") {
+        return stato
+    }
+    if(canExecuteAction({attore, tipologia})) {
+        return stato
+    }
+     return "ATTESA"
+}
 const reverseOrder = ({node: {order: a}}, {node: {order: b}}) => (b - a)
 
 export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", className, onExecute = () => {}}) => {
@@ -30,14 +38,16 @@ export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", classN
             </tr>
         </thead>
         <tbody>
-            {azioni.filter(({node: {fase}}) => fase === filtroFase).sort(reverseOrder).map(({node: {stato = "", tipologia = "",label = "", attore = "", tooltip = "", data, uuid}} = {}) => (
-                <tr key={uuid}>
-                    <td><i className={`material-icons ${getActionIconColor(stato)}`}>{getActionIcon(stato)}</i></td>
-                    <td>{tooltip ? (<TextWithTooltip dataTip={tooltip} dataTipDisable={!tooltip} text={label}/>) : label}</td>
-                    <td>{attore}</td>
-                    <td className={`${stato === "ATTESA" ? "text-serapide" : ""}`}><span className="d-flex">{stato === "ATTESA" && <i className="material-icons text-serapide" style={{width: 28}}>notifications_activex</i>} {data && formatDate(data)}</span></td>
-                    <td className={`${getAction(stato) && canExecuteAction({attore, tipologia})  ? "pointer": ""}`}>{getAction(stato) && canExecuteAction({attore, tipologia}) && <i className="material-icons text-serapide" onClick={() => onExecute(tipologia, uuid)}>play_circle_filled</i>}</td>
-                </tr>))}
+            {azioni.filter(({node: {fase}}) => fase === filtroFase).sort(reverseOrder).map(({node: {stato = "", tipologia = "",label = "", attore = "", tooltip = "", data, uuid}} = {}) => {
+                let adjustedStato = adjustStato(stato, attore, tipologia)
+                return (<tr key={uuid}>
+                            <td><i className={`material-icons ${getActionIconColor(adjustedStato)}`}>{getActionIcon(adjustedStato)}</i></td>
+                            <td>{tooltip ? (<TextWithTooltip dataTip={tooltip} dataTipDisable={!tooltip} text={label}/>) : label}</td>
+                            <td>{attore}</td>
+                            <td className={`${adjustedStato === "ATTESA" ? "text-serapide" : ""}`}><span className="d-flex">{adjustedStato === "ATTESA" && <i className="material-icons text-serapide" style={{width: 28}}>notifications_activex</i>} {data && formatDate(data)}</span></td>
+                            <td className={`${getAction(adjustedStato) && canExecuteAction({attore, tipologia})  ? "pointer": ""}`}>{getAction(adjustedStato) && canExecuteAction({attore, tipologia}) && <i className="material-icons text-serapide" onClick={() => onExecute(tipologia, uuid)}>play_circle_filled</i>}</td>
+                        </tr>)}
+                )}
         </tbody>
     </Table>
 )})
