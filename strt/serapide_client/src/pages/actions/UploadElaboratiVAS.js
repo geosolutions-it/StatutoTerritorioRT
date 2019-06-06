@@ -11,7 +11,7 @@ import {Query} from 'react-apollo'
 import FileUpload from 'components/UploadSingleFile'
 import ActionTitle from 'components/ActionTitle'
 import SalvaInvia from 'components/SalvaInvia'
-// import Elaborati from 'components/ElaboratiPiano'
+
 
 import  {showError, getCodice} from 'utils'
 
@@ -27,7 +27,6 @@ const UI = ({
     }) => {
         
         const rapporto = resources.filter(({node: {tipo, user = {}}}) => tipo === 'rapporto_ambientale').map(({node}) => node).shift()
-        // const elaboratiCompleti = elaboratiCompletati(tipoPiano, resources)
         return (
             <React.Fragment>
                 <ActionTitle>Upload Elaborati VAS</ActionTitle>

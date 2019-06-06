@@ -17,7 +17,7 @@ import {EnhancedDateSelector} from 'components/DateSelector'
 import Input from 'components/EnhancedInput'
 import Elaborati from "components/ElaboratiPiano"
 
-import  {showError, elaboratiCompletati, getInputFactory, getCodice} from 'utils'
+import  {showError, getInputFactory, getCodice} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
 import {GET_APPROVAZIONE, UPDATE_APPROVAZIONE,
@@ -48,7 +48,6 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
 
             
             const [{node: deliberaApprovazione} = {}] = edges.filter(({node: {tipo}}) => tipo === "delibera_approvazione")
-            const elaboratiCompleti = elaboratiCompletati(tipoPiano, edges)
             
             return (<React.Fragment>
                 <ActionTitle>
@@ -98,7 +97,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
                 <div className="w-100 border-top mt-3"></div>
                 <div className="align-self-center mt-5">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_APPROVAZIONE} 
-                        canCommit={ elaboratiCompleti && deliberaApprovazione && dataDeliberaApprovazione  && urlPianoPubblicato}></SalvaInvia>
+                        canCommit={ deliberaApprovazione && dataDeliberaApprovazione  && urlPianoPubblicato}></SalvaInvia>
                 </div>
             </React.Fragment>)})
 

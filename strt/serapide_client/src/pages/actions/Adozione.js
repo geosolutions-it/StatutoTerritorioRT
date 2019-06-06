@@ -17,7 +17,7 @@ import {EnhancedDateSelector} from 'components/DateSelector'
 import Input from 'components/EnhancedInput'
 import Elaborati from "components/ElaboratiPiano"
 
-import  {showError, formatDate, elaboratiCompletati, getInputFactory, getCodice} from 'utils'
+import  {showError, formatDate, getInputFactory, getCodice} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
@@ -52,7 +52,6 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
 
             const {node: rapportoAmbientale} = resVas.filter(({node: {tipo}}) => tipo === "rapporto_ambientale").shift() || {}
             const {node: deliberaAdozione} = edges.filter(({node: {tipo}}) => tipo === "delibera_adozione").shift() || {}
-            const elaboratiCompleti = elaboratiCompletati(tipoPiano, edges)
             return (<React.Fragment>
                 <ActionTitle>
                    Trasmissione Adozione
@@ -170,7 +169,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                 <div className="w-100 border-top mt-3"></div> 
                 <div className="align-self-center mt-5">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_ADOZIONE} 
-                        canCommit={ elaboratiCompleti && deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData}></SalvaInvia>
+                        canCommit={ deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData}></SalvaInvia>
                 </div>
             </React.Fragment>)})
 
