@@ -7,7 +7,7 @@ const testuali = { "realzaione_generale": {label: "RELAZIONE GENERALE", tooltip:
 "relazione_responsabile": {label: "RELAZIONE TECNICA RESPONSABILE DEL PROCEDIMENTO", tooltip: "art. 95 comma 7 l.r. 65/2014"},
 "relazione_garante_informazione_partecipazione" : {label: "RELAZIONE DEL GARANTE DELL’INFORMAZIONE E DELLA PARTECIPAZIONE", tooltip: "art. 38 comma 2 l.r. 65/2014"},
 "valutazioni": {label: "VALUTAZIONI", tooltip: "art. 14 l.r. 65/2014; l.r. 10/2010"},
-"elaborati_conformazione": {label: "ELABORATI DI ADEGAUMENTO CONFORMAZIONE", tooltip: "art. 3 comma 4 Accordo MIBACT-Regione Toscana del 16.12.2016"}
+"elaborati_conformazione": {label: "ELABORATI DI ADEGUAMENTO CONFORMAZIONE", tooltip: "art. 3 comma 4 Accordo MIBACT-Regione Toscana del 16.12.2016"}
 }
 
 const cartografici =  {

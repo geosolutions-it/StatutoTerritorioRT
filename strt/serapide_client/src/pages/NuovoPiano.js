@@ -97,7 +97,7 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                                         </p>
                                     </div>
                                 <div className="col-12">
-                                    <h5 className="text-uppercase">Dcumenti richiesti per la creazione del piano</h5>
+                                    <h5 className="text-uppercase">Documenti richiesti per la creazione del piano</h5>
                                     <p style={{textAlign: "justify"}}>
                                     Per poter creare l'atto di governo del territorio è necessario compilare una anagrafica del Piano selezionato nella successiva sezione
                                     "CREA ANAGRAFICA". A tal fine è necessario inserire  l’atto amministrativo di avvio del procedimento, specificandone il numero e la sua 
