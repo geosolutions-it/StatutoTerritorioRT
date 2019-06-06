@@ -11,7 +11,7 @@ import {Nav, NavItem,NavLink, TabContent,TabPane} from 'reactstrap'
 
 import Risorsa from 'components/Resource'
 import VAS from 'components/VAS'
-import Elaborati from 'components/ElaboratiPiano'
+
 
 import classnames from 'classnames'
 import {withControllableState} from 'enhancers'
@@ -26,9 +26,8 @@ import {GET_AVVIO, GET_CONFERENZA} from 'schema'
 const enhancers = withControllableState('section', 'toggleSection', 'vas')
 
 const UI = enhancers(({
-    procedureAvvio: {node: {
-        uuid, conferenzaCopianificazione, 
-        dataCreazione, dataScadenzaRisposta,
+    procedureAvvio: {node: { 
+        dataScadenzaRisposta,
         garanteNominativo, garantePec,
         risorse: {edges: risorseAvvio = []} = {}
         } = {}} = {}, 
@@ -38,8 +37,6 @@ const UI = enhancers(({
         dataProtocolloGenioCivile,
         autoritaIstituzionali: {edges: aut =[]} = {},
         altriDestinatari: {edges: dest = []} = {},
-        ente,
-        fase,
         risorse: {edges: risorsePiano = []},
         dataDelibera
     } = {}
@@ -50,7 +47,7 @@ const UI = enhancers(({
         const {node: quadro} = risorseAvvio.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").shift() || {}
         const {node: programma} = risorseAvvio.filter(({node: {tipo}}) => tipo === "programma_attivita").shift() || {}
         const {node: garante } = risorseAvvio.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").shift() || {}
-        // const allegati = risorseAvvio.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node) 
+        const allegati = risorseAvvio.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node) 
         const integrazioni = risorseAvvio.filter(({node: {tipo}}) => tipo === "integrazioni").map(({node}) => node) 
     return (
         <div className="d-flex flex-column pb-4 pt-5">
@@ -81,13 +78,16 @@ const UI = enhancers(({
                 <div className="col-12 py-2">
                     <Risorsa fileSize={false} useLabel resource={garante} isLocked={true}/> 
                 </div>
-                <div className="col-12 pt-4">
-                    <Elaborati upload={false} resources={risorseAvvio}></Elaborati>
-                </div>
                 </React.Fragment>) : (<div className="col-12 py-2">Nessun elaborato presente</div>)}
+                <div className="col-12 pt-4">ALTRI ALLEGATI	
+                {allegati.length > 0 ? allegati.map(doc => (	
+                    <div key={doc.className="col-12 px-0 py-2">	
+                        <Risorsa fileSize={false}  resource={doc} isLocked={true}/> 	
+                </div>)): (<div className="col-12 px-0 py-2">Nessun allegato presente</div>)}	
+                </div>
                 {integrazioni.length > 0 && (<div className="col-12 pt-4">INTEGRAZIONI
                 {integrazioni.map(doc => (
-                    <div key={doc.uuid} className="col-12 px-0 py-2">
+                    <div key={doc.className="col-12 px-0 py-2">
                         <Risorsa fileSize={false}  resource={doc} isLocked={true}/> 
                 </div>))}
                 </div>)}
@@ -98,14 +98,14 @@ const UI = enhancers(({
                 </div>
                 <div className="col-12 d-flex align-items-center pt-4">TERMINI SCADENZA PER LA PROPOSTA{dataScadenzaRisposta && (<span className="p-2 ml-4 border bg-serapide"><i className="material-icons pr-1">date_range</i><span style={{verticalAlign: 'super'}}>{formatDate(dataScadenzaRisposta)}</span></span>)}</div>
                 <div className="col-6 pt-4 mb-3"><div className="mb-3">NOTIFICHE SOGGETTI ISTITUZIONALI</div>
-                {aut.map(({node: {nome, uuid} = {}}) => (
-                        <div className="col-12 px-0 py-1" key={uuid}>
+                {aut.map(({node: {nome, = {}}) => (
+                        <div className="col-12 px-0 py-1" key={
                                  {nome}
                         </div>))}
                 </div>
                 <div className="col-6 pt-4 pb-3"><div className="mb-3">NOTIFICHE ALTRI SOGGETTI NON ISTITUZIONALI</div>
-                {dest.map(({node: {nome, uuid} = {}}) => (
-                        <div className="col-12 px-0 p-1" key={uuid}>
+                {dest.map(({node: {nome, = {}}) => (
+                        <div className="col-12 px-0 p-1" key={
                                  {nome}
                         </div>))}
                 </div>
@@ -146,7 +146,7 @@ const UI = enhancers(({
                 <TabPane tabId="conferenza">
                 {section === 'conferenza' && (
                     <Query query={GET_CONFERENZA} variables={{codice}} onError={showError}>
-                    {({loading, data: {modello: {edges: [conferenza] = []} = {}} = {}, error}) => {
+                    {({loading, data: {modello: {edges: [conferenza = {}] = []} = {}} = {}}) => {
                         if(loading) {
                             return (
                                 <div className="flex-fill d-flex justify-content-center">
@@ -171,7 +171,7 @@ const UI = enhancers(({
                             </div>
                             <div className="col-auto smoll mb-2">Allegati e Verbali</div>
                             {elaboratiConferenza.length > 0 ? elaboratiConferenza.map(doc => (
-                                <div key={doc.uuid} className="col-12 px-0 py-2">
+                                <div key={doc.className="col-12 px-0 py-2">
                                     <Risorsa className="border-0" fileSize={false}  resource={doc} isLocked={true}/> 
                                 </div>)): (<div className="col-12 px-0 py-2">Nessun documento presente</div>)}
                         </div>)}}
