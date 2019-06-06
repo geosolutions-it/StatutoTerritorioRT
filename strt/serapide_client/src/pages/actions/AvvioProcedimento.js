@@ -9,19 +9,18 @@ import React from 'react'
 import {Query, Mutation} from "react-apollo"
 
 import FileUpload from 'components/UploadSingleFile'
-import Elaborati from 'components/ElaboratiPiano'
+import UploadFiles from 'components/UploadFiles'
 import Resource from 'components/Resource'
 import {EnhancedListSelector} from 'components/ListSelector'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
-import AddContact from 'components/AddContact'
 import Button from 'components/IconButton'
 import TextWithTooltip from 'components/TextWithTooltip'
 import {EnhancedDateSelector} from 'components/DateSelector'
 import Input from 'components/EnhancedInput'
 
 import {rebuildTooltip} from 'enhancers'
-import  {showError, elaboratiCompletati, getInputFactory, getCodice, getContatti} from 'utils'
+import  {showError, getInputFactory, getCodice, getContatti} from 'utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
@@ -44,7 +43,6 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
             risorse: {edges=[]} = {}
             } = {}} = {},
         piano: {
-            tipo: tipoPiano = "",
             autoritaIstituzionali: {edges: aut =[]} = {},
             altriDestinatari: {edges: dest = []} = {},
             codice,
@@ -53,12 +51,13 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
 
             const {node: delibera} = resPiano.filter(({node: n}) => n.tipo === "delibera").pop() || {};
             const obiettivi = edges.filter(({node: {tipo}}) => tipo === "obiettivi_piano").map(({node}) => node).shift()
+            const allegati = edges.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node)
             const quadro = edges.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").map(({node}) => node).shift()
             const programma = edges.filter(({node: {tipo}}) => tipo === "programma_attivita").map(({node}) => node).shift()
             const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
-            const elaboratiCompleti = elaboratiCompletati(tipoPiano, edges)
+
             return (<React.Fragment>
                 <ActionTitle>
                     Avvio del Procedimento<br/><small className="text-nowrap">(Atto di Avvio)<TextWithTooltip dataTip="art. 17 L.R. 65/2014"/></small>
@@ -86,14 +85,12 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                 </div>
 
 
-                <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
-                <Elaborati
-                            tipoPiano={tipoPiano.toLowerCase()}
-                            resources={edges}
-                            mutation={AVVIO_FILE_UPLOAD}
-                            resourceMutation={DELETE_RISORSA_AVVIO}
-                            uuid={uuid}
-                           />
+                <h6 className="font-weight-light pt-5 pl-2 pb-1">ALTRI ALLEGATI</h6>
+                <UploadFiles
+                    {...fileProps}
+                    risorse={allegati}
+                    variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
+                />
 
                 <h5 className="font-weight-light pb-1 mt-5 mb-3">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</h5>
                 <Input getInput={getProceduraAvvioInput(uuid, "garanteNominativo")} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />
@@ -241,7 +238,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
 
 
                 <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={elaboratiCompleti && obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
+                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
 
                 </div>
             </React.Fragment>)})
