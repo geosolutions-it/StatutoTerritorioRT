@@ -35,7 +35,6 @@ const UI = ({
             tipo: tipoPiano = ""
             },
         back}) => {
-            // const elaboratiCpmpleti = elaboratiCompletati(tipoPiano, edges)
             return (<React.Fragment>
                 <ActionTitle>
                   Piano Controdedotto
