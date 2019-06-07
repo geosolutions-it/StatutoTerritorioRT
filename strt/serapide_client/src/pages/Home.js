@@ -9,7 +9,7 @@ import React from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
 import Azioni from 'components/TabellaAzioni'
 import FaseSwitch from 'components/FaseSwitch'
-import components from './actions'
+import actions from './actions'
 
 import classNames from 'classnames'
 import { getAction, pollingInterval} from 'utils'
@@ -21,6 +21,7 @@ import {camelCase} from 'lodash'
 
 
 const polling = stopStartPolling(pollingInterval)
+const components = Object.keys(actions).reduce((c,k) => ({...c, [k]: polling(actions[k])}), {})
 
 const getCurrentAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
@@ -85,7 +86,7 @@ render () {
             <Switch>
                 {azioni.filter(({node: {attore, tipologia}}) => attore.toLowerCase() === utente.attore.toLowerCase() || tipologia === "OSSERVAZIONI_ENTI").map(({node: {uuid, stato = "", tipologia = "",label = "", attore = ""}}) => {
                     const tipo = tipologia.toLowerCase()
-                    const El = components[camelCase(tipo)] && polling(components[camelCase(tipo)])
+                    const El = components[camelCase(tipo)]
                     return El && (
                             <Route exact key={tipo} path={`${path}/${tipo}/${uuid}`} >
                                 {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
