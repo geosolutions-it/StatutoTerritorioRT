@@ -39,7 +39,7 @@ const UI = enhancers(({
     vas: { node: { risorse : {edges: risorseVas = []} = {}} = {}} = {},
     piano: {
         autoritaIstituzionali: {edges: aut =[]} = {},
-        altriDestinatari: {edges: dest = []} = {}
+        // altriDestinatari: {edges: dest = []} = {}
     } = {}
     , toggleSection, section} = {}) => {
         
@@ -76,12 +76,12 @@ const UI = enhancers(({
                                  {nome}
                         </div>))}
                 </div>
-                <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
+                {/* <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
                 {dest.map(({node: {nome, uuid} = {}}) => (
                         <div className="col-12 px-0 p-1" key={uuid}>
                                  {nome}
                         </div>))}
-                </div>
+                </div> */}
                 <div className="border-top w-100 my-4"></div>
                 <div className="col-4 pb-2">PUBBLICAZIONE B.U.R.T.</div>
                 <div className="col-5 d-flex">

@@ -35,7 +35,7 @@ const UI = enhancers(({
         numeroProtocolloGenioCivile,
         dataProtocolloGenioCivile,
         autoritaIstituzionali: {edges: aut =[]} = {},
-        altriDestinatari: {edges: dest = []} = {},
+        // altriDestinatari: {edges: dest = []} = {},
         risorse: {edges: risorsePiano = []},
         dataDelibera
     } = {}
@@ -102,12 +102,12 @@ const UI = enhancers(({
                                  {nome}
                         </div>))}
                 </div>
-                <div className="col-6 pt-4 pb-3"><div className="mb-3">NOTIFICHE ALTRI SOGGETTI NON ISTITUZIONALI</div>
+                {/* <div className="col-6 pt-4 pb-3"><div className="mb-3">NOTIFICHE ALTRI SOGGETTI NON ISTITUZIONALI</div>
                 {dest.map(({node: {nome, uuid} = {}}) => (
                         <div className="col-12 px-0 p-1" key={uuid}>
                                  {nome}
                         </div>))}
-                </div>
+                </div> */}
             </div>    
             <div className="border-serapide border-top w-100 my-4"></div>   
             

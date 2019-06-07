@@ -42,7 +42,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
         piano: {
             tipo: tipoPiano = "",
             autoritaIstituzionali: {edges: aut =[]} = {},
-            altriDestinatari: {edges: dest = []} = {}
+            // altriDestinatari: {edges: dest = []} = {}
             },
         back}) => {
 
@@ -87,13 +87,13 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
                                  {nome}
                         </div>))}
                     </div>
-                <h6 className="font-weight-light pb-1 mt-4">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h6>
+                {/* <h6 className="font-weight-light pb-1 mt-4">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h6>
                 <div className="row">
                             {dest.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
                                     <i className="material-icons text-serapide">bookmark</i>
                                     {nome}
                             </div>))}
-                        </div>
+                        </div> */}
                 <div className="w-100 border-top mt-3"></div>
                 <div className="align-self-center mt-5">
                     <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_APPROVAZIONE} 
