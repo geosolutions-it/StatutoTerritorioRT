@@ -104,6 +104,11 @@ class CreatePiano(relay.ClientIDMutation):
                     _month = datetime.date.today().month
                     _piano_id = Piano.objects.filter(ente=_ente).count() + 1
                     _codice = '%s%02d%02d%05d' % (_ente.code, int(_year), _month, _piano_id)
+                    _cnt = 1
+                    while Piano.objects.filter(codice=_codice).count() > 0:
+                        _cnt += 1
+                        _piano_id = Piano.objects.filter(ente=_ente).count() + _cnt
+                        _codice = '%s%02d%02d%05d' % (_ente.code, int(_year), _month, _piano_id)
                 _piano_data['codice'] = _codice
 
                 # Fase (O)
