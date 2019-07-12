@@ -46,7 +46,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
             tipo: tipoPiano = "",
             redazioneNormeTecnicheAttuazioneUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl,
             autoritaIstituzionali: {edges: aut =[]} = {},
-            altriDestinatari: {edges: dest = []} = {}
+            // altriDestinatari: {edges: dest = []} = {}
             },
         back}) => {
 

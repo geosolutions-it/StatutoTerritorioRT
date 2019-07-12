@@ -28,7 +28,7 @@ const UI = ({
         } = {}, 
     piano: {
         autoritaIstituzionali: {edges: aut =[]} = {},
-        altriDestinatari: {edges: dest = []} = {}
+        // altriDestinatari: {edges: dest = []} = {}
     } = {}
     } = {}) => {
 
@@ -61,12 +61,12 @@ const UI = ({
                                  {nome}
                         </div>))}
                 </div>
-                <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
+                {/* <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
                 {dest.map(({node: {nome, uuid} = {}}) => (
                         <div className="col-12 px-0 p-1" key={uuid}>
                                  {nome}
                         </div>))}
-                </div>
+                </div> */}
                 <div className="border-top w-100 my-4"></div>
                 <div className="col-5">PUBBLICAZIONE SITO WEB</div>
                 <div className="col-5 d-flex">

@@ -44,7 +44,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
             } = {}} = {},
         piano: {
             autoritaIstituzionali: {edges: aut =[]} = {},
-            altriDestinatari: {edges: dest = []} = {},
+            // altriDestinatari: {edges: dest = []} = {},
             codice,
             risorse: {edges: resPiano = []}} = {},
         back}) => {
@@ -56,7 +56,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
             const programma = edges.filter(({node: {tipo}}) => tipo === "programma_attivita").map(({node}) => node).shift()
             const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
             const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
-            const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
+            // const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
 
             return (<React.Fragment>
                 <ActionTitle>
