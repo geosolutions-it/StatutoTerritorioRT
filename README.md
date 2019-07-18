@@ -16,19 +16,23 @@
 - Django 2.0.8+
 
 ## Install
+- Install system wide packages:\
+  `sudo apt install python3-dev`\
+  `sudo apt install postgresql-server-dev-10`\
+  `sudo apt install python3-rtree`
 
 - Create a suitable virtualenv, e.g.:\
-`mkvirtualenv --python=/usr/bin/python3 strt`\
-`sudo apt install python3-rtree`
+  `mkvirtualenv --python=/usr/bin/python3 strt`
 
-- Clone the repository:\
-`git clone https://github.com/geosolutions-it/StatutoTerritorioRT.git`
+- Clone the repository: \
+ `git clone https://github.com/geosolutions-it/StatutoTerritorioRT.git`
 
-- Create a virtual environment and activate it
+- Activate the virtual env:\
+  `. strt/bin/activate`
 
 - Install requirements with pip:\
-`cd StatutoTerritorioRT/requirements`\
-`pip install -r requirements.txt`
+  `cd StatutoTerritorioRT/requirements`\
+  `pip install -r requirements.txt`
 
 
 ## Environment setup
