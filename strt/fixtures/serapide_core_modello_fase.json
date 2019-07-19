@@ -1,0 +1,58 @@
+[
+    {
+        "model": "modello.fase",
+        "pk": "FP000",
+        "fields": {
+            "nome": "unknown",
+            "descrizione": "Unknown"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP001",
+        "fields": {
+            "nome": "anagrafica",
+            "descrizione": "Anagrafica"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP002",
+        "fields": {
+            "nome": "avvio",
+            "descrizione": "Avvio"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP003",
+        "fields": {
+            "nome": "adozione",
+            "descrizione": "Adozione"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP004",
+        "fields": {
+            "nome": "approvazione",
+            "descrizione": "Approvazione"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP005",
+        "fields": {
+            "nome": "pubblicazione",
+            "descrizione": "Pubblicazione"
+        }
+    },
+    {
+        "model": "modello.fase",
+        "pk": "FP255",
+        "fields": {
+            "nome": "draft",
+            "descrizione": "Draft"
+        }
+    }
+]
