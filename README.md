@@ -69,12 +69,13 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 
 - Load default data:
   ```
-  ./manage.sh loaddata fixtures/strt_tipi_di_ente.json
-  ./manage.sh loaddata fixtures/strt_enti.json
-  ./manage.sh loaddata fixtures/strt_tipi_di_ruolo.json
-  ./manage.sh loaddata fixtures/strt_utenti_di_test.json
-  ./manage.sh loaddata fixtures/serapide_core_modello_fase.json
-  ./manage.sh loaddata fixtures/serapide_core_modello_contatto.json
+  python manage.py loaddata fixtures/strt_homepage.json
+  python manage.py loaddata fixtures/strt_tipi_di_ente.json
+  python manage.py loaddata fixtures/strt_enti.json
+  python manage.py loaddata fixtures/strt_tipi_di_ruolo.json
+  python manage.py loaddata fixtures/strt_utenti_di_test.json
+  python manage.py loaddata fixtures/serapide_core_modello_fase.json
+  python manage.py loaddata fixtures/serapide_core_modello_contatto.json
   ```
 
 - Run the Django development server:\
