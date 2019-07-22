@@ -45,7 +45,7 @@ $fasi: (
         display: none;
       }
       li{
-        font-size: 10px;
+        font-size: 0.4rem;
         width: $space-between;
         text-align: center;
         white-space: nowrap;
@@ -106,13 +106,24 @@ $fasi: (
   }
 }
 
-
-
 .stato-progress {
-  @include statoProgress(8px, 120px, 4, 24px)
-  
+    @include statoProgress(12px, 250px, 4, 60px)
+  }
+
+@media (min-width: 1300px) { 
+  .stato-progress {
+    @include statoProgress(14px, 300px, 4, 80px)
+  }
 }
 
-.stato-progress-xxl {
-  @include statoProgress(18px, 400px, 4, 80px)
+@media (min-width: 1500px) { 
+  .stato-progress {
+    @include statoProgress(16px, 350px, 4, 100px)
+  }
+}
+
+@media (min-width: 1600px) { 
+  .stato-progress {
+    @include statoProgress(18px, 400px, 4, 120px)
+  }
 }

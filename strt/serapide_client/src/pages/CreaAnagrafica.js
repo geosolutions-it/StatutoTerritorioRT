@@ -65,7 +65,7 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                 window.location.href=`#/pino/${code}/anagrafica`
             }
             return(
-            <div>
+            <div className="py-5 px-7">
                     <div className="d-flex flex-column ">
                         <h4 className="text-uppercase">{getEnteLabel(ente)}</h4>  
                         <div className="pb-4 pt-3 d-flex flex-row">
