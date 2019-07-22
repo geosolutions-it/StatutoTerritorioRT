@@ -12,19 +12,19 @@ LICENSE file in the root directory of this source tree.
 {% load wagtailcore_tags wagtailimages_tags %}
 
 
-<div class="row m-0 py-3 py-lg-5 third-section-row">
+<div class="row m-0 third-section-row">
 
-    <div class="col-12 col-lg-12 text-center">
+    <div class="col-6 col-lg-6 text-center">
         {% image self.main_block.image fill-800x800 class="img-fluid" %}
     </div>
-    <div class="col-12 col-lg-7 " id="side-content">
-        <p class="font-weight-bold wrap-text">
+    <div class="col-6 col-lg-6 " id="side-content">
+        <p class="font-weight-bold wrap-text" style="font-size: 1.45454rem">
             {{ self.main_block.subtitle }}
         </p>
-        <p class="medium-text wrap-text">
+        <p class="medium-text wrap-text" style="font-size: 2.2727rem; padding-top: 1rem;padding-bottom: 1rem;">
             {{ self.main_block.title }}
         </p>
-        <p class="wrap-text">
+        <p class="wrap-text" style="font-size: 1.36rem">
             {{ self.main_block.text }}
         </p>
         <div class="my-5">

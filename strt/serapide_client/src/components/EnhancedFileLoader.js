@@ -16,7 +16,7 @@ const showError = (error) => {
         toast.error(error.message,  {autoClose: true})
     }
 } 
-export default ({mutation, update, variables, file, placeholder, onAbort, renderChooser, ...mutationProps}) => (
+export default ({mutation, update, variables, file, placeholder, fontSize, iconSize, onAbort, renderChooser, ...mutationProps}) => (
             <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
                     {(upload, m_props) => {
                         const {error, data: {upload: res} = {}, loading} = m_props
@@ -33,7 +33,9 @@ export default ({mutation, update, variables, file, placeholder, onAbort, render
                                 upload={upload}
                                 variables={variables}
                                 error={hasError}
-                                onAbort={onAbort}/>
+                                onAbort={onAbort}
+                                fontSize={fontSize}
+                                iconSize={iconSize}/>
                             {renderChooser && renderChooser(loading)}
                             </React.Fragment>)
 

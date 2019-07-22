@@ -24,6 +24,9 @@ import StatoProgress from 'components/StatoProgress'
 import {getEnteLabel, getPianoLabel, pollingInterval} from "utils"
 import {GET_PIANI} from "schema"
 
+import {toggleControllableState} from 'enhancers'
+const enhancer = toggleControllableState("expanded", "toggleOpen", true)
+
 const getActive = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
@@ -49,15 +52,14 @@ class Piano extends React.PureComponent {
         const {edges: azioni} = piano.azioni || {}
     return (<React.Fragment>
                 <Injector el="serapide-sidebar">
-                    <SideBar url={url} piano={piano} active={activeLocation} unreadMessages={utente.unreadThreadsCount}></SideBar>
+                    <SideBar url={url} piano={piano} active={activeLocation} expanded={this.props.expanded} toggleOpen={this.props.toggleOpen} unreadMessages={utente.unreadThreadsCount}></SideBar>
                 </Injector>
-                <div>
-                    <div className="d-flex flex-column ">
-                        <div className="d-flex justify-content-between align-items-center ">
-                            <div className="pr-3">
-                                <h4 className="text-uppercase">{getEnteLabel(piano.ente)}</h4>  
-                                <h2 className="mb-0 text-capitalize">{`${getPianoLabel(piano.tipo)} ${piano.codice}`}</h2>  
-                                <div className="pr-4">{piano.descrizione}</div>  
+                    <div className={`${this.props.expanded ? "sidebar-open" : "sidebar-closed"} d-flex flex-column `}>
+                        <div className="bg-white pt-5 pb-5 d-flex justify-content-between align-items-center piano-header">
+                            <div className="flex-grow-1 pr-4">
+                                <h4 className="text-uppercase h-pre mb-0">{getEnteLabel(piano.ente)}</h4>  
+                                <div className="text-capitalize h-title">{`${getPianoLabel(piano.tipo)} ${piano.codice}`}</div>  
+                                <div className="h-sub">{piano.descrizione}</div>  
                             </div>
                             <StatoProgress className="stato-progress-xxl" stato={piano.fase} legend></StatoProgress>
                         </div>
@@ -90,14 +92,13 @@ class Piano extends React.PureComponent {
                             </Route>       
                         </Switch>      
                     </div>
-                </div>
             </React.Fragment>
             )
     
     }
 }
 
-
+const PianoWithControlledSideBar = enhancer(Piano);
 export default ({match: {url, path, params: {code} = {}} = {}, history, ...props}) => (
     <Query query={GET_PIANI} pollInterval={pollingInterval} variables={{codice: code}}>
         {({loading, data: {piani: {edges: [{node: piano} = {}] = []} = {}} = {}, error, networkStatus, ...queryProps}) => {
@@ -113,7 +114,7 @@ export default ({match: {url, path, params: {code} = {}} = {}, history, ...props
                 toast.error(`Impossibile trovare il piano: ${code}`,  {autoClose: true, onClose: () => (history.back())})
                 return <div></div>
             }
-            return (<Piano {...props} {...queryProps} piano={piano} url={url} path={path}/>)}
+            return (<PianoWithControlledSideBar {...props} {...queryProps} piano={piano} url={url} path={path}/>)}
         }
     
     </Query>

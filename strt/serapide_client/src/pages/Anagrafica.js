@@ -18,6 +18,7 @@ import {EnhancedDateSelector} from "components/DateSelector"
 import Delibera from 'components/UploadSingleFile'
 import UploadFiles from 'components/UploadFiles'
 import VAS from 'components/VAS'
+import PianoPageContainer from 'components/PianoPageContainer';
 
 
 const getDataDeliberaInput = (codice) => (val) => ({
@@ -53,7 +54,8 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                 window.location.href=`#/crea_anagrafica/${code}`
             }
             return(
-                        <div className="pb-4 pt-5 d-flex flex-row">
+                    <PianoPageContainer>
+                        <div className="pb-4 d-flex flex-row">
                             <i className="material-icons text-serapide icon-34">assignment</i>
                             <i style={{maxWidth: 26}} className="material-icons text-serapide">locked</i>
                             <div className="d-flex flex-column flex-fill">
@@ -72,6 +74,7 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                             </div>
                             
                         </div>
+                    </PianoPageContainer>
                    
             )}
         }
