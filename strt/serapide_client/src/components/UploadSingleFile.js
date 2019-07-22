@@ -46,8 +46,9 @@ class SingleFile extends React.PureComponent {
         vertical:false,
         useLabel: false,
         getSuccess: ({upload: {success}}) => success,
-        sz: "lg"
-        
+        sz: "lg",
+        iconSize: "icon-15",
+        fontSize: "size-11"
     } 
     onFilesChange = (files = []) => {
         if (files[0]) {
