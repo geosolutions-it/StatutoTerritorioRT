@@ -224,6 +224,71 @@ class AvvioPiano(graphene.Mutation):
                 _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())
                 _avvio_procedimento.save()
 
+                _contributi_tecnici = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.contributi_tecnici,
+                    attore=TIPOLOGIA_ATTORE.regione,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=procedura_avvio.data_scadenza_risposta
+                )
+                _contributi_tecnici.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_contributi_tecnici, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
+        _piano = _procedura_avvio.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                return AvvioPiano(
+                    avvio_aggiornato=_procedura_avvio,
+                    errors=[]
+                )
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class ContributiTecnici(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = piano.azioni.count()
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _avvio_procedimento = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
+            _contributi_tecnici = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.contributi_tecnici).first()
+            if _avvio_procedimento and _avvio_procedimento.stato == STATO_AZIONE.nessuna and \
+            _contributi_tecnici and _contributi_tecnici.stato != STATO_AZIONE.nessuna:
+
+                _contributi_tecnici.stato = STATO_AZIONE.nessuna
+                _contributi_tecnici.data = datetime.datetime.now(timezone.get_current_timezone())
+                _contributi_tecnici.save()
+
                 _formazione_del_piano = Azione(
                     tipologia=TIPOLOGIA_AZIONE.formazione_del_piano,
                     attore=TIPOLOGIA_ATTORE.comune,
@@ -284,8 +349,7 @@ class AvvioPiano(graphene.Mutation):
                         tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
                         attore=TIPOLOGIA_ATTORE.comune,
                         order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=procedura_avvio.data_scadenza_risposta
+                        stato=STATO_AZIONE.attesa
                     )
                     _conferenza_copianificazione.save()
                     _order += 1
@@ -300,8 +364,7 @@ class AvvioPiano(graphene.Mutation):
                         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
                         attore=TIPOLOGIA_ATTORE.comune,
                         order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=procedura_avvio.data_scadenza_risposta
+                        stato=STATO_AZIONE.attesa
                     )
                     _protocollo_genio_civile.save()
                     _order += 1
@@ -334,11 +397,11 @@ class AvvioPiano(graphene.Mutation):
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
-                return AvvioPiano(
+                return ContributiTecnici(
                     avvio_aggiornato=_procedura_avvio,
                     errors=[]
                 )

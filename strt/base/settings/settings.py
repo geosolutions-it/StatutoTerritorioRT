@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.contenttypes',
+    'django_celery_beat',
     'django_extensions',
     # Pinax apps
     'fontawesome',
@@ -236,6 +237,26 @@ USE_L10N = EnvUtil.get_env_var('USE_L10N', type=bool, default=True)
 TIME_ZONE = EnvUtil.get_env_var('TIME_ZONE', default='UTC')
 USE_TZ = EnvUtil.get_env_var('USE_TZ', type=bool, default=True)
 
+# Celery
+CELERY_BROKER_URL = 'memory://'
+CELERY_SCHEDULE_INTERVAL = int(os.getenv('CELERY_SCHEDULE_INTERVAL', 10))
+CELERY_ENABLE_UTC = True
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_RESULT_PERSISTENT = False
+CELERY_ACKS_LATE = True
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_IGNORE_RESULT = True
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+
+CELERY_BEAT_SCHEDULE = {
+    'delayed-action-sync-task': {
+        'task': 'serapide_core.tasks.synch_actions',
+        'schedule': timedelta(seconds=CELERY_SCHEDULE_INTERVAL),
+    }
+}
+
 # CrispyForm template pack
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -318,7 +339,7 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
@@ -330,16 +351,16 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["console"], "level": "ERROR", },
+            "handlers": ["console"], "level": "INFO", },
         "celery": {
-            "handlers": ["console"], "level": "ERROR", },
+            "handlers": ["console"], "level": "INFO", },
         "strt_tests": {
-            "handlers": ["console"], "level": "DEBUG", },
+            "handlers": ["console"], "level": "INFO", },
         "strt_portal": {
-            "handlers": ["console"], "level": "ERROR", },
+            "handlers": ["console"], "level": "INFO", },
         "strt_users": {
-            "handlers": ["console"], "level": "ERROR", },
+            "handlers": ["console"], "level": "INFO", },
         "serapide_core": {
-            "handlers": ["console"], "level": "ERROR", },
+            "handlers": ["console"], "level": "INFO", },
     },
 }

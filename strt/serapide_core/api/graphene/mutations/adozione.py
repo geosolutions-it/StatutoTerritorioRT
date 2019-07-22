@@ -225,7 +225,7 @@ class TrasmissioneAdozione(graphene.Mutation):
                         ente=piano.ente
                     )
 
-                    if _procedura_adozione_vas:
+                    if created:
                         _pareri_adozione_sca = Azione(
                             tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca,
                             attore=TIPOLOGIA_ATTORE.sca,

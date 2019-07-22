@@ -9,7 +9,8 @@ django-currentuser==0.2.3
 django-guardian==1.4.9
 django-fontawesome==1.0
 djangorestframework==3.8.2
-celery==4.2.1
+celery==4.3.0
+django-celery-beat==1.5.0
 rules==2.0
 wagtail==2.3
 PyJWT==1.6.4

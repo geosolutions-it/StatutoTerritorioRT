@@ -36,3 +36,32 @@ def send_queued_notifications(self, *args):
         send_all(settings.NOTIFICATION_LOCK_LOCATION)
     else:
         send_all(*args)
+
+
+@shared_task
+def synch_actions(*args):
+    """TODO
+
+    """
+    import datetime
+
+    from django.conf import settings
+    from django.utils import timezone
+
+    from serapide_core.modello.enums import (
+        FASE, STATO_AZIONE)
+    from serapide_core.modello.models import Piano
+
+    _piani = Piano.objects.all().exclude(fase=FASE.pubblicazione)
+
+    for _piano in _piani:
+        logger.info(" -------------------------------------- PIANO: %s " % _piano.codice)
+        _azioni = _piano.azioni.filter(stato=STATO_AZIONE.attesa)
+        for _azione in _azioni:
+            _now = datetime.datetime.now(timezone.get_current_timezone())
+            logger.info(" -------------------------------------- NOW: %s " % _now)
+            if _azione.data and _now >= _azione.data:
+                logger.info(" -------------------------------------- AZIONE: %s / %s " % (_azione.tipologia, _azione.data))
+                _azione.stato = STATO_AZIONE.nessuna
+                _azione.data = _now
+                _azione.save()
