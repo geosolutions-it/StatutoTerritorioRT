@@ -348,7 +348,7 @@ a {
 }
 // modifiche revisione Elena
 
-@for $i from 0 through 15 {
+@for $i from 0 through 12 {
     $width: 700 + ($i * 100);
     $size: 10 + $i;
     @include generateMediaQuery($width, $size);
