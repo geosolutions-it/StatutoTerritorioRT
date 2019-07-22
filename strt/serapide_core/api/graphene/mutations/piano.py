@@ -92,12 +92,8 @@ class CreatePiano(relay.ClientIDMutation):
             # Ente (M)
             _data = _piano_data.pop('ente')
             _ente = Organization.objects.get(code=_data['code'])
-            _role = info.context.session['role'] if 'role' in info.context.session else None
-            _token = info.context.session['token'] if 'token' in info.context.session else None
             _piano_data['ente'] = _ente
-            if info.context.user and \
-            rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente) and \
-            rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune'):
+            if info.context.user and rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente):
 
                 # Codice (M)
                 if 'codice' in _piano_data:

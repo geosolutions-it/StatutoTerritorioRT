@@ -15,8 +15,8 @@ const OneWord = (word, className, dataTip, dataTipDisable, color) => (
 const ManyWords = (words, className, dataTip, dataTipDisable, color) => (
     <span className={className}>
         {words.slice(0, -1).join(" ")}
-        {" "}
         <span className="text-nowrap">
+            {" "}
             {words.slice(-1)}<i data-tip={dataTip} data-tip-disable={dataTipDisable} className={`material-icons text-${color} align-top icon-12`}>info</i>
         </span>
     </span>
@@ -24,6 +24,6 @@ const ManyWords = (words, className, dataTip, dataTipDisable, color) => (
 const getComp = (words = "", className, dataTip = "", dataTipDisable, color) => (words.length > 1 ? ManyWords(words, className, dataTip, dataTipDisable, color) : OneWord(words, className, dataTip, dataTipDisable, color))
 
 export default ({dataTip, dataTipDisable, text = "", className, color="serapide"}) => {
-    const words = text.replace(/ +(?= )/g,'').trim().split(" ")
+    const words = text.replace(/ +(?= )/g,'').split(" ")
     return text ? getComp(words, className, dataTip, dataTipDisable, color) : (<i data-tip={dataTip} data-tip-disable={dataTipDisable} className={`material-icons text-${color} align-top icon-12`}>info</i>)
 }

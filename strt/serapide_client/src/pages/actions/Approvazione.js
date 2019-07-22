@@ -42,7 +42,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
         piano: {
             tipo: tipoPiano = "",
             autoritaIstituzionali: {edges: aut =[]} = {},
-            // altriDestinatari: {edges: dest = []} = {}
+            altriDestinatari: {edges: dest = []} = {}
             },
         back}) => {
 

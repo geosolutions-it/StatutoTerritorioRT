@@ -1,42 +1,34 @@
 .sidebar {
     background-color: rgb(81, 80, 80) !important;
     color:white;
+    
 
     .sidebar-header{
-        min-width: 13.3333rem;
+        min-width: 250px;
         padding: 8px;
         .close{
             font-size: 1rem;
             text-shadow: none;
             opacity: 1;
             display: inline-block;
-            > .material-icons{
-                font-size: 1rem;
-            }
+
         }
         
         margin-bottom: 10px;
         .title {
             font-size: 15px;
         }
-        .title-portale{
-            font-size: 0.5333rem;
-        }
         .piano-title {
             font-size: 20px;
         }
     }
     .sidebar-header.collapsed{
-        display: flex;
-        padding-top:1rem;
-        justify-content: center;
-        min-height: 4rem;
-        align-items: center;
-        text-align: center;
         margin-bottom: 0px;
-        min-width: 3.466rem;
-        font-size: 1.2rem;
+        padding-left: 6px;
+        padding-right: 6px;
+        min-width: 0px;
     }
+
     .list-group {
         .list-group-item {
             display: flex;
@@ -50,16 +42,12 @@
             cursor: pointer;
             .icons{
                 margin-right: 0.8rem;
-                
-            }
-            .material-icons {
-                font-size: 1rem;
             }
             .title {
-                font-size: 0.8rem;
+                font-size: 15px;
             }
             .sub-title {
-                font-size: 0.5333px;
+                font-size: 12px;
             }
             .badge {
                 position: absolute;
@@ -70,11 +58,10 @@
             cursor: not-allowed;
         }
         .list-group-item.collapsed {
-            justify-content: center;
             padding: 0px;
             padding-left: 4px;
             padding-right: 4px;
-            min-height: 3.466rem;
+            min-height: 60px;
             .icons{
                 padding-left: 2px;
                 padding-right: 2px;

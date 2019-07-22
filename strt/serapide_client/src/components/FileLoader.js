@@ -12,25 +12,25 @@ import {Button} from 'reactstrap'
 
 const getFileSize = (file) => file.size ? `${Math.round(file.size/100000)/10} MB` : null
 
-const UI = ({placeholder, isLoading, progress, icon = "picture_as_pdf", fontSize, iconSize, onCancel, file = {}, error = false, onRetry}) => (
+const UI = ({placeholder, isLoading, progress, icon = "picture_as_pdf", onCancel, file = {}, error = false, onRetry}) => (
         <div className="file-loader d-flex justify-content-between align-items-center flex-1 " >
             <div className="d-flex">
-                {file.name && (<i className={`material-icons text-serapide ${iconSize}`}>{icon}</i>)}
-            <div className={`pl-1 d-flex flex-column justify-content-between ${fontSize}`}>
+                {file.name && (<i className="material-icons text-serapide">{icon}</i>)}
+            <div className="pl-1 d-flex flex-column justify-content-between">
                 <span>{file.name || placeholder}</span>
-                <span style={{fontSize: "0.8em"}}>{getFileSize(file)}</span>
+                <span style={{fontSize: "0.8rem"}}>{getFileSize(file)}</span>
             </div>
         </div>
             {isLoading && (
-                            <div className={`d-flex justify-content-center align-items-center ${fontSize}`}>
+                            <div className="d-flex justify-content-center align-items-center">
                                 <div className="prog text-dark">{Math.round(progress)}%</div> 
                                 <div className="spinner-grow text-serapide"role="status">
                                         <span className="sr-only">Loading...</span>                
                                 </div>       
-                                <i className={`material-icons text-danger pointer ${iconSize}`} onClick={onCancel}>cancel</i>
+                                <i className="material-icons text-danger" onClick={onCancel}style={{cursor: 'pointer'}}>cancel</i>
                                 </div>)
                 }
-                {error && file.name && !isLoading && (<Button className={fontSize} color="danger" onClick={onRetry}>Riprova</Button>)}
+                {error && file.name && !isLoading && (<Button color="danger" onClick={onRetry}>Riprova</Button>)}
             </div>
 
 )
@@ -43,9 +43,7 @@ class FileLoader extends React.Component {
         isLoading: PropTypes.bool,
         upload: PropTypes.func,
         error: PropTypes.bool,
-        onAbort: PropTypes.func,
-        fontSize: PropTypes.string,
-        iconSize: PropTypes.string
+        onAbort: PropTypes.func
     }
     static defaultProps = {
         placeholder: "",
