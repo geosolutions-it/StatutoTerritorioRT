@@ -9,21 +9,20 @@ import React from 'react'
 import MenuItem from './MenuItem'
 import ReactTooltip from 'react-tooltip'
 // import {Badge} from 'reactstrap'
-import {toggleControllableState} from 'enhancers'
-const enhancer = toggleControllableState("expanded", "toggleOpen", true)
 
-export default enhancer(({piano = {}, expanded, url, active, toggleOpen, unreadMessages = 0}) => (
+
+export default ({piano = {}, expanded, url, active, toggleOpen, unreadMessages = 0}) => (
     <React.Fragment>
         <ReactTooltip id="sidebar-tooltip"/>
         {expanded ? (
             <div className="sidebar-header">
-            <span className="close text-serapide" onClick={toggleOpen}>x</span>
+            <span className="close text-serapide" onClick={toggleOpen}><i className="material-icons">close</i></span>
                 <div className="d-flex flex-column pt-2">
-                    <div className="">PORTALE DEL TERRITORIO</div>
+                    <div className="title-portale">PORTALE DEL TERRITORIO</div>
                     <div className="piano-title text-capitalize">{`${piano.codice}`}</div>
                 </div>
             </div>) : (
-            <div className="sidebar-header collapsed" onClick={toggleOpen}><i className="material-icons icon-16">reorder</i></div>)}
+            <div className="sidebar-header collapsed" onClick={toggleOpen}><i className="material-icons">reorder</i></div>)}
         
             <ul className="list-group">
                 <MenuItem href={active !== "home" && `${url}/home`} active={active === "home"} title="HOME PIANO" icon="home" expanded={expanded}/>
@@ -44,4 +43,4 @@ export default enhancer(({piano = {}, expanded, url, active, toggleOpen, unreadM
                 
             </ul>
     </React.Fragment>
-))
+)

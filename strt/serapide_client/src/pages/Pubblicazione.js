@@ -11,6 +11,8 @@ import {Query} from 'react-apollo'
 import {formatDate, showError} from 'utils'
 
 import {GET_PUBBLICAZIONE} from 'schema'
+import PianoPageContainer from '../components/PianoPageContainer';
+import PianoSubPageTitle from '../components/PianoSubPageTitle';
 
 
 
@@ -27,13 +29,8 @@ const UI = ({
     } = {}) => {
 
     return (
-        <div className="d-flex flex-column pb-4 pt-5">
-            <div className="d-flex border-serapide border-top py-5">
-                <span className="d-flex mt-4 align-items-center" >
-                    <i className="material-icons text-white bg-serapide p-2 mr-2 rounded-circle" style={{ fontSize: 44}}>turned_in</i>
-                    <h2 className="m-0 p-2">PUBBLICAZIONE</h2>
-                </span>
-            </div>
+        <PianoPageContainer>
+            <PianoSubPageTitle icon="turned_in" title="PUBBLICAZIONE"/>
             <div className="row pt-5">
                 <div className="col-auto py-2">PUBBLICATOI IL {formatDate(pubblicazioneUrlData)}</div>
                 <div className="col-auto py-2">URL</div>
@@ -59,7 +56,7 @@ const UI = ({
             </div>
                     
                 
-        </div>
+        </PianoPageContainer>
 )}
 
 

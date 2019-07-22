@@ -8,10 +8,8 @@
 import React from 'react'
 
 
-export default ({label, children, className="py-3 border-bottom-2 border-top-2"}) => (
-    <div  className={className}>
-        <div className="action-title">
+export default ({label, children, className}) => (
+    <div  className={`pt-5 font-weight-bold ${className}`}>
         {children ? children : label}
-        </div>
     </div>
     )

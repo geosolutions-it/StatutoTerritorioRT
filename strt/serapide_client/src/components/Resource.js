@@ -13,26 +13,37 @@ import TextWithTooltip from './TextWithTooltip'
 const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : null
 
 
-const ResourceTitle = ({resource: {downloadUrl, label = "", tooltip = "", nome} = {}, useLabel} = {}) => {
+const ResourceTitle = ({resource: {downloadUrl, label = "", tooltip = "", nome} = {}, useLabel, fontSize} = {}) => {
     
     const lab = useLabel && label ?  label : nome
-    const tip = (<TextWithTooltip dataTip={tooltip} dataTipDisable={!useLabel} text={label}/>)
+    const tip = (<TextWithTooltip dataTip={tooltip} className={fontSize} dataTipDisable={!useLabel} text={lab}/>)
     return downloadUrl ?(
-            <a target="_blank" rel="noopener noreferrer" className="text-dark" href={downloadUrl} download={nome}>
+            <a target="_blank" rel="noopener noreferrer" className={`text-dark ${fontSize}`} href={downloadUrl} download={nome}>
                 {useLabel && tooltip ? tip : lab}
             </a>) : (
-        <span >{useLabel && tooltip ? tip : lab}</span>)
+        <span className={fontSize} >{useLabel && tooltip ? tip : lab}</span>)
+}
+const ResourceTools = ({downloadUrl, downloadIcon, nome, isLocked, iconClasses, confirm} = {}) => {
+    return <React.Fragment>
+                {downloadUrl ? (
+                    <a className="text-dark d-flex" target="_blank" rel="noopener noreferrer" href={downloadUrl} download={nome}>
+                {downloadIcon} </a>) : downloadIcon}
+                {isLocked ? (<i className={iconClasses}>lock</i>) : (<i className={`${iconClasses} pointer`} onClick={confirm} >cancel</i>)}
+            </React.Fragment>
 }
 
 export default ({
     resource = {},
     className ="resource",
     icon = "picture_as_pdf",
+    iconSize,
+    fontSize,
     codice,
     isLoading,
     isLocked = true,
     useLabel = false,
     fileSize = true,
+    vertical = false,
     onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
     const  { nome, uuid, lastUpdate, dimensione, downloadUrl} = resource;
     let toastId
@@ -47,30 +58,54 @@ export default ({
           });
         }
     }
-    return  (
+    const iconClasses = `material-icons text-serapide ${iconSize}`;
+    const downloadIcon = (<i className={ ` ${iconClasses} pointer `}>{isLocked ? "cloud_download" : "check_circle"}</i>);
+    return  !vertical ? (
         <div className={`${className} row align-items-center`}>
-            
             <div className="col-6 d-flex">
-                <i className="material-icons text-serapide align-self-center">{icon}</i>
-                <div className="pl-1 d-flex flex-column justify-content-between">
-                <ResourceTitle resource={resource} useLabel={useLabel}/>
-                {fileSize && (<span style={{fontSize: "0.8rem"}}>{getFileSize(dimensione)}</span>)}
+                <i className={`${iconClasses} align-self-center `}>{icon}</i>
+                <div className={`pl-1 d-flex flex-column justify-content-between ${fontSize}`}>
+                <ResourceTitle fontSize={fontSize} resource={resource} useLabel={useLabel}/>
+                {fileSize && (<span style={{fontSize: "0.8em"}}>{getFileSize(dimensione)}</span>)}
             </div></div>
-            <div className="col-3">{lastUpdate && formatDate(lastUpdate, "dd MMMM yyyy")}</div>
+            <div className={`col-3 ${fontSize}`}>{lastUpdate && formatDate(lastUpdate, "dd/MM/yyyy")}</div>
             <div className="col-3 d-flex justify-content-end">
-                {isLoading && (<div className="spinner-grow text-serapide" role="status">
+                {isLoading ? (<div className="spinner-grow text-serapide" role="status">
                     <span className="sr-only">Loading...</span>                
-                </div>)}
-                {downloadUrl ? (
-                <a className="text-dark d-flex" target="_blank" rel="noopener noreferrer" href={downloadUrl} download={nome}>
-                    <i className="material-icons text-serapide pointer">{isLocked ? "cloud_download" : "check_circle"}</i></a>) :
-                (<i className="material-icons text-serapide pointer">{isLocked ? "cloud_download" : "check_circle"}</i>)}
-                
-                {isLocked ? (
-                    <i className="material-icons text-serapide">lock</i>
-                ) : (
-                    <i className="material-icons text-danger" onClick={confirm} style={{cursor: 'pointer'}}>cancel</i>
-                ) }
+                </div>) : (<ResourceTools
+                                downloadUrl={downloadUrl} 
+                                downloadIcon={downloadIcon}
+                                nome={nome}
+                                isLocked={isLocked}
+                                iconClasses={iconClasses}
+                                confirm={confirm}/>)}
             </div>
-        </div>)
+        </div>) : (
+            <div className={`${className} row align-items-center`}>
+                <div className="col-10 d-flex">
+                    <i className={`${iconClasses} align-self-center `}>{icon}</i>
+                    <div className={`pl-1 d-flex flex-column justify-content-between ${fontSize}`}>
+                        <ResourceTitle fontSize={fontSize} resource={resource} useLabel={useLabel}/>
+                        { useLabel && resource.label && (<span>{resource.nome}</span>)}
+                        <span className="d-flex align-items-center">
+                            {lastUpdate && (<span>{formatDate(lastUpdate, "dd/MM/yyyy")}</span>)}
+                            {fileSize && (<span className="offset-4 text-nowrap" style={{fontSize: "0.8em"}}>{getFileSize(dimensione)}</span>)}
+                        </span>
+                    </div>
+                </div>
+                <div className="col-2 d-flex justify-content-end">
+                    {isLoading ? (<div className="spinner-grow text-serapide" role="status">
+                            <span className="sr-only">Loading...</span>                
+                        </div>) : (<ResourceTools
+                                    downloadUrl={downloadUrl} 
+                                    downloadIcon={downloadIcon}
+                                    nome={nome}
+                                    isLocked={isLocked}
+                                    iconClasses={iconClasses}
+                                    confirm={confirm}/>)
+                    }
+                
+                    
+                </div>
+            </div>)
 }
