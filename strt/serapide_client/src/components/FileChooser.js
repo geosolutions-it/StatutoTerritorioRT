@@ -22,7 +22,8 @@ class FileChooser extends React.Component {
       fileType: PropTypes.string,
       multiple: PropTypes.bool,
       showBtn: PropTypes.bool,
-      isLocked: PropTypes.bool
+      isLocked: PropTypes.bool,
+      fontSize: PropTypes.string
     }
     static defaultProps = {
       sz: "sm",
@@ -61,23 +62,24 @@ class FileChooser extends React.Component {
               style={{width: this.props.width || "auto"}}
               className={classNames('d-flex','align-items-center', 'justify-content-around', 'dropzone', `${this.props.sz}`,
                 {'isRejected': isDragActive ? isDragReject : rejectedFiles.length > 0 ,
-                'isAccept':isDragActive ? isDragAccept : acceptedFiles.length > 0 })}
+                'isAccept':isDragActive ? isDragAccept : acceptedFiles.length > 0 },
+                `${this.props.fontSize}`)}
             >
               <input {...getInputProps()} />
               <i className="material-icons text-serapide">cloud_upload</i>
               <span className="title">{this.getTitle()}</span>
               <span className="sub-title">oppure</span>
-              <Button  color="serapide" size={this.props.sz}>{this.getLabel()}</Button>
+              <Button className={this.props.fontSize} color="serapide" size={this.props.sz}>{this.getLabel()}</Button>
             </div>
           )
         }}
       </Dropzone>
     )
     render() {
-      const {modal, sz, isOpen, toggleOpen, showBtn, isLocked} = this.props
+      const {modal, sz, isOpen, toggleOpen, showBtn, isLocked, fontSize} = this.props
       const open = toggleOpen ? isOpen : this.state.isOpen
       if(modal && !open && showBtn) {
-        return (<Button disabled={isLocked} color="serapide" onClick={this.toggleOpen}>Upload</Button>)
+        return (<Button className={fontSize} disabled={isLocked} color="serapide" onClick={this.toggleOpen}>Upload</Button>)
       }
       const comp = this.renderChooser()
      return modal ? (

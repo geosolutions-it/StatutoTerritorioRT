@@ -19,7 +19,7 @@ const Messaggio = () => (<React.Fragment>
                     <h4>STAI PER INVIARE I DOCUMENTI</h4>
                     <h4> AL SISTEMA</h4>
                     </React.Fragment>)
-export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = false, onCompleted, label="SALVA ED INVIA", tipIconColor = "danger", messaggio = (<Messaggio/>) }) => {
+export default enhancer(({mutation, variables, fontSize, iconSize, toggleOpen, isOpen, canCommit = false, onCompleted, label="SALVA ED INVIA", tipIconColor = "danger", messaggio = (<Messaggio/>) }) => {
     const lab = !canCommit ? (<TextWithTooltip color={tipIconColor} dataTip="Informazioni mancanti" text={label}/>) : label
     return (
             <Mutation mutation={mutation} onError={showError} onCompleted={onCompleted}>
@@ -27,7 +27,7 @@ export default enhancer(({mutation, variables, toggleOpen, isOpen, canCommit = f
                         const updatePiano = () => {onConfirm({variables})}
                       return (
                         <React.Fragment>
-                            <Button isLoading={loading} onClick={toggleOpen} className="my-auto text-uppercase" disabled={!canCommit} color="serapide"  label={lab}></Button>
+                            <Button isLoading={loading} fontSize={fontSize} iconSize={iconSize} onClick={toggleOpen} className="my-auto text-uppercase" disabled={!canCommit} color="serapide"  label={lab}></Button>
                             {isOpen && (
                                 <Modal isOpen={isOpen} centered size="md" wrapClassName="serapide" autoFocus={true}>
                                     <ModalHeader className="d-flex justify-content-center"><i className="material-icons text-serapide icon-34">notifications_active</i></ModalHeader>

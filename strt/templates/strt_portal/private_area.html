@@ -28,46 +28,43 @@ LICENSE file in the root directory of this source tree.
     <div class="serapide">
 
         <!-- USER-NAVBAR -->
-        <nav class="user-navbar navbar navbar-expand-md navbar-dark bg-serapide-gray fixed-top justify-content-end">
+        <nav class="user-navbar navbar navbar-expand-sm navbar-dark bg-serapide-gray fixed-top justify-content-end">
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#userNavbarSupportedContent" aria-controls="userNavbarSupportedContent"
-                    aria-expanded="true" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <a href="/serapide/#"  class="btn btn-md">
+                 
+                    
+                <i class="material-icons icon-34 text-serapide">home</i>
+            </a>
 
             <div class="collapse navbar-collapse" id="userNavbarSupportedContent">
 
                 <h5>
                     {% for m in request.user.memberships %}
                         {% if m.pk == request.session.role %}
-                          <span class="d-block role role-item text-white">{{ request.user }} - {{ m.organization.description|default:m.organization.name }}</span>
+                          <span class="d-block role role-item text-white pb-1 size-11">{{ request.user }} - {{ m.organization.description|default:m.organization.name }}</span>
                           {% if request.session.attore != 'UNKNOWN' %}
                             <span class="d-block role role-item text-white" style="font-size: 12px"><em>{{ m.type.description|default:m.type.name }}</em></span>
                           {% endif %}
                         {% endif %}
                     {% endfor %}
                 </h5>
-                <ul class="ml-auto text-center navbar-nav" id="user-navbar-list">
+                <ul class="ml-auto text-center align-items-center navbar-nav" id="user-navbar-list">
 
                     {% has_perm 'strt_users.can_manage_users' request.user as can_manage_users %}
                     {% if can_manage_users %}
 
                         <!-- User management menu -->
-                        <div class="usermenu text-white dropdown order-last">
-                            <a aria-haspopup="true" href="" class="p-0 dropdown-toggle nav-link"
-                               aria-expanded="false" data-toggle="dropdown">
-                                <span class="link-icon d-inline-flex flex-row">
-                                    <i class="material-icons text-serapide m-1 rounded-circle bg-white">group</i>
-                                    <div class="flex-column align-self-center">
-                                        <div class="link-icon-label ">
-                                            {% trans 'gestione utenti'|capfirst %}
-                                        </div>
-                                    </div>
-                                </span>
-                            </a>
+                        <li class="usermenu text-white dropdown nav-item order-last">
+                            <span aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="link-icon nav-link">
+                                <a  class="utenti align-self-center dropdown-toggle">
+                                        <i class="material-icons align-bottom  m-0 text-white">supervised_user_circle</i>                                        
+                                </a>
+                            <div class="link-icon-label">
+                                    {% trans 'gestione utenti'|capfirst %}
+                                </div>
+                            </span>
                             <div role="menu" aria-hidden="true"
-                                 class="dropdown-menu dropdown-menu-right">
+                                 class="dropdown-menu dropdown-menu-right ">
                                 <a class="dropdown-item" href="{% url 'users_list' %}">
                                     {% trans 'lista utenti'|capfirst %}
                                 </a>
@@ -81,23 +78,17 @@ LICENSE file in the root directory of this source tree.
                                     {% trans 'registra ruolo'|capfirst %}
                                 </a>
                             </div>
-                        </div><!-- end User management menu -->
+                        </li><!-- end User management menu -->
 
                     {% endif %}
 
                     <!-- User menu -->
-                    <div class="usermenu text-white dropdown order-last">
-                        <a aria-haspopup="true" href="" class="p-0 dropdown-toggle nav-link"
-                           data-toggle="dropdown" aria-expanded="false">
-                            <span class="link-icon d-inline-flex flex-row">
-                                <i class="material-icons text-serapide m-1 rounded-circle bg-white">person</i>
-                                <div class="flex-column align-self-center">
-                                    <div class="link-icon-label ">
-                                        {{ request.user.get_full_name }}
-                                    </div>
-                                </div>
-                            </span>
+                    <li class="usermenu text-white dropdown nav-item order-last">
+                        <span aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="link-icon nav-link">
+                        <a class="utenti align-self-center dropdown-toggle">
+                            <i class="material-icons align-bottom text-serapide m-0 icon-34">account_circle</i>    
                         </a>
+                        </span>
                         <div role="menu" aria-hidden="true"
                              class="dropdown-menu dropdown-menu-right">
                             <!-- <span class="role text-serapide">{% trans 'ruolo'|upper %}:</span>
@@ -106,6 +97,9 @@ LICENSE file in the root directory of this source tree.
                                 <span class="d-block role role-item text-serapide">{{ m.description|default_if_none:m.type }}</span>
                                 {% endif %}
                             {% endfor %} -->
+                            
+                                    
+                            
                             <a class="dropdown-item" href="{% url 'users_profile_detail' %}">
                                 {% trans 'profilo'|capfirst %}
                             </a>
@@ -116,7 +110,7 @@ LICENSE file in the root directory of this source tree.
                                 {% trans 'logout'|capfirst %}
                             </a>
                         </div>
-                    </div><!-- end User menu -->
+                    </li><!-- end User menu -->
 
                 </ul>
 

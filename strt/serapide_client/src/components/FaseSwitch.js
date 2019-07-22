@@ -14,17 +14,17 @@ export default enhancer(({fase, className, checked, toggle, goToSection, childre
     <React.Fragment>
         <div className={classNames("d-flex", "flex-column",className)}>
             <div className="d-flex pb-1" >
-                <i className="material-icons">folder_open</i>
+                <i className="material-icons icon-20">folder_open</i>
                 <span className="pl-2 text-uppercase">{fase}</span>
             </div>
             <div className="d-flex strt-switch" >
                 <div className="custom-control custom-switch border-top pt-2">
-                    <label onClick={toggle} className={classNames('custom-control-label','pointer', {"border-serapide bg-serapide": checked, checked})}/>
-                    Visualizza attività
+                    <label onClick={toggle} className={classNames('custom-control-label pointer', {"border-serapide bg-serapide": checked, checked})}/>
+                    <span className="size-8 align-middle">Visualizza attività</span>
                 </div>
                 <div className="d-flex border-top pl-2 pt-2">
-                    <i className="material-icons pointer text-serapide" onClick={goToSection}>exit_to_app</i>
-                    <label className="control-label pl-1">Vai alla sezione</label>
+                    <i className="material-icons pointer text-serapide icon-22" onClick={goToSection}>exit_to_app</i>
+                    <label className="control-label pl-1 size-8 my-auto">Vai alla sezione</label>
                 </div>
             </div>
         </div>
