@@ -30,7 +30,7 @@ export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", classN
     return (
     <Table size="sm" className={className} hover>
         <thead>
-            <tr className="size-8">
+            <tr>
                 <th>Stato</th>
                 <th>Azione</th>
                 <th>Attori</th>
@@ -42,10 +42,10 @@ export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", classN
             {azioni.filter(({node: {fase}}) => fase === filtroFase).sort(reverseOrder).map(({node: {stato = "", tipologia = "",label = "", attore = "", tooltip = "", data, uuid}} = {}) => {
                 let adjustedStato = adjustStato(stato, attore, tipologia)
                 return (<tr key={uuid}>
-                            <td><i className={`icon-18 material-icons ${getActionIconColor(adjustedStato)}`}>{getActionIcon(adjustedStato)}</i></td>
-                            <td>{tooltip ? (<TextWithTooltip className="size-11" dataTip={tooltip} dataTipDisable={!tooltip} text={label}/>) : label}</td>
-                            <td><span className="size-11">{attore}</span></td>
-                            <td className={`${adjustedStato === "ATTESA" ? "text-serapide" : ""}`}><span className="d-flex size-11">{adjustedStato === "ATTESA" && <i className="material-icons text-serapide" style={{width: 28}}>notifications_activex</i>}<span className="my-auto size-11">{data && formatDate(data)}</span></span></td>
+                            <td><i className={`material-icons ${getActionIconColor(adjustedStato)}`}>{getActionIcon(adjustedStato)}</i></td>
+                            <td>{tooltip ? (<TextWithTooltip dataTip={tooltip} dataTipDisable={!tooltip} text={label}/>) : label}</td>
+                            <td>{attore}</td>
+                            <td className={`${adjustedStato === "ATTESA" ? "text-serapide" : ""}`}><span className="d-flex">{adjustedStato === "ATTESA" && <i className="material-icons text-serapide" style={{width: 28}}>notifications_activex</i>} {data && formatDate(data)}</span></td>
                             <td className={`${getAction(adjustedStato) && canExecuteAction({attore, tipologia})  ? "pointer": ""}`}>{getAction(adjustedStato) && canExecuteAction({attore, tipologia}) && <i className="material-icons text-serapide" onClick={() => onExecute(tipologia, uuid)}>play_circle_filled</i>}</td>
                         </tr>)}
                 )}

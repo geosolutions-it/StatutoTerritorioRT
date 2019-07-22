@@ -24,11 +24,7 @@ class UploadFiles extends React.PureComponent {
         resourceMutation: PropTypes.object,
         getSuccess: PropTypes.func,
         getFileName: PropTypes.func,
-        multiple: PropTypes.bool,
-        iconSize: PropTypes.string,
-        fontSize: PropTypes.string,
-        vertical: PropTypes.bool,
-        useLabel: PropTypes.bool
+        multiple: PropTypes.bool
     }
     static defaultProps = {
         placeholder: "",
@@ -56,9 +52,9 @@ class UploadFiles extends React.PureComponent {
         }
     }
     renderRisorse = () => {
-        const {variables, resourceMutation, isLocked, iconSize, fontSize, vertical, useLabel} = this.props
+        const {variables, resourceMutation, isLocked} = this.props
         return (this.props.risorse.map((res) => (
-            <Resource vertical={vertical} useLabel={useLabel} fontSize={fontSize} iconSize={iconSize} codice={variables.codice} mutation={resourceMutation} key={res.uuid} resource={res} isLocked={isLocked}/>))
+            <Resource codice={variables.codice} mutation={resourceMutation} key={res.uuid} resource={res} isLocked={isLocked}/>))
             )
         }
     removeFile = (nome= "") => {
@@ -67,7 +63,7 @@ class UploadFiles extends React.PureComponent {
     }
     renderLoader = () => {
         const {files = []} = this.state || {}
-        const {variables, placeholder,fontSize, iconSize} = this.props
+        const {variables, placeholder} = this.props
         return files.map((file) => (
             <FileLoader
                 key={file.name}
@@ -77,8 +73,6 @@ class UploadFiles extends React.PureComponent {
                 placeholder={placeholder}
                 variables={variables}
                 onAbort={this.removeFile}
-                fontSize={fontSize}
-                iconSize={iconSize}
             />))
     }
     render() {
@@ -90,7 +84,6 @@ class UploadFiles extends React.PureComponent {
                </div>
                <div className="align-self-start"> 
                {!this.props.isLocked && <FileChooser
-                    fontSize={this.props.fontSize}
                     isLocked={this.props.isLocked}
                     disabled={this.props.isLocked} 
                     fileType={this.props.fileType}

@@ -27,11 +27,7 @@ class SingleFile extends React.PureComponent {
         showBtn: PropTypes.bool,
         getSuccess: PropTypes.func,
         sz: PropTypes.oneOf(["sm","lg"]),
-        resIcon: PropTypes.string,
-        iconSize: PropTypes.string,
-        fontSize: PropTypes.string,
-        vertical: PropTypes.bool,
-        useLabel: PropTypes.bool
+        resIcon: PropTypes.string
     }
     static defaultProps = {
         placeholder: "",
@@ -43,8 +39,6 @@ class SingleFile extends React.PureComponent {
         resourceMutation: DELETE_RISORSA,
         modal: true,
         showBtn: true,
-        vertical:false,
-        useLabel: false,
         getSuccess: ({upload: {success}}) => success,
         sz: "lg"
         
@@ -69,8 +63,8 @@ class SingleFile extends React.PureComponent {
     render() {
         
         const {file} = this.state || {}
-        const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation, modal, showBtn, sz, className = "", fileType, resIcon, fontSize, iconSize, vertical, useLabel} = this.props
-        return  risorsa ? (<Resource vertical={vertical} useLabel={useLabel} fontSize={fontSize} iconSize={iconSize} icon={resIcon} className={className} codice={variables.codice} mutation={resourceMutation} resource={risorsa} isLocked={isLocked}/>) : (
+        const {risorsa, variables, placeholder, isLocked, disabled, mutation, resourceMutation, modal, showBtn, sz, className = "", fileType, resIcon} = this.props
+        return  risorsa ? (<Resource icon={resIcon} className={className} codice={variables.codice} mutation={resourceMutation} resource={risorsa} isLocked={isLocked}/>) : (
             <div style={{minHeight: "3.813rem"}} className={`${className} file-loader d-flex justify-content-between border-top border-bottom align-items-center`}>
                 <FileLoader
                     mutation={mutation}
@@ -79,11 +73,8 @@ class SingleFile extends React.PureComponent {
                     variables={variables}
                     update={this.updateCache}
                     onAbort={this.removeFile}
-                    fontSize={fontSize}
-                    iconSize={iconSize}
                     renderChooser={(loading) => (
                         <FileChooser 
-                            fontSize={fontSize}
                             isLocked={disabled || !!loading || isLocked}
                             multiple={false}
                             fileType={fileType}

@@ -2,7 +2,7 @@
 @at-root .navbar {
     z-index: 1031;
     height: $portal-header !important;
-    padding-right: 2rem;
+    padding-right: $portal-header !important;
 }
 @at-root .navbar-menu {
     z-index: 1030;
@@ -25,20 +25,19 @@
     }
 }
 @at-root .top-navbar {
-    font-size: 0.8rem;
+    font-size: 90%;
 }
 @at-root .brand-text {
-    font-size: 1.2rem;
+    font-size: 80%;
 }
 .user-navbar {
-    height: $portal-header !important;
     top: $portal-header !important;
 }
 
 .navbar {
+    padding-left: $portal-header;
     z-index: 1030; 
     height: $portal-header;
-    padding-left: 0px;
 }
 .link-icon {
     cursor: pointer;
@@ -51,12 +50,8 @@
     -webkit-align-items: center;
     padding: 0px;
 }
-@media (min-width: 1920px) { 
-    .link-icon i {
-    font-size: 34px;
-}}
 .link-icon i {
-    font-size: 28px;
+    font-size: 24px;
 }
 .nav-btn-badge {
     margin-left: 4px;
@@ -73,7 +68,7 @@
     color: darken($white, 20%) !important;
 }
 .link-icon-label{
-    font-size: 0.5333rem;
+    font-size: 10px;
     color: inherit;
 }
 .bg-serapide-gray {

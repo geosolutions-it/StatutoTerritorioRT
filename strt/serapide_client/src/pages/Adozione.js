@@ -18,8 +18,6 @@ import {withControllableState} from 'enhancers'
 import {formatDate, showError, getNominativo, filterAndGroupResourcesByUser, map, isEmpty} from 'utils'
 
 import {GET_ADOZIONE_PAGE} from 'schema'
-import PianoSubPageTitle from '../components/PianoSubPageTitle';
-import PianoPageContainer from '../components/PianoPageContainer';
 
 
 
@@ -41,7 +39,7 @@ const UI = enhancers(({
     vas: { node: { risorse : {edges: risorseVas = []} = {}} = {}} = {},
     piano: {
         autoritaIstituzionali: {edges: aut =[]} = {},
-        // altriDestinatari: {edges: dest = []} = {}
+        altriDestinatari: {edges: dest = []} = {}
     } = {}
     , toggleSection, section} = {}) => {
         
@@ -55,10 +53,13 @@ const UI = enhancers(({
     const elaboratiConferenza =  risorseAdozione.filter(({node: {tipo}}) => tipo === 'elaborati_conferenza_paesaggistica').map(({node}) => node)
     
     return (
-        <PianoPageContainer>
-            <PianoSubPageTitle icon="library_add" title="ADOZIONE"/>
-                
-            
+        <div className="d-flex flex-column pb-4 pt-5">
+            <div className="d-flex border-serapide border-top py-5">
+                <span className="d-flex mt-4 align-items-center" >
+                    <i className="material-icons text-white bg-serapide p-2 mr-2 rounded-circle" style={{ fontSize: 44}}>library_add</i>
+                    <h2 className="m-0 p-2">ADOZIONE</h2>
+                </span>
+            </div>
             <div className="row pt-5">
                 <div className="col-12 py-2">DELIBERA DEL {formatDate(dataDeliberaAdozione)}</div>
                 <div className="col-12 py-2">
@@ -75,12 +76,12 @@ const UI = enhancers(({
                                  {nome}
                         </div>))}
                 </div>
-                {/* <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
+                <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
                 {dest.map(({node: {nome, uuid} = {}}) => (
                         <div className="col-12 px-0 p-1" key={uuid}>
                                  {nome}
                         </div>))}
-                </div> */}
+                </div>
                 <div className="border-top w-100 my-4"></div>
                 <div className="col-4 pb-2">PUBBLICAZIONE B.U.R.T.</div>
                 <div className="col-5 d-flex">
@@ -188,8 +189,9 @@ const UI = enhancers(({
                     </div>) }
                         
                 </TabPane>
-            </TabContent>   
-            </PianoPageContainer>
+            </TabContent>
+                
+        </div>
 )})
 
 

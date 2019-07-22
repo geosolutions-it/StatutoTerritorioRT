@@ -7,8 +7,6 @@
  */
 import React from 'react'
 import {Button} from 'reactstrap'
-import PianoPageContainer from '../components/PianoPageContainer';
-import PianoSubPageTitle from '../components/PianoSubPageTitle';
 
 
 const goTo = (url) => {
@@ -18,9 +16,13 @@ const goTo = (url) => {
 export default ({utente: {attore} = {},
     piano: {redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl} = {}
     } = {}) => (
-       <PianoPageContainer>
-           <PianoSubPageTitle icon="build" title="STRUMENTI PER LA FORMAZIONE DEL PIANO"/>
-           
+    <div className="d-flex flex-column pb-4 pt-5">
+        <div className="d-flex border-serapide border-top py-5 justify-content-around">
+            <span className="d-flex mt-4 align-items-center" >
+                <i className="material-icons text-white bg-serapide p-2 mr-2 rounded-circle" style={{ fontSize: 44}}>build</i>
+                <h2 className="m-0 p-2">STRUMENTI PER LA FORMAZIONE DEL PIANO</h2>
+            </span>
+        </div>
         <div className="m-auto p-5 text-center" style={{maxWidth: 1000}}>Selezionando uno dei riquadri si accede agli strumenti operativi per la redazione della disciplina del Piano, 
                 la valutazione ambientale, la conformazione al PIT-PPR ed il monitoraggio del dimensionamento. del consumo di suolo e del recupero urbano.
         </div>
@@ -28,8 +30,8 @@ export default ({utente: {attore} = {},
         
                 <div className="col-auto py-2 m-auto">
                     <Button disabled={!redazioneNormeTecnicheAttuazioneUrl} onClick={() => goTo(redazioneNormeTecnicheAttuazioneUrl)}
-                            className="margin-auto" style={{minWidth: "20rem"}} size="lg" color="serapide">
-                        <div  className="d-flex flex-column size-16">
+                            className="margin-auto" style={{minWidth: 344}} size="lg" color="serapide">
+                        <div  className="d-flex flex-column">
                             <span>REDAZIONE NORME TECHINCHE</span>
                             <span>DI ATTUAZIONE DEL PIANO</span>
                             <span>[Minerva]</span>
@@ -41,8 +43,8 @@ export default ({utente: {attore} = {},
                 </div>
                 <div className="col-auto m-auto">
                     <Button disabled={!compilazioneRapportoAmbientaleUrl} onClick={() => goTo( compilazioneRapportoAmbientaleUrl)} 
-                            className="margin-auto" style={{minWidth: "20rem"}}  size="lg" color="serapide">
-                        <div className="d-flex flex-column size-16">
+                            className="margin-auto" style={{minWidth: 344}}  size="lg" color="serapide">
+                        <div className="d-flex flex-column">
                             <span>COMPILAZIONE DEL</span>
                             <span>RAPPORTO AMBIENTALE</span>
                             <span>[Minerva]</span>
@@ -56,8 +58,8 @@ export default ({utente: {attore} = {},
         <div className="row">
                 <div className="col-auto py-2 m-auto">
                     <Button disabled={!conformazionePitPprUrl} onClick={() => goTo(conformazionePitPprUrl)}
-                            className="margin-auto" style={{minWidth: "20rem"}} size="lg" color="serapide">
-                        <div className="d-flex flex-column size-16">
+                            className="margin-auto" style={{minWidth: 344}} size="lg" color="serapide">
+                        <div className="d-flex flex-column">
                             <span>CONFORMAZIONE</span>
                             <span>AL PIT-PPR</span>
                             <span>[Crono]</span>
@@ -69,8 +71,8 @@ export default ({utente: {attore} = {},
                 </div>
                 <div className="col-auto m-auto">
                     <Button disabled={!monitoraggioUrbanisticoUrl} onClick={() => goTo(monitoraggioUrbanisticoUrl)}
-                            className="margin-auto" style={{minWidth: "20rem"}}  size="lg" color="serapide">
-                        <div className="d-flex flex-column size-16">
+                            className="margin-auto" style={{minWidth: 344}}  size="lg" color="serapide">
+                        <div className="d-flex flex-column">
                             <span>MONITORAGGIO</span>
                             <span>URBANISTICO</span>
                             <span>[Input]</span>
@@ -82,5 +84,5 @@ export default ({utente: {attore} = {},
                 </div>
            
         </div>
-    </PianoPageContainer> 
+    </div>
 )

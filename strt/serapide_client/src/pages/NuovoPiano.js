@@ -60,7 +60,7 @@ const updateCache = (cache, { data: {createPiano : {nuovoPiano: node}}  = {}} = 
   }
 const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti, ente, selectEnte, tipiPiano , utente: {role: { organization: {name, code: codeEnte, type: {tipo: tipoEnte} = {}} = {}} = {}} = {}}) => {
             return (
-                <div className="py-5 px-7">
+                <div>
                     <h4 className="text-uppercase">{tipoEnte} di {name}</h4>  
                     <div className="row">
                         <div className="col-6">
