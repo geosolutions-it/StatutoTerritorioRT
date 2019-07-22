@@ -110,20 +110,19 @@ $fasi: (
     @include statoProgress(12px, 250px, 4, 60px)
   }
 
+.stato-progress-xxl {
+  @include statoProgress(12px, 250px, 4, 60px)
+}
+
 @media (min-width: 1300px) { 
-  .stato-progress {
+  .stato-progress-xxl {
     @include statoProgress(14px, 300px, 4, 80px)
   }
 }
 
 @media (min-width: 1500px) { 
-  .stato-progress {
+  .stato-progress-xxl {
     @include statoProgress(16px, 350px, 4, 100px)
   }
 }
 
-@media (min-width: 1600px) { 
-  .stato-progress {
-    @include statoProgress(18px, 400px, 4, 120px)
-  }
-}
