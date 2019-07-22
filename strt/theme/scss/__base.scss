@@ -429,3 +429,19 @@ a {
     padding: 1.66rem;
 
 }
+.salva-invia{
+    .sv-button{
+        min-width:200px;
+    }
+}
+@media (min-width: 1400px) { 
+    .salva-invia{
+        .modal-dialog{
+            max-width: 800px !important;
+            
+        }
+        .sv-button{
+            min-width:300px;
+        }
+    }
+}

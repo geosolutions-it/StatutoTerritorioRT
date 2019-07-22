@@ -29,11 +29,11 @@ export default enhancer(({mutation, variables, fontSize, iconSize, toggleOpen, i
                         <React.Fragment>
                             <Button isLoading={loading} fontSize={fontSize} iconSize={iconSize} onClick={toggleOpen} className="my-auto text-uppercase" disabled={!canCommit} color="serapide"  label={lab}></Button>
                             {isOpen && (
-                                <Modal isOpen={isOpen} centered size="md" wrapClassName="serapide" autoFocus={true}>
+                                <Modal isOpen={isOpen} centered size="md" wrapClassName="serapide salva-invia" autoFocus={true}>
                                     <ModalHeader className="d-flex justify-content-center"><i className="material-icons text-serapide icon-34">notifications_active</i></ModalHeader>
                                     <ModalBody className="d-flex justify-content-center flex-column pt-0 px-5 pb-5  align-items-center justify-item-center">
                                         {messaggio}
-                                        <div style={{minWidth: 200}} className="pt-5 d-flex justify-content-around">
+                                        <div className="sv-button pt-5 d-flex justify-content-around">
                                             <Button label="ANNULLA" color="serapide" disabled={loading}  onClick={toggleOpen}></Button>
                                             <Button label="SALVA" isLoading={loading} disabled={loading} color="serapide" onClick={updatePiano}></Button>
                                         </div>

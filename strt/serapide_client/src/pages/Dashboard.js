@@ -58,7 +58,7 @@ const Piani = () => (
 
 export default ({utente, ...props}) => {
     console.log(utente,props);
-    const {role: {type, attore} = {}} = utente || {}
+    const {role: {type} = {}, attore} = utente || {}
     return (
         <React.Fragment>
             <div className="py-5 px-7">

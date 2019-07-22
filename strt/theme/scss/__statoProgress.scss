@@ -107,8 +107,9 @@ $fasi: (
 }
 
 .stato-progress {
-    @include statoProgress(12px, 250px, 4, 60px)
-  }
+    @include statoProgress(8px, 120px, 4, 24px)
+    
+}
 
 .stato-progress-xxl {
   @include statoProgress(12px, 250px, 4, 60px)
