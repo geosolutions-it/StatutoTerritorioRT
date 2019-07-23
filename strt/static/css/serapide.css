@@ -8349,39 +8349,6 @@ button.bg-serapide:focus {
   padding-top: 70px; }
 
 /** colori notifiche**/
-.icon-52 {
-  font-size: 3.4666rem; }
-
-.icon-34 {
-  font-size: 2.2666rem !important; }
-
-.icon-22 {
-  font-size: 1.4666rem !important; }
-
-.icon-20 {
-  font-size: 1.3333rem !important; }
-
-.icon-18 {
-  font-size: 1.2rem !important; }
-
-.icon-16 {
-  font-size: 1.0666rem !important; }
-
-.icon-15 {
-  font-size: 1rem !important; }
-
-.icon-14 {
-  font-size: 0.9333rem !important; }
-
-.icon-13 {
-  font-size: 0.8666rem !important; }
-
-.icon-12 {
-  font-size: 0.8rem !important; }
-
-.icon-8 {
-  font-size: 0.5333rem !important; }
-
 .first {
   order: -1; }
 
@@ -8668,92 +8635,221 @@ a {
   html {
     font-size: 22px; } }
 
-@media (min-width: 2000px) {
-  html {
-    font-size: 23px; } }
+.icon-8 {
+  font-size: 0.53333rem !important; }
 
-@media (min-width: 2100px) {
-  html {
-    font-size: 24px; } }
+.icon-9 {
+  font-size: 0.6rem !important; }
 
-@media (min-width: 2200px) {
-  html {
-    font-size: 25px; } }
+.icon-10 {
+  font-size: 0.66667rem !important; }
+
+.icon-11 {
+  font-size: 0.73333rem !important; }
+
+.icon-12 {
+  font-size: 0.8rem !important; }
+
+.icon-13 {
+  font-size: 0.86667rem !important; }
+
+.icon-14 {
+  font-size: 0.93333rem !important; }
+
+.icon-15 {
+  font-size: 1rem !important; }
+
+.icon-16 {
+  font-size: 1.06667rem !important; }
+
+.icon-17 {
+  font-size: 1.13333rem !important; }
+
+.icon-18 {
+  font-size: 1.2rem !important; }
+
+.icon-19 {
+  font-size: 1.26667rem !important; }
+
+.icon-20 {
+  font-size: 1.33333rem !important; }
+
+.icon-21 {
+  font-size: 1.4rem !important; }
+
+.icon-22 {
+  font-size: 1.46667rem !important; }
+
+.icon-23 {
+  font-size: 1.53333rem !important; }
+
+.icon-24 {
+  font-size: 1.6rem !important; }
+
+.icon-25 {
+  font-size: 1.66667rem !important; }
+
+.icon-26 {
+  font-size: 1.73333rem !important; }
+
+.icon-27 {
+  font-size: 1.8rem !important; }
+
+.icon-28 {
+  font-size: 1.86667rem !important; }
+
+.icon-29 {
+  font-size: 1.93333rem !important; }
+
+.icon-30 {
+  font-size: 2rem !important; }
+
+.icon-31 {
+  font-size: 2.06667rem !important; }
+
+.icon-32 {
+  font-size: 2.13333rem !important; }
+
+.icon-33 {
+  font-size: 2.2rem !important; }
+
+.icon-34 {
+  font-size: 2.26667rem !important; }
+
+.icon-35 {
+  font-size: 2.33333rem !important; }
+
+.icon-36 {
+  font-size: 2.4rem !important; }
+
+.icon-37 {
+  font-size: 2.46667rem !important; }
+
+.icon-38 {
+  font-size: 2.53333rem !important; }
+
+.icon-39 {
+  font-size: 2.6rem !important; }
+
+.icon-40 {
+  font-size: 2.66667rem !important; }
+
+.icon-41 {
+  font-size: 2.73333rem !important; }
+
+.icon-42 {
+  font-size: 2.8rem !important; }
+
+.icon-43 {
+  font-size: 2.86667rem !important; }
+
+.icon-44 {
+  font-size: 2.93333rem !important; }
+
+.icon-45 {
+  font-size: 3rem !important; }
+
+.icon-46 {
+  font-size: 3.06667rem !important; }
+
+.icon-47 {
+  font-size: 3.13333rem !important; }
+
+.icon-48 {
+  font-size: 3.2rem !important; }
+
+.icon-49 {
+  font-size: 3.26667rem !important; }
+
+.icon-50 {
+  font-size: 3.33333rem !important; }
+
+.icon-51 {
+  font-size: 3.4rem !important; }
+
+.icon-52 {
+  font-size: 3.46667rem !important; }
+
+.icon-53 {
+  font-size: 3.53333rem !important; }
+
+.icon-54 {
+  font-size: 3.6rem !important; }
 
 .size-6 {
-  font-size: 0.4rem; }
+  font-size: 0.4rem !important; }
 
 .size-7 {
-  font-size: 0.46667rem; }
+  font-size: 0.46667rem !important; }
 
 .size-8 {
-  font-size: 0.53333rem; }
+  font-size: 0.53333rem !important; }
 
 .size-9 {
-  font-size: 0.6rem; }
+  font-size: 0.6rem !important; }
 
 .size-10 {
-  font-size: 0.66667rem; }
+  font-size: 0.66667rem !important; }
 
 .size-11 {
-  font-size: 0.73333rem; }
+  font-size: 0.73333rem !important; }
 
 .size-12 {
-  font-size: 0.8rem; }
+  font-size: 0.8rem !important; }
 
 .size-13 {
-  font-size: 0.86667rem; }
+  font-size: 0.86667rem !important; }
 
 .size-14 {
-  font-size: 0.93333rem; }
+  font-size: 0.93333rem !important; }
 
 .size-15 {
-  font-size: 1rem; }
+  font-size: 1rem !important; }
 
 .size-16 {
-  font-size: 1.06667rem; }
+  font-size: 1.06667rem !important; }
 
 .size-17 {
-  font-size: 1.13333rem; }
+  font-size: 1.13333rem !important; }
 
 .size-18 {
-  font-size: 1.2rem; }
+  font-size: 1.2rem !important; }
 
 .size-19 {
-  font-size: 1.26667rem; }
+  font-size: 1.26667rem !important; }
 
 .size-20 {
-  font-size: 1.33333rem; }
+  font-size: 1.33333rem !important; }
 
 .size-21 {
-  font-size: 1.4rem; }
+  font-size: 1.4rem !important; }
 
 .size-22 {
-  font-size: 1.46667rem; }
+  font-size: 1.46667rem !important; }
 
 .size-23 {
-  font-size: 1.53333rem; }
+  font-size: 1.53333rem !important; }
 
 .size-24 {
-  font-size: 1.6rem; }
+  font-size: 1.6rem !important; }
 
 .size-25 {
-  font-size: 1.66667rem; }
+  font-size: 1.66667rem !important; }
 
 .size-26 {
-  font-size: 1.73333rem; }
+  font-size: 1.73333rem !important; }
 
 .size-27 {
-  font-size: 1.8rem; }
+  font-size: 1.8rem !important; }
 
 .size-28 {
-  font-size: 1.86667rem; }
+  font-size: 1.86667rem !important; }
 
 .size-29 {
-  font-size: 1.93333rem; }
+  font-size: 1.93333rem !important; }
 
 .size-30 {
-  font-size: 2rem; }
+  font-size: 2rem !important; }
 
 .h-pre {
   font-size: 30px;
@@ -8779,6 +8875,13 @@ a {
   padding: 1.66rem;
   margin-left: 1rem; }
 
+.piano-page-content {
+  margin: 1.66rem;
+  display: flex;
+  flex-direction: column !important;
+  background-color: #fff;
+  padding: 1.66rem; }
+
 .sidebar-open .piano-header {
   padding-left: 3.33rem;
   padding-right: 4.66rem; }
@@ -8798,18 +8901,12 @@ a {
 .sidebar-closed > div > .home-container {
   margin: 1.66rem 3.33rem 1.66rem 3.33rem; }
 
+.sidebar-closed .piano-page-content {
+  margin: 1.66rem 3.33rem 1.66rem 3.33rem; }
+
 .action-title {
   font-size: 1rem;
   font-weight: bold; }
-
-.piano-page-content {
-  margin: 1.66rem;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  display: flex;
-  flex-direction: column !important;
-  background-color: #fff;
-  padding: 1.66rem; }
 
 .salva-invia .sv-button {
   min-width: 200px; }
@@ -8819,5 +8916,29 @@ a {
     max-width: 800px !important; }
   .salva-invia .sv-button {
     min-width: 300px; } }
+
+@media (min-width: 1400px) {
+  .serapide .modal-dialog {
+    max-width: 550px !important; } }
+
+@media (min-width: 1500px) {
+  .serapide .modal-dialog {
+    max-width: 600px !important; } }
+
+@media (min-width: 1600px) {
+  .serapide .modal-dialog {
+    max-width: 650px !important; } }
+
+@media (min-width: 1700px) {
+  .serapide .modal-dialog {
+    max-width: 700px !important; } }
+
+@media (min-width: 1800px) {
+  .serapide .modal-dialog {
+    max-width: 750px !important; } }
+
+@media (min-width: 1900px) {
+  .serapide .modal-dialog {
+    max-width: 800px !important; } }
 
 /*# sourceMappingURL=serapide.css.map */
