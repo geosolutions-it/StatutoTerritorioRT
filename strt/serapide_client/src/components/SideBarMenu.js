@@ -9,8 +9,8 @@ import React from 'react'
 import MenuItem from './MenuItem'
 import ReactTooltip from 'react-tooltip'
 // import {Badge} from 'reactstrap'
-
-
+import {showAdozione, showApprovazione, showPubblicazione} from 'utils'
+const hasContributi = (piano) => console.log(piano)
 export default ({piano = {}, expanded, url, active, toggleOpen, unreadMessages = 0}) => (
     <React.Fragment>
         <ReactTooltip id="sidebar-tooltip"/>
@@ -27,13 +27,13 @@ export default ({piano = {}, expanded, url, active, toggleOpen, unreadMessages =
             <ul className="list-group">
                 <MenuItem href={active !== "home" && `${url}/home`} active={active === "home"} title="HOME PIANO" icon="home" expanded={expanded}/>
                 <MenuItem href={`${url}/anagrafica`} active={active === "anagrafica"} title="ANAGRAFICA" icon="assignment" expanded={expanded}/>
-                <MenuItem className="border-bottom-3" href={`${url}/formazione`} active={active === "formazione"} title="FORMAZIONE PIANO" subtitle="Accesso agli strumenti" icon="build" expanded={expanded}/>
+                <MenuItem locked={hasContributi(piano)} className="border-bottom-3" href={`${url}/formazione`} active={active === "formazione"} title="FORMAZIONE PIANO" subtitle="Accesso agli strumenti" icon="build" expanded={expanded}/>
                 
                 <MenuItem href={`${url}/avvio`} active={active === "avvio"} title="AVVIO" subtitle="Avvio del Procedimento" icon="dashboard" expanded={expanded}/>
                 
-                <MenuItem href={`${url}/adozione`} active={active === "adozione"} title="ADOZIONE" icon="library_add" expanded={expanded}/>
-                <MenuItem href={`${url}/approvazione`} active={active === "approvazione"} title="APPROVAZIONE" icon="offline_pin" expanded={expanded}/>
-                <MenuItem href={`${url}/pubblicazione`} active={active === "pubblicazione"} title="PUBBLICAZIONE" icon="turned_in" expanded={expanded}/>
+                <MenuItem locked={!showAdozione(piano.fase.nomefase)} href={`${url}/adozione`} active={active === "adozione"} title="ADOZIONE" icon="library_add" expanded={expanded}/>
+                <MenuItem locked={!showApprovazione(piano.fase.nomefase)} href={`${url}/approvazione`} active={active === "approvazione"} title="APPROVAZIONE" icon="offline_pin" expanded={expanded}/>
+                <MenuItem locked={!showPubblicazione(piano.fase.nomefase)} href={`${url}/pubblicazione`} active={active === "pubblicazione"} title="PUBBLICAZIONE" icon="turned_in" expanded={expanded}/>
                 {/* <MenuItem href="/users/messages/inbox/" active={active === "/messaggi"} title="MESSAGGI" icon="email" expanded={expanded}>
                     <Badge color="light">{unreadMessages}</Badge>
                 </MenuItem> */}

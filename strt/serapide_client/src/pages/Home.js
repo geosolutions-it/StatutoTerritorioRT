@@ -12,7 +12,7 @@ import FaseSwitch from 'components/FaseSwitch'
 import actions from './actions'
 
 import classNames from 'classnames'
-import { getAction, pollingInterval} from 'utils'
+import { getAction, pollingInterval, showAdozione, showApprovazione, showPubblicazione} from 'utils'
 import {canExecuteAction} from '../autorizzazioni'
 import {stopStartPolling} from 'enhancers'
 
@@ -26,10 +26,6 @@ const components = Object.keys(actions).reduce((c,k) => ({...c, [k]: polling(act
 const getCurrentAction = (url = "", pathname = "") => {
     return pathname.replace(url, "").split("/").filter(p => p !== "").shift()
 }
-
-const showAdozione = (f) => f === "AVVIO" || f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
-const showApprovazione = (f) => f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
-const showPubblicazione = (f) => f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 
 const NotAvailable = () => (<div className="p-6">Azione non implementata</div>)
 

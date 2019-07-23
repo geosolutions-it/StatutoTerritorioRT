@@ -57,7 +57,6 @@ const Piani = () => (
 //     </Query>)
 
 export default ({utente, ...props}) => {
-    console.log(utente,props);
     const {role: {type} = {}, attore} = utente || {}
     return (
         <React.Fragment>

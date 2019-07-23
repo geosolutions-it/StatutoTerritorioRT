@@ -9,7 +9,7 @@ LICENSE file in the root directory of this source tree.
 -->
 
 
-{% extends "strt_portal/private_area.html" %}
+    {% extends "index.html" %}
 
 {% load static %}
 {% load i18n %}
@@ -72,13 +72,12 @@ LICENSE file in the root directory of this source tree.
                 {% endfor %}
             </tbody>
         </table>
-
+    <div id="only-nav-bar"></div>
     </div>
-
 {% endblock content %}
 
 {% block add_script %}
-
+ {{ block.super }}
     <script>
 
         $('.delete-row').on('click', function () {

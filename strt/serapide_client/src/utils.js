@@ -107,3 +107,6 @@ export const filterAndGroupResourcesByUser = ( resources, type = "") => groupRes
 export const getContatti = ({contatti: {edges = []} = {}} = {}) => {
     return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
 }
+export const showAdozione = (f) => f === "AVVIO" || f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
+export const showApprovazione = (f) => f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
+export const showPubblicazione = (f) => f === "APPROVAZIONE" || f === "PUBBLICAZIONE"

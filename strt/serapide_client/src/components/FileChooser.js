@@ -60,7 +60,7 @@ class FileChooser extends React.Component {
             <div
               {...getRootProps()}
               style={{width: this.props.width || "auto"}}
-              className={classNames('d-flex','align-items-center', 'justify-content-around', 'dropzone', `${this.props.sz}`,
+              className={classNames('d-flex','align-items-center','flex-fill justify-content-around', 'dropzone', `${this.props.sz}`,
                 {'isRejected': isDragActive ? isDragReject : rejectedFiles.length > 0 ,
                 'isAccept':isDragActive ? isDragAccept : acceptedFiles.length > 0 },
                 `${this.props.fontSize}`)}
