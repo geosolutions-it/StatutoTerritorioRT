@@ -41,6 +41,7 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         # label, display, description
         ("message_sent", _("Messaggio Ricevuto"), _("Messaggio Ricevuto"),),
         ("piano_phase_changed", _("Piano Aggiornato"), _("Piano Aggiornato"),),
+        ("contributi_tecnici", _("Contributi Tecnici"), _("Contributi Tecnici"),),
         ("piano_verifica_vas_updated", _("Documento Preliminare VAS"), _("Documento Preliminare VAS"),),
         ("conferenza_copianificazione", _("Conferenza di Copianificazione"), _("Conferenza di Copianificazione"),),
         ("tutti_pareri_inviati", _("Pareri pronti per la verifica"), _("Pareri pronti per la verifica"),),
