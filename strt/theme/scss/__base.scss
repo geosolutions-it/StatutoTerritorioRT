@@ -14,9 +14,17 @@ $sizeBase: 15;
 @mixin generate-size ($size){
     $val: $size / $sizeBase;
     .size-#{$size} {
-        font-size: $val#{rem};
+        font-size: $val#{rem} !important;
     }
 }
+
+@mixin generate-icon-size ($size){
+    $val: $size / $sizeBase;
+    .icon-#{$size} {
+        font-size: $val#{rem} !important;
+    }
+}
+
 
 @mixin generateMediaQuery($width, $size){
     @media (min-width: $width#{px}) { 
@@ -74,39 +82,6 @@ $sizeBase: 15;
 
 }
 /** colori notifiche**/
-.icon-52 {
-    font-size: 3.4666rem;
-}
-.icon-34 {
-    font-size: 2.2666rem !important;
-}
-.icon-22 {
-    font-size: 1.4666rem !important;
-}
-.icon-20 {
-    font-size: 1.3333rem !important;
-}
-.icon-18 {
-    font-size: 1.2rem !important;
-}
-.icon-16 {
-    font-size: 1.0666rem !important;
-}
-.icon-15 {
-    font-size: 1rem !important;
-}
-.icon-14 {
-    font-size: 0.9333rem !important;
-}
-.icon-13 {
-    font-size: 0.8666rem !important;
-}
-.icon-12 {
-    font-size: 0.8rem !important;
-}
-.icon-8 {
-    font-size: 0.5333rem !important;
-}
 .first {
     order: -1;
 }
@@ -353,7 +328,10 @@ a {
     $size: 10 + $i;
     @include generateMediaQuery($width, $size);
 }
-
+// genera icone
+@for $size from 8 through 54 {
+    @include generate-icon-size($size);
+}
 // pagina piano->home-action
 // genera font-size relativi
 @for $size from 6 through 30 {
@@ -384,6 +362,18 @@ a {
     padding: 1.66rem;
     margin-left: 1rem;
 }
+.piano-page-content {
+    margin: 1.66rem;
+    display: flex;
+    flex-direction: column !important;
+    background-color: $white;
+    padding: 1.66rem;
+
+}
+
+
+
+
 .sidebar-open {
     .piano-header {
         padding-left: 3.33rem;
@@ -412,6 +402,10 @@ a {
             margin: 1.66rem 3.33rem 1.66rem 3.33rem;
         }
     }
+    .piano-page-content {
+        margin: 1.66rem 3.33rem 1.66rem 3.33rem;
+    
+    }
 }
 
 .action-title{
@@ -419,16 +413,7 @@ a {
     font-weight: bold;
 }
 
-.piano-page-content {
-    margin: 1.66rem;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    display: flex;
-    flex-direction: column !important;
-    background-color: $white;
-    padding: 1.66rem;
 
-}
 .salva-invia{
     .sv-button{
         min-width:200px;
@@ -446,11 +431,45 @@ a {
     }
 }
 
-// @media (min-width: 1400px) { 
-//     .serapide{
-//         .modal-dialog{
-//             max-width: 800px !important;
-            
-//         }
-//     }
-// }
+@media (min-width: 1400px) { 
+     .serapide{
+         .modal-dialog{
+             max-width: 550px !important;
+         }
+     }
+ }
+ @media (min-width: 1500px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 600px !important;
+        }
+    }
+}
+@media (min-width: 1600px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 650px !important;
+        }
+    }
+}
+@media (min-width: 1700px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 700px !important;
+        }
+    }
+}
+@media (min-width: 1800px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 750px !important;
+        }
+    }
+}
+@media (min-width: 1900px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 800px !important;
+        }
+    }
+}

@@ -30,7 +30,6 @@ const getVasTypeInput = getInputFactory("proceduraVas")
 
 
 
-
 const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifica, docProcSemp) => {
     switch (tipologia.toLowerCase()) {
         case "semplificata":
@@ -47,7 +46,7 @@ const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifi
         return false
     }
 }
-const fileProps = {className:"col-xl-12",
+const fileProps = {className:"col-xl-12", iconSize: "icon-24", fontSize: "size-15",
                     mutation: VAS_FILE_UPLOAD, resourceMutation: DELETE_RISORSA_VAS}
 
 

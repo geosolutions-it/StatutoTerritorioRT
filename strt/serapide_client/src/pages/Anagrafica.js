@@ -13,28 +13,18 @@ import {Query} from "react-apollo"
 import {getEnteLabelID} from "utils"
 import {GET_PIANI, UPDATE_PIANO} from "schema"
 
-import {EnhancedDateSelector} from "components/DateSelector"
+import {formatDate} from "utils"
 
-import Delibera from 'components/UploadSingleFile'
-import UploadFiles from 'components/UploadFiles'
+import Risorsa from 'components/Resource'
 import VAS from 'components/VAS'
 import PianoPageContainer from 'components/PianoPageContainer';
+import PianoSubPageTitle from '../components/PianoSubPageTitle';
 
-
-const getDataDeliberaInput = (codice) => (val) => ({
-    variables: {
-        input: { 
-            pianoOperativo: {
-            dataDelibera: val.toISOString()}, 
-        codice}
-    }})
-
-const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera && delibera && descrizione
 
 
 export default ({match: {params: {code} = {}} = {}, ...props}) => {
     return (<Query query={GET_PIANI} variables={{codice: code}}>
-        {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
+        {({loading, data: {piani: {edges: [piano] = []} = {}} = {}, error}) => {
             if(loading){
                 return (
                         <div className="d-flex justify-content-center">
@@ -42,38 +32,39 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                                 <span className="sr-only">Loading...</span>
                             </div>
                         </div>)
-            } else if(edges.length === 0) {
+            } else if(!piano) {
                 toast.error(`Impossobile trovare il piano: ${code}`,  {autoClose: true})
                 return <div></div>
             }
-            const {node: {ente, fase: {nome: faseNome}, risorse : {edges: resources = []} = {}, codice = "", dataDelibera, descrizione} = {}} = edges[0] || {}
+            const {node: {ente, fase: {nome: faseNome}, risorse : {edges: resources = []} = {}, codice = "", dataDelibera} = {}} = piano
             const locked = faseNome !== "DRAFT"
             const {node: delibera} = resources.filter(({node: n}) => n.tipo === "delibera").pop() || {};
-            const optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || {};
+            let optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || {};
             if(!locked) {
                 window.location.href=`#/crea_anagrafica/${code}`
             }
+            optionals = [delibera, delibera, delibera];
+            console.log(piano);
             return(
                     <PianoPageContainer>
-                        <div className="pb-4 d-flex flex-row">
-                            <i className="material-icons text-serapide icon-34">assignment</i>
-                            <i style={{maxWidth: 26}} className="material-icons text-serapide">locked</i>
+                        <PianoSubPageTitle icon="assignment" title="ANAGRAFICA"/>
                             <div className="d-flex flex-column flex-fill">
-                                <h3 className="mb-0">ANAGRAFICA</h3>
-                                <span className="pt-5">{getEnteLabelID(ente)}</span>
-                                <div className="d-flex pt-5 align-items-center">
-                                    <span className="pr-2">DELIBERA DEL</span>
-                                    <EnhancedDateSelector isLocked={locked} selected={dataDelibera ? new Date(dataDelibera) : undefined} mutation={UPDATE_PIANO} getInput={getDataDeliberaInput(codice)}/>
+                                <div className="pt-5 row">
+                                    <div className="col-12 py-2">ID {getEnteLabelID(ente)}</div>
+                                    <div className="col-12 py-2 pt-4">DELIBERA DEL {formatDate(dataDelibera)}</div>
+                                    <div className="col-12 py-2">
+                                    <Risorsa fileSize={false} useLabel resource={delibera} isLocked/> </div>
+                                
+                                <div className="col-12 pt-4 pb2">ALTRI DOCUMENTI	
+                                {optionals.length > 0 ? optionals.map(doc => (	
+                                    <div key={doc.uuid} className="col-12 py-2">	
+                                        <Risorsa fileSize={false}  resource={doc} isLocked={true}/> 	
+                                    </div>)): (<div className="col-12 px-0 py-2">Nessun allegato presente</div>)}
                                 </div>
-                                <span className="pt-5">DELIBERA COMUNALE</span>
-                                <Delibera placeholder="Delibera Comunale (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={locked}/>
-                                <span className="pt-5">ALTRI DOCUMENTI</span>
-                                <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_opts" }} isLocked={locked}/>
+                                </div>
                                 <div style={{borderBottom: "2px dashed"}} className="mt-5 text-serapide" ></div>
-                                <VAS codice={codice} canUpdate={canCommit(dataDelibera, delibera, descrizione)} isLocked={locked}></VAS>
-                            </div>
-                            
-                        </div>
+                                <VAS codice={codice} canUpdate={false} isLocked={locked}></VAS>
+                            </div>  
                     </PianoPageContainer>
                    
             )}

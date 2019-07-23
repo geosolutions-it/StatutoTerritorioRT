@@ -9,8 +9,8 @@ import React from 'react'
 
 
 export default ({children = [], className}) => (
-    <div className="d-flex border-top  bg-white pb-4">
-        <div className={`piano-page-content ${className}`}>
+    <div className="d-flex border-top pb-4">
+        <div className={`piano-page-content border flex-fill ${className}`}>
             {children}
         </div>
     </div>
