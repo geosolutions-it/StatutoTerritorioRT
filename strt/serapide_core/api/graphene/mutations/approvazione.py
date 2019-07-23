@@ -45,9 +45,9 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_ATTORE,
 )
 
-from . import fase
-from .. import types
-from .. import inputs
+from serapide_core.api.graphene import types
+from serapide_core.api.graphene import inputs
+from serapide_core.api.graphene.mutations import fase
 
 logger = logging.getLogger(__name__)
 
@@ -147,6 +147,14 @@ class TrasmissioneApprovazione(graphene.Mutation):
     errors = graphene.List(graphene.String)
     approvazione_aggiornata = graphene.Field(types.ProceduraApprovazioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.trasmissione_approvazione
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_approvazione
+
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user):
 
@@ -229,8 +237,16 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
     errors = graphene.List(graphene.String)
     approvazione_aggiornata = graphene.Field(types.ProceduraApprovazioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica_ap
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_approvazione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -268,7 +284,7 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
 
                 # Notify Users
                 piano_phase_changed.send(
@@ -297,8 +313,16 @@ class PubblicazioneApprovazione(graphene.Mutation):
     errors = graphene.List(graphene.String)
     approvazione_aggiornata = graphene.Field(types.ProceduraApprovazioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.pubblicazione_approvazione
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_approvazione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -342,7 +366,7 @@ class PubblicazioneApprovazione(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
 
                 # Notify Users
                 piano_phase_changed.send(
@@ -371,8 +395,16 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
     errors = graphene.List(graphene.String)
     approvazione_aggiornata = graphene.Field(types.ProceduraApprovazioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.attribuzione_conformita_pit
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_approvazione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user):
 
         # - Update Action state accordingly
         if fase.nome == FASE.adozione:
@@ -406,7 +438,7 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
