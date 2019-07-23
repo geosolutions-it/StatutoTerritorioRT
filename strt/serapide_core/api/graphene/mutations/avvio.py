@@ -54,9 +54,9 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
-from . import fase
-from .. import types
-from .. import inputs
+from serapide_core.api.graphene import types
+from serapide_core.api.graphene import inputs
+from serapide_core.api.graphene.mutations import fase
 
 logger = logging.getLogger(__name__)
 
@@ -234,6 +234,13 @@ class AvvioPiano(graphene.Mutation):
                 _contributi_tecnici.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_contributi_tecnici, piano=piano)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=user,
+                    piano=piano,
+                    message_type="contributi_tecnici")
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -268,6 +275,14 @@ class ContributiTecnici(graphene.Mutation):
 
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
+
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.contributi_tecnici
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
@@ -421,6 +436,14 @@ class RichiestaIntegrazioni(graphene.Mutation):
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.richiesta_integrazioni
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
+
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
@@ -533,6 +556,14 @@ class IntegrazioniRichieste(graphene.Mutation):
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.integrazioni_richieste
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
+
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
@@ -631,6 +662,14 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.protocollo_genio_civile
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
+
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
@@ -725,6 +764,14 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
+
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
@@ -815,6 +862,14 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
 
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
+
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.esito_conferenza_copianificazione
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):

@@ -68,9 +68,9 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_CONTATTO,
 )
 
-from . import fase
-from .. import types
-from .. import inputs
+from serapide_core.api.graphene import types
+from serapide_core.api.graphene import inputs
+from serapide_core.api.graphene.mutations import fase
 
 logger = logging.getLogger(__name__)
 
@@ -148,7 +148,7 @@ class CreatePiano(relay.ClientIDMutation):
                 _procedura_vas, created = ProceduraVAS.objects.get_or_create(
                     piano=nuovo_piano,
                     ente=nuovo_piano.ente,
-                    tipologia=TIPOLOGIA_VAS.semplificata)
+                    tipologia=TIPOLOGIA_VAS.unknown)
 
                 # Inizializzazione Procedura Avvio
                 _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(

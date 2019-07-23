@@ -39,8 +39,8 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_AZIONE,
 )
 
-from .. import types
-from .. import inputs
+from serapide_core.api.graphene import types
+from serapide_core.api.graphene import inputs
 
 logger = logging.getLogger(__name__)
 
@@ -140,8 +140,16 @@ class PubblicazionePiano(graphene.Mutation):
     errors = graphene.List(graphene.String)
     pubblicazione_aggiornata = graphene.Field(types.ProceduraPubblicazioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.pubblicazione_piano
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_pubblicazione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_pubblicazione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_pubblicazione, user):
 
         # - Update Action state accordingly
         if fase.nome == FASE.approvazione:
@@ -172,7 +180,7 @@ class PubblicazionePiano(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_pubblicazione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_pubblicazione, info.context.user)
 
                 # Notify Users
                 piano_phase_changed.send(
