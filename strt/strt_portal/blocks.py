@@ -19,6 +19,7 @@ from wagtail.core.blocks import (
 class BaseBlock(StructBlock):
 
     main_title = RawHTMLBlock(required=False)
+    title = CharBlock(required=False)
     subtitle = CharBlock(required=False)
     text = TextBlock(required=False)
     image = ImageChooserBlock(required=False)

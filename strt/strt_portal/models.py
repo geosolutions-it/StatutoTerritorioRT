@@ -10,7 +10,7 @@
 #########################################################################
 
 
-from wagtail.admin.edit_handlers import StreamFieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page
 from .blocks import (
@@ -25,7 +25,7 @@ class Home(Page):
     Put desired fields in the content_panels list below to manage
     the page contents in the Wagtail admin.
     """
-    main_title = RichTextField()
+    main_title = RichTextField(blank=True)
     body = StreamField([
         ('First_section', FirstSectionBlock(
             verbose_name='First section block',
