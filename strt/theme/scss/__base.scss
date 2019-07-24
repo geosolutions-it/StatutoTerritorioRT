@@ -157,12 +157,15 @@ $sizeBase: 15;
 }
 .serapide-content {
 }
+.pointer{
+    cursor: pointer;
+}
 .serapide {
    
     width: 100%;
     .pointer{
         cursor: pointer;
-    }
+    }   
     .tipo__{
     
     &option {

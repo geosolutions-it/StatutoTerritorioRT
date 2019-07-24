@@ -22,7 +22,7 @@ export default ({piano = {}, expanded, url, active, toggleOpen, unreadMessages =
                     <div className="piano-title text-capitalize">{`${piano.codice}`}</div>
                 </div>
             </div>) : (
-            <div className="sidebar-header collapsed" onClick={toggleOpen}><i className="material-icons">reorder</i></div>)}
+            <div className="sidebar-header collapsed" onClick={toggleOpen}><i className="material-icons pointer">reorder</i></div>)}
         
             <ul className="list-group">
                 <MenuItem href={active !== "home" && `${url}/home`} active={active === "home"} title="HOME PIANO" icon="home" expanded={expanded}/>
