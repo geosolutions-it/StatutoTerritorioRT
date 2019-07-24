@@ -12,13 +12,13 @@
 
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.core.blocks import (
-    CharBlock, StructBlock, TextBlock, RichTextBlock
+    CharBlock, StructBlock, TextBlock, RichTextBlock, RawHTMLBlock
 )
 
 
 class BaseBlock(StructBlock):
 
-    title = CharBlock(required=False)
+    main_title = RawHTMLBlock(required=False)
     subtitle = CharBlock(required=False)
     text = TextBlock(required=False)
     image = ImageChooserBlock(required=False)
