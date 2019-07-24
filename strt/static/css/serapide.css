@@ -8456,6 +8456,9 @@ button.bg-serapide:focus {
   padding-left: 210px !important;
   padding-right: 210px !important; }
 
+.pointer {
+  cursor: pointer; }
+
 .serapide {
   width: 100%; }
   .serapide .pointer {
