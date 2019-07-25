@@ -48,7 +48,7 @@ class UserMembershipModelAdminForm(forms.ModelForm):
 class UserMembershipModelAdmin(admin.ModelAdmin):
     form = UserMembershipModelAdminForm
     list_display = ['name', 'description', 'member', 'attore', 'organization', 'type']
-    search_fields = ['name', 'description', 'member', 'attore', 'organization', 'type']
+    search_fields = ['name', 'description', 'attore', 'organization__name', 'member__fiscal_code', 'member__first_name', 'member__last_name', 'type__name']
     list_filter = ['name', 'description', 'member', 'attore', 'organization', 'type']
 
 

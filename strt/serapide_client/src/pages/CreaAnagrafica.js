@@ -65,7 +65,7 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                 window.location.href=`#/pino/${code}/anagrafica`
             }
             return(
-            <div>
+            <div className="py-5 px-7">
                     <div className="d-flex flex-column ">
                         <h4 className="text-uppercase">{getEnteLabel(ente)}</h4>  
                         <div className="pb-4 pt-3 d-flex flex-row">
@@ -86,7 +86,7 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                                 </div>
                                 <span className="pt-5">DELIBERA DI AVVIO DEL PROCEDIMENTO</span>
                                 <span className="pb-2 font-weight-light">Caricare delibera, formato obbligatorio pdf</span>
-                                <Delibera placeholder="Delibera (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={locked}/>
+                                <Delibera useLabel iconSize="icon-24" fontSize="size-15" placeholder="Delibera (obbligatoria)" variables={{codice, tipo: "delibera" }} risorsa={delibera} isLocked={locked}/>
                                 <span className="pt-5">ALTRI DOCUMENTI</span>
                                 <span className="font-weight-light">Caricare eventuali allegati trascinando i files nel riquadro, formato obbligatorio pdf</span>
                                 <UploadFiles risorse={optionals} variables={{codice, tipo: "delibera_opts" }} isLocked={locked}/>

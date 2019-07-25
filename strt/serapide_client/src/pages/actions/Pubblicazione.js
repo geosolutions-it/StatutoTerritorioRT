@@ -28,7 +28,8 @@ const UI = ({
     placeholder = "COPIA URL PIANO",
     updateM,
     piano: {autoritaIstituzionali: {edges: aut =[]} = {},
-            altriDestinatari: {edges: dest = []} = {}},
+            // altriDestinatari: {edges: dest = []} = {}
+        },
     modello: { node: {uuid, pubblicazioneUrl, pubblicazioneUrlData} = {}} = {}
     }) => {
         const getInput = getInputFactory(procedura)        

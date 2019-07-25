@@ -109,6 +109,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_elaborati_vas', _('Upload elaborati VAS')),  # Comune
         # Avvio
         ('avvio_procedimento', _('Avvio del Procedimento')),  # Comune
+        ('contributi_tecnici', _('Contributi Tecnici')),  # Regione
         ('richiesta_integrazioni', _('Richiesta Integrazioni')),  # Regione
         ('integrazioni_richieste', _('Integrazioni Richieste')),  # Comune
         ('formazione_del_piano', _('Formazione del Piano')),  # Comune
@@ -154,6 +155,7 @@ FASE_AZIONE = Choices(
         ('upload_elaborati_vas', 'anagrafica'),
         # Avvio
         ('avvio_procedimento', 'anagrafica'),
+        ('contributi_tecnici', 'anagrafica'),
         ('richiesta_integrazioni', 'anagrafica'),
         ('integrazioni_richieste', 'anagrafica'),
         ('formazione_del_piano', 'anagrafica'),
@@ -196,6 +198,7 @@ TOOLTIP_AZIONE = Choices(
         ('pubblicazione_provvedimento_verifica', _('art.22 L.R. 10/2010')),
         # Avvio
         ('avvio_procedimento', _('art. 17 L.R. 65/2014, comma 1, art. 21 Disciplina del Piano , PIT-PPR')),
+        ('contributi_tecnici', _('art. 17 L.R. 65/2014, comma 1, art. 21 Disciplina del Piano , PIT-PPR')),
         ('richiesta_conferenza_copianificazione', _('art.25 L.R. 65/2014')),
         ('protocollo_genio_civile', _('art.65/104 RR')),
         ('protocollo_genio_civile_id', _('art.65/104 RR')),

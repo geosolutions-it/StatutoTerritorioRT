@@ -15,19 +15,19 @@ import Messaggi from './MenuMessaggi'
 import {toggleControllableState} from 'enhancers'
 import classNames from "classnames"
 
-export default toggleControllableState("isOpen", "toggle", false) (({roleType, isOpen= false, toggle = () =>{}, user = {}, messaggi = [], alertsCount = 0}) => (
+export default toggleControllableState("isOpen", "toggle", false) (({roleType, attore, isOpen= false, toggle = () =>{}, user = {}, messaggi = [], alertsCount = 0}) => (
             <React.Fragment>
               <NavItem className="first">
-                <LinkWithIcon className="vertical-divider-left" icon="find_in_page" label="Ricerca" link="./#/search"></LinkWithIcon>
+                <LinkWithIcon className="vertical-divider-left disabled" icon="find_in_page" label="Ricerca" link="/serapide/#/search" disabled></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
-                <LinkWithIcon icon="view_list" label="Archivio Piani" link="./#/archivio"></LinkWithIcon>
+                <LinkWithIcon icon="view_list" label="Archivio Piani" link="/serapide/#/archivio"></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
-                <LinkWithIcon className={classNames("vertical-divider-right", {disabled: roleType !== "RUP"})} disabled={roleType !== "RUP"} icon="note_add" label="Crea Nuovo Piano" link="./#/nuovo_piano"></LinkWithIcon>
+                <LinkWithIcon className={classNames("vertical-divider-right", {disabled: !(roleType === "RUP" && attore === "Comune")})} disabled={!(roleType === "RUP" && attore === "Comune")} icon="note_add" label="Crea Nuovo Piano" link="/serapide/#/nuovo_piano"></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
-                <LinkWithIcon className="vertical-divider-right" icon="today" label="Calendario"></LinkWithIcon>
+                <LinkWithIcon className="vertical-divider-right disabled"  disabled icon="today" label="Calendario"></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
                 <LinkWithIcon  link="./#/" icon="notification_important" iconColor="text-danger" withBadge badge={alertsCount} label="Alert"></LinkWithIcon>

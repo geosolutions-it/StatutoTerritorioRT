@@ -9,9 +9,9 @@ import React from 'react'
 
 
 export default ({label, children, className="py-3 border-bottom-2 border-top-2"}) => (
-    <div  className={"py-3 border-bottom-2 border-top-2"}>
-        <h2 className="m-0">
+    <div  className={className}>
+        <div className="action-title">
         {children ? children : label}
-        </h2>
+        </div>
     </div>
     )

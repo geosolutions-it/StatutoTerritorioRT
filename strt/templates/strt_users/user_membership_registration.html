@@ -7,7 +7,7 @@ This source code is licensed under the BSD-style license found in the
 LICENSE file in the root directory of this source tree.
 
 -->
-{% extends "strt_portal/private_area.html" %}
+{% extends "index.html" %}
 
 {% load static %}
 {% load i18n %}
@@ -21,7 +21,7 @@ LICENSE file in the root directory of this source tree.
 
 {% block content %}
 
-    <div class="bg-light h-100 pt-5 m-0 pX-md">
+    <div class="bg-light h-100 py-5 m-0 px-6">
 
         <h2>{% trans 'assegnazione ruolo'|capfirst %}</h2>
         <hr class="border-warning border-bottom"></hr>
@@ -42,5 +42,5 @@ LICENSE file in the root directory of this source tree.
         </form>
 
     </div>
-
+    <div id="only-nav-bar"></div>
 {% endblock content %}

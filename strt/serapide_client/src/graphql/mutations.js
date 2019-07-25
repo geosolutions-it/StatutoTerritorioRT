@@ -417,6 +417,22 @@ mutation AvvioPiano($codice: String!) {
 ${FR.AZIONI_PIANO}
 `
 
+export const CONTRIBUTI_TECNICI = gql`
+mutation ContirbutiTecnici($codice: String!) {
+  contributiTecnici(uuid: $codice) {
+        errors
+        avvioAggiornato {
+              piano {
+                ...AzioniPiano
+              }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+`
+
+
+
 export const RICHIESTA_INTEGRAZIONI = gql`
 mutation RichiestaIntegrazioni($codice: String!) {
   richiestaIntegrazioni(uuid: $codice) {

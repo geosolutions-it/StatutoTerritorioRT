@@ -1,0 +1,1 @@
+source <(sed -e /^$/d -e /^#/d -e 's/.*/declare -x "&"/g' /opt/StatutoTerritorioRT/strt/.env); /home/geosolutions/Envs/strt/bin/celery -A base.celery_app:app beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler $@

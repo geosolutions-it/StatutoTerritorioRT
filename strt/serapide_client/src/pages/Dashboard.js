@@ -57,18 +57,18 @@ const Piani = () => (
 //     </Query>)
 
 export default ({utente, ...props}) => {
-    const {role: {type} = {}} = utente || {}
+    const {role: {type} = {}, attore} = utente || {}
     return (
         <React.Fragment>
-            <div>
+            <div className="py-5 px-7">
                 <h1>Portale della pianificazione</h1>
-                <h3><TextWithTooltip dataTip="(L.R. 65/2014)" text="Software per la formazione e gestione dei piani"/></h3>
+                <h3 className="pb-5"><TextWithTooltip dataTip="(L.R. 65/2014)" text="Software per la formazione e gestione dei piani"/></h3>
                 <hr className="border-serapide border-bottom"></hr>
                 <div className="py-4 d-flex flex-row">
                     <div className="d-flex flex-column ">
                         <h2>{`${utente.firstName || ""} ${utente.lastName || ""}`}</h2>
                     </div>
-                    {type === "RUP" && <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="serapide" icon="note_add" label="Crea nuovo piano"></Button>}
+                    {type === "RUP" && attore === "Comune" && <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="serapide" icon="note_add" label="Crea nuovo piano"></Button>}
                 </div>
                 
                 <h5 className="py-5">I MIEI PIANI</h5>

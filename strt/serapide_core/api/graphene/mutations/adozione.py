@@ -49,9 +49,9 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_ATTORE,
 )
 
-from . import fase
-from .. import types
-from .. import inputs
+from serapide_core.api.graphene import types
+from serapide_core.api.graphene import inputs
+from serapide_core.api.graphene.mutations import fase
 
 logger = logging.getLogger(__name__)
 
@@ -164,6 +164,14 @@ class TrasmissioneAdozione(graphene.Mutation):
     errors = graphene.List(graphene.String)
     adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.trasmissione_adozione
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_adozione
+
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
@@ -225,7 +233,7 @@ class TrasmissioneAdozione(graphene.Mutation):
                         ente=piano.ente
                     )
 
-                    if _procedura_adozione_vas:
+                    if created:
                         _pareri_adozione_sca = Azione(
                             tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca,
                             attore=TIPOLOGIA_ATTORE.sca,
@@ -355,8 +363,16 @@ class Controdeduzioni(graphene.Mutation):
     errors = graphene.List(graphene.String)
     adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.controdeduzioni
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_adozione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -402,7 +418,7 @@ class Controdeduzioni(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
                 return Controdeduzioni(
                     adozione_aggiornata=_procedura_adozione,
@@ -424,8 +440,16 @@ class PianoControdedotto(graphene.Mutation):
     errors = graphene.List(graphene.String)
     adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.piano_controdedotto
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_adozione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -475,7 +499,7 @@ class PianoControdedotto(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
                 # Notify Users
                 piano_phase_changed.send(
@@ -517,8 +541,16 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
     errors = graphene.List(graphene.String)
     adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_adozione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -556,7 +588,7 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
                 # Notify Users
                 piano_phase_changed.send(
@@ -585,8 +617,16 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
     errors = graphene.List(graphene.String)
     adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.rev_piano_post_cp
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_adozione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
         # Update Azioni Piano
         # - Update Action state accordingly
@@ -622,7 +662,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
                 # Notify Users
                 piano_phase_changed.send(
@@ -664,8 +704,16 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
     errors = graphene.List(graphene.String)
     vas_aggiornata = graphene.Field(types.ProceduraAdozioneVASNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.pareri_adozione_sca
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_adozione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -760,7 +808,7 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
                         piano=_piano,
                         message_type="tutti_pareri_inviati")
 
-                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
                 return InvioPareriAdozioneVAS(
                     vas_aggiornata=_procedura_vas,
@@ -782,8 +830,16 @@ class InvioParereMotivatoAC(graphene.Mutation):
     errors = graphene.List(graphene.String)
     vas_aggiornata = graphene.Field(types.ProceduraAdozioneVASNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.parere_motivato_ac
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_adozione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -837,7 +893,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
                         break
 
                 if _tutti_pareri_inviati:
-                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
                     # Notify Users
                     piano_phase_changed.send(
@@ -866,8 +922,16 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
     errors = graphene.List(graphene.String)
     vas_aggiornata = graphene.Field(types.ProceduraAdozioneVASNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_adozione
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user, token):
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
         # Update Azioni Piano
         # - Update Action state accordingly
@@ -917,7 +981,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user, _token)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
                 # Notify Users
                 piano_phase_changed.send(

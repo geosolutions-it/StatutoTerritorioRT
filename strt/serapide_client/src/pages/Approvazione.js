@@ -14,6 +14,8 @@ import Elaborati from 'components/ElaboratiPiano'
 import {formatDate, showError} from 'utils'
 
 import {GET_APPROVAZIONE_PAGE} from 'schema'
+import PianoPageContainer from '../components/PianoPageContainer';
+import PianoSubPageTitle from '../components/PianoSubPageTitle';
 
 const UI = ({
     approvazione: {
@@ -28,7 +30,7 @@ const UI = ({
         } = {}, 
     piano: {
         autoritaIstituzionali: {edges: aut =[]} = {},
-        altriDestinatari: {edges: dest = []} = {}
+        // altriDestinatari: {edges: dest = []} = {}
     } = {}
     } = {}) => {
 
@@ -37,13 +39,8 @@ const UI = ({
     const elaboratiConferenza =  risorseApprovazione.filter(({node: {tipo}}) => tipo === 'elaborati_conferenza_paesaggistica').map(({node}) => node)
     
     return (
-        <div className="d-flex flex-column pb-4 pt-5">
-            <div className="d-flex border-serapide border-top py-5">
-                <span className="d-flex mt-4 align-items-center" >
-                    <i className="material-icons text-white bg-serapide p-2 mr-2 rounded-circle" style={{ fontSize: 44}}>library_add</i>
-                    <h2 className="m-0 p-2">APPROVAZIONE</h2>
-                </span>
-            </div>
+        <PianoPageContainer>
+            <PianoSubPageTitle icon="library_add" title="APPROVAZIONE"/>
             <div className="row pt-5">
                 <div className="col-12 py-2">DELIBERA DEL {formatDate(dataDeliberaApprovazione)}</div>
                 <div className="col-12 py-2">
@@ -61,12 +58,12 @@ const UI = ({
                                  {nome}
                         </div>))}
                 </div>
-                <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
+                {/* <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
                 {dest.map(({node: {nome, uuid} = {}}) => (
                         <div className="col-12 px-0 p-1" key={uuid}>
                                  {nome}
                         </div>))}
-                </div>
+                </div> */}
                 <div className="border-top w-100 my-4"></div>
                 <div className="col-5">PUBBLICAZIONE SITO WEB</div>
                 <div className="col-5 d-flex">
@@ -98,7 +95,7 @@ const UI = ({
                         
            
                 
-        </div>
+                </PianoPageContainer>
 )}
 
 

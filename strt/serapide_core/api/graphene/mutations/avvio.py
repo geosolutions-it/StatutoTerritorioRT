@@ -54,9 +54,9 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
-from . import fase
-from .. import types
-from .. import inputs
+from serapide_core.api.graphene import types
+from serapide_core.api.graphene import inputs
+from serapide_core.api.graphene.mutations import fase
 
 logger = logging.getLogger(__name__)
 
@@ -224,6 +224,86 @@ class AvvioPiano(graphene.Mutation):
                 _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())
                 _avvio_procedimento.save()
 
+                _contributi_tecnici = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.contributi_tecnici,
+                    attore=TIPOLOGIA_ATTORE.regione,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=procedura_avvio.data_scadenza_risposta
+                )
+                _contributi_tecnici.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_contributi_tecnici, piano=piano)
+        else:
+            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
+        _piano = _procedura_avvio.piano
+        _role = info.context.session['role'] if 'role' in info.context.session else None
+        _token = info.context.session['token'] if 'token' in info.context.session else None
+        _organization = _piano.ente
+        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+            try:
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="contributi_tecnici")
+
+                return AvvioPiano(
+                    avvio_aggiornato=_procedura_avvio,
+                    errors=[]
+                )
+            except BaseException as e:
+                tb = traceback.format_exc()
+                logger.error(tb)
+                return GraphQLError(e, code=500)
+        else:
+            return GraphQLError(_("Forbidden"), code=403)
+
+
+class ContributiTecnici(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
+
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.contributi_tecnici
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
+
+        # Update Azioni Piano
+        # - Complete Current Actions
+        _order = piano.azioni.count()
+
+        # - Update Action state accordingly
+        if fase.nome == FASE.anagrafica:
+            _avvio_procedimento = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
+            _contributi_tecnici = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.contributi_tecnici).first()
+            if _avvio_procedimento and _avvio_procedimento.stato == STATO_AZIONE.nessuna and \
+            _contributi_tecnici and _contributi_tecnici.stato != STATO_AZIONE.nessuna:
+
+                _contributi_tecnici.stato = STATO_AZIONE.nessuna
+                _contributi_tecnici.data = datetime.datetime.now(timezone.get_current_timezone())
+                _contributi_tecnici.save()
+
                 _formazione_del_piano = Azione(
                     tipologia=TIPOLOGIA_AZIONE.formazione_del_piano,
                     attore=TIPOLOGIA_ATTORE.comune,
@@ -264,13 +344,7 @@ class AvvioPiano(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_esito_conferenza_copianificazione, piano=piano)
 
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=user,
-                        piano=piano,
-                        message_type="conferenza_copianificazione")
-
+                    return "conferenza_copianificazione"
                 elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
 
                     procedura_avvio.notifica_genio_civile = False
@@ -284,13 +358,13 @@ class AvvioPiano(graphene.Mutation):
                         tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
                         attore=TIPOLOGIA_ATTORE.comune,
                         order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=procedura_avvio.data_scadenza_risposta
+                        stato=STATO_AZIONE.attesa
                     )
                     _conferenza_copianificazione.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
 
+                    return None
                 elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
 
                     procedura_avvio.notifica_genio_civile = True
@@ -300,8 +374,7 @@ class AvvioPiano(graphene.Mutation):
                         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
                         attore=TIPOLOGIA_ATTORE.comune,
                         order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=procedura_avvio.data_scadenza_risposta
+                        stato=STATO_AZIONE.attesa
                     )
                     _protocollo_genio_civile.save()
                     _order += 1
@@ -317,12 +390,7 @@ class AvvioPiano(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile_id, piano=piano)
 
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=user,
-                        piano=piano,
-                        message_type="protocollo_genio_civile")
+                    return "protocollo_genio_civile"
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -334,11 +402,19 @@ class AvvioPiano(graphene.Mutation):
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+                _res = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
-                return AvvioPiano(
+                if _res:
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type=_res)
+
+                return ContributiTecnici(
                     avvio_aggiornato=_procedura_avvio,
                     errors=[]
                 )
@@ -357,6 +433,14 @@ class RichiestaIntegrazioni(graphene.Mutation):
 
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
+
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.richiesta_integrazioni
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
@@ -470,6 +554,14 @@ class IntegrazioniRichieste(graphene.Mutation):
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.integrazioni_richieste
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
+
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
@@ -568,6 +660,14 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.protocollo_genio_civile
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
+
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
@@ -662,6 +762,14 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
+
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
@@ -711,13 +819,6 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                         _conferenza_copianificazione.save()
                         _order += 1
                         AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
-
-                        # Notify Users
-                        piano_phase_changed.send(
-                            sender=Piano,
-                            user=user,
-                            piano=piano,
-                            message_type="conferenza_copianificazione")
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -732,6 +833,13 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="conferenza_copianificazione")
 
                 return RichiestaConferenzaCopianificazione(
                     avvio_aggiornato=_procedura_avvio,
@@ -752,6 +860,14 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
 
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
+
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.esito_conferenza_copianificazione
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_avvio
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
@@ -799,13 +915,6 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                     _protocollo_genio_civile_id.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile_id, piano=piano)
-
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=user,
-                        piano=piano,
-                        message_type="protocollo_genio_civile")
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -820,6 +929,13 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="protocollo_genio_civile")
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)

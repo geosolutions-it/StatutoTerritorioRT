@@ -17,6 +17,8 @@ import {withControllableState} from 'enhancers'
 import {formatDate, showError} from 'utils'
 
 import {GET_AVVIO, GET_CONFERENZA} from 'schema'
+import PianoPageContainer from '../components/PianoPageContainer';
+import PianoSubPageTitle from '../components/PianoSubPageTitle';
 
 
 
@@ -35,7 +37,7 @@ const UI = enhancers(({
         numeroProtocolloGenioCivile,
         dataProtocolloGenioCivile,
         autoritaIstituzionali: {edges: aut =[]} = {},
-        altriDestinatari: {edges: dest = []} = {},
+        // altriDestinatari: {edges: dest = []} = {},
         risorse: {edges: risorsePiano = []},
         dataDelibera
     } = {}
@@ -46,16 +48,12 @@ const UI = enhancers(({
         const {node: quadro} = risorseAvvio.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").shift() || {}
         const {node: programma} = risorseAvvio.filter(({node: {tipo}}) => tipo === "programma_attivita").shift() || {}
         const {node: garante } = risorseAvvio.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").shift() || {}
+        const {node: contributiTecnici } = risorseAvvio.filter(({node: {tipo}}) => tipo === "contributi_tecnici").shift() || {}
         const allegati = risorseAvvio.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node) 
         const integrazioni = risorseAvvio.filter(({node: {tipo}}) => tipo === "integrazioni").map(({node}) => node) 
     return (
-        <div className="d-flex flex-column pb-4 pt-5">
-            <div className="d-flex border-serapide border-top py-5">
-                <span className="d-flex mt-4 align-items-center" >
-                    <i className="material-icons text-white bg-serapide p-2 mr-2 rounded-circle" style={{ fontSize: 44}}>dashboard</i>
-                    <h2 className="m-0 p-2">AVVIO DEL PROCEDIMENTO</h2>
-                </span>
-            </div>
+        <PianoPageContainer>
+            <PianoSubPageTitle icon="dashboard" title="AVVIO DEL PROCEDIMENTO"/>
             <div className="row pt-5">
                 <div className="col-12 py-2">DELIBERA DEL {formatDate(dataDelibera)}</div>
                 <div className="col-12 py-2">
@@ -90,7 +88,10 @@ const UI = enhancers(({
                         <Risorsa fileSize={false}  resource={doc} isLocked={true}/> 
                 </div>))}
                 </div>)}
-                
+                <div className="col-12 pt-4 pb-2">CONTRIBUTI TECNICI</div>
+                {contributiTecnici && (<div className="col-12 py-2">
+                    <Risorsa fileSize={false} useLabel resource={contributiTecnici} isLocked={true}/> 
+                </div>)}
                 <div className="col-12 pt-4">GARANTE DELL'INFORMAZIONE E DELLA PARTECIAPZIONE
                 <div className="col-12 pt-2 pb-1">{garanteNominativo}</div>
                 <div className="col-12">{garantePec}</div>
@@ -102,12 +103,12 @@ const UI = enhancers(({
                                  {nome}
                         </div>))}
                 </div>
-                <div className="col-6 pt-4 pb-3"><div className="mb-3">NOTIFICHE ALTRI SOGGETTI NON ISTITUZIONALI</div>
+                {/* <div className="col-6 pt-4 pb-3"><div className="mb-3">NOTIFICHE ALTRI SOGGETTI NON ISTITUZIONALI</div>
                 {dest.map(({node: {nome, uuid} = {}}) => (
                         <div className="col-12 px-0 p-1" key={uuid}>
                                  {nome}
                         </div>))}
-                </div>
+                </div> */}
             </div>    
             <div className="border-serapide border-top w-100 my-4"></div>   
             
@@ -203,7 +204,7 @@ const UI = enhancers(({
                 </TabPane>
             </TabContent>
                 
-        </div>
+            </PianoPageContainer>
 )})
 
 

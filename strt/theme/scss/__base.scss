@@ -9,6 +9,31 @@ $attori: (
   SCA: #FA2AB3,
   GENIO_CIVILE: #FA2AB3
 );
+$sizeBase: 15;
+
+@mixin generate-size ($size){
+    $val: $size / $sizeBase;
+    .size-#{$size} {
+        font-size: $val#{rem} !important;
+    }
+}
+
+@mixin generate-icon-size ($size){
+    $val: $size / $sizeBase;
+    .icon-#{$size} {
+        font-size: $val#{rem} !important;
+    }
+}
+
+
+@mixin generateMediaQuery($width, $size){
+    @media (min-width: $width#{px}) { 
+        html {
+            font-size: $size#{px};
+        }
+    }
+}
+
 
 @mixin serapide-color ($color){
     @include text-emphasis-variant(".text-serapide", $color );
@@ -31,7 +56,12 @@ $attori: (
             @include serapide-color($colore);
         }
 }
-
+.border-piano {
+    border-color:  #707070;
+}
+.bg-piano {
+    background-color: #F6F7F4;
+}
 .border-2         { border: ($border-width * 2) solid $border-color !important; }
 .border-top-2    { border-top: ($border-width * 2) solid $border-color !important; }
 .border-right-2   { border-right: ($border-width * 2) solid $border-color !important; }
@@ -52,21 +82,6 @@ $attori: (
 
 }
 /** colori notifiche**/
-.icon-34 {
-    font-size: 34px !important;
-}
-.icon-18 {
-    font-size: 16px !important;
-}
-.icon-16 {
-    font-size: 16px !important;
-}
-.icon-14 {
-    font-size: 14px !important;
-}
-.icon-12 {
-    font-size: 12px !important;
-}
 .first {
     order: -1;
 }
@@ -141,13 +156,16 @@ $attori: (
     }
 }
 .serapide-content {
-    
+}
+.pointer{
+    cursor: pointer;
 }
 .serapide {
+   
     width: 100%;
     .pointer{
         cursor: pointer;
-    }
+    }   
     .tipo__{
     
     &option {
@@ -186,39 +204,47 @@ a {
     }
 }
 .big-text {
-    font-size: 100px;
+    font-size: 5.4545rem;
     font-weight: 700;
-    line-height: 100px;
+    line-height: 5.4545rem;
 }
 .medium-text {
-    font-size: 40px;
+    font-size: 1.8181rem;
     font-weight: 400;
-    line-height: 48px;
+    line-height: 2.1818rem;
 }
 .wrap-text {
     word-wrap: break-word;
 }
 .first-section-row {
-    padding-left: 120px;
-    padding-right: 120px;
+    padding-left: 6rem;
+    padding-right: 6rem;
 }
 .second-section-row {
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    .medium-text{
+        font-size:1.1rem;
+    }
+    p {
+        margin: 0px;
+    }
 }
 .third-section-row {
-    padding-left: 80px;
-    padding-right: 80px;
+    padding-left: 4rem;
+    padding-right: 4re,;
+    padding-top: 11.66rem;
 }
 .section-row {
     padding-left: 60px;
     padding-right: 60px;
+    
 }
 .icon-col {
-    border-right: 8px solid yellow;
+    border-right: 8px solid #FED403;
 }
 .home-icon {
-    font-size: 48px;
+    font-size: 3.5rem;
 }
 .bg-pink {
     background-color: #e1e1e1;
@@ -296,5 +322,157 @@ a {
             .react-datepicker__input-container{
                 flex: 1 1 auto !important
             }
+    }
+}
+// modifiche revisione Elena
+
+@for $i from 0 through 12 {
+    $width: 700 + ($i * 100);
+    $size: 10 + $i;
+    @include generateMediaQuery($width, $size);
+}
+// genera icone
+@for $size from 8 through 54 {
+    @include generate-icon-size($size);
+}
+// pagina piano->home-action
+// genera font-size relativi
+@for $size from 6 through 30 {
+    @include generate-size($size);
+}
+.h-pre {
+    font-size: 30px;
+    line-height: 30px;
+}
+.h-title {
+    font-size: 38px;
+    font-weight: bold;
+    line-height: 38px
+}
+.h-sub {
+    font-size: 28px;
+}
+.home-container{
+    margin: 1.66rem;
+}
+
+.lista-azioni{
+    padding: 1.66rem;
+    max-width: 52rem;
+    min-width: 40rem;
+}
+.action-container{
+    padding: 1.66rem;
+    margin-left: 1rem;
+}
+.piano-page-content {
+    margin: 1.66rem;
+    display: flex;
+    flex-direction: column !important;
+    background-color: $white;
+    padding: 1.66rem;
+
+}
+
+
+
+
+.sidebar-open {
+    .piano-header {
+        padding-left: 3.33rem;
+        padding-right: 4.66rem;
+    }
+     > div {
+         > .legenda-azioni {
+            padding-left: 3.33rem;
+            padding-right: 4.66rem;
+        }
+    }
+
+}
+.sidebar-closed {
+
+    .piano-header {
+        padding-left: 6rem;
+        padding-right: 6.66rem;
+    }
+    > div {
+        > .legenda-azioni {
+            padding-left: 6rem;
+            padding-right: 6.66rem;
+        }
+        > .home-container {
+            margin: 1.66rem 3.33rem 1.66rem 3.33rem;
+        }
+    }
+    .piano-page-content {
+        margin: 1.66rem 3.33rem 1.66rem 3.33rem;
+    
+    }
+}
+
+.action-title{
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+
+.salva-invia{
+    .sv-button{
+        min-width:200px;
+    }
+}
+@media (min-width: 1400px) { 
+    .salva-invia{
+        .modal-dialog{
+            max-width: 800px !important;
+            
+        }
+        .sv-button{
+            min-width:300px;
+        }
+    }
+}
+
+@media (min-width: 1400px) { 
+     .serapide{
+         .modal-dialog{
+             max-width: 550px !important;
+         }
+     }
+ }
+ @media (min-width: 1500px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 600px !important;
+        }
+    }
+}
+@media (min-width: 1600px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 650px !important;
+        }
+    }
+}
+@media (min-width: 1700px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 700px !important;
+        }
+    }
+}
+@media (min-width: 1800px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 750px !important;
+        }
+    }
+}
+@media (min-width: 1900px) { 
+    .serapide{
+        .modal-dialog{
+            max-width: 800px !important;
+        }
     }
 }

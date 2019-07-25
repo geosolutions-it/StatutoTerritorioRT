@@ -51,9 +51,9 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_ATTORE,
 )
 
-from . import fase
-from .. import types
-from .. import inputs
+from serapide_core.api.graphene import types
+from serapide_core.api.graphene import inputs
+from serapide_core.api.graphene.mutations import fase
 
 logger = logging.getLogger(__name__)
 
@@ -242,8 +242,16 @@ class InvioPareriVerificaVAS(graphene.Mutation):
     errors = graphene.List(graphene.String)
     vas_aggiornata = graphene.Field(types.ProceduraVASNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.pareri_verifica_sca
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_vas
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
 
         # Update Azioni Piano
         # - Update Action state accordingly
@@ -302,7 +310,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                         piano=_piano,
                         message_type="tutti_pareri_inviati")
 
-                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
                 return InvioPareriVerificaVAS(
                     vas_aggiornata=_procedura_vas,
@@ -512,13 +520,6 @@ class AvvioConsultazioniVAS(graphene.Mutation):
 
                 consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
 
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=user,
-                    piano=piano,
-                    message_type="piano_verifica_vas_updated")
-
                 _avvio_consultazioni_sca.save()
                 consultazione_vas.save()
 
@@ -551,6 +552,13 @@ class AvvioConsultazioniVAS(graphene.Mutation):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _consultazione_vas, info.context.user)
 
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="piano_verifica_vas_updated")
+
                 return AvvioConsultazioniVAS(
                     consultazione_vas_aggiornata=_consultazione_vas,
                     errors=[]
@@ -571,8 +579,16 @@ class InvioPareriVAS(graphene.Mutation):
     errors = graphene.List(graphene.String)
     vas_aggiornata = graphene.Field(types.ProceduraVASNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.avvio_consultazioni_sca
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_vas
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -712,7 +728,7 @@ class InvioPareriVAS(graphene.Mutation):
                         piano=_piano,
                         message_type="tutti_pareri_inviati")
 
-                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+                    cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
                 return InvioPareriVAS(
                     vas_aggiornata=_procedura_vas,
@@ -734,8 +750,16 @@ class AvvioEsamePareriSCA(graphene.Mutation):
     errors = graphene.List(graphene.String)
     vas_aggiornata = graphene.Field(types.ProceduraVASNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.avvio_esame_pareri_sca
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_vas
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
@@ -779,7 +803,7 @@ class AvvioEsamePareriSCA(graphene.Mutation):
         (rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune') or
          rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC')):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
                 return AvvioEsamePareriSCA(
                     vas_aggiornata=_procedura_vas,
@@ -801,8 +825,16 @@ class UploadElaboratiVAS(graphene.Mutation):
     errors = graphene.List(graphene.String)
     vas_aggiornata = graphene.Field(types.ProceduraVASNode)
 
+    @staticmethod
+    def action():
+        return TIPOLOGIA_AZIONE.upload_elaborati_vas
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_vas
+
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas):
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
 
         # Update Azioni Piano
         # - Update Action state accordingly
@@ -833,7 +865,7 @@ class UploadElaboratiVAS(graphene.Mutation):
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)

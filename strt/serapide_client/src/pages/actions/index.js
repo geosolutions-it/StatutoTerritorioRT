@@ -32,8 +32,10 @@ import {INVIO_PARERI_VAS, CONTRODEDUZIONI,
         GET_APPROVAZIONE, APPROVAZIONE_FILE_UPLOAD, UPDATE_APPROVAZIONE,
         DELETE_RISORSA_APPROVAZIONE, ESITO_CONFERENZA_PAESAGGISTICA_AP,
         PUBBLICAZIONE_APPROVAZIONE, ATTRIBUZIONE_CONFORMITA_PIT,
-        GET_PUBBLICAZIONE, UPDATE_PUBBLICAZIONE, PUBBLICAZIONE_PIANO
+        GET_PUBBLICAZIONE, UPDATE_PUBBLICAZIONE, PUBBLICAZIONE_PIANO,
+        AVVIO_FILE_UPLOAD, CONTRIBUTI_TECNICI
 } from 'schema'
+import { GET_AVVIO, DELETE_RISORSA_AVVIO } from '../../graphql/index';
 
 
 // parametri passati di default piano, back, utente, scadenza
@@ -94,7 +96,16 @@ export default {
                                                 query={GET_PUBBLICAZIONE}
                                                 updateM={UPDATE_PUBBLICAZIONE}
                                                 closeAction={PUBBLICAZIONE_PIANO}
-                                                {...props}/>)
+                                                {...props}/>),
+    contributiTecnici: (props) => (<UploadFile  title="Contributi Tecnici"
+        placeholder="Contributi Tecnici"
+        fileType="contributi_tecnici"
+        subTitle="Caricare il file dei contributi tecnici"
+        query={GET_AVVIO} 
+        deleteRes={DELETE_RISORSA_AVVIO} 
+        uploadRes={AVVIO_FILE_UPLOAD}
+        closeAction={CONTRIBUTI_TECNICI}
+        {...props}/>),
     
 }
 

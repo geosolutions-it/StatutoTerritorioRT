@@ -48,7 +48,8 @@ const azioni = {
         "REV_PIANO_POST_CP_AP": ["RUP", "OP", "TMP"],
         "ATTRIBUZIONE_CONFORMITA_PIT": ["RUP", "OP", "TMP"],
         "PUBBLICAZIONE_APPROVAZIONE": ["RUP", "OP", "TMP"],
-        "PUBBLICAZIONE_PIANO": ["RUP", "OP", "TMP"]
+        "PUBBLICAZIONE_PIANO": ["RUP", "OP", "TMP"],
+        "CONTRIBUTI_TECNICI": ["*"]
     }
 export const globalAuth = {
     _attore_attivo: "",
@@ -60,5 +61,5 @@ export const checkAttore = ( {attore = ""} = {}, attore_attivo = globalAuth._att
 
 export const canExecuteAction = ({tipologia = "", attore= ""} = {}, attore_attivo = globalAuth._attore_attivo, ruolo = globalAuth._ruolo) => {
   // console.log(attore_attivo, ruolo, tipologia, attore, includes((azioni[tipologia] || []), ruolo) );
-  return tipologia === "OSSERVAZIONI_ENTI" || (attore_attivo.toLowerCase() === attore.toLowerCase() && includes((azioni[tipologia] || []), ruolo))
+  return tipologia === "OSSERVAZIONI_ENTI" || (attore_attivo.toLowerCase() === attore.toLowerCase() && (includes((azioni[tipologia] || []), ruolo) || includes((azioni[tipologia] || []), "*")))
 }
