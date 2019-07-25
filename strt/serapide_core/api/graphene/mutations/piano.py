@@ -188,28 +188,30 @@ class UpdatePiano(relay.ClientIDMutation):
 
     @staticmethod
     def get_role(contact, actor):
-        _new_role_type = MembershipType.objects.filter(
+
+        _new_role = UserMembership.objects.filter(
             attore=actor,
             member=contact.user,
-            organization_type=contact.ente.type
+            organization=contact.ente
         ).first()
-        if not _new_role_type:
+
+        if not _new_role:
             _new_role_type, created = MembershipType.objects.get_or_create(
                 code=settings.TEMP_USER_CODE,
                 organization_type=contact.ente.type
             )
 
-        _new_role_name = '%s-%s-%s' % (contact.user.fiscal_code,
-                                       contact.ente.code,
-                                       actor)
-        _new_role, created = UserMembership.objects.get_or_create(
-            name=_new_role_name,
-            attore=actor,
-            description='%s - %s' % (_new_role_type.description, contact.ente.name),
-            member=contact.user,
-            organization=contact.ente,
-            type=_new_role_type
-        )
+            _new_role_name = '%s-%s-%s' % (contact.user.fiscal_code,
+                                           contact.ente.code,
+                                           actor)
+            _new_role, created = UserMembership.objects.get_or_create(
+                name=_new_role_name,
+                attore=actor,
+                description='%s - %s' % (_new_role_type.description, contact.ente.name),
+                member=contact.user,
+                organization=contact.ente,
+                type=_new_role_type
+            )
         return _new_role
 
     @staticmethod
