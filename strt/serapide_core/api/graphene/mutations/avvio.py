@@ -234,13 +234,6 @@ class AvvioPiano(graphene.Mutation):
                 _contributi_tecnici.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_contributi_tecnici, piano=piano)
-
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=user,
-                    piano=piano,
-                    message_type="contributi_tecnici")
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -255,6 +248,13 @@ class AvvioPiano(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="contributi_tecnici")
 
                 return AvvioPiano(
                     avvio_aggiornato=_procedura_avvio,
