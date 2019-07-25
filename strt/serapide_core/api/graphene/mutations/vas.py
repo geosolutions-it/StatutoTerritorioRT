@@ -520,13 +520,6 @@ class AvvioConsultazioniVAS(graphene.Mutation):
 
                 consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
 
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=user,
-                    piano=piano,
-                    message_type="piano_verifica_vas_updated")
-
                 _avvio_consultazioni_sca.save()
                 consultazione_vas.save()
 
@@ -558,6 +551,13 @@ class AvvioConsultazioniVAS(graphene.Mutation):
          rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC')):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _consultazione_vas, info.context.user)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="piano_verifica_vas_updated")
 
                 return AvvioConsultazioniVAS(
                     consultazione_vas_aggiornata=_consultazione_vas,

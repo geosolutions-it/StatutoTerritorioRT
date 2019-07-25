@@ -344,13 +344,7 @@ class ContributiTecnici(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_esito_conferenza_copianificazione, piano=piano)
 
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=user,
-                        piano=piano,
-                        message_type="conferenza_copianificazione")
-
+                    return "conferenza_copianificazione"
                 elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
 
                     procedura_avvio.notifica_genio_civile = False
@@ -370,6 +364,7 @@ class ContributiTecnici(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
 
+                    return None
                 elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
 
                     procedura_avvio.notifica_genio_civile = True
@@ -395,12 +390,7 @@ class ContributiTecnici(graphene.Mutation):
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile_id, piano=piano)
 
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=user,
-                        piano=piano,
-                        message_type="protocollo_genio_civile")
+                    return "protocollo_genio_civile"
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -414,7 +404,15 @@ class ContributiTecnici(graphene.Mutation):
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+                _res = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                if _res:
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type=_res)
 
                 return ContributiTecnici(
                     avvio_aggiornato=_procedura_avvio,
@@ -821,13 +819,6 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                         _conferenza_copianificazione.save()
                         _order += 1
                         AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
-
-                        # Notify Users
-                        piano_phase_changed.send(
-                            sender=Piano,
-                            user=user,
-                            piano=piano,
-                            message_type="conferenza_copianificazione")
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -842,6 +833,13 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="conferenza_copianificazione")
 
                 return RichiestaConferenzaCopianificazione(
                     avvio_aggiornato=_procedura_avvio,
@@ -917,13 +915,6 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                     _protocollo_genio_civile_id.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile_id, piano=piano)
-
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=user,
-                        piano=piano,
-                        message_type="protocollo_genio_civile")
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -938,6 +929,13 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="protocollo_genio_civile")
 
                 if _piano.is_eligible_for_promotion:
                     _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
