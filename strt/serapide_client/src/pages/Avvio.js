@@ -188,7 +188,7 @@ const UI = enhancers(({
                     {!!numeroProtocolloGenioCivile && (<div className="row pt-4">
                     <div className="col-12 d-flex">
                         <i className="material-icons text-serapide self-align-center">check_circle</i>
-                        <span className="pl-1">RICCEZIONE PROTOCOLLO DAL GENIO CIVILE</span>
+                        <span className="pl-1">RICEZIONE PROTOCOLLO DAL GENIO CIVILE</span>
                     </div>
                     
                     <div className="col-12 pt-3 pl-4 text-serapide">
