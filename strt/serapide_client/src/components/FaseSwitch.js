@@ -20,11 +20,11 @@ export default enhancer(({fase, className, checked, toggle, goToSection, childre
             <div className="d-flex strt-switch" >
                 <div className="custom-control custom-switch border-top pt-2">
                     <label onClick={toggle} className={classNames('custom-control-label pointer', {"border-serapide bg-serapide": checked, checked})}/>
-                    <span className="size-8 align-middle">Visualizza attività</span>
+                    <span className="size-10 align-middle">Visualizza attività</span>
                 </div>
                 <div className="d-flex border-top pl-2 pt-2">
                     <i className="material-icons pointer text-serapide icon-22" onClick={goToSection}>exit_to_app</i>
-                    <label className="control-label pl-1 size-8 my-auto">Vai alla sezione</label>
+                    <label className="control-label pl-1 size-10 my-auto">Vai alla sezione</label>
                 </div>
             </div>
         </div>

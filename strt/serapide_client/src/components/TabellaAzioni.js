@@ -30,7 +30,7 @@ export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", classN
     return (
     <Table size="sm" className={className} hover>
         <thead>
-            <tr className="size-8">
+            <tr className="size-11">
                 <th>Stato</th>
                 <th>Azione</th>
                 <th>Attori</th>

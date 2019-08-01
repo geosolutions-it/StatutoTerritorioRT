@@ -84,7 +84,7 @@ class FileChooser extends React.Component {
       const comp = this.renderChooser()
      return modal ? (
       <Modal toggle={this.toggleOpen} isOpen={open} centered size={`${sz === 'lg' ? 'md' : 'sm'}`} wrapClassName="serapide" autoFocus={true}>
-        <ModalBody className="d-flex justify-content-center">{comp}</ModalBody>
+        <ModalBody className="d-flex justify-content-center modal-body-file-chooser">{comp}</ModalBody>
       </Modal>) : comp
 
    }

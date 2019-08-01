@@ -58,7 +58,7 @@ render () {
             </div>
         </div>
         <div className="d-flex home-container ">
-            <div className={classNames("lista-azioni bg-white border  d-flex flex-column flex-3", {"flex-fill": !action})}>
+            <div className={classNames("lista-azioni bg-white border  d-flex flex-column flex-1", {"flex-fill": !action})}>
                 
                 {showPubblicazione(nomeFase) && (<FaseSwitch initValue={nomeFase==="APPROVAZIONE"} fase="pubblicazione" goToSection={() => history.push(url.replace("home","pubblicazione"))}>
                     <div className="py-4">
@@ -81,7 +81,7 @@ render () {
                     </div>
                 </FaseSwitch>
             </div >
-            <div className={classNames("d-flex flex-column", {"action-container flex-fill border  border-piano overflow-auto bg-white": action})}>
+            <div className={classNames("d-flex flex-column", {"action-container flex-1 border  border-piano overflow-auto bg-white": action})}>
                 {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
                 <Switch>
                     {azioni.filter(({node: {attore, tipologia}}) => attore.toLowerCase() === utente.attore.toLowerCase() || tipologia === "OSSERVAZIONI_ENTI").map(({node: {uuid, stato = "", tipologia = "",label = "", attore = ""}}) => {

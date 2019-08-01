@@ -1,4 +1,7 @@
 
+.modal-body-file-chooser {
+    padding: 1.5rem 2rem ;
+}
 .dropzone {
     padding: 0.5em;
     border-width: 1px;
@@ -60,7 +63,7 @@
         border-color: $danger;
     }
 }
-
+// Css for resource and file loader
 .resource, .file-loader{
     padding: map-get($spacers, 2);
     .material-icons, .prog {

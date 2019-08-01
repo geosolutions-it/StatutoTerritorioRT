@@ -341,16 +341,16 @@ a {
     @include generate-size($size);
 }
 .h-pre {
-    font-size: 30px;
-    line-height: 30px;
+    font-size: 1.6rem;
+    line-height: 1.6em;
 }
 .h-title {
-    font-size: 38px;
+    font-size: 2.2rem;
     font-weight: bold;
-    line-height: 38px
+    line-height: 2rem
 }
 .h-sub {
-    font-size: 28px;
+    font-size: 1.4rem;
 }
 .home-container{
     margin: 1.66rem;
@@ -359,7 +359,6 @@ a {
 .lista-azioni{
     padding: 1.66rem;
     max-width: 52rem;
-    min-width: 40rem;
 }
 .action-container{
     padding: 1.66rem;
