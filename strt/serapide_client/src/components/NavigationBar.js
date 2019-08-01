@@ -21,7 +21,7 @@ export default toggleControllableState("isOpen", "toggle", false) (({roleType, a
                 <LinkWithIcon className="vertical-divider-left disabled" icon="find_in_page" label="Ricerca" link="/serapide/#/search" disabled></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
-                <LinkWithIcon icon="view_list" label="Archivio Piani" link="/serapide/#/archivio"></LinkWithIcon>
+                <LinkWithIcon className="disabled" icon="view_list" label="Archivio Piani" link="/serapide/#/archivio" disabled></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
                 <LinkWithIcon className={classNames("vertical-divider-right", {disabled: !(roleType === "RUP" && attore === "Comune")})} disabled={!(roleType === "RUP" && attore === "Comune")} icon="note_add" label="Crea Nuovo Piano" link="/serapide/#/nuovo_piano"></LinkWithIcon>
@@ -30,7 +30,7 @@ export default toggleControllableState("isOpen", "toggle", false) (({roleType, a
                 <LinkWithIcon className="vertical-divider-right disabled"  disabled icon="today" label="Calendario"></LinkWithIcon>
               </NavItem>
               <NavItem className="first">
-                <LinkWithIcon  link="./#/" icon="notification_important" iconColor="text-danger" withBadge badge={alertsCount} label="Alert"></LinkWithIcon>
+                <LinkWithIcon  className="default" link="./#/" icon="notification_important" iconColor="text-danger" withBadge badge={alertsCount} label="Alert"></LinkWithIcon>
               </NavItem>
               <Messaggi className="first" messaggi={messaggi}></Messaggi>
             </React.Fragment>
