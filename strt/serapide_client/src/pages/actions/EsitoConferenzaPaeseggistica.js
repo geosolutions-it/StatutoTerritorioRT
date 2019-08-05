@@ -11,6 +11,7 @@ import {Query} from 'react-apollo'
 import UploadFiles from 'components/UploadFiles'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
 
 import  {showError, getCodice} from 'utils'
 
@@ -33,14 +34,19 @@ const UI = ({
         return (
             <React.Fragment>
                 <ActionTitle>Esisto Conferenza Paesaggistica</ActionTitle>
-                <h4 className="mt-5 font-weight-light pl-4 pb-1">Verbali e Allegati</h4>
-                <UploadFiles risorse={docsAllegati} 
+                <ActionParagraphTitle fontWeight="font-weight-light">Verbali e Allegati</ActionParagraphTitle>
+                <UploadFiles
+                        iconSize="icon-15"
+                        fontSize="size-11"
+                        vertical
+                        useLabel
+                        risorse={docsAllegati} 
                         mutation={uploadM} 
                         resourceMutation={deleteM}
                         variables={{codice: uuid, tipo: 'elaborati_conferenza_paesaggistica' }}
                         isLocked={false}/>
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveM} canCommit={docsAllegati.length> 0}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={saveM} canCommit={docsAllegati.length> 0}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }

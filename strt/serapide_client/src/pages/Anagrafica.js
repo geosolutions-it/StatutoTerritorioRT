@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 
 import {Query} from "react-apollo"
 import {getEnteLabelID} from "utils"
-import {GET_PIANI, UPDATE_PIANO} from "schema"
+import {GET_PIANI} from "schema"
 
 import {formatDate} from "utils"
 

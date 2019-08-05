@@ -8,8 +8,8 @@
 import React from 'react'
 
 
-export default ({label, children, className}) => (
-    <div  className={`pt-5 font-weight-bold ${className}`}>
+export default ({label, children, fontWeight ="font-weight-bold", className = "size-14 pb-1"}) => (
+    <div  className={`pt-5 ${fontWeight || ''} ${className || ''}`}>
         {children ? children : label}
     </div>
     )

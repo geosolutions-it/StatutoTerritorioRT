@@ -13,7 +13,7 @@ import FileUpload from './UploadSingleFile'
 import Button from './IconButton'
 import {EnhancedListSelector} from './ListSelector'
 import Resource from 'components/Resource'
-import AddContact from 'components/AddContact'
+// import AddContact from 'components/AddContact'
 import SalvaInvia from 'components/SalvaInvia'
 import TextWithTooltip from 'components/TextWithTooltip'
 
@@ -173,7 +173,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             label="DEFINISCI SOGGETTO PROPONENTE"
                             size="lg"
                             onChange={changed}
-                            btn={(toggleOpen) => (<Button fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="my-auto text-uppercase" color="serapide" icon="add_circle" label="SOGGETTO PROPONENTE"></Button>)}
+                            btn={(toggleOpen) => (<Button iconSize="icon-20" fontSize="size-11" disabled={isLocked} onClick={toggleOpen} className="my-auto text-uppercase" color="serapide" icon="add_circle" label="SOGGETTO PROPONENTE"></Button>)}
                         >
                         {/*<AddContact className="mt-2"
                          tipologia="generico"></AddContact>*/}
@@ -203,7 +203,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             variables={{tipo: "acvas"}}
                             size="lg"
                             label="SELEZIONA AUTORITA’ COMPETENTE VAS"
-                            btn={(toggleOpen) => (<Button  fontSize="60%" disabled={isLocked} onClick={toggleOpen} className="text-uppercase" color="serapide" icon="add_circle" label="AUTORITA’ COMPETENTE VAS (AC)"/>)}
+                            btn={(toggleOpen) => (<Button iconSize="icon-20" fontSize="size-11" disabled={isLocked} onClick={toggleOpen} className="text-uppercase" color="serapide" icon="add_circle" label="AUTORITA’ COMPETENTE VAS (AC)"/>)}
                             >
                             {/*<AddContact className="mt-2"
                              tipologia="acvas"></AddContact>*/}
@@ -238,7 +238,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         label="DEFINISCI SCA"
                         size="lg"
                         onChange={changed}
-                        btn={(toggleOpen) => (<Button fontSize="60%" onClick={toggleOpen} className="my-auto text-uppercase" disabled={disableSCA || isLocked} color="serapide" icon="add_circle" label="SOGGETTI COMPETENTI IN MATERIA AMBIENTALE (SCA)"></Button>)}
+                        btn={(toggleOpen) => (<Button iconSize="icon-20" fontSize="size-11" onClick={toggleOpen} className="my-auto text-uppercase" disabled={disableSCA || isLocked} color="serapide" icon="add_circle" label="SOGGETTI COMPETENTI IN MATERIA AMBIENTALE (SCA)"></Button>)}
                     >
                     {/*<AddContact className="mt-2"
                      tipologia="sca"></AddContact>*/}

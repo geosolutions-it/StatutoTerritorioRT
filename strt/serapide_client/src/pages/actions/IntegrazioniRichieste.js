@@ -11,6 +11,7 @@ import {Query} from 'react-apollo'
 import UploadFiles from 'components/UploadFiles'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import {EnhancedDateSelector} from 'components/DateSelector'
 
 import  {showError, getInputFactory, getCodice} from 'utils'
@@ -38,22 +39,31 @@ const UI = rebuildTooltip()(({
         return (
             <React.Fragment>
                 <ActionTitle>Integrazioni Richieste</ActionTitle>
-                <div className="row">
-                <div className="col-12 d-flex align-items-center">
-                        <i className="material-icons icon-18 rounded-circle text-white bg-serapide">edit</i>
-                        <span className="pl-1 text-serapide">CARICA FILES PER L'INTEGRAZIONE</span>
-                    </div>
-                    </div>
-                <UploadFiles risorse={integrazioni} 
+                
+                <div className="d-flex mt-4 align-items-center">
+                        <i className="material-icons icon-15 rounded-circle text-white bg-serapide">edit</i>
+                        <span className="pl-1 text-serapide size-11">CARICA FILES PER L'INTEGRAZIONE</span>
+                </div>
+                
+                <UploadFiles 
+                        useLabel
+                        iconSize="icon-15"
+                        fontSize="size-11"
+                        className="border-0 mt-3"
+                        risorse={integrazioni} 
                         mutation={AVVIO_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_AVVIO}
                         variables={{codice: uuid, tipo: 'integrazioni' }}
                         isLocked={false}/>
-                    <h5 className="font-weight-light pb-1 mt-5 mb-3">TERMINI SCADENZA PER LA RISPOSTA</h5>
-                <EnhancedDateSelector selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getInput(uuid, "dataScadenzaRisposta")} className="py-0 rounded-pill" mutation={UPDATE_AVVIO}/>
+                
+                <ActionParagraphTitle className="size-14 pb-1 d-flex justify-content-between align-items-center">
+                    <span>TERMINI SCADENZA PER LA RISPOSTA</span>
+                    <EnhancedDateSelector popperPlacement="left" selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getInput(uuid, "dataScadenzaRisposta")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_AVVIO}/>            
+                </ActionParagraphTitle>
+
                 
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={INTEGRAZIONI_RICHIESTE} canCommit={integrazioni.length> 0}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={INTEGRAZIONI_RICHIESTE} canCommit={integrazioni.length> 0}></SalvaInvia>
                 </div>
             </React.Fragment>)
     })

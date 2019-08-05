@@ -12,10 +12,14 @@ import FileUpload from 'components/UploadSingleFile'
 import Resource from 'components/Resource'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
-import TextWithTooltip from 'components/TextWithTooltip'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
+import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
+import ListaContatti from 'components/ListaContatti'
+
 import {EnhancedDateSelector} from 'components/DateSelector'
 import Input from 'components/EnhancedInput'
 import Elaborati from "components/ElaboratiPiano"
+
 
 import  {showError, formatDate, getInputFactory, getCodice} from 'utils'
 import {rebuildTooltip} from 'enhancers'
@@ -27,10 +31,22 @@ import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
 } from 'schema'
 
 
+const Link = ({title, url}) => (<React.Fragment>
+                <ActionSubParagraphTitle>{title}</ActionSubParagraphTitle>
+                <div className="mt-3 row d-flex align-items-center">
+                    <div className="col-12 d-flex align-items-center">
+                        <i className="material-icons icon-15 text-serapide">link</i><a href={url} target="_blank" rel="noopener noreferrer" className="pl-1 size-12 text-secondary">{url}</a>
+                    </div>
+                </div>
+                    </React.Fragment>)
+ 
+
 const getInput = getInputFactory("proceduraAdozione")
 
 const fileProps = {className: `border-0`, mutation: ADOZIONE_FILE_UPLOAD,
-                    resourceMutation: DELETE_RISORSA_ADOZIONE, disabled: false, isLocked: false}
+                    resourceMutation: DELETE_RISORSA_ADOZIONE, disabled: false, isLocked: false,
+                    iconSize: "icon-15", fontSize: "size-11",
+                    vertical: true, useLabel: true}
                     
 const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})(({
     vas: {node:{ risorse: {edges: resVas =[]} = {}} = {}} = {},
@@ -56,35 +72,16 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                 <ActionTitle>
                    Trasmissione Adozione
                 </ActionTitle>
-                <h5 className="pt-5 font-weight-light">RIFERIMENTI DOCUMENTALI</h5>
-                <h6 className="pt-3 font-weight-light">NORME TECNICHE DI ATTUAZIONE E RAPPORTO AMBIENTALE</h6>
-                <div className="mt-1 row d-flex align-items-center">
-                    <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><a href={redazioneNormeTecnicheAttuazioneUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{redazioneNormeTecnicheAttuazioneUrl}</a>
-                    </div>
-                </div>
-                <Resource useLabel fileSize={false} className="border-0 mt-3" icon="attach_file" resource={rapportoAmbientale}/>
-                <h6 className="pt-3 font-weight-light">CONFORMAZIONE AL PIT-PPR</h6>
-                <div className="mt-1 row d-flex align-items-center">
-                    <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><a href={conformazionePitPprUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{conformazionePitPprUrl}</a>
-                    </div>
-                </div>
-                <h6 className="pt-3 font-weight-light">MONITORAGGIO URBANISTICO</h6>
-                <div className="mt-1 row d-flex align-items-center">
-                    <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><a href={monitoraggioUrbanisticoUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{monitoraggioUrbanisticoUrl}</a>
-                    </div>
-                </div>
-                <div className="w-100 border-top mt-3"></div>
-                <h5 className="pt-4 font-weight-light">DESTINATARI</h5>
-                <h6 className="font-weight-light pb-1 mt-2">SOGGETTI ISTITUZIONALI</h6>
-                <div className="row">  
-                    {aut.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
-                                 <i className="material-icons text-serapide">bookmark</i>
-                                 {nome}
-                        </div>))}
-                    </div>
+                <ActionParagraphTitle>RIFERIMENTI DOCUMENTALI</ActionParagraphTitle>
+                <Link title="NORME TECNICHE DI ATTUAZIONE E RAPPORTO AMBIENTALE" url={redazioneNormeTecnicheAttuazioneUrl}/>
+                <Resource iconSize="icon-15" fontSize="size-11" useLabel fileSize={false} className="border-0 mt-3" icon="attach_file" resource={rapportoAmbientale}/>
+                <div className="w-100 py-2"></div>
+                <Link title="CONFORMAZIONE AL PIT-PPR" url={conformazionePitPprUrl}/>
+                <div className="w-100 py-2"></div>
+                <Link title="MONITORAGGIO URBANISTICO" url={monitoraggioUrbanisticoUrl}/>
+                <div className="w-100 border-top m-0 mt-4"></div>
+                <ActionParagraphTitle className="pt-4 font-weight-light">DESTINATARI</ActionParagraphTitle>
+                <ListaContatti title="SOGGETTI ISTITUZIONALI" contacts={aut}/>
                 {/* <h6 className="font-weight-light pb-1 mt-4">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h6>
                 <div className="row">
                             {dest.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
@@ -93,19 +90,24 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                             </div>))}
                         </div> */}
                 <div className="w-100 border-top mt-3"></div>
-                <div className="action-uploader  align-self-start ">
+                <div className="action-uploader  mt-5 py-1 align-self-start border-bottom">
                 <FileUpload 
                     {...fileProps}
                     placeholder="DELIBERA DI ADOZIONE"
                     risorsa={deliberaAdozione} variables={{codice: uuid, tipo: "delibera_adozione" }}/>                
                 </div>
-                <div className="row mt-4">
-                    <div className="col-12 d-flex pl-4 align-items-center">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA ADOZIONE" selected={dataDeliberaAdozione ? new Date(dataDeliberaAdozione) : undefined} getInput={getInput(uuid,"dataDeliberaAdozione")} className="py-0" mutation={UPDATE_ADOZIONE}/></div>
-                </div>
+
+                <ActionParagraphTitle className="pb-1 d-flex justify-content-between size-14">
+                    <span className="my-auto">DATA ADOZIONE</span>
+                    <EnhancedDateSelector popperPlacement="left" placeholder="SELEZIONA DATA ADOZIONE" selected={dataDeliberaAdozione ? new Date(dataDeliberaAdozione) : undefined} getInput={getInput(uuid,"dataDeliberaAdozione")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_ADOZIONE}/>
+                </ActionParagraphTitle>
                 
-                <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
-                <Elaborati 
+                <ActionParagraphTitle>ELABORATI DEL PIANO</ActionParagraphTitle>
+                <Elaborati
+                        iconSize="icon-15"
+                        fontSize="size-11"
+                        vertical
+                        useLabel
                         tipoPiano={tipoPiano.toLowerCase()} 
                         resources={edges}
                         mutation={ADOZIONE_FILE_UPLOAD}
@@ -113,62 +115,56 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                         uuid={uuid}
                         />               
                 <div className="w-100 border-top mt-3"></div>                
-                <h5 className="pt-4 font-weight-light">PUBBLICAZIONE</h5>
+                <ActionParagraphTitle>PUBBLICAZIONE</ActionParagraphTitle>
                 <div className="mt-2 row d-flex align-items-center">
-                    <div className="col-3">URL B.U.R.T</div>
+                    <div className="col-3 size-12">URL B.U.R.T</div>
                     <div className="col-9 ">
-                        <Input placeholder="COPIA URL B.U.R.T." getInput={getInput(uuid, "pubblicazioneBurtUrl")} mutation={UPDATE_ADOZIONE} disabled={false}  onChange={undefined} value={pubblicazioneBurtUrl} type="text" />
+                        <Input className="size-10" placeholder="COPIA URL B.U.R.T." getInput={getInput(uuid, "pubblicazioneBurtUrl")} mutation={UPDATE_ADOZIONE} disabled={false}  onChange={undefined} value={pubblicazioneBurtUrl} type="text" />
                     </div>
                     <div className="col-9 mt-2 offset-3">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneBurtData ? new Date(pubblicazioneBurtData) : undefined} getInput={getInput(uuid, "pubblicazioneBurtData")} className="py-0 " mutation={UPDATE_ADOZIONE}/>
+                    <EnhancedDateSelector  placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneBurtData ? new Date(pubblicazioneBurtData) : undefined} getInput={getInput(uuid, "pubblicazioneBurtData")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_ADOZIONE}/>
                     </div>
 
                 </div>
                 <div className="mt-2 row d-flex align-items-center">
-                    <div className="col-3">URL SITO</div>
+                    <div className="col-3 size-12">URL SITO</div>
                     <div className="col-9 ">
-                        <Input placeholder="COPIA URL SITO" getInput={getInput(uuid, "pubblicazioneSitoUrl")} mutation={UPDATE_ADOZIONE} disabled={false}  onChange={undefined} value={pubblicazioneSitoUrl} type="text" />
+                        <Input className="size-10" placeholder="COPIA URL SITO" getInput={getInput(uuid, "pubblicazioneSitoUrl")} mutation={UPDATE_ADOZIONE} disabled={false}  onChange={undefined} value={pubblicazioneSitoUrl} type="text" />
                     </div>
                     <div className="col-9 mt-2 offset-3">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneSitoData ? new Date(pubblicazioneSitoData) : undefined} getInput={getInput(uuid, "pubblicazioneSitoData")} className="py-0 " mutation={UPDATE_ADOZIONE}/>
+                    <EnhancedDateSelector placeholder="SELEZIONA DATA PUBBLICAZIONE" selected={pubblicazioneSitoData ? new Date(pubblicazioneSitoData) : undefined} getInput={getInput(uuid, "pubblicazioneSitoData")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_ADOZIONE}/>
                     </div>
 
                 </div>
                 <div className="w-100 border-top mt-3"></div>    
-                <div className="row align-items-center pt-4 ">
-                    <div className="col-12"><h5 className="mb-0 font-weight-light">INVIO A SCA E AC</h5>
-                    </div>
-                    {/* <div className="col-1">
-                    <input  checked={true} className="form-check-input position-static" type="checkbox"/>
-                    </div> */}
+                <ActionParagraphTitle className="mb-0 font-weight-light">INVIO A SCA E AC</ActionParagraphTitle>
+
                 
-                
-                <div className="col-12 pt-2">
+                <div className="pt-3 text-justify size-13">
                     {`Il sistema invierà i link ai Soggetti Compententi in materia ambientale e all'Autorità compentente
                     in materia ambientale (già selezionati nella fase di avvio) la documentazione necessaria affinché i destinatari
                     possano formulare i pareri entro 60gg dall'adozione`}
                 </div>
-                </div>
                 <div className="w-100 border-top mt-3"></div> 
 
                 <div className="row d-flex align-items-center pt-4">
-                    <div className="col-1"><i className="material-icons text-serapide">notifications_active</i></div>
-                    <div className="col-7"><div className="pl-1 py-1 bg-dark text-serapide">ALERT RICEZIONI OSSERVAZIONI</div></div>
-                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-dark pr-1">date_range</i><span>{dataRicezioneOsservazioni && formatDate(dataRicezioneOsservazioni)}</span></div>
-                    <div className="col-11 offset-1">Il sistema calcola automaticamente la data entro la quale ricevere le osservazioni sulla base
+                    <div className="col-1"><i className="material-icons text-serapide icon-16">notifications_active</i></div>
+                    <div className="col-7"><div className="pl-1 py-1 bg-dark text-serapide size-13">ALERT RICEZIONI OSSERVAZIONI</div></div>
+                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-dark pr-1 icon-16">date_range</i><span>{dataRicezioneOsservazioni && formatDate(dataRicezioneOsservazioni)}</span></div>
+                    <div className="col-11 offset-1 size-12">Il sistema calcola automaticamente la data entro la quale ricevere le osservazioni sulla base
                     della data di pubblicazione su B.U.R.T. e sul sito web</div>
                 </div>
                 <div className="row align-items-center pt-4">
-                    <div className="col-1"><i className="material-icons text-serapide">notifications_active</i></div>
-                    <div className="col-7"><div className="pl-1 py-1 bg-serapide">ALERT RICEZIONI PARERI</div></div>
-                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-serapide pr-1">date_range</i><span>{dataRicezionePareri && formatDate(dataRicezionePareri)}</span></div>
-                    <div className="col-11 offset-1">Il sistema calcola automaticamente la data entro la quale ricevere le osservazioni sulla base
+                    <div className="col-1"><i className="material-icons text-serapide icon-18">notifications_active</i></div>
+                    <div className="col-7"><div className="pl-1 py-1 bg-serapide size-13">ALERT RICEZIONI PARERI</div></div>
+                    <div className="col-3 d-flex align-items-center p-0"><i className="material-icons text-serapide pr-1 icon-16">date_range</i><span>{dataRicezionePareri && formatDate(dataRicezionePareri)}</span></div>
+                    <div className="col-11 offset-1 size-12">Il sistema calcola automaticamente la data entro la quale ricevere le osservazioni sulla base
                     della data di adozione</div>
                 </div>
                 
                 <div className="w-100 border-top mt-3"></div> 
-                <div className="align-self-center mt-5">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_ADOZIONE} 
+                <div className="align-self-center mt-7">
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_ADOZIONE} 
                         canCommit={ deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData}></SalvaInvia>
                 </div>
             </React.Fragment>)})

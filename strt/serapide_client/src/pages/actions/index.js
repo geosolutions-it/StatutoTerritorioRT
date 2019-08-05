@@ -41,48 +41,48 @@ import { GET_AVVIO, DELETE_RISORSA_AVVIO } from '../../graphql/index';
 // parametri passati di default piano, back, utente, scadenza
 
 export default {
-    avvioConsultazioniSca: (props) => (<AvvioConsultazioniSCA {...props}/>),
-    pareriVerificaSca: (props) => (<PareriSCA  {...props}/>),
-    pareriSca: (props) => (<PareriSCA tipo="parere_sca"
+        avvioConsultazioniSca: (props) => (<AvvioConsultazioniSCA {...props}/>),
+        pareriVerificaSca: (props) => (<PareriSCA  {...props}/>),
+        pareriSca: (props) => (<PareriSCA tipo="parere_sca"
                                       saveMutation={INVIO_PARERI_VAS}
                                       tipoVas="documento_preliminare_vas"
                                       label="Pareri SCA"
                                       {...props}/>),
-    emissioneProvvedimentoVerifica: (props) => (<ProvvedimentoVerificaVAS {...props}/>),
-    pubblicazioneProvvedimentoVerifica: (props) => (<PubblicazioneProvv {...props}/>),
-    avvioProcedimento: (props) => (<AvvioProcedimento {...props}/>),
-    avvioEsamePareriSca: (props) => (<AvviaEsamePareri {...props}/>),
-    uploadElaboratiVas: (props) => (<UploadElaboratiVAS {...props}/>),
-    protocolloGenioCivileId: (props) => (<GenioCivile {...props}/>),
-    formazioneDelPiano: (props) => (<FormazionePiano {...props}/>),
-    richiestaConferenzaCopianificazione: (props) => (<RichiestaConferenza {...props}/>),
-    esitoConferenzaCopianificazione: (props) => (<SvolgimentoConferenza {...props}/>),
-    richiestaIntegrazioni: (props) => (<RichiestaIntegrazioni  {...props}/>),
-    integrazioniRichieste: (props) => (<IntegrazioniRichieste  {...props}/>),
-    trasmissioneAdozione: (props) => (<Adozione  {...props}/>),
-    uploadOsservazioniPrivati: (props) => (<Osservazioni  {...props}/>),
-    osservazioniEnti: (props) => (<Osservazioni hideSave={true} disableSave={true} label="OSSERVAZIONI" titolo="Osservazioni Ente"  filterByUser={false} tipo="osservazioni_enti" {...props}/>),
-    controdeduzioni: (props) => (<Controdeduzioni filterByUser={false} saveMutation={CONTRODEDUZIONI} showData={false} label="Carica Files" titolo="CONTRODEDUZIONI"   tipo="controdeduzioni" {...props}/>),
-    osservazioniRegione: (props) => (<OsservazioniRegione  {...props}/>),
-    pianoControdedotto: (props) => (<PianoControdedotto {...props}/>),
-    esitoConferenzaPaesaggistica: (props) => (<EsitoPae {...props}/>),
-    revPianoPostCp: (props) => (<RevisionePianoCP {...props}/>),
-    pareriAdozioneSca: (props) =>(<PareriAdozioneSCA {...props}/>),
-    parereMotivatoAc: (props) =>(<ParereMotivatoAc {...props}/>),
-    uploadElaboratiAdozioneVas: (props) => (<UploadElaboratiAdozioneVAS {...props}/>),
-    trasmissioneApprovazione: (props) => (<Approvazione {...props}/>),
-    esitoConferenzaPaesaggisticaAp: (props) => (<EsitoPae getM={GET_APPROVAZIONE}
+        emissioneProvvedimentoVerifica: (props) => (<ProvvedimentoVerificaVAS {...props}/>),
+        pubblicazioneProvvedimentoVerifica: (props) => (<PubblicazioneProvv {...props}/>),
+        avvioProcedimento: (props) => (<AvvioProcedimento {...props}/>),
+        avvioEsamePareriSca: (props) => (<AvviaEsamePareri {...props}/>),
+        uploadElaboratiVas: (props) => (<UploadElaboratiVAS {...props}/>),
+        protocolloGenioCivileId: (props) => (<GenioCivile {...props}/>),
+        formazioneDelPiano: (props) => (<FormazionePiano {...props}/>),
+        richiestaConferenzaCopianificazione: (props) => (<RichiestaConferenza {...props}/>),
+        esitoConferenzaCopianificazione: (props) => (<SvolgimentoConferenza {...props}/>),
+        richiestaIntegrazioni: (props) => (<RichiestaIntegrazioni  {...props}/>),
+        integrazioniRichieste: (props) => (<IntegrazioniRichieste  {...props}/>),
+        trasmissioneAdozione: (props) => (<Adozione  {...props}/>),
+        uploadOsservazioniPrivati: (props) => (<Osservazioni  {...props}/>),
+        osservazioniEnti: (props) => (<Osservazioni hideSave={true} disableSave={true} label="OSSERVAZIONI" titolo="Osservazioni Ente"  filterByUser={false} tipo="osservazioni_enti" {...props}/>),
+        controdeduzioni: (props) => (<Controdeduzioni filterByUser={false} saveMutation={CONTRODEDUZIONI} showData={false} label="Carica Files" titolo="CONTRODEDUZIONI"   tipo="controdeduzioni" {...props}/>),
+        osservazioniRegione: (props) => (<OsservazioniRegione  {...props}/>),
+        pianoControdedotto: (props) => (<PianoControdedotto {...props}/>),
+        esitoConferenzaPaesaggistica: (props) => (<EsitoPae {...props}/>),
+        revPianoPostCp: (props) => (<RevisionePianoCP {...props}/>),
+        pareriAdozioneSca: (props) =>(<PareriAdozioneSCA {...props}/>),
+        parereMotivatoAc: (props) =>(<ParereMotivatoAc {...props}/>),
+        uploadElaboratiAdozioneVas: (props) => (<UploadElaboratiAdozioneVAS {...props}/>),
+        trasmissioneApprovazione: (props) => (<Approvazione {...props}/>),
+        esitoConferenzaPaesaggisticaAp: (props) => (<EsitoPae getM={GET_APPROVAZIONE}
                                                           saveM={ESITO_CONFERENZA_PAESAGGISTICA_AP}
                                                           uploadM={APPROVAZIONE_FILE_UPLOAD}
                                                           deleteM={DELETE_RISORSA_APPROVAZIONE}
                                                           {...props}/>),
-    pubblicazioneApprovazione: (props) => (<Pubblicazione 
+        pubblicazioneApprovazione: (props) => (<Pubblicazione 
                                         title="Pubblicazione Approvazione"
                                         query={GET_APPROVAZIONE}
                                         closeAction={PUBBLICAZIONE_APPROVAZIONE}
                                         updateM={UPDATE_APPROVAZIONE}
                                         {...props}/>),
-    attribuzioneConformitaPit: (props) => (<UploadFile  title="Conformità PIT"
+        attribuzioneConformitaPit: (props) => (<UploadFile  title="Conformità PIT"
                                                         placeholder="Documento di conformità Pit"
                                                         fileType="conformita-pit"
                                                         subTitle="Caricare il file di conformità"
@@ -91,21 +91,21 @@ export default {
                                                         uploadRes={APPROVAZIONE_FILE_UPLOAD}
                                                         closeAction={ATTRIBUZIONE_CONFORMITA_PIT}
                                                         {...props}/>),
-   pubblicazionePiano: (props) => (<Pubblicazione title="Pubblicazione Piano"
+        pubblicazionePiano: (props) => (<Pubblicazione title="Pubblicazione Piano"
                                                 procedura="proceduraPubblicazione"
                                                 query={GET_PUBBLICAZIONE}
                                                 updateM={UPDATE_PUBBLICAZIONE}
                                                 closeAction={PUBBLICAZIONE_PIANO}
                                                 {...props}/>),
-    contributiTecnici: (props) => (<UploadFile  title="Contributi Tecnici"
-        placeholder="Contributi Tecnici"
-        fileType="contributi_tecnici"
-        subTitle="Caricare il file dei contributi tecnici"
-        query={GET_AVVIO} 
-        deleteRes={DELETE_RISORSA_AVVIO} 
-        uploadRes={AVVIO_FILE_UPLOAD}
-        closeAction={CONTRIBUTI_TECNICI}
-        {...props}/>),
-    
+        contributiTecnici: (props) => (<UploadFile  title="Contributi Tecnici"
+                                                placeholder="Contributi Tecnici"
+                                                fileType="contributi_tecnici"
+                                                subTitle="Caricare il file dei contributi tecnici"
+                                                query={GET_AVVIO} 
+                                                deleteRes={DELETE_RISORSA_AVVIO} 
+                                                uploadRes={AVVIO_FILE_UPLOAD}
+                                                closeAction={CONTRIBUTI_TECNICI}
+                                                {...props}/>),
+                                
 }
 

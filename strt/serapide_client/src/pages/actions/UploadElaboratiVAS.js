@@ -12,7 +12,6 @@ import FileUpload from 'components/UploadSingleFile'
 import ActionTitle from 'components/ActionTitle'
 import SalvaInvia from 'components/SalvaInvia'
 
-
 import  {showError, getCodice} from 'utils'
 
 import {GET_VAS,
@@ -30,9 +29,11 @@ const UI = ({
         return (
             <React.Fragment>
                 <ActionTitle>Upload Elaborati VAS</ActionTitle>
-                <p>Il comune esamina i pareri, forma il piano e redige il Rapporto Ambientale. Gli elaborati vengono caricati nella piattafo</p>
-                <div className="action-uploader mt-3 align-self-start border-bottom border-top mb-3">
+                <div className="d-flex pt-2 mb-5 size-13 text-justify">Il comune esamina i pareri, forma il piano e redige il Rapporto Ambientale. Gli elaborati vengono caricati nella piattafo</div>
+                <div className="action-uploader  py-1 align-self-start border-bottom   border-bottom border-top">
                 <FileUpload 
+                    iconSize="icon-15" fontSize="size-11"
+                    vertical useLabel
                     className="border-0"
                     placeholder="Documento preliminare di VAS"
                     mutation={VAS_FILE_UPLOAD} 
@@ -48,12 +49,13 @@ const UI = ({
                         uuid={uuid}
                 /> */}
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }
 
-    export default (props) => (
+    export default 
+    (props) => (
         <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
             {({loading, data: {modello: {edges: [vas] = []} = {}}, error}) => {
                 if(loading) {

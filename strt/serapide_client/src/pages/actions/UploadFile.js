@@ -11,7 +11,8 @@ import {Query} from 'react-apollo'
 import FileUpload from 'components/UploadSingleFile'
 import ActionTitle from 'components/ActionTitle'
 import SalvaInvia from 'components/SalvaInvia'
-// import Elaborati from 'components/ElaboratiPiano'
+import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
+
 
 import  {showError, getCodice} from 'utils'
 
@@ -34,17 +35,22 @@ const UI = ({
         return (
             <React.Fragment>
                 <ActionTitle>{title}</ActionTitle>
-                <p className="mt-2">{subTitle}</p>
+                <ActionSubParagraphTitle className="size-13 pb-1 pt-5">{subTitle}</ActionSubParagraphTitle>
                 <div className="action-uploader mt-4 align-self-start border-bottom border-top">
                 <FileUpload 
+                    iconSize="icon-15"
+                    fontSize="size-11"
+                    vertical
+                    useLabel
                     className="border-0"
                     placeholder={placeholder}
                     mutation={uploadRes} 
                     resourceMutation={deleteRes} disabled={false} 
                     isLocked={false} risorsa={file} variables={{codice: uuid, tipo: fileType }}/>
                 </div>
+                
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={closeAction} canCommit={file}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={closeAction} canCommit={file}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }

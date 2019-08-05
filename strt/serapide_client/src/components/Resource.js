@@ -8,8 +8,9 @@
 import React from 'react'
 import { toast } from 'react-toastify'
 import Confirm from './ConfirmToast'
-import {formatDate} from 'utils'
+import {formatDate, isEmpty} from 'utils'
 import TextWithTooltip from './TextWithTooltip'
+
 const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : null
 
 
@@ -60,6 +61,9 @@ export default ({
     }
     const iconClasses = `material-icons text-serapide ${iconSize}`;
     const downloadIcon = (<i className={ ` ${iconClasses} pointer `}>{isLocked ? "cloud_download" : "check_circle"}</i>);
+    if (isEmpty(resource)) {
+        return <div className={`${className} row align-items-center`}></div>
+    }
     return  !vertical ? (
         <div className={`${className} row align-items-center`}>
             <div className="col-6 d-flex">
@@ -103,9 +107,7 @@ export default ({
                                     isLocked={isLocked}
                                     iconClasses={iconClasses}
                                     confirm={confirm}/>)
-                    }
-                
-                    
+                    }          
                 </div>
             </div>)
 }

@@ -27,15 +27,15 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
     return (
         <React.Fragment>
             <ActionTitle>Pubblicazione Provvedimento di Verifica</ActionTitle>
-            <Resource className="border-0 mt-2" icon="attach_file" resource={provvedimentoVerificaVas}></Resource>
+            <Resource useLabel iconSize="icon-15" fontSize="size-11" className="border-0 mt-5" fileSize={false} icon="attach_file" resource={provvedimentoVerificaVas}></Resource>
             
-            <span style={{maxWidth: 400}} className="mt-5 d-flex align-items-center">
-                <i className="material-icons icon34 text-serapide">link</i>
-                    <Input disabled={false} value={url} onChange={(e) => onUrlChange(e.target.value)} type="url" name="text" />                
+            <span  className="mt-5 d-flex align-items-center">
+                <i className="material-icons icon-15 text-serapide pr-2">link</i>
+                <Input className="rounded-pill size-10" placeholder="Inserire la URL della pagina dove è stato pubblicato il provvedimento di verifica" disabled={false} value={url} onChange={(e) => onUrlChange(e.target.value)} type="url" name="text" />                
             </span>
-            <span style={{fontSize: "80%", maxWidth: 400}}className="pl-4 font-80">Inserire la URL della pagina dove è stato pubblicato il provvedimento di verifica</span>
+            
             <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} mutation={PUBBLICA_PROVV_VERIFICA} variables={{input: {proceduraVas: {[pubblicazione_provvedimento_verifica]: url}, uuid}}} canCommit={url}></SalvaInvia>
+                <SalvaInvia fontSize="size-8" onCompleted={back} mutation={PUBBLICA_PROVV_VERIFICA} variables={{input: {proceduraVas: {[pubblicazione_provvedimento_verifica]: url}, uuid}}} canCommit={url}></SalvaInvia>
             </div>
         </React.Fragment>)
     })

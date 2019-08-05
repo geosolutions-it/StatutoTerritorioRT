@@ -14,7 +14,7 @@ import Button from 'components/IconButton'
 import {EnhancedDateSelector} from "components/DateSelector"
 import UploadFiles from 'components/UploadFiles'
 import Input from 'components/EnhancedInput'
-import AddContact from 'components/AddContact'
+// import AddContact from 'components/AddContact'
 import {EnhancedListSelector} from 'components/ListSelector'
 
 import {compose} from 'recompose'

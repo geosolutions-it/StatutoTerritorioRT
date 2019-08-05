@@ -11,6 +11,7 @@ import {Query} from 'react-apollo'
 import {EnhancedSwitch} from 'components/Switch'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
 
 import  {showError, getInputFactory, getCodice} from 'utils'
 import {rebuildTooltip} from 'enhancers'
@@ -32,40 +33,37 @@ const UI = rebuildTooltip()(({
         return (
             <React.Fragment>
                 <ActionTitle>Osservazione della Regione Toscana</ActionTitle>
-                <h6 className="pt-3 font-weight-light">Redazione delle Osservazioni</h6>
-                <div className="row">
-                    <div className="col-12 pt-2">
+                <ActionParagraphTitle fontWeight="font-weight-light">Redazione delle Osservazioni</ActionParagraphTitle>
+                <div className="pt-3 text-justify size-13">
+                    
                         {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras venenatis risus quis blandit feugiat.
                         Nunc pulvinar auctor sapien, a tincidunt nunc dignissim id. Fusce facilisis augue vel imperdiet molestie.
                         Nulla a nisl metus. In vel sapien vel lacus finibus malesuada eget et mi.
                         Praesent scelerisque dapibus tortor, a iaculis diam eleifend ac.  `}
-                    </div> 
                 </div>
-                <div className="mt-3 pb-2 row d-flex align-items-center border-bottom">
-                    <div className="col-12 d-flex">
-                        <i className="material-icons text-serapide">link</i><a href={conformazionePitPprUrl} target="_balnk" className="pl-1 text-serapide pointer">{conformazionePitPprUrl}</a>
+                <div className="mt-3 row d-flex border-bottom">
+                    <div className="col-12 align-items-center d-flex">
+                        <i className="material-icons icon-15 text-serapide">link</i><a href={conformazionePitPprUrl} target="_balnk" className="pl-1 text-serapide size-12  pointer">{conformazionePitPprUrl}</a>
                     </div>
                 </div>
-                <div className="mt-4 row">
-                    <div className="col-12 pt-2">
+                <div className="pt-3 text-justify size-13">
                         {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras venenatis risus quis blandit feugiat.
                         Nunc pulvinar auctor sapien, a tincidunt nunc dignissim id. Fusce facilisis augue vel imperdiet molestie.
                         Nulla a nisl metus. In vel sapien vel lacus finibus malesuada eget et mi.
                         Praesent scelerisque dapibus tortor, a iaculis diam eleifend ac.  `}
-                    </div> 
                 </div>
                 
                 <EnhancedSwitch 
                 ignoreChecked
                 value={!osservazioniConcluse}
                 labelClassName="col-auto text-serapide"
-                className="mt-3"
+                className="switch-small mt-4"
                 checked={osservazioniConcluse}
                 label="OSSERVAZIONI CONCLUSE"
                 mutation={UPDATE_ADOZIONE} getInput={getInput(uuid, "osservazioniConcluse")}></EnhancedSwitch>
                 
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_OSSERVAZIONI} canCommit={osservazioniConcluse}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_OSSERVAZIONI} canCommit={osservazioniConcluse}></SalvaInvia>
                 </div>
             </React.Fragment>)
     })

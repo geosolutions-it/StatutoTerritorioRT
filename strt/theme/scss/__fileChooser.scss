@@ -97,8 +97,13 @@
 
 .action-uploader {
         width: 100%;
+        min-height: 4rem;
+        display: flex;
     .file-loader, .resource {
         width: 100%;
+    }
+    div {
+        flex: 1;
     }
     div .dropzone {
             align-self: baseline;

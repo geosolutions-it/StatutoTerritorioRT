@@ -16,6 +16,7 @@ import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
+import ListaContatti from 'components/ListaContatti'
 import Button from 'components/IconButton'
 import TextWithTooltip from 'components/TextWithTooltip'
 import {EnhancedDateSelector} from 'components/DateSelector'
@@ -67,7 +68,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                 </ActionTitle>
 
                 <Resource useLabel iconSize="icon-15" fontSize="size-11" fileSize={false} className="border-0 mt-3" icon="attach_file" resource={delibera}/>
-                <ActionParagraphTitle className="size-13 pb-1">
+                <ActionParagraphTitle>
                     <TextWithTooltip text="Elaborati allegati alla delibera di avvio del procedimento" dataTip="ai sensi dell’art. 17 comma 3, lett. a,b,c,d,e,f, L.R. 65/2014"/>
                 </ActionParagraphTitle>
                 <div className="action-uploader  py-1 align-self-start border-bottom">
@@ -88,14 +89,14 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                     placeholder={(<span>Programma delle attività di informazione e di partecipazione<TextWithTooltip dataTip="art. 17, lett.e, L.R. 65/2014"/></span>)}
                     risorsa={programma} variables={{codice: uuid, tipo: "programma_attivita" }}/>
                 </div>
-                <ActionSubParagraphTitle className="size-13">ALTRI ALLEGATI</ActionSubParagraphTitle>
+                <ActionSubParagraphTitle>ALTRI ALLEGATI</ActionSubParagraphTitle>
                 <UploadFiles
                     {...fileProps}
                     risorse={allegati}
                     variables={{codice: uuid, tipo: "altri_allegati_avvio" }}
                 />
                 <hr className="w-100 m-0 mt-3"></hr>
-                <ActionParagraphTitle className="pb-1 size-13">GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</ActionParagraphTitle>
+                <ActionParagraphTitle>GARANTE DELL'INFORMAZIONE E DELLA PARTECIPAZIONE</ActionParagraphTitle>
                 <Input getInput={getProceduraAvvioInput(uuid, "garanteNominativo")} mutation={UPDATE_AVVIO} disabled={false} className="my-3 rounded-pill size-10" placeholder="Nominativo" onChange={undefined} value={garanteNominativo} type="text" />
                 <Input getInput={getProceduraAvvioInput(uuid, "garantePec")} mutation={UPDATE_AVVIO} disabled={false} className="mb-3 rounded-pill size-10" placeholder="Indirizzo Pec" onChange={undefined} value={garantePec} type="email"/>
                 <div className="action-uploader  align-self-start border-bottom ">
@@ -105,22 +106,17 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                     risorsa={garante} variables={{codice: uuid, tipo: "individuazione_garante_informazione" }}/>
                 </div>
                 
-                <ActionParagraphTitle className="pb-1 d-flex justify-content-between size-13">
-                    <span>TERMINI SCADENZA PER LA RISPOSTA</span>
+                <ActionParagraphTitle className="pb-1 d-flex justify-content-between size-14">
+                    <span className="my-auto">TERMINI SCADENZA PER LA RISPOSTA</span>
                     <EnhancedDateSelector popperPlacement="left" selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getProceduraAvvioInput(uuid, "dataScadenzaRisposta")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_AVVIO}/>
                 </ActionParagraphTitle>
                 <hr className="w-100 m-0 mt-3"></hr>
-                <ActionParagraphTitle className="pb-1 size-13">SCELTA SOGGETTI ISTITUZIONALI</ActionParagraphTitle>
+                <ActionParagraphTitle>SCELTA SOGGETTI ISTITUZIONALI</ActionParagraphTitle>
                 <div className="font-weight-light pb-1 size-8">
                         <TextWithTooltip text="Soggetti istituzionali a cui si chiede il contributo tecnico" dataTip="art. 17, lett.c, L.R. 65/2014"/>
                 </div>
-                    <div className="d-flex flex-wrap">
-                    {aut.map(({node: {nome, uuid} = {}}) => (<div className="d-flex mr-2 flex-fill align-items-center size-11" key={uuid}>
-                                 <i className="material-icons text-serapide icon-13">bookmark</i>
-                                 {nome}
-                        </div>))}
-                    </div>
-                    <div className="mt-3 pl-4 pb-4">
+                <ListaContatti hideTitle contacts={aut}/>
+                    <div className="mt-4 pl-4 pb-4">
                     <Mutation mutation={UPDATE_PIANO} onError={showError}>
                         {(onChange) => {
                             const changed = (val) => {
@@ -196,10 +192,9 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                         </Mutation>
                         </div> */}
                         <hr className="w-100 m-0 mt-3"></hr>
-                        <ActionParagraphTitle className="size-13 pb-1"><TextWithTooltip text="RICHIESTA CONFERENZA DI COPIANIFICAZIONE" dataTip="art. 25 L.R. 65/2014"/></ActionParagraphTitle>
+                        <ActionParagraphTitle><TextWithTooltip text="RICHIESTA CONFERENZA DI COPIANIFICAZIONE" dataTip="art. 25 L.R. 65/2014"/></ActionParagraphTitle>
                         <div className="row pl-2">
-                            <div className="col-12 pt-2 size-13
-                            ">
+                            <div className="col-12 pt-2 size-13">
                                 Se si seleziona l'opzione "Si" viene inviata a Regione Toscana la RICHIESTA
                                     di convocazione della Conferenza di Copianificazione.<br/>
                                 Se si seleziona l'opzione "Non Adesso" il sistema inserisce nella lista delle attività la Conferenza di Copianificazione

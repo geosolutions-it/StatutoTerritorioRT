@@ -19,6 +19,11 @@ import {GET_ADOZIONE_VAS,
     ADOZIONE_VAS_FILE_UPLOAD, UPLOAD_ELABORATI_ADOZIONE_VAS
 } from 'schema'
 
+const fileProps = { className: `border-0`, mutation: ADOZIONE_VAS_FILE_UPLOAD,
+                    resourceMutation: DELETE_RISORSA_ADOZIONE_VAS, disabled: false, isLocked: false,
+                    iconSize: "icon-15", fontSize: "size-11",
+                    vertical: true, useLabel: true}
+
 const UI = ({
     back,
     // piano: {tipo: tipoPiano} = {}, 
@@ -31,21 +36,17 @@ const UI = ({
             <React.Fragment>
                 <ActionTitle>Upload Elaborati VAS</ActionTitle>
                 
-                <div className="action-uploader mt-3 align-self-start border-bottom border-top mb-3">
+                <div className="action-uploader mt-4 py-1 align-self-start border-bottom">
                 <FileUpload 
-                    className="border-0"
+                    {...fileProps}
                     placeholder="Documento di sintesi"
-                    mutation={ADOZIONE_VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_ADOZIONE_VAS} disabled={false} 
-                    isLocked={false} risorsa={sintesi} variables={{codice: uuid, tipo: "documento_sintesi" }}/>
+                    risorsa={sintesi} variables={{codice: uuid, tipo: "documento_sintesi" }}/>
                 </div>
-                <div className="action-uploader mt-3 align-self-start border-bottom border-top mb-3">
-                <FileUpload 
-                    className="border-0"
+                <div className="action-uploader mt-4 py-1 align-self-start border-bottom">
+                <FileUpload
+                    {...fileProps}
                     placeholder="Rapporto ambientale"
-                    mutation={ADOZIONE_VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_ADOZIONE_VAS} disabled={false} 
-                    isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
+                    risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
                 </div>
                 {/* <h4 className="font-weight-light pl-4 pb-1">Elaborati</h4>
                 <Elaborati
@@ -56,7 +57,7 @@ const UI = ({
                         uuid={uuid}
                 /> */}
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={UPLOAD_ELABORATI_ADOZIONE_VAS} canCommit={rapporto && sintesi}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={UPLOAD_ELABORATI_ADOZIONE_VAS} canCommit={rapporto && sintesi}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }

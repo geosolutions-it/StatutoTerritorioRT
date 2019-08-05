@@ -11,6 +11,7 @@ import FileUpload from './UploadSingleFile'
 import Elaborati from "../Elaborati"
 import TextTooltip from "./TextWithTooltip"
 import Resource from './Resource'
+import ActionSubParagraphTitle from './ActionSubParagraphTitle'
 
 import {map} from "lodash"
 
@@ -24,15 +25,19 @@ const getResource = (el, tipo, icon = "picture_as_pdf") => el && (<Resource
                                     icon={icon}
                                     resource={el}/>)
 // Due sezioni Elaborati testuali ed elaborati Cartografici
-export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMutation, upload = true}) => {
+export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMutation, upload = true, fontSize, iconSize, vertical = false, useLabel = false}) => {
 
     return (
         <React.Fragment>
-        <h6 className="mt-3 font-weight-light">Elaborati Testuali</h6>
+        <ActionSubParagraphTitle className="size-13 mb-3">Elaborati Testuali</ActionSubParagraphTitle>
         <div className="container border" style={{maxHeight: 200, minHeight: 50, overflowY: "scroll"}}>
             {map((Elaborati[tipoPiano] && Elaborati[tipoPiano]["testuali"]) || [], (({label, tooltip}, tipo) => {
                 const el = getElaborato(tipo, resources)
                 return upload ? (<FileUpload key={tipo}
+                    fontSize={fontSize}
+                    iconSize={iconSize}
+                    vertical={vertical}
+                    useLabel={useLabel}
                     mutation={mutation}
                     resourceMutation={resourceMutation}
                     placeholder={(<TextTooltip text={label} dataTip={tooltip}/>)}
@@ -44,13 +49,17 @@ export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMuta
                 }
             )) }
         </div>
-        <h6 className="mt-3 font-weight-light">Elaborati Cartografici</h6>
+        <ActionSubParagraphTitle className="size-13 my-3">Elaborati Cartografici</ActionSubParagraphTitle>
         <div className="container border" style={{maxHeight: 200, minHeight: 80, overflowY: "scroll"}}>
             {map((Elaborati[tipoPiano] && Elaborati[tipoPiano]["cartografici"]) || [], (({label, tooltip}, tipo) => {
                 const el = getElaborato(tipo, resources)
                     
                 return upload ? (<FileUpload key={tipo}
                     mutation={mutation}
+                    fontSize={fontSize}
+                    iconSize={iconSize}
+                    vertical={vertical}
+                    useLabel={useLabel}
                     resIcon="map"
                     fileType="application/zip,application/x-zip-compressed,.zip"
                     resourceMutation={resourceMutation}

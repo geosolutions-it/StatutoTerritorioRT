@@ -13,6 +13,7 @@ import FileUpload from 'components/UploadSingleFile'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import RichiestaComune from 'components/RichiestaComune'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
 
 import  {showError, formatDate, daysSub, getCodice} from 'utils'
 import {rebuildTooltip} from 'enhancers'
@@ -37,24 +38,27 @@ const UI = rebuildTooltip()(({
         return (
             <React.Fragment>
                 <ActionTitle>Pareri Motivato AC</ActionTitle>
-                <RichiestaComune scadenza={scadenza && daysSub(scadenza, 30)}/>
-                <div className="mt-3 mb-5 border-bottom-2 pb-2 d-flex">
-                        <i className="material-icons text-serapide pr-3">event_busy</i> 
-                        <div className="d-flex flex-column">
+                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={scadenza && daysSub(scadenza, 30)}/>
+                <div className="mt-4 border-bottom-2 pb-3 d-flex">
+                        <i className="material-icons text-serapide pr-3 icon-15">event_busy</i> 
+                        <div className="d-flex flex-column size-11">
                             <span>{scadenza && formatDate(scadenza, "dd MMMM yyyy")}</span>
                             <span>Data entro la quale ricevere i pareri</span>
                         </div>
                 </div>
-                <h4 className="font-weight-light pl-4 pb-1">{label}</h4>
-                <FileUpload 
-                    
-                    placeholder="Upload file parere"
-                    mutation={ADOZIONE_VAS_FILE_UPLOAD} 
-                    resourceMutation={DELETE_RISORSA_ADOZIONE_VAS} disabled={false} 
-                    isLocked={false} risorsa={parere} variables={{codice: uuid, tipo: tipoDoc }}/>
+                <ActionParagraphTitle fontWeight="font-weight-light">{label}</ActionParagraphTitle>
+                <div className="action-uploader  py-2 align-self-start border-bottom">
+                    <FileUpload 
+                        className="border-0"
+                        iconSize="icon-15" fontSize="size-11" vertical useLabel
+                        placeholder="Upload file parere"
+                        mutation={ADOZIONE_VAS_FILE_UPLOAD} 
+                        resourceMutation={DELETE_RISORSA_ADOZIONE_VAS} disabled={false} 
+                        isLocked={false} risorsa={parere} variables={{codice: uuid, tipo: tipoDoc }}/>
+                </div>
                 
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={parere}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={parere}></SalvaInvia>
                 </div>
             </React.Fragment>)
     })

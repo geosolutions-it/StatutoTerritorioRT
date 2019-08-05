@@ -10,6 +10,7 @@ import {Query} from 'react-apollo'
 
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import Input from 'components/EnhancedInput'
 
 import {rebuildTooltip} from 'enhancers'
@@ -38,18 +39,17 @@ const UI = rebuildTooltip()(({ back,
             <React.Fragment>
                 <ActionTitle>Protocollo Genio Civile</ActionTitle>
                 
-                <div className="mt-4 row d-flex">
-                    <div className="col-12 d-flex align-items-center">
-                        <i className="material-icons icon-18 rounded-circle text-white bg-serapide">edit</i>
+                <ActionParagraphTitle   >
+                    <div className="d-flex align-items-center">
+                        <i className="material-icons icon-15 rounded-circle text-white bg-serapide">edit</i>
                         <span className="pl-1 text-serapide">INSERISCI PROTOCOLLO</span>
                     </div>
-                    <div className="col-11 px-3 mt-3 offset-1">
-                        <Input getInput={getInput(codice)} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={numeroProtocolloGenioCivile} type="text" />
+                </ActionParagraphTitle>
+                    <div className="px-3 mt-4">
+                        <Input className="size-10" placeholder="Numero di protocollo" getInput={getInput(codice)} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={numeroProtocolloGenioCivile} type="text" />
                     </div>
-                </div>
-                
                 <div className="align-self-center mt-7">
-                    <SalvaInvia tipIconColor="w" onCompleted={back} variables={{codice: uuid}} mutation={INVIO_PROTOCOLLO_GENIO} canCommit={!!numeroProtocolloGenioCivile}></SalvaInvia>
+                    <SalvaInvia  fontSize="size-8" tipIconColor="w" onCompleted={back} variables={{codice: uuid}} mutation={INVIO_PROTOCOLLO_GENIO} canCommit={!!numeroProtocolloGenioCivile}></SalvaInvia>
                 </div>
             </React.Fragment>)
     })

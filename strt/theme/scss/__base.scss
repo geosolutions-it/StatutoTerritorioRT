@@ -156,6 +156,7 @@ $sizeBase: 15;
     }
 }
 .serapide-content {
+    min-width: 700px;
 }
 .pointer{
     cursor: pointer;
@@ -329,6 +330,10 @@ a {
 }
 // modifiche revisione Elena
 
+html {
+    font-size: 8px;
+}
+
 @for $i from 0 through 12 {
     $width: 700 + ($i * 100);
     $size: 10 + $i;
@@ -418,7 +423,27 @@ a {
     font-weight: bold;
 }
 
-
+//switch
+.switch-small {
+    span {
+        font-size: 0.8rem;
+    }
+    .custom-switch .custom-control-label::before  {
+        width: 1.7rem;
+    }
+    .custom-control-label::before {
+        height: 0.8rem;
+    }
+    .serapide .strt-switch .custom-control-label.checked:after{
+        -webkit-transform: translateX(0.7rem);
+        transform: translateX(0.7rem);
+    }
+    .custom-switch .custom-control-label::after{
+        width: calc(0.8rem - 4px);
+        height: calc(0.8rem - 4px);
+        left: calc(-2.15rem + 2px);
+    }
+}
 .salva-invia{
     .sv-button{
         min-width:200px;

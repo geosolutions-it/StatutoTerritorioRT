@@ -32,20 +32,20 @@ const UI = rebuildTooltip()(({
             <React.Fragment>
                 <ActionTitle>Richiesta Integrazioni</ActionTitle>
         
-                <div className="row pl-2 pt-4">
-                    <div className="col-5 bg-serapide">Richiesta integrazioni</div> 
-                    <div className="col-2 ml-2">
+                <div className="d-flex pl-2 mt-4 align-items-center">
+                    <div className=" bg-serapide size-12 rounded-pill px-3 mr-2">Richiesta integrazioni</div> 
+                    <div className="ml-4 switch-small">
                         <EnhancedSwitch className="" value={!richiestaIntegrazioni}
                                     getInput={getInput(uuid, "richiestaIntegrazioni")}  
                                     ignoreChecked
                                     mutation={UPDATE_AVVIO} checked={richiestaIntegrazioni}/> 
                     </div>        
                 </div>
-                <div className="row pl-2 pt-4">
-                    <Input getInput={getInput(uuid, "messaggioIntegrazione")} mutation={UPDATE_AVVIO} disabled={false} placeholder="Inserisci messaggio da inviare" onChange={undefined} value={messaggioIntegrazione} type="textarea" />
+                <div className="d-flex pl-2 mt-4 ">
+                    <Input className="size-11" getInput={getInput(uuid, "messaggioIntegrazione")} mutation={UPDATE_AVVIO} disabled={false} placeholder="Inserisci messaggio da inviare" onChange={undefined} value={messaggioIntegrazione} type="textarea" />
                 </div>
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={RICHIESTA_INTEGRAZIONI} canCommit={!!messaggioIntegrazione}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={RICHIESTA_INTEGRAZIONI} canCommit={!!messaggioIntegrazione}></SalvaInvia>
                 </div>
             </React.Fragment>)
     })

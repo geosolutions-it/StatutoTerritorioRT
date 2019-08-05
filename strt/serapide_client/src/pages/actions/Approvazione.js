@@ -12,7 +12,9 @@ import FileUpload from 'components/UploadSingleFile'
 
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
-import TextWithTooltip from 'components/TextWithTooltip'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
+import ListaContatti from 'components/ListaContatti'
+
 import {EnhancedDateSelector} from 'components/DateSelector'
 import Input from 'components/EnhancedInput'
 import Elaborati from "components/ElaboratiPiano"
@@ -30,7 +32,9 @@ import {GET_APPROVAZIONE, UPDATE_APPROVAZIONE,
 const getInput = getInputFactory("proceduraApprovazione")
 
 const fileProps = {className: `border-0`, mutation: APPROVAZIONE_FILE_UPLOAD,
-                    resourceMutation: DELETE_RISORSA_APPROVAZIONE, disabled: false, isLocked: false}
+                    resourceMutation: DELETE_RISORSA_APPROVAZIONE, disabled: false, isLocked: false,
+                    iconSize: "icon-15", fontSize: "size-11",
+                    vertical: true, useLabel: true}
                     
 const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"})(({
     proceduraApprovazione: {
@@ -53,40 +57,40 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
                 <ActionTitle>
                    Trasmissione Approvazione
                 </ActionTitle>
-                <div className="action-uploader  mt-3 align-self-start ">
+                <div className="action-uploader  mt-5 py-1 align-self-start">
                 <FileUpload 
                     {...fileProps}
                     placeholder="DELIBERA DI APPROVAZIONE"
                     risorsa={deliberaApprovazione} variables={{codice: uuid, tipo: "delibera_approvazione" }}/>                
                 </div>
-                <div className="row mt-4">
-                    <div className="col-12 d-flex pl-4 align-items-center">
-                    <EnhancedDateSelector placeholder="SELEZIONA DATA APPROVAZIONE" selected={dataDeliberaApprovazione ? new Date(dataDeliberaApprovazione) : undefined} getInput={getInput(uuid,"dataDeliberaApprovazione")} className="py-0" mutation={UPDATE_APPROVAZIONE}/></div>
-                </div>
+                <ActionParagraphTitle className="pb-1 d-flex justify-content-between size-14">
+                    <span className="my-auto">DATA APPROVAZIONE</span>
+                    <EnhancedDateSelector popperPlacement="left" placeholder="SELEZIONA DATA APPROVAZIONE" selected={dataDeliberaApprovazione ? new Date(dataDeliberaApprovazione) : undefined} getInput={getInput(uuid,"dataDeliberaApprovazione")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_APPROVAZIONE}/>
+                </ActionParagraphTitle>
+
                 
-                <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
-                <Elaborati 
+                <ActionParagraphTitle>ELABORATI DEL PIANO</ActionParagraphTitle>
+                <Elaborati
+                        iconSize="icon-15"
+                        fontSize="size-11"
+                        vertical
+                        useLabel
                         tipoPiano={tipoPiano.toLowerCase()} 
                         resources={edges}
                         mutation={APPROVAZIONE_FILE_UPLOAD}
                         resourceMutation={DELETE_RISORSA_APPROVAZIONE}
                         uuid={uuid}
-                        /> 
+                        />
+                <ActionParagraphTitle>PUBBLICAZIONE</ActionParagraphTitle> 
                 <div className="mt-4 row d-flex align-items-center">
-                    <div className="col-12">URL PUBBLICAZIONE</div>
-                    <div className="col-12 ">
-                        <Input placeholder="COPIA URL PUBBLICAZIONE" getInput={getInput(uuid, "urlPianoPubblicato")} mutation={UPDATE_APPROVAZIONE} disabled={false}  onChange={undefined} value={urlPianoPubblicato} type="url" />
+                    <div className="col-2 size-12">URL </div>
+                    <div className="col-9 ">
+                        <Input className="size-10" placeholder="COPIA URL PUBBLICAZIONE" getInput={getInput(uuid, "urlPianoPubblicato")} mutation={UPDATE_APPROVAZIONE} disabled={false}  onChange={undefined} value={urlPianoPubblicato} type="url" />
                     </div>
                 </div>
                 <div className="w-100 border-top mt-3"></div>
-                <h5 className="pt-4 font-weight-light">DESTINATARI</h5>
-                <h6 className="font-weight-light pb-1 mt-2">SOGGETTI ISTITUZIONALI</h6>
-                <div className="row">  
-                    {aut.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
-                                 <i className="material-icons text-serapide">bookmark</i>
-                                 {nome}
-                        </div>))}
-                    </div>
+                <ActionParagraphTitle className="pt-4 font-weight-light">DESTINATARI</ActionParagraphTitle>
+                <ListaContatti title="SOGGETTI ISTITUZIONALI" contacts={aut}/>
                 {/* <h6 className="font-weight-light pb-1 mt-4">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h6>
                 <div className="row">
                             {dest.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
@@ -96,7 +100,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "ApprovazioneProc"
                         </div> */}
                 <div className="w-100 border-top mt-3"></div>
                 <div className="align-self-center mt-5">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_APPROVAZIONE} 
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_APPROVAZIONE} 
                         canCommit={ deliberaApprovazione && dataDeliberaApprovazione  && urlPianoPubblicato}></SalvaInvia>
                 </div>
             </React.Fragment>)})

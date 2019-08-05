@@ -13,6 +13,7 @@ import Switch from 'components/Switch'
 import Resource from 'components/Resource'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
 
 import {map} from 'lodash'
 import  {showError, getNominativo, getCodice, filterAndGroupResourcesByUser} from 'utils'
@@ -38,43 +39,36 @@ const UI = enhancer(({
     return (
         <React.Fragment>
             <ActionTitle>Avvia Esame Pareri SCA</ActionTitle>
-            <h5 className="font-weight-light mt-4">DOCUMENTO PRELIMINARE</h5>
-            <Resource className="border-0 mt-2" icon="attach_file" resource={docpreliminare}></Resource>
+            <ActionParagraphTitle fontWeight="font-weight-light">DOCUMENTO PRELIMINARE</ActionParagraphTitle>
+            <Resource iconSize="icon-15" fontSize="size-11" vertical useLabel className="border-0" icon="attach_file" resource={docpreliminare}></Resource>
             
-            <h5 className="font-weight-light mt-4">PARERI SCA</h5>
-            <div className={className(" mb-4", {"border-bottom-2": pareriUser.length > 0})}>
+            <ActionParagraphTitle fontWeight="font-weight-light">PARERI SCA</ActionParagraphTitle>
+            <div className={className(" mb-5", {"border-bottom-2": pareriUser.length > 0})}>
             {map(pareriUser, (u) => (
                 <div key={u[0].user.fiscalCode} className="mb-4">
                     <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(u[0].user)}</span></div>
-                    {u.map(parere => (<Resource key={parere.uuid} className="border-0 mt-2" icon="attach_file" resource={parere}></Resource>))}
+                    {u.map(parere => (<Resource icon2Size="icon-15" fontSize="size-11" vertical useLabel  key={parere.uuid} className="border-0 mt-2" icon="attach_file" resource={parere}></Resource>))}
                 </div>
                 ))
                 }
             </div>
-            <div className="row pl-2">
-                <div className="col-12">
-                    <div className="col-12 d-flex pl-0">
-                        <i className="material-icons text-serapide pr-3">email</i>
-                                <div className="bg-serapide mb-auto px-2">Avvia esame pareri sca</div>
-                                <Switch
-                                    labelClassName = "col-auto"
-                                    checked={checked}
-                                    toggleSwitch={toggleSwitch}
-                                    ignoreChecked
-                                /> 
-                    </div>
-                            
-                    <div className="col-12 pt-2">Nota: Selezionale l'opzione Avvia Esame Pareri non comporta nessuna cmunicazione
-                            agli altri attori coinvolti nel procedimento VAS e nessuna scadenza predefinita. E' solo una funzione per 
-                            tentere traccia e evidenziare lo stato di avanzamento del procedimento.
-                    </div>
-                        
-                </div>
-            </div> 
-            
-            
+        
+            <div className="d-flex align-items-center switch-small ">
+                <i className="material-icons text-serapide icon-15 pr-2">email</i>
+                <div className="bg-serapide px-2 size-12">Avvia consultazione SCA</div>                    
+                <Switch
+                    labelClassName = "col-auto"
+                    checked={checked}
+                    toggleSwitch={toggleSwitch}
+                    ignoreChecked/> 
+            </div>           
+            <div className="pt-2 size-13 text-justify">Nota: Selezionale l'opzione Avvia Esame Pareri non comporta nessuna cmunicazione
+                    agli altri attori coinvolti nel procedimento VAS e nessuna scadenza predefinita. E' solo una funzione per 
+                    tentere traccia e evidenziare lo stato di avanzamento del procedimento.
+            </div>
+                                    
             <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} mutation={AVVIO_ESAME_PARERI_SCA} variables={{uuid}} canCommit={checked}></SalvaInvia>
+                <SalvaInvia fontSize="size-8" onCompleted={back} mutation={AVVIO_ESAME_PARERI_SCA} variables={{uuid}} canCommit={checked}></SalvaInvia>
             </div>
         </React.Fragment>)
     })

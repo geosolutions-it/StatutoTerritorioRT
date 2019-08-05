@@ -11,6 +11,7 @@ import {FormGroup, Input, Label} from 'reactstrap'
 
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
 
 import {toggleControllableState} from 'enhancers'
 import {showError, getCodice} from 'utils'
@@ -33,16 +34,18 @@ const UI = enhancer(({ back,
             <React.Fragment>
                 <ActionTitle>Conferenza di copianificazione</ActionTitle>
                 
-                <h5 className="mt-4 font-weight-light"><i className="material-icons pr-1">question_answer</i>RICHIESTA CONFERENZA COPIANIFICAZIONE</h5>
-                <FormGroup className="py-4 px-5" check>
-                    <Label check>
-                        <Input className="text-serapide" type="checkbox" checked={isChecked} onChange={toggleCheck}/>
+                <ActionParagraphTitle fontWeight="font-weight-light">
+                    <i className="material-icons icon-15 pr-1">question_answer</i>RICHIESTA CONFERENZA COPIANIFICAZIONE
+                    </ActionParagraphTitle>
+                <FormGroup className="pt-4 px-5" check>
+                    <Label className="size-12" check>
+                        <Input className="text-serapide size-11" type="checkbox" checked={isChecked} onChange={toggleCheck}/>
                         Selezionando questa opzione viene inviata richiesta a Regione Toscana di convocazione
                         della Conferenza di Copianificazione.
                     </Label>
                 </FormGroup>     
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={RICHIESTA_CONFERENZA_COPIANIFICAZIONE} canCommit={isChecked}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={RICHIESTA_CONFERENZA_COPIANIFICAZIONE} canCommit={isChecked}></SalvaInvia>
                 </div>
             </React.Fragment>)
     })

@@ -11,6 +11,7 @@ import {Query} from 'react-apollo'
 import UploadFiles from 'components/UploadFiles'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
 
 import  {showError, formatDate, getCodice} from 'utils'
 import {rebuildTooltip} from 'enhancers'
@@ -40,21 +41,26 @@ const UI = rebuildTooltip()(({
             <React.Fragment>
                 <ActionTitle>{titolo}</ActionTitle>
                 {showData && (<div className="mt-4 border-bottom-2 pb-2 d-flex">
-                        <i className="material-icons text-serapide pr-3">event_busy</i> 
-                        <div className="d-flex flex-column">
+                        <i className="material-icons text-serapide icon-18 pr-3">event_busy</i> 
+                        <div className="d-flex flex-column size-14">
                             <span>{dataRicezionePareri && formatDate(dataRicezionePareri, "dd MMMM yyyy")}</span>
                             <span>Data entro la quale inviare le osservazioni</span>
                         </div>
                 </div>)}
-                <h4 className="mt-5 font-weight-light pl-4 pb-1">{label}</h4>
-                <UploadFiles risorse={osservazioni} 
+                <ActionParagraphTitle fontWeight="font-weight-light">{label}</ActionParagraphTitle>
+                <UploadFiles 
+                        iconSize="icon-15"
+                        fontSize="size-11"
+                        vertical
+                        useLabel
+                        risorse={osservazioni} 
                         mutation={ADOZIONE_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_ADOZIONE}
                         variables={{codice: uuid, tipo: tipoDoc }}
                         isLocked={false}/>
                 
                 {!hideSave && (<div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={osservazioni.length> 0 && !disableSave}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={osservazioni.length> 0 && !disableSave}></SalvaInvia>
                 </div>)}
             </React.Fragment>)
     })

@@ -11,6 +11,7 @@ import {Query} from 'react-apollo'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import Elaborati from 'components/ElaboratiPiano'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
 
 import  {showError, getCodice} from 'utils'
 
@@ -32,8 +33,12 @@ const UI = ({
         return (
             <React.Fragment>
                 <ActionTitle>Revisione Piano post C.P.</ActionTitle>
-                <h4 className="mt-5 font-weight-light pl-4 pb-1">Elaborati del Piano</h4>
+                <ActionParagraphTitle fontWeight="font-weight-light">ELABORATI DEL PIANO</ActionParagraphTitle>
                     <Elaborati 
+                        conSize="icon-15"
+                        fontSize="size-11"
+                        vertical
+                        useLabel
                         tipoPiano={tipoPiano.toLowerCase()} 
                         resources={resources}
                         mutation={uploadRes}
@@ -42,7 +47,7 @@ const UI = ({
                     />
 
                 <div className="align-self-center mt-7">
-                    <SalvaInvia onCompleted={back} variables={{codice: uuidProcedura}} mutation={saveM} canCommit={true}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuidProcedura}} mutation={saveM} canCommit={true}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }

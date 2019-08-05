@@ -15,9 +15,13 @@ import Resource from 'components/Resource'
 import {EnhancedListSelector} from 'components/ListSelector'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
-import AddContact from 'components/AddContact'
+// import AddContact from 'components/AddContact'
 import Button from 'components/IconButton'
 import RichiestaComune from 'components/RichiestaComune'
+import ActionParagraphTitle from 'components/ActionParagraphTitle'
+
+import ListaContatti from 'components/ListaContatti'
+
 
 import {rebuildTooltip} from 'enhancers'
 import  {showError, formatDate, getInputFactory, getCodice, getContatti} from 'utils'
@@ -53,22 +57,18 @@ const UI = rebuildTooltip()(({
             return (<React.Fragment>
                 <ActionTitle>Avvio Consultazioni SCA</ActionTitle>
                 {isFull ? (<React.Fragment>
-                    <div className="py-3 border-bottom-2">
-                        <Resource className="border-0 mt-2" icon="attach_file" resource={provvedimentoVerificaVas}></Resource>
-                        <div className="row mt-2">
+                    <div className="py-3 border-bottom">
+                        <Resource iconSize="icon-15" fontSize="size-11" vertical useLabel className="border-0 mt-4" icon="attach_file" resource={provvedimentoVerificaVas}></Resource>
+                        <div className="row mt-4 size-11">
                             <div className="col-6 d-flex">
-                                <i className="material-icons text-serapide self-align-center">assignment_turned_in</i>
-                                <span className="pl-1">ESITO: Assoggettamento VAS</span>
+                                <i className="material-icons text-serapide icon-15 self-align-center">assignment_turned_in</i>
+                                <span className="pl-1 ">ESITO: Assoggettamento VAS</span>
                             </div>
                             <span className="col-3">{dataAssoggettamento && formatDate(dataAssoggettamento)}</span>
                         </div>
                     </div>
-                    <h5 className="font-weight-light pb-1 mt-3">AUTORITA' COMPETENTE (AC)</h5>
-                    {aut.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pl-2 mt-3 " key={uuid}>
-                                 <i className="material-icons text-serapide">bookmark</i>
-                                 {nome}
-                        </div>))}
-                    <div className="mt-4 pl-4 pb-4">
+                    <ListaContatti title="AUTORITA' COMPETENTE (AC)" contacts={aut}></ListaContatti>
+                    <div className="mt-3 pl-4 ">
                     <Mutation mutation={UPDATE_PIANO} onError={showError}>
                         {(onChange) => {
                             const changed = (val) => {
@@ -87,7 +87,7 @@ const UI = rebuildTooltip()(({
                                     size="lg"
                                     btn={(toggleOpen) => (
                                         <div className="row">
-                                            <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="text-serapide rounded-pill" color="dark" icon="add_circle" label="Autorità competente VAS (AC)"/>
+                                            <Button fontSize="size-8"  iconSize="icon-13"  classNameLabel="py-0" onClick={toggleOpen} className="text-serapide rounded-pill" color="dark" icon="add_circle" label="Autorità competente VAS (AC)"/>
                                         </div>
                                         )}
 
@@ -98,11 +98,7 @@ const UI = rebuildTooltip()(({
                         }
                         </Mutation>
                         </div>
-                        <h5 className="font-weight-light pb-1 mt-3">SOGGETTI COMPETENTI SCA</h5>
-                        {sca.map(({node: {nome, uuid} = {}}) => (<div className="d-flex mt-3" key={uuid}>
-                                 <i className="material-icons text-serapide">bookmark</i>
-                                 {nome}
-                        </div>))}
+                        <ListaContatti title="SOGGETTI COMPETENTI SCA" contacts={sca}></ListaContatti>
                         <div className="mt-3 pl-4 border-bottom-2 pb-5">
                         <Mutation mutation={UPDATE_PIANO} onError={showError}>
                     {(onChange) => {
@@ -129,7 +125,7 @@ const UI = rebuildTooltip()(({
                                 btn={(toggleOpen) => (
                                     <div className="row">
                                         <Button
-                                            fontSize="60%"
+                                            fontSize="size-8"  iconSize="icon-13"
                                             classNameLabel="py-0"
                                             onClick={toggleOpen}
                                             className="text-serapide rounded-pill"
@@ -145,12 +141,13 @@ const UI = rebuildTooltip()(({
                         </div>
                     </React.Fragment>
                     ) : (
-                        <RichiestaComune   scadenza={dataCreazione}/>
+                        <RichiestaComune  fontSize="size-11" iconSize="icon-15" scadenza={dataCreazione}/>
                         )}
 
-                <h4 className="font-weight-light pt-4 pl-2 pb-1">DOCUMENTO PRELIMINARE</h4>
-                <div className="action-uploader  align-self-start pl-2 pb-5">
+                <ActionParagraphTitle fontWeight="font-weight-light">DOCUMENTO PRELIMINARE</ActionParagraphTitle>
+                <div className="action-uploader  py-1 align-self-start">
                 <FileUpload
+                    iconSize="icon-15" fontSize="size-11" vertical useLabel
                     className={`border-0 ${!docPrelim ? "flex-column": ""}`}
                     sz="sm" modal={false} showBtn={false}
                     mutation={VAS_FILE_UPLOAD}
@@ -158,37 +155,33 @@ const UI = rebuildTooltip()(({
                     isLocked={false} risorsa={docPrelim} variables={{codice: pVasUUID, tipo: "documento_preliminare_vas" }}/>
                 </div>
 
-                    <div className="row pl-2">
-                        <div className="col-8">
-                            <div className="col-12 d-flex pl-0">
-                                <i className="material-icons text-serapide pr-3">email</i>
-                                <div className="bg-serapide mb-auto px-2">Avvia consultazione SCA</div>
-                                <EnhancedSwitch value={!avvioConsultazioniSca}
-                                    getInput={getInput}
-                                    ignoreChecked
-                                    labelClassName="col-auto"
-                                    mutation={UPDATE_CONSULTAZIONE_VAS} checked={avvioConsultazioniSca}
-                                />
+                    <div className="row pt-4 pl-0 ">
+                        <div className="col-7 d-flex align-items-center switch-small ">
+                            <i className="material-icons text-serapide icon-15 pr-2">email</i>
+                            <div className="bg-serapide px-2 size-12">Avvia consultazione SCA</div>
+                            <EnhancedSwitch value={!avvioConsultazioniSca}
+                                getInput={getInput}
+                                ignoreChecked
+                                labelClassName="col-auto"
+                                mutation={UPDATE_CONSULTAZIONE_VAS} checked={avvioConsultazioniSca}
+                            />
+                        </div>
+                        <div className="col-5 d-flex align-items-center">
+                            <i className="material-icons icon-15 pr-2">event_busy</i>
+                            <div className="d-flex flex-column size-10">
+                                <span>{dataRicezionePareri && formatDate(dataRicezionePareri, "dd MMMM yyyy")}</span>
+                                <span>90 giorni per ricevere i pareri sca</span>
                             </div>
-
-                            <div className="col-12 pt-2">Selezionando l’opzione e cliccando “Salva e Invia” verrà inviata comunicazione e
+                        </div>
+                        <div className="col-8 pt-3 text-justify pr-2 size-13">Selezionando l’opzione e cliccando “Salva e Invia” verrà inviata comunicazione e
                             documento preliminare agli SCA selezionati e per conoscenza all’Autorità Competente
                             in materia ambientale identificati all’atto di creazione del Piano.</div>
-
-                        </div>
-                        <div className="col-4 d-flex">
-                            <i className="material-icons pr-3">event_busy</i>
-                            <div className="d-flex flex-column">
-                                <span>{dataRicezionePareri && formatDate(dataRicezionePareri, "dd MMMM yyyy")}</span>
-                                <span style={{maxWidth: 150}}>90 giorni per ricevere i pareri sca</span>
-                            </div>
-                        </div>
                       </div>
 
 
 
                 <div className="align-self-center mt-7">
-                <SalvaInvia onCompleted={back} variables={{codice: uuid}} mutation={AVVIO_CONSULTAZIONE_VAS} canCommit={avvioConsultazioniSca && docPrelim && (!isFull || (auths.length > 0 && scas.length > 0))}></SalvaInvia>
+                <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={AVVIO_CONSULTAZIONE_VAS} canCommit={avvioConsultazioniSca && docPrelim && (!isFull || (auths.length > 0 && scas.length > 0))}></SalvaInvia>
 
                 </div>
             </React.Fragment>)})

@@ -18,9 +18,9 @@ export default enhancer(({fase, className, checked, toggle, goToSection, childre
                 <span className="pl-2 text-uppercase">{fase}</span>
             </div>
             <div className="d-flex strt-switch" >
-                <div className="custom-control custom-switch border-top pt-2">
+                <div className="custom-control custom-switch border-top pt-2 d-flex">
                     <label onClick={toggle} className={classNames('custom-control-label pointer', {"border-serapide bg-serapide": checked, checked})}/>
-                    <span className="size-10 align-middle">Visualizza attività</span>
+                    <span className="size-10 my-auto">Visualizza attività</span>
                 </div>
                 <div className="d-flex border-top pl-2 pt-2">
                     <i className="material-icons pointer text-serapide icon-22" onClick={goToSection}>exit_to_app</i>
