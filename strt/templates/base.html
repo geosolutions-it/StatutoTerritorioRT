@@ -20,7 +20,7 @@ LICENSE file in the root directory of this source tree.
 
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block head_title %}Statuto Territorio RT{% endblock head_title %}</title>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="{% static 'fonts/icon.css' %}"rel="stylesheet">
         <!-- CSS -->
         <link rel="stylesheet" href="{% static 'css/serapide.css' %}"/>
         {% block styles %}
