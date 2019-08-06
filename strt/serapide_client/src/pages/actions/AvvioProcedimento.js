@@ -24,7 +24,7 @@ import Input from 'components/EnhancedInput'
 import Spinner from 'components/Spinner'
 
 import {rebuildTooltip} from 'enhancers'
-import  {showError, getInputFactory, getCodice, getContatti} from 'utils'
+import  {showError, getInputFactory, getCodice, getContatti, daysAdd} from 'utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
@@ -32,6 +32,7 @@ import {GET_AVVIO, UPDATE_AVVIO,
     GET_CONTATTI,
     AVVIA_PIANO
 } from 'schema'
+import { addDays } from 'date-fns/esm';
 
 const getProceduraAvvioInput = getInputFactory("proceduraAvvio")
 
@@ -109,7 +110,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                 
                 <ActionParagraphTitle className="pb-1 d-flex justify-content-between size-14">
                     <span className="my-auto">TERMINI SCADENZA PER LA RISPOSTA</span>
-                    <EnhancedDateSelector popperPlacement="left" selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getProceduraAvvioInput(uuid, "dataScadenzaRisposta")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_AVVIO}/>
+                    <EnhancedDateSelector minDate={addDays(new Date(), 1)} popperPlacement="left" selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getProceduraAvvioInput(uuid, "dataScadenzaRisposta")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_AVVIO}/>
                 </ActionParagraphTitle>
                 <hr className="w-100 m-0 mt-3"></hr>
                 <ActionParagraphTitle>SCELTA SOGGETTI ISTITUZIONALI</ActionParagraphTitle>

@@ -57,7 +57,7 @@ const showError = (error, onError) => {
 export default (props) => (<DatePicker customInput={<CustomInput />} {...props}/>) 
 
 // Pass a mutation an update function if needed, the getInput
-export const EnhancedDateSelector = ({placeholder = "Seleziona Data", popperPlacement, useDateTime = false, showTimeSelect = false, className, isLocked, mutation, update, selected, disabled, iconSize, getInput = _getInput, ...mutationProps}) => {
+export const EnhancedDateSelector = ({placeholder = "Seleziona Data", minDate, popperPlacement, useDateTime = false, showTimeSelect = false, className, isLocked, mutation, update, selected, disabled, iconSize, getInput = _getInput, ...mutationProps}) => {
     return (
         <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
             {(onChange, m_props) => {
@@ -79,6 +79,7 @@ export const EnhancedDateSelector = ({placeholder = "Seleziona Data", popperPlac
                     onChange={saveDate}
                     timeFormat="HH:mm"
                     timeIntervals={15}
+                    minDate={minDate}
                     dateFormat={useDateTime ? "dd-MM-yyyy h:mm aa" : "dd-MM-yyyy" }/>
                 )
             }}

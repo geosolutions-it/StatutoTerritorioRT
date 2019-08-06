@@ -1,4 +1,4 @@
-import { format, parseISO, differenceInCalendarDays, subDays} from 'date-fns'
+import { format, parseISO, differenceInCalendarDays, subDays, addDays} from 'date-fns'
 import {isDate, find, get} from 'lodash'
 import { it } from 'date-fns/locale'
 import { toast } from 'react-toastify'
@@ -23,6 +23,9 @@ export const getDifferenceInDays = (dateEnd, dateStart) => differenceInCalendarD
 
 export const daysSub = (date, amount) =>  {
     return subDays(getDate(date), amount)
+}
+export const daysAdd = (date, amount) =>  {
+    return addDays(getDate(date), amount)
 }
 export const getNominativo = ({firstName, lastName, fiscalCode} = {}) =>  firstName || lastName ? `${firstName || ""} ${lastName || ""}` : fiscalCode
 export const fasi = [ "anagrafica", "avvio", "adozione", "approvazione", "pubblicazione"]

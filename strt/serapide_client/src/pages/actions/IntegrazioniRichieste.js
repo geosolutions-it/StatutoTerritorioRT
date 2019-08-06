@@ -15,7 +15,7 @@ import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import {EnhancedDateSelector} from 'components/DateSelector'
 import Spinner from 'components/Spinner'
 
-import  {showError, getInputFactory, getCodice} from 'utils'
+import  {showError, getInputFactory, getCodice, daysAdd} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
 import {GET_AVVIO, UPDATE_AVVIO,
@@ -59,7 +59,7 @@ const UI = rebuildTooltip()(({
                 
                 <ActionParagraphTitle className="size-14 pb-1 d-flex justify-content-between align-items-center">
                     <span>TERMINI SCADENZA PER LA RISPOSTA</span>
-                    <EnhancedDateSelector popperPlacement="left" selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getInput(uuid, "dataScadenzaRisposta")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_AVVIO}/>            
+                    <EnhancedDateSelector popperPlacement="left" minDate={daysAdd(new Date(), 1)} selected={dataScadenzaRisposta ? new Date(dataScadenzaRisposta) : undefined} getInput={getInput(uuid, "dataScadenzaRisposta")} className="py-0 ml-2 rounded-pill size-8 icon-13" mutation={UPDATE_AVVIO}/>            
                 </ActionParagraphTitle>
 
                 
