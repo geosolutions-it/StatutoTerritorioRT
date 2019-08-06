@@ -68,9 +68,11 @@ export const getAction = (stato) => {
 }
 
 export const showError = ({graphQLErrors, message, networkError: {result:{errors = []} = {}} = {}}) => {
-    const er = [...graphQLErrors, ...errors]
-    if(er) er.map(({message}) => toast.error(message,  {autoClose: true})) 
-    else toast.error(message,  {autoClose: true})
+    let  er = [...graphQLErrors, ...errors]
+    if(message) { 
+        toast.error(message,  {autoClose: true})    
+    }
+    er.map(({message}) => toast.error(message,  {autoClose: true}))
 }
 
 export const elaboratiCompletati = (tipoPiano = "", risorse) => {

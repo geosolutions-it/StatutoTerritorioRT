@@ -10,7 +10,7 @@ import MenuItem from './MenuItem'
 import ReactTooltip from 'react-tooltip'
 // import {Badge} from 'reactstrap'
 import {showAdozione, showApprovazione, showPubblicazione} from 'utils'
-const hasContributi = (piano) => console.log(piano)
+
 export default ({piano = {}, expanded, url, active, toggleOpen, unreadMessages = 0}) => (
     <React.Fragment>
         <ReactTooltip id="sidebar-tooltip"/>
@@ -27,7 +27,7 @@ export default ({piano = {}, expanded, url, active, toggleOpen, unreadMessages =
             <ul className="list-group">
                 <MenuItem href={active !== "home" && `${url}/home`} active={active === "home"} title="HOME PIANO" icon="home" expanded={expanded}/>
                 <MenuItem href={`${url}/anagrafica`} active={active === "anagrafica"} title="ANAGRAFICA" icon="assignment" expanded={expanded}/>
-                <MenuItem locked={hasContributi(piano)} className="border-bottom-3" href={`${url}/formazione`} active={active === "formazione"} title="FORMAZIONE PIANO" subtitle="Accesso agli strumenti" icon="build" expanded={expanded}/>
+                <MenuItem  className="border-bottom-3" href={`${url}/formazione`} active={active === "formazione"} title="FORMAZIONE PIANO" subtitle="Accesso agli strumenti" icon="build" expanded={expanded}/>
                 
                 <MenuItem href={`${url}/avvio`} active={active === "avvio"} title="AVVIO" subtitle="Avvio del Procedimento" icon="dashboard" expanded={expanded}/>
                 

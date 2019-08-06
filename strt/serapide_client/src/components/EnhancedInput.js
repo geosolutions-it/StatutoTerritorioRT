@@ -15,14 +15,14 @@ const debounced = debounce(updatePiano, 500)
 
 export default  ({className, rows, disabled, mutation, value, update, selected, type="textarea", placeholder, getInput = (val) => { return {variables: {input: {descrizione: val}}}}, ...mutationProps}) => {
     return (
-        <Mutation mutation={mutation} update={update} onError={showError} {...mutationProps}>
-            {(onChange, m_props) => {
+        <Mutation mutation={mutation} onError={showError} update={update} {...mutationProps}>
+            {(onChange, {error}) => {
                 const saveInput = (e) => {
                     const value = e.target.value;
                     debounced(onChange, getInput, value)
                 }
                 return (
-                <Input rows={rows} className={className} disabled={disabled} onChange={saveInput} type={type} name="text" defaultValue={value} placeholder={placeholder}/>
+                <Input rows={rows} className={className} invalid={error} disabled={disabled} onChange={saveInput} type={type} name="text" defaultValue={error ? '' : value} placeholder={placeholder}/>
                 )
             }}
         </Mutation>)

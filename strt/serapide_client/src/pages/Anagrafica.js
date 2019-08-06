@@ -44,7 +44,7 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                 window.location.href=`#/crea_anagrafica/${code}`
             }
             optionals = [delibera, delibera, delibera];
-            console.log(piano);
+            
             return(
                     <PianoPageContainer>
                         <PianoSubPageTitle icon="assignment" title="ANAGRAFICA"/>
