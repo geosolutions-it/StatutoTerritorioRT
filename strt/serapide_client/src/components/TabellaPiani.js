@@ -26,7 +26,15 @@ const goToPiano = (codice) => {
 }
 const isDelete = ({nome = "Unknown"}) => (nome === 'DRAFT' || nome === "Unknown")
 
-
+const reverseOrderByUpdate = ({node: {lastUpdate: a}}, {node: {lastUpdate: b}}) => {
+    if(a === b) {
+        return 0
+    }
+    if(a > b) {
+        return -1
+    }
+    return 1    
+}
 
 export default ({title, piani = [], onDeletePiano = () => console.warn("Aggiungere query per eliminazione piano")}) => {
     const deleteResource = (codice) => onDeletePiano({ variables: {codice}})
@@ -60,7 +68,7 @@ export default ({title, piani = [], onDeletePiano = () => console.warn("Aggiunge
                 </tr>
             </thead>
             <tbody>
-                {piani.map(({node: {alertsCount = 0, descrizione, tipo, lastUpdate, codice, fase = {}, user= {}}} = {}) => (
+                {piani.sort(reverseOrderByUpdate).map(({node: {alertsCount = 0, descrizione, tipo, lastUpdate, codice, fase = {}, user= {}}} = {}) => (
                     <tr key={codice}>
                         <td className="text-center">{alertsCount > 0 && (<i className="material-icons text-danger">notification_important</i>)}</td>
                         <td style={{maxWidth: 350}}>{descrizione}</td>
