@@ -11,7 +11,7 @@ import {Query} from 'react-apollo'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
-
+import Spinner from 'components/Spinner'
 import Input from 'components/EnhancedInput'
 import FileUpload from 'components/UploadSingleFile'
 
@@ -107,12 +107,7 @@ export default (props) => (
         <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
             {({loading, data: {modello: {edges: [vas]= []} = {}}}) => {
                 if(loading) {
-                    return (
-                        <div className="flex-fill d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>)
+                    return <Spinner/>
                 }
                 return (
                     <UI {...props} vas={vas} />)}

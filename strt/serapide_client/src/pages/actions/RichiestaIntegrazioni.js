@@ -12,6 +12,7 @@ import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import {EnhancedSwitch} from 'components/Switch'
 import Input from 'components/EnhancedInput'
+import Spinner from 'components/Spinner'
 
 import {rebuildTooltip} from 'enhancers'
 import  {showError, getCodice, getInputFactory} from 'utils'
@@ -54,12 +55,7 @@ const UI = rebuildTooltip()(({
         <Query query={GET_AVVIO} variables={{codice: getCodice(props)}} onError={showError}>
         {({loading, data: {modello: {edges: [proceduraAvvio] = []} = {}} = {}}) => {
                 if(loading) {
-                    return (
-                        <div className="flex-fill d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>)
+                    return <Spinner/>
                 }
                 return (
                     <UI {...props} proceduraAvvio={proceduraAvvio} />)}

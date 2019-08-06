@@ -12,6 +12,7 @@ import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import Elaborati from 'components/ElaboratiPiano'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
+import Spinner from 'components/Spinner'
 
 import  {showError, getCodice} from 'utils'
 
@@ -60,12 +61,7 @@ const UI = ({
                 <Query query={query} variables={{codice}} onError={showError}>
                     {({loading, data: {modello: {edges: [elab] = []} = []} = {}}) => {
                         if(loading || loadingOuter) {
-                            return (
-                                <div className="flex-fill d-flex justify-content-center">
-                                    <div className="spinner-grow " role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>)
+                            return <Spinner/>
                         }
                         return (
                             <UI {...props} procedura={procedura} elab={elab}/>)}

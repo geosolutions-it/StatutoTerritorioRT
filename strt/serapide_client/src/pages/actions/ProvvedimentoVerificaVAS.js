@@ -16,6 +16,7 @@ import className from "classnames"
 import ActionTitle from 'components/ActionTitle'
 import TextWithTooltip from 'components/TextWithTooltip'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
+import Spinner from 'components/Spinner'
 
 import {rebuildTooltip} from 'enhancers'
 import {map} from 'lodash'
@@ -110,12 +111,7 @@ export default (props) => (
     <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
         {({loading, data: {modello: {edges: [vas] = []} = {}} = {}}) => {
             if(loading) {
-                return (
-                    <div className="flex-fill d-flex justify-content-center">
-                        <div className="spinner-grow " role="status">
-                            <span className="sr-only">Loading...</span>
-                        </div>
-                    </div>)
+                return <Spinner/>
             }
             return (
                 <UI {...props} vas={vas}/>)}

@@ -12,6 +12,7 @@ import {EnhancedSwitch} from "components/Switch"
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import Elaborati from 'components/ElaboratiPiano'
+import Spinner from 'components/Spinner'
 
 import  {showError, getInputFactory, getCodice} from 'utils'
 
@@ -85,12 +86,7 @@ export default (props) => {
         return (<Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
                 {({loading, data: {modello: {edges: [proceduraAdozione]= []} = []} = {}}) => {
                         if(loading || loadingContro) {
-                            return (
-                                <div className="flex-fill d-flex justify-content-center">
-                                    <div className="spinner-grow " role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>)
+                            return <Spinner/>
                         }
                         return (
                             <UI  {...props} pianoContro={pianoContro} proceduraAdozione={proceduraAdozione}/>)}

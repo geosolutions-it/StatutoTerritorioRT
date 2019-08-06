@@ -19,6 +19,7 @@ import ActionTitle from 'components/ActionTitle'
 import Button from 'components/IconButton'
 import RichiestaComune from 'components/RichiestaComune'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
+import Spinner from 'components/Spinner'
 
 import ListaContatti from 'components/ListaContatti'
 
@@ -213,12 +214,7 @@ export default (props) => {
                                 </AutoMutation>)
                         }
                         if(loading) {
-                            return (
-                                <div className="flex-fill d-flex justify-content-center">
-                                    <div className="spinner-grow " role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>)
+                            return <Spinner/>
                         }
                         return (
                             <UI {...props} consultazioneSCA={consultazioneSCA}/>)}

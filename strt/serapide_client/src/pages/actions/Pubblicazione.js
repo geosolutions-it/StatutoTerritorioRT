@@ -13,6 +13,7 @@ import SalvaInvia from 'components/SalvaInvia'
 import Input from 'components/EnhancedInput'
 import ListaContatti from 'components/ListaContatti'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
+import Spinner from 'components/Spinner'
 
 import {EnhancedDateSelector} from 'components/DateSelector'
 
@@ -73,12 +74,7 @@ const UI = ({
         <Query query={query} variables={{codice: getCodice(props)}} onError={showError}>
             {({loading, data: {modello: {edges: [modello] = []} = {}}}) => {
                 if(loading) {
-                    return (
-                        <div className="flex-fill d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>)
+                    return <Spinner/>
                 }
                 return (
                     <UI {...props} modello={modello}/>)}

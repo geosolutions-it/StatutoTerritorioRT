@@ -15,6 +15,7 @@ import ActionTitle from 'components/ActionTitle'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
 import ListaContatti from 'components/ListaContatti'
+import Spinner from 'components/Spinner'
 
 import {EnhancedDateSelector} from 'components/DateSelector'
 import Input from 'components/EnhancedInput'
@@ -177,12 +178,7 @@ export default (props) => {
                 <Query query={GET_ADOZIONE} variables={{codice}} onError={showError}>
                     {({loading, data: {modello: {edges: [proceduraAdozione] = []} = []} = {}}) => {
                         if (loading || loadingVas) {
-                            return (
-                                <div className="flex-fill d-flex justify-content-center">
-                                    <div className="spinner-grow " role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>)
+                            return <Spinner/>
                         }
                         return (
                             <UI {...props} vas={vas} proceduraAdozione={proceduraAdozione} />)}

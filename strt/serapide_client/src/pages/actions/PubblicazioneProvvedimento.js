@@ -12,6 +12,7 @@ import {Input} from 'reactstrap'
 import Resource from 'components/Resource'
 import ActionTitle from 'components/ActionTitle'
 import SalvaInvia from 'components/SalvaInvia'
+import Spinner from 'components/Spinner'
 
 import  {showError, getCodice} from 'utils'
 import {withControllableState} from 'enhancers'
@@ -44,12 +45,7 @@ const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edg
         <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
             {({loading, data: {modello: {edges: [vas] = []} = {}}, error}) => {
                 if(loading) {
-                    return (
-                        <div className="flex-fill d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>)
+                    return <Spinner/>
                 }
                 return (
                     <UI {...props} vas={vas}/>)}

@@ -12,6 +12,7 @@ import FileUpload from 'components/UploadSingleFile'
 import ActionTitle from 'components/ActionTitle'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
+import Spinner from 'components/Spinner'
 
 
 import  {showError, getCodice} from 'utils'
@@ -59,12 +60,7 @@ const UI = ({
         <Query query={query} variables={{codice: getCodice(props)}} onError={showError}>
             {({loading, data: {modello: {edges: [modello] = []} = {}}}) => {
                 if(loading) {
-                    return (
-                        <div className="flex-fill d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>)
+                    return <Spinner/>
                 }
                 return (
                     <UI {...props} modello={modello}/>)}

@@ -13,6 +13,7 @@ import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
 //import Elaborati from "components/ElaboratiPiano"
+import Spinner from 'components/Spinner'
 
 import  {showError, formatDate, getCodice} from 'utils'
 import {rebuildTooltip} from 'enhancers'
@@ -78,12 +79,7 @@ const UI = rebuildTooltip()(({
         <Query query={GET_ADOZIONE} variables={{codice: getCodice(props)}} onError={showError}>
              {({loading, data: {modello: {edges: [proceduraAdozione] = []} = []} = {}}) => {
                 if(loading) {
-                    return (
-                        <div className="flex-fill d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>)
+                    return <Spinner/>
                 }
                 return (
                     <UI {...props} proceduraAdozione={proceduraAdozione} />)}

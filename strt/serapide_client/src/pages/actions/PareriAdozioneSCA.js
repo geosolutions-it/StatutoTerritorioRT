@@ -13,6 +13,7 @@ import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import RichiestaComune from 'components/RichiestaComune'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
+import Spinner from 'components/Spinner'
 
 import  {showError, formatDate, daysSub, getCodice} from 'utils'
 
@@ -63,12 +64,7 @@ const UI = ({
         <Query query={GET_ADOZIONE_VAS} variables={{codice: getCodice(props)}} onError={showError}>
             {({loading, data: {modello: {edges: [adozioneVas] = []} = {}}, error}) => {
                 if(loading) {
-                    return (
-                        <div className="flex-fill d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>)
+                    return <Spinner/>
                 }
                 return (
                     <UI {...props} vas={adozioneVas}  />)}
