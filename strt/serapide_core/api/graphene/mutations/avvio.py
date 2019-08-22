@@ -57,6 +57,7 @@ from serapide_core.modello.enums import (
 from serapide_core.api.graphene import types
 from serapide_core.api.graphene import inputs
 from serapide_core.api.graphene.mutations import fase
+from serapide_core.api.graphene.mutations.vas import init_vas_procedure
 
 logger = logging.getLogger(__name__)
 
@@ -209,8 +210,9 @@ class AvvioPiano(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
-            _avvio_procedimento = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
+            _avvio_procedimento = piano.azioni\
+                .filter(tipologia=TIPOLOGIA_AZIONE.avvio_procedimento)\
+                .first()
             if _avvio_procedimento and _avvio_procedimento.stato != STATO_AZIONE.nessuna:
                 if not cls.autorita_ok(piano, TIPOLOGIA_CONTATTO.genio_civile):
                     raise Exception(
@@ -234,6 +236,19 @@ class AvvioPiano(graphene.Mutation):
                 _contributi_tecnici.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_contributi_tecnici, piano=piano)
+
+                _richiesta_verifica_vas = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa
+                )
+                _richiesta_verifica_vas.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_richiesta_verifica_vas, piano=piano)
+
+                init_vas_procedure(piano)
+
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
@@ -244,8 +259,11 @@ class AvvioPiano(graphene.Mutation):
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+        if info.context.user \
+                and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) \
+                and rules.test_rule('strt_core.api.is_actor', _token
+                                                            or (info.context.user, _role)
+                                                            or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -293,12 +311,16 @@ class ContributiTecnici(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
-            _avvio_procedimento = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.avvio_procedimento).first()
-            _contributi_tecnici = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.contributi_tecnici).first()
-            if _avvio_procedimento and _avvio_procedimento.stato == STATO_AZIONE.nessuna and \
-            _contributi_tecnici and _contributi_tecnici.stato != STATO_AZIONE.nessuna:
+            _avvio_procedimento = piano.azioni\
+                .filter(tipologia=TIPOLOGIA_AZIONE.avvio_procedimento)\
+                .first()
+            _contributi_tecnici = piano.azioni\
+                .filter(tipologia=TIPOLOGIA_AZIONE.contributi_tecnici)\
+                .first()
+            if _avvio_procedimento \
+                    and _avvio_procedimento.stato == STATO_AZIONE.nessuna \
+                    and _contributi_tecnici \
+                    and _contributi_tecnici.stato != STATO_AZIONE.nessuna:
 
                 _contributi_tecnici.stato = STATO_AZIONE.nessuna
                 _contributi_tecnici.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -509,8 +531,11 @@ class RichiestaIntegrazioni(graphene.Mutation):
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
+        if info.context.user \
+            and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) \
+            and rules.test_rule('strt_core.api.is_actor', _token  \
+                                                        or (info.context.user, _role) \
+                                                        or (info.context.user, _organization), 'Regione'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 

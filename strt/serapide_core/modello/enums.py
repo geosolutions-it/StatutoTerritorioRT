@@ -229,10 +229,6 @@ AZIONI_BASE = {
         {
             "tipologia": TIPOLOGIA_AZIONE.creato_piano,
             "attore": TIPOLOGIA_ATTORE.comune
-        },
-        {
-            "tipologia": TIPOLOGIA_AZIONE.richiesta_verifica_vas,
-            "attore": TIPOLOGIA_ATTORE.comune
         }
     ],
     FASE.anagrafica: [
