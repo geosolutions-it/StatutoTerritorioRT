@@ -389,23 +389,13 @@ class ContributiTecnici(graphene.Mutation):
 
                     _protocollo_genio_civile = Azione(
                         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
-                        attore=TIPOLOGIA_ATTORE.comune,
+                        attore=TIPOLOGIA_ATTORE.genio_civile,
                         order=_order,
                         stato=STATO_AZIONE.attesa
                     )
                     _protocollo_genio_civile.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile, piano=piano)
-
-                    _protocollo_genio_civile_id = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id,
-                        attore=TIPOLOGIA_ATTORE.genio_civile,
-                        order=_order,
-                        stato=STATO_AZIONE.necessaria
-                    )
-                    _protocollo_genio_civile_id.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile_id, piano=piano)
 
                     return "protocollo_genio_civile"
         else:
@@ -683,8 +673,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
             _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
-            _protocollo_genio_civile_id = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile_id)
-            if needsExecution(_protocollo_genio_civile_id):
+            if needsExecution(_protocollo_genio_civile):
                 if piano.numero_protocollo_genio_civile:
                     piano.data_protocollo_genio_civile = datetime.datetime.now(timezone.get_current_timezone())
                     piano.save()
@@ -699,10 +688,6 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                         _protocollo_genio_civile.stato = STATO_AZIONE.nessuna
                         _protocollo_genio_civile.data = datetime.datetime.now(timezone.get_current_timezone())
                         _protocollo_genio_civile.save()
-
-                        _protocollo_genio_civile_id.stato = STATO_AZIONE.nessuna
-                        _protocollo_genio_civile_id.data = datetime.datetime.now(timezone.get_current_timezone())
-                        _protocollo_genio_civile_id.save()
 
                         _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
                         if not _procedura_vas or _procedura_vas.conclusa:
@@ -894,7 +879,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
 
                     _protocollo_genio_civile = Azione(
                         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
-                        attore=TIPOLOGIA_ATTORE.comune,
+                        attore=TIPOLOGIA_ATTORE.genio_civile,
                         order=_order,
                         stato=STATO_AZIONE.attesa,
                         data=procedura_avvio.data_scadenza_risposta
@@ -902,16 +887,6 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                     _protocollo_genio_civile.save()
                     _order += 1
                     AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile, piano=piano)
-
-                    _protocollo_genio_civile_id = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id,
-                        attore=TIPOLOGIA_ATTORE.genio_civile,
-                        order=_order,
-                        stato=STATO_AZIONE.necessaria
-                    )
-                    _protocollo_genio_civile_id.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile_id, piano=piano)
         else:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
