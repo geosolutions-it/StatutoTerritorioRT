@@ -113,8 +113,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('richiesta_integrazioni', _('Richiesta Integrazioni')),  # Regione
         ('integrazioni_richieste', _('Integrazioni Richieste')),  # Comune
         ('formazione_del_piano', _('Formazione del Piano')),  # Comune
-        ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Comune
-        ('protocollo_genio_civile_id', _('Protocollo N.')),  # Genio Civile
+        ('protocollo_genio_civile', _('Protocollo Genio Civile')),  # Genio Civile
         ('richiesta_conferenza_copianificazione', _('Richiesta Conferenza di copianificazione')),  # Comune
         ('esito_conferenza_copianificazione', _('Esito conferenza di copianificazione')),  # Regione
         # Adozione
@@ -160,7 +159,6 @@ FASE_AZIONE = Choices(
         ('integrazioni_richieste', 'anagrafica'),
         ('formazione_del_piano', 'anagrafica'),
         ('protocollo_genio_civile', 'anagrafica'),
-        ('protocollo_genio_civile_id', 'anagrafica'),
         ('richiesta_conferenza_copianificazione', 'anagrafica'),
         ('esito_conferenza_copianificazione', 'anagrafica'),
         # Adozione
@@ -201,7 +199,6 @@ TOOLTIP_AZIONE = Choices(
         ('contributi_tecnici', _('art. 17 L.R. 65/2014, comma 1, art. 21 Disciplina del Piano , PIT-PPR')),
         ('richiesta_conferenza_copianificazione', _('art.25 L.R. 65/2014')),
         ('protocollo_genio_civile', _('art.65/104 RR')),
-        ('protocollo_genio_civile_id', _('art.65/104 RR')),
         ('esito_conferenza_copianificazione', _('art.25 L.R. 65/2014')),
         # Adozione
         ('trasmissione_adozione', _('art.19 L.R. 65/2014')),

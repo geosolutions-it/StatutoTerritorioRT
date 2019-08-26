@@ -56,6 +56,8 @@ from serapide_core.modello.models import (
     AutoritaIstituzionali,
     AltriDestinatari,
     SoggettiSCA,
+    needsExecution,
+    isExecuted,
 )
 
 from serapide_core.modello.enums import (
@@ -163,7 +165,7 @@ class CreatePiano(relay.ClientIDMutation):
                     _ap.save()
                     AzioniPiano.objects.get_or_create(azione=_ap, piano=nuovo_piano)
 
-                _creato = nuovo_piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
+                _creato = nuovo_piano.getFirstAction(TIPOLOGIA_AZIONE.creato_piano)
                 if _creato:
                     _creato.stato = STATO_AZIONE.necessaria
                     _creato.save()
@@ -260,8 +262,9 @@ class UpdatePiano(relay.ClientIDMutation):
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
         if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+            rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+            rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+
             try:
                 # Codice Piano (M)
                 if 'codice' in _piano_data:
@@ -322,7 +325,9 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'soggetto_proponente_uuid' in _piano_data:
                     _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+                        rules.test_rule('strt_core.api.is_actor', _token or \
+                                                                  (info.context.user, _role) or \
+                                                                  (info.context.user, _organization), 'Comune'):
 
                         if _piano.soggetto_proponente:
                             UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
@@ -340,7 +345,9 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'autorita_competente_vas' in _piano_data:
                     _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+                        rules.test_rule('strt_core.api.is_actor', _token or \
+                                                                  (info.context.user, _role) or \
+                                                                  (info.context.user, _organization), 'Comune'):
 
                         _piano.autorita_competente_vas.clear()
 
@@ -369,7 +376,9 @@ class UpdatePiano(relay.ClientIDMutation):
                 if 'soggetti_sca' in _piano_data:
                     _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+                        rules.test_rule('strt_core.api.is_actor', _token or \
+                                                                  (info.context.user, _role) or \
+                                                                  (info.context.user, _organization), 'Comune'):
 
                         _piano.soggetti_sca.clear()
 
@@ -472,7 +481,9 @@ class UpdatePiano(relay.ClientIDMutation):
 
                 if 'numero_protocollo_genio_civile' in _piano_data:
                     if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) or \
-                    not rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'genio_civile'):
+                        not rules.test_rule('strt_core.api.is_actor', _token or \
+                                                                      (info.context.user, _role) or \
+                                                                      (info.context.user, _organization), 'genio_civile'):
                         _piano_data.pop('numero_protocollo_genio_civile')
                         # This can be changed only by Genio Civile
 
@@ -568,39 +579,25 @@ class FormazionePiano(graphene.Mutation):
         # Update Azioni Piano
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
-            _formazione_del_piano = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
-            if _formazione_del_piano and _formazione_del_piano.stato != STATO_AZIONE.nessuna:
+
+            _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+            if needsExecution(_formazione_del_piano):
                 _formazione_del_piano.stato = STATO_AZIONE.nessuna
                 _formazione_del_piano.data = datetime.datetime.now(timezone.get_current_timezone())
                 _formazione_del_piano.save()
 
-                _conferenza_copianificazione_attiva = False
+                _conferenza_copianificazione_attiva = \
+                     needsExecution(
+                        piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
+                    needsExecution(
+                        piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
 
-                _richiesta_conferenza_copianificazione = piano.azioni.filter(
-                    tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione).first()
-                if _richiesta_conferenza_copianificazione and \
-                _richiesta_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
-                    _conferenza_copianificazione_attiva = True
-
-                _esito_conferenza_copianificazione = piano.azioni.filter(
-                    tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione).first()
-                if _esito_conferenza_copianificazione and \
-                _esito_conferenza_copianificazione.stato != STATO_AZIONE.nessuna:
-                    _conferenza_copianificazione_attiva = True
-
-                _protocollo_genio_civile = piano.azioni.filter(
-                    tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile).first()
-
-                _protocollo_genio_civile_id = piano.azioni.filter(
-                    tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile_id).first()
-
-                _integrazioni_richieste = piano.azioni.filter(
-                    tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste).first()
+                _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+                _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
 
                 if not _conferenza_copianificazione_attiva and \
-                _protocollo_genio_civile and _protocollo_genio_civile.stato == STATO_AZIONE.nessuna and \
-                _protocollo_genio_civile_id and _protocollo_genio_civile_id.stato == STATO_AZIONE.nessuna and \
-                _integrazioni_richieste and _integrazioni_richieste.stato == STATO_AZIONE.nessuna:
+                    isExecuted(_protocollo_genio_civile) and \
+                    isExecuted(_integrazioni_richieste):
 
                     if procedura_vas.conclusa:
                         piano.chiudi_pendenti(attesa=True, necessaria=False)
@@ -608,11 +605,10 @@ class FormazionePiano(graphene.Mutation):
                     procedura_avvio.conclusa = True
                     procedura_avvio.save()
 
-                    procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
-                        piano=piano, ente=piano.ente)
+                    procedura_adozione, created = ProceduraAdozione.objects.get_or_create(piano=piano, ente=piano.ente)
 
-                    piano_controdedotto, created = PianoControdedotto.objects.get_or_create(piano=piano)
-                    piano_rev_post_cp, created = PianoRevPostCP.objects.get_or_create(piano=piano)
+                    PianoControdedotto.objects.get_or_create(piano=piano)
+                    PianoRevPostCP.objects.get_or_create(piano=piano)
 
                     piano.procedura_adozione = procedura_adozione
                     piano.save()
@@ -626,8 +622,9 @@ class FormazionePiano(graphene.Mutation):
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+        if info.context.user and \
+                rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+                rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
