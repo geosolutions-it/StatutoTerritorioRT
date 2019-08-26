@@ -493,6 +493,11 @@ class Piano(models.Model):
                     _state_hist.data_chiusura = _now
                     _state_hist.save()
 
+    def getFirstAction(self, tipologia_azione:TIPOLOGIA_AZIONE):
+        return self.azioni \
+            .filter(tipologia=tipologia_azione) \
+            .first()
+
 
 class FasePianoStorico(models.Model):
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
@@ -1193,3 +1198,10 @@ def delete_piano_associations(sender, instance, **kwargs):
 
     for _t in PianoAuthTokens.objects.filter(piano=instance):
         _t.token.delete()
+
+
+def needsExecution(action:Azione):
+    return action and action.stato != STATO_AZIONE.nessuna
+
+def isExecuted(action:Azione):
+    return action and action.stato == STATO_AZIONE.nessuna

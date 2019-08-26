@@ -41,6 +41,8 @@ from serapide_core.modello.models import (
     ProceduraAvvio,
     ConsultazioneVAS,
     ParereVerificaVAS,
+    isExecuted,
+    needsExecution
 )
 
 from serapide_core.modello.enums import (
@@ -56,6 +58,88 @@ from serapide_core.api.graphene import inputs
 from serapide_core.api.graphene.mutations import fase
 
 logger = logging.getLogger(__name__)
+
+
+def init_vas_procedure(piano:Piano):
+
+    _order = piano.azioni.count()
+    procedura_vas = piano.procedura_vas
+    _verifica_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_verifica_vas)
+
+    if _verifica_vas:
+        if procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+            _verifica_vas.stato = STATO_AZIONE.nessuna
+
+        elif procedura_vas.tipologia in \
+                (TIPOLOGIA_VAS.procedimento, TIPOLOGIA_VAS.procedimento_semplificato):
+            _verifica_vas.stato = STATO_AZIONE.nessuna
+            _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
+            _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
+                                 datetime.timedelta(days=_verifica_vas_expire_days)
+
+            _avvio_consultazioni_sca_ac_expire_days = 10
+            _avvio_consultazioni_sca = Azione(
+                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                attore=TIPOLOGIA_ATTORE.ac,
+                order=_order,
+                stato=STATO_AZIONE.attesa,
+                data=datetime.datetime.now(timezone.get_current_timezone()) +
+                     datetime.timedelta(days=_avvio_consultazioni_sca_ac_expire_days)
+            )
+            _avvio_consultazioni_sca.save()
+            _order += 1
+            AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+
+        elif procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
+            _verifica_vas.stato = STATO_AZIONE.nessuna
+
+            _emissione_provvedimento_verifica_expire_days = 30
+            _emissione_provvedimento_verifica = Azione(
+                tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
+                attore=TIPOLOGIA_ATTORE.ac,
+                order=_order,
+                stato=STATO_AZIONE.attesa,
+                data=datetime.datetime.now(timezone.get_current_timezone()) +
+                     datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
+            )
+            _emissione_provvedimento_verifica.save()
+            _order += 1
+            AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
+
+        elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
+            # _verifica_vas.stato = STATO_AZIONE.attesa
+            _verifica_vas.stato = STATO_AZIONE.nessuna
+            _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
+            _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
+                                 datetime.timedelta(days=_verifica_vas_expire_days)
+
+            _pareri_vas_expire_days = getattr(settings, 'PARERI_VERIFICA_VAS_EXPIRE_DAYS', 30)
+            _pareri_sca = Azione(
+                tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca,
+                attore=TIPOLOGIA_ATTORE.sca,
+                order=_order,
+                stato=STATO_AZIONE.attesa,
+                data=datetime.datetime.now(timezone.get_current_timezone()) +
+                     datetime.timedelta(days=_pareri_vas_expire_days)
+            )
+            _pareri_sca.save()
+            _order += 1
+            AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
+
+            _emissione_provvedimento_verifica_expire_days = 90
+            _emissione_provvedimento_verifica = Azione(
+                tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
+                attore=TIPOLOGIA_ATTORE.ac,
+                order=_order,
+                stato=STATO_AZIONE.attesa,
+                data=datetime.datetime.now(timezone.get_current_timezone()) +
+                     datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
+            )
+            _emissione_provvedimento_verifica.save()
+            _order += 1
+            AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
+
+        _verifica_vas.save()
 
 
 class CreateProceduraVAS(relay.ClientIDMutation):
@@ -168,11 +252,12 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                     if rules.test_rule('strt_users.is_superuser', info.context.user) or \
                     is_RUP(info.context.user) or \
                     rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune'):
-                        _pubblicazione_provvedimento_verifica_ap = _piano.azioni.filter(
-                            tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
-                            attore=TIPOLOGIA_ATTORE.comune).first()
-                        if _pubblicazione_provvedimento_verifica_ap and \
-                        _pubblicazione_provvedimento_verifica_ap.stato != STATO_AZIONE.nessuna:
+                        _pubblicazione_provvedimento_verifica_ap = _piano.azioni\
+                            .filter(
+                                tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                                attore=TIPOLOGIA_ATTORE.comune)\
+                            .first()
+                        if needsExecution(_pubblicazione_provvedimento_verifica_ap):
                             _pubblicazione_provvedimento_verifica_ap.stato = STATO_AZIONE.nessuna
 
                             # Notify Users
@@ -186,13 +271,15 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
                     if rules.test_rule('strt_users.is_superuser', info.context.user) or \
-                    is_RUP(info.context.user) or \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'AC'):
-                        _pubblicazione_provvedimento_verifica_ac = _piano.azioni.filter(
-                            tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
-                            attore=TIPOLOGIA_ATTORE.ac).first()
-                        if _pubblicazione_provvedimento_verifica_ac and \
-                        _pubblicazione_provvedimento_verifica_ac.stato != STATO_AZIONE.nessuna:
+                        is_RUP(info.context.user) or \
+                        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'AC'):
+
+                        _pubblicazione_provvedimento_verifica_ac = _piano.azioni\
+                            .filter(
+                                tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                                attore=TIPOLOGIA_ATTORE.ac)\
+                            .first()
+                        if needsExecution(_pubblicazione_provvedimento_verifica_ac):
                             _pubblicazione_provvedimento_verifica_ac.stato = STATO_AZIONE.nessuna
 
                             # Notify Users
@@ -205,7 +292,8 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                             _pubblicazione_provvedimento_verifica_ac.save()
 
                 if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
-                procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
+                    procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
+
                     _procedura_avvio = ProceduraAvvio.objects.filter(piano=_piano).last()
                     if not _procedura_avvio or _procedura_avvio.conclusa:
                         _piano.chiudi_pendenti(attesa=True, necessaria=False)
@@ -256,8 +344,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
         # Update Azioni Piano
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
-            _pareri_verifica_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca).first()
+            _pareri_verifica_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_verifica_sca)
             if _pareri_verifica_sca.stato == STATO_AZIONE.attesa:
                 _pareri_verifica_sca.stato = STATO_AZIONE.nessuna
                 _pareri_verifica_sca.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -380,10 +467,8 @@ class AssoggettamentoVAS(graphene.Mutation):
                 procedura_vas.save()
 
             if procedura_vas.verifica_effettuata:
-                _emissione_provvedimento_verifica = piano.azioni.filter(
-                    tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica).first()
-                if _emissione_provvedimento_verifica and \
-                _emissione_provvedimento_verifica.stato != STATO_AZIONE.nessuna:
+                _emissione_provvedimento_verifica = piano.getFirstAction(TIPOLOGIA_AZIONE.emissione_provvedimento_verifica)
+                if needsExecution(_emissione_provvedimento_verifica):
                     _emissione_provvedimento_verifica.stato = STATO_AZIONE.nessuna
                     _emissione_provvedimento_verifica.save()
         else:
@@ -400,9 +485,8 @@ class AssoggettamentoVAS(graphene.Mutation):
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC'):
             try:
-                _pareri_verifica_sca = _piano.azioni.filter(
-                    tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca).first()
-                if _pareri_verifica_sca and _pareri_verifica_sca.stato != STATO_AZIONE.nessuna:
+                _pareri_verifica_sca = _piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_verifica_sca)
+                if needsExecution(_pareri_verifica_sca):
                     return GraphQLError(_("Forbidden"), code=403)
                 if not _procedura_vas.verifica_effettuata and \
                 _procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
@@ -513,8 +597,9 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                     _avvio_consultazioni_sca = _ac
                     break
             if _avvio_consultazioni_sca and \
-            not isinstance(_avvio_consultazioni_sca, QuerySet) and \
-            _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
+                not isinstance(_avvio_consultazioni_sca, QuerySet) and \
+                _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
+
                 _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
                 _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
 
@@ -596,16 +681,15 @@ class InvioPareriVAS(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
-            _verifica_vas = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas).first()
-            _avvio_consultazioni_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
+            _verifica_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_verifica_vas)
+
+            _avvio_consultazioni_sca = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
             for _ac in _avvio_consultazioni_sca:
                 if _ac.stato != STATO_AZIONE.nessuna:
                     _avvio_consultazioni_sca = _ac
                     break
-            _pareri_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.pareri_sca)
+
+            _pareri_sca = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.pareri_sca)
             for _psca in _pareri_sca:
                 if _psca.stato != STATO_AZIONE.nessuna:
                     _pareri_sca = _psca
@@ -623,12 +707,13 @@ class InvioPareriVAS(graphene.Mutation):
                 _pareri_sca.save()
 
                 if _avvio_consultazioni_sca and \
-                (not isinstance(_avvio_consultazioni_sca, QuerySet) or
-                 ((_avvio_consultazioni_sca.count() == 1 and
-                   procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento) or (
-                    _avvio_consultazioni_sca.count() == 1 and
-                    _avvio_consultazioni_sca.first().attore == TIPOLOGIA_ATTORE.ac and
+                   (not isinstance(_avvio_consultazioni_sca, QuerySet) or
+                      ((_avvio_consultazioni_sca.count() == 1 and
+                        procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento) or
+                       (_avvio_consultazioni_sca.count() == 1 and
+                        _avvio_consultazioni_sca.first().attore == TIPOLOGIA_ATTORE.ac and
                         procedura_vas.tipologia != TIPOLOGIA_VAS.procedimento_semplificato))):
+
                     if isinstance(_avvio_consultazioni_sca, QuerySet):
                         _avvio_consultazioni_sca = _avvio_consultazioni_sca.last()
 
@@ -767,14 +852,12 @@ class AvvioEsamePareriSCA(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
-            _pareri_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.pareri_sca).first()
-            if _pareri_sca.stato == STATO_AZIONE.nessuna:
+            _pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_sca)
+            if isExecuted(_pareri_sca):
 
-                _avvio_esame_pareri_sca = piano.azioni.filter(
-                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca).first()
+                _avvio_esame_pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_esame_pareri_sca)
 
-                if _avvio_esame_pareri_sca.stato != STATO_AZIONE.nessuna:
+                if needsExecution(_avvio_esame_pareri_sca):
                     _avvio_esame_pareri_sca.stato = STATO_AZIONE.nessuna
                     _avvio_esame_pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
                     _avvio_esame_pareri_sca.save()
@@ -839,9 +922,8 @@ class UploadElaboratiVAS(graphene.Mutation):
         # Update Azioni Piano
         # - Update Action state accordingly
         if fase.nome == FASE.anagrafica:
-            _upload_elaborati_vas = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.upload_elaborati_vas).first()
-            if _upload_elaborati_vas.stato != STATO_AZIONE.nessuna:
+            _upload_elaborati_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.upload_elaborati_vas)
+            if needsExecution(_upload_elaborati_vas):
                 _upload_elaborati_vas.stato = STATO_AZIONE.nessuna
                 _upload_elaborati_vas.data = datetime.datetime.now(timezone.get_current_timezone())
                 _upload_elaborati_vas.save()
