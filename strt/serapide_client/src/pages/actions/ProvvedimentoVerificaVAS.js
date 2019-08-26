@@ -31,7 +31,7 @@ import {GET_VAS,
 
 
 
-const SwitchAssoggetamento = ({uuid, assoggettamento, fontSize, iconSize = "icon-34"}) => (
+const SwitchAssoggettamento = ({uuid, assoggettamento, fontSize, iconSize = "icon-34"}) => (
         <Mutation mutation={UPDATE_VAS} onError={showError}>
             {(update) => {
                 const onClick = (val) =>{
@@ -90,7 +90,7 @@ const UI = rebuildTooltip()(({
                     }
                 </div>
                 <ActionParagraphTitle>Emissione Provvedimento di Verifica</ActionParagraphTitle> 
-                <SwitchAssoggetamento fontSize="size-11" iconSize="icon-15" assoggettamento={assoggettamento} uuid={uuid}></SwitchAssoggetamento>
+                <SwitchAssoggettamento fontSize="size-11" iconSize="icon-15" assoggettamento={assoggettamento} uuid={uuid}></SwitchAssoggettamento>
                 <ActionParagraphTitle fontWeight="font-weight-light">PROVVEDIMENTO DI VERIFICA</ActionParagraphTitle>
                     <div className="action-uploader  py-1 align-self-start border-bottom">
                     <FileUpload 

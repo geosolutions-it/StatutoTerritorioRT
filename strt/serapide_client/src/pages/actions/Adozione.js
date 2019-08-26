@@ -28,7 +28,8 @@ import {rebuildTooltip} from 'enhancers'
 import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
     DELETE_RISORSA_ADOZIONE,
     ADOZIONE_FILE_UPLOAD,
-    TRASMISSIONE_ADOZIONE
+    TRASMISSIONE_ADOZIONE,
+    UPDATE_PIANO
 } from 'schema'
 
 
@@ -43,6 +44,14 @@ const Link = ({title, url}) => (<React.Fragment>
  
 
 const getInput = getInputFactory("proceduraAdozione")
+const getInputPiano = (codice, field) => (val) => ({
+    variables: {
+        input: { 
+            pianoOperativo: { [field]:  val }, 
+            codice
+        }
+    }
+})
 
 const fileProps = {className: `border-0`, mutation: ADOZIONE_FILE_UPLOAD,
                     resourceMutation: DELETE_RISORSA_ADOZIONE, disabled: false, isLocked: false,
@@ -60,28 +69,50 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
             risorse: {edges=[]} = {}
             } = {}} = {}, 
         piano: {
+            codice,
             tipo: tipoPiano = "",
             redazioneNormeTecnicheAttuazioneUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl,
+            compilazioneRapportoAmbientaleUrl,
             autoritaIstituzionali: {edges: aut =[]} = {},
+            risorse: {edges: resources=[]} = {}
             // altriDestinatari: {edges: dest = []} = {}
             },
         back}) => {
 
-            const {node: rapportoAmbientale} = resVas.filter(({node: {tipo}}) => tipo === "rapporto_ambientale").shift() || {}
+            // const {node: rapportoAmbientale} = resVas.filter(({node: {tipo}}) => tipo === "rapporto_ambientale").shift() || {}
             const {node: deliberaAdozione} = edges.filter(({node: {tipo}}) => tipo === "delibera_adozione").shift() || {}
+            const norme = resources.filter(({node: {tipo, user = {}}}) => tipo === 'norme_tecniche_attuazione').map(({node}) => node).shift()
+            
             return (<React.Fragment>
                 <ActionTitle>
                    Trasmissione Adozione
                 </ActionTitle>
                 <ActionParagraphTitle>RIFERIMENTI DOCUMENTALI</ActionParagraphTitle>
-                <Link title="NORME TECNICHE DI ATTUAZIONE E RAPPORTO AMBIENTALE" url={redazioneNormeTecnicheAttuazioneUrl}/>
-                <Resource iconSize="icon-15" fontSize="size-11" useLabel fileSize={false} className="border-0 mt-3" icon="attach_file" resource={rapportoAmbientale}/>
-                <div className="w-100 py-2"></div>
-                <Link title="CONFORMAZIONE AL PIT-PPR" url={conformazionePitPprUrl}/>
-                <div className="w-100 py-2"></div>
-                <Link title="MONITORAGGIO URBANISTICO" url={monitoraggioUrbanisticoUrl}/>
+                <ActionSubParagraphTitle>NORME TECNICHE DI ATTUAZIONE</ActionSubParagraphTitle>
+                <Resource iconSize="icon-15" fontSize="size-11" useLabel fileSize={false} className="border-0 my-3" icon="attach_file" resource={norme}/>
+                <ActionSubParagraphTitle>COMPILAZIONE RAPPORTO AMBIENTALE</ActionSubParagraphTitle>
+                <div className="my-3 row d-flex align-items-center">
+                    <div className="col-1 size-12">URL </div>
+                    <div className="col-11 ">
+                        <Input className="size-10"  placeholder="copiare la URL in questo campo" getInput={getInputPiano(codice, "compilazioneRapportoAmbientaleUrl")} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={compilazioneRapportoAmbientaleUrl} type="text" />
+                    </div>
+                </div>
+                <ActionSubParagraphTitle>CONFORMAZIONE AL PIT-PPR</ActionSubParagraphTitle>
+                <div className="my-3 row d-flex align-items-center">
+                    <div className="col-1 size-12">URL </div>
+                    <div className="col-11 ">
+                        <Input className="size-10" placeholder="copiare la URL in questo campo" getInput={getInputPiano(codice, "conformazionePitPprUrl")} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={conformazionePitPprUrl} type="text" />
+                    </div>
+                </div>
+                <ActionSubParagraphTitle>MONITORAGGIO URBANISTICA</ActionSubParagraphTitle>
+                <div className="my-3 row d-flex align-items-center">
+                    <div className="col-1 size-12">URL </div>
+                    <div className="col-11 ">
+                        <Input className="size-10" placeholder="copiare la URL in questo campo" getInput={getInputPiano(codice, "monitoraggioUrbanisticoUrl")} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={monitoraggioUrbanisticoUrl} type="text" />
+                    </div>
+                </div>
                 <div className="w-100 border-top m-0 mt-4"></div>
-                <ActionParagraphTitle className="pt-4 font-weight-light">DESTINATARI</ActionParagraphTitle>
+                <ActionSubParagraphTitle className="pt-4 font-weight-light">DESTINATARI</ActionSubParagraphTitle>
                 <ListaContatti title="SOGGETTI ISTITUZIONALI" contacts={aut}/>
                 {/* <h6 className="font-weight-light pb-1 mt-4">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h6>
                 <div className="row">
@@ -166,7 +197,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                 <div className="w-100 border-top mt-3"></div> 
                 <div className="align-self-center mt-7">
                     <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_ADOZIONE} 
-                        canCommit={ deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData}></SalvaInvia>
+                        canCommit={ deliberaAdozione && dataDeliberaAdozione && pubblicazioneBurtUrl && pubblicazioneBurtData && pubblicazioneSitoUrl && pubblicazioneSitoData && compilazioneRapportoAmbientaleUrl && conformazionePitPprUrl && monitoraggioUrbanisticoUrl}></SalvaInvia>
                 </div>
             </React.Fragment>)})
 
