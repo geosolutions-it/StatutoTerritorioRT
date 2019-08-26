@@ -671,38 +671,38 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
-            if needsExecution(_protocollo_genio_civile):
-                if piano.numero_protocollo_genio_civile:
-                    piano.data_protocollo_genio_civile = datetime.datetime.now(timezone.get_current_timezone())
-                    piano.save()
-
-                    _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
-
-                    _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
-
-                    if isExecuted(_formazione_del_piano) and \
-                        (not procedura_avvio.richiesta_integrazioni or (isExecuted(_integrazioni_richieste))):
-
-                        _protocollo_genio_civile.stato = STATO_AZIONE.nessuna
-                        _protocollo_genio_civile.data = datetime.datetime.now(timezone.get_current_timezone())
-                        _protocollo_genio_civile.save()
-
-                        _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
-                        if not _procedura_vas or _procedura_vas.conclusa:
-                            piano.chiudi_pendenti(attesa=True, necessaria=False)
-                        procedura_avvio.conclusa = True
-                        procedura_avvio.save()
-
-                        procedura_adozione, created = ProceduraAdozione.objects.get_or_create(piano=piano, ente=piano.ente)
-                        PianoControdedotto.objects.get_or_create(piano=piano)
-                        PianoRevPostCP.objects.get_or_create(piano=piano)
-
-                        piano.procedura_adozione = procedura_adozione
-                        piano.save()
-        else:
+        if fase.nome != FASE.anagrafica:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+
+        _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+        if needsExecution(_protocollo_genio_civile):
+            if piano.numero_protocollo_genio_civile:
+                piano.data_protocollo_genio_civile = datetime.datetime.now(timezone.get_current_timezone())
+                piano.save()
+
+                _protocollo_genio_civile.stato = STATO_AZIONE.nessuna
+                _protocollo_genio_civile.data = datetime.datetime.now(timezone.get_current_timezone())
+                _protocollo_genio_civile.save()
+
+                # controllo se procedura di avvio conclusa
+                _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+                _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
+
+                if isExecuted(_formazione_del_piano) and \
+                    (not procedura_avvio.richiesta_integrazioni or (isExecuted(_integrazioni_richieste))):
+
+                    _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
+                    if not _procedura_vas or _procedura_vas.conclusa:
+                        piano.chiudi_pendenti(attesa=True, necessaria=False)
+                    procedura_avvio.conclusa = True
+                    procedura_avvio.save()
+
+                    procedura_adozione, created = ProceduraAdozione.objects.get_or_create(piano=piano, ente=piano.ente)
+                    PianoControdedotto.objects.get_or_create(piano=piano)
+                    PianoRevPostCP.objects.get_or_create(piano=piano)
+
+                    piano.procedura_adozione = procedura_adozione
+                    piano.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
