@@ -53,7 +53,7 @@ export default {
         avvioProcedimento: (props) => (<AvvioProcedimento {...props}/>),
         avvioEsamePareriSca: (props) => (<AvviaEsamePareri {...props}/>),
         uploadElaboratiVas: (props) => (<UploadElaboratiVAS {...props}/>),
-        protocolloGenioCivileId: (props) => (<GenioCivile {...props}/>),
+        protocolloGenioCivile: (props) => (<GenioCivile {...props}/>),
         formazioneDelPiano: (props) => (<FormazionePiano {...props}/>),
         richiestaConferenzaCopianificazione: (props) => (<RichiestaConferenza {...props}/>),
         esitoConferenzaCopianificazione: (props) => (<SvolgimentoConferenza {...props}/>),
