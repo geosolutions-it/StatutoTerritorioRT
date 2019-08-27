@@ -30,7 +30,7 @@ export default ({utente: {attore} = {},
                     <Button disabled={!redazioneNormeTecnicheAttuazioneUrl} onClick={() => goTo(redazioneNormeTecnicheAttuazioneUrl)}
                             className="margin-auto" style={{minWidth: "20rem"}} size="lg" color="serapide">
                         <div  className="d-flex flex-column size-16">
-                            <span>REDAZIONE NORME TECHINCHE</span>
+                            <span>REDAZIONE NORME TECNICHE</span>
                             <span>DI ATTUAZIONE DEL PIANO</span>
                             <span>[Minerva]</span>
                         </div>

@@ -63,9 +63,9 @@ const UI = enhancer(({
                     toggleSwitch={toggleSwitch}
                     ignoreChecked/> 
             </div>           
-            <div className="pt-2 size-13 text-justify">Nota: Selezionale l'opzione Avvia Esame Pareri non comporta nessuna cmunicazione
+            <div className="pt-2 size-13 text-justify">Nota: Selezionare l'opzione Avvia Esame Pareri non comporta nessuna comunicazione
                     agli altri attori coinvolti nel procedimento VAS e nessuna scadenza predefinita. E' solo una funzione per 
-                    tentere traccia e evidenziare lo stato di avanzamento del procedimento.
+                    tenere traccia e evidenziare lo stato di avanzamento del procedimento.
             </div>
                                     
             <div className="align-self-center mt-7">
