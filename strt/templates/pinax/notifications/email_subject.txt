@@ -1,1 +1,1 @@
-{% load i18n %}{% blocktrans %}[{{ current_site }}] {{ message }}{% endblocktrans %}
+{% load i18n %}{% blocktrans %}[{{ current_site_name }}] {{ message_short }} - {{ piano_descrizione }} ({{ piano_codice }}){% endblocktrans %}

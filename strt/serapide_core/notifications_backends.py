@@ -12,6 +12,7 @@ from django.conf import settings
 from django.core.mail import get_connection, EmailMessage
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext
+from django.contrib.sites.models import Site
 
 from pinax.notifications.backends.base import BaseBackend
 
@@ -39,6 +40,12 @@ class EmailBackend(BaseBackend):
                 "sender": sender,
                 "notice": ugettext(notice_type.display),
             })
+
+            current_site = Site.objects.get_current()
+            context.update({
+                "current_site_name": current_site.name
+            })
+
             context.update(extra_context)
 
             messages = self.get_formatted_messages((
@@ -47,20 +54,29 @@ class EmailBackend(BaseBackend):
             ), notice_type.label, context)
 
             context.update({
-                "message": messages["short.txt"],
+                "message_short": messages["short.txt"],
+                "message":       messages["full.txt"]
             })
-            subject = "".join(render_to_string("pinax/notifications/email_subject.txt", context).splitlines())
 
+            # put in some Piano fields explicitly, since piano.codice etc seem not to work in template
+            piano = context["piano"]
             context.update({
-                "message": messages["full.txt"]
+                "piano_codice":      piano.codice,
+                "piano_descrizione": piano.descrizione,
             })
+
+            subject = "".join(render_to_string("pinax/notifications/email_subject.txt", context).splitlines())
             body = render_to_string("pinax/notifications/email_body.txt", context)
+            to = '"{name} {surname}"<{email}>'.format(
+                email=recipient.email,
+                name=recipient.first_name if recipient.first_name else '',
+                surname=recipient.last_name if recipient.last_name else '')
 
             email = EmailMessage(
                 subject=subject,
                 body=body,
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[recipient.email, ],
+                to=[to, ],
                 reply_to=[settings.DEFAULT_FROM_EMAIL, ])
             email.content_subtype = "html"
 
