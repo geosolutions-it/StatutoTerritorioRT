@@ -746,7 +746,7 @@ class InvioPareriVAS(graphene.Mutation):
                   ((_avvio_consultazioni_sca_list.count() == 1 and \
                         procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento) or \
                    (_avvio_consultazioni_sca_list.count() == 1 and \
-                        _avvio_consultazioni_sca.first().attore == TIPOLOGIA_ATTORE.ac and \
+                        _avvio_consultazioni_sca_list.first().attore == TIPOLOGIA_ATTORE.ac and \
                         procedura_vas.tipologia != TIPOLOGIA_VAS.procedimento_semplificato))):
 
                 if not _avvio_consultazioni_sca:
