@@ -244,7 +244,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                      tipologia="sca"></AddContact>*/}
                     </EnhancedListSelector>)}
                 }
-                </Mutation>) : (<span>SOGGETTI COMPETENTI IN MATERIA AMBIENALE</span>) }
+                </Mutation>) : (<span>SOGGETTI COMPETENTI IN MATERIA AMBIENTALE</span>) }
                 {sca.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pt-3" key={uuid}>
                             <i className="material-icons text-serapide">bookmark</i>
                             {nome}
