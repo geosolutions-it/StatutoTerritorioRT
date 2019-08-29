@@ -39,11 +39,10 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
             const {node: {ente, fase: {nome: faseNome}, risorse : {edges: resources = []} = {}, codice = "", dataDelibera} = {}} = piano
             const locked = faseNome !== "DRAFT"
             const {node: delibera} = resources.filter(({node: n}) => n.tipo === "delibera").pop() || {};
-            let optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || {};
+            let optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || [];
             if(!locked) {
                 window.location.href=`#/crea_anagrafica/${code}`
             }
-            optionals = [delibera, delibera, delibera];
             
             return(
                     <PianoPageContainer>
