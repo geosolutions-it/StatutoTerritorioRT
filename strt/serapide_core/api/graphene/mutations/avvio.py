@@ -59,8 +59,10 @@ from serapide_core.modello.enums import (
 
 from serapide_core.api.graphene import types
 from serapide_core.api.graphene import inputs
-from serapide_core.api.graphene.mutations import fase
 from serapide_core.api.graphene.mutations.vas import init_vas_procedure
+
+from .piano import (promuovi_piano)
+
 
 logger = logging.getLogger(__name__)
 
@@ -456,53 +458,54 @@ class RichiestaIntegrazioni(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
-            if needsExecution(_richiesta_integrazioni):
-                _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
-                _richiesta_integrazioni.data = datetime.datetime.now(timezone.get_current_timezone())
-                _richiesta_integrazioni.save()
-
-                if procedura_avvio.richiesta_integrazioni:
-                    _integrazioni_richieste = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
-                        attore=TIPOLOGIA_ATTORE.comune,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa
-                    )
-                    _integrazioni_richieste.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_integrazioni_richieste, piano=piano)
-                else:
-                    _conferenza_copianificazione_attiva = False
-
-                    _richiesta_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
-                    if needsExecution(_richiesta_conferenza_copianificazione):
-                        _conferenza_copianificazione_attiva = True
-
-                    _esito_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
-                    if needsExecution(_esito_conferenza_copianificazione):
-                        _conferenza_copianificazione_attiva = True
-
-                    _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
-                    _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
-                    if not _procedura_vas or _procedura_vas.conclusa:
-                        if not _conferenza_copianificazione_attiva and isExecuted(_formazione_del_piano):
-                            piano.chiudi_pendenti(attesa=True, necessaria=False)
-
-                    procedura_avvio.conclusa = True
-                    procedura_avvio.save()
-
-                    procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
-                        piano=piano, ente=piano.ente)
-
-                    PianoControdedotto.objects.get_or_create(piano=piano)
-                    PianoRevPostCP.objects.get_or_create(piano=piano)
-
-                    piano.procedura_adozione = procedura_adozione
-                    piano.save()
-        else:
+        if fase.nome != FASE.anagrafica:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+
+        _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
+        if needsExecution(_richiesta_integrazioni):
+            _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
+            _richiesta_integrazioni.data = datetime.datetime.now(timezone.get_current_timezone())
+            _richiesta_integrazioni.save()
+
+            if procedura_avvio.richiesta_integrazioni:
+                _integrazioni_richieste = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa
+                )
+                _integrazioni_richieste.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_integrazioni_richieste, piano=piano)
+            else:
+                _conferenza_copianificazione_attiva = False
+
+                _richiesta_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
+                if needsExecution(_richiesta_conferenza_copianificazione):
+                    _conferenza_copianificazione_attiva = True
+
+                _esito_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
+                if needsExecution(_esito_conferenza_copianificazione):
+                    _conferenza_copianificazione_attiva = True
+
+                _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+                _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
+
+                if not _procedura_vas or _procedura_vas.conclusa:
+                    if not _conferenza_copianificazione_attiva and isExecuted(_formazione_del_piano):
+                        piano.chiudi_pendenti(attesa=True, necessaria=False)
+
+                procedura_avvio.conclusa = True
+                procedura_avvio.save()
+
+                procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+                    piano=piano, ente=piano.ente)
+
+                PianoControdedotto.objects.get_or_create(piano=piano)
+                PianoRevPostCP.objects.get_or_create(piano=piano)
+
+                piano.procedura_adozione = procedura_adozione
+                piano.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -537,7 +540,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    fase.promuovi_piano(_fase, _piano)
+                    promuovi_piano(_fase, _piano)
 
                 return RichiestaIntegrazioni(
                     avvio_aggiornato=_procedura_avvio,
@@ -578,15 +581,11 @@ class IntegrazioniRichieste(graphene.Mutation):
                 _integrazioni_richieste.data = datetime.datetime.now(timezone.get_current_timezone())
                 _integrazioni_richieste.save()
 
-                _conferenza_copianificazione_attiva = False
-
-                _richiesta_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
-                if needsExecution(_richiesta_conferenza_copianificazione):
-                    _conferenza_copianificazione_attiva = True
-
-                _esito_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
-                if needsExecution(_esito_conferenza_copianificazione):
-                    _conferenza_copianificazione_attiva = True
+                _conferenza_copianificazione_attiva = \
+                    needsExecution(
+                        piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
+                    needsExecution(
+                        piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
 
                 _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
                 _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
@@ -637,7 +636,7 @@ class IntegrazioniRichieste(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    fase.promuovi_piano(_fase, _piano)
+                    promuovi_piano(_fase, _piano)
 
                 return IntegrazioniRichieste(
                     avvio_aggiornato=_procedura_avvio,
@@ -727,7 +726,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    fase.promuovi_piano(_fase, _piano)
+                    promuovi_piano(_fase, _piano)
 
                 return InvioProtocolloGenioCivile(
                     avvio_aggiornato=_procedura_avvio,
@@ -920,7 +919,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    fase.promuovi_piano(_fase, _piano)
+                    promuovi_piano(_fase, _piano)
 
                 return ChiusuraConferenzaCopianificazione(
                     avvio_aggiornato=_procedura_avvio,

@@ -72,7 +72,6 @@ from serapide_core.modello.enums import (
 
 from serapide_core.api.graphene import types
 from serapide_core.api.graphene import inputs
-from serapide_core.api.graphene.mutations import fase
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +79,110 @@ logger = logging.getLogger(__name__)
 # ############################################################################ #
 # Management Passaggio di Stato Piano
 # ############################################################################ #
+
+def check_and_close_avvio(piano):
+    _conferenza_copianificazione_attiva = \
+        needsExecution(
+            piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
+        needsExecution(
+            piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
+
+    _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+    _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
+
+    if not _conferenza_copianificazione_attiva and \
+            isExecuted(_protocollo_genio_civile) and \
+            isExecuted(_integrazioni_richieste):
+
+        procedura_vas = ProceduraVAS.objects.get(piano=piano)
+        if procedura_vas.conclusa:
+            piano.chiudi_pendenti(attesa=True, necessaria=False)
+
+        procedura_avvio, _ = ProceduraAvvio.objects.get_or_create(piano=piano)
+        procedura_avvio.conclusa = True
+        procedura_avvio.save()
+
+        ensure_avvio_objects(piano)
+
+
+def ensure_avvio_objects(piano):
+    PianoControdedotto.objects.get_or_create(piano=piano)
+    PianoRevPostCP.objects.get_or_create(piano=piano)
+
+    procedura_adozione, _ = ProceduraAdozione.objects.get_or_create(piano=piano, ente=piano.ente)
+    piano.procedura_adozione = procedura_adozione
+    piano.save()
+
+
+def check_and_promote(_piano, info):
+    promoted = False
+    if _piano.is_eligible_for_promotion:
+
+        if _piano.fase ==  FASE.anagrafica:
+            ensure_avvio_objects(_piano)
+
+        _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+        _piano.save()
+
+        # Notify Users
+        piano_phase_changed.send(
+            sender=Piano,
+            user=info.context.user,
+            piano=_piano,
+            message_type="piano_phase_changed")
+
+        promuovi_piano(_fase, _piano)
+        promoted = True
+
+    return promoted
+
+
+def promuovi_piano(fase, piano):
+
+    procedura_vas = piano.procedura_vas
+
+    # Update Azioni Piano
+    _order = piano.azioni.count()
+
+    # - Attach Actions Templates for the Next "Fase"
+    for _a in AZIONI_BASE[fase.nome]:
+        _azione = Azione(
+            tipologia=_a["tipologia"],
+            attore=_a["attore"],
+            order=_order,
+            stato=STATO_AZIONE.necessaria
+        )
+        _azione.save()
+        _order += 1
+        AzioniPiano.objects.get_or_create(azione=_azione, piano=piano)
+
+    # - Update Action state accordingly
+    if fase.nome == FASE.anagrafica:
+        _creato = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.creato_piano).first()
+        if _creato.stato != STATO_AZIONE.necessaria:
+            raise Exception("Stato Inconsistente!")
+
+        _creato.stato = STATO_AZIONE.nessuna
+        _creato.data = datetime.datetime.now(timezone.get_current_timezone())
+        _creato.save()
+
+    elif fase.nome == FASE.avvio:
+        _richiesta_integrazioni = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni).first()
+
+        if _richiesta_integrazioni and _richiesta_integrazioni.stato != STATO_AZIONE.nessuna:
+            _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
+            _richiesta_integrazioni.save()
+
+        _integrazioni_richieste = piano.azioni.filter(
+                tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste).first()
+
+        if _integrazioni_richieste and _integrazioni_richieste.stato != STATO_AZIONE.nessuna:
+            _integrazioni_richieste.stato = STATO_AZIONE.nessuna
+            _integrazioni_richieste.save()
+
+# ############################################################################ #
+
 class CreatePiano(relay.ClientIDMutation):
 
     class Input:
@@ -538,19 +641,8 @@ class PromozionePiano(graphene.Mutation):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
-                if _piano.is_eligible_for_promotion:
-                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
-                    _piano.save()
-
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=info.context.user,
-                        piano=_piano,
-                        message_type="piano_phase_changed")
-
-                    fase.promuovi_piano(_fase, _piano)
-
+                promoted = check_and_promote(_piano, info)
+                if promoted:
                     return PromozionePiano(
                         piano_aggiornato=_piano,
                         errors=[]
@@ -574,51 +666,25 @@ class FormazionePiano(graphene.Mutation):
     piano_aggiornato = graphene.Field(types.PianoNode)
 
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
+    def update_actions_for_phase(cls, fase, piano, user):
 
         # Update Azioni Piano
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-
-            _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
-            if needsExecution(_formazione_del_piano):
-                _formazione_del_piano.stato = STATO_AZIONE.nessuna
-                _formazione_del_piano.data = datetime.datetime.now(timezone.get_current_timezone())
-                _formazione_del_piano.save()
-
-                _conferenza_copianificazione_attiva = \
-                     needsExecution(
-                        piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
-                    needsExecution(
-                        piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
-
-                _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
-                _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
-
-                if not _conferenza_copianificazione_attiva and \
-                    isExecuted(_protocollo_genio_civile) and \
-                    isExecuted(_integrazioni_richieste):
-
-                    if procedura_vas.conclusa:
-                        piano.chiudi_pendenti(attesa=True, necessaria=False)
-                    procedura_avvio, created = ProceduraAvvio.objects.get_or_create(piano=piano)
-                    procedura_avvio.conclusa = True
-                    procedura_avvio.save()
-
-                    procedura_adozione, created = ProceduraAdozione.objects.get_or_create(piano=piano, ente=piano.ente)
-
-                    PianoControdedotto.objects.get_or_create(piano=piano)
-                    PianoRevPostCP.objects.get_or_create(piano=piano)
-
-                    piano.procedura_adozione = procedura_adozione
-                    piano.save()
-        else:
+        if fase.nome != FASE.anagrafica:
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+
+        _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+        if needsExecution(_formazione_del_piano):
+            _formazione_del_piano.stato = STATO_AZIONE.nessuna
+            _formazione_del_piano.data = datetime.datetime.now(timezone.get_current_timezone())
+            _formazione_del_piano.save()
+
+            check_and_close_avvio(piano)
 
     @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
-        _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
+
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -626,20 +692,9 @@ class FormazionePiano(graphene.Mutation):
                 rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
                 rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+                cls.update_actions_for_phase(_piano.fase, _piano, info.context.user)
 
-                if _piano.is_eligible_for_promotion:
-                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
-                    _piano.save()
-
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=info.context.user,
-                        piano=_piano,
-                        message_type="piano_phase_changed")
-
-                    fase.promuovi_piano(_fase, _piano)
+                check_and_promote(_piano, info)
 
                 return FormazionePiano(
                     piano_aggiornato=_piano,

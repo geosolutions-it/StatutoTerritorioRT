@@ -57,6 +57,10 @@ rules.add_rule(
     vas_rules.parere_verifica_vas_ok
 )
 
+# ############################################################################ #
+# RULES FOR FASI
+# ############################################################################ #
+
 rules.add_rule(
     'strt_core.api.fase_anagrafica_completa',
     ~piano_rules.has_pending_alerts &

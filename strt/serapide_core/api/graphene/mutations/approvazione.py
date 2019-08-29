@@ -47,7 +47,8 @@ from serapide_core.modello.enums import (
 
 from serapide_core.api.graphene import types
 from serapide_core.api.graphene import inputs
-from serapide_core.api.graphene.mutations import fase
+
+from .piano import (promuovi_piano)
 
 logger = logging.getLogger(__name__)
 
@@ -451,7 +452,7 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    fase.promuovi_piano(_fase, _piano)
+                    promuovi_piano(_fase, _piano)
 
                 return AttribuzioneConformitaPIT(
                     approvazione_aggiornata=_procedura_approvazione,

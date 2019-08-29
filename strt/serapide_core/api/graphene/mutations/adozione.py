@@ -51,7 +51,8 @@ from serapide_core.modello.enums import (
 
 from serapide_core.api.graphene import types
 from serapide_core.api.graphene import inputs
-from serapide_core.api.graphene.mutations import fase
+
+from .piano import (promuovi_piano)
 
 logger = logging.getLogger(__name__)
 
@@ -69,8 +70,8 @@ class CreateProceduraAdozione(relay.ClientIDMutation):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_adozione_data = input.get('procedura_adozione')
         if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
             try:
                 # ProceduraAdozione (M)
                 _procedura_adozione_data['piano'] = _piano
@@ -519,7 +520,7 @@ class PianoControdedotto(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    fase.promuovi_piano(_fase, _piano)
+                    piano.promuovi_piano(_fase, _piano)
 
                 return PianoControdedotto(
                     adozione_aggiornata=_procedura_adozione,
@@ -682,7 +683,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    fase.promuovi_piano(_fase, _piano)
+                    promuovi_piano(_fase, _piano)
 
                 return RevisionePianoPostConfPaesaggistica(
                     adozione_aggiornata=_procedura_adozione,
@@ -1001,7 +1002,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
                         piano=_piano,
                         message_type="piano_phase_changed")
 
-                    fase.promuovi_piano(_fase, _piano)
+                    promuovi_piano(_fase, _piano)
 
                 return UploadElaboratiAdozioneVAS(
                     vas_aggiornata=_procedura_vas,
