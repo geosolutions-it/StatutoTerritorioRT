@@ -476,15 +476,16 @@ class AssoggettamentoVAS(graphene.Mutation):
             _pubblicazione_vas_ac.save()
             _order += 1
             AzioniPiano.objects.get_or_create(azione=_pubblicazione_vas_ac, piano=piano)
+
             procedura_vas.non_necessaria = True
             procedura_vas.verifica_effettuata = True
             procedura_vas.save()
 
-            if procedura_vas.verifica_effettuata:
-                _emissione_provvedimento_verifica = piano.getFirstAction(TIPOLOGIA_AZIONE.emissione_provvedimento_verifica)
-                if needsExecution(_emissione_provvedimento_verifica):
-                    _emissione_provvedimento_verifica.stato = STATO_AZIONE.nessuna
-                    _emissione_provvedimento_verifica.save()
+        _emissione_provvedimento_verifica = piano.getFirstAction(TIPOLOGIA_AZIONE.emissione_provvedimento_verifica)
+        if needsExecution(_emissione_provvedimento_verifica):
+            _emissione_provvedimento_verifica.stato = STATO_AZIONE.nessuna
+            _emissione_provvedimento_verifica.data = datetime.datetime.now(timezone.get_current_timezone())
+            _emissione_provvedimento_verifica.save()
 
 
     @classmethod
