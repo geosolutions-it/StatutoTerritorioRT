@@ -287,7 +287,7 @@ GRAPHENE = {
     'SCHEMA': 'serapide_core.schema.schema',
     'SCHEMA_OUTPUT': 'data/schema.json',  # defaults to schema.json
     'MIDDLEWARE': [
-        'graphene_django.debug.DjangoDebugMiddleware',
+        #'graphene_django.debug.DjangoDebugMiddleware',
         'graphene_django_extras.ExtraGraphQLDirectiveMiddleware',
     ]
 }
@@ -328,6 +328,9 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d '
                       '%(thread)d %(message)s'
         },
+        'avg0': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
         'simple': {
             'format': '%(message)s',
         },
@@ -341,7 +344,7 @@ LOGGING = {
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'avg0'
         },
         'mail_admins': {
             'level': 'ERROR',
@@ -351,7 +354,7 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["console"], "level": "INFO", },
+            "handlers": ["console"], "level": "WARN", },
         "celery": {
             "handlers": ["console"], "level": "INFO", },
         "strt_tests": {
