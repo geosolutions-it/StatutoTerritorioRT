@@ -310,7 +310,13 @@ class Azione(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         super().save(force_insert, force_update, using, update_fields)
-        log.info("Saving AZIONE tipo:{tipo} attore:{attore} stato:{stato}".format(
+
+        verb = "CHIUDI" if self.stato == STATO_AZIONE.nessuna else \
+               "APRI  " if self.stato in (STATO_AZIONE.attesa, STATO_AZIONE.necessaria) else \
+               "CREA  "
+
+        log.info("{verb} azione {tipo:<38}  STATO:{stato:<10} ATT:{attore}".format(
+            verb=verb,
             tipo=self.tipologia,
             attore=self.attore,
             stato=self.stato))
