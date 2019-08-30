@@ -23,6 +23,8 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
+from serapide_core.api.graphene.mutations import log_enter_mutate
+
 from serapide_core.helpers import (
     is_RUP,
     update_create_instance)
@@ -59,7 +61,6 @@ from serapide_core.api.graphene import inputs
 from .piano import (promuovi_piano, check_and_promote)
 
 logger = logging.getLogger(__name__)
-
 
 def init_vas_procedure(piano:Piano):
 
@@ -154,6 +155,7 @@ class CreateProceduraVAS(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
+        log_enter_mutate(logger, cls, _piano, info)
         _procedura_vas_data = input.get('procedura_vas')
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
@@ -213,6 +215,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # This cannot be changed
             _procedura_vas_data.pop('piano')
         _piano = _procedura_vas.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _ente = _piano.ente
@@ -363,6 +366,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -492,6 +496,7 @@ class AssoggettamentoVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -532,6 +537,7 @@ class CreateConsultazioneVAS(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
+        log_enter_mutate(logger, cls, _piano, info)
         _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
@@ -575,6 +581,7 @@ class UpdateConsultazioneVAS(relay.ClientIDMutation):
         _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
         _consultazione_vas_data = input.get('consultazione_vas')
         _piano = _consultazione_vas.procedura_vas.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -649,6 +656,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
         _procedura_vas = _consultazione_vas.procedura_vas
         _piano = _procedura_vas.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -800,6 +808,7 @@ class InvioPareriVAS(graphene.Mutation):
             .order_by('data_creazione')\
             .first()
         _piano = _procedura_vas.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -919,6 +928,7 @@ class AvvioEsamePareriSCA(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -985,6 +995,7 @@ class UploadElaboratiVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente

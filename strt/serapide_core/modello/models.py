@@ -308,6 +308,13 @@ class Azione(models.Model):
         db_table = "strt_core_azione"
         verbose_name_plural = 'Azioni'
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super().save(force_insert, force_update, using, update_fields)
+        log.info("Saving AZIONE tipo:{tipo} attore:{attore} stato:{stato}".format(
+            tipo=self.tipologia,
+            attore=self.attore,
+            stato=self.stato))
+
     def __str__(self):
         return '{} - {} [{}]'.format(self.attore, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
 

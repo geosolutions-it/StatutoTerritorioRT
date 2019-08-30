@@ -24,6 +24,8 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
+from serapide_core.api.graphene.mutations import log_enter_mutate
+
 from strt_users.models import (
     Organization,
     Token,
@@ -74,7 +76,6 @@ from serapide_core.api.graphene import types
 from serapide_core.api.graphene import inputs
 
 logger = logging.getLogger(__name__)
-
 
 # ############################################################################ #
 # Management Passaggio di Stato Piano
@@ -248,6 +249,7 @@ class CreatePiano(relay.ClientIDMutation):
                     _order += 1
 
                 nuovo_piano = update_create_instance(_piano, _piano_data)
+                log_enter_mutate(logger, cls, nuovo_piano, info)
 
                 # Inizializzazione Procedura VAS
                 _procedura_vas, created = ProceduraVAS.objects.get_or_create(
@@ -360,6 +362,7 @@ class UpdatePiano(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
+        log_enter_mutate(logger, cls, _piano, info)
         _piano_data = input.get('piano_operativo')
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
@@ -615,6 +618,7 @@ class DeletePiano(graphene.Mutation):
             _id = input['codice_piano']
             try:
                 _piano = Piano.objects.get(codice=_id)
+                log_enter_mutate(logger, self, _piano, info)
                 if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
                 rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
                     _piano.delete()
@@ -639,6 +643,7 @@ class PromozionePiano(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
+        log_enter_mutate(logger, cls, _piano, info)
         if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
             try:
                 promoted = check_and_promote(_piano, info)
@@ -684,6 +689,7 @@ class FormazionePiano(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
+        log_enter_mutate(logger, cls, _piano, info)
 
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None

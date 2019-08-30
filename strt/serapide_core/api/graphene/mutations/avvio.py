@@ -22,6 +22,8 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
+from serapide_core.api.graphene.mutations import log_enter_mutate
+
 from serapide_core.helpers import (
     is_RUP,
     unslugify,
@@ -63,9 +65,7 @@ from serapide_core.api.graphene.mutations.vas import init_vas_procedure
 
 from .piano import (promuovi_piano)
 
-
 logger = logging.getLogger(__name__)
-
 
 class CreateProceduraAvvio(relay.ClientIDMutation):
 
@@ -78,6 +78,8 @@ class CreateProceduraAvvio(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
+        log_enter_mutate(logger, cls, _piano, info)
+
         _procedura_avvio_data = input.get('procedura_avvio')
         if info.context.user and \
         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
@@ -124,6 +126,8 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
             # This cannot be changed
             _procedura_avvio_data.pop('piano')
         _piano = _procedura_avvio.piano
+        log_enter_mutate(logger, cls, _piano, info)
+
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _ente = _piano.ente
@@ -260,6 +264,7 @@ class AvvioPiano(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -407,6 +412,7 @@ class ContributiTecnici(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        log_enter_mutate(logger, cls,_piano,info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -511,6 +517,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -609,6 +616,7 @@ class IntegrazioniRichieste(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -707,6 +715,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -809,6 +818,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -893,6 +903,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
+        log_enter_mutate(logger, cls, _piano, info)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente

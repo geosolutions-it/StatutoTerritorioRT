@@ -120,7 +120,7 @@ class SessionControlMiddleware(object):
                     if not attore:
                         if not request.user.is_superuser:
                             return self.redirect_to_login(request)
-                print(" ----------------------------- %s / %s " % (request.user, attore))
+                # print(" ----------------------------- %s / %s " % (request.user, attore))
             # ------------------------
             response = self.get_response(request)
             # ------------------------
