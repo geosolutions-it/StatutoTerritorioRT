@@ -70,7 +70,8 @@ rules.add_rule(
     piano_rules.has_delibera_comunale &
     piano_rules.has_soggetto_proponente &
     piano_rules.has_procedura_vas &
-    vas_rules.procedura_vas_is_valid
+    vas_rules.procedura_vas_is_valid &
+    piano_rules.protocollo_genio_inviato
 )
 
 rules.add_rule(
