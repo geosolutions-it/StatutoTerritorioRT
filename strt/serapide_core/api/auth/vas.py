@@ -80,19 +80,14 @@ def procedura_vas_is_valid(piano, procedura_vas):
                         os.path.exists(procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).file.path):
                             return True
                 return False
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
+            elif procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.procedimento_semplificato):
                 if procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False).count() > 0:
                     return procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False).count() > 0 and \
-                    all(
-                        r.dimensione > 0 and r.file and os.path.exists(r.file.path)
-                        for r in procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False)
-                    )
+                        all(
+                            r.dimensione > 0 and r.file and os.path.exists(r.file.path)
+                            for r in procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False)
+                        )
                 return False
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento_semplificato:
-                return (
-                    piano.autorita_competente_vas.count() > 0 and
-                    piano.soggetti_sca.count() > 0
-                )
             elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
                 return (
                     piano.autorita_competente_vas.count() > 0 and
@@ -106,9 +101,7 @@ def procedura_vas_is_valid(piano, procedura_vas):
         elif piano.fase.nome == FASE.anagrafica:
             if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
                 return procedura_vas.conclusa
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
-                return procedura_vas.conclusa
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento_semplificato:
+            elif procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.procedimento_semplificato):
                 return procedura_vas.conclusa
             elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
                 return procedura_vas.conclusa

@@ -72,8 +72,7 @@ def init_vas_procedure(piano:Piano):
         if procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
             _verifica_vas.stato = STATO_AZIONE.nessuna
 
-        elif procedura_vas.tipologia in \
-                (TIPOLOGIA_VAS.procedimento, TIPOLOGIA_VAS.procedimento_semplificato):
+        elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
             _verifica_vas.stato = STATO_AZIONE.nessuna
             _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
             _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
@@ -108,7 +107,8 @@ def init_vas_procedure(piano:Piano):
             _order += 1
             AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
 
-        elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
+        elif procedura_vas.tipologia in \
+                (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.procedimento_semplificato):
             # _verifica_vas.stato = STATO_AZIONE.attesa
             _verifica_vas.stato = STATO_AZIONE.nessuna
             _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
@@ -510,7 +510,9 @@ class AssoggettamentoVAS(graphene.Mutation):
 
                 if needsExecution(_pareri_verifica_sca) or \
                        _procedura_vas.verifica_effettuata or \
-                       _procedura_vas.tipologia not in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
+                       _procedura_vas.tipologia not in (TIPOLOGIA_VAS.verifica,
+                                                        TIPOLOGIA_VAS.procedimento_semplificato,
+                                                        TIPOLOGIA_VAS.semplificata):
                     return GraphQLError(_("Forbidden"), code=403)
 
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
