@@ -16,7 +16,7 @@ import classnames from 'classnames'
 import {withControllableState} from 'enhancers'
 import {formatDate, showError} from 'utils'
 
-import {GET_AVVIO, GET_CONFERENZA} from 'schema'
+import {GET_AVVIO_PAGE, GET_CONFERENZA} from 'schema'
 import PianoPageContainer from '../components/PianoPageContainer';
 import PianoSubPageTitle from '../components/PianoSubPageTitle';
 
@@ -31,7 +31,8 @@ const UI = enhancers(({
         dataScadenzaRisposta,
         garanteNominativo, garantePec,
         risorse: {edges: risorseAvvio = []} = {}
-        } = {}} = {}, 
+        } = {}} = {},
+    vas: { node: { risorse : {edges: risorseVas = []} = {}} = {}} = {},
     piano: {
         codice,
         numeroProtocolloGenioCivile,
@@ -51,6 +52,7 @@ const UI = enhancers(({
         const {node: contributiTecnici } = risorseAvvio.filter(({node: {tipo}}) => tipo === "contributi_tecnici").shift() || {}
         const allegati = risorseAvvio.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node) 
         const integrazioni = risorseAvvio.filter(({node: {tipo}}) => tipo === "integrazioni").map(({node}) => node) 
+        const [{node: rapporto} = {}] = risorseVas.filter(({node: {tipo}}) => tipo === 'rapporto_ambientale')
     return (
         <PianoPageContainer>
             <PianoSubPageTitle icon="dashboard" title="AVVIO DEL PROCEDIMENTO"/>
@@ -140,6 +142,12 @@ const UI = enhancers(({
                     {section === 'vas' && (<div className="row">
                         <div className="col-12 pt-4">
                          <VAS codice={codice} canUpdate={false} isLocked={true}></VAS>
+                         <div className="row pt-2">
+                            <div className="col-12 pt-4">RAPPORTO AMBIENTALE</div>
+                                <div className="col-12 pt-1">
+                                    {rapporto ? <Risorsa className="border-0 mt-2" fileSize={false} useLabel resource={rapporto} isLocked={true}/> : ( <div className="col-12 samll">Nessun rapporto </div>)}
+                                </div>
+                            </div>
                         </div>
                     </div>)}
                 </TabPane>
@@ -210,8 +218,8 @@ const UI = enhancers(({
 
 
 export default ({back, piano}) => (
-    <Query query={GET_AVVIO} variables={{codice: piano.codice}} onError={showError}>
-        {({loading, data: {modello: {edges = []} = {}} = {}}) => {
+    <Query query={GET_AVVIO_PAGE} variables={{codice: piano.codice}} onError={showError}>
+        {({loading, data: {procedureAvvio: {edges: [avvio] = []} = {}, procedureVas: {edges: [vas] = []} = {}} = {}}) => {
             if(loading) {
                 return (
                     <div className="flex-fill d-flex justify-content-center">
@@ -221,6 +229,6 @@ export default ({back, piano}) => (
                     </div>)
             }
             return (
-                <UI procedureAvvio={edges[0]} piano={piano}/>)}
+                <UI procedureAvvio={avvio} vas={vas} piano={piano}/>)}
         }
     </Query>)
