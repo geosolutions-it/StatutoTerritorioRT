@@ -447,19 +447,17 @@ class AssoggettamentoVAS(graphene.Mutation):
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
         if procedura_vas.assoggettamento:
-            _avvio_consultazioni_sca = Azione(
-                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+            _avvio_esame_pareri_sca = Azione(
+                tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
                 attore=TIPOLOGIA_ATTORE.comune,
                 order=_order,
                 stato=STATO_AZIONE.necessaria
             )
-            _avvio_consultazioni_sca.save()
+            _avvio_esame_pareri_sca.save()
             _order += 1
-            AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+            AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
 
-            procedura_vas.verifica_effettuata = True
             procedura_vas.data_assoggettamento = datetime.datetime.now(timezone.get_current_timezone())
-            procedura_vas.save()
         else:
             _pubblicazione_vas_comune = Azione(
                 tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
@@ -482,8 +480,9 @@ class AssoggettamentoVAS(graphene.Mutation):
             AzioniPiano.objects.get_or_create(azione=_pubblicazione_vas_ac, piano=piano)
 
             procedura_vas.non_necessaria = True
-            procedura_vas.verifica_effettuata = True
-            procedura_vas.save()
+
+        procedura_vas.verifica_effettuata = True
+        procedura_vas.save()
 
         _emissione_provvedimento_verifica = piano.getFirstAction(TIPOLOGIA_AZIONE.emissione_provvedimento_verifica)
         if needsExecution(_emissione_provvedimento_verifica):
