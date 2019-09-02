@@ -56,7 +56,7 @@ const UI = enhancer(({
         
             <div className="d-flex align-items-center switch-small ">
                 <i className="material-icons text-serapide icon-15 pr-2">email</i>
-                <div className="bg-serapide px-2 size-12">Avvia consultazione SCA</div>                    
+                <div className="bg-serapide px-2 size-12">Avvia Esame Pareri</div>
                 <Switch
                     labelClassName = "col-auto"
                     checked={checked}
