@@ -16,8 +16,11 @@ const goTo = (url) => {
 }
 
 export default ({utente: {attore} = {},
-    piano: {redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl} = {}
-    } = {}) => (
+    piano: {redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl, risorse : {edges: resources = []}} = {}
+    } = {}) => { 
+        const norme = resources.filter(({node: {tipo}}) => tipo === 'norme_tecniche_attuazione').map(({node}) => node).shift()
+        const urlNorme = norme && norme.downloadUrl
+    return (
        <PianoPageContainer>
            <PianoSubPageTitle icon="build" title="STRUMENTI PER LA FORMAZIONE DEL PIANO"/>
            
@@ -26,9 +29,9 @@ export default ({utente: {attore} = {},
         </div>
         <div className="row pt-5">
         
-                <div className="col-auto py-2 m-auto">
-                    <Button disabled={!redazioneNormeTecnicheAttuazioneUrl} onClick={() => goTo(redazioneNormeTecnicheAttuazioneUrl)}
-                            className="margin-auto" style={{minWidth: "20rem"}} size="lg" color="serapide">
+                <div className="col-auto d-flex flex-column py-2 m-auto">
+                    <Button disabled={!urlNorme} onClick={() => goTo(urlNorme)}
+                            className="margin-auto align-self-center" style={{minWidth: "20rem", maxWidth:"20rem"}} size="lg" color="serapide">
                         <div  className="d-flex flex-column size-16">
                             <span>REDAZIONE NORME TECNICHE</span>
                             <span>DI ATTUAZIONE DEL PIANO</span>
@@ -36,12 +39,12 @@ export default ({utente: {attore} = {},
                         </div>
                     </Button>
                     <div className="mt-3 mb-4">
-                        <span>URL</span><div className="border p-2">{redazioneNormeTecnicheAttuazioneUrl}</div>
+                        <span>URL</span><div className="border p-2 overflow-hidden size-12" style={{width: "25rem", textOverflow: "ellipsis"}}>{urlNorme}</div>
                     </div>
                 </div>
-                <div className="col-auto m-auto">
+                <div className="col-auto d-flex flex-column m-auto">
                     <Button disabled={!compilazioneRapportoAmbientaleUrl} onClick={() => goTo( compilazioneRapportoAmbientaleUrl)} 
-                            className="margin-auto" style={{minWidth: "20rem"}}  size="lg" color="serapide">
+                            className="margin-auto align-self-center" style={{minWidth: "20rem", maxWidth:"20rem"}}  size="lg" color="serapide">
                         <div className="d-flex flex-column size-16">
                             <span>COMPILAZIONE DEL</span>
                             <span>RAPPORTO AMBIENTALE</span>
@@ -49,14 +52,14 @@ export default ({utente: {attore} = {},
                         </div>
                     </Button>
                     <div className="mt-3 mb-4">
-                     <span>URL</span><div className="border p-2">{compilazioneRapportoAmbientaleUrl}</div>
+                     <span>URL</span><div className="border p-2 overflow-hidden size-12" style={{width: "25rem", textOverflow: "ellipsis"}}>{compilazioneRapportoAmbientaleUrl}</div>
                     </div>
                 </div>
         </div>
         <div className="row">
-                <div className="col-auto py-2 m-auto">
+                <div className="col-auto d-flex flex-column py-2 m-auto">
                     <Button disabled={!conformazionePitPprUrl} onClick={() => goTo(conformazionePitPprUrl)}
-                            className="margin-auto" style={{minWidth: "20rem"}} size="lg" color="serapide">
+                            className="margin-auto align-self-center" style={{minWidth: "20rem", maxWidth:"20rem"}} size="lg" color="serapide">
                         <div className="d-flex flex-column size-16">
                             <span>CONFORMAZIONE</span>
                             <span>AL PIT-PPR</span>
@@ -64,12 +67,12 @@ export default ({utente: {attore} = {},
                         </div>
                     </Button>
                     <div className="mt-3 mb-4">
-                     <span>URL</span><div className="border p-2">{conformazionePitPprUrl}</div>
+                     <span>URL</span><div className="border p-2 overflow-hidden size-12" style={{width: "25rem", textOverflow: "ellipsis"}}>{conformazionePitPprUrl}</div>
                     </div>
                 </div>
-                <div className="col-auto m-auto">
+                <div className="col-auto d-flex flex-column m-auto">
                     <Button disabled={!monitoraggioUrbanisticoUrl} onClick={() => goTo(monitoraggioUrbanisticoUrl)}
-                            className="margin-auto" style={{minWidth: "20rem"}}  size="lg" color="serapide">
+                            className="margin-auto align-self-center" style={{minWidth: "20rem", maxWidth:"20rem"}}  size="lg" color="serapide">
                         <div className="d-flex flex-column size-16">
                             <span>MONITORAGGIO</span>
                             <span>URBANISTICO</span>
@@ -77,10 +80,10 @@ export default ({utente: {attore} = {},
                         </div>
                     </Button>
                     <div className="mt-3 mb-4">
-                     <span>URL</span><div className="border p-2">{monitoraggioUrbanisticoUrl}</div>
+                     <span>URL</span><div className="border p-2 overflow-hidden size-12" style={{width: "25rem", textOverflow: "ellipsis"}}>{monitoraggioUrbanisticoUrl}</div>
                     </div>
                 </div>
            
         </div>
     </PianoPageContainer> 
-)
+)}

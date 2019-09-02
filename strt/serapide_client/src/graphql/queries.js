@@ -305,6 +305,31 @@ ${FR.ADOZIONE}
 ${FR.RISORSE}
 `
 
+export const GET_AVVIO_PAGE = gql`
+
+query RisorsePaginaAvvio($codice: String){
+  procedureAvvio(piano_Codice: $codice) {
+        edges{
+          node{
+            ...AVVIO 
+            }
+            
+        }
+    }
+  procedureVas(piano_Codice: $codice) {
+        edges{
+          node{
+            uuid
+            risorse{...Risorse}
+            }
+            
+        }
+    }
+}
+${FR.AVVIO}
+${FR.RISORSE}
+`
+
 export const GET_APPROVAZIONE_PAGE = gql`
 
 query RisorsePaginaApprovazione($codice: String!){
