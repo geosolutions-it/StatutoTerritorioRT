@@ -47,7 +47,7 @@ const SwitchAssoggettamento = ({uuid, assoggettamento, fontSize, iconSize = "ico
                         </span>
                         <span className="d-flex justify-content-start pointer">
                             <i className={`material-icons text-serapide ${iconSize} ${assoggettamento ? '' : 'pointer'}`} onClick={() =>  onClick(true)}>{!assoggettamento ? 'radio_button_unchecked' : 'radio_button_checked'}</i>
-                            <span className={`pl-2 align-self-center ${fontSize}`}>assoggetamento VAS</span>
+                            <span className={`pl-2 align-self-center ${fontSize}`}>assoggettamento VAS</span>
                         </span>
                     </div>)
             }}
