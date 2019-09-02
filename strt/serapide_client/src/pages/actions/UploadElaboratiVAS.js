@@ -30,13 +30,13 @@ const UI = ({
         return (
             <React.Fragment>
                 <ActionTitle>Upload Elaborati VAS</ActionTitle>
-                <div className="d-flex pt-2 mb-5 size-13 text-justify">Il comune esamina i pareri, forma il piano e redige il Rapporto Ambientale. Gli elaborati vengono caricati nella piattafo</div>
+                <div className="d-flex pt-2 mb-5 size-13 text-justify">Il comune esamina i pareri, forma il piano e redige il Rapporto Ambientale. Gli elaborati vengono caricati nella piattaforma</div>
                 <div className="action-uploader  py-1 align-self-start border-bottom   border-bottom border-top">
                 <FileUpload 
                     iconSize="icon-15" fontSize="size-11"
                     vertical useLabel
                     className="border-0"
-                    placeholder="Documento preliminare di VAS"
+                    placeholder="Rapporto ambientale"
                     mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
