@@ -115,21 +115,21 @@ const UI = enhancers(({
             <Nav tabs>
                 <NavItem>
                     <NavLink
-                        className={classnames({ active: section === 'vas' })}
+                        className={classnames(["pointer", { active: section === 'vas' }])}
                         onClick={() => { toggleSection('vas'); }}>
                         VAS
                     </NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink
-                        className={classnames({ active: section === 'conferenza' })}
+                        className={classnames(["pointer",{ active: section === 'conferenza' }])}
                         onClick={() => { toggleSection('conferenza'); }}>
                         CONFERENZA COPIANIFICAZIONE
                     </NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink
-                        className={classnames({ active: section === 'genio' })}
+                        className={classnames(["pointer", { active: section === 'genio' }])}
                         onClick={() => { toggleSection('genio'); }}>
                         GENIO
                     </NavLink>
