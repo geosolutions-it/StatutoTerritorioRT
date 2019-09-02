@@ -16,13 +16,13 @@ const UI = ({placeholder, isLoading, progress, icon = "picture_as_pdf", fontSize
         <div className="file-loader d-flex justify-content-between align-items-center flex-1 " >
             <div className="d-flex">
                 {file.name && (<i className={`material-icons text-serapide ${iconSize}`}>{icon}</i>)}
-            <div className={`pl-1 d-flex flex-column justify-content-between ${fontSize}`}>
-                <span>{file.name || placeholder}</span>
-                <span style={{fontSize: "0.8em"}}>{getFileSize(file)}</span>
+                <div className={`pl-1 d-flex flex-column justify-content-between ${fontSize}`}>
+                    <span>{file.name || placeholder}</span>
+                    <span style={{fontSize: "0.8em"}}>{getFileSize(file)}</span>
+                </div>
             </div>
-        </div>
             {isLoading && (
-                            <div className={`d-flex justify-content-center align-items-center ${fontSize}`}>
+                            <div className={`d-flex justify-content-center align-items-center loading ${fontSize}`}>
                                 <div className="prog text-dark">{Math.round(progress)}%</div> 
                                 <div className="spinner-grow text-serapide"role="status">
                                         <span className="sr-only">Loading...</span>                
