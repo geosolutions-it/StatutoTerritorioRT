@@ -398,7 +398,7 @@ class ContributiTecnici(graphene.Mutation):
                         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
                         attore=TIPOLOGIA_ATTORE.genio_civile,
                         order=_order,
-                        stato=STATO_AZIONE.attesa
+                        stato=STATO_AZIONE.necessaria
                     )
                     _protocollo_genio_civile.save()
                     _order += 1
@@ -890,7 +890,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                         tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
                         attore=TIPOLOGIA_ATTORE.genio_civile,
                         order=_order,
-                        stato=STATO_AZIONE.attesa,
+                        stato=STATO_AZIONE.necessaria,
                         data=procedura_avvio.data_scadenza_risposta
                     )
                     _protocollo_genio_civile.save()
