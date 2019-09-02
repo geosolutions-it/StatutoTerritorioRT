@@ -479,6 +479,10 @@ class Piano(models.Model):
                                next=self.next_phase),
                                self,
                                self.procedura_vas)
+        log.info("is_eligible_for_promotion CURR:{curr} FASE:{fase} RESULT:{result}".format(
+            curr=self.fase,
+            fase=self.next_phase,
+            result=_res))
         return _res
 
     class Meta:
