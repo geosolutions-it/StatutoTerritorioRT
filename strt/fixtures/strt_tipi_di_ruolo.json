@@ -108,5 +108,15 @@
             "description": "Temporary Users per l'ente Regione",
             "organization_type": "R"
         }
+    },
+    {
+        "model": "strt_users.membershiptype",
+        "pk": 12,
+        "fields": {
+            "code": "OP",
+            "name": "Operatore",
+            "description": "Operatore per l'ente Regione",
+            "organization_type": "R"
+        }
     }
 ]
