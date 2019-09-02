@@ -99,21 +99,21 @@ const UI = enhancers(({
             <Nav tabs>
                 <NavItem>
                     <NavLink
-                        className={classnames({ active: section === 'art', "text-serapide": section === 'art' })}
+                        className={classnames(["pointer", { active: section === 'art', "text-serapide": section === 'art' }])}
                         onClick={() => { toggleSection('art'); }}>
                         ART. 19
                     </NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink
-                        className={classnames({ active: section === 'vas', "text-serapide": section === 'vas' })}
+                        className={classnames(["pointer", { active: section === 'vas', "text-serapide": section === 'vas' }])}
                         onClick={() => { toggleSection('vas'); }}>
                         VAS
                     </NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink
-                        className={classnames({ active: section === 'cpAnte' , "text-serapide": section === 'cpAnte'})}
+                        className={classnames(["pointer",{ active: section === 'cpAnte' , "text-serapide": section === 'cpAnte'}])}
                         onClick={() => { toggleSection('cpAnte'); }}>
                         CONFERENZA PAESAGGISTICA ANTE
                     </NavLink>
