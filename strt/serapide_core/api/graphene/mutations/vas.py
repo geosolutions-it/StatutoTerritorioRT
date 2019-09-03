@@ -359,7 +359,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
         _pareri_verifica_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_verifica_sca)
-        if _pareri_verifica_sca.stato == STATO_AZIONE.attesa:
+        if needsExecution(_pareri_verifica_sca):
             _pareri_verifica_sca.stato = STATO_AZIONE.nessuna
             _pareri_verifica_sca.data = datetime.datetime.now(timezone.get_current_timezone())
             _pareri_verifica_sca.save()
@@ -917,9 +917,14 @@ class AvvioEsamePareriSCA(graphene.Mutation):
             raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
 
         _pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_sca)
-        if isExecuted(_pareri_sca):
-            _avvio_esame_pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_esame_pareri_sca)
+        _emissione_provvedimento_verifica = piano.getFirstAction(TIPOLOGIA_AZIONE.emissione_provvedimento_verifica)
 
+        transition_ok = \
+            (procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento and isExecuted(_pareri_sca)) or \
+            (procedura_vas.tipologia != TIPOLOGIA_VAS.procedimento and isExecuted(_emissione_provvedimento_verifica))
+
+        if transition_ok :
+            _avvio_esame_pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_esame_pareri_sca)
             if needsExecution(_avvio_esame_pareri_sca):
                 _avvio_esame_pareri_sca.stato = STATO_AZIONE.nessuna
                 _avvio_esame_pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
@@ -934,6 +939,12 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                 _upload_elaborati_vas.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_upload_elaborati_vas, piano=piano)
+            else
+                logger.warn("AvvioEsamePareriSCA: needed action is already executed")
+        else
+            logger.error("Stato inaspettato -- AvvioEsamePareriSCA piano:{piano}".format(piano=piano), stack_info=True)
+            return GraphQLError(_("Stato inaspettato"), code=403)
+
 
     @classmethod
     def mutate(cls, root, info, **input):
