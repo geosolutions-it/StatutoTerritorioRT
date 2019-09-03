@@ -106,6 +106,8 @@ class CreateProceduraAvvio(relay.ClientIDMutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- CreateProceduraAvvio piano:{piano}".format(piano=_piano),
+                         stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -163,6 +165,7 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- UpdateProceduraAvvio piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -292,6 +295,7 @@ class AvvioPiano(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- AvvioPiano piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -438,6 +442,7 @@ class ContributiTecnici(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- ContributiTecnici piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -558,6 +563,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- RichiestaIntegrazioni piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -655,6 +661,7 @@ class IntegrazioniRichieste(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- IntegrazioniRichieste piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -746,6 +753,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- InvioProtocolloGenioCivile piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -843,6 +851,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- RichiestaConferenzaCopianificazione piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -941,4 +950,5 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- ChiusuraConferenzaCopianificazione piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
