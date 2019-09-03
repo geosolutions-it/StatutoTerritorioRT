@@ -195,6 +195,7 @@ class CreateProceduraVAS(relay.ClientIDMutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- CreateProceduraVAS piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -329,6 +330,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- UpdateProceduraVAS piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -390,6 +392,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                     )
                     _parere_vas.save()
                 elif _pareri_vas.count() != 1:
+                    logger.error("InvioPareriVerificaVAS piano:{piano}".format(piano=_piano), stack_info=True)
                     return GraphQLError(_("Forbidden"), code=403)
 
                 ## controlla che tutti gli SCA abbiano inviato il proprio parere
@@ -424,6 +427,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- InvioPareriVerificaVAS piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -512,6 +516,7 @@ class AssoggettamentoVAS(graphene.Mutation):
                        _procedura_vas.tipologia not in (TIPOLOGIA_VAS.verifica,
                                                         TIPOLOGIA_VAS.procedimento_semplificato,
                                                         TIPOLOGIA_VAS.semplificata):
+                    logger.error("Stato inconsistente -- AssoggettamentoVAS piano:{piano}".format(piano=_piano), stack_info=True)
                     return GraphQLError(_("Forbidden"), code=403)
 
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
@@ -525,6 +530,7 @@ class AssoggettamentoVAS(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- AssoggettamentoVAS piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -565,6 +571,7 @@ class CreateConsultazioneVAS(relay.ClientIDMutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- CreateConsultazioneVAS piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -602,6 +609,7 @@ class UpdateConsultazioneVAS(relay.ClientIDMutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- UpdateConsultazioneVAS piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -688,6 +696,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- AvvioConsultazioniVAS piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -876,6 +885,7 @@ class InvioPareriVAS(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- InvioPareriVAS piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -953,6 +963,7 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- AvvioEsamePareriSCA piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
 
 
@@ -1019,4 +1030,5 @@ class UploadElaboratiVAS(graphene.Mutation):
                 logger.error(tb)
                 return GraphQLError(e, code=500)
         else:
+            logger.error("Richiesta non permessa -- UploadElaboratiVAS piano:{piano}".format(piano=_piano), stack_info=True)
             return GraphQLError(_("Forbidden"), code=403)
