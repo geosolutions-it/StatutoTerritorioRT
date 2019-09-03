@@ -939,9 +939,9 @@ class AvvioEsamePareriSCA(graphene.Mutation):
                 _upload_elaborati_vas.save()
                 _order += 1
                 AzioniPiano.objects.get_or_create(azione=_upload_elaborati_vas, piano=piano)
-            else
+            else:
                 logger.warn("AvvioEsamePareriSCA: needed action is already executed")
-        else
+        else:
             logger.error("Stato inaspettato -- AvvioEsamePareriSCA piano:{piano}".format(piano=piano), stack_info=True)
             return GraphQLError(_("Stato inaspettato"), code=403)
 
