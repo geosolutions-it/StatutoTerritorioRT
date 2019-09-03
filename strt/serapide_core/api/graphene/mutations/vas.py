@@ -511,13 +511,19 @@ class AssoggettamentoVAS(graphene.Mutation):
             try:
                 _pareri_verifica_sca = _piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_verifica_sca)
 
-                if needsExecution(_pareri_verifica_sca) or \
-                       _procedura_vas.verifica_effettuata or \
-                       _procedura_vas.tipologia not in (TIPOLOGIA_VAS.verifica,
-                                                        TIPOLOGIA_VAS.procedimento_semplificato,
-                                                        TIPOLOGIA_VAS.semplificata):
+                transition_ok = \
+                    (_procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata and
+                        not _pareri_verifica_sca) or \
+                    (_procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.procedimento_semplificato) and \
+                        isExecuted(_pareri_verifica_sca))
+
+                if not transition_ok:
                     logger.error("Stato inconsistente -- AssoggettamentoVAS piano:{piano}".format(piano=_piano), stack_info=True)
-                    return GraphQLError(_("Forbidden"), code=403)
+                    return GraphQLError(_("Stato inconsistente - Necessaria azione 'Pareri Verifica SCA'"), code=409)
+
+                if _procedura_vas.verifica_effettuata:
+                    logger.error("Stato inconsistente (2) -- AssoggettamentoVAS piano:{piano}".format(piano=_piano), stack_info=True)
+                    return GraphQLError(_("Stato inconsistente"), code=409)
 
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 
