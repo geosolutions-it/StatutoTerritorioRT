@@ -76,18 +76,20 @@ def procedura_vas_is_valid(piano, procedura_vas):
             if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
                 if procedura_vas.risorse.filter(tipo='vas_semplificata', archiviata=False).count() == 1 and \
                     procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).dimensione > 0 and \
-                        procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).file and \
-                        os.path.exists(procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).file.path):
+                    procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).file and \
+                    os.path.exists(procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).file.path):
                             return True
                 return False
             elif procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.procedimento_semplificato):
-                if procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False).count() > 0:
-                    return procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False).count() > 0 and \
+                tipo = 'vas_verifica' if procedura_vas.tipologia == TIPOLOGIA_VAS.verifica else "doc_proc_semplificato"
+                if procedura_vas.risorse.filter(tipo=tipo, archiviata=False).count() > 0:
+                    return procedura_vas.risorse.filter(tipo=tipo, archiviata=False).count() > 0 and \
                         all(
                             r.dimensione > 0 and r.file and os.path.exists(r.file.path)
-                            for r in procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False)
+                            for r in procedura_vas.risorse.filter(tipo=tipo, archiviata=False)
                         )
-                return False
+                else:
+                    return False
             elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
                 return (
                     piano.autorita_competente_vas.count() > 0 and
