@@ -16,11 +16,17 @@ LICENSE file in the root directory of this source tree.
 {% load wagtailcore_tags %}
 
 {% block head_title %}{{ block.super }} - {% trans 'glossario' %}{% endblock head_title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/glossario.css' %}"/>
+{% endblock styles %}
 
 {% block content %}
-
-        <div class="p-2">
-            <h1>GLOSSARIO</h1>
+        <div class="col">
+            <div class="p-2">
+                <h1>GLOSSARIO</h1>
+            </div>
+            <div>{% include "strt_portal/glossary/termini.html" %}</div>
         </div>
+
 
 {% endblock content %}

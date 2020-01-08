@@ -1,0 +1,7 @@
+#tabella-termini {
+    margin: 20px 20px 20px 20px;
+}
+
+#tabella-termini td.cell-denominazione {
+    text-align: justify;
+}
