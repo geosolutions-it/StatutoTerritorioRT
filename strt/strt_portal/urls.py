@@ -21,5 +21,5 @@ urlpatterns = [
     path('serapide/', serapideView, name='serapide'),
     path('geoportal/', GeoportalView.as_view(), name='geoportal'),
     path('opendata/', OpendataView.as_view(), name='opendata'),
-    path('glossary/', GlossaryView.as_view(), name='glossary'),
+    path('glossario/', GlossaryView.as_view(), name='glossary'),
 ]

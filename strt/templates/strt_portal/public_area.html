@@ -1,0 +1,41 @@
+<!--
+
+Copyright 2019, GeoSolutions SAS.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+
+{% block top_navbar_items %}
+
+    <!-- TOP-NAVBAR-CONTENT -->
+    <ul class="navbar-nav ml-auto pl-2">
+        <li class="nav-item pr-0">
+            <a class="nav-link text-white pr-0" href="{% url 'serapide' %}#/">
+                <span>{% trans 'area riservata'|upper %}</span>
+            </a>
+        </li>
+    </ul><!-- end TOP-NAVBAR-CONTENT -->
+
+{% endblock top_navbar_items %}
+
+{% block user_navbar %}
+
+    <nav class="navbar-menu navbar navbar-expand-md navbar-light bg-light py-2 py-lg-4">
+
+        {% include "strt_portal/navbar_menu.html" with text_color='dark' bg_color='white' %}
+
+    </nav>
+
+{% endblock user_navbar %}
+
+{% block content %}{% endblock content %}
