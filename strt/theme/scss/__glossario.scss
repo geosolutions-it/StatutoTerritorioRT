@@ -1,4 +1,4 @@
-$bulletSize: 1.1rem;
+$bulletSize: 0.9rem;
 $legenda: (
   c: rgb(11, 83, 148),
   m: rgb(166, 77, 121),
@@ -63,7 +63,7 @@ $legenda: (
   }
   #glossario {
     dt {
-      font-size: 1.1rem;
+      font-size: $bulletSize;
       padding: 10px 0px 10px 0px;
       padding-top: $portal-header;
       margin-top: -$portal-header;
@@ -80,7 +80,7 @@ $legenda: (
           margin-right: 10px;
         }
         .dt-label {
-          line-height: 1.1rem;
+          line-height: 1rem;
           a {
             color: $gray-700;
             &:hover {
@@ -96,6 +96,7 @@ $legenda: (
 
     }
     dd {
+      font-size: 0.8rem;
       text-align: justify;
       padding: 0px 0px 5px 0px;
       margin-bottom: 40px;
