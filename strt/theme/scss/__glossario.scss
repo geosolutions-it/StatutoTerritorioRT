@@ -1,15 +1,35 @@
+$bulletSize: 1rem;
+$legenda: (
+  c: rgb(11, 83, 148),
+  m: rgb(166, 77, 121),
+  v: rgb(36, 77, 17)
+);
+
 #glossario-termini {
-    margin: 20px 20px 20px 20px;
-}
-
-#glossario-termini dt {
-  font-size: 1.1rem;
-  padding: 10px 0px 0px 0px;
-  border-top: 1px solid $warning;
-}
-
-#glossario-termini dd {
-  text-align: justify;
-  padding: 0px 0px 5px 0px;
-  margin-bottom: 40px;
+  margin: 20px 20px 20px 20px;
+  dt {
+    font-size: 1.1rem;
+    padding: 10px 0px 0px 0px;
+    border-top: 1px solid $warning;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .glossario-denominazione-bullet {
+      width: $bulletSize;
+      height: $bulletSize;
+      border-radius: $bulletSize $bulletSize $bulletSize $bulletSize;
+      margin-right: 10px;
+    }
+    @each $legenda-item in map-keys($legenda) {
+      $colore: map-get($legenda, $legenda-item);
+      .legenda-#{$legenda-item}{
+        background-color: $colore;
+      }
+    }
+  }
+  dd {
+    text-align: justify;
+    padding: 0px 0px 5px 0px;
+    margin-bottom: 40px;
+  }
 }

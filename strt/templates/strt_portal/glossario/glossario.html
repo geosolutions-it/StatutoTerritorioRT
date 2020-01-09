@@ -24,7 +24,9 @@ LICENSE file in the root directory of this source tree.
             <div id="glossario-termini">
                 <dl>
                     {% for termine in glossario %}
-                    <dt>{{ termine.denominazione }}</dt>
+                    <dt>
+                        <div class="glossario-denominazione-bullet legenda-{{ termine.tipo }}"></div>
+                        <div>{{ termine.denominazione }}</div></dt>
                     <dd>{{ termine.definizione }}</dd>
                     {% endfor %}
                 </dl>
