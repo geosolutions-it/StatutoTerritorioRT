@@ -1,4 +1,4 @@
-[
+glossario = [
   {
     "denominazione": "Abaco delle invarianti",
     "tipo": "c",

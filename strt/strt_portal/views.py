@@ -30,6 +30,7 @@ from django.shortcuts import (
     render, redirect
 )
 from strt_users.models import Organization, UserMembership
+from .glossario import glossario
 
 
 def privateAreaView(request):
@@ -132,4 +133,9 @@ class OpendataView(TemplateView):
 
 class GlossaryView(TemplateView):
 
-    template_name = "strt_portal/glossary/glossary.html"
+    template_name = "strt_portal/glossario/glossario.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['glossario'] = glossario
+        return context
