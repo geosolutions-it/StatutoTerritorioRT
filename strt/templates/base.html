@@ -11,13 +11,10 @@ LICENSE file in the root directory of this source tree.
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
-
     {% load static %}
     {% load i18n %}
     {% load rules %}
-
     <head>
-
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block head_title %}Statuto Territorio RT{% endblock head_title %}</title>
         <link href="{% static 'fonts/icon.css' %}"rel="stylesheet">
@@ -25,11 +22,8 @@ LICENSE file in the root directory of this source tree.
         <link rel="stylesheet" href="{% static 'css/serapide.css' %}"/>
         {% block styles %}
         {% endblock styles %}
-
     </head>
-
     <body>
-
         <!-- CONTAINER-FLUID -->
         <div class="container-fluid p-0" >
 
