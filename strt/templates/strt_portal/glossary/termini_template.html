@@ -1,14 +1,8 @@
-<table id="tabella-termini">
-    <thead>
-        <th>DENOMINAZIONE</th>
-        <th>DEFINIZIONE</th>
-    </thead>
-    <tbody>
+<div id="glossario-termini">
+    <dl>
         {% for termine in glossario %}
-        <tr>
-            <td>{{ termine.denominazione }}</td>
-            <td class="cell-denominazione">{{ termine.definizione }}</td>
-        </tr>
+        <dt>{{ termine.denominazione }}</dt>
+        <dd>{{ termine.definizione }}</dd>
         {% endfor %}
-    </tbody>
-</table>
+    </dl>
+</div>

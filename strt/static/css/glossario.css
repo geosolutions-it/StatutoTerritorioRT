@@ -1,7 +1,7 @@
-#tabella-termini {
+#glossario-termini {
     margin: 20px 20px 20px 20px;
 }
 
-#tabella-termini td.cell-denominazione {
+#glossario-termini dd {
     text-align: justify;
 }
