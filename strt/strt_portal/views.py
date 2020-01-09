@@ -150,9 +150,6 @@ class GlossaryView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-
-
         context['indice'] = GlossaryView.index
         context['glossario'] = glossario
         return context

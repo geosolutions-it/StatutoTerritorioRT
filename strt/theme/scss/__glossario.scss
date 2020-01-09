@@ -65,7 +65,8 @@ $legenda: (
     dt {
       font-size: 1.1rem;
       padding: 10px 0px 10px 0px;
-      padding-top: 70px; margin-top: -70px;
+      padding-top: $portal-header;
+      margin-top: -$portal-header;
       .dt-items {
         display: flex;
         flex-direction: row;
