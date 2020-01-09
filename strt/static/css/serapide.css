@@ -8981,27 +8981,69 @@ html {
 
 #glossario-termini {
   margin: 20px 20px 20px 20px; }
-  #glossario-termini dt {
+  #glossario-termini #legenda {
+    background-color: white;
+    margin: 10px 0px 10px 0px;
+    padding: 10px 10px 10px 10px;
+    border: 1px solid #e9ecef; }
+    #glossario-termini #legenda .title {
+      font-size: 1.3rem; }
+    #glossario-termini #legenda .legenda {
+      display: flex;
+      flex-direction: row;
+      align-items: center; }
+      #glossario-termini #legenda .legenda dt {
+        width: 30px;
+        height: 18px;
+        line-height: 18px;
+        background-color: #0c5460;
+        content: ""; }
+      #glossario-termini #legenda .legenda dd {
+        font-size: 18px;
+        margin: 0px 15px 0px 10px; }
+      #glossario-termini #legenda .legenda .legenda-c {
+        background-color: #0b5394; }
+      #glossario-termini #legenda .legenda .legenda-m {
+        background-color: #a64d79; }
+      #glossario-termini #legenda .legenda .legenda-v {
+        background-color: #244d11; }
+    #glossario-termini #legenda #indice {
+      text-align: center;
+      margin: 40px 0px 40px 0px; }
+      #glossario-termini #legenda #indice .lettera-indice {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 50%;
+        background-color: #ffc107;
+        cursor: pointer;
+        display: inline-block;
+        margin: 0px 5px 0px 5px; }
+        #glossario-termini #legenda #indice .lettera-indice span {
+          font-size: 18px;
+          position: relative;
+          top: 2px; }
+  #glossario-termini #glossario dt {
     font-size: 1.1rem;
     padding: 10px 0px 10px 0px;
     border-top: 1px solid #ffc107;
     display: flex;
     flex-direction: row;
     align-items: center; }
-    #glossario-termini dt .dt-bullet {
-      width: 1rem;
-      height: 1rem;
-      border-radius: 1rem 1rem 1rem 1rem;
+    #glossario-termini #glossario dt .dt-bullet {
+      width: 1.1rem;
+      height: 1.1rem;
+      border-radius: 1.1rem 1.1rem 1.1rem 1.1rem;
       margin-right: 10px; }
-    #glossario-termini dt .dt-label {
+    #glossario-termini #glossario dt .dt-label {
       line-height: 1.1rem; }
-    #glossario-termini dt .legenda-c {
+    #glossario-termini #glossario dt .legenda-c {
       background-color: #0b5394; }
-    #glossario-termini dt .legenda-m {
+    #glossario-termini #glossario dt .legenda-m {
       background-color: #a64d79; }
-    #glossario-termini dt .legenda-v {
+    #glossario-termini #glossario dt .legenda-v {
       background-color: #244d11; }
-  #glossario-termini dd {
+  #glossario-termini #glossario dd {
     text-align: justify;
     padding: 0px 0px 5px 0px;
     margin-bottom: 40px; }

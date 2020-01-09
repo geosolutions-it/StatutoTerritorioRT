@@ -18,6 +18,7 @@ from django.forms import ValidationError
 from django.views.generic.base import TemplateView
 from django.contrib.auth import authenticate, login
 from django.utils.translation import ugettext_lazy as _
+from django.utils.text import slugify
 # from django.contrib.auth import logout
 
 from strt_tests.forms import UserAuthenticationForm
@@ -132,10 +133,26 @@ class OpendataView(TemplateView):
 
 
 class GlossaryView(TemplateView):
-
     template_name = "strt_portal/glossario/glossario.html"
+
+    for termine in glossario:
+        termine['slug'] = slugify(termine['denominazione'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        unique_char = []
+        index = []
+        for termine in glossario:
+            denominazione = termine['denominazione']
+            first_char = denominazione[0]
+            if not first_char in unique_char:
+                unique_char.append(first_char)
+                index.append({
+                    'lettera': first_char,
+                    'slug': termine['slug']
+                })
+
+        context['indice'] = index
         context['glossario'] = glossario
         return context

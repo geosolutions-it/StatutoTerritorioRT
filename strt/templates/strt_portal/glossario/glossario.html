@@ -22,14 +22,48 @@ LICENSE file in the root directory of this source tree.
                 <h1>GLOSSARIO</h1>
             </div>
             <div id="glossario-termini">
-                <dl>
-                    {% for termine in glossario %}
-                    <dt>
-                        <div class="dt-bullet legenda-{{ termine.tipo }}"></div>
-                        <div class="dt-label">{{ termine.denominazione }}</div></dt>
-                    <dd>{{ termine.definizione }}</dd>
+                <div id="legenda">
+                    <div class="">
+                        <dl class="legenda">
+                            <dt class="legenda-c"></dt>
+                            <dd>Conformazione al PIT-PPR</dd>
+                            <dt class="legenda-m"></dt>
+                            <dd>MONITORAGGIO URBANISTICO</dd>
+                            <dt class="legenda-v"></dt>
+                            <dd>V.E.A.Valutazione Effetti Ambientali</dd>
+                        </dl>
+                    </div>
+                    <div id="indice">
+                    {% for termine_indice in indice %}
+                        <div class="lettera-indice" data-termine="{{ termine_indice.slug }}">
+                            <span>{{ termine_indice.lettera }}</span></div>
                     {% endfor %}
-                </dl>
+                    </div>
+                </div>
+                <div id="glossario">
+                    <dl>
+                        {% for termine in glossario %}
+                        <dt id="{{ termine.slug }}">
+                            <div class="dt-bullet legenda-{{ termine.tipo }}"></div>
+                            <div class="dt-label">{{ termine.denominazione }}</div></dt>
+                        <dd>{{ termine.definizione }}</dd>
+                        {% endfor %}
+                    </dl>
+                </div>
             </div>
         </div>
 {% endblock content %}
+{% block add_script %}
+<script>
+    function scrollToTermine(selector){
+        let el = $("#"+selector);
+        $('html,body').animate({scrollTop: el.offset().top-75},'fast');
+    }
+    $("#indice > .lettera-indice").click(function(){
+        let termine = $(this).data('termine');
+        if (termine) {
+            scrollToTermine(termine)
+        }
+    })
+</script>
+{% endblock add_script %}
