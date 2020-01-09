@@ -65,23 +65,34 @@ $legenda: (
     dt {
       font-size: 1.1rem;
       padding: 10px 0px 10px 0px;
-      border-top: 1px solid $warning;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      .dt-bullet {
-        width: $bulletSize;
-        height: $bulletSize;
-        border-radius: $bulletSize $bulletSize $bulletSize $bulletSize;
-        margin-right: 10px;
+      padding-top: 70px; margin-top: -70px;
+      .dt-items {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-top: 1px solid $warning;
+        padding: 10px 0px 0px 0px;
+        .dt-bullet {
+          width: $bulletSize;
+          height: $bulletSize;
+          border-radius: $bulletSize $bulletSize $bulletSize $bulletSize;
+          margin-right: 10px;
+        }
+        .dt-label {
+          line-height: 1.1rem;
+          a {
+            color: $gray-700;
+            &:hover {
+              color: $gray-800;
+            }
+          }
+        }
+        @each $legenda-item in map-keys($legenda) {
+          $colore: map-get($legenda, $legenda-item);
+          @include legenda-color($legenda-item,$colore);
+        }
       }
-      .dt-label {
-        line-height: 1.1rem;
-      }
-      @each $legenda-item in map-keys($legenda) {
-        $colore: map-get($legenda, $legenda-item);
-        @include legenda-color($legenda-item,$colore);
-      }
+
     }
     dd {
       text-align: justify;
