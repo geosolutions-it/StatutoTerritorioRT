@@ -569,7 +569,7 @@ class ProceduraVAS(models.Model):
     verifica_effettuata = models.BooleanField(null=False, blank=False, default=False)
     procedimento_effettuato = models.BooleanField(null=False, blank=False, default=False)
     non_necessaria = models.BooleanField(null=False, blank=False, default=False)
-    assoggettamento = models.BooleanField(null=False, blank=False, default=True)
+    assoggettamento = models.NullBooleanField(null=True, blank=False, default=None)
 
     pubblicazione_provvedimento_verifica_ap = models.URLField(null=True, blank=True)
     pubblicazione_provvedimento_verifica_ac = models.URLField(null=True, blank=True)
