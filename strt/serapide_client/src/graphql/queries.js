@@ -56,7 +56,7 @@ ${FR.ADOZIONE}
 
 
 export const GET_CONSULTAZIONE_VAS = gql`
-query ConsultazioniVas($codice: String){
+query ConsultazioniVas($codice: ID){
   modello: consultazioneVas(proceduraVas_Piano_Codice: $codice){
   edges{
     node{

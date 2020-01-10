@@ -82,8 +82,9 @@ class CreateProceduraAvvio(relay.ClientIDMutation):
 
         _procedura_avvio_data = input.get('procedura_avvio')
         if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+            rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+            rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+
             try:
                 # ProceduraAvvio (M)
                 _procedura_avvio_data['piano'] = _piano
@@ -232,6 +233,9 @@ class AvvioPiano(graphene.Mutation):
                 if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE.regione, contatto=False):
                     raise Exception(
                         "'%s' non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_ATTORE.regione))
+
+                if procedura_avvio.conferenza_copianificazione is None:
+                    raise Exception("Conferenza copianificazione non impostata")
 
                 _avvio_procedimento.stato = STATO_AZIONE.nessuna
                 _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())

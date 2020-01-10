@@ -475,8 +475,7 @@ class Piano(models.Model):
 
     @property
     def is_eligible_for_promotion(self):
-        _res = rules.test_rule('strt_core.api.fase_{next}_completa'.format(
-                               next=self.next_phase),
+        _res = rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=self.next_phase),
                                self,
                                self.procedura_vas)
         log.info("is_eligible_for_promotion CURR:{curr} FASE:{fase} RESULT:{result}".format(
@@ -776,7 +775,9 @@ class ProceduraAvvio(models.Model):
 
     conferenza_copianificazione = models.CharField(
         choices=TIPOLOGIA_CONF_COPIANIFIZAZIONE,
-        default=TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria,
+        null=True,
+        blank=True,
+        default=None,
         max_length=20
     )
 
