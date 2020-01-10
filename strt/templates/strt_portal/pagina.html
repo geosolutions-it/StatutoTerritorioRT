@@ -1,0 +1,44 @@
+<!--
+
+Copyright 2019, GeoSolutions SAS.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+
+
+{% extends "strt_portal/public_area.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+
+{% block head_title %}{{ block.super }} - {% trans 'glossario' %}{% endblock head_title %}
+{% block content %}
+        <div class="col">
+            <div class="pagina-container">
+                <div class="pagina-title">
+                    <h1>{% block page-title %}{% endblock page-title %}</h1>
+                </div>
+                <div id="pagina-contenuti">
+                    {% block page-contents %}{% endblock page-contents %}
+                </div>
+            </div>
+        </div>
+{% endblock content %}
+{% block add_script %}
+<script>
+    function scrollToTermine(selector){
+        let el = $("#"+selector);
+        $('html,body').animate({scrollTop: el.offset().top-5},'fast');
+    }
+    $(".lettera-indice").click(function(){
+        let termine = $(this).data('termine');
+        if (termine) {
+            scrollToTermine(termine)
+        }
+    })
+</script>
+{% endblock add_script %}
