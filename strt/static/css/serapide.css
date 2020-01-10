@@ -9010,19 +9010,20 @@ html {
     #glossario-termini #legenda #indice {
       text-align: center;
       margin: 40px 0px 40px 0px; }
-      #glossario-termini #legenda #indice .lettera-indice {
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        border-radius: 50%;
-        background-color: #ffc107;
-        cursor: pointer;
-        display: inline-block;
-        margin: 0px 5px 0px 5px; }
-        #glossario-termini #legenda #indice .lettera-indice span {
-          font-size: 18px;
-          position: relative;
-          top: 2px; }
+      #glossario-termini #legenda #indice .lettere {
+        display: flex;
+        justify-content: center; }
+        #glossario-termini #legenda #indice .lettere .lettera-indice {
+          width: 40px;
+          height: 40px;
+          line-height: 40px;
+          cursor: pointer; }
+          #glossario-termini #legenda #indice .lettere .lettera-indice span {
+            font-size: 20px;
+            position: relative;
+            top: 2px; }
+        #glossario-termini #legenda #indice .lettere .lettera-indice:not(:last-child) {
+          border-right: 1px solid #ffc107; }
   #glossario-termini #glossario dt {
     font-size: 0.9rem;
     padding: 10px 0px 10px 0px;
@@ -9056,3 +9057,5 @@ html {
     text-align: justify;
     padding: 0px 0px 5px 0px;
     margin-bottom: 40px; }
+
+/*# sourceMappingURL=serapide.css.map */

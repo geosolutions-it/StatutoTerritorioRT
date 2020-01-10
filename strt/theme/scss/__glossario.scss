@@ -44,19 +44,22 @@ $legenda: (
     #indice {
       text-align: center;
       margin: 40px 0px 40px 0px;
-      .lettera-indice {
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        border-radius: 50%;
-        background-color: $warning;
-        cursor: pointer;
-        display: inline-block;
-        margin: 0px 5px 0px 5px;
-        span {
-          font-size: 18px;
-          position: relative;
-          top:2px;
+      .lettere {
+        display: flex;
+        justify-content: center;
+        .lettera-indice {
+          width: 40px;
+          height: 40px;
+          line-height: 40px;
+          cursor: pointer;
+          span {
+            font-size: 20px;
+            position: relative;
+            top:2px;
+          }
+        }
+        & .lettera-indice:not(:last-child) {
+          border-right: 1px solid $warning;
         }
       }
     }
