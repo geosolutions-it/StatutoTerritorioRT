@@ -11,16 +11,15 @@ $legenda: (
   }
 }
 
-.page-title {
-  padding-left: 40px;
-  border-bottom: 2px solid $warning;
-}
-
-.glossaro-container {
+.pagina-container {
   max-width: 1720px;
   margin: 0 auto;
+  .pagina-title {
+    padding-left: 40px;
+    border-bottom: 2px solid $warning;
+  }
 
-  #glossario-termini {
+  #pagina-contenuti {
     font-size: 16px;
     padding: 10px 40px 10px 40px;
     background-color: white;
