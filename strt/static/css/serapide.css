@@ -8355,8 +8355,7 @@ button.bg-serapide:focus {
 
 .content {
   min-height: calc(100vh - 196px);
-  padding-top: 70px;
-  justify-content: center; }
+  padding-top: 70px; }
 
 /** colori notifiche**/
 .first {
@@ -8986,7 +8985,7 @@ html {
 
 .glossaro-container {
   max-width: 1720px;
-  margin: 0px 40px 0px 40px; }
+  margin: 0 auto; }
   .glossaro-container #glossario-termini {
     font-size: 16px;
     padding: 10px 40px 10px 40px;

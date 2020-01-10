@@ -17,44 +17,46 @@ LICENSE file in the root directory of this source tree.
 
 {% block head_title %}{{ block.super }} - {% trans 'glossario' %}{% endblock head_title %}
 {% block content %}
-        <div class="col glossaro-container">
-            <div class="page-title">
-                <h1>GLOSSARIO</h1>
-            </div>
-            <div id="glossario-termini">
-                <div id="legenda">
-                    <div>
-                        <dl class="legenda-termini">
-                            <dt class="legenda-c"></dt>
-                            <dd>Conformazione al PIT-PPR</dd>
-                            <dt class="legenda-m"></dt>
-                            <dd>MONITORAGGIO URBANISTICO</dd>
-                            <dt class="legenda-v"></dt>
-                            <dd>V.E.A.Valutazione Effetti Ambientali</dd>
-                        </dl>
-                    </div>
-                    <div id="indice">
-                        <div class="lettere">
-                            {% for termine_indice in indice %}
-                                <div class="lettera-indice" data-termine="{{ termine_indice.slug }}">
-                                    <span>{{ termine_indice.lettera }}</span></div>
-                            {% endfor %}
+        <div class="col">
+            <div class="glossaro-container">
+                <div class="page-title">
+                    <h1>GLOSSARIO</h1>
+                </div>
+                <div id="glossario-termini">
+                    <div id="legenda">
+                        <div>
+                            <dl class="legenda-termini">
+                                <dt class="legenda-c"></dt>
+                                <dd>Conformazione al PIT-PPR</dd>
+                                <dt class="legenda-m"></dt>
+                                <dd>MONITORAGGIO URBANISTICO</dd>
+                                <dt class="legenda-v"></dt>
+                                <dd>V.E.A.Valutazione Effetti Ambientali</dd>
+                            </dl>
+                        </div>
+                        <div id="indice">
+                            <div class="lettere">
+                                {% for termine_indice in indice %}
+                                    <div class="lettera-indice" data-termine="{{ termine_indice.slug }}">
+                                        <span>{{ termine_indice.lettera }}</span></div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="glossario">
-                    <dl>
-                        {% for termine in glossario %}
-                        <dt id="{{ termine.slug }}">
-                            <div class="dt-items">
-                                <div class="dt-bullet legenda-{{ termine.tipo }}"></div>
-                                <div class="dt-label"><a href="#{{ termine.slug }}">{{ termine.denominazione }}</a></div>
-                            </div>
-                        </dt>
-                        <dd>{{ termine.definizione }}</dd>
+                    <div id="glossario">
+                        <dl>
+                            {% for termine in glossario %}
+                            <dt id="{{ termine.slug }}">
+                                <div class="dt-items">
+                                    <div class="dt-bullet legenda-{{ termine.tipo }}"></div>
+                                    <div class="dt-label"><a href="#{{ termine.slug }}">{{ termine.denominazione }}</a></div>
+                                </div>
+                            </dt>
+                            <dd>{{ termine.definizione }}</dd>
 
-                        {% endfor %}
-                    </dl>
+                            {% endfor %}
+                        </dl>
+                    </div>
                 </div>
             </div>
         </div>
