@@ -139,7 +139,7 @@ class GlossaryView(TemplateView):
 
     for termine in glossario:
         denominazione = termine['denominazione']
-        termine['slug'] = denominazione
+        termine['slug'] = slugify(denominazione)
         first_char = denominazione[0]
         if not first_char in unique_char:
             unique_char.append(first_char)

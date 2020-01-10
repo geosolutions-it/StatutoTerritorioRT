@@ -1,4 +1,4 @@
-$bulletSize: 0.9rem;
+$bulletSize: 1.1em;
 $legenda: (
   c: rgb(11, 83, 148),
   m: rgb(166, 77, 121),
@@ -11,98 +11,110 @@ $legenda: (
   }
 }
 
-#glossario-termini {
-  margin: 20px 20px 20px 20px;
-  #legenda {
+.page-title {
+  padding-left: 40px;
+  border-bottom: 2px solid $warning;
+}
+
+.glossaro-container {
+  max-width: 1720px;
+  margin: 0px 40px 0px 40px;
+
+  #glossario-termini {
+    font-size: 16px;
+    padding: 10px 40px 10px 40px;
     background-color: white;
-    margin: 10px 0px 10px 0px;
-    padding: 10px 10px 10px 10px;
-    border: 1px solid $gray-200;
-    .title {
-      font-size: 1.3rem;
-    }
-    .legenda {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      dt {
-        width: 30px;
-        height:18px;
-        line-height: 18px;
-        background-color: #0c5460;
-        content: "";
-      }
-      dd {
-        font-size: 18px;
-        margin: 0px 15px 0px 10px;
-      }
-      @each $legenda-item in map-keys($legenda) {
-        $colore: map-get($legenda, $legenda-item);
-        @include legenda-color($legenda-item,$colore);
-      }
-    }
-    #indice {
-      text-align: center;
-      margin: 40px 0px 40px 0px;
-      .lettere {
-        display: flex;
-        justify-content: center;
-        .lettera-indice {
-          width: 40px;
-          height: 40px;
-          line-height: 40px;
-          cursor: pointer;
-          span {
-            font-size: 20px;
-            position: relative;
-            top:2px;
-          }
-        }
-        & .lettera-indice:not(:last-child) {
-          border-right: 1px solid $warning;
-        }
-      }
-    }
-  }
-  #glossario {
-    dt {
-      font-size: $bulletSize;
-      padding: 10px 0px 10px 0px;
-      padding-top: $portal-header;
-      margin-top: -$portal-header;
-      .dt-items {
+    margin-top: 40px;
+    #legenda {
+      background-color: white;
+      margin: 10px 0px 10px 0px;
+      .legenda-termini {
         display: flex;
         flex-direction: row;
         align-items: center;
-        border-top: 1px solid $warning;
-        padding: 10px 0px 0px 0px;
-        .dt-bullet {
+        dt {
           width: $bulletSize;
-          height: $bulletSize;
-          border-radius: $bulletSize $bulletSize $bulletSize $bulletSize;
-          margin-right: 10px;
+          height:$bulletSize;
+          line-height: 18px;
+          background-color: #0c5460;
+          content: "";
         }
-        .dt-label {
-          line-height: 1rem;
-          a {
-            color: $gray-700;
-            &:hover {
-              color: $gray-800;
-            }
-          }
+        dd {
+          font-size: 18px;
+          margin: 0px 15px 0px 10px;
         }
         @each $legenda-item in map-keys($legenda) {
           $colore: map-get($legenda, $legenda-item);
           @include legenda-color($legenda-item,$colore);
         }
       }
-
+      #indice {
+        text-align: center;
+        margin: 40px 0px 40px 0px;
+        .lettere {
+          display: flex;
+          justify-content: center;
+          .lettera-indice {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            cursor: pointer;
+            span {
+              font-size: 1.2em;
+              font-weight: bold;
+              color: $gray-700;
+              &:hover {
+                color: $gray-800;
+              }
+              position: relative;
+              top:2px;
+            }
+          }
+          & .lettera-indice:not(:last-child) {
+            border-right: 1px solid $warning;
+          }
+        }
+      }
     }
-    dd {
-      font-size: 0.8rem;
-      text-align: justify;
-      padding: 0px 0px 5px 0px;
-      margin-bottom: 40px;
+    #glossario {
+      dt {
+        font-size: $bulletSize;
+        padding: 10px 0px 10px 0px;
+        padding-top: $portal-header;
+        margin-top: -$portal-header;
+        .dt-items {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          border-top: 1px solid $serpiade-light-yellow;
+          padding: 10px 0px 0px 0px;
+          .dt-bullet {
+            width: 1em;
+            height: 1em;
+            margin-right: 10px;
+          }
+          .dt-label {
+            line-height: 1rem;
+            a {
+              color: $gray-700;
+              &:hover {
+                color: $gray-800;
+              }
+            }
+          }
+          @each $legenda-item in map-keys($legenda) {
+            $colore: map-get($legenda, $legenda-item);
+            @include legenda-color($legenda-item,$colore);
+          }
+        }
+
+      }
+      dd {
+        font-size: 1em;
+        text-align: justify;
+        padding: 0px 0px 5px 0px;
+        margin-bottom: 40px;
+      }
     }
   }
 }
