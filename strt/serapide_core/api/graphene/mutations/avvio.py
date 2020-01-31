@@ -32,10 +32,10 @@ from serapide_core.signals import (
 )
 
 from serapide_core.modello.models import (
-    Fase,
+    Fase, Qualifica, QualificaRichiesta,
     Piano,
     Azione,
-    Contatto,
+    SoggettoOperante,
     AzioniPiano,
     ProceduraVAS,
     ProceduraAvvio,
@@ -45,15 +45,16 @@ from serapide_core.modello.models import (
     ConferenzaCopianificazione,
 
     isExecuted,
-    needsExecution
+    needsExecution,
+    ensure_fase,
+    chiudi_azione,
+    crea_azione,
 )
 
 from serapide_core.modello.enums import (
-    FASE,
+    Fase,
     STATO_AZIONE,
     TIPOLOGIA_AZIONE,
-    TIPOLOGIA_ATTORE,
-    TIPOLOGIA_CONTATTO,
     TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
@@ -169,90 +170,88 @@ class AvvioPiano(graphene.Mutation):
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
     @classmethod
-    def autorita_ok(cls, piano, tipologia, contatto=True):
-        _res = False
-        _has_tipologia = False
+    def esiste_referente(cls, piano, tipologia):
+        SoggettoOperante._default_manager.filter(piano=piano,)
 
+    @classmethod
+    def autorita_ok(cls, piano, qualifiche):
+        # _res = False
+        # _has_tipologia = False
+
+        # TODO: check autorita_competente_vas, autorita_istituzionali, altri_destinatari
         if piano.soggetto_proponente and \
             piano.autorita_competente_vas.all().count() > 0 and \
             piano.autorita_istituzionali.all().count() >= 0 and \
             piano.altri_destinatari.all().count() >= 0 and \
             piano.soggetti_sca.all().count() >= 0:
 
-            for _c in piano.soggetti_sca.all():
-                _tipologia = _c.tipologia if contatto else \
-                    Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
-                if _tipologia.upper() == tipologia.upper():
-                    _has_tipologia = True
-                    break
+            for qualifica in qualifiche:
+                c = SoggettoOperante.objects.filter(piano=piano, qualifica_ufficio__qualifica=qualifica).count()
+                if c > 0:
+                    return True;
 
-            if not _has_tipologia:
-                for _c in piano.autorita_istituzionali.all():
-                    _tipologia = _c.tipologia if contatto else \
-                        Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
-                    if _tipologia.upper() == tipologia.upper():
-                        _has_tipologia = True
-                        break
-
-            if not _has_tipologia:
-                for _c in piano.altri_destinatari.all():
-                    _tipologia = _c.tipologia if contatto else \
-                        Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
-                    if _tipologia.upper() == tipologia.upper():
-                        _has_tipologia = True
-                        break
-
-            _res = _has_tipologia
-        return _res
+            # for _c in piano.soggetti_sca.all():
+            #     _tipologia = _c.tipologia if contatto else \
+            #         Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
+            #     if _tipologia.upper() == tipologia.upper():
+            #         _has_tipologia = True
+            #         break
+            #
+            # if not _has_tipologia:
+            #     for _c in piano.autorita_istituzionali.all():
+            #         _tipologia = _c.tipologia if contatto else \
+            #             Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
+            #         if _tipologia.upper() == tipologia.upper():
+            #             _has_tipologia = True
+            #             break
+            #
+            # if not _has_tipologia:
+            #     for _c in piano.altri_destinatari.all():
+            #         _tipologia = _c.tipologia if contatto else \
+            #             Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
+            #         if _tipologia.upper() == tipologia.upper():
+            #             _has_tipologia = True
+            #             break
+            #
+            # _res = _has_tipologia
+        return False
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = piano.azioni.count()
-
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
-            if needsExecution(_avvio_procedimento):
-                if not cls.autorita_ok(piano, TIPOLOGIA_CONTATTO.genio_civile):
-                    raise Exception(
-                        "'%s' non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_CONTATTO.genio_civile))
+        ensure_fase(fase, Fase.ANAGRAFICA);
 
-                if not cls.autorita_ok(piano, TIPOLOGIA_ATTORE.regione, contatto=False):
-                    raise Exception(
-                        "'%s' non presente fra i Soggetti Istituzionali." % unslugify(TIPOLOGIA_ATTORE.regione))
+        _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
+        if needsExecution(_avvio_procedimento):
+            if not cls.autorita_ok(piano, [Qualifica.GC]):
+                raise Exception(
+                    "'%s' non presente fra i Soggetti Istituzionali." % unslugify(Qualifica.GC))
 
-                _avvio_procedimento.stato = STATO_AZIONE.nessuna
-                _avvio_procedimento.data = datetime.datetime.now(timezone.get_current_timezone())
-                _avvio_procedimento.save()
+            if not cls.autorita_ok(piano, [Qualifica.PIAN, Qualifica.URB]):
+                raise Exception(
+                    "'%s' non presente fra i Soggetti Istituzionali." % unslugify([Qualifica.PIAN, Qualifica.URB]))
 
-                _contributi_tecnici = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.contributi_tecnici,
-                    attore=TIPOLOGIA_ATTORE.regione,
-                    order=_order,
-                    stato=STATO_AZIONE.attesa,
-                    data=procedura_avvio.data_scadenza_risposta
-                )
-                _contributi_tecnici.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_contributi_tecnici, piano=piano)
+            chiudi_azione(_avvio_procedimento)
 
-                _richiesta_verifica_vas = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas,
-                    attore=TIPOLOGIA_ATTORE.comune,
-                    order=_order,
-                    stato=STATO_AZIONE.attesa
-                )
-                _richiesta_verifica_vas.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_richiesta_verifica_vas, piano=piano)
+            crea_azione(piano,
+                        Azione(
+                            tipologia=TIPOLOGIA_AZIONE.contributi_tecnici,
+                            qualifica_richiesta=QualificaRichiesta.REGIONE,
+                            stato=STATO_AZIONE.attesa,
+                            data=procedura_avvio.data_scadenza_risposta
+                        ))
 
-                init_vas_procedure(piano)
+            crea_azione(piano,
+                        Azione(
+                            tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas,
+                            qualifica_richiesta=QualificaRichiesta.COMUNE,
+                            stato=STATO_AZIONE.attesa
+                        ))
 
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+            init_vas_procedure(piano)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -309,97 +308,81 @@ class ContributiTecnici(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = piano.azioni.count()
-
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
-            _contributi_tecnici = piano.getFirstAction(TIPOLOGIA_AZIONE.contributi_tecnici)
-            if isExecuted(_avvio_procedimento) and needsExecution(_contributi_tecnici):
 
-                _contributi_tecnici.stato = STATO_AZIONE.nessuna
-                _contributi_tecnici.data = datetime.datetime.now(timezone.get_current_timezone())
-                _contributi_tecnici.save()
+        ensure_fase(fase, Fase.ANAGRAFICA)
 
-                _formazione_del_piano = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.formazione_del_piano,
-                    attore=TIPOLOGIA_ATTORE.comune,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _formazione_del_piano.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_formazione_del_piano, piano=piano)
+        _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
+        _contributi_tecnici = piano.getFirstAction(TIPOLOGIA_AZIONE.contributi_tecnici)
 
-                if procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria:
+        if isExecuted(_avvio_procedimento) and needsExecution(_contributi_tecnici):
 
-                    procedura_avvio.notifica_genio_civile = False
-                    procedura_avvio.save()
+            chiudi_azione(_contributi_tecnici)
 
-                    _cc, created = ConferenzaCopianificazione.objects.get_or_create(piano=piano)
-                    _cc.data_richiesta_conferenza = datetime.datetime.now(timezone.get_current_timezone())
-                    _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
-                    _cc.save()
+            crea_azione(piano,
+                        Azione(
+                            tipologia=TIPOLOGIA_AZIONE.formazione_del_piano,
+                            qualifica_richiesta=QualificaRichiesta.COMUNE,
+                            stato=STATO_AZIONE.necessaria
+                        ))
 
-                    _richiesta_integrazioni = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
-                        attore=TIPOLOGIA_ATTORE.regione,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa
-                    )
-                    _richiesta_integrazioni.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_richiesta_integrazioni, piano=piano)
+            if procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria:
 
-                    _esito_conferenza_copianificazione = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
-                        attore=TIPOLOGIA_ATTORE.regione,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa
-                    )
-                    _esito_conferenza_copianificazione.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_esito_conferenza_copianificazione, piano=piano)
+                procedura_avvio.notifica_genio_civile = False
+                procedura_avvio.save()
 
-                    return "conferenza_copianificazione"
-                elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
+                _cc, created = ConferenzaCopianificazione.objects.get_or_create(piano=piano)
+                _cc.data_richiesta_conferenza = datetime.datetime.now(timezone.get_current_timezone())
+                _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
+                _cc.save()
 
-                    procedura_avvio.notifica_genio_civile = False
-                    procedura_avvio.save()
+                crea_azione(piano,
+                            Azione(
+                                tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
+                                qualifica_richiesta=QualificaRichiesta.REGIONE,
+                                stato=STATO_AZIONE.attesa
+                            ))
 
-                    _cc, created = ConferenzaCopianificazione.objects.get_or_create(piano=piano)
-                    _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
-                    _cc.save()
+                crea_azione(piano,
+                            Azione(
+                                tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
+                                qualifica_richiesta=QualificaRichiesta.REGIONE,
+                                stato=STATO_AZIONE.attesa
+                            ))
 
-                    _conferenza_copianificazione = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
-                        attore=TIPOLOGIA_ATTORE.comune,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa
-                    )
-                    _conferenza_copianificazione.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
+                return "conferenza_copianificazione"
 
-                    return None
-                elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+            elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
 
-                    procedura_avvio.notifica_genio_civile = True
-                    procedura_avvio.save()
+                procedura_avvio.notifica_genio_civile = False
+                procedura_avvio.save()
 
-                    _protocollo_genio_civile = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
-                        attore=TIPOLOGIA_ATTORE.genio_civile,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa
-                    )
-                    _protocollo_genio_civile.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile, piano=piano)
+                _cc, created = ConferenzaCopianificazione.objects.get_or_create(piano=piano)
+                _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
+                _cc.save()
 
-                    return "protocollo_genio_civile"
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+                crea_azione(piano,
+                            Azione(
+                                tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
+                                qualifica_richiesta=QualificaRichiesta.COMUNE,
+                                stato=STATO_AZIONE.attesa
+                            ))
+
+                return None
+
+            elif procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.non_necessaria:
+
+                procedura_avvio.notifica_genio_civile = True
+                procedura_avvio.save()
+
+                crea_azione(piano,
+                            Azione(
+                                tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
+                                qualifica_richiesta=QualificaRichiesta.GC,
+                                stato=STATO_AZIONE.attesa
+                            ))
+
+                return "protocollo_genio_civile"
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -453,56 +436,50 @@ class RichiestaIntegrazioni(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = piano.azioni.count()
-
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
-            if needsExecution(_richiesta_integrazioni):
-                _richiesta_integrazioni.stato = STATO_AZIONE.nessuna
-                _richiesta_integrazioni.data = datetime.datetime.now(timezone.get_current_timezone())
-                _richiesta_integrazioni.save()
 
-                if procedura_avvio.richiesta_integrazioni:
-                    _integrazioni_richieste = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
-                        attore=TIPOLOGIA_ATTORE.comune,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa
-                    )
-                    _integrazioni_richieste.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_integrazioni_richieste, piano=piano)
-                else:
-                    _conferenza_copianificazione_attiva = False
+        ensure_fase(fase, Fase.ANAGRAFICA)
 
-                    _richiesta_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
-                    if needsExecution(_richiesta_conferenza_copianificazione):
-                        _conferenza_copianificazione_attiva = True
+        _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
+        if needsExecution(_richiesta_integrazioni):
 
-                    _esito_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
-                    if needsExecution(_esito_conferenza_copianificazione):
-                        _conferenza_copianificazione_attiva = True
+            chiudi_azione(_richiesta_integrazioni)
 
-                    _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
-                    _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
-                    if not _procedura_vas or _procedura_vas.conclusa:
-                        if not _conferenza_copianificazione_attiva and isExecuted(_formazione_del_piano):
-                            piano.chiudi_pendenti(attesa=True, necessaria=False)
+            if procedura_avvio.richiesta_integrazioni:
+                crea_azione(piano,
+                            Azione(
+                                tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
+                                qualifica_richiesta=QualificaRichiesta.COMUNE,
+                                stato=STATO_AZIONE.attesa
+                            ))
+            else:
+                _conferenza_copianificazione_attiva = False
 
-                    procedura_avvio.conclusa = True
-                    procedura_avvio.save()
+                _richiesta_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
+                if needsExecution(_richiesta_conferenza_copianificazione):
+                    _conferenza_copianificazione_attiva = True
 
-                    procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
-                        piano=piano, ente=piano.ente)
+                _esito_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
+                if needsExecution(_esito_conferenza_copianificazione):
+                    _conferenza_copianificazione_attiva = True
 
-                    PianoControdedotto.objects.get_or_create(piano=piano)
-                    PianoRevPostCP.objects.get_or_create(piano=piano)
+                _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+                _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
+                if not _procedura_vas or _procedura_vas.conclusa:
+                    if not _conferenza_copianificazione_attiva and isExecuted(_formazione_del_piano):
+                        piano.chiudi_pendenti(attesa=True, necessaria=False)
 
-                    piano.procedura_adozione = procedura_adozione
-                    piano.save()
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+                procedura_avvio.conclusa = True
+                procedura_avvio.save()
+
+                procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+                    piano=piano, ente=piano.ente)
+
+                PianoControdedotto.objects.get_or_create(piano=piano)
+                PianoRevPostCP.objects.get_or_create(piano=piano)
+
+                piano.procedura_adozione = procedura_adozione
+                piano.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -571,40 +548,37 @@ class IntegrazioniRichieste(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
-            if needsExecution(_integrazioni_richieste):
-                _integrazioni_richieste.stato = STATO_AZIONE.nessuna
-                _integrazioni_richieste.data = datetime.datetime.now(timezone.get_current_timezone())
-                _integrazioni_richieste.save()
+        ensure_fase(fase, Fase.ANAGRAFICA)
 
-                _conferenza_copianificazione_attiva = False
+        _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
+        if needsExecution(_integrazioni_richieste):
+            chiudi_azione(_integrazioni_richieste)
 
-                _richiesta_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
-                if needsExecution(_richiesta_conferenza_copianificazione):
-                    _conferenza_copianificazione_attiva = True
+            _conferenza_copianificazione_attiva = False
 
-                _esito_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
-                if needsExecution(_esito_conferenza_copianificazione):
-                    _conferenza_copianificazione_attiva = True
+            _richiesta_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
+            if needsExecution(_richiesta_conferenza_copianificazione):
+                _conferenza_copianificazione_attiva = True
 
-                _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
-                _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
-                if not _procedura_vas or _procedura_vas.conclusa:
-                    if not _conferenza_copianificazione_attiva and isExecuted(_formazione_del_piano):
-                        piano.chiudi_pendenti(attesa=True, necessaria=False)
+            _esito_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
+            if needsExecution(_esito_conferenza_copianificazione):
+                _conferenza_copianificazione_attiva = True
 
-                procedura_avvio.conclusa = True
-                procedura_avvio.save()
+            _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+            _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()
+            if not _procedura_vas or _procedura_vas.conclusa:
+                if not _conferenza_copianificazione_attiva and isExecuted(_formazione_del_piano):
+                    piano.chiudi_pendenti(attesa=True, necessaria=False)
 
-                procedura_adozione, created = ProceduraAdozione.objects.get_or_create(piano=piano, ente=piano.ente)
-                PianoControdedotto.objects.get_or_create(piano=piano)
-                PianoRevPostCP.objects.get_or_create(piano=piano)
+            procedura_avvio.conclusa = True
+            procedura_avvio.save()
 
-                piano.procedura_adozione = procedura_adozione
-                piano.save()
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+            procedura_adozione, created = ProceduraAdozione.objects.get_or_create(piano=piano, ente=piano.ente)
+            PianoControdedotto.objects.get_or_create(piano=piano)
+            PianoRevPostCP.objects.get_or_create(piano=piano)
+
+            piano.procedura_adozione = procedura_adozione
+            piano.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -671,8 +645,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Update Action state accordingly
-        if fase.nome != FASE.anagrafica:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+        ensure_fase(fase, Fase.ANAGRAFICA)
 
         _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
         if needsExecution(_protocollo_genio_civile):
@@ -680,9 +653,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
                 piano.data_protocollo_genio_civile = datetime.datetime.now(timezone.get_current_timezone())
                 piano.save()
 
-                _protocollo_genio_civile.stato = STATO_AZIONE.nessuna
-                _protocollo_genio_civile.data = datetime.datetime.now(timezone.get_current_timezone())
-                _protocollo_genio_civile.save()
+                chiudi_azione(_protocollo_genio_civile)
 
                 # controllo se procedura di avvio conclusa
                 _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
@@ -761,50 +732,41 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = piano.azioni.count()
-
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
-            if isExecuted(_avvio_procedimento):
-                if procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
 
-                    _richiesta_cc = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
-                    if needsExecution(_richiesta_cc):
+        ensure_fase(fase, Fase.ANAGRAFICA)
 
-                        _richiesta_cc.stato = STATO_AZIONE.nessuna
-                        _richiesta_cc.save()
+        _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
+        if isExecuted(_avvio_procedimento):
+            if procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.posticipata:
 
-                        procedura_avvio.notifica_genio_civile = False
-                        procedura_avvio.save()
+                _richiesta_cc = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
+                if needsExecution(_richiesta_cc):
 
-                        _cc = ConferenzaCopianificazione.objects.get(piano=piano)
-                        _cc.data_richiesta_conferenza = datetime.datetime.now(timezone.get_current_timezone())
-                        _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
-                        _cc.save()
+                    chiudi_azione(_richiesta_cc) # TODO check: original code did not set timestamp
 
-                        _richiesta_integrazioni = Azione(
-                            tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
-                            attore=TIPOLOGIA_ATTORE.regione,
-                            order=_order,
-                            stato=STATO_AZIONE.attesa
-                        )
-                        _richiesta_integrazioni.save()
-                        _order += 1
-                        AzioniPiano.objects.get_or_create(azione=_richiesta_integrazioni, piano=piano)
+                    procedura_avvio.notifica_genio_civile = False
+                    procedura_avvio.save()
 
-                        _conferenza_copianificazione = Azione(
-                            tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
-                            attore=TIPOLOGIA_ATTORE.regione,
-                            order=_order,
-                            stato=STATO_AZIONE.attesa,
-                            data=procedura_avvio.data_scadenza_risposta
-                        )
-                        _conferenza_copianificazione.save()
-                        _order += 1
-                        AzioniPiano.objects.get_or_create(azione=_conferenza_copianificazione, piano=piano)
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+                    _cc = ConferenzaCopianificazione.objects.get(piano=piano)
+                    _cc.data_richiesta_conferenza = datetime.datetime.now(timezone.get_current_timezone())
+                    _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
+                    _cc.save()
+
+                    crea_azione(piano,
+                                Azione(
+                                    tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
+                                    qualifica_richiesta=QualificaRichiesta.REGIONE,
+                                    stato=STATO_AZIONE.attesa
+                                ))
+
+                    crea_azione(piano,
+                                Azione(
+                                    tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
+                                    qualifica_richiesta=QualificaRichiesta.REGIONE,
+                                    stato=STATO_AZIONE.attesa,
+                                    data=procedura_avvio.data_scadenza_risposta
+                                ))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -857,38 +819,32 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = piano.azioni.count()
-
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
-            if isExecuted(_avvio_procedimento):
 
-                _esito_cc = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
-                if needsExecution(_esito_cc):
+        ensure_fase(fase, Fase.ANAGRAFICA)
 
-                    _esito_cc.stato = STATO_AZIONE.nessuna
-                    _esito_cc.save()
+        _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
+        if isExecuted(_avvio_procedimento):
 
-                    procedura_avvio.notifica_genio_civile = True
-                    procedura_avvio.save()
+            _esito_cc = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
+            if needsExecution(_esito_cc):
 
-                    _cc = ConferenzaCopianificazione.objects.get(piano=piano)
-                    _cc.data_chiusura_conferenza = datetime.datetime.now(timezone.get_current_timezone())
-                    _cc.save()
+                chiudi_azione(_esito_cc) # TODO: check: original code did not set timestamp
 
-                    _protocollo_genio_civile = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
-                        attore=TIPOLOGIA_ATTORE.genio_civile,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa,
-                        data=procedura_avvio.data_scadenza_risposta
-                    )
-                    _protocollo_genio_civile.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_protocollo_genio_civile, piano=piano)
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+                procedura_avvio.notifica_genio_civile = True
+                procedura_avvio.save()
+
+                _cc = ConferenzaCopianificazione.objects.get(piano=piano)
+                _cc.data_chiusura_conferenza = datetime.datetime.now(timezone.get_current_timezone())
+                _cc.save()
+
+                crea_azione(piano,
+                            Azione(
+                                tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
+                                qualifica_richiesta=QualificaRichiesta.GC,
+                                stato=STATO_AZIONE.attesa,
+                                data=procedura_avvio.data_scadenza_risposta
+                            ))
 
     @classmethod
     def mutate(cls, root, info, **input):

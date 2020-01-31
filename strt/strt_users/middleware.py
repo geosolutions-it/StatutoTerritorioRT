@@ -17,8 +17,8 @@ from django.urls import reverse
 from django.contrib.auth import logout
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 
-from strt_users.models import Token, Organization
-from serapide_core.modello.models import PianoAuthTokens, Contatto
+from strt_users.models import Ente
+from serapide_core.modello.models import PianoAuthTokens
 
 
 class TokenMiddleware(object):
@@ -52,8 +52,9 @@ class TokenMiddleware(object):
                 if not role:
                     request.session['role'] = user.memberships.all().first().pk if user.memberships.all().first() \
                     else None
-                attore = Contatto.attore(user, token=token)
-                request.session['attore'] = attore
+                # TODO
+                # attore = Contatto.attore(user, token=token)
+                # request.session['attore'] = attore
                 auth.login(request, user)
 
         # ------------------------
@@ -82,15 +83,16 @@ class SessionControlMiddleware(object):
             else:
                 role = request.session['role'] if 'role' in request.session else None
                 token = request.session['token'] if 'token' in request.session else None
-                if token:
-                    try:
-                        _t = Token.objects.get(key=token)
-                        if _t.is_expired():
-                            if not request.user.is_superuser:
-                                return self.redirect_to_login(request)
-                    except BaseException:
-                        del request.session['token']
-                        traceback.print_exc()
+                # TODO
+                # if token:
+                #     try:
+                #         _t = Token.objects.get(key=token)
+                #         if _t.is_expired():
+                #             if not request.user.is_superuser:
+                #                 return self.redirect_to_login(request)
+                #     except BaseException:
+                #         del request.session['token']
+                #         traceback.print_exc()
 
                 organization = request.session['organization'] if 'organization' in request.session else None
                 if not organization:
@@ -98,7 +100,7 @@ class SessionControlMiddleware(object):
                         return self.redirect_to_login(request)
                 else:
                     try:
-                        Organization.objects.get(code=organization)
+                        Ente.objects.get(code=organization)
                     except BaseException:
                         traceback.print_exc()
                         if not request.user.is_superuser:
@@ -106,20 +108,23 @@ class SessionControlMiddleware(object):
 
                 attore = request.session['attore'] if 'attore' in request.session else None
                 if not attore:
-                    try:
-                        if token:
-                            attore = Contatto.attore(request.user, token=token)
-                        elif role:
-                            attore = Contatto.attore(request.user, role=role)
-                        elif organization:
-                            attore = Contatto.attore(request.user, organization=organization)
-                        request.session['attore'] = attore
-                    except BaseException:
-                        traceback.print_exc()
+                    # TODO
+                    return self.redirect_to_login(request)
 
-                    if not attore:
-                        if not request.user.is_superuser:
-                            return self.redirect_to_login(request)
+                    # try:
+                    #     if token:
+                    #         attore = Contatto.attore(request.user, token=token)
+                    #     elif role:
+                    #         attore = Contatto.attore(request.user, role=role)
+                    #     elif organization:
+                    #         attore = Contatto.attore(request.user, organization=organization)
+                    #     request.session['attore'] = attore
+                    # except BaseException:
+                    #     traceback.print_exc()
+                    #
+                    # if not attore:
+                    #     if not request.user.is_superuser:
+                    #         return self.redirect_to_login(request)
                 print(" ----------------------------- %s / %s " % (request.user, attore))
             # ------------------------
             response = self.get_response(request)

@@ -14,7 +14,6 @@ import rules
 from strt_users.rules import (
     is_RUP,
     is_recognizable,
-    # is_responsabile_ISIDE
 )
 
 from .auth import (
@@ -39,7 +38,9 @@ rules.add_rule(
 
 rules.add_rule(
     'strt_core.api.is_actor',
-    user_rules.is_actor_for_token | user_rules.is_actor_for_role | user_rules.is_actor_for_organization
+    user_rules.is_actor_for_token |
+        # user_rules.is_actor_for_role |  # TODO
+        user_rules.is_actor_for_organization
 )
 
 rules.add_rule(

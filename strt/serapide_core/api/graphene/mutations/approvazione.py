@@ -36,13 +36,18 @@ from serapide_core.modello.models import (
     AzioniPiano,
     ProceduraApprovazione,
     ProceduraPubblicazione,
+
+    ensure_fase,
+    crea_azione,
+    chiudi_azione,
+    isExecuted,
+    needsExecution,
 )
 
 from serapide_core.modello.enums import (
-    FASE,
     STATO_AZIONE,
     TIPOLOGIA_AZIONE,
-    TIPOLOGIA_ATTORE,
+    QualificaRichiesta,
 )
 
 from serapide_core.api.graphene import types
@@ -157,46 +162,34 @@ class TrasmissioneApprovazione(graphene.Mutation):
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user):
-
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = piano.azioni.count()
-
         # - Update Action state accordingly
-        if fase.nome == FASE.adozione:
-            _trasmissione_approvazione = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.trasmissione_approvazione).first()
-            if _trasmissione_approvazione and _trasmissione_approvazione.stato != STATO_AZIONE.nessuna:
-                _trasmissione_approvazione.stato = STATO_AZIONE.nessuna
-                _trasmissione_approvazione.data = datetime.datetime.now(timezone.get_current_timezone())
-                _trasmissione_approvazione.save()
 
-                if not piano.procedura_adozione.richiesta_conferenza_paesaggistica:
-                    # Se non è stata fatta prima, va fatta ora...
-                    _convocazione_cp = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica_ap,
-                        attore=TIPOLOGIA_ATTORE.regione,
-                        order=_order,
-                        stato=STATO_AZIONE.attesa
-                    )
-                    _convocazione_cp.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_convocazione_cp, piano=piano)
-                else:
-                    _pubblicazione_approvazione = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione,
-                        attore=TIPOLOGIA_ATTORE.comune,
-                        order=_order,
-                        stato=STATO_AZIONE.necessaria
-                    )
-                    _pubblicazione_approvazione.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_pubblicazione_approvazione, piano=piano)
+        ensure_fase(fase, Fase.ADOZIONE)
 
-                procedura_approvazione.richiesta_conferenza_paesaggistica = True
-                procedura_approvazione.save()
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+        _trasmissione_approvazione = piano.getFirstAction(TIPOLOGIA_AZIONE.trasmissione_approvazione)
+        if needsExecution(_trasmissione_approvazione):
+            chiudi_azione(_trasmissione_approvazione)
+
+            if not piano.procedura_adozione.richiesta_conferenza_paesaggistica:
+                # Se non è stata fatta prima, va fatta ora...
+                crea_azione(piano,
+                            Azione(
+                                tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica_ap,
+                                qualifica_richiesta=QualificaRichiesta.REGIONE,
+                                stato=STATO_AZIONE.attesa
+                            ))
+            else:
+                crea_azione(piano,
+                            Azione(
+                                tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione,
+                                qualifica_richiesta=QualificaRichiesta.COMUNE,
+                                stato=STATO_AZIONE.necessaria
+                            ))
+
+            procedura_approvazione.richiesta_conferenza_paesaggistica = True
+            procedura_approvazione.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -205,8 +198,9 @@ class TrasmissioneApprovazione(graphene.Mutation):
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+        if info.context.user \
+                and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) \
+                and rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
 
@@ -250,29 +244,21 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = piano.azioni.count()
-
         # - Update Action state accordingly
-        if fase.nome == FASE.adozione:
-            _esito_cp = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica_ap).first()
 
-            if _esito_cp and _esito_cp.stato != STATO_AZIONE.nessuna:
-                _esito_cp.stato = STATO_AZIONE.nessuna
-                _esito_cp.data = datetime.datetime.now(timezone.get_current_timezone())
-                _esito_cp.save()
+        ensure_fase(fase, Fase.ADOZIONE)
 
-                _pubblicazione_approvazione = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione,
-                    attore=TIPOLOGIA_ATTORE.comune,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _pubblicazione_approvazione.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_pubblicazione_approvazione, piano=piano)
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+        _esito_cp = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica_ap)
+
+        if needsExecution(_esito_cp):
+            chiudi_azione(_esito_cp)
+
+            crea_azione(piano,
+                        Azione(
+                            tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione,
+                            qualifica_richiesta=QualificaRichiesta.COMUNE,
+                            stato=STATO_AZIONE.necessaria
+                        ))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -326,35 +312,26 @@ class PubblicazioneApprovazione(graphene.Mutation):
 
         # Update Azioni Piano
         # - Complete Current Actions
-        _order = piano.azioni.count()
-
         # - Update Action state accordingly
-        if fase.nome == FASE.adozione:
-            _trasmissione_approvazione = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.trasmissione_approvazione).first()
 
-            _pubblicazione_approvazione = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione).first()
+        ensure_fase(fase, Fase.ADOZIONE)
 
-            if _pubblicazione_approvazione and _pubblicazione_approvazione.stato != STATO_AZIONE.nessuna:
-                _pubblicazione_approvazione.stato = STATO_AZIONE.nessuna
-                _pubblicazione_approvazione.data = datetime.datetime.now(timezone.get_current_timezone())
-                _pubblicazione_approvazione.save()
+        _pubblicazione_approvazione = piano.getFirstAction(TIPOLOGIA_AZIONE.pubblicazione_approvazione)
 
-                _expire_days = getattr(settings, 'ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS', 30)
-                _alert_delta = datetime.timedelta(days=_expire_days)
-                _attribuzione_conformita_pit = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.attribuzione_conformita_pit,
-                    attore=TIPOLOGIA_ATTORE.regione,
-                    order=_order,
-                    stato=STATO_AZIONE.attesa,
-                    data=_trasmissione_approvazione.data + _alert_delta
-                )
-                _attribuzione_conformita_pit.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_attribuzione_conformita_pit, piano=piano)
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+        if needsExecution(_pubblicazione_approvazione):
+            chiudi_azione(_pubblicazione_approvazione)
+
+            _trasmissione_approvazione = piano.getFirstAction(TIPOLOGIA_AZIONE.trasmissione_approvazione)
+            _expire_days = getattr(settings, 'ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS', 30)
+            _alert_delta = datetime.timedelta(days=_expire_days)
+
+            crea_azione(piano,
+                        Azione(
+                            tipologia=TIPOLOGIA_AZIONE.attribuzione_conformita_pit,
+                            qualifica_richiesta=QualificaRichiesta.REGIONE,
+                            stato=STATO_AZIONE.attesa,
+                            data=_trasmissione_approvazione.data + _alert_delta
+                        ))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -363,8 +340,9 @@ class PubblicazioneApprovazione(graphene.Mutation):
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+        if info.context.user \
+                and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) \
+                and rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
             try:
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
 
@@ -406,27 +384,22 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_approvazione, user):
 
-        # - Update Action state accordingly
-        if fase.nome == FASE.adozione:
-            _attribuzione_conformita_pit = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.attribuzione_conformita_pit).first()
+        ensure_fase(fase, Fase.ADOZIONE)
 
-            if _attribuzione_conformita_pit and _attribuzione_conformita_pit.stato != STATO_AZIONE.nessuna:
-                _attribuzione_conformita_pit.stato = STATO_AZIONE.nessuna
-                _attribuzione_conformita_pit.data = datetime.datetime.now(timezone.get_current_timezone())
-                _attribuzione_conformita_pit.save()
+        _attribuzione_conformita_pit = piano.getFirstAction(TIPOLOGIA_AZIONE.attribuzione_conformita_pit)
 
-            if not procedura_approvazione.conclusa:
-                piano.chiudi_pendenti(attesa=True, necessaria=False)
-                procedura_approvazione.conclusa = True
-                procedura_approvazione.save()
+        if needsExecution(_attribuzione_conformita_pit):
+            chiudi_azione(_attribuzione_conformita_pit)
 
-                procedura_pubblicazione, created = ProceduraPubblicazione.objects.get_or_create(
-                    piano=piano, ente=piano.ente)
-                piano.procedura_pubblicazione = procedura_pubblicazione
-                piano.save()
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+        if not procedura_approvazione.conclusa:
+            piano.chiudi_pendenti(attesa=True, necessaria=False)
+            procedura_approvazione.conclusa = True
+            procedura_approvazione.save()
+
+            procedura_pubblicazione, created = ProceduraPubblicazione.objects.get_or_create(
+                piano=piano, ente=piano.ente)
+            piano.procedura_pubblicazione = procedura_pubblicazione
+            piano.save()
 
     @classmethod
     def mutate(cls, root, info, **input):

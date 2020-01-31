@@ -13,7 +13,7 @@ import os
 import rules
 
 from serapide_core.modello.enums import (
-    FASE,
+    Fase,
     STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,)
@@ -33,9 +33,9 @@ from serapide_core.modello.models import (
 @rules.predicate
 def is_draft(user, obj):
     if isinstance(obj, Piano):
-        return obj.fase.nome == FASE.draft
+        return obj.fase == Fase.DRAFT
     elif isinstance(obj, ProceduraVAS):
-        return obj.piano.fase.nome == FASE.draft
+        return obj.piano.fase == Fase.DRAFT
     else:
         return False
 
@@ -43,9 +43,9 @@ def is_draft(user, obj):
 @rules.predicate
 def is_anagrafica(user, obj):
     if isinstance(obj, Piano):
-        return obj.fase.nome == FASE.anagrafica
+        return obj.fase == Fase.ANAGRAFICA
     elif isinstance(obj, ProceduraVAS):
-        return obj.piano.fase.nome == FASE.anagrafica
+        return obj.piano.fase == Fase.ANAGRAFICA
     else:
         return False
 
@@ -53,9 +53,9 @@ def is_anagrafica(user, obj):
 @rules.predicate
 def is_avvio(user, obj):
     if isinstance(obj, Piano):
-        return obj.fase.nome == FASE.avvio
+        return obj.fase == Fase.AVVIO
     elif isinstance(obj, ProceduraVAS):
-        return obj.piano.fase.nome == FASE.avvio
+        return obj.piano.fase == Fase.AVVIO
     else:
         return False
 
@@ -63,9 +63,9 @@ def is_avvio(user, obj):
 @rules.predicate
 def is_adozione(user, obj):
     if isinstance(obj, Piano):
-        return obj.fase.nome == FASE.adozione
+        return obj.fase == Fase.ADOZIONE
     elif isinstance(obj, ProceduraVAS):
-        return obj.piano.fase.nome == FASE.adozione
+        return obj.piano.fase == Fase.ADOZIONE
     else:
         return False
 

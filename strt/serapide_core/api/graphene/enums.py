@@ -18,8 +18,8 @@ class StrtEnumNode(graphene.ObjectType):
     label = graphene.String()
 
 
-class FasePiano(StrtEnumNode):
-    pass
+# class FasePiano(StrtEnumNode):
+#     pass
 
 
 class TipologiaVAS(StrtEnumNode):

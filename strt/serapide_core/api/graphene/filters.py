@@ -12,19 +12,20 @@
 import rules
 import logging
 import django_filters
-
+from django_filters import (CharFilter)
+from django.db.models import Q
 from django.conf import settings
 
 from strt_users.models import (
-    AppUser,
-    Organization,
+    Utente,
+    Ente,
 )
 
 from serapide_core.helpers import is_RUP
 
 from serapide_core.modello.models import (
     Piano,
-    Contatto,
+    SoggettoOperante,
     ProceduraVAS,
     ProceduraAvvio,
     ProceduraAdozione,
@@ -43,7 +44,7 @@ class UserMembershipFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='iexact')
 
     class Meta:
-        model = AppUser
+        model = Utente
         exclude = ['password', 'is_staff', 'is_active', 'is_superuser', 'last_login']
 
     @property
@@ -66,8 +67,9 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='iexact')
 
     class Meta:
-        model = Organization
-        fields = ['name', 'code', 'description', 'usermembership', ]
+        model = Ente
+#        fields = ['nome', 'id', 'descrizione', 'qualifica', ]
+        fields = ['nome', 'id', 'descrizione']
 
     @property
     def qs(self):
@@ -85,27 +87,40 @@ class CharInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
     pass
 
 
-class EnteContattoMembershipFilter(django_filters.FilterSet):
+# class EnteContattoMembershipFilter(django_filters.FilterSet):
+#
+#     # Do case-insensitive lookups on 'name'
+#     name = django_filters.CharFilter(lookup_expr='iexact')
+#     tipologiain = CharInFilter(field_name='tipologia', lookup_expr='in')
+#
+#     class Meta:
+#         model = Referente
+#         fields = ['name', 'email', 'ente', 'tipologia', 'tipologiain']
+#
+#     @property
+#     def qs(self):
+#         # The query context can be found in self.request.
+#         if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
+#             if is_RUP(self.request.user):
+#                 return super(EnteContattoMembershipFilter, self).qs.all()
+#             else:
+#                 return super(EnteContattoMembershipFilter, self).qs.filter(
+#                     ente__ruolo__utente=self.request.user)
+#         else:
+#             return super(EnteContattoMembershipFilter, self).qs.none()
 
-    # Do case-insensitive lookups on 'name'
-    name = django_filters.CharFilter(lookup_expr='iexact')
-    tipologiain = CharInFilter(field_name='tipologia', lookup_expr='in')
+
+class SoggettoOperanteFilter(django_filters.FilterSet):
+
+    qualifica = CharFilter(method='qualifica_filter')
 
     class Meta:
-        model = Contatto
-        fields = ['name', 'email', 'ente', 'tipologia', 'tipologiain']
+        model = SoggettoOperante
+        fields = ['piano', 'qualifica']
 
-    @property
-    def qs(self):
-        # The query context can be found in self.request.
-        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
-            if is_RUP(self.request.user):
-                return super(EnteContattoMembershipFilter, self).qs.all()
-            else:
-                return super(EnteContattoMembershipFilter, self).qs.filter(
-                    ente__usermembership__member=self.request.user)
-        else:
-            return super(EnteContattoMembershipFilter, self).qs.none()
+    def qualifica_filter(self, queryset, piano, qualifica):
+        return queryset.filter(piano=piano, ruolo__qualifica=qualifica) | \
+               queryset.filter(piano=piano, ufficio__qualifica=qualifica)
 
 
 class PianoUserMembershipFilter(django_filters.FilterSet):
@@ -129,7 +144,7 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
                 _is_iside = self.request.user.memberships.filter(type__code=settings.RESPONSABILE_ISIDE_CODE)
                 _is_regione = self.request.user.memberships.filter(type__organization_type__code='R')
                 if _is_regione and not _is_iside:
-                    for _o in Organization.objects.filter(type__code='C'):
+                    for _o in Ente.objects.filter(type__code='C'):
                         _enti.append(_o.code)
                 else:
                     for _m in _memberships.all():
@@ -164,7 +179,7 @@ class ProceduraMembershipFilterBase(django_filters.FilterSet):
                 _is_iside = self.request.user.memberships.filter(type__code=settings.RESPONSABILE_ISIDE_CODE)
                 _is_regione = self.request.user.memberships.filter(type__organization_type__code='R')
                 if _is_regione and not _is_iside:
-                    for _o in Organization.objects.filter(type__code='C'):
+                    for _o in Ente.objects.filter(type__code='C'):
                         _enti.append(_o.code)
                 else:
                     for _m in _memberships.all():

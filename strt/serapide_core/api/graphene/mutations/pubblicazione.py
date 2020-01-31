@@ -34,7 +34,7 @@ from serapide_core.modello.models import (
 )
 
 from serapide_core.modello.enums import (
-    FASE,
+    Fase,
     STATO_AZIONE,
     TIPOLOGIA_AZIONE,
 )
@@ -152,7 +152,7 @@ class PubblicazionePiano(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_pubblicazione, user):
 
         # - Update Action state accordingly
-        if fase.nome == FASE.approvazione:
+        if fase == Fase.APPROVAZIONE:
             _pubblicazione_piano = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.pubblicazione_piano).first()
 

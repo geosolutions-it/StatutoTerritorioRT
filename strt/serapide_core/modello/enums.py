@@ -9,29 +9,48 @@
 #
 #########################################################################
 
+from enum import Enum
+
 from model_utils import Choices
+from django.db import models
 from django.utils.translation import gettext as _
 
+from strt_users.enums import QualificaRichiesta
 
-FASE = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('draft', _('DRAFT')),
-        ('anagrafica', _('ANAGRAFICA')),
-        ('avvio', _('AVVIO')),
-        ('adozione', _('ADOZIONE')),
-        ('approvazione', _('APPROVAZIONE')),
-        ('pubblicazione', _('PUBBLICAZIONE')),
-    )
 
-FASE_NEXT = {
-    'unknown': None,
-    'draft': FASE.anagrafica,
-    'anagrafica': FASE.avvio,
-    'avvio': FASE.adozione,
-    'adozione': FASE.approvazione,
-    'approvazione': FASE.pubblicazione,
-    'pubblicazione': None
-}
+class Fase(Enum):
+    UNKNOWN = 'UNKNOWN'
+    DRAFT = 'DRAFT'
+    ANAGRAFICA = 'ANAGRAFICA'
+    AVVIO = 'AVVIO'
+    ADOZIONE = 'ADOZIONE'
+    APPROVAZIONE = 'APPROVAZIONE'
+    PUBBLICAZIONE = 'PUBBLICAZIONE'
+
+    def create_choices(self=None):
+        return [
+            (Fase.UNKNOWN, _('UNKNOWN')),
+            (Fase.DRAFT, _('DRAFT')),
+            (Fase.ANAGRAFICA, _('ANAGRAFICA')),
+            (Fase.AVVIO, _('AVVIO')),
+            (Fase.ADOZIONE, _('ADOZIONE')),
+            (Fase.APPROVAZIONE, _('APPROVAZIONE')),
+            (Fase.PUBBLICAZIONE, _('PUBBLICAZIONE')),
+        ]
+
+    _FASE_NEXT = {
+        UNKNOWN: None,
+        DRAFT: ANAGRAFICA,
+        ANAGRAFICA: AVVIO,
+        AVVIO: ADOZIONE,
+        ADOZIONE: APPROVAZIONE,
+        APPROVAZIONE: PUBBLICAZIONE,
+        PUBBLICAZIONE: None
+    }
+
+    def getNext(self):
+        return self._FASE_NEXT(self)
+
 
 TIPOLOGIA_RISORSA = {
     'delibera': {
@@ -56,22 +75,31 @@ TIPOLOGIA_RISORSA = {
     }
 }
 
-TIPOLOGIA_CONTATTO = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('generico', _('GENERICO')),
-        ('acvas', _('AUT_COMP_VAS')),
-        ('sca', _('SOGGETTO_SCA')),
-        ('ente', _('ENTE')),
-        ('genio_civile', _('GENIO_CIVILE')),
-    )
+# TIPOLOGIA_CONTATTO = Choices(
+#         ('unknown', _('UNKNOWN')),
+#         ('generico', _('GENERICO')),
+#         ('acvas', _('AUT_COMP_VAS')),
+#         ('sca', _('SOGGETTO_SCA')),
+#         ('ente', _('ENTE')),
+#         ('genio_civile', _('GENIO_CIVILE')),
+#     )
 
-TIPOLOGIA_PIANO = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('operativo', _('OPERATIVO')),
-        ('strutturale', _('STRUTTURALE')),
-        ('variante_operativo', _('VARIANTE_OPERATIVO')),
-        ('variante_strutturale', _('VARIANTE_STRUTTURALE')),
-    )
+class TipologiaPiano(Enum):
+
+    UNKNOWN = 'UNKNOWN'
+    OPERATIVO = 'OPERATIVO'
+    STRUTTURALE = 'STRUTTURALE'
+    VARIANTE_OPERATIVO = 'VARIANTE_OPERATIVO'
+    VARIANTE_STRUTTURALE = 'VARIANTE_STRUTTURALE'
+
+    def create_choices(self=None):
+        return Choices(
+            (TipologiaPiano.UNKNOWN, _('UNKNOWN')),
+            (TipologiaPiano.OPERATIVO, _('OPERATIVO')),
+            (TipologiaPiano.STRUTTURALE, _('STRUTTURALE')),
+            (TipologiaPiano.VARIANTE_OPERATIVO, _('VARIANTE_OPERATIVO')),
+            (TipologiaPiano.VARIANTE_STRUTTURALE, _('VARIANTE_STRUTTURALE')),
+        )
 
 TIPOLOGIA_VAS = Choices(
         ('unknown', _('UNKNOWN')),
@@ -211,42 +239,43 @@ TOOLTIP_AZIONE = Choices(
         ('rev_piano_post_cp', _('art.19 L.R. 65/2014')),
     )
 
-TIPOLOGIA_ATTORE = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('comune', _('Comune')),
-        ('regione', _('Regione')),
-        ('ac', _('AC')),
-        ('sca', _('SCA')),
-        ('enti', _('ENTI')),
-        ('genio_civile', _('GENIO_CIVILE')),
-    )
+# TIPOLOGIA_ATTORE = Choices(
+#         ('unknown', _('UNKNOWN')),
+#         ('comune', _('Comune')),
+#         ('regione', _('Regione')),
+#         ('ac', _('AC')),
+#         ('sca', _('SCA')),
+#         ('enti', _('ENTI')),
+#         ('genio_civile', _('GENIO_CIVILE')),
+#     )
+
 
 AZIONI_BASE = {
-    FASE.draft: [
+    Fase.DRAFT: [
         {
             "tipologia": TIPOLOGIA_AZIONE.creato_piano,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE
         }
     ],
-    FASE.anagrafica: [
+    Fase.ANAGRAFICA: [
         {
             "tipologia": TIPOLOGIA_AZIONE.avvio_procedimento,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE
         }
     ],
-    FASE.avvio: [
+    Fase.AVVIO: [
         {
             "tipologia": TIPOLOGIA_AZIONE.trasmissione_adozione,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE
         },
     ],
-    FASE.adozione: [
+    Fase.ADOZIONE: [
         {
             "tipologia": TIPOLOGIA_AZIONE.trasmissione_approvazione,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE
         },
     ],
-    FASE.approvazione: [
+    Fase.APPROVAZIONE: [
         # {
         #     "tipologia": TIPOLOGIA_AZIONE.convocazione_commissione_paritetica,
         #     "attore": TIPOLOGIA_ATTORE.comune
@@ -257,7 +286,7 @@ AZIONI_BASE = {
         # },
         {
             "tipologia": TIPOLOGIA_AZIONE.pubblicazione_piano,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE
         },
     ]
 }

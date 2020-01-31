@@ -16,10 +16,10 @@ from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 
 from serapide_core.modello.enums import (
-    FASE,
+    Fase,
     TIPOLOGIA_VAS,
-    TIPOLOGIA_PIANO,
-    TIPOLOGIA_CONTATTO,
+    TipologiaPiano,
+    # TIPOLOGIA_CONTATTO,
     TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 class Query(object):
 
     # Models
-    fasi = DjangoFilterConnectionField(types.FaseNode)
+    # fasi = DjangoFilterConnectionField(types.FaseNode)
 
     utenti = DjangoFilterConnectionField(types.AppUserNode,
                                          filterset_class=filters.UserMembershipFilter)
@@ -87,11 +87,12 @@ class Query(object):
 
     piano_rev_post_cp = DjangoFilterConnectionField(types.PianoRevPostCPNode)
 
-    contatti = DjangoFilterConnectionField(types.ContattoNode,
-                                           filterset_class=filters.EnteContattoMembershipFilter)
+    # TODO
+    # contatti = DjangoFilterConnectionField(types.ContattoNode,
+    #                                        filterset_class=filters.EnteContattoMembershipFilter)
 
     # Enums
-    fase_piano = graphene.List(enums.FasePiano)
+    # fase_piano = graphene.List(enums.FasePiano) # TODO
     tipologia_vas = graphene.List(enums.TipologiaVAS)
     tipologia_piano = graphene.List(enums.TipologiaPiano)
     tipologia_contatto = graphene.List(enums.TipologiaContatto)
@@ -99,7 +100,7 @@ class Query(object):
 
     def resolve_fase_piano(self, info):
         _l = []
-        for _f in FASE:
+        for _f in Fase:
             _l.append(enums.FasePiano(_f[0], _f[1]))
         return _l
 
@@ -111,15 +112,15 @@ class Query(object):
 
     def resolve_tipologia_piano(self, info):
         _l = []
-        for _t in TIPOLOGIA_PIANO:
+        for _t in TipologiaPiano:
             _l.append(enums.TipologiaPiano(_t[0], _t[1]))
         return _l
 
-    def resolve_tipologia_contatto(self, info):
-        _l = []
-        for _t in TIPOLOGIA_CONTATTO:
-            _l.append(enums.TipologiaContatto(_t[0], _t[1]))
-        return _l
+    # def resolve_tipologia_contatto(self, info):
+    #     _l = []
+    #     for _t in TIPOLOGIA_CONTATTO:
+    #         _l.append(enums.TIPOLOGIA_CONTATTO(_t[0], _t[1]))
+    #     return _l
 
     def resolve_tipologia_conferenza_copianificazione(self, info):
         _l = []
@@ -136,11 +137,12 @@ class Query(object):
 # ############################################################################ #
 class Mutation(object):
 
-    create_fase = core.CreateFase.Field()
-    update_fase = core.UpdateFase.Field()
+    # create_fase = core.CreateFase.Field()
+    # update_fase = core.UpdateFase.Field()
 
-    create_contatto = core.CreateContatto.Field()
-    delete_contatto = core.DeleteContatto.Field()
+    # TODO
+    # create_contatto = core.CreateContatto.Field()
+    # delete_contatto = core.DeleteContatto.Field()
 
     create_piano = piano.CreatePiano.Field()
     update_piano = piano.UpdatePiano.Field()

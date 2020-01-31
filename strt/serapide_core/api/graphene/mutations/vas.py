@@ -42,15 +42,16 @@ from serapide_core.modello.models import (
     ConsultazioneVAS,
     ParereVerificaVAS,
     isExecuted,
-    needsExecution
+    needsExecution,
+    ensure_fase,
 )
 
 from serapide_core.modello.enums import (
-    FASE,
+    Fase,
     STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
-    TIPOLOGIA_ATTORE,
+    # TIPOLOGIA_ATTORE,
 )
 
 from serapide_core.api.graphene import types
@@ -62,7 +63,8 @@ logger = logging.getLogger(__name__)
 
 def init_vas_procedure(piano:Piano):
 
-    _order = piano.azioni.count()
+    # _order = piano.azioni.count()
+    _order = AzioniPiano.count_by_piano(piano)
     procedura_vas = piano.procedura_vas
     _verifica_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_verifica_vas)
 
@@ -340,17 +342,14 @@ class InvioPareriVerificaVAS(graphene.Mutation):
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
-
+        ensure_fase(fase, Fase.ANAGRAFICA)
         # Update Azioni Piano
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _pareri_verifica_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_verifica_sca)
-            if _pareri_verifica_sca.stato == STATO_AZIONE.attesa:
-                _pareri_verifica_sca.stato = STATO_AZIONE.nessuna
-                _pareri_verifica_sca.data = datetime.datetime.now(timezone.get_current_timezone())
-                _pareri_verifica_sca.save()
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+        _pareri_verifica_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_verifica_sca)
+        if _pareri_verifica_sca.stato == STATO_AZIONE.attesa:
+            _pareri_verifica_sca.stato = STATO_AZIONE.nessuna
+            _pareri_verifica_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+            _pareri_verifica_sca.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -421,58 +420,56 @@ class AssoggettamentoVAS(graphene.Mutation):
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_vas):
-
         # Update Azioni Piano
         # - Complete Current Actions
         _order = piano.azioni.count()
 
+        ensure_fase(fase, Fase.ANAGRAFICA)
+
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            if procedura_vas.assoggettamento:
-                _avvio_consultazioni_sca = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
-                    attore=TIPOLOGIA_ATTORE.comune,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _avvio_consultazioni_sca.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+        if procedura_vas.assoggettamento:
+            _avvio_consultazioni_sca = Azione(
+                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                attore=TIPOLOGIA_ATTORE.comune,
+                order=_order,
+                stato=STATO_AZIONE.necessaria
+            )
+            _avvio_consultazioni_sca.save()
+            _order += 1
+            AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
 
-                procedura_vas.verifica_effettuata = True
-                procedura_vas.data_assoggettamento = datetime.datetime.now(timezone.get_current_timezone())
-                procedura_vas.save()
-            else:
-                _pubblicazione_vas_comune = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
-                    attore=TIPOLOGIA_ATTORE.comune,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _pubblicazione_vas_comune.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_pubblicazione_vas_comune, piano=piano)
-
-                _pubblicazione_vas_ac = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
-                    attore=TIPOLOGIA_ATTORE.ac,
-                    order=_order,
-                    stato=STATO_AZIONE.necessaria
-                )
-                _pubblicazione_vas_ac.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_pubblicazione_vas_ac, piano=piano)
-                procedura_vas.non_necessaria = True
-                procedura_vas.verifica_effettuata = True
-                procedura_vas.save()
-
-            if procedura_vas.verifica_effettuata:
-                _emissione_provvedimento_verifica = piano.getFirstAction(TIPOLOGIA_AZIONE.emissione_provvedimento_verifica)
-                if needsExecution(_emissione_provvedimento_verifica):
-                    _emissione_provvedimento_verifica.stato = STATO_AZIONE.nessuna
-                    _emissione_provvedimento_verifica.save()
+            procedura_vas.verifica_effettuata = True
+            procedura_vas.data_assoggettamento = datetime.datetime.now(timezone.get_current_timezone())
+            procedura_vas.save()
         else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+            _pubblicazione_vas_comune = Azione(
+                tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                attore=TIPOLOGIA_ATTORE.comune,
+                order=_order,
+                stato=STATO_AZIONE.necessaria
+            )
+            _pubblicazione_vas_comune.save()
+            _order += 1
+            AzioniPiano.objects.get_or_create(azione=_pubblicazione_vas_comune, piano=piano)
+
+            _pubblicazione_vas_ac = Azione(
+                tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                attore=TIPOLOGIA_ATTORE.ac,
+                order=_order,
+                stato=STATO_AZIONE.necessaria
+            )
+            _pubblicazione_vas_ac.save()
+            _order += 1
+            AzioniPiano.objects.get_or_create(azione=_pubblicazione_vas_ac, piano=piano)
+            procedura_vas.non_necessaria = True
+            procedura_vas.verifica_effettuata = True
+            procedura_vas.save()
+
+        if procedura_vas.verifica_effettuata:
+            _emissione_provvedimento_verifica = piano.getFirstAction(TIPOLOGIA_AZIONE.emissione_provvedimento_verifica)
+            if needsExecution(_emissione_provvedimento_verifica):
+                _emissione_provvedimento_verifica.stato = STATO_AZIONE.nessuna
+                _emissione_provvedimento_verifica.save()
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -588,40 +585,39 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         # - Complete Current Actions
         _order = piano.azioni.count()
 
+        ensure_fase(fase, Fase.ANAGRAFICA)
+
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _avvio_consultazioni_sca = piano.azioni.filter(
-                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
-            for _ac in _avvio_consultazioni_sca:
-                if _ac.stato != STATO_AZIONE.nessuna:
-                    _avvio_consultazioni_sca = _ac
-                    break
-            if _avvio_consultazioni_sca and \
-                not isinstance(_avvio_consultazioni_sca, QuerySet) and \
-                _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
+        _avvio_consultazioni_sca = piano.azioni.filter(
+            tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
+        for _ac in _avvio_consultazioni_sca:
+            if _ac.stato != STATO_AZIONE.nessuna:
+                _avvio_consultazioni_sca = _ac
+                break
+        if _avvio_consultazioni_sca and \
+            not isinstance(_avvio_consultazioni_sca, QuerySet) and \
+            _avvio_consultazioni_sca.stato != STATO_AZIONE.nessuna:
 
-                _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
-                _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+            _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
+            _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
 
-                consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
+            consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
 
-                _avvio_consultazioni_sca.save()
-                consultazione_vas.save()
+            _avvio_consultazioni_sca.save()
+            consultazione_vas.save()
 
-                _pareri_vas_expire_days = getattr(settings, 'PARERI_VAS_EXPIRE_DAYS', 60)
-                _pareri_sca = Azione(
-                    tipologia=TIPOLOGIA_AZIONE.pareri_sca,
-                    attore=TIPOLOGIA_ATTORE.sca,
-                    order=_order,
-                    stato=STATO_AZIONE.attesa,
-                    data=datetime.datetime.now(timezone.get_current_timezone()) +
-                    datetime.timedelta(days=_pareri_vas_expire_days)
-                )
-                _pareri_sca.save()
-                _order += 1
-                AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+            _pareri_vas_expire_days = getattr(settings, 'PARERI_VAS_EXPIRE_DAYS', 60)
+            _pareri_sca = Azione(
+                tipologia=TIPOLOGIA_AZIONE.pareri_sca,
+                attore=TIPOLOGIA_ATTORE.sca,
+                order=_order,
+                stato=STATO_AZIONE.attesa,
+                data=datetime.datetime.now(timezone.get_current_timezone()) +
+                datetime.timedelta(days=_pareri_vas_expire_days)
+            )
+            _pareri_sca.save()
+            _order += 1
+            AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -674,86 +670,84 @@ class InvioPareriVAS(graphene.Mutation):
 
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
-
         # Update Azioni Piano
         # - Complete Current Actions
         _order = piano.azioni.count()
 
+        ensure_fase(fase, Fase.ANAGRAFICA)
+
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _verifica_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_verifica_vas)
+        _verifica_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_verifica_vas)
 
-            _avvio_consultazioni_sca = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
-            for _ac in _avvio_consultazioni_sca:
-                if _ac.stato != STATO_AZIONE.nessuna:
-                    _avvio_consultazioni_sca = _ac
-                    break
+        _avvio_consultazioni_sca = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
+        for _ac in _avvio_consultazioni_sca:
+            if _ac.stato != STATO_AZIONE.nessuna:
+                _avvio_consultazioni_sca = _ac
+                break
 
-            _pareri_sca = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.pareri_sca)
-            for _psca in _pareri_sca:
-                if _psca.stato != STATO_AZIONE.nessuna:
-                    _pareri_sca = _psca
-                    break
+        _pareri_sca = piano.azioni.filter(tipologia=TIPOLOGIA_AZIONE.pareri_sca)
+        for _psca in _pareri_sca:
+            if _psca.stato != STATO_AZIONE.nessuna:
+                _pareri_sca = _psca
+                break
 
-            if _verifica_vas and \
-            _pareri_sca and \
-            (isinstance(_pareri_sca, QuerySet) or
-             _pareri_sca.stato != STATO_AZIONE.nessuna):
-                if isinstance(_pareri_sca, QuerySet):
-                    _pareri_sca = _pareri_sca.last()
+        if _verifica_vas and \
+        _pareri_sca and \
+        (isinstance(_pareri_sca, QuerySet) or
+         _pareri_sca.stato != STATO_AZIONE.nessuna):
+            if isinstance(_pareri_sca, QuerySet):
+                _pareri_sca = _pareri_sca.last()
 
-                _pareri_sca.stato = STATO_AZIONE.nessuna
-                _pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
-                _pareri_sca.save()
+            _pareri_sca.stato = STATO_AZIONE.nessuna
+            _pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+            _pareri_sca.save()
 
-                if _avvio_consultazioni_sca and \
-                   (not isinstance(_avvio_consultazioni_sca, QuerySet) or
-                      ((_avvio_consultazioni_sca.count() == 1 and
-                        procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento) or
-                       (_avvio_consultazioni_sca.count() == 1 and
-                        _avvio_consultazioni_sca.first().attore == TIPOLOGIA_ATTORE.ac and
-                        procedura_vas.tipologia != TIPOLOGIA_VAS.procedimento_semplificato))):
+            if _avvio_consultazioni_sca and \
+               (not isinstance(_avvio_consultazioni_sca, QuerySet) or
+                  ((_avvio_consultazioni_sca.count() == 1 and
+                    procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento) or
+                   (_avvio_consultazioni_sca.count() == 1 and
+                    _avvio_consultazioni_sca.first().attore == TIPOLOGIA_ATTORE.ac and
+                    procedura_vas.tipologia != TIPOLOGIA_VAS.procedimento_semplificato))):
 
-                    if isinstance(_avvio_consultazioni_sca, QuerySet):
-                        _avvio_consultazioni_sca = _avvio_consultazioni_sca.last()
+                if isinstance(_avvio_consultazioni_sca, QuerySet):
+                    _avvio_consultazioni_sca = _avvio_consultazioni_sca.last()
 
-                    _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
-                    _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
-                    _avvio_consultazioni_sca.save()
+                _avvio_consultazioni_sca.stato = STATO_AZIONE.nessuna
+                _avvio_consultazioni_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+                _avvio_consultazioni_sca.save()
 
-                    _verifica_vas.stato = STATO_AZIONE.nessuna
-                    _verifica_vas.save()
+                _verifica_vas.stato = STATO_AZIONE.nessuna
+                _verifica_vas.save()
 
-                    _avvio_consultazioni_sca = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
-                        attore=TIPOLOGIA_ATTORE.comune,
-                        order=_order,
-                        stato=STATO_AZIONE.necessaria
-                    )
-                    _avvio_consultazioni_sca.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+                _avvio_consultazioni_sca = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.necessaria
+                )
+                _avvio_consultazioni_sca.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
 
-                    consultazione_vas = ConsultazioneVAS.objects.filter(
-                        procedura_vas=procedura_vas).order_by('data_creazione').first()
-                    consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
-                    consultazione_vas.save()
+                consultazione_vas = ConsultazioneVAS.objects.filter(
+                    procedura_vas=procedura_vas).order_by('data_creazione').first()
+                consultazione_vas.data_avvio_consultazioni_sca = _avvio_consultazioni_sca.data
+                consultazione_vas.save()
 
-                    procedura_vas.verifica_effettuata = True
-                    procedura_vas.save()
+                procedura_vas.verifica_effettuata = True
+                procedura_vas.save()
 
-                else:
-                    _avvio_esame_pareri_sca = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
-                        attore=TIPOLOGIA_ATTORE.comune,
-                        order=_order,
-                        stato=STATO_AZIONE.necessaria
-                    )
-                    _avvio_esame_pareri_sca.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+            else:
+                _avvio_esame_pareri_sca = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.necessaria
+                )
+                _avvio_esame_pareri_sca.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_avvio_esame_pareri_sca, piano=piano)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -851,28 +845,26 @@ class AvvioEsamePareriSCA(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_sca)
-            if isExecuted(_pareri_sca):
+        ensure_fase(fase, Fase.ANAGRAFICA)
+        _pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_sca)
+        if isExecuted(_pareri_sca):
 
-                _avvio_esame_pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_esame_pareri_sca)
+            _avvio_esame_pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_esame_pareri_sca)
 
-                if needsExecution(_avvio_esame_pareri_sca):
-                    _avvio_esame_pareri_sca.stato = STATO_AZIONE.nessuna
-                    _avvio_esame_pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
-                    _avvio_esame_pareri_sca.save()
+            if needsExecution(_avvio_esame_pareri_sca):
+                _avvio_esame_pareri_sca.stato = STATO_AZIONE.nessuna
+                _avvio_esame_pareri_sca.data = datetime.datetime.now(timezone.get_current_timezone())
+                _avvio_esame_pareri_sca.save()
 
-                    _upload_elaborati_vas = Azione(
-                        tipologia=TIPOLOGIA_AZIONE.upload_elaborati_vas,
-                        attore=TIPOLOGIA_ATTORE.comune,
-                        order=_order,
-                        stato=STATO_AZIONE.necessaria
-                    )
-                    _upload_elaborati_vas.save()
-                    _order += 1
-                    AzioniPiano.objects.get_or_create(azione=_upload_elaborati_vas, piano=piano)
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+                _upload_elaborati_vas = Azione(
+                    tipologia=TIPOLOGIA_AZIONE.upload_elaborati_vas,
+                    attore=TIPOLOGIA_ATTORE.comune,
+                    order=_order,
+                    stato=STATO_AZIONE.necessaria
+                )
+                _upload_elaborati_vas.save()
+                _order += 1
+                AzioniPiano.objects.get_or_create(azione=_upload_elaborati_vas, piano=piano)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -921,20 +913,19 @@ class UploadElaboratiVAS(graphene.Mutation):
 
         # Update Azioni Piano
         # - Update Action state accordingly
-        if fase.nome == FASE.anagrafica:
-            _upload_elaborati_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.upload_elaborati_vas)
-            if needsExecution(_upload_elaborati_vas):
-                _upload_elaborati_vas.stato = STATO_AZIONE.nessuna
-                _upload_elaborati_vas.data = datetime.datetime.now(timezone.get_current_timezone())
-                _upload_elaborati_vas.save()
+        ensure_fase(fase, Fase.ANAGRAFICA)
 
-                _procedura_avvio = ProceduraAvvio.objects.filter(piano=piano).last()
-                if not _procedura_avvio or _procedura_avvio.conclusa:
-                    piano.chiudi_pendenti(attesa=True, necessaria=False)
-                procedura_vas.conclusa = True
-                procedura_vas.save()
-        else:
-            raise Exception(_("Fase Piano incongruente con l'azione richiesta"))
+        _upload_elaborati_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.upload_elaborati_vas)
+        if needsExecution(_upload_elaborati_vas):
+            _upload_elaborati_vas.stato = STATO_AZIONE.nessuna
+            _upload_elaborati_vas.data = datetime.datetime.now(timezone.get_current_timezone())
+            _upload_elaborati_vas.save()
+
+            _procedura_avvio = ProceduraAvvio.objects.filter(piano=piano).last()
+            if not _procedura_avvio or _procedura_avvio.conclusa:
+                piano.chiudi_pendenti(attesa=True, necessaria=False)
+            procedura_vas.conclusa = True
+            procedura_vas.save()
 
     @classmethod
     def mutate(cls, root, info, **input):

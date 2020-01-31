@@ -42,11 +42,9 @@ from serapide_core.modello.models import (
 )
 
 from serapide_core.modello.enums import (
-    FASE,
     STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
-    TIPOLOGIA_ATTORE,
 )
 
 from serapide_core.api.graphene import types
@@ -180,7 +178,7 @@ class TrasmissioneAdozione(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase == Fase.AVVIO:
             _trasmissione_adozione = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.trasmissione_adozione).first()
             if _trasmissione_adozione and _trasmissione_adozione.stato != STATO_AZIONE.nessuna:
@@ -296,7 +294,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase == Fase.AVVIO:
 
             _osservazioni_regione = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.osservazioni_regione).first()
@@ -379,7 +377,7 @@ class Controdeduzioni(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase == Fase.AVVIO:
             _controdeduzioni = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.controdeduzioni).first()
 
@@ -456,7 +454,7 @@ class PianoControdedotto(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase == Fase.AVVIO:
             _piano_controdedotto = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.piano_controdedotto).first()
 
@@ -557,7 +555,7 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase == Fase.AVVIO:
             _esito_cp = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica).first()
 
@@ -630,7 +628,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
 
         # Update Azioni Piano
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase == Fase.AVVIO:
             _rev_piano_post_cp = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp).first()
 
@@ -720,8 +718,9 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio and \
-        piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
+        if fase == Fase.AVVIO and \
+                piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
+
             _pareri_sca = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca)
             for _psca in _pareri_sca:
@@ -730,8 +729,9 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
                     break
 
             if _pareri_sca and \
-            (isinstance(_pareri_sca, QuerySet) or
-             _pareri_sca.stato != STATO_AZIONE.nessuna):
+                    (isinstance(_pareri_sca, QuerySet) or
+                    _pareri_sca.stato != STATO_AZIONE.nessuna):
+
                 if isinstance(_pareri_sca, QuerySet):
                     _pareri_sca = _pareri_sca.last()
 
@@ -846,8 +846,8 @@ class InvioParereMotivatoAC(graphene.Mutation):
         _order = piano.azioni.count()
 
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio and \
-        piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
+        if fase == Fase.AVVIO and \
+                piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
             _parere_motivato_ac = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.parere_motivato_ac).first()
 
@@ -935,7 +935,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
 
         # Update Azioni Piano
         # - Update Action state accordingly
-        if fase.nome == FASE.avvio:
+        if fase == Fase.AVVIO:
             _osservazioni_regione = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.osservazioni_regione).first()
 

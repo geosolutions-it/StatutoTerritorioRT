@@ -12,11 +12,11 @@
 import rules
 
 from strt_users.models import (
-    Token,
-    Organization)
+    Delega,
+    Ente)
 
 from serapide_core.modello.models import (
-    Contatto,
+    SoggettoOperante,
     PianoAuthTokens)
 
 
@@ -31,7 +31,7 @@ def can_access_piano(user, piano):
     )
 
     if not _has_access:
-        _tokens = Token.objects.filter(user=user)
+        _tokens = Delega.objects.filter(user=user)
         for _t in _tokens:
             if not _t.is_expired():
                 _allowed_pianos = [_pt.piano for _pt in PianoAuthTokens.objects.filter(token__key=_t.key)]
@@ -43,31 +43,32 @@ def can_access_piano(user, piano):
 
 @rules.predicate
 def is_actor_for_token(token, actor):
-    _attore = None
-    if token and \
-    (isinstance(token, str) or isinstance(token, Token)):
-        token = Token.objects.get(key=token)
-        _attore = Contatto.attore(token.user, token=token.key)
+    return True
+    # _attore = None
+    # if token and \
+    # (isinstance(token, str) or isinstance(token, Delega):
+    #     token = Delega.objects.get(key=token)
+    #     _attore = Contatto.attore(token.user, token=token.key)
+    #
+    # if _attore is None:
+    #     return False
+    # else:
+    #     return (_attore.lower() == actor.lower())
 
-    if _attore is None:
-        return False
-    else:
-        return (_attore.lower() == actor.lower())
 
-
-@rules.predicate
-def is_actor_for_role(user_info, actor):
-    _user = user_info[0]
-    _role = user_info[1]
-    _attore = None
-    if _user and \
-    _role and not isinstance(_role, Organization):
-        _attore = Contatto.attore(_user, role=_role)
-
-    if _attore is None:
-        return False
-    else:
-        return (_attore.lower() == actor.lower())
+# @rules.predicate
+# def is_actor_for_role(user_info, actor):
+#     _user = user_info[0]
+#     _role = user_info[1]
+#     _attore = None
+#     if _user and \
+#     _role and not isinstance(_role, Ente):
+#         _attore = Referente.attore(_user, role=_role)
+#
+#     if _attore is None:
+#         return False
+#     else:
+#         return (_attore.lower() == actor.lower())
 
 
 @rules.predicate
@@ -76,8 +77,8 @@ def is_actor_for_organization(user_info, actor):
     _organization = user_info[1]
     _attore = None
     if _user and \
-    _organization and isinstance(_organization, Organization):
-        _attore = Contatto.attore(_user, organization=_organization.code)
+    _organization and isinstance(_organization, Ente):
+        _attore = Referente.attore(_user, organization=_organization.code)
 
     if _attore is None:
         return False

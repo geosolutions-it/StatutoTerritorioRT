@@ -29,7 +29,7 @@ from django_currentuser.middleware import (
 from django.shortcuts import (
     render, redirect
 )
-from strt_users.models import Organization, UserMembership
+from strt_users.models import Ente
 
 
 def privateAreaView(request):
@@ -82,10 +82,10 @@ def privateAreaView(request):
                         organization = None
                         try:
                             # Organizations must be already registered
-                            organization = Organization._default_manager.get(
+                            organization = Ente._default_manager.get(
                                 code=_organization
                             )
-                        except Organization.DoesNotExist:
+                        except Ente.DoesNotExist:
                             ve = forms.ValidationError(
                                 _("L'ente {} non risulta censito.".format(_organization))
                             )
@@ -93,7 +93,7 @@ def privateAreaView(request):
 
                         if user and organization:
                             try:
-                                membership = UserMembership._default_manager.get(code=_role)
+                                membership = None # TODO Ruolo._default_manager.get(code=_role)
 
                                 login(request, user)
                                 request.session['role'] = membership.pk
@@ -102,7 +102,7 @@ def privateAreaView(request):
                                 if membership.type.code == settings.RESPONSABILE_ISIDE_CODE:
                                     return redirect('users_list')
                                 return redirect('serapide')
-                            except UserMembership.DoesNotExist:
+                            except:    # Ruolo.DoesNotExist:
                                 ve = forms.ValidationError(
                                     _("Utente {} non valido.".format(user))
                                 )

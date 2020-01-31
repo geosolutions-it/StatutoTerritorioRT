@@ -171,7 +171,8 @@ DATABASES = {
     )
 }
 
-AUTH_USER_MODEL = 'strt_users.AppUser'
+#AUTH_USER_MODEL = 'strt_users.AppUser'
+AUTH_USER_MODEL = 'strt_users.Utente'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

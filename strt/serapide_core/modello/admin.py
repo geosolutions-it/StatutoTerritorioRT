@@ -12,9 +12,10 @@
 from django.contrib import admin
 
 from .models import (
-    Fase,
+    # Fase,
     Risorsa,
-    Contatto,
+    # Referente,
+    SoggettoOperante,
     Azione, AzioniPiano,
     Piano, RisorsePiano,
     ProceduraVAS, RisorseVas,
@@ -23,10 +24,6 @@ from .models import (
     ProceduraAdozione, RisorseAdozione,
     ProceduraApprovazione, RisorseApprovazione,
     ProceduraPubblicazione, RisorsePubblicazione,
-    AutoritaCompetenteVAS,
-    AutoritaIstituzionali,
-    AltriDestinatari,
-    SoggettiSCA,
     PianoAuthTokens,
     ParereVAS,
     ConsultazioneVAS,
@@ -84,20 +81,8 @@ class RisorsePianoRevPostCPInline(admin.TabularInline):
     model = RisorsePianoRevPostCP
 
 
-class AutoritaCompetenteVASInline(admin.TabularInline):
-    model = AutoritaCompetenteVAS
-
-
-class AutoritaIstituzionaliInline(admin.TabularInline):
-    model = AutoritaIstituzionali
-
-
-class AltriDestinatariInline(admin.TabularInline):
-    model = AltriDestinatari
-
-
-class SoggettiSCAInline(admin.TabularInline):
-    model = SoggettiSCA
+class SoggettoOperanteInline(admin.TabularInline):
+     model = SoggettoOperante
 
 
 class TokensInline(admin.TabularInline):
@@ -112,19 +97,15 @@ class ParereAdozioneVASInline(admin.TabularInline):
     model = ParereAdozioneVAS
 
 
-class ContattoAdmin(admin.ModelAdmin):
-    exclude = ('email',)
-    list_display = ('nome', 'tipologia', 'ente', 'user', )
+# class ReferenteAdmin(admin.ModelAdmin):
+#     list_display = ('tipo', 'piano', 'ruolo', 'ufficio')
 
 
 class PianoAdmin(admin.ModelAdmin):
     inlines = [AzioniPianoInline,
-               AutoritaCompetenteVASInline,
-               AutoritaIstituzionaliInline,
-               AltriDestinatariInline,
-               SoggettiSCAInline,
-               RisorsePianoInline,
-               TokensInline, ]
+               SoggettoOperanteInline,
+               RisorsePianoInline,]
+               # TODO TokensInline, ]
 
 
 class ProceduraVASAdmin(admin.ModelAdmin):
@@ -167,10 +148,10 @@ class PianoRevPostCPAdmin(admin.ModelAdmin):
     inlines = [RisorsePianoRevPostCPInline, ]
 
 
-admin.site.register(Fase)
+# admin.site.register(Fase)
 admin.site.register(Azione)
 admin.site.register(Risorsa)
-admin.site.register(Contatto, ContattoAdmin)
+# admin.site.register(Referente, ReferenteAdmin)
 admin.site.register(Piano, PianoAdmin)
 admin.site.register(ProceduraVAS, ProceduraVASAdmin)
 admin.site.register(ProceduraAdozioneVAS, ProceduraAdozioneVASAdmin)

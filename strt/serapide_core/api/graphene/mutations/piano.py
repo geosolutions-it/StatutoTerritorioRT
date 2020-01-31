@@ -25,10 +25,9 @@ from graphene import relay
 from graphql_extensions.exceptions import GraphQLError
 
 from strt_users.models import (
-    Organization,
-    Token,
-    MembershipType,
-    UserMembership,
+    Ente,
+    Delega,
+    Qualifica,
 )
 
 from serapide_core.helpers import (
@@ -44,7 +43,7 @@ from serapide_core.modello.models import (
     Fase,
     Piano,
     Azione,
-    Contatto,
+    SoggettoOperante,
     AzioniPiano,
     ProceduraVAS,
     ProceduraAvvio,
@@ -52,22 +51,18 @@ from serapide_core.modello.models import (
     PianoControdedotto,
     PianoRevPostCP,
     PianoAuthTokens,
-    AutoritaCompetenteVAS,
-    AutoritaIstituzionali,
-    AltriDestinatari,
-    SoggettiSCA,
+
     needsExecution,
     isExecuted,
+    crea_azione,
 )
 
 from serapide_core.modello.enums import (
-    FASE,
+    Fase,
     AZIONI_BASE,
     STATO_AZIONE,
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
-    TIPOLOGIA_ATTORE,
-    TIPOLOGIA_CONTATTO,
 )
 
 from serapide_core.api.graphene import types
@@ -93,7 +88,7 @@ class CreatePiano(relay.ClientIDMutation):
             _piano_data = input.get('piano_operativo')
             # Ente (M)
             _data = _piano_data.pop('ente')
-            _ente = Organization.objects.get(code=_data['code'])
+            _ente = Ente.objects.get(code=_data['code'])
             _role = info.context.session['role'] if 'role' in info.context.session else None
             _token = info.context.session['token'] if 'token' in info.context.session else None
             _piano_data['ente'] = _ente
@@ -146,6 +141,16 @@ class CreatePiano(relay.ClientIDMutation):
 
                 nuovo_piano = update_create_instance(_piano, _piano_data)
 
+                for _a in AZIONI_BASE[_fase]:
+                    crea_azione(nuovo_piano,
+                                Azione(
+                                    tipologia=_a["tipologia"],
+                                    qualifica_richiesta=_a["qualifica"],
+                                    order=_order
+                                ))
+                    _order += 1
+
+
                 # Inizializzazione Procedura VAS
                 _procedura_vas, created = ProceduraVAS.objects.get_or_create(
                     piano=nuovo_piano,
@@ -179,6 +184,24 @@ class CreatePiano(relay.ClientIDMutation):
             return GraphQLError(e, code=500)
 
 
+def update_referenti(piano, tipo):
+
+    # TODO
+    pass
+    # referenti = Referente.objects.filter(piano=piano, tipo=tipo)
+    # referenti.delete();
+    #
+    # if _piano.soggetto_proponente:
+    #     UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
+    #     _piano.soggetto_proponente = None
+    #
+    # if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
+    #     _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
+    #     _new_role = UpdatePiano.get_role(_soggetto_proponente, TIPOLOGIA_ATTORE.unknown)
+    #     UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
+    #     _piano.soggetto_proponente = _soggetto_proponente
+
+
 class UpdatePiano(relay.ClientIDMutation):
 
     class Input:
@@ -191,14 +214,14 @@ class UpdatePiano(relay.ClientIDMutation):
     @staticmethod
     def get_role(contact, actor):
 
-        _new_role = UserMembership.objects.filter(
-            attore=actor,
-            member=contact.user,
-            organization=contact.ente
+        _new_role = Ruolo.objects.filter(
+            qualifica=actor,
+            utente=contact.user,
+            ente=contact.ente
         ).first()
 
         if not _new_role:
-            _new_role_type, created = MembershipType.objects.get_or_create(
+            _new_role_type, created = Ruolo.objects.get_or_create(
                 code=settings.TEMP_USER_CODE,
                 organization_type=contact.ente.type
             )
@@ -206,12 +229,12 @@ class UpdatePiano(relay.ClientIDMutation):
             _new_role_name = '%s-%s-%s' % (contact.user.fiscal_code,
                                            contact.ente.code,
                                            actor)
-            _new_role, created = UserMembership.objects.get_or_create(
-                name=_new_role_name,
-                attore=actor,
+            _new_role, created = Ruolo.objects.get_or_create(
+                nome=_new_role_name,
+                qualifica=actor,
                 description='%s - %s' % (_new_role_type.description, contact.ente.name),
-                member=contact.user,
-                organization=contact.ente,
+                utente=contact.user,
+                ente=contact.ente,
                 type=_new_role_type
             )
         return _new_role
@@ -225,11 +248,11 @@ class UpdatePiano(relay.ClientIDMutation):
 
     @staticmethod
     def get_or_create_token(user, piano, role):
-        _allowed_tokens = Token.objects.filter(user=user, membership=role)
+        _allowed_tokens = Delega.objects.filter(user=user, membership=role)
         _auth_token = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
         if not _auth_token:
-            _token_key = Token.generate_key()
-            _new_token, created = Token.objects.get_or_create(
+            _token_key = Delega.generate_key()
+            _new_token, created = Delega.objects.get_or_create(
                 key=_token_key,
                 defaults={
                     'user': user,
@@ -248,7 +271,7 @@ class UpdatePiano(relay.ClientIDMutation):
 
     @staticmethod
     def delete_token(user, piano):
-        _allowed_tokens = Token.objects.filter(user=user)
+        _allowed_tokens = Delega.objects.filter(user=user)
         _auth_tokens = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
         for _at in _auth_tokens:
             _at.token.delete()
@@ -257,7 +280,7 @@ class UpdatePiano(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
-        _piano_data = input.get('piano_operativo')
+        _piano_input = input.get('piano_operativo')
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -267,83 +290,84 @@ class UpdatePiano(relay.ClientIDMutation):
 
             try:
                 # Codice Piano (M)
-                if 'codice' in _piano_data:
-                    _piano_data.pop('codice')
+                if 'codice' in _piano_input:
+                    _piano_input.pop('codice')
                     # This cannot be changed
 
                 # Data Accettazione (M)
-                if 'data_creazione' in _piano_data:
-                    _piano_data.pop('data_creazione')
+                if 'data_creazione' in _piano_input:
+                    _piano_input.pop('data_creazione')
                     # This cannot be changed
 
                 # Data Accettazione (O)
-                if 'data_accettazione' in _piano_data:
-                    _piano_data.pop('data_accettazione')
+                if 'data_accettazione' in _piano_input:
+                    _piano_input.pop('data_accettazione')
                     # This cannot be changed
 
                 # Data Avvio (O)
-                if 'data_avvio' in _piano_data:
-                    _piano_data.pop('data_avvio')
+                if 'data_avvio' in _piano_input:
+                    _piano_input.pop('data_avvio')
                     # This cannot be changed
 
                 # Data Approvazione (O)
-                if 'data_approvazione' in _piano_data:
-                    _piano_data.pop('data_approvazione')
+                if 'data_approvazione' in _piano_input:
+                    _piano_input.pop('data_approvazione')
                     # This cannot be changed
 
                 # Ente (M)
-                if 'ente' in _piano_data:
-                    _piano_data.pop('ente')
+                if 'ente' in _piano_input:
+                    _piano_input.pop('ente')
                     # This cannot be changed
 
                 # Fase (O)
-                if 'fase' in _piano_data:
-                    _piano_data.pop('fase')
+                if 'fase' in _piano_input:
+                    _piano_input.pop('fase')
                     # This cannot be changed
 
                 # Tipologia (O)
-                if 'tipologia' in _piano_data:
-                    _piano_data.pop('tipologia')
+                if 'tipologia' in _piano_input:
+                    _piano_input.pop('tipologia')
                     # This cannot be changed
 
                 # ############################################################ #
                 # Editable fields - consistency checks
                 # ############################################################ #
                 # Descrizione (O)
-                if 'descrizione' in _piano_data:
-                    _data = _piano_data.pop('descrizione')
+                if 'descrizione' in _piano_input:
+                    _data = _piano_input.pop('descrizione')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
                         _piano.descrizione = _data[0]
 
                 # Data Delibera (O)
-                if 'data_delibera' in _piano_data:
+                if 'data_delibera' in _piano_input:
                     if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-                        _piano_data.pop('data_delibera')
+                        _piano_input.pop('data_delibera')
                         # This cannot be changed
 
                 # Soggetto Proponente (O)
-                if 'soggetto_proponente_uuid' in _piano_data:
-                    _soggetto_proponente_uuid = _piano_data.pop('soggetto_proponente_uuid')
+                if 'soggetto_proponente_uuid' in _piano_input:
+                    _soggetto_proponente_uuid = _piano_input.pop('soggetto_proponente_uuid')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                        rules.test_rule('strt_core.api.is_actor', _token or \
-                                                                  (info.context.user, _role) or \
+                        rules.test_rule('strt_core.api.is_actor', _token or
+                                                                  (info.context.user, _role) or
                                                                   (info.context.user, _organization), 'Comune'):
+                        update_referenti(_piano, Referente.TIPO_PROPONENTE)
 
-                        if _piano.soggetto_proponente:
-                            UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
-                            _piano.soggetto_proponente = None
-
-                        if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
-                            _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
-                            _new_role = UpdatePiano.get_role(_soggetto_proponente, TIPOLOGIA_ATTORE.unknown)
-                            UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
-                            _piano.soggetto_proponente = _soggetto_proponente
+                        # if _piano.soggetto_proponente:
+                        #     UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
+                        #     _piano.soggetto_proponente = None
+                        #
+                        # if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
+                        #     _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
+                        #     _new_role = UpdatePiano.get_role(_soggetto_proponente, TIPOLOGIA_ATTORE.unknown)
+                        #     UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
+                        #     _piano.soggetto_proponente = _soggetto_proponente
                     else:
                         return GraphQLError(_("Forbidden"), code=403)
 
                 # Autorita' Competente VAS (O)
-                if 'autorita_competente_vas' in _piano_data:
-                    _autorita_competente_vas = _piano_data.pop('autorita_competente_vas')
+                if 'autorita_competente_vas' in _piano_input:
+                    _autorita_competente_vas = _piano_input.pop('autorita_competente_vas')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
                         rules.test_rule('strt_core.api.is_actor', _token or \
                                                                   (info.context.user, _role) or \
@@ -373,8 +397,8 @@ class UpdatePiano(relay.ClientIDMutation):
                         return GraphQLError(_("Forbidden"), code=403)
 
                 # Soggetti SCA (O)
-                if 'soggetti_sca' in _piano_data:
-                    _soggetti_sca_uuid = _piano_data.pop('soggetti_sca')
+                if 'soggetti_sca' in _piano_input:
+                    _soggetti_sca_uuid = _piano_input.pop('soggetti_sca')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
                         rules.test_rule('strt_core.api.is_actor', _token or \
                                                                   (info.context.user, _role) or \
@@ -404,8 +428,8 @@ class UpdatePiano(relay.ClientIDMutation):
                         return GraphQLError(_("Forbidden"), code=403)
 
                 # Autorita' Istituzionali (O)
-                if 'autorita_istituzionali' in _piano_data:
-                    _autorita_istituzionali = _piano_data.pop('autorita_istituzionali')
+                if 'autorita_istituzionali' in _piano_input:
+                    _autorita_istituzionali = _piano_input.pop('autorita_istituzionali')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
 
                         _piano.autorita_istituzionali.clear()
@@ -440,8 +464,8 @@ class UpdatePiano(relay.ClientIDMutation):
                                     _ac.save()
 
                 # Altri Destinatari (O)
-                if 'altri_destinatari' in _piano_data:
-                    _altri_destinatari = _piano_data.pop('altri_destinatari')
+                if 'altri_destinatari' in _piano_input:
+                    _altri_destinatari = _piano_input.pop('altri_destinatari')
                     if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
 
                         _piano.altri_destinatari.clear()
@@ -475,19 +499,19 @@ class UpdatePiano(relay.ClientIDMutation):
                                     _ac.save()
 
                 # Protocollo Genio Civile
-                if 'data_protocollo_genio_civile' in _piano_data:
-                    _piano_data.pop('data_protocollo_genio_civile')
+                if 'data_protocollo_genio_civile' in _piano_input:
+                    _piano_input.pop('data_protocollo_genio_civile')
                     # This cannot be changed
 
-                if 'numero_protocollo_genio_civile' in _piano_data:
+                if 'numero_protocollo_genio_civile' in _piano_input:
                     if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) or \
                         not rules.test_rule('strt_core.api.is_actor', _token or \
                                                                       (info.context.user, _role) or \
                                                                       (info.context.user, _organization), 'genio_civile'):
-                        _piano_data.pop('numero_protocollo_genio_civile')
+                        _piano_input.pop('numero_protocollo_genio_civile')
                         # This can be changed only by Genio Civile
 
-                piano_aggiornato = update_create_instance(_piano, _piano_data)
+                piano_aggiornato = update_create_instance(_piano, _piano_input)
                 return cls(piano_aggiornato=piano_aggiornato)
             except BaseException as e:
                 tb = traceback.format_exc()

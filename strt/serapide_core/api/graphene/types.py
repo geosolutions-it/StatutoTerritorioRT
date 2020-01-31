@@ -24,11 +24,10 @@ from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
 from strt_users.models import (
-    Token,
-    AppUser,
-    Organization,
-    OrganizationType,
-    UserMembership,
+    Delega,
+    Utente,
+    Ente,
+    Qualifica,
 )
 
 from serapide_core.modello.models import (
@@ -36,7 +35,7 @@ from serapide_core.modello.models import (
     Piano,
     Azione,
     Risorsa,
-    Contatto,
+    SoggettoOperante,
     ProceduraVAS,
     ConsultazioneVAS,
     PianoAuthTokens,
@@ -75,25 +74,25 @@ logger = logging.getLogger(__name__)
 
 # Graphene will automatically map the Category model's fields onto the CategoryNode.
 # This is configured in the CategoryNode's Meta class (as you can see below)
-class RoleNode(DjangoObjectType):
+# class RoleNode(DjangoObjectType):
+#
+#     type = graphene.String()
+#
+#     def resolve_type(self, info, **args):
+#         return self.type.code
+#
+#     class Meta:
+#         model = Qualifica
+#         filter_fields = '__all__'
+#         interfaces = (relay.Node, )
 
-    type = graphene.String()
 
-    def resolve_type(self, info, **args):
-        return self.type.code
-
-    class Meta:
-        model = UserMembership
-        filter_fields = '__all__'
-        interfaces = (relay.Node, )
-
-
-class FaseNode(DjangoObjectType):
-
-    class Meta:
-        model = Fase
-        filter_fields = ['codice', 'nome', 'descrizione', 'piani_operativi']
-        interfaces = (relay.Node, )
+# class FaseNode(DjangoObjectType):
+#
+#     class Meta:
+#         model = Fase
+#         filter_fields = ['codice', 'nome', 'descrizione', 'piani_operativi']
+#         interfaces = (relay.Node, )
 
 
 class FasePianoStoricoType(DjangoObjectType):
@@ -182,8 +181,9 @@ class RisorsaNode(DjangoObjectType):
                          'descrizione',
                          'data_creazione',
                          'last_update',
-                         'fase__codice',
-                         'piano__codice']
+                         'fase',
+                         # 'piano__codice' #TODO
+                         ]
         interfaces = (relay.Node, )
 
 
@@ -193,7 +193,7 @@ class RisorsePianoType(DjangoObjectType):
 
     class Meta:
         model = RisorsePiano
-        filter_fields = ['risorsa__fase__codice',
+        filter_fields = ['risorsa__fase',
                          'piano__codice']
         interfaces = (relay.Node, )
 
@@ -204,7 +204,7 @@ class RisorseVASType(DjangoObjectType):
 
     class Meta:
         model = RisorseVas
-        filter_fields = ['risorsa__fase__codice']
+        filter_fields = ['risorsa__fase']
         interfaces = (relay.Node, )
 
 
@@ -214,7 +214,7 @@ class RisorseAdozioneVASType(DjangoObjectType):
 
     class Meta:
         model = RisorseAdozioneVas
-        filter_fields = ['risorsa__fase__codice']
+        filter_fields = ['risorsa__fase']
         interfaces = (relay.Node, )
 
 
@@ -224,7 +224,7 @@ class RisorseAvvioType(DjangoObjectType):
 
     class Meta:
         model = RisorseAvvio
-        filter_fields = ['risorsa__fase__codice']
+        filter_fields = ['risorsa__fase']
         interfaces = (relay.Node, )
 
 
@@ -234,7 +234,7 @@ class RisorseAdozioneType(DjangoObjectType):
 
     class Meta:
         model = RisorseAdozione
-        filter_fields = ['risorsa__fase__codice']
+        filter_fields = ['risorsa__fase']
         interfaces = (relay.Node, )
 
 
@@ -244,7 +244,7 @@ class RisorseApprovazioneType(DjangoObjectType):
 
     class Meta:
         model = RisorseApprovazione
-        filter_fields = ['risorsa__fase__codice']
+        filter_fields = ['risorsa__fase']
         interfaces = (relay.Node, )
 
 
@@ -254,7 +254,7 @@ class RisorsePubblicazioneType(DjangoObjectType):
 
     class Meta:
         model = RisorsePubblicazione
-        filter_fields = ['risorsa__fase__codice']
+        filter_fields = ['risorsa__fase']
         interfaces = (relay.Node, )
 
 
@@ -264,7 +264,7 @@ class RisorseCopianificazioneType(DjangoObjectType):
 
     class Meta:
         model = RisorseCopianificazione
-        filter_fields = ['risorsa__fase__codice']
+        filter_fields = ['risorsa__fase']
         interfaces = (relay.Node, )
 
 
@@ -274,7 +274,7 @@ class RisorsePianoControdedottoType(DjangoObjectType):
 
     class Meta:
         model = RisorsePianoControdedotto
-        filter_fields = ['risorsa__fase__codice']
+        filter_fields = ['risorsa__fase']
         interfaces = (relay.Node, )
 
 
@@ -284,20 +284,20 @@ class RisorsePianoRevPostCPType(DjangoObjectType):
 
     class Meta:
         model = RisorsePianoRevPostCP
-        filter_fields = ['risorsa__fase__codice']
+        filter_fields = ['risorsa__fase']
         interfaces = (relay.Node, )
 
 
-class EnteTipoNode(DjangoObjectType):
-
-    class Meta:
-        model = OrganizationType
-        interfaces = (relay.Node, )
+# class EnteTipoNode(DjangoObjectType):
+#
+#     class Meta:
+#         model = OrganizationType
+#         interfaces = (relay.Node, )
 
 
 class AppUserNode(DjangoObjectType):
 
-    role = graphene.Field(RoleNode)
+    qualifica = graphene.String()
     attore = graphene.String()
     alerts_count = graphene.String()
     unread_threads_count = graphene.String()
@@ -309,7 +309,7 @@ class AppUserNode(DjangoObjectType):
         token = info.context.session.get('token', None)
         role = info.context.session.get('role', None)
         if token:
-            return Token.objects.get(key=token).membership
+            return Delega.objects.get(key=token).membership
         elif role:
             return self.memberships.filter(pk=role).first()
         else:
@@ -352,40 +352,40 @@ class AppUserNode(DjangoObjectType):
             unread_messages.append(_t.latest_message)
         return unread_messages
 
-    def resolve_contact_type(self, info, **args):
-        organization = info.context.session.get('organization', None)
-        token = info.context.session.get('token', None)
-        role = info.context.session.get('role', None)
-        _tipologia_contatto = None
-        try:
-            if token:
-                _tipologia_contatto = Contatto.tipologia_contatto(self, token=token)
-            elif role:
-                _tipologia_contatto = Contatto.tipologia_contatto(self, role=role)
-            elif organization:
-                _tipologia_contatto = Contatto.tipologia_contatto(self, organization=organization)
-        except Exception as e:
-            logger.exception(e)
-        return _tipologia_contatto
+    # def resolve_contact_type(self, info, **args):
+    #     organization = info.context.session.get('organization', None)
+    #     token = info.context.session.get('token', None)
+    #     role = info.context.session.get('role', None)
+    #     _tipologia_contatto = None
+    #     try:
+    #         if token:
+    #             _tipologia_contatto = Contatto.tipologia_contatto(self, token=token)
+    #         elif role:
+    #             _tipologia_contatto = Contatto.tipologia_contatto(self, role=role)
+    #         elif organization:
+    #             _tipologia_contatto = Contatto.tipologia_contatto(self, organization=organization)
+    #     except Exception as e:
+    #         logger.exception(e)
+    #     return _tipologia_contatto
 
-    def resolve_attore(self, info, **args):
-        organization = info.context.session.get('organization', None)
-        token = info.context.session.get('token', None)
-        role = info.context.session.get('role', None)
-        _attore = None
-        try:
-            if role:
-                _attore = Contatto.attore(self, role=role)
-            elif token:
-                _attore = Contatto.attore(self, token=token)
-            elif organization:
-                _attore = Contatto.attore(self, organization=organization)
-        except Exception as e:
-            logger.exception(e)
-        return _attore
+    # def resolve_attore(self, info, **args):
+    #     organization = info.context.session.get('organization', None)
+    #     token = info.context.session.get('token', None)
+    #     role = info.context.session.get('role', None)
+    #     _attore = None
+    #     try:
+    #         if role:
+    #             _attore = Contatto.attore(self, role=role)
+    #         elif token:
+    #             _attore = Contatto.attore(self, token=token)
+    #         elif organization:
+    #             _attore = Contatto.attore(self, organization=organization)
+    #     except Exception as e:
+    #         logger.exception(e)
+    #     return _attore
 
     class Meta:
-        model = AppUser
+        model = Utente
         # Allow for some more advanced filtering here
         filter_fields = {
             'fiscal_code': ['exact'],
@@ -393,13 +393,13 @@ class AppUserNode(DjangoObjectType):
             'last_name': ['exact', 'icontains', 'istartswith'],
             'email': ['exact'],
         }
-        exclude_fields = ('password', 'is_staff', 'is_active', 'is_superuser', 'last_login')
+        exclude_fields = ('password', 'is_active', 'is_superuser', 'last_login')
         interfaces = (relay.Node, )
 
 
 class EnteNode(DjangoObjectType):
 
-    tipologia_ente = graphene.Field(EnteTipoNode)
+    #tipologia_ente = graphene.Field(EnteTipoNode)
     role = graphene.List(graphene.String)
 
     def resolve_role(self, info, **args):
@@ -413,12 +413,12 @@ class EnteNode(DjangoObjectType):
         return roles
 
     class Meta:
-        model = Organization
+        model = Ente
         # Allow for some more advanced filtering here
         filter_fields = {
-            'code': ['exact'],
-            'name': ['exact', 'icontains', 'istartswith'],
-            'description': ['exact', 'icontains'],
+            'id': ['exact'],
+            'nome': ['exact', 'icontains', 'istartswith'],
+            'descrizione': ['exact', 'icontains'],
         }
         interfaces = (relay.Node, )
 
@@ -538,19 +538,18 @@ class ProceduraPubblicazioneNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
-class ContattoNode(DjangoObjectType):
+class SoggettoOperanteNode(DjangoObjectType):
 
     ente = graphene.Field(EnteNode)
 
     class Meta:
-        model = Contatto
+        model = SoggettoOperante
         # Allow for some more advanced filtering here
         filter_fields = {
-            'nome': ['exact', 'icontains'],
-            'email': ['exact'],
-            'tipologia': ['exact'],
-            'ente': ['exact'],
-            'piano__codice': ['exact'],
+#            'nome': ['exact', 'icontains'],
+#            'email': ['exact'],
+#            'tipo': ['exact'],
+            'piano__id': ['exact'],
         }
         interfaces = (relay.Node, )
 
@@ -558,14 +557,14 @@ class ContattoNode(DjangoObjectType):
 class ConsultazioneVASNode(DjangoObjectType):
 
     user = graphene.Field(AppUserNode)
-    contatto = graphene.Field(ContattoNode)
+    referente = graphene.Field(SoggettoOperanteNode)
     procedura_vas = graphene.Field(ProceduraVASNode)
 
-    def resolve_contatto(self, info, **args):
-        _contatto = None
-        if self.user:
-            _contatto = Contatto.objects.filter(user=self.user).first()
-        return _contatto
+    # def resolve_contatto(self, info, **args):
+    #     _contatto = None
+    #     if self.user:
+    #         _contatto = Contatto.objects.filter(user=self.user).first()
+    #     return _contatto
 
     class Meta:
         model = ConsultazioneVAS
@@ -623,7 +622,7 @@ class PianoNode(DjangoObjectType):
     storico_fasi = graphene.List(FasePianoStoricoType)
     risorsa = DjangoFilterConnectionField(RisorsePianoType)
     procedura_vas = graphene.Field(ProceduraVASNode)
-    soggetto_proponente = graphene.Field(ContattoNode)
+    soggetto_proponente = graphene.Field(EnteNode)
     alerts_count = graphene.String()
 
     def resolve_alerts_count(self, info, **args):

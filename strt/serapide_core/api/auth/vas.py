@@ -19,7 +19,7 @@ from serapide_core.modello.models import (
 )
 
 from serapide_core.modello.enums import (
-    FASE,
+    Fase,
     TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE
 )
@@ -72,7 +72,7 @@ def parere_verifica_vas_ok(user, procedura_vas):
 def procedura_vas_is_valid(piano, procedura_vas):
     if procedura_vas.piano == piano:
         # Perform checks specifically for the current "Fase"
-        if piano.fase.nome == FASE.draft:
+        if piano.fase == Fase.DRAFT:
             if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
                 if procedura_vas.risorse.filter(tipo='vas_semplificata', archiviata=False).count() == 1 and \
                     procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).dimensione > 0 and \
@@ -103,7 +103,7 @@ def procedura_vas_is_valid(piano, procedura_vas):
             else:
                 return False
 
-        elif piano.fase.nome == FASE.anagrafica:
+        elif piano.fase.nome == Fase.ANAGRAFICA:
             if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
                 return procedura_vas.conclusa
             elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
