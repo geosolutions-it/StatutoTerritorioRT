@@ -13,7 +13,7 @@ from django import forms
 from django.forms import ModelChoiceField
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import (Utente, Delega, Ente)
+from .models import (Utente, Ente)
 from django.utils.translation import gettext_lazy as _
 
 
@@ -79,8 +79,3 @@ class UtenteAdmin(UserAdmin):
     ordering = ('fiscal_code',)
 
 
-@admin.register(Delega)
-class DelegaModelAdmin(admin.ModelAdmin):
-    list_display = ['key', 'user', 'created']
-    search_fields = ['key', 'user', 'created']
-    list_filter = ['key', 'user', 'created']

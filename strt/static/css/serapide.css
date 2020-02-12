@@ -7939,6 +7939,9 @@ a.text-dark:hover, a.text-dark:focus {
   .serapide .menumessaggi .message-item span :last-child {
     font-size: 60%; }
 
+.serapide .modal-body-file-chooser {
+  padding: 1.5rem 2rem; }
+
 .serapide .dropzone {
   padding: 0.5em;
   border-width: 1px;
@@ -8008,9 +8011,15 @@ a.text-dark:hover, a.text-dark:focus {
   border-bottom: none; }
 
 .serapide .action-uploader {
-  width: 100%; }
+  width: 100%;
+  min-height: 4rem;
+  display: flex; }
   .serapide .action-uploader .file-loader, .serapide .action-uploader .resource {
     width: 100%; }
+  .serapide .action-uploader div {
+    flex: 1; }
+  .serapide .action-uploader .loading {
+    flex: 0; }
   .serapide .action-uploader div .dropzone {
     align-self: baseline; }
 
@@ -8043,7 +8052,7 @@ a.text-dark:hover, a.text-dark:focus {
     .sidebar .sidebar-header .title-portale {
       font-size: 0.5333rem; }
     .sidebar .sidebar-header .piano-title {
-      font-size: 20px; }
+      font-size: 1.2rem; }
   .sidebar .sidebar-header.collapsed {
     display: flex;
     padding-top: 1rem;
@@ -8456,8 +8465,14 @@ button.bg-serapide:focus {
   padding-left: 210px !important;
   padding-right: 210px !important; }
 
+.serapide-content {
+  min-width: 700px; }
+
 .pointer {
   cursor: pointer; }
+
+.default {
+  cursor: default !important; }
 
 .serapide {
   width: 100%; }
@@ -8585,6 +8600,9 @@ a {
   display: flex; }
   .date-time-picker .react-datepicker-wrapper .react-datepicker__input-container {
     flex: 1 1 auto !important; }
+
+html {
+  font-size: 8px; }
 
 @media (min-width: 700px) {
   html {
@@ -8855,24 +8873,23 @@ a {
   font-size: 2rem !important; }
 
 .h-pre {
-  font-size: 30px;
-  line-height: 30px; }
+  font-size: 1.6rem;
+  line-height: 1.6em; }
 
 .h-title {
-  font-size: 38px;
+  font-size: 2.2rem;
   font-weight: bold;
-  line-height: 38px; }
+  line-height: 2rem; }
 
 .h-sub {
-  font-size: 28px; }
+  font-size: 1.4rem; }
 
 .home-container {
   margin: 1.66rem; }
 
 .lista-azioni {
   padding: 1.66rem;
-  max-width: 52rem;
-  min-width: 40rem; }
+  max-width: 52rem; }
 
 .action-container {
   padding: 1.66rem;
@@ -8910,6 +8927,24 @@ a {
 .action-title {
   font-size: 1rem;
   font-weight: bold; }
+
+.switch-small span {
+  font-size: 0.8rem; }
+
+.switch-small .custom-switch .custom-control-label::before {
+  width: 1.7rem; }
+
+.switch-small .custom-control-label::before {
+  height: 0.8rem; }
+
+.switch-small .serapide .strt-switch .custom-control-label.checked:after {
+  -webkit-transform: translateX(0.7rem);
+  transform: translateX(0.7rem); }
+
+.switch-small .custom-switch .custom-control-label::after {
+  width: calc(0.8rem - 4px);
+  height: calc(0.8rem - 4px);
+  left: calc(-2.15rem + 2px); }
 
 .salva-invia .sv-button {
   min-width: 200px; }

@@ -33,7 +33,6 @@ from serapide_core.modello.models import (
     Fase,
     Piano,
     Azione,
-    AzioniPiano,
     ProceduraApprovazione,
     ProceduraPubblicazione,
 

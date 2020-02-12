@@ -23,11 +23,26 @@ from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
-from strt_users.models import (
-    Delega,
-    Utente,
-    Ente,
+from strt_users.enums import  (
     Qualifica,
+    Profilo,
+)
+
+from strt_users.models import (
+    Ente,
+    Ufficio, QualificaUfficio,
+    Utente, Assegnatario,
+    Token,
+    ProfiloUtente,
+)
+
+from serapide_core.modello.enums import (
+    STATO_AZIONE,
+    TIPOLOGIA_RISORSA,
+    TIPOLOGIA_VAS,
+    FASE_AZIONE,
+    TIPOLOGIA_AZIONE,
+    TOOLTIP_AZIONE
 )
 
 from serapide_core.modello.models import (
@@ -36,9 +51,10 @@ from serapide_core.modello.models import (
     Azione,
     Risorsa,
     SoggettoOperante,
+    Delega,
     ProceduraVAS,
     ConsultazioneVAS,
-    PianoAuthTokens,
+    # PianoAuthTokens,
     FasePianoStorico,
     ProceduraAvvio,
     ProceduraAdozione,
@@ -58,15 +74,6 @@ from serapide_core.modello.models import (
     RisorseAdozioneVas,
     RisorseApprovazione,
     RisorsePubblicazione,
-)
-
-from serapide_core.modello.enums import (
-    STATO_AZIONE,
-    TIPOLOGIA_RISORSA,
-    TIPOLOGIA_VAS,
-    FASE_AZIONE,
-    TIPOLOGIA_AZIONE,
-    TOOLTIP_AZIONE
 )
 
 logger = logging.getLogger(__name__)
@@ -143,7 +150,7 @@ class AzioneNode(DjangoObjectType):
         model = Azione
         filter_fields = ['uuid',
                          'tipologia',
-                         'attore',
+                         #'attore',
                          'stato',
                          'data']
         interfaces = (relay.Node, )
@@ -295,51 +302,78 @@ class RisorsePianoRevPostCPType(DjangoObjectType):
 #         interfaces = (relay.Node, )
 
 
-class AppUserNode(DjangoObjectType):
 
+
+
+
+class UtenteNode(DjangoObjectType):
+
+    profilo = graphene.String()
     qualifica = graphene.String()
-    attore = graphene.String()
+    ente = graphene.String()
+
     alerts_count = graphene.String()
     unread_threads_count = graphene.String()
     unread_messages = graphene.List(UserMessageType)
-    contact_type = graphene.String()
 
-    def resolve_role(self, info, **args):
-        _org = info.context.session.get('organization', None)
-        token = info.context.session.get('token', None)
-        role = info.context.session.get('role', None)
-        if token:
-            return Delega.objects.get(key=token).membership
-        elif role:
-            return self.memberships.filter(pk=role).first()
-        else:
-            return self.memberships.filter(organization__code=_org).first()
+    def resolve_profilo(self, info, **args):
+        psess = info.context.session.get('profilo', None)
+        try:
+            return Profilo[psess].name
+        except KeyError:
+            return None
+
+    def resolve_qualifica(self, info, **args):
+        psess = info.context.session.get('profilo', None)
+        try:
+            profilo = Profilo[psess]
+        except KeyError:
+            return None
+
+        if profilo == Profilo.OPERATORE:
+            return info.context.session.get('qualifica', None)
+
+        return None
+
+    def resolve_ente(self, info, **args):
+        psess = info.context.session.get('profilo', None)
+        try:
+            profilo = Profilo[psess]
+        except KeyError:
+            return None
+
+        if profilo in [Profilo.OPERATORE, Profilo.ADMIN_ENTE]:
+            return info.context.session.get('qualifica', None)
+
+        return None
+
 
     def resolve_alerts_count(self, info, **args):
         _alerts_count = 0
 
-        _pianos = []
-        _enti = []
-        _memberships = None
-        _memberships = self.memberships
-        if _memberships:
-            for _m in _memberships.all():
-                if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
-                    # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
-                    continue
-                else:
-                    _enti.append(_m.organization.code)
-
-        token = info.context.session.get('token', None)
-        if token:
-            _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
-            _pianos = [_p for _p in Piano.objects.filter(codice__in=_allowed_pianos)]
-        else:
-            _pianos = [_p for _p in Piano.objects.filter(ente__code__in=_enti)]
-
-        _alert_states = [STATO_AZIONE.attesa, STATO_AZIONE.necessaria]
-        for _p in _pianos:
-            _alerts_count += _p.azioni.filter(stato__in=_alert_states).count()
+        # TODO
+        # _pianos = []
+        # _enti = []
+        # _memberships = None
+        # _memberships = self.memberships
+        # if _memberships:
+        #     for _m in _memberships.all():
+        #         if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
+        #             # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
+        #             continue
+        #         else:
+        #             _enti.append(_m.organization.code)
+        #
+        # token = info.context.session.get('token', None)
+        # if token:
+        #     _allowed_pianos = [_pt.piano.codice for _pt in Token.objects.filter(token__key=token)]
+        #     _pianos = [_p for _p in Piano.objects.filter(codice__in=_allowed_pianos)]
+        # else:
+        #     _pianos = [_p for _p in Piano.objects.filter(ente__code__in=_enti)]
+        #
+        # _alert_states = [STATO_AZIONE.attesa, STATO_AZIONE.necessaria]
+        # for _p in _pianos:
+        #     _alerts_count += _p.azioni.filter(stato__in=_alert_states).count()
 
         return _alerts_count
 
@@ -400,7 +434,7 @@ class AppUserNode(DjangoObjectType):
 class EnteNode(DjangoObjectType):
 
     #tipologia_ente = graphene.Field(EnteTipoNode)
-    role = graphene.List(graphene.String)
+    #role = graphene.List(graphene.String)
 
     def resolve_role(self, info, **args):
         roles = []
@@ -556,7 +590,7 @@ class SoggettoOperanteNode(DjangoObjectType):
 
 class ConsultazioneVASNode(DjangoObjectType):
 
-    user = graphene.Field(AppUserNode)
+    user = graphene.Field(UtenteNode)
     referente = graphene.Field(SoggettoOperanteNode)
     procedura_vas = graphene.Field(ProceduraVASNode)
 
@@ -617,17 +651,24 @@ class PianoRevPostCPNode(DjangoObjectType):
 
 class PianoNode(DjangoObjectType):
 
-    user = graphene.Field(AppUserNode)
+    user = graphene.Field(UtenteNode)
     ente = graphene.Field(EnteNode)
     storico_fasi = graphene.List(FasePianoStoricoType)
     risorsa = DjangoFilterConnectionField(RisorsePianoType)
     procedura_vas = graphene.Field(ProceduraVASNode)
     soggetto_proponente = graphene.Field(EnteNode)
     alerts_count = graphene.String()
+    azioni = graphene.List(AzioneNode)
+
+    def resolve_azioni(self, info, **args):
+        return Azione.objects.filter(piano=self)
 
     def resolve_alerts_count(self, info, **args):
         _alert_states = [STATO_AZIONE.attesa, STATO_AZIONE.necessaria]
-        return self.azioni.filter(stato__in=_alert_states).count()
+        # return self.azioni.filter(stato__in=_alert_states).count()
+        return Azione.objects \
+            .filter(piano=self)\
+            .filter(stato__in=_alert_states).count()
 
     def resolve_storico_fasi(self, info, **args):
         # Warning this is not currently paginated
@@ -649,6 +690,78 @@ class PianoNode(DjangoObjectType):
             'codice': ['exact', 'icontains', 'istartswith'],
             'ente': ['exact'],
             'descrizione': ['exact', 'icontains'],
-            'tipologia': ['exact', 'icontains'],
+            'tipologia': ['exact'],
         }
         interfaces = (relay.Node, )
+        convert_choices_to_enum = False
+
+
+
+class QualificaChoiceNode(DjangoObjectType):
+
+    qualifica = graphene.String()
+    ufficio = graphene.String()
+
+    def resolve_qualifica(self, info, **args):
+        return self.qualifica_ufficio.qualifica.name
+
+    def resolve_ufficio(self, info, **args):
+        return self.qualifica_ufficio.ufficio.nome
+
+    class Meta:
+        # model = QualificaUfficio # qualifica_ufficio, utente
+        model = Assegnatario # qualifica_ufficio, utente
+        filter_fields = ['qualifica_ufficio']
+        convert_choices_to_enum = False
+
+
+
+class ProfiloChoiceNode(DjangoObjectType):
+    qualifiche = graphene.List(QualificaChoiceNode)
+
+    def resolve_profilo(self, info, **args):
+        return self.profilo.name
+
+    def resolve_qualifiche(self, info, **args):
+        logger.error("FOUND PROFILO {}".format(self.profilo))
+        if Profilo.OPERATORE.equal(self.profilo):
+            logger.error('OPERATORE RICONOSCIUTO')
+
+            # filter(assegnatario__utente=self.utente).
+            ass = Assegnatario.objects. \
+                    filter(utente=self.utente).  \
+                    filter(qualifica_ufficio__ufficio__ente=self.ente)
+            logger.error("FOUND QUALIFICHE {}".format(len(ass)))
+            # ret = [a.qualifica_ufficio.qualifica for a in ass]
+            # return ret
+            return ass
+        else:
+            logger.error('OPERATORE NON RICONOSCIUTO')
+            logger.warning("TIPO {}".format(type(self.profilo)))
+
+        return None
+
+    class Meta:
+        model = ProfiloUtente # utente, profilo ente
+        filter_fields = ['profilo', 'ente']
+        # interfaces = (relay.Node, )
+        convert_choices_to_enum = False
+
+class UtenteChoiceNode(DjangoObjectType):
+    profili = graphene.List(ProfiloChoiceNode)
+
+    def resolve_profili(self, info):
+        return ProfiloUtente.objects.filter(utente=self)
+
+    class Meta:
+        model = Utente
+        interfaces = (relay.Node, )
+        filter_fields = {
+            'fiscal_code': ['exact'],
+            'first_name': ['exact', 'icontains', 'istartswith'],
+            'last_name': ['exact', 'icontains', 'istartswith'],
+            'email': ['exact'],
+        }
+        exclude_fields = ('password', 'is_active', 'is_superuser', 'last_login')
+
+

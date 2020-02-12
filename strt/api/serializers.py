@@ -10,7 +10,7 @@
 #########################################################################
 
 from rest_framework import serializers
-from strt_users.models import Qualifica
+from strt_users.models import (Qualifica, Profilo)
 
 
 class QualificaSerializer(serializers.ModelSerializer):
@@ -20,10 +20,8 @@ class QualificaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class RuoloSerializer(serializers.ModelSerializer):
-#
-#     type = QualificaSerializer()
-#
-#     class Meta:
-#         model = Ruolo
-#         fields = '__all__'
+class ProfiloSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profilo
+        fields = '__all__'

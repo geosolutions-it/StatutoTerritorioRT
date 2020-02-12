@@ -34,7 +34,6 @@ from serapide_core.modello.models import (
     Fase,
     Piano,
     Azione,
-    AzioniPiano,
     ProceduraAdozione,
     ParereAdozioneVAS,
     ProceduraAdozioneVAS,

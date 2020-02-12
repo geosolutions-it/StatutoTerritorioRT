@@ -26,12 +26,13 @@ from serapide_core.helpers import is_RUP
 from serapide_core.modello.models import (
     Piano,
     SoggettoOperante,
+    Delega,
     ProceduraVAS,
     ProceduraAvvio,
     ProceduraAdozione,
     ProceduraApprovazione,
     ProceduraPubblicazione,
-    PianoAuthTokens,
+    # PianoAuthTokens,
 )
 
 
@@ -45,7 +46,7 @@ class UserMembershipFilter(django_filters.FilterSet):
 
     class Meta:
         model = Utente
-        exclude = ['password', 'is_staff', 'is_active', 'is_superuser', 'last_login']
+        exclude = ['password', 'is_active', 'is_superuser', 'last_login']
 
     @property
     def qs(self):
@@ -156,7 +157,7 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
 
         token = self.request.session.get('token', None)
         if token:
-            _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
+            _allowed_pianos = [_pt.piano.codice for _pt in Delega.objects.filter(token__key=token)]
             return super(PianoUserMembershipFilter, self).qs.filter(
                 codice__in=_allowed_pianos).order_by('-last_update', '-codice')
         else:
@@ -191,11 +192,12 @@ class ProceduraMembershipFilterBase(django_filters.FilterSet):
                 # _enti = [_m.organization.code for _m in _memberships.all()]
 
         token = self.request.session.get('token', None)
-        if token:
-            _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
-            _pianos = [_p for _p in Piano.objects.filter(codice__in=_allowed_pianos)]
-            for _p in _pianos:
-                _enti.append(_p.ente.code)
+        # TODO
+        # if token:
+        #     _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
+        #     _pianos = [_p for _p in Piano.objects.filter(codice__in=_allowed_pianos)]
+        #     for _p in _pianos:
+        #         _enti.append(_p.ente.code)
 
         return super(ProceduraMembershipFilterBase, self).qs.filter(ente__code__in=_enti)
 

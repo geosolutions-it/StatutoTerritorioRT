@@ -16,7 +16,8 @@ from .models import (
     Risorsa,
     # Referente,
     SoggettoOperante,
-    Azione, AzioniPiano,
+    Delega,
+    Azione,
     Piano, RisorsePiano,
     ProceduraVAS, RisorseVas,
     ProceduraAdozioneVAS, RisorseAdozioneVas,
@@ -24,7 +25,6 @@ from .models import (
     ProceduraAdozione, RisorseAdozione,
     ProceduraApprovazione, RisorseApprovazione,
     ProceduraPubblicazione, RisorsePubblicazione,
-    PianoAuthTokens,
     ParereVAS,
     ConsultazioneVAS,
     ParereAdozioneVAS,
@@ -35,10 +35,6 @@ from .models import (
     RisorsePianoControdedotto,
     RisorsePianoRevPostCP,
 )
-
-
-class AzioniPianoInline(admin.TabularInline):
-    model = AzioniPiano
 
 
 class RisorsePianoInline(admin.TabularInline):
@@ -85,8 +81,8 @@ class SoggettoOperanteInline(admin.TabularInline):
      model = SoggettoOperante
 
 
-class TokensInline(admin.TabularInline):
-    model = PianoAuthTokens
+# class TokensInline(admin.TabularInline):
+#      model = Token
 
 
 class ParereVASInline(admin.TabularInline):
@@ -102,10 +98,10 @@ class ParereAdozioneVASInline(admin.TabularInline):
 
 
 class PianoAdmin(admin.ModelAdmin):
-    inlines = [AzioniPianoInline,
+    inlines = [#AzioniPianoInline,
                SoggettoOperanteInline,
-               RisorsePianoInline,]
-               # TODO TokensInline, ]
+               RisorsePianoInline]
+               # TokensInline, ]
 
 
 class ProceduraVASAdmin(admin.ModelAdmin):
@@ -163,3 +159,9 @@ admin.site.register(ConsultazioneVAS, ConsultazioneVASAdmin)
 admin.site.register(ConferenzaCopianificazione, ConferenzaCopianificazioneAdmin)
 admin.site.register(PianoControdedotto, PianoControdedottoAdmin)
 admin.site.register(PianoRevPostCP, PianoRevPostCPAdmin)
+
+@admin.register(Delega)
+class DelegaModelAdmin(admin.ModelAdmin):
+    list_display = ['created', 'created_by']
+    search_fields = ['created', 'created_by']
+    list_filter = ['created', 'created_by']

@@ -36,12 +36,13 @@ rules.add_rule(
     is_RUP | user_rules.can_access_piano
 )
 
-rules.add_rule(
-    'strt_core.api.is_actor',
-    user_rules.is_actor_for_token |
-        # user_rules.is_actor_for_role |  # TODO
-        user_rules.is_actor_for_organization
-)
+# TODO
+# rules.add_rule(
+#     'strt_core.api.is_actor',
+#     user_rules.is_actor_for_token |
+#         # user_rules.is_actor_for_role |  # TODO
+#         user_rules.is_actor_for_organization
+# )
 
 rules.add_rule(
     'strt_core.api.can_update_piano',

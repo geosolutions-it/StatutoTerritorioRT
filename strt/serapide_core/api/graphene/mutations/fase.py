@@ -18,7 +18,6 @@ from django.utils import timezone
 
 from serapide_core.modello.models import (
     Azione,
-    AzioniPiano,
 
     needsExecution,
     isExecuted,

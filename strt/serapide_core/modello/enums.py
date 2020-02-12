@@ -15,7 +15,7 @@ from model_utils import Choices
 from django.db import models
 from django.utils.translation import gettext as _
 
-from strt_users.enums import QualificaRichiesta
+from strt_users.enums import QualificaRichiesta, fix_enum
 
 
 class Fase(Enum):
@@ -27,7 +27,8 @@ class Fase(Enum):
     APPROVAZIONE = 'APPROVAZIONE'
     PUBBLICAZIONE = 'PUBBLICAZIONE'
 
-    def create_choices(self=None):
+    @classmethod
+    def create_choices(cls):
         return [
             (Fase.UNKNOWN, _('UNKNOWN')),
             (Fase.DRAFT, _('DRAFT')),
@@ -38,18 +39,22 @@ class Fase(Enum):
             (Fase.PUBBLICAZIONE, _('PUBBLICAZIONE')),
         ]
 
-    _FASE_NEXT = {
-        UNKNOWN: None,
-        DRAFT: ANAGRAFICA,
-        ANAGRAFICA: AVVIO,
-        AVVIO: ADOZIONE,
-        ADOZIONE: APPROVAZIONE,
-        APPROVAZIONE: PUBBLICAZIONE,
-        PUBBLICAZIONE: None
-    }
-
     def getNext(self):
         return self._FASE_NEXT(self)
+
+    @classmethod
+    def fix_enum(cls, obj):
+        return fix_enum(cls, obj)
+
+_FASE_NEXT = {
+    Fase.UNKNOWN: None,
+    Fase.DRAFT: Fase.ANAGRAFICA,
+    Fase.ANAGRAFICA: Fase.AVVIO,
+    Fase.AVVIO: Fase.ADOZIONE,
+    Fase.ADOZIONE: Fase.APPROVAZIONE,
+    Fase.APPROVAZIONE: Fase.PUBBLICAZIONE,
+    Fase.PUBBLICAZIONE: None
+}
 
 
 TIPOLOGIA_RISORSA = {
@@ -92,7 +97,8 @@ class TipologiaPiano(Enum):
     VARIANTE_OPERATIVO = 'VARIANTE_OPERATIVO'
     VARIANTE_STRUTTURALE = 'VARIANTE_STRUTTURALE'
 
-    def create_choices(self=None):
+    @classmethod
+    def create_choices(cls):
         return Choices(
             (TipologiaPiano.UNKNOWN, _('UNKNOWN')),
             (TipologiaPiano.OPERATIVO, _('OPERATIVO')),
@@ -100,6 +106,11 @@ class TipologiaPiano(Enum):
             (TipologiaPiano.VARIANTE_OPERATIVO, _('VARIANTE_OPERATIVO')),
             (TipologiaPiano.VARIANTE_STRUTTURALE, _('VARIANTE_STRUTTURALE')),
         )
+
+    @classmethod
+    def fix_enum(cls, obj):
+        return fix_enum(cls, obj)
+
 
 TIPOLOGIA_VAS = Choices(
         ('unknown', _('UNKNOWN')),
@@ -254,7 +265,8 @@ AZIONI_BASE = {
     Fase.DRAFT: [
         {
             "tipologia": TIPOLOGIA_AZIONE.creato_piano,
-            "qualifica": QualificaRichiesta.COMUNE
+            "qualifica": QualificaRichiesta.COMUNE,
+            "stato": STATO_AZIONE.necessaria,
         }
     ],
     Fase.ANAGRAFICA: [

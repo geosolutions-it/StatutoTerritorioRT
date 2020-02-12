@@ -13,6 +13,7 @@ import rules
 from django.conf import settings
 
 
+
 @rules.predicate
 def is_superuser(user):
     return user.is_superuser

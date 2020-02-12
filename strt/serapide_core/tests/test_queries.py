@@ -19,6 +19,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from serapide_core.schema import schema
 
+from .test_data_setup import DataLoader
+
 
 logger = logging.getLogger(__name__)
 
@@ -32,17 +34,20 @@ def _log(msg):
 class BaseTest(TestCase):
 
     def setUp(self):
-        self.foo_user = UserModel.objects.create_user("foo_user", "test@example.com", "123456")
-        self.bar_user = UserModel.objects.create_user("bar_user", "dev@example.com", "123456")
+        DataLoader.loadData()
+
+        # self.foo_user = UserModel.objects.get_or_create("foo_user", "test@example.com", "123456")
+        # self.bar_user = UserModel.objects.create_user("bar_user", "dev@example.com", "123456")
 
     def tearDown(self):
-        self.foo_user.delete()
-        self.bar_user.delete()
+        # self.foo_user.delete()
+        # self.bar_user.delete()
+        pass
 
 
 class TestGrapheneQueries(BaseTest):
 
-    fixtures = ['test_set_001.json', ]
+    # fixtures = ['fixtures/test_set_001.json', ]
 
     def test_select(self):
         query_1 = """query {

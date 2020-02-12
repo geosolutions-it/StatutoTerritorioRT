@@ -29,7 +29,7 @@ REACT_APP_DIR = os.path.join(BASE_DIR, 'serapide_client') # serapide-client
 SECRET_KEY = EnvUtil.get_env_var('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = EnvUtil.get_env_var('DJANGO_DEBUG', type=bool, default=False)
+DEBUG = EnvUtil.get_env_var('DJANGO_DEBUG', type=bool, default=True)
 
 ROOT_URLCONF = 'base.urls'
 WSGI_APPLICATION = 'base.wsgi.application'
@@ -170,6 +170,21 @@ DATABASES = {
                                 os.path.join(BASE_DIR, 'db.sqlite3')))
     )
 }
+
+DATABASES['default']['TEST'] = {'ENGINE': 'django.db.backends.sqlite3'}
+DATABASES['test'] = {'ENGINE': 'django.db.backends.sqlite3'}
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'your db settings as normal',
+#         [...]
+#         'TEST': {
+#           # this gets you in-memory sqlite for tests, which is fast
+#           'ENGINE': 'django.db.backends.sqlite3',
+#         }
+#     }
+#
+
 
 #AUTH_USER_MODEL = 'strt_users.AppUser'
 AUTH_USER_MODEL = 'strt_users.Utente'
@@ -323,7 +338,7 @@ MIDDLEWARE = (
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d '
@@ -353,6 +368,8 @@ LOGGING = {
     "loggers": {
         "django": {
             "handlers": ["console"], "level": "INFO", },
+        "django.server": {
+            "handlers": ["console"], "level": "DEBUG", },
         "celery": {
             "handlers": ["console"], "level": "INFO", },
         "strt_tests": {

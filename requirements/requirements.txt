@@ -16,12 +16,12 @@ wagtail==2.8rc1
 PyJWT==1.6.4
 psycopg2==2.8.3
 graphene<3.0.0,>=2.1.8
-graphene-django==2.8.0
-graphene-django-extras==0.4.8
+graphene-django>=2.8.0
+graphene-django-extras>=0.4.8
 graphene-file-upload==1.2.2
 graphql-core<3,>=2.2
 graphql-relay<3,>=2
-django-graphql-extensions==0.0.6
+django-graphql-extensions>=0.0.7
 idna==2.6
 Inflector==2.0.12
 jsonfield==2.0.2

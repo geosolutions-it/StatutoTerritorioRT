@@ -26,7 +26,6 @@ from graphql_extensions.exceptions import GraphQLError
 
 from strt_users.models import (
     Ente,
-    Delega,
     Qualifica,
 )
 
@@ -44,13 +43,13 @@ from serapide_core.modello.models import (
     Piano,
     Azione,
     SoggettoOperante,
-    AzioniPiano,
+    Delega,
     ProceduraVAS,
     ProceduraAvvio,
     ProceduraAdozione,
     PianoControdedotto,
     PianoRevPostCP,
-    PianoAuthTokens,
+    # PianoAuthTokens,
 
     needsExecution,
     isExecuted,
@@ -68,6 +67,8 @@ from serapide_core.modello.enums import (
 from serapide_core.api.graphene import types
 from serapide_core.api.graphene import inputs
 from serapide_core.api.graphene.mutations import fase
+
+import serapide_core.api.auth.user as auth
 
 logger = logging.getLogger(__name__)
 
@@ -88,96 +89,90 @@ class CreatePiano(relay.ClientIDMutation):
             _piano_data = input.get('piano_operativo')
             # Ente (M)
             _data = _piano_data.pop('ente')
-            _ente = Ente.objects.get(code=_data['code'])
-            _role = info.context.session['role'] if 'role' in info.context.session else None
-            _token = info.context.session['token'] if 'token' in info.context.session else None
+            _ente = Ente.objects.get(ipa=_data['ipa'])
+            _role = info.context.session.get('role', None)
+            _token = info.context.session.get('token', None)
             _piano_data['ente'] = _ente
-            if info.context.user and \
-            rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente) and \
-            rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune'):
 
-                # Codice (M)
-                if 'codice' in _piano_data:
-                    _data = _piano_data.pop('codice')
-                    _codice = _data
-                else:
-                    _year = str(datetime.date.today().year)[2:]
-                    _month = datetime.date.today().month
-                    _piano_id = Piano.objects.filter(ente=_ente).count() + 1
-                    _codice = '%s%02d%02d%05d' % (_ente.code, int(_year), _month, _piano_id)
-                    _cnt = 1
-                    while Piano.objects.filter(codice=_codice).count() > 0:
-                        _cnt += 1
-                        _piano_id = Piano.objects.filter(ente=_ente).count() + _cnt
-                        _codice = '%s%02d%02d%05d' % (_ente.code, int(_year), _month, _piano_id)
-                _piano_data['codice'] = _codice
+            if not info.context.user:
+                return GraphQLError("Unauthorized", code=401)
 
-                # Fase (O)
-                if 'fase' in _piano_data:
-                    _data = _piano_data.pop('fase')
-                    _fase = Fase.objects.get(codice=_data['codice'])
-                else:
-                    _fase = Fase.objects.get(codice='FP255')
-                _piano_data['fase'] = _fase
+            if not _ente.is_comune():
+                return GraphQLError("Ente deve essere un comune", code=400)
 
-                # Descrizione (O)
-                if 'descrizione' in _piano_data:
-                    _data = _piano_data.pop('descrizione')
-                    _piano_data['descrizione'] = _data[0]
-                _piano_data['user'] = info.context.user
-                _piano = Piano()
+            if not auth.can_create_piano(info.context.user, _ente):
+                return GraphQLError("Forbidden: user can't create piano", code=403)
 
-                # Inizializzazione Azioni del Piano
-                _order = 0
-                _azioni_piano = []
-                for _a in AZIONI_BASE[_fase.nome]:
-                    _azione = Azione(
-                        tipologia=_a["tipologia"],
-                        attore=_a["attore"],
-                        order=_order
-                    )
-                    _azioni_piano.append(_azione)
-                    _order += 1
+            #     and \
+            # rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente) and \
+            # rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune'):
 
-                nuovo_piano = update_create_instance(_piano, _piano_data)
-
-                for _a in AZIONI_BASE[_fase]:
-                    crea_azione(nuovo_piano,
-                                Azione(
-                                    tipologia=_a["tipologia"],
-                                    qualifica_richiesta=_a["qualifica"],
-                                    order=_order
-                                ))
-                    _order += 1
-
-
-                # Inizializzazione Procedura VAS
-                _procedura_vas, created = ProceduraVAS.objects.get_or_create(
-                    piano=nuovo_piano,
-                    ente=nuovo_piano.ente,
-                    tipologia=TIPOLOGIA_VAS.unknown)
-
-                # Inizializzazione Procedura Avvio
-                _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
-                    piano=nuovo_piano,
-                    ente=nuovo_piano.ente)
-
-                nuovo_piano.procedura_vas = _procedura_vas
-                nuovo_piano.procedura_avvio = _procedura_avvio
-                nuovo_piano.save()
-
-                for _ap in _azioni_piano:
-                    _ap.save()
-                    AzioniPiano.objects.get_or_create(azione=_ap, piano=nuovo_piano)
-
-                _creato = nuovo_piano.getFirstAction(TIPOLOGIA_AZIONE.creato_piano)
-                if _creato:
-                    _creato.stato = STATO_AZIONE.necessaria
-                    _creato.save()
-
-                return cls(nuovo_piano=nuovo_piano)
+            # Codice (M)
+            if 'codice' in _piano_data:
+                _data = _piano_data.pop('codice')
+                _codice = _data
             else:
-                return GraphQLError(_("Forbidden"), code=403)
+                _year = str(datetime.date.today().year)[2:]
+                _month = datetime.date.today().month
+                _piano_id = Piano.objects.filter(ente=_ente).count() + 1
+                _codice = '%s%02d%02d%05d' % (_ente.ipa, int(_year), _month, _piano_id)
+                _cnt = 1
+                while Piano.objects.filter(codice=_codice).count() > 0:
+                    _cnt += 1
+                    _piano_id = Piano.objects.filter(ente=_ente).count() + _cnt
+                    _codice = '%s%02d%02d%05d' % (_ente.ipa, int(_year), _month, _piano_id)
+            _piano_data['codice'] = _codice
+
+            # Fase (O)
+            if 'fase' in _piano_data:
+                _data = _piano_data.pop('fase')
+                _fase = Fase[_data]
+            else:
+                _fase = Fase.DRAFT
+            _piano_data['fase'] = _fase
+
+            # Descrizione (O)
+            if 'descrizione' in _piano_data:
+                _data = _piano_data.pop('descrizione')
+                _piano_data['descrizione'] = _data[0]
+            _piano_data['user'] = info.context.user
+
+            # Crea piano
+            _piano = Piano()
+
+            nuovo_piano = update_create_instance(_piano, _piano_data)
+
+            # Inizializzazione Azioni del Piano
+            _order = 0
+
+            for _a in AZIONI_BASE[_fase]:
+                crea_azione(Azione(
+                                piano=nuovo_piano,
+                                tipologia=_a["tipologia"],
+                                qualifica_richiesta=_a["qualifica"],
+                                stato = _a.get('stato', None),
+                                order=_order
+                            ))
+                _order += 1
+
+
+            # Inizializzazione Procedura VAS
+            _procedura_vas, created = ProceduraVAS.objects.get_or_create(
+                piano=nuovo_piano,
+                ente=nuovo_piano.ente,
+                tipologia=TIPOLOGIA_VAS.unknown)
+
+            # Inizializzazione Procedura Avvio
+            _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
+                piano=nuovo_piano,
+                ente=nuovo_piano.ente)
+
+            nuovo_piano.procedura_vas = _procedura_vas
+            nuovo_piano.procedura_avvio = _procedura_avvio
+            nuovo_piano.save()
+
+            return cls(nuovo_piano=nuovo_piano)
+
         except BaseException as e:
             tb = traceback.format_exc()
             logger.error(tb)

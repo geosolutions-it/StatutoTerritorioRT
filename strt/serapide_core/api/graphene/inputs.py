@@ -19,8 +19,8 @@ class EnteCreateInput(InputObjectType):
     Class created to accept input data
     from the interactive graphql console.
     """
-    name = graphene.String(source='name', required=False)
-    code = graphene.String(required=True)
+    nome = graphene.String(source='nome', required=False)
+    ipa = graphene.String(required=True)
 
 
 # class ContattoCreateInput(InputObjectType):

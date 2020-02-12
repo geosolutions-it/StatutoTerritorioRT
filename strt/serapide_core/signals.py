@@ -13,7 +13,7 @@ from django.dispatch import Signal
 
 from .notifications_helper import send_now_notification
 
-from serapide_core.modello.models import PianoAuthTokens
+# from serapide_core.modello.models import PianoAuthTokens
 
 # ############################################################################ #
 # Signals
@@ -76,8 +76,8 @@ def piano_phase_changed_notification(sender, **kwargs):
             for _c in piano.soggetti_sca.all():
                 users.append(_c.user)
 
-        if PianoAuthTokens.objects.filter(piano=piano).count() > 0:
-            tokens = [_p.token for _p in PianoAuthTokens.objects.filter(piano=piano)]
+        # if PianoAuthTokens.objects.filter(piano=piano).count() > 0:
+        #     tokens = [_p.token for _p in PianoAuthTokens.objects.filter(piano=piano)]
 
         send_now_notification(users,
                               notification_type,

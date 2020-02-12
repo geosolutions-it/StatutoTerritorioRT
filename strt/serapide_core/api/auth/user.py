@@ -9,20 +9,38 @@
 #
 #########################################################################
 
+import logging
 import rules
 
+from strt_users.enums import (
+    Profilo,
+)
+
 from strt_users.models import (
-    Delega,
+    Utente, ProfiloUtente,
     Ente)
 
 from serapide_core.modello.models import (
     SoggettoOperante,
-    PianoAuthTokens)
+    Delega,
+    # PianoAuthTokens
+)
 
+logger = logging.getLogger(__name__)
 
 # ############################################################################ #
 # User
 # ############################################################################ #
+
+def can_create_piano(utente, ente):
+    if not isinstance(utente, Utente):
+        logger.error('Utente di tipo errato <{tipo}>[{utente}]'.format(tipo=type(utente), utente=utente))
+        return False
+
+    return ProfiloUtente.objects\
+        .filter(utente=utente, ente=ente, profilo=Profilo.ADMIN_ENTE) # TODO: use privs
+
+
 @rules.predicate
 def can_access_piano(user, piano):
     _has_access = any(
@@ -71,16 +89,17 @@ def is_actor_for_token(token, actor):
 #         return (_attore.lower() == actor.lower())
 
 
-@rules.predicate
-def is_actor_for_organization(user_info, actor):
-    _user = user_info[0]
-    _organization = user_info[1]
-    _attore = None
-    if _user and \
-    _organization and isinstance(_organization, Ente):
-        _attore = Referente.attore(_user, organization=_organization.code)
-
-    if _attore is None:
-        return False
-    else:
-        return (_attore == actor)
+# TODO
+# @rules.predicate
+# def is_actor_for_organization(user_info, actor):
+#     _user = user_info[0]
+#     _organization = user_info[1]
+#     _attore = None
+#     if _user and \
+#     _organization and isinstance(_organization, Ente):
+#         _attore = Referente.attore(_user, organization=_organization.code)
+#
+#     if _attore is None:
+#         return False
+#     else:
+#         return (_attore == actor)

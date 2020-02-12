@@ -1,0 +1,45 @@
+query {
+  utenti {
+    edges {
+      node {
+        ...User
+        profilo
+        qualifica
+        ente
+
+        unreadThreadsCount
+        unreadMessages {
+          thread {
+            id
+            subject
+            absoluteUrl
+            __typename
+          }
+          sender {
+            email
+            firstName
+            lastName
+            __typename
+          }
+          sentAt
+          content
+          __typename
+        }
+        __typename
+      }
+      __typename
+    } 
+    __typename
+  }
+}
+
+fragment User on UtenteNode {
+  id
+  email
+  fiscalCode
+  firstName
+  lastName
+  dateJoined
+  alertsCount
+  __typename
+}

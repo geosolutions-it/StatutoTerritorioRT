@@ -51,7 +51,7 @@ class Query(object):
     # Models
     # fasi = DjangoFilterConnectionField(types.FaseNode)
 
-    utenti = DjangoFilterConnectionField(types.AppUserNode,
+    utenti = DjangoFilterConnectionField(types.UtenteNode,
                                          filterset_class=filters.UserMembershipFilter)
 
     enti = DjangoFilterConnectionField(types.EnteNode,
@@ -86,6 +86,8 @@ class Query(object):
     piano_controdedotto = DjangoFilterConnectionField(types.PianoControdedottoNode)
 
     piano_rev_post_cp = DjangoFilterConnectionField(types.PianoRevPostCPNode)
+
+    user_choices = DjangoFilterConnectionField(types.UtenteChoiceNode)
 
     # TODO
     # contatti = DjangoFilterConnectionField(types.ContattoNode,

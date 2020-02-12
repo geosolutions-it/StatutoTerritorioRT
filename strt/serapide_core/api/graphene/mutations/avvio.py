@@ -36,7 +36,6 @@ from serapide_core.modello.models import (
     Piano,
     Azione,
     SoggettoOperante,
-    AzioniPiano,
     ProceduraVAS,
     ProceduraAvvio,
     ProceduraAdozione,

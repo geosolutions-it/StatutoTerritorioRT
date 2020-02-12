@@ -36,7 +36,6 @@ from serapide_core.modello.models import (
     Piano,
     Azione,
     ParereVAS,
-    AzioniPiano,
     ProceduraVAS,
     ProceduraAvvio,
     ConsultazioneVAS,
@@ -64,7 +63,7 @@ logger = logging.getLogger(__name__)
 def init_vas_procedure(piano:Piano):
 
     # _order = piano.azioni.count()
-    _order = AzioniPiano.count_by_piano(piano)
+    _order = Azione.count_by_piano(piano)
     procedura_vas = piano.procedura_vas
     _verifica_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_verifica_vas)
 
