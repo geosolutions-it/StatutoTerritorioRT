@@ -154,6 +154,7 @@ class AzioneNode(DjangoObjectType):
                          'stato',
                          'data']
         interfaces = (relay.Node, )
+        convert_choices_to_enum = False
 
 
 class RisorsaNode(DjangoObjectType):

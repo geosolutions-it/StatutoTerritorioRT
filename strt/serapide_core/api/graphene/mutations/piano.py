@@ -206,33 +206,33 @@ class UpdatePiano(relay.ClientIDMutation):
     errors = graphene.List(graphene.String)
     piano_aggiornato = graphene.Field(types.PianoNode)
 
-    @staticmethod
-    def get_role(contact, actor):
-
-        _new_role = Ruolo.objects.filter(
-            qualifica=actor,
-            utente=contact.user,
-            ente=contact.ente
-        ).first()
-
-        if not _new_role:
-            _new_role_type, created = Ruolo.objects.get_or_create(
-                code=settings.TEMP_USER_CODE,
-                organization_type=contact.ente.type
-            )
-
-            _new_role_name = '%s-%s-%s' % (contact.user.fiscal_code,
-                                           contact.ente.code,
-                                           actor)
-            _new_role, created = Ruolo.objects.get_or_create(
-                nome=_new_role_name,
-                qualifica=actor,
-                description='%s - %s' % (_new_role_type.description, contact.ente.name),
-                utente=contact.user,
-                ente=contact.ente,
-                type=_new_role_type
-            )
-        return _new_role
+    # @staticmethod
+    # def get_role(contact, actor):
+    #
+    #     _new_role = Ruolo.objects.filter(
+    #         qualifica=actor,
+    #         utente=contact.user,
+    #         ente=contact.ente
+    #     ).first()
+    #
+    #     if not _new_role:
+    #         _new_role_type, created = Ruolo.objects.get_or_create(
+    #             code=settings.TEMP_USER_CODE,
+    #             organization_type=contact.ente.type
+    #         )
+    #
+    #         _new_role_name = '%s-%s-%s' % (contact.user.fiscal_code,
+    #                                        contact.ente.code,
+    #                                        actor)
+    #         _new_role, created = Ruolo.objects.get_or_create(
+    #             nome=_new_role_name,
+    #             qualifica=actor,
+    #             description='%s - %s' % (_new_role_type.description, contact.ente.name),
+    #             utente=contact.user,
+    #             ente=contact.ente,
+    #             type=_new_role_type
+    #         )
+    #     return _new_role
 
     @staticmethod
     def make_token_expiration(days=365):
@@ -241,279 +241,254 @@ class UpdatePiano(relay.ClientIDMutation):
         _expire_delta = datetime.timedelta(days=_expire_days)
         return _expire_time + _expire_delta
 
-    @staticmethod
-    def get_or_create_token(user, piano, role):
-        _allowed_tokens = Delega.objects.filter(user=user, membership=role)
-        _auth_token = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
-        if not _auth_token:
-            _token_key = Delega.generate_key()
-            _new_token, created = Delega.objects.get_or_create(
-                key=_token_key,
-                defaults={
-                    'user': user,
-                    'membership': role,
-                    'expires': UpdatePiano.make_token_expiration()
-                }
-            )
+    # @staticmethod
+    # def get_or_create_token(user, piano, role):
+    #     _allowed_tokens = Delega.objects.filter(user=user, membership=role)
+    #     _auth_token = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
+    #     if not _auth_token:
+    #         _token_key = Delega.generate_key()
+    #         _new_token, created = Delega.objects.get_or_create(
+    #             key=_token_key,
+    #             defaults={
+    #                 'user': user,
+    #                 'membership': role,
+    #                 'expires': UpdatePiano.make_token_expiration()
+    #             }
+    #         )
+    #
+    #         _auth_token, created = PianoAuthTokens.objects.get_or_create(
+    #             piano=piano,
+    #             token=_new_token
+    #         )
+    #
+    #         _new_token.save()
+    #         _auth_token.save()
 
-            _auth_token, created = PianoAuthTokens.objects.get_or_create(
-                piano=piano,
-                token=_new_token
-            )
-
-            _new_token.save()
-            _auth_token.save()
-
-    @staticmethod
-    def delete_token(user, piano):
-        _allowed_tokens = Delega.objects.filter(user=user)
-        _auth_tokens = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
-        for _at in _auth_tokens:
-            _at.token.delete()
-        _auth_tokens.delete()
+    # @staticmethod
+    # def delete_token(user, piano):
+    #     _allowed_tokens = Delega.objects.filter(user=user)
+    #     _auth_tokens = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
+    #     for _at in _auth_tokens:
+    #         _at.token.delete()
+    #     _auth_tokens.delete()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
         _piano_input = input.get('piano_operativo')
-        _role = info.context.session['role'] if 'role' in info.context.session else None
-        _token = info.context.session['token'] if 'token' in info.context.session else None
-        _organization = _piano.ente
-        if info.context.user and \
-            rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-            rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+        # _role = info.context.session['role'] if 'role' in info.context.session else None
+        # _token = info.context.session['token'] if 'token' in info.context.session else None
+        _ente = _piano.ente
 
-            try:
-                # Codice Piano (M)
-                if 'codice' in _piano_input:
-                    _piano_input.pop('codice')
+        if not info.context.user:
+            return GraphQLError("Unauthorized", code=401)
+
+        if not auth.can_edit_piano(info.context.user, _ente):
+            if not auth.has_qualifica(info.context.user, _ente, Qualifica.RESP):
+                return GraphQLError("Forbidden - L'utente non può editare piani in questo Ente", code=403)
+
+        # if info.context.user and \
+        #     rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        #     rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+
+        try:
+
+            for fixed_field in ['codice', 'data_creazione', 'data_accettazione', 'data_avvio',
+                                'data_approvazione', 'ente', 'fase', 'tipologia', 'data_delibera']:
+                if fixed_field in _piano_input:
+                    logger.warning('Il campo "{}" non può essere modificato attraverso questa operazione'.format(fixed_field))
+                    _piano_input.pop(fixed_field)
+
+            # ############################################################ #
+            # Editable fields - consistency checks
+            # ############################################################ #
+            # Descrizione (O)
+            if 'descrizione' in _piano_input:
+                _data = _piano_input.pop('descrizione')
+                # if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+                _piano.descrizione = _data[0]
+
+            # Data Delibera (O)
+            # if 'data_delibera' in _piano_input:
+            #     if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+            #         _piano_input.pop('data_delibera')
                     # This cannot be changed
 
-                # Data Accettazione (M)
-                if 'data_creazione' in _piano_input:
-                    _piano_input.pop('data_creazione')
-                    # This cannot be changed
+            # Soggetto Proponente (O)
+            if 'soggetto_proponente_uuid' in _piano_input:
+                _soggetto_proponente_uuid = _piano_input.pop('soggetto_proponente_uuid')
+                if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+                    rules.test_rule('strt_core.api.is_actor', _token or
+                                                              (info.context.user, _role) or
+                                                              (info.context.user, _ente), 'Comune'):
+                    update_referenti(_piano, Referente.TIPO_PROPONENTE)
 
-                # Data Accettazione (O)
-                if 'data_accettazione' in _piano_input:
-                    _piano_input.pop('data_accettazione')
-                    # This cannot be changed
+                    # if _piano.soggetto_proponente:
+                    #     UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
+                    #     _piano.soggetto_proponente = None
+                    #
+                    # if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
+                    #     _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
+                    #     _new_role = UpdatePiano.get_role(_soggetto_proponente, TIPOLOGIA_ATTORE.unknown)
+                    #     UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
+                    #     _piano.soggetto_proponente = _soggetto_proponente
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
 
-                # Data Avvio (O)
-                if 'data_avvio' in _piano_input:
-                    _piano_input.pop('data_avvio')
-                    # This cannot be changed
+            # Autorita' Competente VAS (O)
+            if 'autorita_competente_vas' in _piano_input:
+                _autorita_competente_vas = _piano_input.pop('autorita_competente_vas')
+                if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+                    rules.test_rule('strt_core.api.is_actor', _token or \
+                                                              (info.context.user, _role) or \
+                                                              (info.context.user, _ente), 'Comune'):
 
-                # Data Approvazione (O)
-                if 'data_approvazione' in _piano_input:
-                    _piano_input.pop('data_approvazione')
-                    # This cannot be changed
+                    _piano.autorita_competente_vas.clear()
 
-                # Ente (M)
-                if 'ente' in _piano_input:
-                    _piano_input.pop('ente')
-                    # This cannot be changed
+                    if _autorita_competente_vas:
+                        for _ac in _piano.autorita_competente_vas.all():
+                            UpdatePiano.delete_token(_ac.user, _piano)
 
-                # Fase (O)
-                if 'fase' in _piano_input:
-                    _piano_input.pop('fase')
-                    # This cannot be changed
+                        if len(_autorita_competente_vas) > 0:
 
-                # Tipologia (O)
-                if 'tipologia' in _piano_input:
-                    _piano_input.pop('tipologia')
-                    # This cannot be changed
+                            _autorita_competenti = []
 
-                # ############################################################ #
-                # Editable fields - consistency checks
-                # ############################################################ #
-                # Descrizione (O)
-                if 'descrizione' in _piano_input:
-                    _data = _piano_input.pop('descrizione')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-                        _piano.descrizione = _data[0]
+                            for _contatto_uuid in _autorita_competente_vas:
+                                _autorita_competenti.append(AutoritaCompetenteVAS(
+                                    piano=_piano,
+                                    autorita_competente=Contatto.objects.get(uuid=_contatto_uuid))
+                                )
 
-                # Data Delibera (O)
-                if 'data_delibera' in _piano_input:
-                    if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-                        _piano_input.pop('data_delibera')
-                        # This cannot be changed
+                            for _ac in _autorita_competenti:
+                                _new_role = UpdatePiano.get_role(_ac.autorita_competente, TIPOLOGIA_ATTORE.ac)
+                                UpdatePiano.get_or_create_token(_ac.autorita_competente.user, _piano, _new_role)
+                                _ac.save()
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
 
-                # Soggetto Proponente (O)
-                if 'soggetto_proponente_uuid' in _piano_input:
-                    _soggetto_proponente_uuid = _piano_input.pop('soggetto_proponente_uuid')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                        rules.test_rule('strt_core.api.is_actor', _token or
-                                                                  (info.context.user, _role) or
-                                                                  (info.context.user, _organization), 'Comune'):
-                        update_referenti(_piano, Referente.TIPO_PROPONENTE)
+            # Soggetti SCA (O)
+            if 'soggetti_sca' in _piano_input:
+                _soggetti_sca_uuid = _piano_input.pop('soggetti_sca')
+                if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+                    rules.test_rule('strt_core.api.is_actor', _token or \
+                                                              (info.context.user, _role) or \
+                                                              (info.context.user, _ente), 'Comune'):
 
-                        # if _piano.soggetto_proponente:
-                        #     UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
-                        #     _piano.soggetto_proponente = None
-                        #
-                        # if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
-                        #     _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
-                        #     _new_role = UpdatePiano.get_role(_soggetto_proponente, TIPOLOGIA_ATTORE.unknown)
-                        #     UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
-                        #     _piano.soggetto_proponente = _soggetto_proponente
-                    else:
-                        return GraphQLError(_("Forbidden"), code=403)
+                    _piano.soggetti_sca.clear()
 
-                # Autorita' Competente VAS (O)
-                if 'autorita_competente_vas' in _piano_input:
-                    _autorita_competente_vas = _piano_input.pop('autorita_competente_vas')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                        rules.test_rule('strt_core.api.is_actor', _token or \
+                    if _soggetti_sca_uuid:
+                        for _sca in _piano.soggetti_sca.all():
+                            UpdatePiano.delete_token(_sca.user, _piano)
+
+                        if len(_soggetti_sca_uuid) > 0:
+
+                            _soggetti_sca = []
+
+                            for _contatto_uuid in _soggetti_sca_uuid:
+                                _soggetti_sca.append(SoggettiSCA(
+                                    piano=_piano,
+                                    soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid))
+                                )
+
+                            for _sca in _soggetti_sca:
+                                _new_role = UpdatePiano.get_role(_sca.soggetto_sca, TIPOLOGIA_ATTORE.sca)
+                                UpdatePiano.get_or_create_token(_sca.soggetto_sca.user, _piano, _new_role)
+                                _sca.save()
+                else:
+                    return GraphQLError(_("Forbidden"), code=403)
+
+            # Autorita' Istituzionali (O)
+            if 'autorita_istituzionali' in _piano_input:
+                _autorita_istituzionali = _piano_input.pop('autorita_istituzionali')
+                if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+
+                    _piano.autorita_istituzionali.clear()
+
+                    if _autorita_istituzionali:
+
+                        for _ac in _piano.autorita_istituzionali.all():
+                            UpdatePiano.delete_token(_ac.user, _piano)
+
+                        if len(_autorita_istituzionali) > 0:
+
+                            _autorita_competenti = []
+
+                            for _contatto_uuid in _autorita_istituzionali:
+                                _autorita_competenti.append(AutoritaIstituzionali(
+                                    piano=_piano,
+                                    autorita_istituzionale=Contatto.objects.get(uuid=_contatto_uuid))
+                                )
+
+                            for _ac in _autorita_competenti:
+                                _tipologia = TIPOLOGIA_ATTORE.unknown
+                                if _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
+                                    _tipologia = TIPOLOGIA_ATTORE.genio_civile
+                                elif _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.acvas:
+                                    _tipologia = TIPOLOGIA_ATTORE.ac
+                                elif _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.sca:
+                                    _tipologia = TIPOLOGIA_ATTORE.sca
+                                elif _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.ente:
+                                    _tipologia = TIPOLOGIA_ATTORE.enti
+                                _new_role = UpdatePiano.get_role(_ac.autorita_istituzionale, _tipologia)
+                                UpdatePiano.get_or_create_token(_ac.autorita_istituzionale.user, _piano, _new_role)
+                                _ac.save()
+
+            # Altri Destinatari (O)
+            if 'altri_destinatari' in _piano_input:
+                _altri_destinatari = _piano_input.pop('altri_destinatari')
+                if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+
+                    _piano.altri_destinatari.clear()
+
+                    if _altri_destinatari:
+                        for _ac in _piano.altri_destinatari.all():
+                            UpdatePiano.delete_token(_ac.user, _piano)
+
+                        if len(_altri_destinatari) > 0:
+
+                            _autorita_competenti = []
+
+                            for _contatto_uuid in _altri_destinatari:
+                                _autorita_competenti.append(AltriDestinatari(
+                                    piano=_piano,
+                                    altro_destinatario=Contatto.objects.get(uuid=_contatto_uuid))
+                                )
+
+                            for _ac in _autorita_competenti:
+                                _tipologia = TIPOLOGIA_ATTORE.unknown
+                                if _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
+                                    _tipologia = TIPOLOGIA_ATTORE.genio_civile
+                                elif _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.acvas:
+                                    _tipologia = TIPOLOGIA_ATTORE.ac
+                                elif _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.sca:
+                                    _tipologia = TIPOLOGIA_ATTORE.sca
+                                elif _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.ente:
+                                    _tipologia = TIPOLOGIA_ATTORE.enti
+                                _new_role = UpdatePiano.get_role(_ac.altro_destinatario, _tipologia)
+                                UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano, _new_role)
+                                _ac.save()
+
+            # Protocollo Genio Civile
+            if 'data_protocollo_genio_civile' in _piano_input:
+                _piano_input.pop('data_protocollo_genio_civile')
+                # This cannot be changed
+
+            if 'numero_protocollo_genio_civile' in _piano_input:
+                if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) or \
+                    not rules.test_rule('strt_core.api.is_actor', _token or \
                                                                   (info.context.user, _role) or \
-                                                                  (info.context.user, _organization), 'Comune'):
+                                                                  (info.context.user, _ente), 'genio_civile'):
+                    _piano_input.pop('numero_protocollo_genio_civile')
+                    # This can be changed only by Genio Civile
 
-                        _piano.autorita_competente_vas.clear()
-
-                        if _autorita_competente_vas:
-                            for _ac in _piano.autorita_competente_vas.all():
-                                UpdatePiano.delete_token(_ac.user, _piano)
-
-                            if len(_autorita_competente_vas) > 0:
-
-                                _autorita_competenti = []
-
-                                for _contatto_uuid in _autorita_competente_vas:
-                                    _autorita_competenti.append(AutoritaCompetenteVAS(
-                                        piano=_piano,
-                                        autorita_competente=Contatto.objects.get(uuid=_contatto_uuid))
-                                    )
-
-                                for _ac in _autorita_competenti:
-                                    _new_role = UpdatePiano.get_role(_ac.autorita_competente, TIPOLOGIA_ATTORE.ac)
-                                    UpdatePiano.get_or_create_token(_ac.autorita_competente.user, _piano, _new_role)
-                                    _ac.save()
-                    else:
-                        return GraphQLError(_("Forbidden"), code=403)
-
-                # Soggetti SCA (O)
-                if 'soggetti_sca' in _piano_input:
-                    _soggetti_sca_uuid = _piano_input.pop('soggetti_sca')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-                        rules.test_rule('strt_core.api.is_actor', _token or \
-                                                                  (info.context.user, _role) or \
-                                                                  (info.context.user, _organization), 'Comune'):
-
-                        _piano.soggetti_sca.clear()
-
-                        if _soggetti_sca_uuid:
-                            for _sca in _piano.soggetti_sca.all():
-                                UpdatePiano.delete_token(_sca.user, _piano)
-
-                            if len(_soggetti_sca_uuid) > 0:
-
-                                _soggetti_sca = []
-
-                                for _contatto_uuid in _soggetti_sca_uuid:
-                                    _soggetti_sca.append(SoggettiSCA(
-                                        piano=_piano,
-                                        soggetto_sca=Contatto.objects.get(uuid=_contatto_uuid))
-                                    )
-
-                                for _sca in _soggetti_sca:
-                                    _new_role = UpdatePiano.get_role(_sca.soggetto_sca, TIPOLOGIA_ATTORE.sca)
-                                    UpdatePiano.get_or_create_token(_sca.soggetto_sca.user, _piano, _new_role)
-                                    _sca.save()
-                    else:
-                        return GraphQLError(_("Forbidden"), code=403)
-
-                # Autorita' Istituzionali (O)
-                if 'autorita_istituzionali' in _piano_input:
-                    _autorita_istituzionali = _piano_input.pop('autorita_istituzionali')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-
-                        _piano.autorita_istituzionali.clear()
-
-                        if _autorita_istituzionali:
-
-                            for _ac in _piano.autorita_istituzionali.all():
-                                UpdatePiano.delete_token(_ac.user, _piano)
-
-                            if len(_autorita_istituzionali) > 0:
-
-                                _autorita_competenti = []
-
-                                for _contatto_uuid in _autorita_istituzionali:
-                                    _autorita_competenti.append(AutoritaIstituzionali(
-                                        piano=_piano,
-                                        autorita_istituzionale=Contatto.objects.get(uuid=_contatto_uuid))
-                                    )
-
-                                for _ac in _autorita_competenti:
-                                    _tipologia = TIPOLOGIA_ATTORE.unknown
-                                    if _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
-                                        _tipologia = TIPOLOGIA_ATTORE.genio_civile
-                                    elif _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.acvas:
-                                        _tipologia = TIPOLOGIA_ATTORE.ac
-                                    elif _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.sca:
-                                        _tipologia = TIPOLOGIA_ATTORE.sca
-                                    elif _ac.autorita_istituzionale.tipologia == TIPOLOGIA_CONTATTO.ente:
-                                        _tipologia = TIPOLOGIA_ATTORE.enti
-                                    _new_role = UpdatePiano.get_role(_ac.autorita_istituzionale, _tipologia)
-                                    UpdatePiano.get_or_create_token(_ac.autorita_istituzionale.user, _piano, _new_role)
-                                    _ac.save()
-
-                # Altri Destinatari (O)
-                if 'altri_destinatari' in _piano_input:
-                    _altri_destinatari = _piano_input.pop('altri_destinatari')
-                    if rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-
-                        _piano.altri_destinatari.clear()
-
-                        if _altri_destinatari:
-                            for _ac in _piano.altri_destinatari.all():
-                                UpdatePiano.delete_token(_ac.user, _piano)
-
-                            if len(_altri_destinatari) > 0:
-
-                                _autorita_competenti = []
-
-                                for _contatto_uuid in _altri_destinatari:
-                                    _autorita_competenti.append(AltriDestinatari(
-                                        piano=_piano,
-                                        altro_destinatario=Contatto.objects.get(uuid=_contatto_uuid))
-                                    )
-
-                                for _ac in _autorita_competenti:
-                                    _tipologia = TIPOLOGIA_ATTORE.unknown
-                                    if _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.genio_civile:
-                                        _tipologia = TIPOLOGIA_ATTORE.genio_civile
-                                    elif _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.acvas:
-                                        _tipologia = TIPOLOGIA_ATTORE.ac
-                                    elif _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.sca:
-                                        _tipologia = TIPOLOGIA_ATTORE.sca
-                                    elif _ac.altro_destinatario.tipologia == TIPOLOGIA_CONTATTO.ente:
-                                        _tipologia = TIPOLOGIA_ATTORE.enti
-                                    _new_role = UpdatePiano.get_role(_ac.altro_destinatario, _tipologia)
-                                    UpdatePiano.get_or_create_token(_ac.altro_destinatario.user, _piano, _new_role)
-                                    _ac.save()
-
-                # Protocollo Genio Civile
-                if 'data_protocollo_genio_civile' in _piano_input:
-                    _piano_input.pop('data_protocollo_genio_civile')
-                    # This cannot be changed
-
-                if 'numero_protocollo_genio_civile' in _piano_input:
-                    if not rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) or \
-                        not rules.test_rule('strt_core.api.is_actor', _token or \
-                                                                      (info.context.user, _role) or \
-                                                                      (info.context.user, _organization), 'genio_civile'):
-                        _piano_input.pop('numero_protocollo_genio_civile')
-                        # This can be changed only by Genio Civile
-
-                piano_aggiornato = update_create_instance(_piano, _piano_input)
-                return cls(piano_aggiornato=piano_aggiornato)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-        else:
-            return GraphQLError(_("Forbidden"), code=403)
+            piano_aggiornato = update_create_instance(_piano, _piano_input)
+            return cls(piano_aggiornato=piano_aggiornato)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+        # else:
+        #     return GraphQLError(_("Forbidden"), code=403)
 
 
 class DeletePiano(graphene.Mutation):

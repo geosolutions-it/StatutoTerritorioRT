@@ -13,11 +13,13 @@ import logging
 import rules
 
 from strt_users.enums import (
-    Profilo,
-)
+    Profilo, Qualifica,
+    Priv)
 
 from strt_users.models import (
-    Utente, ProfiloUtente,
+    Utente,
+    ProfiloUtente,
+    Assegnatario,
     Ente)
 
 from serapide_core.modello.models import (
@@ -37,9 +39,38 @@ def can_create_piano(utente, ente):
         logger.error('Utente di tipo errato <{tipo}>[{utente}]'.format(tipo=type(utente), utente=utente))
         return False
 
-    return ProfiloUtente.objects\
-        .filter(utente=utente, ente=ente, profilo=Profilo.ADMIN_ENTE) # TODO: use privs
+    profili_utente = ProfiloUtente.objects\
+        .filter(utente=utente, ente=ente)
 
+    for pu in profili_utente:
+        p = pu.profilo
+        if Priv.CREATE_PLAN in p.get_priv():
+            return True
+
+    return False
+
+
+def can_edit_piano(utente, ente):
+    if not isinstance(utente, Utente):
+        logger.error('Utente di tipo errato <{tipo}>[{utente}]'.format(tipo=type(utente), utente=utente))
+        return False
+
+    profili_utente = ProfiloUtente.objects\
+        .filter(utente=utente, ente=ente)
+
+    for pu in profili_utente:
+        p = pu.profilo
+        if Priv.OPERATE_PLAN in p.get_priv():
+            return True
+
+    return False
+
+def has_qualifica(utente, ente:Ente, qualifica:Qualifica):
+    return Assegnatario.objects. \
+        filter(utente=utente). \
+        filter(qualifica_ufficio__qualifica=qualifica). \
+        filter(qualifica_ufficio__ufficio__ente=ente). \
+        exist()
 
 @rules.predicate
 def can_access_piano(user, piano):

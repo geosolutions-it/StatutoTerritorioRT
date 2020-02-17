@@ -78,7 +78,7 @@ class Profilo(Enum):
         :return: a list of related Privs
         '''
 
-        return Profilo.PRIV_BY_PROFILE[self]
+        return PRIV_BY_PROFILE[self]
 
 PRIV_BY_PROFILE = {
     Profilo.ADMIN_PORTALE:

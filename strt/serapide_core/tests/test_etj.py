@@ -10,21 +10,12 @@ from serapide_core.schema import schema
 
 from .test_data_setup import DataLoader
 
-# Check https://github.com/graphql-python/graphene-django/issues/828
-# for the error: AttributeError: 'function' object has no attribute 'wrapped'
-
 logger = logging.getLogger(__name__)
 
 class UserLoginTestCase(GraphQLTestCase):
     # injecting test case's schema
     GRAPHQL_SCHEMA = schema
     GRAPHQL_URL = "/serapide/graphql/"
-
-    # LOGIN_URL = "/serapide/login/"
-    # LOGIN_URL =  '/serapide/accounts/login/'
-    # LOGIN_URL =  '/serapide/membership-type-api/'
-    # LOGIN_URL =  '/serapide/users-list/'
-    # LOGIN_URL =  '/users/login/'
     LOGIN_URL = '/users/login/'
 
     GET_PROFILES_URL =  '/users/membership-type-api/'
@@ -117,29 +108,37 @@ class UserLoginTestCase(GraphQLTestCase):
         )
         self.assertEqual(200, response.status_code, 'CREATE PIANO failed')
 
-
         dump_result('CREATE PIANO', response)
 
-        # print("CREATE PIANO ====================")
-        # print(create_piano_resp)
-        # print(create_piano_resp.content)
+        content = json.loads(response.content)
+        codice_piano = content['data']['createPiano']['nuovoPiano']['codice']
+        print("PIANO CREATO ==================== {}".format(codice_piano))
 
 
-        # self.assertResponseNoErrors(create_piano_resp)
+        print("UPDATE PIANO ====================")
+        with open(os.path.join(this_path, 'fixtures', '002_update_piano.query'), 'r') as file:
+            query = file.read().replace('\n', '')
+        query_bound = query.replace('{codice_piano}', codice_piano)
+        response = self._client.post(
+            self.GRAPHQL_URL,
+            query_bound,
+            content_type="application/json",
+            # **headers
+        )
 
-        # print(create_piano_resp)
-        # print(create_piano_resp.content)
-        # self.assertEqual(200, create_piano_resp.status_code)
+        dump_result('UPDATE PIANO', response)
+
+        self.assertEqual(200, response.status_code, 'UPDATE PIANO failed')
 
 
-        # print("JSON FORM FILE  ====================")
-        # print(content)
 
         # This validates the status code and if you get errors
         self.assertResponseNoErrors(response)
 
     @classmethod
     def tearDownClass(cls):
+        # Check https://github.com/graphql-python/graphene-django/issues/828
+        # for the error: AttributeError: 'function' object has no attribute 'wrapped'
         try:
             super().tearDownClass()
         except AttributeError as e:
