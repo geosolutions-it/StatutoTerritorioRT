@@ -20,9 +20,11 @@ from strt_users.models import (
     Utente,
     ProfiloUtente,
     Assegnatario,
+    QualificaUfficio,
     Ente)
 
 from serapide_core.modello.models import (
+    Piano,
     SoggettoOperante,
     Delega,
     # PianoAuthTokens
@@ -33,6 +35,13 @@ logger = logging.getLogger(__name__)
 # ############################################################################ #
 # User
 # ############################################################################ #
+
+def is_recognizable(user):
+    logger.warning("is_recognizable: USER {user} {anon} {act} {auth}".format(user=user, anon=user.is_anonymous, act=user.is_active, auth=user.is_authenticated))
+    return user \
+           and not user.is_anonymous \
+           and user.is_active \
+           and user.is_authenticated
 
 def can_create_piano(utente, ente):
     if not isinstance(utente, Utente):
@@ -70,7 +79,35 @@ def has_qualifica(utente, ente:Ente, qualifica:Qualifica):
         filter(utente=utente). \
         filter(qualifica_ufficio__qualifica=qualifica). \
         filter(qualifica_ufficio__ufficio__ente=ente). \
-        exist()
+        exists()
+
+def is_soggetto_operante(utente, piano:Piano, qualifica:Qualifica=None):
+    # TODO aggiungere gestione deleghe
+    logger.warning("is_soggetto_operante: USER {utente}".format(utente=utente))
+    assegnatario = Assegnatario.objects.filter(utente=utente)
+    if qualifica:
+        assegnatario = assegnatario.filter(qualifica_ufficio__qualifica=qualifica)
+    qu_set = [a.qualifica_ufficio for a in assegnatario]
+
+    qs =  SoggettoOperante.objects. \
+        filter(piano=piano). \
+        filter(qualifica_ufficio__in=qu_set)
+
+    if qualifica:
+        qs = qs.filter(qualifica_ufficio__qualifica=qualifica)
+
+    return qs.exists()
+
+def is_soggetto_proponente(utente, piano:Piano):
+
+    return Assegnatario.objects. \
+        filter(utente=utente). \
+        filter(qualifica_ufficio=piano.soggetto_proponente). \
+        exists()
+
+def is_soggetto(utente, piano:Piano):
+    return is_soggetto_operante(utente, piano) or is_soggetto_proponente(utente, piano)
+
 
 @rules.predicate
 def can_access_piano(user, piano):

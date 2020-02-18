@@ -1,15 +1,16 @@
 {
-   "operationName" : "UpdatePiano",
+   "operationName" : "UploadFile",
+
    "variables" : {
-      "input" : {
-         "codice" : "{codice_piano}",
-         "pianoOperativo" : {
-            "{nome_campo}" : "{valore_campo}"
-         }
-      }
+      "codice" : "{codice_piano}",
+      "tipo" : "delibera",
+      "file" : null
    },
-   "query" : "mutation UpdatePiano($input: UpdatePianoInput!) {
-  updatePiano(input: $input) {
+
+   "query" : "mutation UploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+  upload(file: $file, codice: $codice, tipoFile: $tipo) {
+    success
+    fileName
     pianoAggiornato {
       ...Piano
       __typename

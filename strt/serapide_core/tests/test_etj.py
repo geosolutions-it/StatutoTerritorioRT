@@ -3,7 +3,11 @@ import logging
 import json
 import os
 import sys
+import datetime
+import time
+import tempfile
 
+from django.test.client import MULTIPART_CONTENT
 from graphene_django.utils.testing import GraphQLTestCase
 from serapide_core.schema import schema
 
@@ -12,7 +16,7 @@ from .test_data_setup import DataLoader
 
 logger = logging.getLogger(__name__)
 
-class UserLoginTestCase(GraphQLTestCase):
+class FullFlowTestCase(GraphQLTestCase):
     # injecting test case's schema
     GRAPHQL_SCHEMA = schema
     GRAPHQL_URL = "/serapide/graphql/"
@@ -114,11 +118,17 @@ class UserLoginTestCase(GraphQLTestCase):
         codice_piano = content['data']['createPiano']['nuovoPiano']['codice']
         print("PIANO CREATO ==================== {}".format(codice_piano))
 
-
-        print("UPDATE PIANO ====================")
+        print("UPDATE PIANO ==================== 1")
         with open(os.path.join(this_path, 'fixtures', '002_update_piano.query'), 'r') as file:
-            query = file.read().replace('\n', '')
-        query_bound = query.replace('{codice_piano}', codice_piano)
+            query_update = file.read().replace('\n', '')
+        query_bound = query_update.replace('{codice_piano}', codice_piano)
+
+        now = datetime.datetime.now()
+        now = now.replace(microsecond=0)
+
+        query_bound = query_bound.replace('{nome_campo}', "dataDelibera")
+        query_bound = query_bound.replace('{valore_campo}',  now.isoformat())
+
         response = self._client.post(
             self.GRAPHQL_URL,
             query_bound,
@@ -129,7 +139,52 @@ class UserLoginTestCase(GraphQLTestCase):
         dump_result('UPDATE PIANO', response)
 
         self.assertEqual(200, response.status_code, 'UPDATE PIANO failed')
+        print("UPDATE PIANO ==================== 1 OK")
 
+        print("UPDATE PIANO ==================== 2")
+        query_bound = query_update.replace('{codice_piano}', codice_piano)
+
+        query_bound = query_bound.replace('{nome_campo}', "descrizione")
+        query_bound = query_bound.replace('{valore_campo}', "Piano di test [{}]".format(now))
+
+        response = self._client.post(
+            self.GRAPHQL_URL,
+            query_bound,
+            content_type="application/json",
+            # **headers
+        )
+
+        dump_result('UPDATE PIANO', response)
+
+        self.assertEqual(200, response.status_code, 'UPDATE PIANO failed')
+        print("UPDATE PIANO ==================== 2 OK")
+
+
+        print("UPLOAD FILE ==================== 1")
+        with open(os.path.join(this_path, 'fixtures', '003_upload_file.query'), 'r') as file:
+            query_upload = file.read().replace('\n', '')
+        query_bound = query_upload.replace('{codice_piano}', codice_piano)
+
+        # now = datetime.datetime.now()
+        # now = now.replace(microsecond=0)
+        #
+        # query_bound = query_bound.replace('{nome_campo}', "dataDelibera")
+        # query_bound = query_bound.replace('{valore_campo}',  now.isoformat())
+
+        with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
+            form = {
+                "operations": query_bound,
+                "map" : '{"1":["variables.file"]}',
+                "1": f,
+            }
+
+            response = self._client.post(self.GRAPHQL_URL,
+                                        content_type=MULTIPART_CONTENT,
+                                        data=form)
+
+            self.assertEqual(response.status_code, 200)
+
+        dump_result('UPLOAD FILE', response)
 
 
         # This validates the status code and if you get errors

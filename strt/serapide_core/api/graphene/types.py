@@ -150,7 +150,6 @@ class AzioneNode(DjangoObjectType):
         model = Azione
         filter_fields = ['uuid',
                          'tipologia',
-                         #'attore',
                          'stato',
                          'data']
         interfaces = (relay.Node, )
@@ -456,6 +455,7 @@ class EnteNode(DjangoObjectType):
             'descrizione': ['exact', 'icontains'],
         }
         interfaces = (relay.Node, )
+        convert_choices_to_enum = False
 
 
 class ProceduraVASNode(DjangoObjectType):
@@ -660,6 +660,7 @@ class PianoNode(DjangoObjectType):
     soggetto_proponente = graphene.Field(EnteNode)
     alerts_count = graphene.String()
     azioni = graphene.List(AzioneNode)
+    soggetti_operanti = graphene.List(SoggettoOperanteNode)
 
     def resolve_azioni(self, info, **args):
         return Azione.objects.filter(piano=self)
@@ -683,6 +684,10 @@ class PianoNode(DjangoObjectType):
         except BaseException:
             pass
         return _vas
+
+    def resolve_soggetti_operanti(self, info, **args):
+        # Warning this is not currently paginated
+        return SoggettoOperante.objects.filter(piano=self)
 
     class Meta:
         model = Piano
@@ -764,5 +769,3 @@ class UtenteChoiceNode(DjangoObjectType):
             'email': ['exact'],
         }
         exclude_fields = ('password', 'is_active', 'is_superuser', 'last_login')
-
-

@@ -55,7 +55,6 @@ fragment Piano on PianoNode {
     __typename
   }
   soggettoProponente {
-
     __typename
   }
   __typename
@@ -105,6 +104,7 @@ fragment Azioni on AzioneNode {
       order
       tipologia
       stato
+      qualificaRichiesta
       data
       uuid
       label

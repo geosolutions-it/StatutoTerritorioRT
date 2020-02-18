@@ -13,6 +13,7 @@ import logging
 import os
 import traceback
 import binascii
+import uuid
 
 from django.dispatch import receiver
 from django.db.models.signals import post_init
@@ -106,9 +107,9 @@ class Utente(AbstractBaseUser, PermissionsMixin):
         if self.first_name or self.last_name:
             first_name = self.first_name if self.first_name else ''
             last_name = self.last_name if self.last_name else ''
-            return "{} - {} {}".format(self.fiscal_code.upper(), first_name, last_name)
+            return "Utente[{} - {} {}]".format(self.fiscal_code.upper(), first_name, last_name)
         else:
-            return self.fiscal_code.upper()
+            return "Utente[{}]".format(self.fiscal_code.upper())
 
     def get_full_name(self):
         if self.first_name and self.last_name:
@@ -219,6 +220,10 @@ class Ufficio(models.Model):
     # id = models.CharField(
     #     max_length=50, primary_key=True, verbose_name=_('id')
     # )
+    uuid = models.UUIDField(
+        default=uuid.uuid4, editable=False,
+    )
+
     nome = models.CharField(
         max_length=255, null=False, blank=False, verbose_name=_('nome')
     )

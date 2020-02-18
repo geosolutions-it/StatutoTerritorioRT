@@ -52,8 +52,11 @@ from serapide_core.modello.models import (
     RisorseApprovazione,
     RisorsePubblicazione,
 )
+from strt_users.enums import Qualifica
 
 from .. import types
+
+import serapide_core.api.auth.user as auth
 
 logger = logging.getLogger(__name__)
 
@@ -112,38 +115,40 @@ class UploadFile(UploadBaseBase):
 
     @classmethod
     def mutate(cls, root, info, file, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _codice_piano = input['codice']
-            _tipo_file = input['tipo_file']
+        if not info.context.user or not  auth.is_recognizable(info.context.user):
+            return GraphQLError("Not Authorized - Utente non riconosciuto", code=401)
 
-            try:
-                # Validating 'Piano'
-                _piano = Piano.objects.get(codice=_codice_piano)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-                    _resources = UploadBaseBase.handle_uploaded_data(
-                        file,
-                        _codice_piano,
-                        _piano.fase,
-                        _tipo_file,
-                        info.context.user
-                    )
-                    _success = False
-                    if _resources and len(_resources) > 0:
-                        _success = True
-                        for _risorsa in _resources:
-                            RisorsePiano(piano=_piano, risorsa=_risorsa).save()
-                    return UploadFile(piano_aggiornato=_piano, success=_success, file_name=_resources[0].nome)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+        # Fetching input arguments
+        _codice_piano = input['codice']
+        _tipo_file = input['tipo_file']
 
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+        try:
+            # Validating 'Piano'
+            _piano = Piano.objects.get(codice=_codice_piano) # TODO 404
+            # if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+            # rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+            if not auth.is_soggetto(info.context.user, _piano):
+                if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                    return GraphQLError("Forbidden - L'utente non può operare su questo Piano", code=403)
+
+            _resources = UploadBaseBase.handle_uploaded_data(
+                file,
+                _codice_piano,
+                _piano.fase,
+                _tipo_file,
+                info.context.user
+            )
+            _success = False
+            if _resources and len(_resources) > 0:
+                _success = True
+                for _risorsa in _resources:
+                    RisorsePiano(piano=_piano, risorsa=_risorsa).save()
+            return UploadFile(piano_aggiornato=_piano, success=_success, file_name=_resources[0].nome)
+
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class UploadRisorsaVAS(UploadBaseBase):

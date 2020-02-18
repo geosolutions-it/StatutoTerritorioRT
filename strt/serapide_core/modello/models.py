@@ -252,14 +252,14 @@ class Piano(models.Model):
     #     through='SoggettiSCA'
     # )
     #
-    # soggetto_proponente = models.ForeignKey(
-    #     to=Contatto,
-    #     on_delete=models.DO_NOTHING,
-    #     verbose_name=_('soggetto proponente'),
-    #     default=None,
-    #     blank=True,
-    #     null=True
-    # )
+    soggetto_proponente = models.ForeignKey(
+        to=QualificaUfficio,
+        on_delete=models.DO_NOTHING,
+        verbose_name=_('soggetto proponente'),
+        default=None,
+        blank=True,
+        null=True
+    )
 
     ente = models.ForeignKey(
         to=Ente,
@@ -283,11 +283,13 @@ class Piano(models.Model):
         # - Complete Current Actions
         _now = datetime.now(timezone.get_current_timezone())
         if attesa:
-            self.azioni.filter(
-                stato=STATO_AZIONE.attesa).update(stato=STATO_AZIONE.nessuna, data=_now)
+            self.azioni\
+                .filter(stato=STATO_AZIONE.attesa)\
+                .update(stato=STATO_AZIONE.nessuna, data=_now)
         if necessaria:
-            self.azioni.filter(
-                stato=STATO_AZIONE.necessaria).update(stato=STATO_AZIONE.nessuna, data=_now)
+            self.azioni\
+                .filter(stato=STATO_AZIONE.necessaria)\
+                .update(stato=STATO_AZIONE.nessuna, data=_now)
 
     @property
     def next_phase(self):
@@ -370,7 +372,7 @@ class Azione(models.Model):
     uuid = models.UUIDField(
         default=uuid.uuid4,
         editable=False,
-        null=True
+        null=False
     )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
@@ -406,6 +408,12 @@ class Azione(models.Model):
 
     def count_by_piano(piano):
         return Azione.objects.filter(piano=piano).count()
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(Azione, cls).from_db(db, field_names, values)
+        instance.qualifica_richiesta = QualificaRichiesta.fix_enum(instance.qualifica_richiesta)
+        return instance
 
 
 class FasePianoStorico(models.Model):

@@ -191,7 +191,7 @@ class QualificaRichiesta(Enum):
 
     @classmethod
     def fix_enum(cls, obj):
-        fix_enum(cls, obj)
+        return fix_enum(cls, obj)
 
     def is_ok(self, qual:Qualifica):
         return qual in ALLOWED_QUALIFICA_BY_RICHIESTA[self]
