@@ -60,6 +60,9 @@ fragment Piano on PianoNode {
   soggettiOperanti {
     __typename
   }
+  proceduraVas {
+    uuid
+  }
   __typename
 }
 

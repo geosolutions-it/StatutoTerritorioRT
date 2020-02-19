@@ -16,6 +16,8 @@ from .test_data_setup import DataLoader
 
 logger = logging.getLogger(__name__)
 
+this_path = os.path.dirname(__file__)
+
 class FullFlowTestCase(GraphQLTestCase):
     # injecting test case's schema
     GRAPHQL_SCHEMA = schema
@@ -81,7 +83,7 @@ class FullFlowTestCase(GraphQLTestCase):
 
         ### Try a CreatePiano
         # this_path = sys.path[0]
-        this_path = os.path.dirname(__file__)
+
 
         with open(os.path.join(this_path, 'fixtures', '001_create_piano.query'), 'r') as file:
             query = file.read().replace('\n', '')
@@ -110,13 +112,14 @@ class FullFlowTestCase(GraphQLTestCase):
             content_type="application/json",
             # **headers
         )
-        self.assertEqual(200, response.status_code, 'CREATE PIANO failed')
 
         dump_result('CREATE PIANO', response)
+        self.assertEqual(200, response.status_code, 'CREATE PIANO failed')
 
         content = json.loads(response.content)
         codice_piano = content['data']['createPiano']['nuovoPiano']['codice']
-        print("PIANO CREATO ==================== {}".format(codice_piano))
+        codice_vas = content['data']['createPiano']['nuovoPiano']['proceduraVas']['uuid']
+        print("PIANO CREATO ^^^^^^^^^^^^^^^^^^^^ {}".format(codice_piano))
 
         print("UPDATE PIANO ==================== 1")
         with open(os.path.join(this_path, 'fixtures', '002_update_piano.query'), 'r') as file:
@@ -137,9 +140,9 @@ class FullFlowTestCase(GraphQLTestCase):
         )
 
         dump_result('UPDATE PIANO', response)
-
         self.assertEqual(200, response.status_code, 'UPDATE PIANO failed')
-        print("UPDATE PIANO ==================== 1 OK")
+
+        print("UPDATE PIANO OK ^^^^^^^^^^^^^^^^^^^^ 1")
 
         print("UPDATE PIANO ==================== 2")
         query_bound = query_update.replace('{codice_piano}', codice_piano)
@@ -157,38 +160,59 @@ class FullFlowTestCase(GraphQLTestCase):
         dump_result('UPDATE PIANO', response)
 
         self.assertEqual(200, response.status_code, 'UPDATE PIANO failed')
-        print("UPDATE PIANO ==================== 2 OK")
+        print("UPDATE PIANO OK ^^^^^^^^^^^^^^^^^^^^ 2")
+
+        response = self.upload_file(codice_piano, '003_upload_file.query')
+
+        response = self.update_vas(codice_vas, 'semplificata', '004_update_procedura_vas.query')
 
 
+
+    def upload_file(self, codice_piano, file_name):
         print("UPLOAD FILE ==================== 1")
-        with open(os.path.join(this_path, 'fixtures', '003_upload_file.query'), 'r') as file:
+        with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
             query_upload = file.read().replace('\n', '')
         query_bound = query_upload.replace('{codice_piano}', codice_piano)
-
-        # now = datetime.datetime.now()
-        # now = now.replace(microsecond=0)
-        #
-        # query_bound = query_bound.replace('{nome_campo}', "dataDelibera")
-        # query_bound = query_bound.replace('{valore_campo}',  now.isoformat())
 
         with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
             form = {
                 "operations": query_bound,
-                "map" : '{"1":["variables.file"]}',
+                "map": '{"1":["variables.file"]}',
                 "1": f,
             }
 
             response = self._client.post(self.GRAPHQL_URL,
-                                        content_type=MULTIPART_CONTENT,
-                                        data=form)
+                                         content_type=MULTIPART_CONTENT,
+                                         data=form)
 
             self.assertEqual(response.status_code, 200)
-
         dump_result('UPLOAD FILE', response)
+        print("UPLOAD FILE OK ^^^^^^^^^^^^^^^^^^^^ 1")
+        return response
 
 
-        # This validates the status code and if you get errors
-        self.assertResponseNoErrors(response)
+    def update_vas(self, codice_vas, tipologia, file_name):
+        print("UPDATE VAS ==================== 1")
+        with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
+            query = file.read().replace('\n', '')
+
+        query = query.replace('{codice_vas}', codice_vas)
+        query = query.replace('{tipologia_vas}', tipologia)
+
+        response = self._client.post(
+            self.GRAPHQL_URL,
+            query,
+            content_type="application/json",
+            # **headers
+        )
+
+        dump_result('UPDATE VAS', response)
+
+        self.assertEqual(200, response.status_code, 'UPDATE VAS failed')
+        print("UPDATE VAS OK ^^^^^^^^^^^^^^^^^^^^ 1")
+
+        return response
+
 
     @classmethod
     def tearDownClass(cls):

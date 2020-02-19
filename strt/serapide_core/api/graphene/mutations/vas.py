@@ -23,6 +23,7 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
+
 from serapide_core.helpers import (
     is_RUP,
     update_create_instance)
@@ -40,11 +41,14 @@ from serapide_core.modello.models import (
     ProceduraAvvio,
     ConsultazioneVAS,
     ParereVerificaVAS,
+
     isExecuted,
     needsExecution,
     ensure_fase,
+    crea_azione,
+    chiudi_azione,
 )
-
+from strt_users.enums import QualificaRichiesta, Qualifica
 from serapide_core.modello.enums import (
     Fase,
     STATO_AZIONE,
@@ -53,9 +57,11 @@ from serapide_core.modello.enums import (
     # TIPOLOGIA_ATTORE,
 )
 
-from serapide_core.api.graphene import types
-from serapide_core.api.graphene import inputs
+from serapide_core.api.graphene import (types, inputs)
 from serapide_core.api.graphene.mutations import fase
+
+import serapide_core.api.auth.user as auth
+
 
 logger = logging.getLogger(__name__)
 
@@ -72,40 +78,37 @@ def init_vas_procedure(piano:Piano):
             _verifica_vas.stato = STATO_AZIONE.nessuna
 
         elif procedura_vas.tipologia in \
-                (TIPOLOGIA_VAS.procedimento, TIPOLOGIA_VAS.procedimento_semplificato):
-            _verifica_vas.stato = STATO_AZIONE.nessuna
+                (TIPOLOGIA_VAS.procedimento,
+                 TIPOLOGIA_VAS.procedimento_semplificato):
+
             _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
-            _verifica_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
-                                 datetime.timedelta(days=_verifica_vas_expire_days)
+            chiudi_azione(_verifica_vas, datetime.datetime.now(timezone.get_current_timezone()) + \
+                                 datetime.timedelta(days=_verifica_vas_expire_days))
 
             _avvio_consultazioni_sca_ac_expire_days = 10
-            _avvio_consultazioni_sca = Azione(
+            crea_azione(Azione(
+                piano=piano,
                 tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
-                attore=TIPOLOGIA_ATTORE.ac,
+                qualifica_richiesta=QualificaRichiesta.AC,
                 order=_order,
                 stato=STATO_AZIONE.attesa,
                 data=datetime.datetime.now(timezone.get_current_timezone()) +
                      datetime.timedelta(days=_avvio_consultazioni_sca_ac_expire_days)
-            )
-            _avvio_consultazioni_sca.save()
-            _order += 1
-            AzioniPiano.objects.get_or_create(azione=_avvio_consultazioni_sca, piano=piano)
+            ))
 
         elif procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
             _verifica_vas.stato = STATO_AZIONE.nessuna
 
             _emissione_provvedimento_verifica_expire_days = 30
-            _emissione_provvedimento_verifica = Azione(
+            crea_azione(Azione(
+                piano=piano,
                 tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
-                attore=TIPOLOGIA_ATTORE.ac,
+                qualifica_richiesta=QualificaRichiesta.AC,
                 order=_order,
                 stato=STATO_AZIONE.attesa,
                 data=datetime.datetime.now(timezone.get_current_timezone()) +
                      datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
-            )
-            _emissione_provvedimento_verifica.save()
-            _order += 1
-            AzioniPiano.objects.get_or_create(azione=_emissione_provvedimento_verifica, piano=piano)
+            ))
 
         elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
             # _verifica_vas.stato = STATO_AZIONE.attesa
@@ -207,120 +210,109 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _procedura_vas_data = input.get('procedura_vas')
-        if 'piano' in _procedura_vas_data:
-            # This cannot be changed
-            _procedura_vas_data.pop('piano')
         _piano = _procedura_vas.piano
-        _role = info.context.session['role'] if 'role' in info.context.session else None
-        _token = info.context.session['token'] if 'token' in info.context.session else None
+
+        # _role = info.context.session['role'] if 'role' in info.context.session else None
+        # _token = info.context.session['token'] if 'token' in info.context.session else None
         _ente = _piano.ente
-        if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
-            try:
-                if 'uuid' in _procedura_vas_data:
-                    _procedura_vas_data.pop('uuid')
-                    # This cannot be changed
 
-                if 'data_creazione' in _procedura_vas_data:
-                    _procedura_vas_data.pop('data_creazione')
-                    # This cannot be changed
+        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+            if not auth.is_soggetto(info.context.user, _piano):
+                return GraphQLError(_("Forbidden"), code=403)
+            if not auth.is_soggetto(info.context.user, _piano):
+                return GraphQLError(_("Forbidden"), code=403)
 
-                # Ente (M)
-                if 'ente' in _procedura_vas_data:
-                    _procedura_vas_data.pop('ente')
-                    # This cannot be changed
+        try:
+            # These fields cannot be changed
+            for field in ['piano', 'uuid', 'data_creazione', 'ente']:
+                if 'field' in _procedura_vas_data:
+                    logger.warning('Il campo "{}" non può essere modificato attraverso questa operazione'.format(field))
+                    _procedura_vas_data.pop(field)
 
-                # Tipologia (O)
-                if 'tipologia' in _procedura_vas_data:
-                    if rules.test_rule('strt_users.is_superuser', info.context.user) or \
-                    is_RUP(info.context.user) or \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune'):
-                        _tipologia = _procedura_vas_data.pop('tipologia')
-                        if _tipologia and _tipologia in TIPOLOGIA_VAS:
-                            _procedura_vas_data['tipologia'] = _tipologia
+            # These fields can be changed by the RESP only
+            # Tipologia (O)
+            if 'tipologia' in _procedura_vas_data:
+                _tipologia = _procedura_vas_data.pop('tipologia')
+                if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                    if _tipologia and _tipologia in TIPOLOGIA_VAS:
+                        _procedura_vas_data['tipologia'] = _tipologia
+                    else:
+                        logger.info('Valore di tipologia sconosciuto: [{}]'.format(_tipologia))
+                else:
+                    logger.info('Non si hanno i privilegi per modificare il campo "tipologia"')
 
-                # Note (O)
-                if 'note' in _procedura_vas_data:
-                    if rules.test_rule('strt_users.is_superuser', info.context.user) or \
-                    is_RUP(info.context.user) or \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'Comune'):
-                        _data = _procedura_vas_data.pop('note')
-                        _procedura_vas.note = _data[0]
+            # Note (O)
+            if 'note' in _procedura_vas_data:
+                _data = _procedura_vas_data.pop('note')
+                if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                    _procedura_vas.note = _data[0]
+                else:
+                    logger.info('Non si hanno i privilegi per modificare il campo "note"')
 
-                procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
+            procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
 
-                if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap:
-                    if rules.test_rule('strt_users.is_superuser', info.context.user) or \
-                    is_RUP(info.context.user) or \
-                    rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune'):
-                        _pubblicazione_provvedimento_verifica_ap = _piano.azioni\
-                            .filter(
-                                tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
-                                attore=TIPOLOGIA_ATTORE.comune)\
-                            .first()
-                        if needsExecution(_pubblicazione_provvedimento_verifica_ap):
-                            _pubblicazione_provvedimento_verifica_ap.stato = STATO_AZIONE.nessuna
+            if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap:
+                if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                    _pubblicazione_provvedimento_verifica_ap = _piano.getFirstAction(
+                            TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                            QualificaRichiesta.COMUNE)
 
-                            # Notify Users
-                            piano_phase_changed.send(
-                                sender=Piano,
-                                user=info.context.user,
-                                piano=_piano,
-                                message_type="piano_verifica_vas_updated")
-
-                            _pubblicazione_provvedimento_verifica_ap.save()
-
-                if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
-                    if rules.test_rule('strt_users.is_superuser', info.context.user) or \
-                        is_RUP(info.context.user) or \
-                        rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _ente), 'AC'):
-
-                        _pubblicazione_provvedimento_verifica_ac = _piano.azioni\
-                            .filter(
-                                tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
-                                attore=TIPOLOGIA_ATTORE.ac)\
-                            .first()
-                        if needsExecution(_pubblicazione_provvedimento_verifica_ac):
-                            _pubblicazione_provvedimento_verifica_ac.stato = STATO_AZIONE.nessuna
-
-                            # Notify Users
-                            piano_phase_changed.send(
-                                sender=Piano,
-                                user=info.context.user,
-                                piano=_piano,
-                                message_type="piano_verifica_vas_updated")
-
-                            _pubblicazione_provvedimento_verifica_ac.save()
-
-                if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
-                    procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
-
-                    _procedura_avvio = ProceduraAvvio.objects.filter(piano=_piano).last()
-                    if not _procedura_avvio or _procedura_avvio.conclusa:
-                        _piano.chiudi_pendenti(attesa=True, necessaria=False)
-                    procedura_vas_aggiornata.conclusa = True
-                    procedura_vas_aggiornata.save()
-
-                    if _piano.is_eligible_for_promotion:
-                        _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
-                        _piano.save()
+                    if needsExecution(_pubblicazione_provvedimento_verifica_ap):
+                        chiudi_azione(_pubblicazione_provvedimento_verifica_ap, set_data=False)
 
                         # Notify Users
                         piano_phase_changed.send(
                             sender=Piano,
                             user=info.context.user,
                             piano=_piano,
-                            message_type="piano_phase_changed")
+                            message_type="piano_verifica_vas_updated")
 
-                        fase.promuovi_piano(_fase, _piano)
+            if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
+                if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP) or \
+                    auth.is_soggetto_operante(info.context.user, _piano, Qualifica.AC):
 
-                return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-        else:
-            return GraphQLError(_("Forbidden"), code=403)
+                    _pubblicazione_provvedimento_verifica_ac = _piano.getFirstAction(
+                            TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                            qualifica_richiesta=QualificaRichiesta.AC)
+
+                    if needsExecution(_pubblicazione_provvedimento_verifica_ac):
+                        chiudi_azione(_pubblicazione_provvedimento_verifica_ac.stato, set_data=False)
+
+                        # Notify Users
+                        piano_phase_changed.send(
+                            sender=Piano,
+                            user=info.context.user,
+                            piano=_piano,
+                            message_type="piano_verifica_vas_updated")
+
+
+            if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
+                procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
+
+                _procedura_avvio = ProceduraAvvio.objects.filter(piano=_piano).last()
+                if not _procedura_avvio or _procedura_avvio.conclusa:
+                    _piano.chiudi_pendenti(attesa=True, necessaria=False)
+                procedura_vas_aggiornata.conclusa = True
+                procedura_vas_aggiornata.save()
+
+                if _piano.is_eligible_for_promotion:
+                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
+                    _piano.save()
+
+                    # Notify Users
+                    piano_phase_changed.send(
+                        sender=Piano,
+                        user=info.context.user,
+                        piano=_piano,
+                        message_type="piano_phase_changed")
+
+                    fase.promuovi_piano(_fase, _piano)
+
+            return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class InvioPareriVerificaVAS(graphene.Mutation):

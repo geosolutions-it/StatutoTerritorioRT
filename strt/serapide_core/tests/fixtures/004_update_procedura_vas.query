@@ -1,0 +1,112 @@
+{
+   "operationName" : "UpdateProceduraVas",
+   "variables" : {
+      "input" : {
+         "uuid" : "{codice_vas}",
+         "proceduraVas" : {
+            "tipologia" : "{tipologia_vas}"
+         }
+      }
+   },
+   "query" : "mutation UpdateProceduraVas($input: UpdateProceduraVASInput!) {
+  updateProceduraVas(input: $input) {
+    proceduraVasAggiornata {
+      ...VAS
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment VAS on ProceduraVASNode {
+  uuid
+  tipologia
+  dataVerifica
+  dataCreazione
+  dataProcedimento
+  dataApprovazione
+  dataAssoggettamento
+  verificaEffettuata
+  procedimentoEffettuato
+  assoggettamento
+  nonNecessaria
+  piano {
+    codice
+    autoritaCompetenteVas: soggettiOperanti(qualifica: \"AC\") {
+      qualificaUfficio {
+        qualifica
+        ufficio {
+          uuid
+          nome
+        }
+        __typename
+      }
+      __typename
+    }
+    soggettiSca: soggettiOperanti(qualifica: \"SCA\") {
+        qualificaUfficio {
+            qualifica
+            ufficio {
+                uuid
+                nome
+            }
+        }
+      __typename
+    }
+    soggettoProponente {
+
+        qualifica
+        ufficio {
+            uuid
+            nome
+        }
+
+      __typename
+    }
+    __typename
+  }
+  risorse(archiviata: false) {
+    ...Risorse
+    __typename
+  }
+  documentoPreliminareVerifica {
+    ...Risorsa
+    __typename
+  }
+  relazioneMotivataVasSemplificata {
+    ...Risorsa
+    __typename
+  }
+  __typename
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+  __typename
+}
+"
+}

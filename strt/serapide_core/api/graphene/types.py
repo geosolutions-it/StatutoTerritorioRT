@@ -16,6 +16,7 @@ import graphene
 from urllib.parse import urljoin
 
 from django.conf import settings
+import django_filters
 
 from pinax.messages.models import Thread, Message
 
@@ -573,20 +574,30 @@ class ProceduraPubblicazioneNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
-class SoggettoOperanteNode(DjangoObjectType):
+class SoggettoOperanteFilter(django_filters.FilterSet):
 
-    ente = graphene.Field(EnteNode)
+    qualifica = django_filters.CharFilter(method='qualifica_filter')
+
+    class Meta:
+        model = SoggettoOperante
+        fields = ['id', 'piano', 'qualifica']
+
+        def qualifica_filter(self, queryset, name, val):
+            return queryset.filter(qualifica_ufficio__qualifica=val)
+
+
+class SoggettoOperanteNode(DjangoObjectType):
 
     class Meta:
         model = SoggettoOperante
         # Allow for some more advanced filtering here
-        filter_fields = {
-#            'nome': ['exact', 'icontains'],
-#            'email': ['exact'],
-#            'tipo': ['exact'],
-            'piano__id': ['exact'],
-        }
+        filter_fields = [
+            'id',
+            'qualifica',
+            'qualifica_ufficio'
+        ]
         interfaces = (relay.Node, )
+        # filterset_class = SoggettoOperanteFilter
 
 
 class ConsultazioneVASNode(DjangoObjectType):
@@ -637,6 +648,20 @@ class PianoControdedottoNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class QualificaUfficioNode(DjangoObjectType):
+
+    class Meta:
+        model = QualificaUfficio # ufficio, qualifica
+        filter_fields = ['qualifica, ufficio']
+        convert_choices_to_enum = False
+
+class UfficioNode(DjangoObjectType):
+
+    class Meta:
+        model = Ufficio # ufficio, qualifica
+        filter_fields = ['uuid', 'name', 'ente']
+
+
 class PianoRevPostCPNode(DjangoObjectType):
 
     risorsa = DjangoFilterConnectionField(RisorseCopianificazioneType)
@@ -657,10 +682,11 @@ class PianoNode(DjangoObjectType):
     storico_fasi = graphene.List(FasePianoStoricoType)
     risorsa = DjangoFilterConnectionField(RisorsePianoType)
     procedura_vas = graphene.Field(ProceduraVASNode)
-    soggetto_proponente = graphene.Field(EnteNode)
+    soggetto_proponente = graphene.Field(QualificaUfficioNode)
     alerts_count = graphene.String()
     azioni = graphene.List(AzioneNode)
-    soggetti_operanti = graphene.List(SoggettoOperanteNode)
+
+    soggetti_operanti = graphene.List(SoggettoOperanteNode, qualifica=graphene.String())
 
     def resolve_azioni(self, info, **args):
         return Azione.objects.filter(piano=self)
@@ -685,9 +711,16 @@ class PianoNode(DjangoObjectType):
             pass
         return _vas
 
-    def resolve_soggetti_operanti(self, info, **args):
+    def resolve_soggetti_operanti(self, info , qualifica=None,**args):
         # Warning this is not currently paginated
-        return SoggettoOperante.objects.filter(piano=self)
+        qs = SoggettoOperante.objects.filter(piano=self)
+        if qualifica:
+            qs = qs.filter(qualifica_ufficio__qualifica=qualifica)
+        return qs
+
+    # TODO: check and remove this since it's mirroring a Piano field
+    def resolve_soggetto_proponente(self, info, **args):
+        return self.soggetto_proponente
 
     class Meta:
         model = Piano
@@ -700,7 +733,6 @@ class PianoNode(DjangoObjectType):
         }
         interfaces = (relay.Node, )
         convert_choices_to_enum = False
-
 
 
 class QualificaChoiceNode(DjangoObjectType):

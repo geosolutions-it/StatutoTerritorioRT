@@ -111,19 +111,6 @@ class CharInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
 #             return super(EnteContattoMembershipFilter, self).qs.none()
 
 
-class SoggettoOperanteFilter(django_filters.FilterSet):
-
-    qualifica = CharFilter(method='qualifica_filter')
-
-    class Meta:
-        model = SoggettoOperante
-        fields = ['piano', 'qualifica']
-
-    def qualifica_filter(self, queryset, piano, qualifica):
-        return queryset.filter(piano=piano, ruolo__qualifica=qualifica) | \
-               queryset.filter(piano=piano, ufficio__qualifica=qualifica)
-
-
 class PianoUserMembershipFilter(django_filters.FilterSet):
 
     # Do case-insensitive lookups on 'name'

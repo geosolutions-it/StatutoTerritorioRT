@@ -361,10 +361,11 @@ class Piano(models.Model):
         instance.tipologia = TipologiaPiano.fix_enum(instance.tipologia)
         return instance
 
-    def getFirstAction(self, tipologia_azione:TIPOLOGIA_AZIONE):
-        return Azione \
-            .filter(piano=self, tipologia=tipologia_azione) \
-            .first()
+    def getFirstAction(self, tipologia_azione:TIPOLOGIA_AZIONE, qualifica_richiesta:QualificaRichiesta=None):
+        qs = Azione.filter(piano=self, tipologia=tipologia_azione)
+        if qualifica_richiesta:
+            qs = qs.filter(qualifica_richiesta=qualifica_richiesta)
+        return qs.first()
 
 
 class Azione(models.Model):
@@ -1223,9 +1224,10 @@ def ensure_fase(check:Fase, expected:Fase):
         raise Exception(_("Fase Piano incongruente con l'azione richiesta") + " -- " + _(check.name))
 
 
-def chiudi_azione(azione:Azione):
+def chiudi_azione(azione:Azione, data=None, set_data=True):
     azione.stato = STATO_AZIONE.nessuna
-    azione.data = datetime.datetime.now(timezone.get_current_timezone())
+    if set_data:
+        azione.data = data if data else datetime.datetime.now(timezone.get_current_timezone())
     azione.save()
 
 

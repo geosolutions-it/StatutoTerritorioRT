@@ -235,16 +235,16 @@ class AvvioPiano(graphene.Mutation):
 
             chiudi_azione(_avvio_procedimento)
 
-            crea_azione(piano,
-                        Azione(
+            crea_azione(Azione(
+                            piano=piano,
                             tipologia=TIPOLOGIA_AZIONE.contributi_tecnici,
                             qualifica_richiesta=QualificaRichiesta.REGIONE,
                             stato=STATO_AZIONE.attesa,
                             data=procedura_avvio.data_scadenza_risposta
                         ))
 
-            crea_azione(piano,
-                        Azione(
+            crea_azione(Azione(
+                            piano=piano,
                             tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas,
                             qualifica_richiesta=QualificaRichiesta.COMUNE,
                             stato=STATO_AZIONE.attesa
