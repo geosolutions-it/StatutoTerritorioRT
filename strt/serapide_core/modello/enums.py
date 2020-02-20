@@ -40,7 +40,7 @@ class Fase(Enum):
         ]
 
     def getNext(self):
-        return self._FASE_NEXT(self)
+        return _FASE_NEXT[self]
 
     @classmethod
     def fix_enum(cls, obj):
@@ -61,10 +61,11 @@ class TipoRisorsa(Enum):
     VAS_SEMPLIFICATA = 'vas_semplificata'
     PARERE_VERIFICA_VAS = 'parere_verifica_vas'
     PARERE_SCA = 'parere_sca'
+    DELIBERA = 'delibera'
 
 
 TIPOLOGIA_RISORSA = {
-    'delibera': {
+    TipoRisorsa.DELIBERA.value: {
         'label': 'Delibera di avvio ',
         'tooltip': 'ai sensi dell’articolo. 17 L.R. 65/2014'
     },

@@ -56,26 +56,6 @@ from .enums import (Fase,
 
 log = logging.getLogger(__name__)
 
-# class Fase(models.Model):
-#
-#     codice = models.CharField(max_length=255, primary_key=True)
-#
-#     nome = models.CharField(
-#         choices=Fase,
-#         default=Fase.DRAFT,
-#         max_length=20
-#     )
-#
-#     descrizione = models.TextField(null=True, blank=True)
-#
-#     class Meta:
-#         db_table = "strt_core_fase"
-#         verbose_name_plural = 'Fasi'
-#
-#     def __str__(self):
-#         return '{} [{}]'.format(self.codice, self.nome)
-
-
 
 class Risorsa(models.Model):
     """
@@ -83,7 +63,7 @@ class Risorsa(models.Model):
     """
 
     """
-    Every "Piano" in the serapide_core application has a unique uuid
+    Every "Risorsa" in the serapide_core application has a unique uuid
     """
     uuid = models.UUIDField(
         default=uuid.uuid4,
@@ -137,6 +117,13 @@ class Risorsa(models.Model):
 
     def __str__(self):
         return '{} [{}]'.format(self.nome, self.uuid)
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(Risorsa, cls).from_db(db, field_names, values)
+        instance.fase = Fase.fix_enum(instance.fase)
+        return instance
+
 
 
 # ############################################################################ #
@@ -291,18 +278,18 @@ class Piano(models.Model):
                 .filter(stato=STATO_AZIONE.necessaria)\
                 .update(stato=STATO_AZIONE.nessuna, data=_now)
 
-    @property
-    def next_phase(self):
-        # return FASE_NEXT[self.fase.nome]
-        return self.fase.get_next()
+    # @property
+    # def next_phase(self):
+    #     # return FASE_NEXT[self.fase.nome]
+    #     return self.fase.get_next()
 
-    @property
-    def is_eligible_for_promotion(self):
-        _res = rules.test_rule('strt_core.api.fase_{next}_completa'.format(
-                               next=self.next_phase),
-                               self,
-                               self.procedura_vas)
-        return _res
+    # @property
+    # def is_eligible_for_promotion(self):
+    #     _res = rules.test_rule('strt_core.api.fase_{next}_completa'.format(
+    #                            next=self.next_phase),
+    #                            self,
+    #                            self.procedura_vas)
+    #     return _res
 
     class Meta:
         db_table = "strt_core_piano"
@@ -350,7 +337,7 @@ class Piano(models.Model):
                 _state_hist.save()
 
                 if _prev_state:
-                    _state_hist = FasePianoStorico.objects.filter(piano=self, fase=_prev_state).first()
+                    _state_hist = FasePianoStorico.objects.filter(piano=self, fase=_prev_state.fase).first()
                     _state_hist.data_chiusura = _now
                     _state_hist.save()
 
@@ -362,7 +349,7 @@ class Piano(models.Model):
         return instance
 
     def getFirstAction(self, tipologia_azione:TIPOLOGIA_AZIONE, qualifica_richiesta:QualificaRichiesta=None):
-        qs = Azione.filter(piano=self, tipologia=tipologia_azione)
+        qs = Azione.objects.filter(piano=self, tipologia=tipologia_azione)
         if qualifica_richiesta:
             qs = qs.filter(qualifica_richiesta=qualifica_richiesta)
         return qs.first()
@@ -1230,13 +1217,13 @@ def ensure_fase(check:Fase, expected:Fase):
 def chiudi_azione(azione:Azione, data=None, set_data=True):
     azione.stato = STATO_AZIONE.nessuna
     if set_data:
-        azione.data = data if data else datetime.datetime.now(timezone.get_current_timezone())
+        azione.data = data if data else datetime.now(timezone.get_current_timezone())
     azione.save()
 
 
 def crea_azione(azione:Azione):
     if azione.order == None:
-        _order = Azione.objects.filter(piano=azione.piano).count()
+        _order = Azione.count_by_piano(azione.piano)
         azione.order = _order
 
     azione.save()

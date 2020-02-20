@@ -4,6 +4,7 @@ import json
 import os
 import datetime
 import tempfile
+import uuid
 
 from django.test.client import MULTIPART_CONTENT
 from django.test import TestCase, Client
@@ -87,94 +88,75 @@ class FullFlowTestCase(GraphQLTestCase):
         self.assertEqual(2, len(node['profili']))
 
         ### Now we should select a profile
-
+        # not really needed
 
         ### Try a CreatePiano
-        # this_path = sys.path[0]
-
-
-        with open(os.path.join(this_path, 'fixtures', '001_create_piano.query'), 'r') as file:
-            query = file.read().replace('\n', '')
-
-        print("CREATE PIANO on Regione ====================")
-        query_bound = query.replace('{IPA}', DataLoader.IPA_RT)
-
-        print('QUERY_RT: ' + query_bound)
-
-        response = self._client.post(
-            self.GRAPHQL_URL,
-            query_bound,
-            content_type="application/json",
-            # **headers
-        )
-
-        self.assertEqual(400, response.status_code, 'CREATE PIANO on RT should fail')
-
-
-        print("CREATE PIANO ====================")
-        query_bound = query.replace('{IPA}', DataLoader.IPA_FI)
-
-        response = self._client.post(
-            self.GRAPHQL_URL,
-            query_bound,
-            content_type="application/json",
-            # **headers
-        )
-
-        dump_result('CREATE PIANO', response)
-        self.assertEqual(200, response.status_code, 'CREATE PIANO failed')
+        response = self.create_piano(DataLoader.IPA_RT, expected_code=400, extra_title=" on Regione (should fail)")
+        response = self.create_piano(DataLoader.IPA_FI)
 
         content = json.loads(response.content)
         codice_piano = content['data']['createPiano']['nuovoPiano']['codice']
         codice_vas = content['data']['createPiano']['nuovoPiano']['proceduraVas']['uuid']
-        print("PIANO CREATO ^^^^^^^^^^^^^^^^^^^^ {}".format(codice_piano))
-
-        print("UPDATE PIANO ==================== 1")
-        with open(os.path.join(this_path, 'fixtures', '002_update_piano.query'), 'r') as file:
-            query_update = file.read().replace('\n', '')
-        query_bound = query_update.replace('{codice_piano}', codice_piano)
 
         now = datetime.datetime.now()
         now = now.replace(microsecond=0)
 
-        query_bound = query_bound.replace('{nome_campo}', "dataDelibera")
-        query_bound = query_bound.replace('{valore_campo}',  now.isoformat())
-
-        response = self._client.post(
-            self.GRAPHQL_URL,
-            query_bound,
-            content_type="application/json",
-            # **headers
-        )
-
-        dump_result('UPDATE PIANO', response)
-        self.assertEqual(200, response.status_code, 'UPDATE PIANO failed')
-
-        print("UPDATE PIANO OK ^^^^^^^^^^^^^^^^^^^^ 1")
-
-        print("UPDATE PIANO ==================== 2")
-        query_bound = query_update.replace('{codice_piano}', codice_piano)
-
-        query_bound = query_bound.replace('{nome_campo}', "descrizione")
-        query_bound = query_bound.replace('{valore_campo}', "Piano di test [{}]".format(now))
-
-        response = self._client.post(
-            self.GRAPHQL_URL,
-            query_bound,
-            content_type="application/json",
-            # **headers
-        )
-
-        dump_result('UPDATE PIANO', response)
-
-        self.assertEqual(200, response.status_code, 'UPDATE PIANO failed')
-        print("UPDATE PIANO OK ^^^^^^^^^^^^^^^^^^^^ 2")
+        response = self.update_piano(codice_piano, "dataDelibera", now.isoformat())
+        response = self.update_piano(codice_piano, "descrizione", "Piano di test [{}]".format(now))
+        response = self.update_piano(codice_piano, "soggettoProponenteUuid", uuid.uuid4().__str__(), expected_code=404)
+        response = self.update_piano(codice_piano, "soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
 
         response = self.upload_file(codice_piano, '003_upload_file.query')
 
         response = self.update_vas(codice_vas, 'semplificata', '004_update_procedura_vas.query')
 
         response = self.vas_upload_file(codice_vas, TipoRisorsa.VAS_SEMPLIFICATA, '005_vas_upload_file.query')
+
+        # response = self.promuovi_piano(codice_piano, '006_promozione.query', expected_code=409)
+        # content = json.loads(response.content)
+        # errs = content['errors'][0]['data']['errors']
+        # self.assertEqual(2, len(errs))
+
+        response = self.promuovi_piano(codice_piano, '006_promozione.query')
+
+
+
+    def create_piano(self, ipa, expected_code=200, extra_title=''):
+        print("CREATE PIANO ==================== {}".format(extra_title))
+        with open(os.path.join(this_path, 'fixtures', '001_create_piano.query'), 'r') as file:
+            query = file.read().replace('\n', '')
+        query_bound = query.replace('{IPA}', ipa)
+        response = self._client.post(
+            self.GRAPHQL_URL,
+            query_bound,
+            content_type="application/json",
+            # **headers
+        )
+        dump_result('CREATE PIANO', response)
+        self.assertEqual(expected_code, response.status_code, 'CREATE PIANO failed')
+        print("PIANO CREATO ^^^^^^^^^^^^^^^^^^^^")
+        return response
+
+    def update_piano(self, codice_piano, nome_campo, valore_campo, expected_code=200, extra_title=''):
+        print("UPDATE PIANO ==================== {}".format(extra_title))
+        with open(os.path.join(this_path, 'fixtures', '002_update_piano.query'), 'r') as file:
+            query = file.read().replace('\n', '')
+        query = query.replace('{codice_piano}', codice_piano)
+
+        query = query.replace('{nome_campo}', nome_campo)
+        query = query.replace('{valore_campo}',  valore_campo)
+
+        response = self._client.post(
+            self.GRAPHQL_URL,
+            query,
+            content_type="application/json",
+            # **headers
+        )
+
+        dump_result('UPDATE PIANO', response)
+        self.assertEqual(expected_code, response.status_code, 'UPDATE PIANO failed')
+
+        print("UPDATE PIANO OK ^^^^^^^^^^^^^^^^^^^^")
 
 
     def upload_file(self, codice_piano, file_name):
@@ -183,7 +165,12 @@ class FullFlowTestCase(GraphQLTestCase):
             query_upload = file.read().replace('\n', '')
         query_bound = query_upload.replace('{codice_piano}', codice_piano)
 
-        with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
+
+        with tempfile.NamedTemporaryFile(mode='w+', suffix=".pdf", delete=False) as f:
+            f.write("this is a fake PDF file\n")
+            filename = f.name
+
+        with open(filename) as f:
             form = {
                 "operations": query_bound,
                 "map": '{"1":["variables.file"]}',
@@ -229,8 +216,11 @@ class FullFlowTestCase(GraphQLTestCase):
         query = query.replace('{codice_vas}', codice_vas)
         query = query.replace('{tipo_risorsa}', tipo.value)
 
+        with tempfile.NamedTemporaryFile(mode='w+', prefix=tipo.name, suffix=".pdf", delete=False) as f:
+            f.write("this is a fake PDF file\n")
+            filename = f.name
 
-        with tempfile.NamedTemporaryFile(prefix=tipo.name, suffix=".pdf") as f:
+        with open(filename) as f:
             form = {
                 "operations": query,
                 "map": '{"1":["variables.file"]}',
@@ -240,11 +230,35 @@ class FullFlowTestCase(GraphQLTestCase):
             response = self._client.post(self.GRAPHQL_URL,
                                          content_type=MULTIPART_CONTENT,
                                          data=form)
+        os.unlink(filename)
 
-            self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
+
         dump_result('VAS UPLOAD FILE', response)
         print("VAS UPLOAD FILE OK ^^^^^^^^^^^^^^^^^^^^ 1")
         return response
+
+    def promuovi_piano(self, codice_piano, file_name, expected_code=200):
+        print("PROMOZIONE PIANO ==================== ")
+        with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
+            query = file.read().replace('\n', '')
+
+        query = query.replace('{codice_piano}', codice_piano)
+
+        response = self._client.post(
+            self.GRAPHQL_URL,
+            query,
+            content_type="application/json",
+            # **headers
+        )
+
+        dump_result('PROMOZIONE PIANO', response)
+
+        self.assertEqual(expected_code, response.status_code, 'PROMOZIONE PIANO failed')
+        print("PROMOZIONE PIANO VAS OK ^^^^^^^^^^^^^^^^^^^^")
+
+        return response
+
 
 
     @classmethod

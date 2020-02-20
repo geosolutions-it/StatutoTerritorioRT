@@ -69,6 +69,7 @@ from serapide_core.api.graphene import inputs
 from serapide_core.api.graphene.mutations import fase
 
 import serapide_core.api.auth.user as auth
+import serapide_core.api.auth.piano as auth_piano
 
 logger = logging.getLogger(__name__)
 
@@ -324,7 +325,7 @@ class UpdatePiano(relay.ClientIDMutation):
                 if not ufficio:
                     return GraphQLError(_("Not found - Ufficio proponente sconosciuto"), code=404)
 
-                qu = QualificaUfficio.objects.filter(ufficio=ufficio, qualifica=Qualifica.RESP).get
+                qu = QualificaUfficio.objects.filter(ufficio=ufficio, qualifica=Qualifica.RESP).get()
                 if not qu:
                     return GraphQLError(_("Not found - L'ufficio proponente non è responsabile di Comune"), code=404)
 
@@ -376,6 +377,10 @@ class UpdatePiano(relay.ClientIDMutation):
 
             piano_aggiornato = update_create_instance(_piano, _piano_input)
             return cls(piano_aggiornato=piano_aggiornato)
+
+        except (Ufficio.DoesNotExist, QualificaUfficio.DoesNotExist) as e:
+            return GraphQLError(e, code=404)
+
         except BaseException as e:
             tb = traceback.format_exc()
             logger.error(tb)
@@ -421,33 +426,46 @@ class PromozionePiano(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
-        if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
-            try:
-                if _piano.is_eligible_for_promotion:
-                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
-                    _piano.save()
 
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=info.context.user,
-                        piano=_piano,
-                        message_type="piano_phase_changed")
+        # Primo chek generico di autorizzazione
 
-                    fase.promuovi_piano(_fase, _piano)
+        # if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
+        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+            if not auth.is_soggetto(info.context.user, _piano):
+                return GraphQLError("Forbidden - Pre-check: L'utente non può editare piani in questo Ente", code=403)
 
-                    return PromozionePiano(
-                        piano_aggiornato=_piano,
-                        errors=[]
-                    )
-                else:
-                    return GraphQLError(_("Not Allowed"), code=405)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-        else:
-            return GraphQLError(_("Forbidden"), code=403)
+        try:
+            # def is_eligible_for_promotion(self):
+            #     _res = rules.test_rule('strt_core.api.fase_{next}_completa'.format(
+            #         next=self.next_phase),
+            #         self,
+            #         self.procedura_vas)
+
+            eligible, errors = auth_piano.is_eligible_for_promotion(_piano)
+            if eligible:
+                _piano.fase = _piano.fase.getNext()
+                _piano.save()
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="piano_phase_changed")
+
+                fase.promuovi_piano(_piano.fase, _piano)
+
+                return PromozionePiano(
+                    piano_aggiornato=_piano,
+                    errors=[]
+                )
+            else:
+                return GraphQLError("Dati non corretti", code=409, errors=errors)
+
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class FormazionePiano(graphene.Mutation):

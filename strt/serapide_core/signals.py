@@ -11,6 +11,9 @@
 
 from django.dispatch import Signal
 
+from serapide_core.modello.models import SoggettoOperante
+from strt_users.models import Assegnatario
+
 from .notifications_helper import send_now_notification
 
 # from serapide_core.modello.models import PianoAuthTokens
@@ -55,31 +58,23 @@ def piano_phase_changed_notification(sender, **kwargs):
         from_user = kwargs['user']
         piano = kwargs['piano']
 
-        users = []
+        ufficio = []
+        utenti = []
         tokens = []
-        if piano.soggetto_proponente:
-            users.append(piano.soggetto_proponente.user)
 
-        if piano.autorita_competente_vas:
-            for _c in piano.autorita_competente_vas.all():
-                users.append(_c.user)
+        soqs = SoggettoOperante.objects.filter(piano=piano)
+        qu_list = [so.qualifica_ufficio for so in soqs]
 
-        if piano.autorita_istituzionali:
-            for _c in piano.autorita_istituzionali.all():
-                users.append(_c.user)
+        ass_list = Assegnatario.objects.filter(qualifica_ufficio__in=qu_list)
 
-        if piano.altri_destinatari:
-            for _c in piano.altri_destinatari.all():
-                users.append(_c.user)
-
-        if piano.soggetti_sca:
-            for _c in piano.soggetti_sca.all():
-                users.append(_c.user)
+        dest_uff = [{'nome':qu.ufficio.__str__(), 'email':qu.ufficio.email} for qu in qu_list ]
+        dest_utenti = [{'nome':ass.utente.get_full_name(), 'email':ass.utente.email} for ass in ass_list ]
+        # TODO tokens
 
         # if PianoAuthTokens.objects.filter(piano=piano).count() > 0:
         #     tokens = [_p.token for _p in PianoAuthTokens.objects.filter(piano=piano)]
 
-        send_now_notification(users,
+        send_now_notification(dest_uff + dest_utenti,
                               notification_type,
                               {
                                 "user": from_user,

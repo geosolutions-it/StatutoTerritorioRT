@@ -33,18 +33,18 @@ from serapide_core.modello.enums import (
 logger = logging.getLogger(__name__)
 
 
-def promuovi_piano(fase, piano):
+def promuovi_piano(fase:Fase, piano):
 
     procedura_vas = piano.procedura_vas
 
     # Update Azioni Piano
-    _order = piano.azioni.count()
+    _order = Azione.count_by_piano(piano)
 
     # - Attach Actions Templates for the Next "Fase"
     for _a in AZIONI_BASE[fase]:
         crea_azione(
                     Azione(
-                        piano,
+                        piano=piano,
                         tipologia=_a["tipologia"],
                         qualifica_richiesta=_a["qualifica"],
                         order=_order,
