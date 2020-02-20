@@ -21,7 +21,12 @@ from serapide_core.modello.models import (
 from serapide_core.modello.enums import (
     Fase,
     TIPOLOGIA_VAS,
-    TIPOLOGIA_AZIONE
+    TIPOLOGIA_AZIONE,
+    TipoRisorsa
+)
+
+from serapide_core.modello.models import (
+    Piano, Azione
 )
 
 
@@ -32,17 +37,19 @@ from serapide_core.modello.enums import (
 def parere_sca_ok(user, procedura_vas):
     if user and procedura_vas:
         _piano = procedura_vas.piano
-        _resources = procedura_vas.risorse.filter(tipo='parere_sca', archiviata=False, user=user)
-        _consultazione_vas = ConsultazioneVAS.objects.filter(
-            procedura_vas=procedura_vas).order_by('data_creazione').first()
-        _avvio_consultazioni_sca_count = _piano.azioni.filter(
-            tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca).count()
-        _pareri_vas = ParereVAS.objects.filter(
-            user=user,
-            inviata=True,
-            procedura_vas=procedura_vas,
-            consultazione_vas=_consultazione_vas,
-        )
+        _resources = procedura_vas.risorse.filter(tipo=TipoRisorsa.PARERE_SCA.value, archiviata=False, user=user)
+        _consultazione_vas = ConsultazioneVAS.objects\
+            .filter(procedura_vas=procedura_vas)\
+            .order_by('data_creazione')\
+            .first()
+        _avvio_consultazioni_sca_count = Azione.count_by_piano(_piano, TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
+        _pareri_vas = ParereVAS.objects\
+            .filter(
+                user=user,
+                inviata=True,
+                procedura_vas=procedura_vas,
+                consultazione_vas=_consultazione_vas,
+            )
         if _resources and _resources.count() > 0 and \
         _pareri_vas and _pareri_vas.count() == _avvio_consultazioni_sca_count:
             return False
@@ -54,12 +61,13 @@ def parere_sca_ok(user, procedura_vas):
 @rules.predicate
 def parere_verifica_vas_ok(user, procedura_vas):
     if user and procedura_vas:
-        _resources = procedura_vas.risorse.filter(tipo='parere_verifica_vas', archiviata=False, user=user)
-        _pareri_vas = ParereVerificaVAS.objects.filter(
-            user=user,
-            inviata=True,
-            procedura_vas=procedura_vas
-        )
+        _resources = procedura_vas.risorse.filter(tipo=TipoRisorsa.PARERE_VERIFICA_VAS.value, archiviata=False, user=user)
+        _pareri_vas = ParereVerificaVAS.objects\
+            .filter(
+                user=user,
+                inviata=True,
+                procedura_vas=procedura_vas
+            )
         if _resources and _resources.count() > 0 and \
         _pareri_vas and _pareri_vas.count() == 1:
             return False

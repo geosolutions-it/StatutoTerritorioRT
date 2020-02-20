@@ -29,6 +29,13 @@ from graphene_file_upload.scalars import Upload
 
 from graphql_extensions.exceptions import GraphQLError
 
+import serapide_core.api.auth.vas as auth_vas
+import serapide_core.api.auth.user as auth
+
+from serapide_core.modello.enums import (
+    TipoRisorsa
+)
+
 from serapide_core.modello.models import (
     Piano,
     Risorsa,
@@ -56,7 +63,7 @@ from strt_users.enums import Qualifica
 
 from .. import types
 
-import serapide_core.api.auth.user as auth
+
 
 logger = logging.getLogger(__name__)
 
@@ -159,49 +166,57 @@ class UploadRisorsaVAS(UploadBaseBase):
 
     @classmethod
     def mutate(cls, root, info, file, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _uuid_vas = input['codice']
-            _tipo_file = input['tipo_file']
 
-            try:
-                # Validating 'Procedura VAS'
-                _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not info.context.user or not  auth.is_recognizable(info.context.user):
+            return GraphQLError("Not Authorized - Utente non riconosciuto", code=401)
 
-                    if _tipo_file == 'parere_sca' and \
-                    not rules.test_rule('strt_core.api.parere_sca_ok', info.context.user, _procedura_vas):
-                        return GraphQLError(_("Forbidden"), code=403)
+        # Fetching input arguments
+        _uuid_vas = input['codice']
+        _tipo_file = input['tipo_file']
 
-                    if _tipo_file == 'parere_verifica_vas' and \
-                    not rules.test_rule('strt_core.api.parere_verifica_vas_ok', info.context.user, _procedura_vas):
-                        return GraphQLError(_("Forbidden"), code=403)
+        try:
+            # Validating 'Procedura VAS'
+            _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
+            _piano = _procedura_vas.piano
 
-                    _resources = UploadBaseBase.handle_uploaded_data(
-                        file,
-                        _uuid_vas,
-                        _procedura_vas.piano.fase,
-                        _tipo_file,
-                        info.context.user
-                    )
-                    _success = False
-                    if _resources and len(_resources) > 0:
-                        _success = True
-                        for _risorsa in _resources:
-                            RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
-                    return UploadRisorsaVAS(
-                        procedura_vas_aggiornata=_procedura_vas,
-                        success=_success,
-                        file_name=_resources[0].nome)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+            # if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+            if not auth.is_soggetto(info.context.user, _piano):
+                if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                    return GraphQLError("Forbidden - L'utente non può operare su questo Piano", code=403)
 
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+            if _tipo_file == TipoRisorsa.PARERE_SCA.value and \
+                    not auth_vas.parere_sca_ok(info.context.user, _procedura_vas):
+                return GraphQLError('Precodition failed - Non si possono aggiungere ulteriori pareri SCA', code=412)
+
+            if _tipo_file == TipoRisorsa.PARERE_VERIFICA_VAS.value and \
+                    not auth_vas.parere_verifica_vas_ok(info.context.user, _procedura_vas):
+                return GraphQLError('Precodition failed - Verifica VAS esistente', code=412)
+
+            # not rules.test_rule('strt_core.api.parere_verifica_vas_ok', info.context.user, _procedura_vas):
+            #     return GraphQLError(_("Forbidden"), code=403)
+
+            _resources = UploadBaseBase.handle_uploaded_data(
+                file,
+                _uuid_vas,
+                _procedura_vas.piano.fase,
+                _tipo_file,
+                info.context.user
+            )
+            _success = False
+            if _resources and len(_resources) > 0:
+                _success = True
+                for _risorsa in _resources:
+                    RisorseVas(procedura_vas=_procedura_vas, risorsa=_risorsa).save()
+            return UploadRisorsaVAS(
+                procedura_vas_aggiornata=_procedura_vas,
+                success=_success,
+                file_name=_resources[0].nome)
+
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class UploadRisorsaAdozioneVAS(UploadBaseBase):

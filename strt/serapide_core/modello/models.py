@@ -93,7 +93,7 @@ class Risorsa(models.Model):
 
     nome = models.TextField(null=False, blank=False)
     file = models.FileField(max_length=500, upload_to='uploads/%Y/%m/%d/')
-    tipo = models.TextField(null=False, blank=False)
+    tipo = models.TextField(null=False, blank=False) # TODO usare enum
 
     dimensione = models.DecimalField(
         null=False,
@@ -407,8 +407,11 @@ class Azione(models.Model):
     def __str__(self):
         return '{} - {} [{}]'.format(self.qualifica_richiesta, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
 
-    def count_by_piano(piano):
-        return Azione.objects.filter(piano=piano).count()
+    def count_by_piano(piano, tipo=None):
+        qs = Azione.objects.filter(piano=piano)
+        if tipo:
+            qs = qs.filter(tipologia=tipo)
+        return qs.count()
 
     @classmethod
     def from_db(cls, db, field_names, values):

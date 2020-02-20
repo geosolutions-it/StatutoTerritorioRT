@@ -57,6 +57,12 @@ _FASE_NEXT = {
 }
 
 
+class TipoRisorsa(Enum):
+    VAS_SEMPLIFICATA = 'vas_semplificata'
+    PARERE_VERIFICA_VAS = 'parere_verifica_vas'
+    PARERE_SCA = 'parere_sca'
+
+
 TIPOLOGIA_RISORSA = {
     'delibera': {
         'label': 'Delibera di avvio ',

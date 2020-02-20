@@ -239,7 +239,7 @@ class Ufficio(models.Model):
     # qualifica = models.ForeignKey(Qualifica, related_name="qualifica", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.nome
+        return '{ente}: {uff}'.format(ente=self.ente.nome, uff=self.nome)
 
 
 # ALLOWED_ENTE = {
@@ -271,8 +271,7 @@ class QualificaUfficio(models.Model):
 
         return '{qualifica}::{nome}'.format(
             qualifica= q,
-            # qualifica=Qualifica[self.qualifica],
-            nome=self.ufficio.nome)
+            nome=self.ufficio)
 
     class Meta:
         pass
@@ -319,9 +318,9 @@ class Assegnatario(models.Model):
 
     def __str__(self):
         return '{qu}::{utente} @{ufficio}'.format(
-            qu=self.qualifica_ufficio,
+            qu=self.qualifica_ufficio.qualifica.name,
             utente=self.utente,
-            ufficio=self.qualifica_ufficio.ufficio.nome)
+            ufficio=self.qualifica_ufficio.ufficio)
 
     def _check_user_is_op(self):
         if not ProfiloUtente.objects\

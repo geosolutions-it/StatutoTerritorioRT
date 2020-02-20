@@ -2,15 +2,16 @@ import logging
 
 import json
 import os
-import sys
 import datetime
-import time
 import tempfile
 
 from django.test.client import MULTIPART_CONTENT
+from django.test import TestCase, Client
 from graphene_django.utils.testing import GraphQLTestCase
+
 from serapide_core.schema import schema
 
+from serapide_core.modello.enums import TipoRisorsa
 
 from .test_data_setup import DataLoader
 
@@ -38,12 +39,12 @@ class FullFlowTestCase(GraphQLTestCase):
         self.assertEqual(401, get_profiles_resp.status_code, 'Unauthenticated GET PROFILES should fail')
 
         print("Test GET_PROFILES ====================")
-        get_profiles_resp = self._client.get(self.GET_PROFILES_URL + "?user_id=" + DataLoader.FC_ACTIVE1)
+        get_profiles_resp = self._client.get(self.GET_PROFILES_URL + "?user_id=" + DataLoader.FC_RUP_RESP)
         self.assertEqual(200, get_profiles_resp.status_code, 'Test GET PROFILES should succeed also without session')
 
         print("LOGIN  ====================")
         logged = True
-        logged = self._client.login(username=DataLoader.FC_ACTIVE1, password='42')
+        logged = self._client.login(username=DataLoader.FC_RUP_RESP, password='42')
 
         # get(
         #     self.LOGIN_URL + "?user_id=" + DataLoader.FC_ACTIVE1 + "&password=42",
@@ -54,6 +55,13 @@ class FullFlowTestCase(GraphQLTestCase):
 
         self.assertTrue(logged, "Error in login")
 
+        client_ac = Client()
+        client_sca = Client()
+        client_gc = Client()
+
+        self.assertTrue(client_ac.login(username=DataLoader.FC_AC1, password='42'), "Error in login - AC")
+        self.assertTrue(client_sca.login(username=DataLoader.FC_SCA1, password='42'), "Error in login - SCA")
+        self.assertTrue(client_gc.login(username=DataLoader.FC_GC1, password='42'), "Error in login - GC")
 
         print("GET_PROFILES ====================")
         response = self._client.get(
@@ -76,7 +84,7 @@ class FullFlowTestCase(GraphQLTestCase):
         node = content['userChoices']['edges'][0]['node']
         print(node.keys())
 
-        self.assertEqual(3, len(node['profili']))
+        self.assertEqual(2, len(node['profili']))
 
         ### Now we should select a profile
 
@@ -166,6 +174,7 @@ class FullFlowTestCase(GraphQLTestCase):
 
         response = self.update_vas(codice_vas, 'semplificata', '004_update_procedura_vas.query')
 
+        response = self.vas_upload_file(codice_vas, TipoRisorsa.VAS_SEMPLIFICATA, '005_vas_upload_file.query')
 
 
     def upload_file(self, codice_piano, file_name):
@@ -211,6 +220,30 @@ class FullFlowTestCase(GraphQLTestCase):
         self.assertEqual(200, response.status_code, 'UPDATE VAS failed')
         print("UPDATE VAS OK ^^^^^^^^^^^^^^^^^^^^ 1")
 
+        return response
+
+    def vas_upload_file(self, codice_vas, tipo:TipoRisorsa, file_name):
+        print("VAS UPLOAD FILE ==================== 1")
+        with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
+            query = file.read().replace('\n', '')
+        query = query.replace('{codice_vas}', codice_vas)
+        query = query.replace('{tipo_risorsa}', tipo.value)
+
+
+        with tempfile.NamedTemporaryFile(prefix=tipo.name, suffix=".pdf") as f:
+            form = {
+                "operations": query,
+                "map": '{"1":["variables.file"]}',
+                "1": f,
+            }
+
+            response = self._client.post(self.GRAPHQL_URL,
+                                         content_type=MULTIPART_CONTENT,
+                                         data=form)
+
+            self.assertEqual(response.status_code, 200)
+        dump_result('VAS UPLOAD FILE', response)
+        print("VAS UPLOAD FILE OK ^^^^^^^^^^^^^^^^^^^^ 1")
         return response
 
 
