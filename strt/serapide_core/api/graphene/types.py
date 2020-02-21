@@ -584,6 +584,7 @@ class SoggettoOperanteFilter(django_filters.FilterSet):
         fields = ['id', 'piano', 'qualifica']
 
         def qualifica_filter(self, queryset, name, val):
+            logger.warning("*** FILTERING SOGGETTO OPERANTE BY QUALIFICA")
             return queryset.filter(qualifica_ufficio__qualifica=val)
 
 
@@ -684,10 +685,11 @@ class PianoNode(DjangoObjectType):
     risorsa = DjangoFilterConnectionField(RisorsePianoType)
     procedura_vas = graphene.Field(ProceduraVASNode)
     soggetto_proponente = graphene.Field(QualificaUfficioNode)
+    soggetti_operanti = graphene.List(SoggettoOperanteNode, qualifica=graphene.String())
+
     alerts_count = graphene.String()
     azioni = graphene.List(AzioneNode)
 
-    soggetti_operanti = graphene.List(SoggettoOperanteNode, qualifica=graphene.String())
 
     def resolve_azioni(self, info, **args):
         return Azione.objects.filter(piano=self)
@@ -716,7 +718,9 @@ class PianoNode(DjangoObjectType):
         # Warning this is not currently paginated
         qs = SoggettoOperante.objects.filter(piano=self)
         if qualifica:
+            qualifica = Qualifica.fix_enum(qualifica)
             qs = qs.filter(qualifica_ufficio__qualifica=qualifica)
+        logger.warning("*** RESOLVING SOGGETTO OPERANTE [q:{}]: {}".format(qualifica, qs.all().count()))
         return qs
 
     # TODO: check and remove this since it's mirroring a Piano field

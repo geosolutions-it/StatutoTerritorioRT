@@ -52,11 +52,24 @@ fragment Piano on PianoNode {
     __typename
   }
   soggettoProponente {
-    __typename
+        qualifica
+        ufficio {
+          uuid
+          nome
+        }
+        __typename
   }
-  soggettiOperanti {
-    __typename
-  }
+    soggettiOperanti {
+      qualificaUfficio {
+        qualifica
+        ufficio {
+          uuid
+          nome
+        }
+        __typename
+      }
+      __typename
+    }
   proceduraVas {
     uuid
   }

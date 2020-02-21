@@ -161,7 +161,7 @@ class DataLoader:
         (IPA_FI, UFF2, [Qualifica.AC], {
             FC_RUP_RESP: [Qualifica.AC],
         }),
-        (IPA_LU, UFF1, [Qualifica.AC, Qualifica.SCA], {
+        (IPA_LU, UFF1, [Qualifica.SCA], {
             FC_ACTIVE2: [Qualifica.SCA],
             FC_SCA1: [Qualifica.SCA],
         }),

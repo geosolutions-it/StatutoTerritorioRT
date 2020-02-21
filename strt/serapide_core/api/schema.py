@@ -89,8 +89,8 @@ class Query(object):
 
     user_choices = DjangoFilterConnectionField(types.UtenteChoiceNode)
 
-    soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
-                                        filterset_class=types.SoggettoOperanteFilter)
+    # soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
+    #                                     filterset_class=types.SoggettoOperanteFilter)
 
 
     # TODO

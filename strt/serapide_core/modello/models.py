@@ -491,7 +491,7 @@ OLD    Rende disponibili: mail, ente, qualifica
         return self.qualifica_ufficio.qualifica
 
     @classmethod
-    def get_by_qualifica(piano, qualifica):
+    def get_by_qualifica(cls, piano, qualifica):
         return SoggettoOperante.objects.filter(piano=piano, qualifica_ufficio__qualifica=qualifica)
 
 

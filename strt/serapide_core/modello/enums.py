@@ -45,6 +45,7 @@ _FASE_NEXT = {
 
 class TipoRisorsa(SerapideEnum):
     VAS_SEMPLIFICATA = 'vas_semplificata'
+    VAS_VERIFICA = 'vas_verifica'
     PARERE_VERIFICA_VAS = 'parere_verifica_vas'
     PARERE_SCA = 'parere_sca'
     DELIBERA = 'delibera'

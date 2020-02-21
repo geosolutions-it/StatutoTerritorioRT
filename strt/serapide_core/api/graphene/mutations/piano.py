@@ -340,7 +340,7 @@ class UpdatePiano(relay.ClientIDMutation):
                 if _soggetti_operanti:
 
                     old_so_qs = SoggettoOperante.objects.filter(piano=_piano)
-                    old_so_dict = {so.qualifica_ufficio.ufficio.uuid + "_" + so.qualifica_ufficio.qualifica: so
+                    old_so_dict = {so.qualifica_ufficio.ufficio.uuid.__str__() + "_" + so.qualifica_ufficio.qualifica.name: so
                                    for so in old_so_qs}
                     add_so = []
 
@@ -351,7 +351,7 @@ class UpdatePiano(relay.ClientIDMutation):
                         if hash in old_so_dict:
                             del old_so_dict[hash]
                         else:
-                            qu = QualificaUfficio.objects.filter \
+                            qu = QualificaUfficio.objects \
                                 .filter(ufficio=uff, qualifica=qualifica).get()  # TODO: 404
                             new_so = SoggettoOperante(qualifica_ufficio=qu, piano=_piano)
                             add_so.append(new_so)

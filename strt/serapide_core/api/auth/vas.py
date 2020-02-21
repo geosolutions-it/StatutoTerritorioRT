@@ -89,17 +89,20 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
         # Perform checks specifically for the current "Fase"
         if piano.fase == Fase.DRAFT:
             if procedura_vas.tipologia == TipologiaVAS.SEMPLIFICATA:
-                if procedura_vas.risorse.filter(tipo='vas_semplificata', archiviata=False).count() == 1 and \
-                    procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).dimensione > 0 and \
-                    procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).file and \
-                    os.path.exists(procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).file.path):
+                risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.VAS_SEMPLIFICATA.value, archiviata=False)
+                if risorse.all().count() == 1:
+                    risorsa = procedura_vas.risorse.get(tipo=TipoRisorsa.VAS_SEMPLIFICATA.value, archiviata=False)
+                    if risorsa.dimensione > 0 and \
+                            risorsa.file and \
+                            os.path.exists(risorsa.file.path):
                         return True, []
                 return False, ['Risorsa mancante per VAS semplificata']
 
             elif procedura_vas.tipologia == TipologiaVAS.VERIFICA:
-                if procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False).count() > 0:
+                risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.VAS_VERIFICA.value, archiviata=False)
+                if risorse.all().count() > 0:
                     if all(r.dimensione > 0 and r.file and os.path.exists(r.file.path)
-                           for r in procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False)):
+                           for r in risorse):
                         return True, []
                     else:
                         return False, ['Errore in una risorsa per VAS verifica']

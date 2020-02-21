@@ -67,14 +67,24 @@ def piano_phase_changed_notification(sender, **kwargs):
 
         ass_list = Assegnatario.objects.filter(qualifica_ufficio__in=qu_list)
 
-        dest_uff = [{'nome':qu.ufficio.__str__(), 'email':qu.ufficio.email} for qu in qu_list ]
-        dest_utenti = [{'nome':ass.utente.get_full_name(), 'email':ass.utente.email} for ass in ass_list ]
+        dest_uff = [{
+            'first_name':qu.ufficio.nome,
+            'last_name':qu.ufficio.ente.nome,
+            'email':qu.ufficio.email}
+                for qu in qu_list ]
+        dest_utenti = [{
+            'first_name':ass.utente.first_name,
+            'last_name':ass.utente.first_name,
+            'email':ass.utente.email}
+                for ass in ass_list ]
         # TODO tokens
 
         # if PianoAuthTokens.objects.filter(piano=piano).count() > 0:
         #     tokens = [_p.token for _p in PianoAuthTokens.objects.filter(piano=piano)]
 
-        send_now_notification(dest_uff + dest_utenti,
+        # todo : check for uffici
+        send_now_notification( #dest_uff + dest_utenti,
+                              [ass.utente for ass in ass_list],
                               notification_type,
                               {
                                 "user": from_user,
