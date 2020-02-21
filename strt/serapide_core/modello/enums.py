@@ -15,10 +15,12 @@ from model_utils import Choices
 from django.db import models
 from django.utils.translation import gettext as _
 
-from strt_users.enums import QualificaRichiesta, fix_enum
+from strt_users.enums import (
+    QualificaRichiesta,
+    SerapideEnum)
 
 
-class Fase(Enum):
+class Fase(SerapideEnum):
     UNKNOWN = 'UNKNOWN'
     DRAFT = 'DRAFT'
     ANAGRAFICA = 'ANAGRAFICA'
@@ -27,24 +29,8 @@ class Fase(Enum):
     APPROVAZIONE = 'APPROVAZIONE'
     PUBBLICAZIONE = 'PUBBLICAZIONE'
 
-    @classmethod
-    def create_choices(cls):
-        return [
-            (Fase.UNKNOWN, _('UNKNOWN')),
-            (Fase.DRAFT, _('DRAFT')),
-            (Fase.ANAGRAFICA, _('ANAGRAFICA')),
-            (Fase.AVVIO, _('AVVIO')),
-            (Fase.ADOZIONE, _('ADOZIONE')),
-            (Fase.APPROVAZIONE, _('APPROVAZIONE')),
-            (Fase.PUBBLICAZIONE, _('PUBBLICAZIONE')),
-        ]
-
     def getNext(self):
         return _FASE_NEXT[self]
-
-    @classmethod
-    def fix_enum(cls, obj):
-        return fix_enum(cls, obj)
 
 _FASE_NEXT = {
     Fase.UNKNOWN: None,
@@ -57,7 +43,7 @@ _FASE_NEXT = {
 }
 
 
-class TipoRisorsa(Enum):
+class TipoRisorsa(SerapideEnum):
     VAS_SEMPLIFICATA = 'vas_semplificata'
     PARERE_VERIFICA_VAS = 'parere_verifica_vas'
     PARERE_SCA = 'parere_sca'
@@ -96,7 +82,7 @@ TIPOLOGIA_RISORSA = {
 #         ('genio_civile', _('GENIO_CIVILE')),
 #     )
 
-class TipologiaPiano(Enum):
+class TipologiaPiano(SerapideEnum):
 
     UNKNOWN = 'UNKNOWN'
     OPERATIVO = 'OPERATIVO'
@@ -104,29 +90,32 @@ class TipologiaPiano(Enum):
     VARIANTE_OPERATIVO = 'VARIANTE_OPERATIVO'
     VARIANTE_STRUTTURALE = 'VARIANTE_STRUTTURALE'
 
-    @classmethod
-    def create_choices(cls):
-        return Choices(
-            (TipologiaPiano.UNKNOWN, _('UNKNOWN')),
-            (TipologiaPiano.OPERATIVO, _('OPERATIVO')),
-            (TipologiaPiano.STRUTTURALE, _('STRUTTURALE')),
-            (TipologiaPiano.VARIANTE_OPERATIVO, _('VARIANTE_OPERATIVO')),
-            (TipologiaPiano.VARIANTE_STRUTTURALE, _('VARIANTE_STRUTTURALE')),
-        )
 
-    @classmethod
-    def fix_enum(cls, obj):
-        return fix_enum(cls, obj)
+class TipologiaVAS(SerapideEnum):
+    UNKNOWN = 'UNKNOWN'
+    SEMPLIFICATA = 'SEMPLIFICATA'
+    VERIFICA = 'VERIFICA'
+    PROCEDIMENTO = 'PROCEDIMENTO'
+    PROCEDIMENTO_SEMPLIFICATO = 'PROCEDIMENTO_SEMPLIFICATO'
+    NON_NECESSARIA = 'NON_NECESSARIA'
+
+    # @classmethod
+    # def create_choices(cls):
+    #     return  [(tag, _(tag.value)) for tag in cls]
+    #
+    # @classmethod
+    # def fix_enum(cls, obj):
+    #     return fix_enum(cls, obj)
 
 
-TIPOLOGIA_VAS = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('semplificata', _('SEMPLIFICATA')),
-        ('verifica', _('VERIFICA')),
-        ('procedimento', _('PROCEDIMENTO')),
-        ('procedimento_semplificato', _('PROCEDIMENTO_SEMPLIFICATO')),
-        ('non_necessaria', _('NON_NECESSARIA')),
-    )
+# TIPOLOGIA_VAS = Choices(
+#         ('unknown', _('UNKNOWN')),
+#         ('semplificata', _('SEMPLIFICATA')),
+#         ('verifica', _('VERIFICA')),
+#         ('procedimento', _('PROCEDIMENTO')),
+#         ('procedimento_semplificato', _('PROCEDIMENTO_SEMPLIFICATO')),
+#         ('non_necessaria', _('NON_NECESSARIA')),
+#     )
 
 TIPOLOGIA_CONF_COPIANIFIZAZIONE = Choices(
         ('necessaria', _('NECESSARIA')),

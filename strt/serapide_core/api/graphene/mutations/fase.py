@@ -24,7 +24,6 @@ from serapide_core.modello.enums import (
     Fase,
     AZIONI_BASE,
     STATO_AZIONE,
-    TIPOLOGIA_VAS,
     TIPOLOGIA_AZIONE,
     # TIPOLOGIA_ATTORE,
 )

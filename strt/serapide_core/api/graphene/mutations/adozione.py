@@ -42,7 +42,7 @@ from serapide_core.modello.models import (
 
 from serapide_core.modello.enums import (
     STATO_AZIONE,
-    TIPOLOGIA_VAS,
+    TipologiaVAS,
     TIPOLOGIA_AZIONE,
 )
 
@@ -220,7 +220,7 @@ class TrasmissioneAdozione(graphene.Mutation):
 
                 if procedura_adozione.pubblicazione_burt_data and \
                 piano.procedura_vas and not piano.procedura_vas.non_necessaria and \
-                piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
+                piano.procedura_vas.tipologia != TipologiaVAS.NON_NECESSARIA:
                     _expire_days = getattr(settings, 'ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', 60)
                     _alert_delta = datetime.timedelta(days=_expire_days)
                     _pareri_adozione_sca_expire = procedura_adozione.pubblicazione_burt_data + _alert_delta
@@ -718,7 +718,7 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase == Fase.AVVIO and \
-                piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
+                piano.procedura_vas and piano.procedura_vas.tipologia != TipologiaVAS.NON_NECESSARIA:
 
             _pareri_sca = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca)
@@ -846,7 +846,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
 
         # - Update Action state accordingly
         if fase == Fase.AVVIO and \
-                piano.procedura_vas and piano.procedura_vas.tipologia != TIPOLOGIA_VAS.non_necessaria:
+                piano.procedura_vas and piano.procedura_vas.tipologia != TipologiaVAS.NON_NECESSARIA:
             _parere_motivato_ac = piano.azioni.filter(
                 tipologia=TIPOLOGIA_AZIONE.parere_motivato_ac).first()
 

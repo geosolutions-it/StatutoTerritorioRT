@@ -18,7 +18,7 @@ import serapide_core.api.auth.vas as auth_vas
 from serapide_core.modello.enums import (
     Fase,
     STATO_AZIONE,
-    TIPOLOGIA_VAS,
+    TipologiaVAS,
     TIPOLOGIA_AZIONE,)
 
 
@@ -150,7 +150,7 @@ def formazione_piano_conclusa(piano):
 def vas_piano_conclusa(piano):
     _procedura_vas = ProceduraVAS.objects.filter(piano=piano).first()
     if not _procedura_vas or \
-    _procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+    _procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
         return True
     return _procedura_vas.conclusa
 
@@ -171,7 +171,7 @@ def adozione_piano_conclusa(piano):
 def adozione_vas_piano_conclusa(piano):
     _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).first()
     if not _procedura_adozione_vas or \
-    _procedura_adozione_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+    _procedura_adozione_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
         return True
     return _procedura_adozione_vas.conclusa
 

@@ -24,14 +24,14 @@ class FullFlowTestCase(GraphQLTestCase):
     # injecting test case's schema
     GRAPHQL_SCHEMA = schema
     GRAPHQL_URL = "/serapide/graphql/"
-    LOGIN_URL = '/users/login/'
 
+    LOGIN_URL = '/users/login/'
     GET_PROFILES_URL =  '/users/membership-type-api/'
 
     def setUp(self):
         DataLoader.loadData()
 
-    def test_full_piano_procedure(self):
+    def test_full_piano_procedure_vas_semplificata(self):
 
         query = None
 
@@ -67,9 +67,6 @@ class FullFlowTestCase(GraphQLTestCase):
         print("GET_PROFILES ====================")
         response = self._client.get(
             self.GET_PROFILES_URL, #  + "?user_id=" + DataLoader.FC_ACTIVE1,
-            # json.dumps(body),
-            # content_type="application/json",
-            # **headers
         )
         print(response)
         print(response.content)
@@ -108,6 +105,7 @@ class FullFlowTestCase(GraphQLTestCase):
 
         response = self.upload_file(codice_piano, '003_upload_file.query')
 
+        response = self.update_vas(codice_vas, 'fake_vas_type', '004_update_procedura_vas.query', expected_code=400)
         response = self.update_vas(codice_vas, 'semplificata', '004_update_procedura_vas.query')
 
         response = self.vas_upload_file(codice_vas, TipoRisorsa.VAS_SEMPLIFICATA, '005_vas_upload_file.query')
@@ -122,7 +120,7 @@ class FullFlowTestCase(GraphQLTestCase):
 
 
     def create_piano(self, ipa, expected_code=200, extra_title=''):
-        print("CREATE PIANO ==================== {}".format(extra_title))
+        print("CREATE PIANO ================================================== {}".format(extra_title))
         with open(os.path.join(this_path, 'fixtures', '001_create_piano.query'), 'r') as file:
             query = file.read().replace('\n', '')
         query_bound = query.replace('{IPA}', ipa)
@@ -138,7 +136,7 @@ class FullFlowTestCase(GraphQLTestCase):
         return response
 
     def update_piano(self, codice_piano, nome_campo, valore_campo, expected_code=200, extra_title=''):
-        print("UPDATE PIANO ==================== {}".format(extra_title))
+        print("UPDATE PIANO ================================================== {} --- {}".format(nome_campo, extra_title))
         with open(os.path.join(this_path, 'fixtures', '002_update_piano.query'), 'r') as file:
             query = file.read().replace('\n', '')
         query = query.replace('{codice_piano}', codice_piano)
@@ -160,7 +158,7 @@ class FullFlowTestCase(GraphQLTestCase):
 
 
     def upload_file(self, codice_piano, file_name):
-        print("UPLOAD FILE ==================== 1")
+        print("UPLOAD FILE ==================================================")
         with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
             query_upload = file.read().replace('\n', '')
         query_bound = query_upload.replace('{codice_piano}', codice_piano)
@@ -187,8 +185,8 @@ class FullFlowTestCase(GraphQLTestCase):
         return response
 
 
-    def update_vas(self, codice_vas, tipologia, file_name):
-        print("UPDATE VAS ==================== 1")
+    def update_vas(self, codice_vas, tipologia, file_name, expected_code=200):
+        print("UPDATE VAS ==================================================")
         with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
             query = file.read().replace('\n', '')
 
@@ -204,13 +202,13 @@ class FullFlowTestCase(GraphQLTestCase):
 
         dump_result('UPDATE VAS', response)
 
-        self.assertEqual(200, response.status_code, 'UPDATE VAS failed')
+        self.assertEqual(expected_code, response.status_code, 'UPDATE VAS failed')
         print("UPDATE VAS OK ^^^^^^^^^^^^^^^^^^^^ 1")
 
         return response
 
     def vas_upload_file(self, codice_vas, tipo:TipoRisorsa, file_name):
-        print("VAS UPLOAD FILE ==================== 1")
+        print("VAS UPLOAD FILE ==================================================")
         with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
             query = file.read().replace('\n', '')
         query = query.replace('{codice_vas}', codice_vas)
@@ -239,7 +237,7 @@ class FullFlowTestCase(GraphQLTestCase):
         return response
 
     def promuovi_piano(self, codice_piano, file_name, expected_code=200):
-        print("PROMOZIONE PIANO ==================== ")
+        print("PROMOZIONE PIANO ================================================== ")
         with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
             query = file.read().replace('\n', '')
 
@@ -272,7 +270,7 @@ class FullFlowTestCase(GraphQLTestCase):
 
 
 def dump_result(title, result):
-    print(title + "==============================")
+    print(title + " result --------------------------------------------------")
 
     print(result)
     print(result.content)

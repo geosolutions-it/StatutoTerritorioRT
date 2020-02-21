@@ -17,7 +17,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 
 from serapide_core.modello.enums import (
     Fase,
-    TIPOLOGIA_VAS,
+    TipologiaVAS,
     TipologiaPiano,
     # TIPOLOGIA_CONTATTO,
     TIPOLOGIA_CONF_COPIANIFIZAZIONE,
@@ -112,7 +112,7 @@ class Query(object):
 
     def resolve_tipologia_vas(self, info):
         _l = []
-        for _t in TIPOLOGIA_VAS:
+        for _t in TipologiaVAS:
             _l.append(enums.TipologiaVAS(_t[0], _t[1]))
         return _l
 
@@ -156,7 +156,7 @@ class Mutation(object):
     promozione_piano = piano.PromozionePiano.Field()
     formazione_del_piano = piano.FormazionePiano.Field()
 
-    create_procedura_vas = vas.CreateProceduraVAS.Field()
+    # create_procedura_vas = vas.CreateProceduraVAS.Field()
     update_procedura_vas = vas.UpdateProceduraVAS.Field()
     invio_pareri_verifica_vas = vas.InvioPareriVerificaVAS.Field()
     assoggettamento_vas = vas.AssoggettamentoVAS.Field()

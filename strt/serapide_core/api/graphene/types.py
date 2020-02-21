@@ -40,7 +40,7 @@ from strt_users.models import (
 from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_RISORSA,
-    TIPOLOGIA_VAS,
+    TipologiaVAS,
     FASE_AZIONE,
     TIPOLOGIA_AZIONE,
     TOOLTIP_AZIONE
@@ -470,19 +470,19 @@ class ProceduraVASNode(DjangoObjectType):
     def resolve_documento_preliminare_vas(self, info, **args):
         _risorsa = None
         if self.verifica_effettuata and \
-        self.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
+        self.tipologia in (TipologiaVAS.VERIFICA, TipologiaVAS.SEMPLIFICATA):
             _risorsa = self.risorse.filter(tipo='documento_preliminare_vas').first()
         return _risorsa
 
     def resolve_documento_preliminare_verifica(self, info, **args):
         _risorsa = None
-        if self.tipologia == TIPOLOGIA_VAS.verifica:
+        if self.tipologia == TipologiaVAS.VERIFICA:
             _risorsa = self.risorse.filter(tipo='vas_verifica').first()
         return _risorsa
 
     def resolve_relazione_motivata_vas_semplificata(self, info, **args):
         _risorsa = None
-        if self.tipologia == TIPOLOGIA_VAS.semplificata:
+        if self.tipologia == TipologiaVAS.SEMPLIFICATA:
             _risorsa = self.risorse.filter(tipo='vas_semplificata').first()
         return _risorsa
 
@@ -496,6 +496,7 @@ class ProceduraVASNode(DjangoObjectType):
             'tipologia': ['exact', 'icontains'],
         }
         interfaces = (relay.Node, )
+        convert_choices_to_enum = False
 
 
 class ProceduraAdozioneVASNode(DjangoObjectType):

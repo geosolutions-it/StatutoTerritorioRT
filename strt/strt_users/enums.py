@@ -18,6 +18,29 @@ from model_utils import Choices
 
 logger = logging.getLogger(__name__)
 
+class SerapideEnum(Enum):
+
+    @classmethod
+    def create_choices(cls):
+        return  [(tag, _(tag.value)) for tag in cls]
+
+    @classmethod
+    def fix_enum(cls, obj, none_on_error=False):
+        return fix_enum(cls, obj, none_on_error)
+
+    def equal(self, obj):
+        if self == obj:
+            return True
+        if self.name == obj:
+            logger.warning('EQUAL on enum is string: {}'.format(obj) )
+            return True
+        if type(self).__name__ + '.' + self.name == obj:
+            logger.warning('EQUAL on enum is string: {}'.format(obj) )
+            return True
+
+        return False
+
+
 class Priv(Enum):
     ADMIN_USER = 'ADMIN_USER'
     CREATE_PLAN = 'CREATE_PLAN'
@@ -34,44 +57,11 @@ class Priv(Enum):
         )
 
 
-class Profilo(Enum):
+class Profilo(SerapideEnum):
     ADMIN_PORTALE = 'ADMIN_PORTALE'
     RESP_RUP = 'RESP_RUP'
     ADMIN_ENTE = 'ADMIN_ENTE'
     OPERATORE = 'OPERATORE'
-
-    @classmethod
-    def create_choices(cls):
-        # return Choices (
-        #     (Profilo.ADMIN_PORTALE, _('Amministratore portale')),
-        #     (Profilo.RESP_RUP, _('Responsabile RUP')),
-        #     (Profilo.ADMIN_ENTE, _('Amministratore Ente')),
-        #     (Profilo.OPERATORE, _('Operatore')),
-        # )
-        # return Choices (
-        #     Profilo.ADMIN_PORTALE,
-        #     Profilo.RESP_RUP,
-        #     Profilo.ADMIN_ENTE,
-        #     Profilo.OPERATORE,
-        # )
-
-        return  [(tag, _(tag.value)) for tag in cls]
-
-    @classmethod
-    def fix_enum(cls, obj):
-        return fix_enum(cls, obj)
-
-    def equal(self, obj):
-        if self == obj:
-            return True
-        if self.name == obj:
-            logger.warning('EQUAL on enum is string: {}'.format(obj) )
-            return True
-        if 'Profilo.' + self.name == obj:
-            logger.warning('EQUAL on enum is string: {}'.format(obj) )
-            return True
-
-        return False
 
     def get_priv(self):
         '''
@@ -103,21 +93,13 @@ PRIV_BY_PROFILE = {
 #     URB = 'URB', _('Responsabile Urbanistica')
 #     GUEST = 'GUEST', _('Guest')
 
-class TipoEnte(Enum):
+class TipoEnte(SerapideEnum):
     COMUNE = 'COMUNE'
     REGIONE = 'REGIONE'
     ALTRO = 'ALTRO'
 
-    @classmethod
-    def create_choices(cls):
-        return  [(tag, _(tag.value)) for tag in cls]
 
-    @classmethod
-    def fix_enum(cls, obj):
-        return fix_enum(cls, obj)
-
-
-class Qualifica(Enum):
+class Qualifica(SerapideEnum):
     RESP = 'RESP'
     AC = 'AC'
     SCA = 'SCA'
@@ -126,36 +108,8 @@ class Qualifica(Enum):
     URB = 'URBANISTICA'
     READONLY = 'READONLY'
 
-    @classmethod
-    def create_choices(cls):
-        return  [(tag, _(tag.value)) for tag in cls]
-
-        # return Choices(
-        #     Qualifica.RESP,
-        #     Qualifica.AC,
-        #     Qualifica.SCA,
-        #     Qualifica.GC,
-        #     Qualifica.PIAN,
-        #     Qualifica.URB,
-        #     Qualifica.READONLY,
-        # )
-        # def create_choices(self=None):
-        #     return Choices(
-        #         (Qualifica.RESP , _('Responsabile Comunale')),
-        #         (Qualifica.AC, _('AUT_COMP_VAS')),
-        #         (Qualifica.SCA, _('SOGGETTO_SCA')),
-        #         (Qualifica.GC, _('Genio Civile')),
-        #         (Qualifica.PIAN, _('Responsabile Pianificazione')),
-        #         (Qualifica.URB, _('Responsabile Urbanistica')),
-        #         (Qualifica.READONLY, _('Read-only')),
-        #     )
-
     def is_allowed(self, tipo:TipoEnte):
         return tipo in ALLOWED_QUALIFICA_BY_TIPOENTE[self]
-
-    @classmethod
-    def fix_enum(cls, obj):
-        return fix_enum(cls, obj)
 
 
 ALLOWED_QUALIFICA_BY_TIPOENTE = {
@@ -168,7 +122,7 @@ ALLOWED_QUALIFICA_BY_TIPOENTE = {
     Qualifica.READONLY: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
 }
 
-class QualificaRichiesta(Enum):
+class QualificaRichiesta(SerapideEnum):
     COMUNE = 'COMUNE'
     AC = 'AC'
     SCA = 'SCA'
@@ -189,10 +143,6 @@ class QualificaRichiesta(Enum):
             (QualificaRichiesta.REGIONE, _('Responsabile regionale')),
         )
 
-    @classmethod
-    def fix_enum(cls, obj):
-        return fix_enum(cls, obj)
-
     def is_ok(self, qual:Qualifica):
         return qual in ALLOWED_QUALIFICA_BY_RICHIESTA[self]
 
@@ -207,26 +157,38 @@ ALLOWED_QUALIFICA_BY_RICHIESTA = {
 }
 
 
-def fix_enum(cls, obj):
+def fix_enum(cls, obj, none_on_error=False):
     # logger.warning('fix_enum {}::{}'.format(cls.__name__, obj))
-    if obj == None:
+    if obj is None:
         return obj
     if isinstance(obj, cls):
         return obj
+
+    cls_name = cls.__name__
+
     if isinstance(obj, str):
         try:
             ret = cls[obj]
-            logger.warning('Fixed 1 {}::{}'.format(cls, obj))
+            logger.warning('Fixed 1 {}[{}]'.format(cls_name, obj))
             return ret
         except KeyError:
             try:
-                if obj.startswith(cls.__name__ + '.'):
-                    key = obj[len(cls.__name__) + 1::]
+                if obj.startswith(cls_name + '.'):
+                    key = obj[len(cls_name) + 1::]
                     ret = cls[key]
-                    logger.warning('Fixed 2 {}::{}'.format(cls, key))
+                    logger.warning('Fixed 2 {}[{}]'.format(cls_name, key))
                     return ret
             except KeyError:
                 pass
 
-    logger.warning('Could not fix {}::{}'.format(cls, obj))
-    return obj
+            ret = [e for e in cls if
+                   e.name.lower() == obj.lower() or (cls_name + '.' + e.name).lower() == obj.lower()]
+
+            if len(ret) == 1:
+                logger.warning('Fixed 3 {}[{}]'.format(cls_name, ret[0].name))
+                return ret[0]
+            elif len(ret) > 1:
+                logger.warning('The lenient fixing procedure returned too many values - class {} key {}'.format(cls_name, obj))
+
+    logger.warning('Could not fix {}[{}]'.format(cls_name, obj))
+    return None if none_on_error else obj

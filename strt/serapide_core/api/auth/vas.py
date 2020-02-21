@@ -21,7 +21,7 @@ from serapide_core.modello.models import (
 
 from serapide_core.modello.enums import (
     Fase,
-    TIPOLOGIA_VAS,
+    TipologiaVAS,
     TIPOLOGIA_AZIONE,
     TipoRisorsa
 )
@@ -88,7 +88,7 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
     if procedura_vas.piano == piano:
         # Perform checks specifically for the current "Fase"
         if piano.fase == Fase.DRAFT:
-            if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
+            if procedura_vas.tipologia == TipologiaVAS.SEMPLIFICATA:
                 if procedura_vas.risorse.filter(tipo='vas_semplificata', archiviata=False).count() == 1 and \
                     procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).dimensione > 0 and \
                     procedura_vas.risorse.get(tipo='vas_semplificata', archiviata=False).file and \
@@ -96,7 +96,7 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                         return True, []
                 return False, ['Risorsa mancante per VAS semplificata']
 
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
+            elif procedura_vas.tipologia == TipologiaVAS.VERIFICA:
                 if procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False).count() > 0:
                     if all(r.dimensione > 0 and r.file and os.path.exists(r.file.path)
                            for r in procedura_vas.risorse.filter(tipo='vas_verifica', archiviata=False)):
@@ -105,7 +105,7 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                         return False, ['Errore in una risorsa per VAS verifica']
                 return False, ['Risorsa mancante per VAS verifica']
 
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento_semplificato:
+            elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
                 msg = []
                 if SoggettoOperante.get_by_qualifica(piano, Qualifica.AC).count() == 0:
                     msg.append("Soggetto AC mancante")
@@ -113,7 +113,7 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                     msg.append("Soggetto SCA mancante")
                 return len(msg) == 0, msg
 
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
+            elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO:
                 msg = []
                 if SoggettoOperante.get_by_qualifica(piano, Qualifica.AC).count() == 0:
                     msg.append("Soggetto AC mancante")
@@ -121,21 +121,21 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                     msg.append("Soggetto SCA mancante")
                 return len(msg) == 0, msg
 
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+            elif procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
                 return True, []
             else:
-                return False, ['Tipologia VAS sconosciuta']
+                return False, ['Tipologia VAS sconosciuta [{}]'.format(procedura_vas.tipologia)]
 
         elif piano.fase.nome == Fase.ANAGRAFICA:
-            if procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
+            if procedura_vas.tipologia == TipologiaVAS.SEMPLIFICATA:
                 return procedura_vas.conclusa
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
+            elif procedura_vas.tipologia == TipologiaVAS.VERIFICA:
                 return procedura_vas.conclusa
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento_semplificato:
+            elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
                 return procedura_vas.conclusa
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento:
+            elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO:
                 return procedura_vas.conclusa
-            elif procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+            elif procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
                 return True
             else:
                 return False

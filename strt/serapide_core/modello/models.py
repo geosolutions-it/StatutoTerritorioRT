@@ -46,7 +46,7 @@ from strt_users.enums import (
 
 from .enums import (Fase,
                     STATO_AZIONE,
-                    TIPOLOGIA_VAS,
+                    TipologiaVAS,
                     TipologiaPiano,
                     TIPOLOGIA_AZIONE,
                     # TIPOLOGIA_CONTATTO,
@@ -540,8 +540,8 @@ class ProceduraVAS(models.Model):
     )
 
     tipologia = models.CharField(
-        choices=TIPOLOGIA_VAS,
-        default=TIPOLOGIA_VAS.unknown,
+        choices=TipologiaVAS.create_choices(),
+        default=TipologiaVAS.UNKNOWN,
         max_length=50
     )
 
@@ -581,7 +581,13 @@ class ProceduraVAS(models.Model):
         verbose_name_plural = 'Procedure VAS'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, TIPOLOGIA_VAS[self.tipologia], self.uuid)
+        return '{} - {} [{}]'.format(self.piano.codice, self.tipologia, self.uuid)
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(ProceduraVAS, cls).from_db(db, field_names, values)
+        instance.tipologia = TipologiaVAS.fix_enum(instance.tipologia)
+        return instance
 
 
 class RisorseVas(models.Model):
@@ -1001,8 +1007,8 @@ class ProceduraAdozioneVAS(models.Model):
     )
 
     tipologia = models.CharField(
-        choices=TIPOLOGIA_VAS,
-        default=TIPOLOGIA_VAS.unknown,
+        choices=TipologiaVAS.create_choices(),
+        default=TipologiaVAS.UNKNOWN,
         max_length=50
     )
 
@@ -1029,7 +1035,13 @@ class ProceduraAdozioneVAS(models.Model):
         verbose_name_plural = 'Procedure Adozione VAS'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, TIPOLOGIA_VAS[self.tipologia], self.uuid)
+        return '{} - {} [{}]'.format(self.piano.codice, self.tipologia, self.uuid)
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(ProceduraVAS, cls).from_db(db, field_names, values)
+        instance.tipologia = TipologiaVAS.fix_enum(instance.tipologia)
+        return instance
 
 
 class RisorseAdozioneVas(models.Model):

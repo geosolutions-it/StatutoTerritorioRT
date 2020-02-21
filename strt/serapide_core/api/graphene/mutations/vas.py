@@ -52,7 +52,7 @@ from strt_users.enums import QualificaRichiesta, Qualifica
 from serapide_core.modello.enums import (
     Fase,
     STATO_AZIONE,
-    TIPOLOGIA_VAS,
+    TipologiaVAS,
     TIPOLOGIA_AZIONE,
     # TIPOLOGIA_ATTORE,
 )
@@ -74,12 +74,12 @@ def init_vas_procedure(piano:Piano):
     _verifica_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_verifica_vas)
 
     if _verifica_vas:
-        if procedura_vas.tipologia == TIPOLOGIA_VAS.non_necessaria:
+        if procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
             _verifica_vas.stato = STATO_AZIONE.nessuna
 
         elif procedura_vas.tipologia in \
-                (TIPOLOGIA_VAS.procedimento,
-                 TIPOLOGIA_VAS.procedimento_semplificato):
+                (TipologiaVAS.PROCEDIMENTO,
+                 TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO):
 
             _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
             chiudi_azione(_verifica_vas, datetime.datetime.now(timezone.get_current_timezone()) + \
@@ -96,7 +96,7 @@ def init_vas_procedure(piano:Piano):
                      datetime.timedelta(days=_avvio_consultazioni_sca_ac_expire_days)
             ))
 
-        elif procedura_vas.tipologia == TIPOLOGIA_VAS.semplificata:
+        elif procedura_vas.tipologia == TipologiaVAS.SEMPLIFICATA:
             _verifica_vas.stato = STATO_AZIONE.nessuna
 
             _emissione_provvedimento_verifica_expire_days = 30
@@ -110,7 +110,7 @@ def init_vas_procedure(piano:Piano):
                      datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
             ))
 
-        elif procedura_vas.tipologia == TIPOLOGIA_VAS.verifica:
+        elif procedura_vas.tipologia == TipologiaVAS.VERIFICA:
             # _verifica_vas.stato = STATO_AZIONE.attesa
             _verifica_vas.stato = STATO_AZIONE.nessuna
             _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
@@ -145,56 +145,56 @@ def init_vas_procedure(piano:Piano):
 
         _verifica_vas.save()
 
-
-class CreateProceduraVAS(relay.ClientIDMutation):
-
-    class Input:
-        procedura_vas = graphene.Argument(inputs.ProceduraVASCreateInput)
-        codice_piano = graphene.String(required=True)
-
-    nuova_procedura_vas = graphene.Field(types.ProceduraVASNode)
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, **input):
-        _piano = Piano.objects.get(codice=input['codice_piano'])
-        _procedura_vas_data = input.get('procedura_vas')
-        _role = info.context.session['role'] if 'role' in info.context.session else None
-        _token = info.context.session['token'] if 'token' in info.context.session else None
-        _ente = _piano.ente
-        if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
-        (rules.test_rule('strt_users.is_superuser', info.context.user) or
-         is_RUP(info.context.user) or
-         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune')):
-            try:
-                # ProceduraVAS (M)
-                _procedura_vas_data['piano'] = _piano
-                # Ente (M)
-                _procedura_vas_data['ente'] = _piano.ente
-                # Note (O)
-                if 'note' in _procedura_vas_data:
-                    _data = _procedura_vas_data.pop('note')
-                    _procedura_vas_data['note'] = _data[0]
-
-                _procedura_vas, created = ProceduraVAS.objects.get_or_create(
-                    piano=_piano,
-                    ente=_piano.ente)
-
-                _procedura_vas_data['id'] = _procedura_vas.id
-                _procedura_vas_data['uuid'] = _procedura_vas.uuid
-                nuova_procedura_vas = update_create_instance(_procedura_vas, _procedura_vas_data)
-
-                _piano.procedura_vas = nuova_procedura_vas
-                _piano.save()
-
-                return cls(nuova_procedura_vas=nuova_procedura_vas)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-        else:
-            return GraphQLError(_("Forbidden"), code=403)
+# TODO: controllare se è davvero usata
+# class CreateProceduraVAS(relay.ClientIDMutation):
+#
+#     class Input:
+#         procedura_vas = graphene.Argument(inputs.ProceduraVASCreateInput)
+#         codice_piano = graphene.String(required=True)
+#
+#     nuova_procedura_vas = graphene.Field(types.ProceduraVASNode)
+#
+#     @classmethod
+#     def mutate_and_get_payload(cls, root, info, **input):
+#         _piano = Piano.objects.get(codice=input['codice_piano'])
+#         _procedura_vas_data = input.get('procedura_vas')
+#         _role = info.context.session['role'] if 'role' in info.context.session else None
+#         _token = info.context.session['token'] if 'token' in info.context.session else None
+#         _ente = _piano.ente
+#         if info.context.user and \
+#         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+#         rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano) and \
+#         (rules.test_rule('strt_users.is_superuser', info.context.user) or
+#          is_RUP(info.context.user) or
+#          rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune')):
+#             try:
+#                 # ProceduraVAS (M)
+#                 _procedura_vas_data['piano'] = _piano
+#                 # Ente (M)
+#                 _procedura_vas_data['ente'] = _piano.ente
+#                 # Note (O)
+#                 if 'note' in _procedura_vas_data:
+#                     _data = _procedura_vas_data.pop('note')
+#                     _procedura_vas_data['note'] = _data[0]
+#
+#                 _procedura_vas, created = ProceduraVAS.objects.get_or_create(
+#                     piano=_piano,
+#                     ente=_piano.ente)
+#
+#                 _procedura_vas_data['id'] = _procedura_vas.id
+#                 _procedura_vas_data['uuid'] = _procedura_vas.uuid
+#                 nuova_procedura_vas = update_create_instance(_procedura_vas, _procedura_vas_data)
+#
+#                 _piano.procedura_vas = nuova_procedura_vas
+#                 _piano.save()
+#
+#                 return cls(nuova_procedura_vas=nuova_procedura_vas)
+#             except BaseException as e:
+#                 tb = traceback.format_exc()
+#                 logger.error(tb)
+#                 return GraphQLError(e, code=500)
+#         else:
+#             return GraphQLError(_("Forbidden"), code=403)
 
 
 class UpdateProceduraVAS(relay.ClientIDMutation):
@@ -219,8 +219,6 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
         if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
             if not auth.is_soggetto(info.context.user, _piano):
                 return GraphQLError(_("Forbidden"), code=403)
-            if not auth.is_soggetto(info.context.user, _piano):
-                return GraphQLError(_("Forbidden"), code=403)
 
         try:
             # These fields cannot be changed
@@ -234,10 +232,11 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             if 'tipologia' in _procedura_vas_data:
                 _tipologia = _procedura_vas_data.pop('tipologia')
                 if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-                    if _tipologia and _tipologia in TIPOLOGIA_VAS:
-                        _procedura_vas_data['tipologia'] = _tipologia
-                    else:
-                        logger.info('Valore di tipologia sconosciuto: [{}]'.format(_tipologia))
+                    if _tipologia: #  and _tipologia in TipologiaVAS:
+                        _tipo_parsed = TipologiaVAS.fix_enum(_tipologia, none_on_error=True)
+                        if not _tipo_parsed:
+                            return GraphQLError("Tipologia non riconosciuta [{}]".format(_tipologia), code=400)
+                        _procedura_vas_data['tipologia'] = _tipo_parsed
                 else:
                     logger.info('Non si hanno i privilegi per modificare il campo "tipologia"')
 
@@ -477,7 +476,7 @@ class AssoggettamentoVAS(graphene.Mutation):
                 if needsExecution(_pareri_verifica_sca):
                     return GraphQLError(_("Forbidden"), code=403)
                 if not _procedura_vas.verifica_effettuata and \
-                _procedura_vas.tipologia in (TIPOLOGIA_VAS.verifica, TIPOLOGIA_VAS.semplificata):
+                _procedura_vas.tipologia in (TipologiaVAS.VERIFICA, TipologiaVAS.SEMPLIFICATA):
                     cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
                 else:
                     return GraphQLError(_("Forbidden"), code=403)
@@ -696,10 +695,10 @@ class InvioPareriVAS(graphene.Mutation):
             if _avvio_consultazioni_sca and \
                (not isinstance(_avvio_consultazioni_sca, QuerySet) or
                   ((_avvio_consultazioni_sca.count() == 1 and
-                    procedura_vas.tipologia == TIPOLOGIA_VAS.procedimento) or
+                    procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO) or
                    (_avvio_consultazioni_sca.count() == 1 and
                     _avvio_consultazioni_sca.first().attore == TIPOLOGIA_ATTORE.ac and
-                    procedura_vas.tipologia != TIPOLOGIA_VAS.procedimento_semplificato))):
+                    procedura_vas.tipologia != TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO))):
 
                 if isinstance(_avvio_consultazioni_sca, QuerySet):
                     _avvio_consultazioni_sca = _avvio_consultazioni_sca.last()

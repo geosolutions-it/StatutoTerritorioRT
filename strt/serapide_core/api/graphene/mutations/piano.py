@@ -60,7 +60,7 @@ from serapide_core.modello.enums import (
     Fase,
     AZIONI_BASE,
     STATO_AZIONE,
-    TIPOLOGIA_VAS,
+    TipologiaVAS,
     TIPOLOGIA_AZIONE,
 )
 
@@ -161,7 +161,7 @@ class CreatePiano(relay.ClientIDMutation):
             _procedura_vas, created = ProceduraVAS.objects.get_or_create(
                 piano=nuovo_piano,
                 ente=nuovo_piano.ente,
-                tipologia=TIPOLOGIA_VAS.unknown)
+                tipologia=TipologiaVAS.UNKNOWN)
 
             # Inizializzazione Procedura Avvio
             _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
