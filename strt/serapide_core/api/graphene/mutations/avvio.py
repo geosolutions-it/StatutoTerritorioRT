@@ -59,6 +59,7 @@ from serapide_core.modello.enums import (
 
 from serapide_core.api.graphene import (types, inputs)
 from serapide_core.api.graphene.mutations.vas import init_vas_procedure
+from serapide_core.api.graphene.mutations.piano import check_and_promote
 
 logger = logging.getLogger(__name__)
 
@@ -316,12 +317,13 @@ class ContributiTecnici(graphene.Mutation):
 
             chiudi_azione(_contributi_tecnici)
 
-            crea_azione(piano,
-                        Azione(
-                            tipologia=TIPOLOGIA_AZIONE.formazione_del_piano,
-                            qualifica_richiesta=QualificaRichiesta.COMUNE,
-                            stato=STATO_AZIONE.necessaria
-                        ))
+            crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TIPOLOGIA_AZIONE.formazione_del_piano,
+                    qualifica_richiesta=QualificaRichiesta.COMUNE,
+                    stato=STATO_AZIONE.necessaria
+                ))
 
             if procedura_avvio.conferenza_copianificazione == TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria:
 
@@ -333,19 +335,21 @@ class ContributiTecnici(graphene.Mutation):
                 _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
                 _cc.save()
 
-                crea_azione(piano,
-                            Azione(
-                                tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
-                                qualifica_richiesta=QualificaRichiesta.REGIONE,
-                                stato=STATO_AZIONE.attesa
-                            ))
+                crea_azione(
+                    Azione(
+                        piano=piano,
+                        tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
+                        qualifica_richiesta=QualificaRichiesta.REGIONE,
+                        stato=STATO_AZIONE.attesa
+                    ))
 
-                crea_azione(piano,
-                            Azione(
-                                tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
-                                qualifica_richiesta=QualificaRichiesta.REGIONE,
-                                stato=STATO_AZIONE.attesa
-                            ))
+                crea_azione(
+                    Azione(
+                        piano=piano,
+                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
+                        qualifica_richiesta=QualificaRichiesta.REGIONE,
+                        stato=STATO_AZIONE.attesa
+                    ))
 
                 return "conferenza_copianificazione"
 
@@ -358,12 +362,13 @@ class ContributiTecnici(graphene.Mutation):
                 _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
                 _cc.save()
 
-                crea_azione(piano,
-                            Azione(
-                                tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
-                                qualifica_richiesta=QualificaRichiesta.COMUNE,
-                                stato=STATO_AZIONE.attesa
-                            ))
+                crea_azione(
+                    Azione(
+                        piano=piano,
+                        tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
+                        qualifica_richiesta=QualificaRichiesta.COMUNE,
+                        stato=STATO_AZIONE.attesa
+                    ))
 
                 return None
 
@@ -372,12 +377,13 @@ class ContributiTecnici(graphene.Mutation):
                 procedura_avvio.notifica_genio_civile = True
                 procedura_avvio.save()
 
-                crea_azione(piano,
-                            Azione(
-                                tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
-                                qualifica_richiesta=QualificaRichiesta.GC,
-                                stato=STATO_AZIONE.attesa
-                            ))
+                crea_azione(
+                    Azione(
+                        piano=piano,
+                        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
+                        qualifica_richiesta=QualificaRichiesta.GC,
+                        stato=STATO_AZIONE.necessaria
+                    ))
 
                 return "protocollo_genio_civile"
 
@@ -494,18 +500,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
                     piano=_piano,
                     message_type="richiesta_integrazioni")
 
-                if _piano.is_eligible_for_promotion:
-                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
-                    _piano.save()
-
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=info.context.user,
-                        piano=_piano,
-                        message_type="piano_phase_changed")
-
-                    fase.promuovi_piano(_fase, _piano)
+                check_and_promote(_piano, info)
 
                 return RichiestaIntegrazioni(
                     avvio_aggiornato=_procedura_avvio,
@@ -591,18 +586,7 @@ class IntegrazioniRichieste(graphene.Mutation):
                     piano=_piano,
                     message_type="integrazioni_richieste")
 
-                if _piano.is_eligible_for_promotion:
-                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
-                    _piano.save()
-
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=info.context.user,
-                        piano=_piano,
-                        message_type="piano_phase_changed")
-
-                    fase.promuovi_piano(_fase, _piano)
+                check_and_promote(_piano, info)
 
                 return IntegrazioniRichieste(
                     avvio_aggiornato=_procedura_avvio,
@@ -734,7 +718,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                 _richiesta_cc = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
                 if needsExecution(_richiesta_cc):
 
-                    chiudi_azione(_richiesta_cc) # TODO check: original code did not set timestamp
+                    chiudi_azione(_richiesta_cc, set_data=False)
 
                     procedura_avvio.notifica_genio_civile = False
                     procedura_avvio.save()
@@ -744,20 +728,22 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                     _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
                     _cc.save()
 
-                    crea_azione(piano,
-                                Azione(
-                                    tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
-                                    qualifica_richiesta=QualificaRichiesta.REGIONE,
-                                    stato=STATO_AZIONE.attesa
-                                ))
+                    crea_azione(
+                        Azione(
+                            piano=piano,
+                            tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
+                            qualifica_richiesta=QualificaRichiesta.REGIONE,
+                            stato=STATO_AZIONE.attesa
+                        ))
 
-                    crea_azione(piano,
-                                Azione(
-                                    tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
-                                    qualifica_richiesta=QualificaRichiesta.REGIONE,
-                                    stato=STATO_AZIONE.attesa,
-                                    data=procedura_avvio.data_scadenza_risposta
-                                ))
+                    crea_azione(
+                        Azione(
+                            piano=piano,
+                            tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
+                            qualifica_richiesta=QualificaRichiesta.REGIONE,
+                            stato=STATO_AZIONE.attesa,
+                            data=procedura_avvio.data_scadenza_risposta
+                        ))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -820,7 +806,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
             _esito_cc = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
             if needsExecution(_esito_cc):
 
-                chiudi_azione(_esito_cc) # TODO: check: original code did not set timestamp
+                chiudi_azione(_esito_cc, set_data=False)
 
                 procedura_avvio.notifica_genio_civile = True
                 procedura_avvio.save()
@@ -829,13 +815,14 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                 _cc.data_chiusura_conferenza = datetime.datetime.now(timezone.get_current_timezone())
                 _cc.save()
 
-                crea_azione(piano,
-                            Azione(
-                                tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
-                                qualifica_richiesta=QualificaRichiesta.GC,
-                                stato=STATO_AZIONE.attesa,
-                                data=procedura_avvio.data_scadenza_risposta
-                            ))
+                crea_azione(
+                    Azione(
+                        piano,
+                        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
+                        qualifica_richiesta=QualificaRichiesta.GC,
+                        stato=STATO_AZIONE.necessaria,
+                        data=procedura_avvio.data_scadenza_risposta
+                    ))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -856,18 +843,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                     piano=_piano,
                     message_type="protocollo_genio_civile")
 
-                if _piano.is_eligible_for_promotion:
-                    _piano.fase = _fase = Fase.objects.get(nome=_piano.next_phase)
-                    _piano.save()
-
-                    # Notify Users
-                    piano_phase_changed.send(
-                        sender=Piano,
-                        user=info.context.user,
-                        piano=_piano,
-                        message_type="piano_phase_changed")
-
-                    fase.promuovi_piano(_fase, _piano)
+                check_and_promote(_piano)
 
                 return ChiusuraConferenzaCopianificazione(
                     avvio_aggiornato=_procedura_avvio,

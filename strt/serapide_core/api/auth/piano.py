@@ -127,12 +127,8 @@ def has_procedura_approvazione(piano):
 
 @rules.predicate
 def protocollo_genio_inviato(piano):
-    _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
-
-    if not _protocollo_genio_civile:
-        return False
-
-    return _protocollo_genio_civile.stato == STATO_AZIONE.nessuna
+    pgc = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+    return pgc and pgc.stato == STATO_AZIONE.nessuna
 
 
 @rules.predicate
