@@ -777,7 +777,8 @@ class ProceduraAvvio(models.Model):
 
     conferenza_copianificazione = models.CharField(
         choices=TIPOLOGIA_CONF_COPIANIFIZAZIONE,
-        default=TIPOLOGIA_CONF_COPIANIFIZAZIONE.necessaria,
+        null=True, blank=True,
+        default=None,
         max_length=20
     )
 
