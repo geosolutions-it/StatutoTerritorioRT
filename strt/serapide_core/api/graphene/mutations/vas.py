@@ -416,7 +416,7 @@ class AssoggettamentoVAS(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria
                 ))
