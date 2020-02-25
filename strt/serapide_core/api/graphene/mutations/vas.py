@@ -77,40 +77,41 @@ def init_vas_procedure(piano:Piano):
         if procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
             _verifica_vas.stato = STATO_AZIONE.nessuna
 
-        elif procedura_vas.tipologia in \
-                (TipologiaVAS.PROCEDIMENTO,
-                 TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO):
+        elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO:
 
             _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
             chiudi_azione(_verifica_vas, datetime.datetime.now(timezone.get_current_timezone()) + \
                                  datetime.timedelta(days=_verifica_vas_expire_days))
 
             _avvio_consultazioni_sca_ac_expire_days = 10
-            crea_azione(Azione(
-                piano=piano,
-                tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
-                qualifica_richiesta=QualificaRichiesta.AC,
-                order=_order,
-                stato=STATO_AZIONE.attesa,
-                data=datetime.datetime.now(timezone.get_current_timezone()) +
-                     datetime.timedelta(days=_avvio_consultazioni_sca_ac_expire_days)
-            ))
+            crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                    qualifica_richiesta=QualificaRichiesta.AC,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=datetime.datetime.now(timezone.get_current_timezone()) +
+                         datetime.timedelta(days=_avvio_consultazioni_sca_ac_expire_days)
+                ))
 
         elif procedura_vas.tipologia == TipologiaVAS.SEMPLIFICATA:
             _verifica_vas.stato = STATO_AZIONE.nessuna
 
             _emissione_provvedimento_verifica_expire_days = 30
-            crea_azione(Azione(
-                piano=piano,
-                tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
-                qualifica_richiesta=QualificaRichiesta.AC,
-                order=_order,
-                stato=STATO_AZIONE.attesa,
-                data=datetime.datetime.now(timezone.get_current_timezone()) +
-                     datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
-            ))
+            crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
+                    qualifica_richiesta=QualificaRichiesta.AC,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=datetime.datetime.now(timezone.get_current_timezone()) +
+                         datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
+                ))
 
-        elif procedura_vas.tipologia == TipologiaVAS.VERIFICA:
+        elif procedura_vas.tipologia in [TipologiaVAS.VERIFICA,
+                                         TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO]:
             # _verifica_vas.stato = STATO_AZIONE.attesa
             _verifica_vas.stato = STATO_AZIONE.nessuna
             _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
@@ -118,17 +119,15 @@ def init_vas_procedure(piano:Piano):
                                  datetime.timedelta(days=_verifica_vas_expire_days)
 
             _pareri_vas_expire_days = getattr(settings, 'PARERI_VERIFICA_VAS_EXPIRE_DAYS', 30)
-            _pareri_sca = Azione(
-                tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca,
-                attore=TIPOLOGIA_ATTORE.sca,
-                order=_order,
-                stato=STATO_AZIONE.attesa,
-                data=datetime.datetime.now(timezone.get_current_timezone()) +
-                     datetime.timedelta(days=_pareri_vas_expire_days)
-            )
-            _pareri_sca.save()
-            _order += 1
-            AzioniPiano.objects.get_or_create(azione=_pareri_sca, piano=piano)
+            _pareri_sca = crea_azione(
+                Azione(
+                    tipologia=TIPOLOGIA_AZIONE.pareri_verifica_sca,
+                    attore=TIPOLOGIA_ATTORE.sca,
+                    order=_order,
+                    stato=STATO_AZIONE.attesa,
+                    data=datetime.datetime.now(timezone.get_current_timezone()) +
+                         datetime.timedelta(days=_pareri_vas_expire_days)
+                ))
 
             _emissione_provvedimento_verifica_expire_days = 90
             _emissione_provvedimento_verifica = Azione(
@@ -465,8 +464,10 @@ class AssoggettamentoVAS(graphene.Mutation):
 
                 if needsExecution(_pareri_verifica_sca) or \
                         _procedura_vas.verifica_effettuata or \
-                        _procedura_vas.tipologia not in (TipologiaVAS.VERIFICA, TipologiaVAS.SEMPLIFICATA):
-                    return GraphQLError("Stato di verifica errato", code=409)
+                        _procedura_vas.tipologia not in (TipologiaVAS.VERIFICA,
+                                                         TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO,
+                                                         TipologiaVAS.SEMPLIFICATA):
+                    return GraphQLError("Stato o tipo VAS errato", code=409)
 
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
 

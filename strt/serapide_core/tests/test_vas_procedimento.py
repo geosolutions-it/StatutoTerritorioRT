@@ -22,7 +22,7 @@ this_path = os.path.dirname(__file__)
 
 class FullFlowTestCase(AbstractSerapideTest):
 
-    def test_full_piano_procedure_vas_proc_semplificato(self):
+    def test_full_piano_procedure_vas_procedimento(self):
 
         query = None
 
@@ -60,12 +60,12 @@ class FullFlowTestCase(AbstractSerapideTest):
         now = now.replace(microsecond=0)
 
         response = self.update_piano(codice_piano, "dataDelibera", now.isoformat())
-        response = self.update_piano(codice_piano, "descrizione", "Piano di test - VAS PROCEDIMENTO SEMPLIFICATO [{}]".format(now))
+        response = self.update_piano(codice_piano, "descrizione", "Piano di test - VAS PROCEDIMENTO [{}]".format(now))
         response = self.update_piano(codice_piano, "soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
 
         response = self.upload_file(codice_piano, '003_upload_file.query')
 
-        response = self.update_vas(codice_vas, TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO.name, '004_update_procedura_vas.query')
+        response = self.update_vas(codice_vas, TipologiaVAS.PROCEDIMENTO.name, '004_update_procedura_vas.query')
 
         # response = self.vas_upload_file(codice_vas, TipoRisorsa.VAS_VERIFICA, '005_vas_upload_file.query')
 

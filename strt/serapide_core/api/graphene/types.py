@@ -470,13 +470,16 @@ class ProceduraVASNode(DjangoObjectType):
     def resolve_documento_preliminare_vas(self, info, **args):
         _risorsa = None
         if self.verifica_effettuata and \
-        self.tipologia in (TipologiaVAS.VERIFICA, TipologiaVAS.SEMPLIFICATA):
+        self.tipologia in (TipologiaVAS.VERIFICA,
+                           TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO,
+                           TipologiaVAS.SEMPLIFICATA):
             _risorsa = self.risorse.filter(tipo='documento_preliminare_vas').first()
         return _risorsa
 
     def resolve_documento_preliminare_verifica(self, info, **args):
         _risorsa = None
-        if self.tipologia == TipologiaVAS.VERIFICA:
+        if self.tipologia in [TipologiaVAS.VERIFICA,
+                              TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO]:
             _risorsa = self.risorse.filter(tipo='vas_verifica').first()
         return _risorsa
 

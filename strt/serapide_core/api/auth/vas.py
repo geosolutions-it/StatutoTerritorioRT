@@ -98,7 +98,7 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                         return True, []
                 return False, ['Risorsa mancante per VAS semplificata']
 
-            elif procedura_vas.tipologia == TipologiaVAS.VERIFICA:
+            elif procedura_vas.tipologia in [TipologiaVAS.VERIFICA, TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO]:
                 risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.VAS_VERIFICA.value, archiviata=False)
                 if risorse.all().count() > 0:
                     if all(r.dimensione > 0 and r.file and os.path.exists(r.file.path)
@@ -107,14 +107,6 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                     else:
                         return False, ['Errore in una risorsa per VAS verifica']
                 return False, ['Risorsa mancante per VAS verifica']
-
-            elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
-                msg = []
-                if SoggettoOperante.get_by_qualifica(piano, Qualifica.AC).count() == 0:
-                    msg.append("Soggetto AC mancante")
-                if SoggettoOperante.get_by_qualifica(piano, Qualifica.SCA).count() == 0:
-                    msg.append("Soggetto SCA mancante")
-                return len(msg) == 0, msg
 
             elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO:
                 msg = []
@@ -132,9 +124,7 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
         elif piano.fase.nome == Fase.ANAGRAFICA:
             if procedura_vas.tipologia == TipologiaVAS.SEMPLIFICATA:
                 return procedura_vas.conclusa
-            elif procedura_vas.tipologia == TipologiaVAS.VERIFICA:
-                return procedura_vas.conclusa
-            elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
+            elif procedura_vas.tipologia in [TipologiaVAS.VERIFICA, TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO]:
                 return procedura_vas.conclusa
             elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO:
                 return procedura_vas.conclusa
