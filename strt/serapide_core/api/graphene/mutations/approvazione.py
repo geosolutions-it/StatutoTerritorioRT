@@ -49,9 +49,9 @@ from serapide_core.modello.enums import (
     QualificaRichiesta,
 )
 
-from serapide_core.api.graphene import types
-from serapide_core.api.graphene import inputs
-from serapide_core.api.graphene.mutations import fase
+from serapide_core.api.graphene import (
+    types, inputs)
+
 
 logger = logging.getLogger(__name__)
 

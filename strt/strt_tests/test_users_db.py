@@ -30,10 +30,10 @@ from strt_users.models import (
     TipoEnte
 )
 
-IPA_RT = 'r_toscan'
-IPA_FI = 'c_d612'
-IPA_LU = 'c_e715'
-IPA_PI = 'c_g702'
+IPA_RT = 'r_toscanX'
+IPA_FI = 'c_d612X'
+IPA_LU = 'c_e715X'
+IPA_PI = 'c_g702X'
 
 class UsersDBTests(TestCase):
 
@@ -49,17 +49,17 @@ class UsersDBTests(TestCase):
         },
         {
             'ipa': IPA_FI,
-            'name': 'Firenze',
+            'nome': 'Firenze',
             'tipo': TipoEnte.COMUNE
         },
         {
             'ipa': IPA_LU,
-            'name': 'Lucca',
+            'nome': 'Lucca',
             'tipo': TipoEnte.COMUNE
         },
         {
             'ipa': IPA_PI,
-            'name': 'Pisa',
+            'nome': 'Pisa',
             'tipo': TipoEnte.COMUNE
         }
     ]
@@ -98,10 +98,10 @@ class UsersDBTests(TestCase):
         IPA_PI: []
     }
 
-    FC_ADMIN = 'RSSMRA80A01D612Y'
-    FC_INACTIVE = 'PLARSS85A15E715G'
+    FC_ADMIN = 'RSSMRA80A01D612X'
+    FC_INACTIVE = 'PLARSS85A15E715X'
     FC_ACTIVE1 = 'ACTIVE11A15E715G'
-    FC_ACTIVE2 = 'ACTIVE22A15E715G'
+    FC_ACTIVE2 = 'ACTIVE22A15E715X'
 
     utenti = [
         {
@@ -126,17 +126,17 @@ class UsersDBTests(TestCase):
 
         for ente in cls.enti:
             ipa = ente['ipa']
-            ente_db, created = Ente._default_manager.get_or_create(ente)
+            ente_db, created = Ente._default_manager.get_or_create(**ente)
             cls.enti_db[ipa] = ente_db
 
             cls.uffici_db[ipa] = []
             for ufficio in cls.uffici[ipa]:
                 ufficio['ente'] = ente_db
-                uff_db,created = Ufficio._default_manager.get_or_create(ufficio)
+                uff_db,created = Ufficio._default_manager.get_or_create(**ufficio)
                 cls.uffici_db[ipa].append(uff_db)
 
         for user in cls.utenti:
-            utente_db,created = Utente._default_manager.get_or_create(user)
+            utente_db,created = Utente._default_manager.get_or_create(**user)
             cls.utenti_db[user['fiscal_code']] = utente_db
 
 

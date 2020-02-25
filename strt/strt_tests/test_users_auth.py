@@ -44,10 +44,10 @@ import jwt
 # 2 - User can manage accounts?
 # 3 - User can access to SERAPIDE?
 
-IPA_RT = 'r_toscan'
-IPA_FI = 'c_d612'
-IPA_LU = 'c_e715'
-IPA_PI = 'c_g702'
+IPA_RT = 'r_toscanW'
+IPA_FI = 'c_d612W'
+IPA_LU = 'c_e715W'
+IPA_PI = 'c_g702W'
 
 class UsersAuthenticationTests:
     # class UsersAuthenticationTests(TestCase):
@@ -63,17 +63,17 @@ class UsersAuthenticationTests:
         },
         {
             'ipa': IPA_FI,
-            'name': 'Firenze',
+            'nome': 'Firenze',
             'tipo': TipoEnte.COMUNE
         },
         {
             'ipa': IPA_LU,
-            'name': 'Lucca',
+            'nome': 'Lucca',
             'tipo': TipoEnte.COMUNE
         },
         {
             'ipa': IPA_PI,
-            'name': 'Pisa',
+            'nome': 'Pisa',
             'tipo': TipoEnte.COMUNE
         }
     ]
@@ -112,9 +112,9 @@ class UsersAuthenticationTests:
         IPA_PI: []
     }
 
-    FC_ADMIN = 'RSSMRA80A01D612Y'
-    FC_INACTIVE = 'PLARSS85A15E715G'
-    FC_ACTIVE = 'CRLRSS85A15E715G'
+    FC_ADMIN = 'RSSMRA80A01D612W'
+    FC_INACTIVE = 'PLARSS85A15E715W'
+    FC_ACTIVE = 'CRLRSS85A15E715W'
 
     Responsabile_ISIDE_user_data = {
         'first_name': 'Mario',
@@ -149,11 +149,11 @@ class UsersAuthenticationTests:
 
         for ente in cls.enti:
             ipa = ente['ipa']
-            ente_db, created = Ente._default_manager.get_or_create(ente)
+            ente_db, created = Ente._default_manager.get_or_create(**ente)
             cls.enti_db[ipa] = ente_db
             for ufficio in cls.uffici[ipa]:
                 ufficio['ente'] = ente_db
-                Ufficio._default_manager.get_or_create(ufficio)
+                Ufficio._default_manager.get_or_create(**ufficio)
 
         # um = IsideUserManager()
 
@@ -165,7 +165,7 @@ class UsersAuthenticationTests:
             #     fiscal_code=user['fiscal_code'],
             #     email=user['email'] if 'email' in user else None,
             #     extra_fields=user)
-            utente_db,created = Utente._default_manager.get_or_create(user)
+            utente_db,created = Utente._default_manager.get_or_create(**user)
             cls.utenti_db[user['fiscal_code']] = utente_db
 
         admin_profile = ProfiloUtente()

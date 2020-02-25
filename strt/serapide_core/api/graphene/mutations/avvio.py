@@ -57,9 +57,7 @@ from serapide_core.modello.enums import (
     TIPOLOGIA_CONF_COPIANIFIZAZIONE,
 )
 
-from serapide_core.api.graphene import types
-from serapide_core.api.graphene import inputs
-from serapide_core.api.graphene.mutations import fase
+from serapide_core.api.graphene import (types, inputs)
 from serapide_core.api.graphene.mutations.vas import init_vas_procedure
 
 logger = logging.getLogger(__name__)
@@ -445,22 +443,16 @@ class RichiestaIntegrazioni(graphene.Mutation):
             chiudi_azione(_richiesta_integrazioni)
 
             if procedura_avvio.richiesta_integrazioni:
-                crea_azione(piano,
-                            Azione(
+                crea_azione(Azione(
+                                piano=piano,
                                 tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
                                 qualifica_richiesta=QualificaRichiesta.COMUNE,
                                 stato=STATO_AZIONE.attesa
                             ))
             else:
-                _conferenza_copianificazione_attiva = False
-
-                _richiesta_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
-                if needsExecution(_richiesta_conferenza_copianificazione):
-                    _conferenza_copianificazione_attiva = True
-
-                _esito_conferenza_copianificazione = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
-                if needsExecution(_esito_conferenza_copianificazione):
-                    _conferenza_copianificazione_attiva = True
+                _conferenza_copianificazione_attiva = \
+                    needsExecution(piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
+                    needsExecution(piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
 
                 _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
                 _procedura_vas = ProceduraVAS.objects.filter(piano=piano).last()

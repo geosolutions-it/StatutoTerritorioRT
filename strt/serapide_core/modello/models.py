@@ -354,6 +354,14 @@ class Piano(models.Model):
             qs = qs.filter(qualifica_richiesta=qualifica_richiesta)
         return qs.first()
 
+    def azioni(self, tipologia_azione:TIPOLOGIA_AZIONE=None, qualifica_richiesta:QualificaRichiesta=None):
+        qs = Azione.objects.filter(piano=self)
+        if tipologia_azione:
+            qs = qs.filter(tipologia=tipologia_azione)
+        if qualifica_richiesta:
+            qs = qs.filter(qualifica_richiesta=qualifica_richiesta)
+        return qs
+
 
 class Azione(models.Model):
 

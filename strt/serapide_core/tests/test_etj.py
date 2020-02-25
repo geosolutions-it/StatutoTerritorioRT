@@ -16,6 +16,7 @@ from serapide_core.modello.enums import TipoRisorsa
 
 from .test_data_setup import DataLoader
 
+
 logger = logging.getLogger(__name__)
 
 this_path = os.path.dirname(__file__)
