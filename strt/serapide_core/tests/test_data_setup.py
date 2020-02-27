@@ -73,6 +73,7 @@ class DataLoader:
     UFF_GC_VC = "GENIO CIVILE TOSCANA VALDARNO CENTRALE"
     UFF_GC_VI = "GENIO CIVILE TOSCANA VALDARNO INFERIORE"
     UFF_GC_VS = "GENIO CIVILE TOSCANA VALDARNO SUPERIORE"
+    UFF_PIAN  = "Uff Pianificazione"
     UFF1 = 'Ufficio 1'
     UFF2 = 'Ufficio 2'
 
@@ -85,6 +86,7 @@ class DataLoader:
             UFF_GC_VC,
             UFF_GC_VI,
             UFF_GC_VS,
+            UFF_PIAN
         ],
         IPA_FI: [
             {'nome': UFF1, 'email': 'uff1@fi'},
@@ -106,6 +108,7 @@ class DataLoader:
     FC_GC1     =  'GCGCGC22A15E715G'
     FC_AC1     =  'ACACAC22A15E715G'
     FC_SCA1    =  'SKASKA22A15E715G'
+    FC_PIAN    =  'PIANRT22A15E715G'
 
     utenti = [
         {
@@ -141,6 +144,11 @@ class DataLoader:
             'last_name': 'Scacchiere',
             'fiscal_code': FC_SCA1
         },
+        {
+            'first_name': 'Pino',
+            'last_name': 'Piano',
+            'fiscal_code': FC_PIAN
+        },
     ]
 
     profili_to_store = [
@@ -149,6 +157,7 @@ class DataLoader:
         (FC_ACTIVE2, Profilo.OPERATORE, IPA_FI),
         (FC_ACTIVE2, Profilo.OPERATORE, IPA_LU),
         (FC_GC1, Profilo.OPERATORE, IPA_RT),
+        (FC_PIAN, Profilo.OPERATORE, IPA_RT),
         (FC_AC1, Profilo.OPERATORE, IPA_PI),
         (FC_SCA1, Profilo.OPERATORE, IPA_LU),
     ]
@@ -159,7 +168,7 @@ class DataLoader:
             FC_ACTIVE2: [Qualifica.AC, Qualifica.SCA],
         }),
         (IPA_FI, UFF2, [Qualifica.AC], {
-            FC_RUP_RESP: [Qualifica.AC],
+            #FC_RUP_RESP: [Qualifica.AC],
         }),
         (IPA_LU, UFF1, [Qualifica.SCA], {
             FC_ACTIVE2: [Qualifica.SCA],
@@ -172,6 +181,9 @@ class DataLoader:
         }),
         (IPA_RT, UFF_GC_TN, [Qualifica.GC], {
             FC_GC1: [Qualifica.GC],
+        }),
+        (IPA_RT, UFF_PIAN, [Qualifica.PIAN], {
+            FC_PIAN: [Qualifica.PIAN],
         }),
     ]
 

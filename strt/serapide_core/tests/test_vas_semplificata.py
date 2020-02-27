@@ -92,18 +92,23 @@ class FullFlowTestCase(AbstractSerapideTest):
         now = datetime.datetime.now()
         now = now.replace(microsecond=0)
 
-        response = self.update_piano(codice_piano, "dataDelibera", now.isoformat())
-        response = self.update_piano(codice_piano, "descrizione", "Piano di test [{}]".format(now))
-        response = self.update_piano(codice_piano, "soggettoProponenteUuid", uuid.uuid4().__str__(), expected_code=404)
-        response = self.update_piano(codice_piano, "soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
+        for nome, val in [
+            ("dataDelibera", now.isoformat()),
+            ("descrizione", "Piano di test - VAS SEMPLIFICATA [{}]".format(now)),
+            ("soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
+        ]:
+            self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, nome, val)
 
-        response = self.upload_file(codice_piano, '003_upload_file.query')
+        self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettoProponenteUuid", uuid.uuid4().__str__(), expected_code=404)
 
-        response = self.update_vas(codice_vas, 'fake_vas_type', '004_update_procedura_vas.query', expected_code=400)
-        response = self.update_vas(codice_vas, TipologiaVAS.SEMPLIFICATA.name, '004_update_procedura_vas.query')
 
-        response = self.vas_upload_file(codice_vas, TipoRisorsa.VAS_SEMPLIFICATA, '005_vas_upload_file.query')
+        response = self.upload(codice_piano, TipoRisorsa.DELIBERA, '003_upload_file.query')
 
-        response = self.promuovi_piano(codice_piano, '006_promozione.query')
+        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', "fake_vas_type", expected_code=400)
+        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', TipologiaVAS.SEMPLIFICATA.name)
+
+        response = self.upload(codice_vas, TipoRisorsa.VAS_SEMPLIFICATA, '005_vas_upload_file.query')
+
+        # response = self.promuovi_piano(codice_piano, '006_promozione.query')
 
 

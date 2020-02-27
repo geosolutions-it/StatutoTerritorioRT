@@ -2,9 +2,9 @@
    "operationName" : "UpdateProceduraVas",
    "variables" : {
       "input" : {
-         "uuid" : "{codice_vas}",
+         "uuid" : "{codice}",
          "proceduraVas" : {
-            "tipologia" : "{tipologia_vas}"
+            "{nome_campo}" : "{valore_campo}"
          }
       }
    },

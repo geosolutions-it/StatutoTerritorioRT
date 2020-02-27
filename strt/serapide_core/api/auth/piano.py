@@ -127,19 +127,14 @@ def has_procedura_approvazione(piano):
 
 @rules.predicate
 def protocollo_genio_inviato(piano):
-    pgc = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
-    return pgc and pgc.stato == STATO_AZIONE.nessuna
+    az = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+    return az and az.stato == STATO_AZIONE.nessuna
 
 
 @rules.predicate
 def formazione_piano_conclusa(piano):
-    _formazione_del_piano = piano.azioni.filter(
-        tipologia=TIPOLOGIA_AZIONE.formazione_del_piano).first()
-
-    if not _formazione_del_piano:
-        return False
-
-    return _formazione_del_piano.stato == STATO_AZIONE.nessuna
+    az = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+    return az and az.stato == STATO_AZIONE.nessuna
 
 
 @rules.predicate
@@ -218,6 +213,26 @@ def is_eligible_for_promotion(piano:Piano):
             msg = msg + vas_msg
 
         return len(msg) == 0, msg
+
+    elif piano.fase == Fase.ANAGRAFICA:
+        if has_pending_alerts(piano):
+            msg.append("Ci sono azioni non ancora completate")
+        if not protocollo_genio_inviato(piano):
+            msg.append("Protocollo Genio Civile mancante")
+        if not formazione_piano_conclusa(piano):
+            msg.append("Formazione piano non conclusa")
+        if not has_procedura_avvio(piano):
+            msg.append("Procedura di avvio mancante")
+        if not avvio_piano_conclusa(piano):
+            msg.append("Procedura di avvio non conclusa")
+        if  not vas_piano_conclusa(piano):
+            msg.append("Procedura VAS non conclusa")
+
+        return len(msg) == 0, msg
+
+    #     has_procedura_avvio &
+    #     avvio_piano_conclusa &
+    #     (~has_procedura_vas | vas_piano_conclusa)
 
     raise Exception('NOT IMPLEMENTED YET')
 

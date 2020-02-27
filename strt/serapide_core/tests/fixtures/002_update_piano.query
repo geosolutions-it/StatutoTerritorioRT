@@ -2,7 +2,7 @@
    "operationName" : "UpdatePiano",
    "variables" : {
       "input" : {
-         "codice" : "{codice_piano}",
+         "codice" : "{codice}",
          "pianoOperativo" : {
             "{nome_campo}" : "{valore_campo}"
          }
@@ -56,27 +56,21 @@ fragment Piano on PianoNode {
   }
   soggettoProponente {
         qualifica
-        ufficio {
-          uuid
-          nome
-        }
+        ufficio {uuid nome}
         __typename
   }
   soggettiOperanti {
       qualificaUfficio {
         qualifica
-        ufficio {
-          uuid
-          nome
-        }
+        ufficio {uuid nome}
         __typename
       }
       __typename
   }
 
-  proceduraVas {
-    uuid
-  }
+  proceduraVas {uuid}
+  proceduraAvvio {uuid}
+
   __typename
 }
 

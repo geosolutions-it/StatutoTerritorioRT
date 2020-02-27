@@ -60,6 +60,8 @@ from serapide_core.modello.enums import (
 from serapide_core.api.graphene import (types, inputs)
 from serapide_core.api.graphene.mutations.vas import init_vas_procedure
 from serapide_core.api.graphene.mutations.piano import check_and_promote
+import serapide_core.api.auth.user as auth
+
 
 logger = logging.getLogger(__name__)
 
@@ -76,32 +78,31 @@ class CreateProceduraAvvio(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_avvio_data = input.get('procedura_avvio')
-        if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-            try:
-                # ProceduraAvvio (M)
-                _procedura_avvio_data['piano'] = _piano
-                # Ente (M)
-                _procedura_avvio_data['ente'] = _piano.ente
 
-                _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
-                    piano=_piano, ente=_piano.ente)
+        if not is_soggetto(info.context.user, _piano):
+            return GraphQLError("Forbidden - Pre-check: L'utente non può editare piani in questo Ente", code=403)
 
-                _procedura_avvio_data['id'] = _procedura_avvio.id
-                _procedura_avvio_data['uuid'] = _procedura_avvio.uuid
-                nuova_procedura_avvio = update_create_instance(_procedura_avvio, _procedura_avvio_data)
+        try:
+            # ProceduraAvvio (M)
+            _procedura_avvio_data['piano'] = _piano
+            # Ente (M)
+            _procedura_avvio_data['ente'] = _piano.ente
 
-                _piano.procedura_avvio = nuova_procedura_avvio
-                _piano.save()
+            _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
+                piano=_piano, ente=_piano.ente)
 
-                return cls(nuova_procedura_avvio=nuova_procedura_avvio)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-        else:
-            return GraphQLError(_("Forbidden"), code=403)
+            _procedura_avvio_data['id'] = _procedura_avvio.id
+            _procedura_avvio_data['uuid'] = _procedura_avvio.uuid
+            nuova_procedura_avvio = update_create_instance(_procedura_avvio, _procedura_avvio_data)
+
+            _piano.procedura_avvio = nuova_procedura_avvio
+            _piano.save()
+
+            return cls(nuova_procedura_avvio=nuova_procedura_avvio)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class UpdateProceduraAvvio(relay.ClientIDMutation):
@@ -115,48 +116,37 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
+
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _procedura_avvio_data = input.get('procedura_avvio')
-        if 'piano' in _procedura_avvio_data:
-            # This cannot be changed
-            _procedura_avvio_data.pop('piano')
+
         _piano = _procedura_avvio.piano
-        _role = info.context.session['role'] if 'role' in info.context.session else None
-        _token = info.context.session['token'] if 'token' in info.context.session else None
-        _ente = _piano.ente
-        if info.context.user and \
-        rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
-            try:
-                if 'uuid' in _procedura_avvio_data:
-                    _procedura_avvio_data.pop('uuid')
-                    # This cannot be changed
 
-                if 'data_creazione' in _procedura_avvio_data:
-                    _procedura_avvio_data.pop('data_creazione')
-                    # This cannot be changed
+        if not auth.is_soggetto(info.context.user, _piano):
+            return GraphQLError("Forbidden - Pre-check: L'utente non può editare questo piano", code=403)
 
-                # Ente (M)
-                if 'ente' in _procedura_avvio_data:
-                    _procedura_avvio_data.pop('ente')
-                    # This cannot be changed
+        for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
+            if fixed_field in _procedura_avvio_data:
+                logger.warning('Il campo "{}" non può essere modificato attraverso questa operazione'.format(fixed_field))
+                _procedura_avvio_data.pop(fixed_field)
 
-                # Tipologia (O)
-                if 'conferenza_copianificazione' in _procedura_avvio_data and \
-                (rules.test_rule('strt_users.is_superuser', info.context.user) or is_RUP(info.context.user) or
-                 rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune')):
-                    _conferenza_copianificazione = _procedura_avvio_data.pop('conferenza_copianificazione')
-                    if _conferenza_copianificazione and _conferenza_copianificazione in TIPOLOGIA_CONF_COPIANIFIZAZIONE:
-                        _procedura_avvio_data['conferenza_copianificazione'] = _conferenza_copianificazione
+        try:
+            # Tipologia (O)
+            if 'conferenza_copianificazione' in _procedura_avvio_data:
+                if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                    return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
 
-                procedura_avvio_aggiornata = update_create_instance(_procedura_avvio, _procedura_avvio_data)
+                _conferenza_copianificazione = _procedura_avvio_data.pop('conferenza_copianificazione')
+                if _conferenza_copianificazione and _conferenza_copianificazione in TIPOLOGIA_CONF_COPIANIFIZAZIONE:
+                    _procedura_avvio_data['conferenza_copianificazione'] = _conferenza_copianificazione
 
-                return cls(procedura_avvio_aggiornata=procedura_avvio_aggiornata)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-        else:
-            return GraphQLError(_("Forbidden"), code=403)
+            procedura_avvio_aggiornata = update_create_instance(_procedura_avvio, _procedura_avvio_data)
+
+            return cls(procedura_avvio_aggiornata=procedura_avvio_aggiornata)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class AvvioPiano(graphene.Mutation):
@@ -168,25 +158,23 @@ class AvvioPiano(graphene.Mutation):
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
     @classmethod
-    def esiste_referente(cls, piano, tipologia):
-        SoggettoOperante._default_manager.filter(piano=piano,)
-
-    @classmethod
     def autorita_ok(cls, piano, qualifiche):
         # _res = False
         # _has_tipologia = False
 
         # TODO: check autorita_competente_vas, autorita_istituzionali, altri_destinatari
-        if piano.soggetto_proponente and \
-            piano.autorita_competente_vas.all().count() > 0 and \
-            piano.autorita_istituzionali.all().count() >= 0 and \
-            piano.altri_destinatari.all().count() >= 0 and \
-            piano.soggetti_sca.all().count() >= 0:
+        if not piano.soggetto_proponente:
+            return False
+            # and \
+            # piano.autorita_competente_vas.all().count() > 0 and \
+            # piano.autorita_istituzionali.all().count() >= 0 and \
+            # piano.altri_destinatari.all().count() >= 0 and \
+            # piano.soggetti_sca.all().count() >= 0:
 
-            for qualifica in qualifiche:
-                c = SoggettoOperante.objects.filter(piano=piano, qualifica_ufficio__qualifica=qualifica).count()
-                if c > 0:
-                    return True;
+        for qualifica in qualifiche:
+            c = SoggettoOperante.get_by_qualifica(piano, qualifica=qualifica).count()
+            if c > 0:
+                return True;
 
             # for _c in piano.soggetti_sca.all():
             #     _tipologia = _c.tipologia if contatto else \
@@ -225,15 +213,13 @@ class AvvioPiano(graphene.Mutation):
         _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
         if needsExecution(_avvio_procedimento):
             if not cls.autorita_ok(piano, [Qualifica.GC]):
-                raise Exception(
-                    "'%s' non presente fra i Soggetti Istituzionali." % unslugify(Qualifica.GC))
+                raise GraphQLError("Genio Civile non trovato tra i soggetti operanti", code=400)
 
             if not cls.autorita_ok(piano, [Qualifica.PIAN, Qualifica.URB]):
-                raise Exception(
-                    "'%s' non presente fra i Soggetti Istituzionali." % unslugify([Qualifica.PIAN, Qualifica.URB]))
+                raise GraphQLError("Pianificazione o Urbanistica non trovato tra i soggetti operanti", code=400)
 
             if procedura_avvio.conferenza_copianificazione is None:
-                raise Exception("Conferenza copianificazione non impostata")
+                raise GraphQLError("Conferenza copianificazione non impostata", code=400)
 
             chiudi_azione(_avvio_procedimento)
 
@@ -260,34 +246,40 @@ class AvvioPiano(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        _role = info.context.session['role'] if 'role' in info.context.session else None
-        _token = info.context.session['token'] if 'token' in info.context.session else None
-        _organization = _piano.ente
-        if info.context.user \
-                and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) \
-                and rules.test_rule('strt_core.api.is_actor', _token
-                                                            or (info.context.user, _role)
-                                                            or (info.context.user, _organization), 'Comune'):
-            try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+        # _role = info.context.session['role'] if 'role' in info.context.session else None
+        # _token = info.context.session['token'] if 'token' in info.context.session else None
+        # _organization = _piano.ente
 
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=info.context.user,
-                    piano=_piano,
-                    message_type="contributi_tecnici")
+        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+            # if not auth.is_soggetto(info.context.user, _piano):
+            return GraphQLError("Forbidden - L'utente non può editare questo piano", code=403)
+        # if info.context.user \
+        #         and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) \
+        #         and rules.test_rule('strt_core.api.is_actor', _token
+        #                                                     or (info.context.user, _role)
+        #                                                     or (info.context.user, _organization), 'Comune'):
+        try:
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
-                return AvvioPiano(
-                    avvio_aggiornato=_procedura_avvio,
-                    errors=[]
-                )
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-        else:
-            return GraphQLError(_("Forbidden"), code=403)
+            # Notify Users
+            piano_phase_changed.send(
+                sender=Piano,
+                user=info.context.user,
+                piano=_piano,
+                message_type="contributi_tecnici")
+
+            return AvvioPiano(
+                avvio_aggiornato=_procedura_avvio,
+                errors=[]
+            )
+
+        except GraphQLError as e:
+            return e
+
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class ContributiTecnici(graphene.Mutation):

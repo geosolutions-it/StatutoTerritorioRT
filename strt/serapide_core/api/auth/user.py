@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 # ############################################################################ #
 
 def is_recognizable(user):
-    logger.warning("is_recognizable: USER {user} {anon} {act} {auth}".format(user=user, anon=user.is_anonymous, act=user.is_active, auth=user.is_authenticated))
+    # logger.warning("is_recognizable: USER {user} {anon} {act} {auth}".format(user=user, anon=user.is_anonymous, act=user.is_active, auth=user.is_authenticated))
     return user \
            and not user.is_anonymous \
            and user.is_active \
@@ -83,11 +83,14 @@ def has_qualifica(utente, ente:Ente, qualifica:Qualifica):
 
 def is_soggetto_operante(utente, piano:Piano, qualifica:Qualifica=None):
     # TODO aggiungere gestione deleghe
-    logger.warning("is_soggetto_operante: USER {utente}".format(utente=utente))
+    # logger.warning("is_soggetto_operante: USER {utente}".format(utente=utente))
     assegnatario = Assegnatario.objects.filter(utente=utente)
     if qualifica:
         assegnatario = assegnatario.filter(qualifica_ufficio__qualifica=qualifica)
     qu_set = [a.qualifica_ufficio for a in assegnatario]
+    if len(qu_set) == 0: # shortcut
+        return False
+    # logger.warning("qu_set {}".format(qu_set))
 
     qs =  SoggettoOperante.objects. \
         filter(piano=piano). \

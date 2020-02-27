@@ -272,40 +272,44 @@ class UploadRisorsaAvvio(UploadBaseBase):
 
     @classmethod
     def mutate(cls, root, info, file, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _uuid_avvio = input['codice']
-            _tipo_file = input['tipo_file']
 
-            try:
-                # Validating 'Procedura VAS'
-                _procedura_avvio = ProceduraAvvio.objects.get(uuid=_uuid_avvio)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_avvio.piano):
-                    _resources = UploadBaseBase.handle_uploaded_data(
-                        file,
-                        _uuid_avvio,
-                        _procedura_avvio.piano.fase,
-                        _tipo_file,
-                        info.context.user
-                    )
-                    _success = False
-                    if _resources and len(_resources) > 0:
-                        _success = True
-                        for _risorsa in _resources:
-                            RisorseAvvio(procedura_avvio=_procedura_avvio, risorsa=_risorsa).save()
-                    return UploadRisorsaAvvio(
-                        procedura_avvio_aggiornata=_procedura_avvio,
-                        success=_success,
-                        file_name=_resources[0].nome)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+        if not  auth.is_recognizable(info.context.user):
+            return GraphQLError("Not Authorized - Utente non riconosciuto", code=401)
 
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+        # Fetching input arguments
+        _uuid_avvio = input['codice']
+        _tipo_file = input['tipo_file']
+
+        _procedura_avvio = ProceduraAvvio.objects.get(uuid=_uuid_avvio)
+        _piano = _procedura_avvio.piano
+
+        if not auth.is_soggetto(info.context.user, _piano):
+            if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                return GraphQLError("Forbidden - L'utente non può operare su questo Piano", code=403)
+
+        try:
+            _resources = UploadBaseBase.handle_uploaded_data(
+                file,
+                _uuid_avvio,
+                _procedura_avvio.piano.fase,
+                _tipo_file,
+                info.context.user
+            )
+            _success = False
+            if _resources and len(_resources) > 0:
+                _success = True
+                for _risorsa in _resources:
+                    RisorseAvvio(procedura_avvio=_procedura_avvio, risorsa=_risorsa).save()
+
+            return UploadRisorsaAvvio(
+                procedura_avvio_aggiornata=_procedura_avvio,
+                success=_success,
+                file_name=_resources[0].nome)
+
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class UploadRisorsaAdozione(UploadBaseBase):

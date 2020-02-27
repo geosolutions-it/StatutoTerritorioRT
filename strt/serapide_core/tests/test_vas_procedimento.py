@@ -59,17 +59,18 @@ class FullFlowTestCase(AbstractSerapideTest):
         now = datetime.datetime.now()
         now = now.replace(microsecond=0)
 
-        response = self.update_piano(codice_piano, "dataDelibera", now.isoformat())
-        response = self.update_piano(codice_piano, "descrizione", "Piano di test - VAS PROCEDIMENTO [{}]".format(now))
-        response = self.update_piano(codice_piano, "soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
+        for nome, val in [
+            ("dataDelibera", now.isoformat()),
+            ("descrizione", "Piano di test - VAS PROCEDIMENTO [{}]".format(now)),
+            ("soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
+        ]:
+            self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, nome, val)
 
-        response = self.upload_file(codice_piano, '003_upload_file.query')
+        response = self.upload(codice_piano, TipoRisorsa.DELIBERA, '003_upload_file.query')
 
-        response = self.update_vas(codice_vas, TipologiaVAS.PROCEDIMENTO.name, '004_update_procedura_vas.query')
+        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', TipologiaVAS.PROCEDIMENTO.name)
 
-        # response = self.vas_upload_file(codice_vas, TipoRisorsa.VAS_VERIFICA, '005_vas_upload_file.query')
-
-        response = self.promuovi_piano(codice_piano, '006_promozione.query', expected_code=409)
+        response = self.send3('006_promozione.query', 'PROMUOVI PIANO', codice_piano, expected_code=409)
         content = json.loads(response.content)
         errors = content['errors'][0]['data']['errors']
         self.assertEqual(2, len(errors))
@@ -82,7 +83,7 @@ class FullFlowTestCase(AbstractSerapideTest):
         so_err = [{
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_PI][DataLoader.UFF1].uuid.__str__(),
             'qualifica': Qualifica.SCA.name}]
-        response = self.update_piano(codice_piano, "soggettiOperanti", json.dumps(so_err), kill_quote=True, expected_code=404)
+        self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettiOperanti", so_err, expected_code=404)
 
         # add soggetto operante AC
         sogg_op = []
@@ -94,7 +95,6 @@ class FullFlowTestCase(AbstractSerapideTest):
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_LU][DataLoader.UFF1].uuid.__str__(),
             'qualifica': Qualifica.SCA.name})
 
-        response = self.update_piano(codice_piano, "soggettiOperanti", json.dumps(sogg_op), kill_quote=True)
+        self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettiOperanti", sogg_op)
 
-
-        response = self.promuovi_piano(codice_piano, '006_promozione.query')
+        # response = self.send3('006_promozione.query', 'PROMUOVI PIANO', codice_piano)

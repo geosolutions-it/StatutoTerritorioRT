@@ -103,7 +103,7 @@ class Qualifica(SerapideEnum):
     RESP = 'RESP'
     AC = 'AC'
     SCA = 'SCA'
-    GC = 'GC'
+    GC = 'GENIO_CIVILE'
     PIAN = 'PIANIFICAZIONE'
     URB = 'URBANISTICA'
     READONLY = 'READONLY'
@@ -169,14 +169,14 @@ def fix_enum(cls, obj, none_on_error=False):
     if isinstance(obj, str):
         try:
             ret = cls[obj]
-            logger.warning('Fixed 1 {}[{}]'.format(cls_name, obj))
+            # logger.warning('Fixed 1 {}[{}]'.format(cls_name, obj))
             return ret
         except KeyError:
             try:
                 if obj.startswith(cls_name + '.'):
                     key = obj[len(cls_name) + 1::]
                     ret = cls[key]
-                    logger.warning('Fixed 2 {}[{}]'.format(cls_name, key))
+                    # logger.warning('Fixed 2 {}[{}]'.format(cls_name, key))
                     return ret
             except KeyError:
                 pass

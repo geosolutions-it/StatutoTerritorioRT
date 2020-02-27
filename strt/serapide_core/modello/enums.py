@@ -44,11 +44,21 @@ _FASE_NEXT = {
 
 
 class TipoRisorsa(SerapideEnum):
+    # piano
+    DELIBERA = 'delibera'
+
+    # VAS
     VAS_SEMPLIFICATA = 'vas_semplificata'
     VAS_VERIFICA = 'vas_verifica'
     PARERE_VERIFICA_VAS = 'parere_verifica_vas'
     PARERE_SCA = 'parere_sca'
-    DELIBERA = 'delibera'
+    PROVVEDIMENTO_VERIFICA_VAS = 'provvedimento_verifica_vas'
+
+    # avvio
+    OBIETTIVI_PIANO = 'obiettivi_piano'
+    QUADRO_CONOSCITIVO = 'quadro_conoscitivo'
+    PROGRAMMA_ATTIVITA = 'programma_attivita'
+    INDIVIDUAZIONE_GARANTE_INFORMAZIONE = 'individuazione_garante_informazione'
 
 
 TIPOLOGIA_RISORSA = {
@@ -136,7 +146,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('creato_piano', _('Creato Piano/Variante')),  # Comune
         # Procedura VAS
         ('richiesta_verifica_vas', _('Documento Preliminare VAS')),  # AC
-        ('pareri_verifica_sca', _('Pareri verifica VAS')),  # SCA
+        ('pareri_verifica_vas', _('Pareri verifica VAS')),  # SCA
         ('emissione_provvedimento_verifica', _('Emissione Provvedimento di verifica')),  # AC
         ('pubblicazione_provvedimento_verifica', _('Pubblicazione provvedimento di verifica')),  # AC/Comune
         ('avvio_consultazioni_sca', _('Avvio consultazioni SCA')),  # Comune/AC
@@ -181,7 +191,7 @@ FASE_AZIONE = Choices(
         ('creato_piano', 'draft'),
         # Procedura VAS
         ('richiesta_verifica_vas', 'anagrafica'),
-        ('pareri_verifica_sca', 'anagrafica'),
+        ('pareri_verifica_vas', 'anagrafica'),
         ('emissione_provvedimento_verifica', 'anagrafica'),
         ('pubblicazione_provvedimento_verifica', 'anagrafica'),
         ('avvio_consultazioni_sca', 'anagrafica'),

@@ -12,14 +12,16 @@
 import rules
 import logging
 import django_filters
-from django_filters import (CharFilter)
-from django.db.models import Q
+
+
 from django.conf import settings
 
+
+from strt_users.enums import Profilo
 from strt_users.models import (
     Utente,
     Ente,
-)
+    ProfiloUtente)
 
 from serapide_core.helpers import is_RUP
 
@@ -35,6 +37,7 @@ from serapide_core.modello.models import (
     # PianoAuthTokens,
 )
 
+from serapide_core.api.auth.user import is_recognizable
 
 logger = logging.getLogger(__name__)
 
@@ -160,33 +163,44 @@ class ProceduraMembershipFilterBase(django_filters.FilterSet):
     def qs(self):
         # The query context can be found in self.request.
         _enti = []
-        _memberships = None
-        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
-            _memberships = self.request.user.memberships
-            if _memberships:
-                _is_iside = self.request.user.memberships.filter(type__code=settings.RESPONSABILE_ISIDE_CODE)
-                _is_regione = self.request.user.memberships.filter(type__organization_type__code='R')
-                if _is_regione and not _is_iside:
-                    for _o in Ente.objects.filter(type__code='C'):
-                        _enti.append(_o.code)
-                else:
-                    for _m in _memberships.all():
-                        if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
-                            # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
-                            continue
-                        else:
-                            _enti.append(_m.organization.code)
-                # _enti = [_m.organization.code for _m in _memberships.all()]
+        # _memberships = None
+        # if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
+        #     _memberships = self.request.user.memberships
+        #     if _memberships:
+        #         _is_iside = self.request.user.memberships.filter(type__code=settings.RESPONSABILE_ISIDE_CODE)
+        #         _is_regione = self.request.user.memberships.filter(type__organization_type__code='R')
+        #         if _is_regione and not _is_iside:
+        #             for _o in Ente.objects.filter(type__code='C'):
+        #                 _enti.append(_o.code)
+        #         else:
+        #             for _m in _memberships.all():
+        #                 if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
+        #                     # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
+        #                     continue
+        #                 else:
+        #                     _enti.append(_m.organization.code)
+        #         # _enti = [_m.organization.code for _m in _memberships.all()]
 
-        token = self.request.session.get('token', None)
-        # TODO
+        is_op = False
+
+        if is_recognizable(self.request.user):
+            is_op = ProfiloUtente.objects.filter(utente=self.request.user, profilo=Profilo.OPERATORE).exists()
+
+        # token = self.request.session.get('token', None)
+        # TODO use also token access
         # if token:
         #     _allowed_pianos = [_pt.piano.codice for _pt in PianoAuthTokens.objects.filter(token__key=token)]
         #     _pianos = [_p for _p in Piano.objects.filter(codice__in=_allowed_pianos)]
         #     for _p in _pianos:
         #         _enti.append(_p.ente.code)
+        #
+        # return super(ProceduraMembershipFilterBase, self).qs.filter(ente__code__in=_enti)
 
-        return super(ProceduraMembershipFilterBase, self).qs.filter(ente__code__in=_enti)
+
+        if is_op:
+            return super(ProceduraMembershipFilterBase, self).qs
+        else:
+            return super(ProceduraMembershipFilterBase, self).qs.none()
 
 
 class ProceduraVASMembershipFilter(ProceduraMembershipFilterBase):

@@ -99,14 +99,21 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                 return False, ['Risorsa mancante per VAS semplificata']
 
             elif procedura_vas.tipologia in [TipologiaVAS.VERIFICA, TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO]:
+                msg = []
+
+                if SoggettoOperante.get_by_qualifica(piano, Qualifica.AC).count() == 0:
+                    msg.append("Soggetto AC mancante")
+                if SoggettoOperante.get_by_qualifica(piano, Qualifica.SCA).count() == 0:
+                    msg.append("Soggetto SCA mancante")
+
                 risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.VAS_VERIFICA.value, archiviata=False)
                 if risorse.all().count() > 0:
-                    if all(r.dimensione > 0 and r.file and os.path.exists(r.file.path)
-                           for r in risorse):
-                        return True, []
-                    else:
-                        return False, ['Errore in una risorsa per VAS verifica']
-                return False, ['Risorsa mancante per VAS verifica']
+                    for r in risorse:
+                        if r.dimensione == 0 or not r.file or not os.path.exists(r.file.path):
+                            msg.append('Errore nella risorsa VAS verifica [{}]'.format(r))
+                else:
+                    msg.append('Risorsa mancante per VAS verifica')
+                return len(msg) == 0, msg
 
             elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO:
                 msg = []

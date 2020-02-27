@@ -2,8 +2,8 @@
    "operationName" : "UploadFile",
 
    "variables" : {
-      "codice" : "{codice_piano}",
-      "tipo" : "delibera",
+      "codice" : "{codice}",
+      "tipo" : "{tipo_risorsa}",
       "file" : null
    },
 

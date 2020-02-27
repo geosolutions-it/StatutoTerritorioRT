@@ -1,20 +1,45 @@
 {
-   "operationName" : "VasUploadFile",
+   "operationName" : "InvioPareriVerifica",
+
    "variables" : {
-      "codice" : "{codice}",
-      "tipo" : "{tipo_risorsa}",
-      "file" : null
+      "codice" : "{codice}"
    },
-   "query" : "mutation VasUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
-  upload: uploadRisorsaVas(file: $file, codice: $codice, tipoFile: $tipo) {
-    success
-    fileName
-    proceduraVasAggiornata {
+
+   "query" : "mutation InvioPareriVerifica($codice: String!) {
+  invioPareriVerificaVas(uuid: $codice) {
+    vasAggiornata {
       ...VAS
+      piano {
+        ...AzioniPiano
+        __typename
+      }
       __typename
     }
     __typename
   }
+}
+
+fragment AzioniPiano on PianoNode {
+  codice
+  fase
+  azioni {
+    ...Azioni
+    __typename
+  }
+  __typename
+}
+
+fragment Azioni on AzioneNode {
+      order
+      tipologia
+      stato
+      qualificaRichiesta
+      data
+      uuid
+      label
+      tooltip
+      fase
+      __typename
 }
 
 fragment VAS on ProceduraVASNode {
@@ -29,7 +54,7 @@ fragment VAS on ProceduraVASNode {
   procedimentoEffettuato
   assoggettamento
   nonNecessaria
-  piano {
+    piano {
     codice
     autoritaCompetenteVas: soggettiOperanti(qualifica: \"AC\") {
       qualificaUfficio {
@@ -52,8 +77,8 @@ fragment VAS on ProceduraVASNode {
         }
       __typename
     }
-
     soggettoProponente {
+
         qualifica
         ufficio {
             uuid
@@ -64,6 +89,7 @@ fragment VAS on ProceduraVASNode {
     }
     __typename
   }
+
   risorse(archiviata: false) {
     ...Risorse
     __typename
@@ -106,6 +132,5 @@ fragment Risorsa on RisorsaNode {
   label
   tooltip
   __typename
-}
-"
+}"
 }
