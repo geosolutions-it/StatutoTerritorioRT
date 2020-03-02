@@ -1,0 +1,66 @@
+[
+   {
+      "fields" : {
+         "ufficio" : 9,
+         "qualifica" : "Qualifica.AC"
+      },
+      "model" : "strt_users.qualificaufficio",
+      "pk" : 1
+   },
+   {
+      "fields" : {
+         "ufficio" : 9,
+         "qualifica" : "Qualifica.RESP"
+      },
+      "model" : "strt_users.qualificaufficio",
+      "pk" : 2
+   },
+   {
+      "pk" : 3,
+      "model" : "strt_users.qualificaufficio",
+      "fields" : {
+         "ufficio" : 9,
+         "qualifica" : "Qualifica.SCA"
+      }
+   },
+   {
+      "fields" : {
+         "qualifica" : "Qualifica.AC",
+         "ufficio" : 10
+      },
+      "pk" : 4,
+      "model" : "strt_users.qualificaufficio"
+   },
+   {
+      "fields" : {
+         "ufficio" : 11,
+         "qualifica" : "Qualifica.SCA"
+      },
+      "model" : "strt_users.qualificaufficio",
+      "pk" : 5
+   },
+   {
+      "fields" : {
+         "qualifica" : "Qualifica.AC",
+         "ufficio" : 13
+      },
+      "model" : "strt_users.qualificaufficio",
+      "pk" : 6
+   },
+   {
+      "fields" : {
+         "ufficio" : 3,
+         "qualifica" : "Qualifica.GC"
+      },
+      "pk" : 7,
+      "model" : "strt_users.qualificaufficio"
+   },
+   {
+      "fields" : {
+         "ufficio" : 8,
+         "qualifica" : "Qualifica.PIAN"
+      },
+      "model" : "strt_users.qualificaufficio",
+      "pk" : 8
+   }
+]

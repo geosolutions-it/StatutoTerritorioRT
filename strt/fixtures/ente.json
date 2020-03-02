@@ -1,0 +1,42 @@
+[
+   {
+      "model" : "strt_users.ente",
+      "fields" : {
+         "descrizione" : null,
+         "ipa" : "r_toscan",
+         "tipo" : "TipoEnte.REGIONE",
+         "nome" : "Toscana"
+      },
+      "pk" : 1
+   },
+   {
+      "model" : "strt_users.ente",
+      "fields" : {
+         "nome" : "Firenze",
+         "tipo" : "TipoEnte.COMUNE",
+         "ipa" : "c_d612",
+         "descrizione" : null
+      },
+      "pk" : 2
+   },
+   {
+      "pk" : 3,
+      "fields" : {
+         "tipo" : "TipoEnte.COMUNE",
+         "ipa" : "c_e715",
+         "descrizione" : null,
+         "nome" : "Lucca"
+      },
+      "model" : "strt_users.ente"
+   },
+   {
+      "pk" : 4,
+      "model" : "strt_users.ente",
+      "fields" : {
+         "tipo" : "TipoEnte.COMUNE",
+         "ipa" : "c_g702",
+         "descrizione" : null,
+         "nome" : "Pisa"
+      }
+   }
+]

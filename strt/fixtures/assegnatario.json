@@ -1,0 +1,66 @@
+[
+   {
+      "pk" : 1,
+      "fields" : {
+         "utente" : "ACTIVE11A15E715G",
+         "qualifica_ufficio" : 2
+      },
+      "model" : "strt_users.assegnatario"
+   },
+   {
+      "pk" : 2,
+      "model" : "strt_users.assegnatario",
+      "fields" : {
+         "utente" : "ACTIVE22A15E715G",
+         "qualifica_ufficio" : 1
+      }
+   },
+   {
+      "pk" : 3,
+      "model" : "strt_users.assegnatario",
+      "fields" : {
+         "utente" : "ACTIVE22A15E715G",
+         "qualifica_ufficio" : 3
+      }
+   },
+   {
+      "pk" : 4,
+      "fields" : {
+         "qualifica_ufficio" : 5,
+         "utente" : "ACTIVE22A15E715G"
+      },
+      "model" : "strt_users.assegnatario"
+   },
+   {
+      "pk" : 5,
+      "fields" : {
+         "qualifica_ufficio" : 5,
+         "utente" : "SKASKA22A15E715G"
+      },
+      "model" : "strt_users.assegnatario"
+   },
+   {
+      "pk" : 6,
+      "model" : "strt_users.assegnatario",
+      "fields" : {
+         "qualifica_ufficio" : 6,
+         "utente" : "ACACAC22A15E715G"
+      }
+   },
+   {
+      "pk" : 7,
+      "fields" : {
+         "qualifica_ufficio" : 7,
+         "utente" : "GCGCGC22A15E715G"
+      },
+      "model" : "strt_users.assegnatario"
+   },
+   {
+      "pk" : 8,
+      "model" : "strt_users.assegnatario",
+      "fields" : {
+         "qualifica_ufficio" : 8,
+         "utente" : "PIANRT22A15E715G"
+      }
+   }
+]
