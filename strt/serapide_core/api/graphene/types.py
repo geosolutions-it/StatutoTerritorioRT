@@ -296,17 +296,6 @@ class RisorsePianoRevPostCPType(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
-# class EnteTipoNode(DjangoObjectType):
-#
-#     class Meta:
-#         model = OrganizationType
-#         interfaces = (relay.Node, )
-
-
-
-
-
-
 class UtenteNode(DjangoObjectType):
 
     profilo = graphene.String()
@@ -531,6 +520,7 @@ class ProceduraAvvioNode(DjangoObjectType):
             'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )
+        convert_choices_to_enum = False
 
 
 class ProceduraAdozioneNode(DjangoObjectType):

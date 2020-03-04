@@ -453,41 +453,48 @@ class UploadRisorsaCopianificazione(UploadBaseBase):
 
     @classmethod
     def mutate(cls, root, info, file, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _uuid_cc = input['codice']
-            _tipo_file = input['tipo_file']
 
-            try:
-                # Validating 'Procedura VAS'
-                _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
-                if rules.test_rule('strt_core.api.can_edit_piano',
-                                   info.context.user,
-                                   _conferenza_copianificazione.piano):
-                    _resources = UploadBaseBase.handle_uploaded_data(
-                        file,
-                        _uuid_cc,
-                        _conferenza_copianificazione.piano.fase,
-                        _tipo_file,
-                        info.context.user
-                    )
-                    _success = False
-                    if _resources and len(_resources) > 0:
-                        _success = True
-                        for _risorsa in _resources:
-                            RisorseCopianificazione(
-                                conferenza_copianificazione=_conferenza_copianificazione,
-                                risorsa=_risorsa).save()
-                    return UploadRisorsaCopianificazione(
-                        conferenza_copianificazione_aggiornata=_conferenza_copianificazione,
-                        success=_success,
-                        file_name=_resources[0].nome)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Forbidden - Utente non riconosciuto", code=403)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+
+        # Fetching input arguments
+        _uuid_cc = input['codice']
+        _tipo_file = input['tipo_file']
+
+        try:
+            # Validating 'Procedura VAS'
+            _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
+
+            if not auth.is_soggetto(info.context.user, _conferenza_copianificazione.piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo Piano", code=403)
+            # if rules.test_rule('strt_core.api.can_edit_piano',
+            #                    info.context.user,
+            #                    _conferenza_copianificazione.piano):
+
+            _resources = UploadBaseBase.handle_uploaded_data(
+                file,
+                _uuid_cc,
+                _conferenza_copianificazione.piano.fase,
+                _tipo_file,
+                info.context.user
+            )
+            _success = False
+            if _resources and len(_resources) > 0:
+                _success = True
+                for _risorsa in _resources:
+                    RisorseCopianificazione(
+                        conferenza_copianificazione=_conferenza_copianificazione,
+                        risorsa=_risorsa).save()
+            return UploadRisorsaCopianificazione(
+                conferenza_copianificazione_aggiornata=_conferenza_copianificazione,
+                success=_success,
+                file_name=_resources[0].nome)
+
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
         # Something went wrong
         return GraphQLError(_("Not Allowed"), code=405)

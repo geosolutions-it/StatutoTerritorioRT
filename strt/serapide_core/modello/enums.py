@@ -59,6 +59,9 @@ class TipoRisorsa(SerapideEnum):
     QUADRO_CONOSCITIVO = 'quadro_conoscitivo'
     PROGRAMMA_ATTIVITA = 'programma_attivita'
     INDIVIDUAZIONE_GARANTE_INFORMAZIONE = 'individuazione_garante_informazione'
+    CONTRIBUTI_TECNICI = 'contributi_tecnici'
+    ELABORATI_CONFERENZA = 'elaborati_conferenza'
+    NORME_TECNICHE_ATTUAZIONE = 'norme_tecniche_attuazione'
 
 
 TIPOLOGIA_RISORSA = {
@@ -128,11 +131,16 @@ class TipologiaVAS(SerapideEnum):
 #         ('non_necessaria', _('NON_NECESSARIA')),
 #     )
 
-TIPOLOGIA_CONF_COPIANIFIZAZIONE = Choices(
-        ('necessaria', _('NECESSARIA')),
-        ('posticipata', _('POSTICIPATA')),
-        ('non_necessaria', _('NON_NECESSARIA')),
-    )
+class TipologiaCopianificazione(SerapideEnum):
+    POSTICIPATA = 'posticipata'
+    NECESSARIA = 'necessaria'
+    NON_NECESSARIA = 'non_necessaria'
+
+# TIPOLOGIA_CONF_COPIANIFIZAZIONE = Choices(
+#         ('necessaria', _('NECESSARIA')),
+#         ('posticipata', _('POSTICIPATA')),
+#         ('non_necessaria', _('NON_NECESSARIA')),
+#     )
 
 STATO_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),

@@ -1,0 +1,66 @@
+{
+   "operationName" : "GetAvvio",
+
+   "variables" : {
+      "codice" : "{codice}"
+   },
+
+   "query" : "query GetAvvio($codice: String!) {
+  modello: procedureAvvio(piano_Codice: $codice) {
+    edges {
+      node {
+        ...AVVIO
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment AVVIO on ProceduraAvvioNode {
+  uuid
+  conferenzaCopianificazione
+  dataCreazione
+  dataScadenzaRisposta
+  garanteNominativo
+  garantePec
+  richiestaIntegrazioni
+  messaggioIntegrazione
+  risorse(archiviata: false) {
+    ...Risorse
+    __typename
+  }
+  __typename
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+  __typename
+}
+"
+}

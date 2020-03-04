@@ -14,7 +14,7 @@ import rules
 
 from strt_users.enums import (
     Profilo, Qualifica,
-    Priv)
+    Priv, QualificaRichiesta)
 
 from strt_users.models import (
     Utente,
@@ -81,23 +81,28 @@ def has_qualifica(utente, ente:Ente, qualifica:Qualifica):
         filter(qualifica_ufficio__ufficio__ente=ente). \
         exists()
 
-def is_soggetto_operante(utente, piano:Piano, qualifica:Qualifica=None):
+def is_soggetto_operante(utente, piano:Piano, qualifica:Qualifica=None, qualifica_richiesta:QualificaRichiesta=None):
     # TODO aggiungere gestione deleghe
-    # logger.warning("is_soggetto_operante: USER {utente}".format(utente=utente))
+    logger.warning("is_soggetto_operante: USER {utente}".format(utente=utente))
     assegnatario = Assegnatario.objects.filter(utente=utente)
     if qualifica:
         assegnatario = assegnatario.filter(qualifica_ufficio__qualifica=qualifica)
     qu_set = [a.qualifica_ufficio for a in assegnatario]
-    if len(qu_set) == 0: # shortcut
-        return False
-    # logger.warning("qu_set {}".format(qu_set))
+    # if len(qu_set) == 0: # shortcut
+    #     return False
+    logger.warning("qu_set {}".format(qu_set))
 
     qs =  SoggettoOperante.objects. \
         filter(piano=piano). \
         filter(qualifica_ufficio__in=qu_set)
 
+    logger.warning("SOps {}".format(qs))
+
     if qualifica:
         qs = qs.filter(qualifica_ufficio__qualifica=qualifica)
+
+    if qualifica_richiesta:
+        qs = qs.filter(qualifica_ufficio__qualifica__in=qualifica_richiesta.qualifiche())
 
     return qs.exists()
 
@@ -174,3 +179,26 @@ def is_actor_for_token(token, actor):
 #         return False
 #     else:
 #         return (_attore == actor)
+
+def get_piani_visibili_id(utente:Utente):
+    # TODO aggiungere gestione deleghe
+    assegnatario = Assegnatario.objects.filter(utente=utente)
+    qu_set = [a.qualifica_ufficio for a in assegnatario]
+    logger.warning("qu_set {}".format(qu_set))
+
+    qs =  SoggettoOperante.objects. \
+        filter(qualifica_ufficio__in=qu_set)
+
+    # piani per i quali l'utente è soggetto operante
+    id_piani = {so.piano.id for so in qs.all()}
+
+    # piani per i quali enti l'utente è RESP
+    ass_resp =  Assegnatario.objects.filter(utente=utente, qualifica_ufficio__qualifica=Qualifica.RESP)
+    enti_resp = { ass.qualifica_ufficio.ufficio.ente for ass in ass_resp}
+    piani_resp = Piano.objects.filter(ente__in=enti_resp)
+    id_piani |= {p.id for p in piani_resp}
+
+    # TODO: piani accessibile da token
+
+    return id_piani
+

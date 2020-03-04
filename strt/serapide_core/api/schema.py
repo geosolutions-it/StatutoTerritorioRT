@@ -20,7 +20,7 @@ from serapide_core.modello.enums import (
     TipologiaVAS,
     TipologiaPiano,
     # TIPOLOGIA_CONTATTO,
-    TIPOLOGIA_CONF_COPIANIFIZAZIONE,
+    TipologiaCopianificazione,
 )
 
 from serapide_core.api.graphene import (
@@ -106,7 +106,7 @@ class Query(object):
     tipologia_vas = graphene.List(enums.TipologiaVAS)
     tipologia_piano = graphene.List(enums.TipologiaPiano)
     tipologia_contatto = graphene.List(enums.TipologiaContatto)
-    tipologia_conferenza_copianificazione = graphene.List(enums.TipologiaContatto)
+    tipologia_conferenza_copianificazione = graphene.List(enums.TipologiaConferenzaCopianificazione)
 
     def resolve_fase_piano(self, info):
         _l = []
@@ -121,10 +121,8 @@ class Query(object):
         return _l
 
     def resolve_tipologia_piano(self, info):
-        _l = []
-        for _t in TipologiaPiano:
-            _l.append(enums.TipologiaPiano(_t[0], _t[1]))
-        return _l
+        return [enums.TipologiaPiano(value=t.name, label=t.value)
+                    for t in TipologiaPiano]
 
     def resolve_user_choices(self, info):
         if info.context.user.is_anonymous:
@@ -132,17 +130,9 @@ class Query(object):
         else:
             return info.context.user
 
-    # def resolve_tipologia_contatto(self, info):
-    #     _l = []
-    #     for _t in TIPOLOGIA_CONTATTO:
-    #         _l.append(enums.TIPOLOGIA_CONTATTO(_t[0], _t[1]))
-    #     return _l
-
     def resolve_tipologia_conferenza_copianificazione(self, info):
-        _l = []
-        for _t in TIPOLOGIA_CONF_COPIANIFIZAZIONE:
-            _l.append(enums.TipologiaConferenzaCopianificazione(_t[0], _t[1]))
-        return _l
+        return [enums.TipologiaConferenzaCopianificazione(value=t.name, label=t.value)
+                    for t in TipologiaCopianificazione]
 
     # Debug
     debug = graphene.Field(DjangoDebug, name='__debug')
@@ -164,7 +154,6 @@ class Mutation(object):
     update_piano = piano.UpdatePiano.Field()
     delete_piano = piano.DeletePiano.Field()
     promozione_piano = piano.PromozionePiano.Field()
-    formazione_del_piano = piano.FormazionePiano.Field()
 
     # create_procedura_vas = vas.CreateProceduraVAS.Field()
     update_procedura_vas = vas.UpdateProceduraVAS.Field()
@@ -186,6 +175,7 @@ class Mutation(object):
     integrazioni_richieste = avvio.IntegrazioniRichieste.Field()
     richiesta_conferenza_copianificazione = avvio.RichiestaConferenzaCopianificazione.Field()
     chiusura_conferenza_copianificazione = avvio.ChiusuraConferenzaCopianificazione.Field()
+    formazione_del_piano = avvio.FormazionePiano.Field()
 
     create_procedura_adozione = adozione.CreateProceduraAdozione.Field()
     update_procedura_adozione = adozione.UpdateProceduraAdozione.Field()

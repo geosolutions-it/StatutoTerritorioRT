@@ -50,7 +50,8 @@ from .enums import (Fase,
                     TipologiaPiano,
                     TIPOLOGIA_AZIONE,
                     # TIPOLOGIA_CONTATTO,
-                    TIPOLOGIA_CONF_COPIANIFIZAZIONE
+                    TipologiaCopianificazione,
+                    # TIPOLOGIA_CONF_COPIANIFIZAZIONE
                     )
 
 
@@ -270,12 +271,10 @@ class Piano(models.Model):
         # - Complete Current Actions
         _now = datetime.now(timezone.get_current_timezone())
         if attesa:
-            self.azioni\
-                .filter(stato=STATO_AZIONE.attesa)\
+            Azione.objects.filter(piano=self, stato=STATO_AZIONE.attesa)\
                 .update(stato=STATO_AZIONE.nessuna, data=_now)
         if necessaria:
-            self.azioni\
-                .filter(stato=STATO_AZIONE.necessaria)\
+            Azione.objects.filter(piano=self, stato=STATO_AZIONE.necessaria)\
                 .update(stato=STATO_AZIONE.nessuna, data=_now)
 
     # @property
@@ -776,10 +775,10 @@ class ProceduraAvvio(models.Model):
     )
 
     conferenza_copianificazione = models.CharField(
-        choices=TIPOLOGIA_CONF_COPIANIFIZAZIONE,
+        choices=TipologiaCopianificazione.create_choices(),
         null=True, blank=True,
         default=None,
-        max_length=20
+        max_length=32
     )
 
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
@@ -813,6 +812,12 @@ class ProceduraAvvio(models.Model):
 
     def __str__(self):
         return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(ProceduraAvvio, cls).from_db(db, field_names, values)
+        instance.conferenza_copianificazione = TipologiaCopianificazione.fix_enum(instance.conferenza_copianificazione)
+        return instance
 
 
 class RisorseAvvio(models.Model):

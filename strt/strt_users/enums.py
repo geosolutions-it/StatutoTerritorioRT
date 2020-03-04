@@ -146,6 +146,10 @@ class QualificaRichiesta(SerapideEnum):
     def is_ok(self, qual:Qualifica):
         return qual in ALLOWED_QUALIFICA_BY_RICHIESTA[self]
 
+    def qualifiche(self):
+        return ALLOWED_QUALIFICA_BY_RICHIESTA[self]
+
+
 ALLOWED_QUALIFICA_BY_RICHIESTA = {
     QualificaRichiesta.COMUNE: [Qualifica.RESP],
     QualificaRichiesta.AC: [Qualifica.AC],

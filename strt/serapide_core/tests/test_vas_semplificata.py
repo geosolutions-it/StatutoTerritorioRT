@@ -68,13 +68,9 @@ class FullFlowTestCase(AbstractSerapideTest):
         self.assertEqual(200, response.status_code, 'GET PROFILES failed')
 
         content = json.loads(response.content)
-        self.assertIn('userChoices', content)
-        self.assertIn('edges', content['userChoices'])
-        self.assertEqual(1, len(content['userChoices']['edges']))
-        self.assertIn('node', content['userChoices']['edges'][0])
 
-        node = content['userChoices']['edges'][0]['node']
-        print(node.keys())
+        node = content['userChoices']
+
 
         self.assertEqual(2, len(node['profili']))
 

@@ -13,9 +13,7 @@ import rules
 import logging
 import django_filters
 
-
 from django.conf import settings
-
 
 from strt_users.enums import Profilo
 from strt_users.models import (
@@ -37,7 +35,11 @@ from serapide_core.modello.models import (
     # PianoAuthTokens,
 )
 
-from serapide_core.api.auth.user import is_recognizable
+from serapide_core.api.auth.user import (
+    is_recognizable,
+    get_piani_visibili_id
+)
+
 
 logger = logging.getLogger(__name__)
 
@@ -128,31 +130,41 @@ class PianoUserMembershipFilter(django_filters.FilterSet):
     def qs(self):
         # The query context can be found in self.request.
         _enti = []
-        _memberships = None
-        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
-            _memberships = self.request.user.memberships
-            if _memberships:
-                _is_iside = self.request.user.memberships.filter(type__code=settings.RESPONSABILE_ISIDE_CODE)
-                _is_regione = self.request.user.memberships.filter(type__organization_type__code='R')
-                if _is_regione and not _is_iside:
-                    for _o in Ente.objects.filter(type__code='C'):
-                        _enti.append(_o.code)
-                else:
-                    for _m in _memberships.all():
-                        if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
-                            # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
-                            continue
-                        else:
-                            _enti.append(_m.organization.code)
+        # _memberships = None
+        # if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
+        if is_recognizable(self.request.user):
+            id_piani = get_piani_visibili_id(self.request.user)
 
-        token = self.request.session.get('token', None)
-        if token:
-            _allowed_pianos = [_pt.piano.codice for _pt in Delega.objects.filter(token__key=token)]
-            return super(PianoUserMembershipFilter, self).qs.filter(
-                codice__in=_allowed_pianos).order_by('-last_update', '-codice')
+            return super(PianoUserMembershipFilter, self).qs\
+                .filter(id__in=id_piani).order_by('-last_update', '-codice')
         else:
-            return super(PianoUserMembershipFilter, self).qs.filter(
-                ente__code__in=_enti).order_by('-last_update', '-codice')
+            return super(PianoUserMembershipFilter, self).qs.none()
+
+        #
+        #
+        #     _memberships = self.request.user.memberships
+        #     if _memberships:
+        #         _is_iside = self.request.user.memberships.filter(type__code=settings.RESPONSABILE_ISIDE_CODE)
+        #         _is_regione = self.request.user.memberships.filter(type__organization_type__code='R')
+        #         if _is_regione and not _is_iside:
+        #             for _o in Ente.objects.filter(type__code='C'):
+        #                 _enti.append(_o.code)
+        #         else:
+        #             for _m in _memberships.all():
+        #                 if _m.type.code == settings.RESPONSABILE_ISIDE_CODE:
+        #                     # RESPONSABILE_ISIDE_CODE cannot access to Piani at all
+        #                     continue
+        #                 else:
+        #                     _enti.append(_m.organization.code)
+        #
+        # token = self.request.session.get('token', None)
+        # if token:
+        #     _allowed_pianos = [_pt.piano.codice for _pt in Delega.objects.filter(token__key=token)]
+        #     return super(PianoUserMembershipFilter, self).qs.filter(
+        #         codice__in=_allowed_pianos).order_by('-last_update', '-codice')
+        # else:
+        #     return super(PianoUserMembershipFilter, self).qs.filter(
+        #         ente__code__in=_enti).order_by('-last_update', '-codice')
 
 
 class ProceduraMembershipFilterBase(django_filters.FilterSet):

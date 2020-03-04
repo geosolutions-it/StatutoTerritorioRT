@@ -1,0 +1,45 @@
+{
+   "operationName" : "RichiestaConferenzaCopianificazione",
+
+   "variables" : {
+      "codice" : "{codice}"
+   },
+
+   "query" : "mutation RichiestaConferenzaCopianificazione($codice: String!) {
+  richiestaConferenzaCopianificazione(uuid: $codice) {
+    errors
+    avvioAggiornato {
+      piano {
+        ...AzioniPiano
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment AzioniPiano on PianoNode {
+  codice
+  fase
+  azioni {
+    ...Azioni
+    __typename
+  }
+  __typename
+}
+
+fragment Azioni on AzioneNode {
+      order
+      tipologia
+      stato
+      qualificaRichiesta
+      data
+      uuid
+      label
+      tooltip
+      fase
+      __typename
+}
+"
+}

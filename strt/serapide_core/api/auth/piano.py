@@ -11,6 +11,8 @@
 
 import os
 import rules
+import logging
+
 
 from serapide_core.modello.enums import TipoRisorsa
 import serapide_core.api.auth.vas as auth_vas
@@ -30,6 +32,7 @@ from serapide_core.modello.models import (
     ProceduraAdozioneVAS,
     ProceduraApprovazione,)
 
+logger = logging.getLogger(__name__)
 
 # ############################################################################ #
 # Piano
@@ -180,6 +183,8 @@ def has_pending_alerts(piano):
 
 
 def is_eligible_for_promotion(piano:Piano):
+
+    logger.warning("Is eligible for promotion {p} {f}".format(p=piano, f=piano.fase))
 
     msg = []
 
