@@ -40,6 +40,10 @@ from serapide_core.api.graphene.mutations import (
     pubblicazione,
 )
 
+from strt_users.models import (
+    Utente
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -87,7 +91,7 @@ class Query(object):
 
     piano_rev_post_cp = DjangoFilterConnectionField(types.PianoRevPostCPNode)
 
-    user_choices = DjangoFilterConnectionField(types.UtenteChoiceNode, filterset_class=filters.UtenteChoiceFilter)
+    user_choices = graphene.Field(types.UtenteChoiceNode)
 
     # soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
     #                                     filterset_class=types.SoggettoOperanteFilter)
@@ -121,6 +125,12 @@ class Query(object):
         for _t in TipologiaPiano:
             _l.append(enums.TipologiaPiano(_t[0], _t[1]))
         return _l
+
+    def resolve_user_choices(self, info):
+        if info.context.user.is_anonymous:
+            return None
+        else:
+            return info.context.user
 
     # def resolve_tipologia_contatto(self, info):
     #     _l = []

@@ -28,10 +28,6 @@ from strt_users.models import (
 )
 from serapide_core.tests.test_data_setup import DataLoader
 
-from .serializers import (
-    ProfiloSerializer,
-    QualificaSerializer,
-)
 
 UserModel = get_user_model()
 
@@ -41,17 +37,17 @@ class UserMembershipDataView(APIView):
 
     def get(self, request):
         # DataLoader.loadData()
+
         # usando SPID, dovremo avere tutti le informazioni dell'utente negli header
         # - controllare se esiste l'utente in locale tramite CF
         # - eventualmente aggiungere l'utente nel db LOCALE
 
         # senza SPID siamo in condizioni di test, e prendiamo semplicemente il CF dalla request
 
-
         user = get_user(request)
 
         if isinstance(user, AnonymousUser):
-            logger.warning('SESSION NOT BOUND TO ANY USER. Using passed in params for debug call')
+            logger.warning('SESSION NOT BOUND TO ANY USER. checking user_id param for debug call')
             user_id = request.GET.get('user_id')
 
             if not user_id:
@@ -63,43 +59,36 @@ class UserMembershipDataView(APIView):
                 filter(fiscal_code=user_id.strip().upper()).\
                 first()
 
-        # u = Utente.objects.filter(fiscal_code=user_id.strip().upper()).first()
-        #
-        # logger.warning("USER : " + u)
-
         if not user or isinstance(user, AnonymousUser):
             return Response(status=401, data='Unauthorized')
             # return Response(status=404, data='User not found')
 
-        result = query("""
-    query {
-        userChoices(fiscalCode: "{cf}") {
-            edges {
-                node {
-                    fiscalCode
-                    firstName
-                    lastName
-
-                    profili {
-                        profilo
-                        ente       { ipa nome}
-                        qualifiche { qualifica ufficio}
+        query = """query {
+                    userChoices {
+                        fiscalCode
+                        firstName
+                        lastName
+        
+                        profili {
+                            profilo
+                            ente       { ipa nome}
+                            qualifiche { qualifica ufficio}
+                        }
                     }
-                }
-            }                         
-        }
-    }""".replace('{cf}', user.fiscal_code), request)
+                }"""
+
+        result = schema.execute(query, context=request)
+        # dump_result(result)
 
         return Response(result.data)
 
-        # return Response({})
 
-def query(q, request):
-    result = schema.execute(q, context=request)
+def dump_result(result):
+
     if result.errors:
         logger.warning("ERRORS:::::::::::::::::::")
         for error in result.errors:
-            logger.warning(error);
+            logger.warning(error)
     else:
         logger.warning("RESULT::::::::::::::::::")
         logger.warning(result)
@@ -109,6 +98,6 @@ def query(q, request):
         except:
             logger.warning(result.data)
     logger.warning("-------------------------")
-    return result
+
 
 user_membership_data_view = UserMembershipDataView.as_view()

@@ -236,21 +236,3 @@ class ProceduraPubblicazioneMembershipFilter(ProceduraMembershipFilterBase):
     class Meta:
         model = ProceduraPubblicazione
         fields = '__all__'
-
-
-class UtenteChoiceFilter(django_filters.FilterSet):
-
-    @property
-    def qs(self):
-        # TODO use also token access
-
-        if self.request and is_recognizable(self.request.user):
-            # logger.warning("FILTERING USER CHOICE BY {}".format(self.request.user.fiscal_code))
-            return super(django_filters.FilterSet, self).qs.filter(fiscal_code=self.request.user.fiscal_code)
-        else:
-            # logger.warning("FILTERING OUT USER CHOICE {}".format(self.request))
-            return super(django_filters.FilterSet, self).qs.none()
-
-    class Meta:
-        model = Utente
-        fields = '__all__'

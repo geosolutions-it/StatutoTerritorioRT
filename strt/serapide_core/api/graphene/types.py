@@ -428,7 +428,7 @@ class UtenteNode(DjangoObjectType):
             'last_name': ['exact', 'icontains', 'istartswith'],
             'email': ['exact'],
         }
-        exclude_fields = ('password', 'is_active', 'is_superuser', 'last_login')
+        exclude = ('password', 'is_active', 'is_superuser', 'last_login')
         interfaces = (relay.Node, )
 
 
@@ -761,7 +761,6 @@ class QualificaChoiceNode(DjangoObjectType):
         convert_choices_to_enum = False
 
 
-
 class ProfiloChoiceNode(DjangoObjectType):
     qualifiche = graphene.List(QualificaChoiceNode)
 
@@ -769,21 +768,22 @@ class ProfiloChoiceNode(DjangoObjectType):
         return self.profilo.name
 
     def resolve_qualifiche(self, info, **args):
-        logger.error("FOUND PROFILO {}".format(self.profilo))
-        if Profilo.OPERATORE.equal(self.profilo):
-            logger.error('OPERATORE RICONOSCIUTO')
+        # logger.error("FOUND PROFILO {}".format(self.profilo))
+        if Profilo.OPERATORE == Profilo.fix_enum(self.profilo):
+            # logger.error('OPERATORE RICONOSCIUTO')
 
             # filter(assegnatario__utente=self.utente).
             ass = Assegnatario.objects. \
                     filter(utente=self.utente).  \
                     filter(qualifica_ufficio__ufficio__ente=self.ente)
-            logger.error("FOUND QUALIFICHE {}".format(len(ass)))
+            # logger.error("FOUND QUALIFICHE {}".format(len(ass)))
             # ret = [a.qualifica_ufficio.qualifica for a in ass]
             # return ret
             return ass
         else:
-            logger.error('OPERATORE NON RICONOSCIUTO')
-            logger.warning("TIPO {}".format(type(self.profilo)))
+            # logger.error('OPERATORE NON RICONOSCIUTO')
+            # logger.warning("PROFILO [{p}] TIPO [{t}]".format(p=self.profilo, t=type(self.profilo)))
+            pass
 
         return None
 
@@ -793,6 +793,7 @@ class ProfiloChoiceNode(DjangoObjectType):
         # interfaces = (relay.Node, )
         convert_choices_to_enum = False
 
+
 class UtenteChoiceNode(DjangoObjectType):
     profili = graphene.List(ProfiloChoiceNode)
 
@@ -801,11 +802,20 @@ class UtenteChoiceNode(DjangoObjectType):
 
     class Meta:
         model = Utente
-        interfaces = (relay.Node, )
+        # interfaces = (relay.Node, )
         filter_fields = {
             'fiscal_code': ['exact'],
             'first_name': ['exact', 'icontains', 'istartswith'],
             'last_name': ['exact', 'icontains', 'istartswith'],
             'email': ['exact'],
         }
-        exclude_fields = ('password', 'is_active', 'is_superuser', 'last_login')
+        exclude = ('password', 'is_active', 'is_superuser', 'last_login')
+
+    @classmethod
+    def get_queryset(cls, queryset, info):
+        if info.context.user.is_anonymous:
+            return queryset.none()
+        else:
+            return queryset.filter(id=info.context.user.id)
+
+        return queryset
