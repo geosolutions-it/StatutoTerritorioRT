@@ -87,7 +87,7 @@ class Query(object):
 
     piano_rev_post_cp = DjangoFilterConnectionField(types.PianoRevPostCPNode)
 
-    user_choices = DjangoFilterConnectionField(types.UtenteChoiceNode)
+    user_choices = DjangoFilterConnectionField(types.UtenteChoiceNode, filterset_class=filters.UtenteChoiceFilter)
 
     # soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
     #                                     filterset_class=types.SoggettoOperanteFilter)
@@ -167,7 +167,7 @@ class Mutation(object):
     avvio_esame_pareri_sca = vas.AvvioEsamePareriSCA.Field()
     upload_elaborati_vas = vas.UploadElaboratiVAS.Field()
 
-    create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
+    # create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
     update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()
     avvia_piano = avvio.AvvioPiano.Field()
     contributi_tecnici = avvio.ContributiTecnici.Field()

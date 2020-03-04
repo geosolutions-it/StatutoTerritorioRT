@@ -26,6 +26,7 @@ from strt_users.models import (
     Ente,
     # MembershipType
 )
+from serapide_core.tests.test_data_setup import DataLoader
 
 from .serializers import (
     ProfiloSerializer,
@@ -39,7 +40,7 @@ logger = logging.getLogger(__name__)
 class UserMembershipDataView(APIView):
 
     def get(self, request):
-
+        # DataLoader.loadData()
         # usando SPID, dovremo avere tutti le informazioni dell'utente negli header
         # - controllare se esiste l'utente in locale tramite CF
         # - eventualmente aggiungere l'utente nel db LOCALE
@@ -81,28 +82,20 @@ class UserMembershipDataView(APIView):
 
                     profili {
                         profilo
-                        ente { 
-                            ipa
-                            nome 
-                        }
-                        qualifiche 
-                        {
-                            qualifica
-                            ufficio 
-                        }
+                        ente       { ipa nome}
+                        qualifiche { qualifica ufficio}
                     }
                 }
             }                         
         }
-    }                
-        """.replace('{cf}', user.fiscal_code))
+    }""".replace('{cf}', user.fiscal_code), request)
 
         return Response(result.data)
 
         # return Response({})
 
-def query(q):
-    result = schema.execute(q)
+def query(q, request):
+    result = schema.execute(q, context=request)
     if result.errors:
         logger.warning("ERRORS:::::::::::::::::::")
         for error in result.errors:
