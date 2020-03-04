@@ -63,6 +63,7 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TipologiaVAS,
     TIPOLOGIA_AZIONE,
+    TipologiaPiano,
 )
 
 from serapide_core.api.graphene import (
@@ -189,8 +190,8 @@ class CreatePiano(relay.ClientIDMutation):
             # Ente (M)
             _data = _piano_data.pop('ente')
             _ente = Ente.objects.get(ipa=_data['ipa'])
-            _role = info.context.session.get('role', None)
-            _token = info.context.session.get('token', None)
+            # _role = info.context.session.get('role', None)
+            # _token = info.context.session.get('token', None)
             _piano_data['ente'] = _ente
 
             if not info.context.user:
@@ -223,17 +224,25 @@ class CreatePiano(relay.ClientIDMutation):
             _piano_data['codice'] = _codice
 
             # Fase (O)
+
+            _fase = None
             if 'fase' in _piano_data:
                 _data = _piano_data.pop('fase')
-                _fase = Fase[_data]
-            else:
-                _fase = Fase.DRAFT
+                _fase = Fase.fix_enum(_data, none_on_error=True)
+
+            _fase = _fase if _fase else Fase.DRAFT
             _piano_data['fase'] = _fase
 
             # Descrizione (O)
             if 'descrizione' in _piano_data:
                 _data = _piano_data.pop('descrizione')
                 _piano_data['descrizione'] = _data[0]
+
+            if 'tipologia' in _piano_data:
+                _tipologia = _piano_data.pop('tipologia')
+                _tipologia = TipologiaPiano.fix_enum(_tipologia, none_on_error=True)
+                _piano_data['tipologia'] = _tipologia
+
             _piano_data['user'] = info.context.user
 
             # Crea piano
@@ -245,13 +254,14 @@ class CreatePiano(relay.ClientIDMutation):
             _order = 0
 
             for _a in AZIONI_BASE[_fase]:
-                crea_azione(Azione(
-                                piano=nuovo_piano,
-                                tipologia=_a["tipologia"],
-                                qualifica_richiesta=_a["qualifica"],
-                                stato = _a.get('stato', None),
-                                order=_order
-                            ))
+                crea_azione(
+                    Azione(
+                        piano=nuovo_piano,
+                        tipologia=_a["tipologia"],
+                        qualifica_richiesta=_a["qualifica"],
+                        stato = _a.get('stato', None),
+                        order=_order
+                    ))
                 _order += 1
 
 

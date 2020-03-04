@@ -147,6 +147,9 @@ class AzioneNode(DjangoObjectType):
     def resolve_tooltip(self, info, **args):
         return TOOLTIP_AZIONE[self.tipologia] if self.tipologia in TOOLTIP_AZIONE else None
 
+    def resolve_qualifica_richiesta(self, info, **args):
+        return self.qualifica_richiesta.name
+
     class Meta:
         model = Azione
         filter_fields = ['uuid',
@@ -423,19 +426,6 @@ class UtenteNode(DjangoObjectType):
 
 class EnteNode(DjangoObjectType):
 
-    #tipologia_ente = graphene.Field(EnteTipoNode)
-    #role = graphene.List(graphene.String)
-
-    def resolve_role(self, info, **args):
-        roles = []
-        if rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            _memberships = info.context.user.memberships
-            if _memberships:
-                for _m in _memberships:
-                    if _m.organization.code == self.code:
-                        roles.append(_m.type.code)
-        return roles
-
     class Meta:
         model = Ente
         # Allow for some more advanced filtering here
@@ -446,6 +436,9 @@ class EnteNode(DjangoObjectType):
         }
         interfaces = (relay.Node, )
         convert_choices_to_enum = False
+
+    def resolve_tipo(self, info, **args):
+        return self.tipo.name
 
 
 class ProceduraVASNode(DjangoObjectType):
@@ -650,6 +643,10 @@ class QualificaUfficioNode(DjangoObjectType):
         filter_fields = ['qualifica, ufficio']
         convert_choices_to_enum = False
 
+    def resolve_qualifica(self, info, **args):
+        return self.qualifica.name
+
+
 class UfficioNode(DjangoObjectType):
 
     class Meta:
@@ -713,12 +710,19 @@ class PianoNode(DjangoObjectType):
         if qualifica:
             qualifica = Qualifica.fix_enum(qualifica)
             qs = qs.filter(qualifica_ufficio__qualifica=qualifica)
-        logger.warning("*** RESOLVING SOGGETTO OPERANTE [q:{}]: {}".format(qualifica, qs.all().count()))
+        # logger.warning("*** RESOLVING SOGGETTO OPERANTE [q:{}]: {}".format(qualifica, qs.all().count()))
         return qs
 
     # TODO: check and remove this since it's mirroring a Piano field
     def resolve_soggetto_proponente(self, info, **args):
         return self.soggetto_proponente
+
+    def resolve_tipologia(self, info, **args):
+        logger.warning("*** RESOLVING TIPOLOGIA [type:{t}]: {o}".format(t=type(self.tipologia), o=self.tipologia))
+        return self.tipologia.name
+
+    def resolve_fase(self, info, **args):
+        return self.fase.name
 
     class Meta:
         model = Piano
