@@ -56,8 +56,10 @@ class UserMembershipFilter(django_filters.FilterSet):
     @property
     def qs(self):
         # The query context can be found in self.request.
-        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
-            return super(UserMembershipFilter, self).qs.filter(id=self.request.user.id).distinct()
+        if is_recognizable(self.request.user):
+            return super(UserMembershipFilter, self).qs\
+                .filter(fiscal_code=self.request.user.fiscal_code)\
+                .distinct()
             # if is_RUP(self.request.user):
             #  return super(UserMembershipFilter, self).qs.filter(usermembership__member=self.request.user).distinct()
             #  return super(UserMembershipFilter, self).qs.all()
