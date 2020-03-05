@@ -22,11 +22,17 @@ class SerapideEnum(Enum):
 
     @classmethod
     def create_choices(cls):
-        return  [(tag, _(tag.value)) for tag in cls]
+        return  [(tag.name, _(tag.value)) for tag in cls]
 
     @classmethod
     def fix_enum(cls, obj, none_on_error=False):
         return fix_enum(cls, obj, none_on_error)
+
+    @classmethod
+    def get_max_len(cls):
+        cls_len = len(cls.__name__)
+        max_item_len = max(len(i.name) for i in cls)
+        return cls_len + 1 + max_item_len
 
     def equal(self, obj):
         if self == obj:
@@ -42,19 +48,10 @@ class SerapideEnum(Enum):
 
 
 class Priv(Enum):
-    ADMIN_USER = 'ADMIN_USER'
-    CREATE_PLAN = 'CREATE_PLAN'
-    MANAGE_PLAN = 'MANAGE_PLAN'
-    OPERATE_PLAN = 'OPERATE_PLAN'
-
-    @classmethod
-    def create_choices(cls):
-        return (
-            (Priv.ADMIN_USER, _('Amministrazione utenti')),
-            (Priv.CREATE_PLAN, _('Creazione piani')),
-            (Priv.MANAGE_PLAN, _('Amministrazione piani')),
-            (Priv.OPERATE_PLAN, _('Gestione piani')),
-        )
+    ADMIN_USER = 'Amministrazione utenti'
+    CREATE_PLAN = 'Creazione piani'
+    MANAGE_PLAN = 'Amministrazione piani'
+    OPERATE_PLAN = 'Gestione piani'
 
 
 class Profilo(SerapideEnum):
@@ -123,25 +120,13 @@ ALLOWED_QUALIFICA_BY_TIPOENTE = {
 }
 
 class QualificaRichiesta(SerapideEnum):
-    COMUNE = 'COMUNE'
+    COMUNE = 'Responsabile Comunale'
     AC = 'AC'
     SCA = 'SCA'
-    GC = 'GC'
-    PIAN = 'PIAN'
-    URB = 'URB'
-    REGIONE = 'REGIONE'
-
-    @classmethod
-    def create_choices(cls):
-        return Choices(
-            (QualificaRichiesta.COMUNE , _('Responsabile Comunale')),
-            (QualificaRichiesta.AC, _('VAS')),
-            (QualificaRichiesta.SCA, _('SCA')),
-            (QualificaRichiesta.GC, _('Genio Civile')),
-            (QualificaRichiesta.PIAN, _('Responsabile Pianificazione')),
-            (QualificaRichiesta.URB, _('Responsabile Urbanistica')),
-            (QualificaRichiesta.REGIONE, _('Responsabile regionale')),
-        )
+    GC = 'Genio Civile'
+    PIAN = 'Responsabile Pianificazione'
+    URB = 'Responsabile Urbanistica'
+    REGIONE = 'Responsabile Regionale'
 
     def is_ok(self, qual:Qualifica):
         return qual in ALLOWED_QUALIFICA_BY_RICHIESTA[self]

@@ -92,7 +92,7 @@ class Risorsa(models.Model):
     fase = models.CharField(
         choices=Fase.create_choices(),
         default=Fase.UNKNOWN,
-        max_length=24
+        max_length=Fase.get_max_len()
     )
 
     user = models.ForeignKey(
@@ -150,7 +150,7 @@ class Piano(models.Model):
     tipologia = models.CharField(
         choices=TipologiaPiano.create_choices(),
         default=TipologiaPiano.UNKNOWN,
-        max_length=24
+        max_length=TipologiaPiano.get_max_len()
     )
 
     descrizione = models.TextField(null=True, blank=True)
@@ -170,7 +170,7 @@ class Piano(models.Model):
     fase = models.CharField(
         choices=Fase.create_choices(),
         default=Fase.UNKNOWN,
-        max_length=24
+        max_length=Fase.get_max_len()
     )
     #¯storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
     risorse = models.ManyToManyField(Risorsa, through='RisorsePiano')
@@ -381,7 +381,7 @@ class Azione(models.Model):
     qualifica_richiesta = models.CharField(
         choices=QualificaRichiesta.create_choices(),
         null=False,
-        max_length=24
+        max_length=QualificaRichiesta.get_max_len()
     )
 
     stato = models.CharField(
@@ -420,7 +420,7 @@ class FasePianoStorico(models.Model):
     fase = models.CharField(
         choices=Fase.create_choices(),
         default=Fase.UNKNOWN,
-        max_length=24
+        max_length=Fase.get_max_len()
     )
 
     data_apertura = models.DateTimeField()
@@ -513,7 +513,10 @@ class Delega(models.Model):
     token = models.ForeignKey(Token, related_name="delega+", on_delete=models.CASCADE, null=False)
 
     # can be READONLY or the Qualifica related to SoggettoOperante
-    qualifica = models.CharField(choices=Qualifica.create_choices(), max_length=8, null=False)
+    qualifica = models.CharField(
+        choices=Qualifica.create_choices(),
+        max_length=Qualifica.get_max_len(),
+        null=False)
 
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(Utente, related_name="+", on_delete=models.CASCADE)
@@ -549,7 +552,7 @@ class ProceduraVAS(models.Model):
     tipologia = models.CharField(
         choices=TipologiaVAS.create_choices(),
         default=TipologiaVAS.UNKNOWN,
-        max_length=50
+        max_length=TipologiaVAS.get_max_len()
     )
 
     note = models.TextField(null=True, blank=True)
@@ -778,7 +781,7 @@ class ProceduraAvvio(models.Model):
         choices=TipologiaCopianificazione.create_choices(),
         null=True, blank=True,
         default=None,
-        max_length=32
+        max_length=TipologiaCopianificazione.get_max_len()
     )
 
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
@@ -1023,7 +1026,7 @@ class ProceduraAdozioneVAS(models.Model):
     tipologia = models.CharField(
         choices=TipologiaVAS.create_choices(),
         default=TipologiaVAS.UNKNOWN,
-        max_length=50
+        max_length=TipologiaVAS.get_max_len()
     )
 
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)

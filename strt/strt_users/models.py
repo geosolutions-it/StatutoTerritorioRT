@@ -156,7 +156,10 @@ class Ente(models.Model):
         max_length=500, null=True, blank=True, verbose_name=_('descrizione')
     )
 
-    tipo = models.CharField(choices=TipoEnte.create_choices(), max_length=24, null=False)
+    tipo = models.CharField(
+        choices=TipoEnte.create_choices(),
+        max_length=TipoEnte.get_max_len(),
+        null=False)
 
     class Meta:
         verbose_name = _('ente')
@@ -178,7 +181,10 @@ class Ente(models.Model):
 class ProfiloUtente(models.Model):
 
     utente = models.ForeignKey(Utente, related_name="+", on_delete=models.CASCADE, null=False)
-    profilo = models.CharField(choices=Profilo.create_choices(), max_length=32, null=False)
+    profilo = models.CharField(
+        choices=Profilo.create_choices(),
+        max_length=Profilo.get_max_len(),
+        null=False)
     ente = models.ForeignKey(Ente, related_name="+", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
@@ -241,30 +247,15 @@ class Ufficio(models.Model):
     def __str__(self):
         return '{ente}: {uff}'.format(ente=self.ente.nome, uff=self.nome)
 
-
-# ALLOWED_ENTE = {
-#     Qualifica.RESP: [TipoEnte.COMUNE],
-#     Qualifica.AC: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
-#     Qualifica.SCA: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
-#     Qualifica.GC: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
-#     Qualifica.PIAN: [TipoEnte.REGIONE],
-#     Qualifica.URB: [TipoEnte.REGIONE],
-#     Qualifica.READONLY: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
-# }
-#
-# def _create_qualificaufficio_constraint():
-#     constraint = None
-#     for qualifica, tipi in ALLOWED_ENTE.items():
-#         q = Q(qualifica = qualifica) & Q(ufficio__ente__tipo__in = tipi)
-#         constraint = q | constraint if constraint else q
-#     return constraint
-
 class QualificaUfficio(models.Model):
     """
 
     """
     ufficio = models.ForeignKey(Ufficio, related_name="+", on_delete=models.CASCADE)
-    qualifica = models.CharField(choices=Qualifica.create_choices(), max_length=32, null=False)
+    qualifica = models.CharField(
+        choices=Qualifica.create_choices(),
+        max_length=Qualifica.get_max_len(),
+        null=False)
 
     def __str__(self):
         q = self.qualifica.name if isinstance(self.qualifica, Qualifica) else "!!!{}".format(self.qualifica)
@@ -337,7 +328,6 @@ class Assegnatario(models.Model):
     def save(self, *args, **kwargs):
         self._check_user_is_op()
         super().save(*args, **kwargs)  # Call the "real" save() method.
-
 
 
 class Token(models.Model):
