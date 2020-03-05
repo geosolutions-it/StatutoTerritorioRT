@@ -61,6 +61,7 @@ class TipoRisorsa(SerapideEnum):
     INDIVIDUAZIONE_GARANTE_INFORMAZIONE = 'individuazione_garante_informazione'
     CONTRIBUTI_TECNICI = 'contributi_tecnici'
     ELABORATI_CONFERENZA = 'elaborati_conferenza'
+    INTEGRAZIONI = 'integrazioni'
     NORME_TECNICHE_ATTUAZIONE = 'norme_tecniche_attuazione'
 
 

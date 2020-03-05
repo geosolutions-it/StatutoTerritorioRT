@@ -124,6 +124,8 @@ def check_and_promote(_piano, info):
         _piano.fase = _fase = _piano.fase.getNext()
         _piano.save()
 
+        logger.warning("PIANO PROMOSSO {}".format(_piano))
+
         # Notify Users
         piano_phase_changed.send(
             sender=Piano,
@@ -146,13 +148,14 @@ def promuovi_piano(fase:Fase, piano):
 
     # - Attach Actions Templates for the Next "Fase"
     for _a in AZIONI_BASE[fase]:
-        crea_azione(Azione(
-                        piano=piano,
-                        tipologia=_a["tipologia"],
-                        qualifica_richiesta=_a["qualifica"],
-                        order=_order,
-                        stato=STATO_AZIONE.necessaria
-                    ))
+        crea_azione(
+            Azione(
+                piano=piano,
+                tipologia=_a["tipologia"],
+                qualifica_richiesta=_a["qualifica"],
+                order=_order,
+                stato=STATO_AZIONE.necessaria
+            ))
         _order += 1
 
     # - Update Action state accordingly
@@ -559,3 +562,42 @@ class PromozionePiano(graphene.Mutation):
             return GraphQLError(e, code=500)
 
 
+def try_and_close_avvio(piano:Piano):
+
+    procedura_avvio = piano.procedura_avvio
+    procedura_vas = piano.procedura_vas
+
+    _conferenza_copianificazione_attiva = \
+        needsExecution(piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
+        needsExecution(piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
+
+    _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
+    _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
+
+    _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+
+    _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+
+    if not _conferenza_copianificazione_attiva and \
+            isExecuted(_protocollo_genio_civile) and \
+            isExecuted(_formazione_del_piano) and \
+            (not procedura_avvio.richiesta_integrazioni or (isExecuted(_integrazioni_richieste))) and \
+            (not procedura_vas or procedura_vas.conclusa):
+
+        if procedura_vas and procedura_vas.conclusa:
+            piano.chiudi_pendenti(attesa=True, necessaria=False)
+
+        procedura_avvio.conclusa = True
+        procedura_avvio.save()
+
+        PianoControdedotto.objects.get_or_create(piano=piano)
+        PianoRevPostCP.objects.get_or_create(piano=piano)
+
+        procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
+            piano=piano, ente=piano.ente)
+        piano.procedura_adozione = procedura_adozione
+        piano.save()
+
+        return True
+
+    return False

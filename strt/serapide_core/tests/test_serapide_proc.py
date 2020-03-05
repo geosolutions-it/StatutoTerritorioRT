@@ -27,8 +27,21 @@ logger = logging.getLogger(__name__)
 
 this_path = os.path.dirname(__file__)
 
-class AbstractSerapideProcsTest(AbstractSerapideTest):
 
+def _get_datetime(**argw_delta):
+    date = datetime.datetime.now()
+    date = date.replace(microsecond=0)
+    if argw_delta:
+        date = date + datetime.timedelta(**argw_delta)
+    return date
+
+def _get_date(**argw_delta):
+    date = _get_datetime(**argw_delta)
+    date = date.replace(hour=0, minute=0, second=0, microsecond=0)
+    return date
+
+
+class AbstractSerapideProcsTest(AbstractSerapideTest):
 
     def do_login(self):
         print("LOGIN  ====================")
@@ -60,8 +73,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.codice_vas = content['data']['createPiano']['nuovoPiano']['proceduraVas']['uuid']
         self.codice_avvio = content['data']['createPiano']['nuovoPiano']['proceduraAvvio']['uuid']
 
-        now = datetime.datetime.now()
-        now = now.replace(microsecond=0)
+        now = _get_datetime()
 
         for nome, val in [
             ("dataDelibera", now.isoformat()),
@@ -70,10 +82,10 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         ]:
             self.send3('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)
 
-        self.upload(self.codice_piano, TipoRisorsa.DELIBERA, '003_upload_file.query')
+        self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
 
         self.send3('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.value)
-        self.upload(self.codice_vas, TipoRisorsa.VAS_VERIFICA, '005_vas_upload_file.query')
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.VAS_VERIFICA)
 
         sogg_op = []
         sogg_op.append({
@@ -94,9 +106,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
 
     def avvio_piano(self, copianificazione:TipologiaCopianificazione):
-        avvio_scadenza = datetime.datetime.now()
-        avvio_scadenza = avvio_scadenza.replace(hour=0, minute=0, second=0, microsecond=0)
-        avvio_scadenza = avvio_scadenza + datetime.timedelta(days=10)
+        avvio_scadenza = _get_date(days=10)
 
         for nome, val in [
             ('dataScadenzaRisposta', avvio_scadenza.isoformat()),
@@ -112,7 +122,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
             TipoRisorsa.PROGRAMMA_ATTIVITA,
             TipoRisorsa.INDIVIDUAZIONE_GARANTE_INFORMAZIONE,
         ]:
-            self.upload(self.codice_avvio, tipo, '011_avvio_upload_file.query')
+            self.upload('011_avvio_upload_file.query', self.codice_avvio, tipo)
 
         # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", expected_code=403)
         # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", client=client_gc)
@@ -124,13 +134,13 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
 
         # SCA
-        self.upload(self.codice_vas, TipoRisorsa.PARERE_VERIFICA_VAS, '005_vas_upload_file.query')
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_VERIFICA_VAS)
         self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, expected_code=403)
         self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, client=self.client_sca)
 
         # AC
         # {"operationName":"VasUploadFile","variables":{"file":null,"codice":"a62a4292-bc89-4a54-9361-ba7d0472d317","tipo":"provvedimento_verifica_vas"}
-        self.upload(self.codice_vas, TipoRisorsa.PROVVEDIMENTO_VERIFICA_VAS, '005_vas_upload_file.query')
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PROVVEDIMENTO_VERIFICA_VAS)
         self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, expected_code=403)
         self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, client=self.client_ac)
 
@@ -147,46 +157,61 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
     def contributi_tecnici(self):
         self.send3('999_get_avvio.query', 'GET AVVIO', self.codice_piano)
-        self.upload(self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI, '011_avvio_upload_file.query')
+        self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
         self.send3('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, expected_code=403)
         self.send3('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, client=self.client_pian) # questo crea le azioni di CC
 
     def confcop_no_int(self):
-        self.send3('016_richiesta_conferenza_copianificazione.query', 'RICHIESTA CONF COP', self.codice_avvio)
+        self.send3('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
 
-        response = self.send3('017_get_conferenza_copianificazione.query', 'GET CONF COP', self.codice_piano)
+        response = self.send3('021_get_cc.query', 'GET CONF COP', self.codice_piano)
         content = json.loads(response.content)
         codice_cc = content['data']['modello']['edges'][0]['node']['uuid']
 
-        self.upload(codice_cc, TipoRisorsa.ELABORATI_CONFERENZA, '018_conferenza_upload_file.query')
-        self.send3('019_chiusura_conferenza_copianificazione.query', 'CHIUSURA CONF COP', self.codice_avvio,
+        self.upload('022_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
+        self.send3('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio,
                    expected_code=403)
-        self.send3('019_chiusura_conferenza_copianificazione.query', 'CHIUSURA CONF COP', self.codice_avvio,
+        self.send3('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio,
                    client=self.client_pian)
 
-        #   update procedura avvia
-        #    "uuid" : "7fc7c9ad-9064-47a9-9cc0-1162c0907ab7",
-        #    "proceduraAvvio" : {
-        #       "messaggioIntegrazione" : "Nessuna richiesta"
-        #    }
-        # }
+        self.send3('024_richiesta_integrazioni.query', 'RICHIESTA INT NO', self.codice_avvio, expected_code=403)
+        self.send3('024_richiesta_integrazioni.query', 'RICHIESTA INT NO', self.codice_avvio, client=self.client_pian)
 
-        # {"operationName":"UpdateProceduraAvvio","variables":{"input":{"proceduraAvvio":{"richiestaIntegrazioni":true},"uuid":"7fc7c9ad-9064-47a9-9cc0-1162c0907ab7"}}
-        # richiesta int può creare ultriori azioni
+    def confcop_IR(self):
+        self.send3('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
 
-        self.send3('020_richiesta_integrazioni.query', 'CHIUSURA CONF COP', self.codice_avvio, expected_code=403)
-        self.send3('020_richiesta_integrazioni.query', 'CHIUSURA CONF COP', self.codice_avvio, client=self.client_pian)
+        response = self.send3('021_get_cc.query', 'GET CONF COP', self.codice_piano)
+        content = json.loads(response.content)
+        codice_cc = content['data']['modello']['edges'][0]['node']['uuid']
+
+        self.upload('022_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
+        self.send3('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, expected_code=403)
+        self.send3('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, client=self.client_pian)
+
+        # richiediamo integrazioni!
+        self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'messaggioIntegrazione', 'servono integrazioni', extra_title='messaggioIntegrazione')
+        self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'richiestaIntegrazioni', True, extra_title='richiestaIntegrazioni')
+        self.send3('024_richiesta_integrazioni.query', 'RICHIESTA INT', self.codice_avvio, client=self.client_pian)
+
+        # inviamo integrazioni
+        self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.INTEGRAZIONI)
+        self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'dataScadenzaRisposta', _get_date(days=20).isoformat(), extra_title='dataScadenzaRisposta')
+
+        self.send3('025_integrazioni_richieste.query', 'INTEGRAZIONI RICH', self.codice_avvio)
+
+
+
 
     def genio_civile(self):
         self.send3('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', expected_code=403)
         self.send3('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', client=self.client_gc)
-        self.send3('021_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, expected_code=403)
-        self.send3('021_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, client=self.client_gc)
+        self.send3('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, expected_code=403)
+        self.send3('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, client=self.client_gc)
 
     def formazione_piano(self):
         #{"operationName":"UploadFile","variables":{"file":null,"codice":"SCND_FI200200017","tipo":"norme_tecniche_attuazione"}
-        self.upload(self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE, '003_upload_file.query')
-        self.send3('022_formazione_piano.query', 'FORMAZIONE PIANO', self.codice_piano)
+        self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE)
+        self.send3('040_formazione_piano.query', 'FORMAZIONE PIANO', self.codice_piano)
 
     def check_fase(self, fase_expected:Fase):
         # l'azione precedente promuove automaticamente alla fase AVVIO
@@ -194,25 +219,3 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         content = json.loads(response.content)
         fase = content['data']['piani']['edges'][0]['node']['fase']
         self.assertEqual(fase_expected, Fase.fix_enum(fase), "Fase errata")
-
-
-    def test_flow_verifica_noass_posticipata_noint(self):
-
-        query = None
-
-        self.do_login()
-        self.create_piano_and_promote(TipologiaVAS.VERIFICA) # Promozione effettuata DRAFT --> ANAGRAFICA
-        self.avvio_piano(TipologiaCopianificazione.POSTICIPATA)
-        self.vas_verifica_no_assoggettamento()
-
-        self.contributi_tecnici()
-        self.confcop_no_int()
-
-        self.genio_civile()
-
-        self.check_fase(Fase.ANAGRAFICA)
-
-        self.formazione_piano()
-
-        self.check_fase(Fase.AVVIO)
-

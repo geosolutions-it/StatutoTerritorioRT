@@ -23,8 +23,6 @@ from graphene import relay
 from graphql_extensions.exceptions import GraphQLError
 
 from serapide_core.helpers import (
-    is_RUP,
-    unslugify,
     update_create_instance)
 
 from serapide_core.signals import (
@@ -32,15 +30,12 @@ from serapide_core.signals import (
 )
 
 from serapide_core.modello.models import (
-    Fase, Qualifica, QualificaRichiesta,
+    QualificaRichiesta,
     Piano,
     Azione,
     SoggettoOperante,
     ProceduraVAS,
     ProceduraAvvio,
-    ProceduraAdozione,
-    PianoControdedotto,
-    PianoRevPostCP,
     ConferenzaCopianificazione,
 
     isExecuted,
@@ -59,50 +54,12 @@ from serapide_core.modello.enums import (
 
 from serapide_core.api.graphene import (types, inputs)
 from serapide_core.api.graphene.mutations.vas import init_vas_procedure
-from serapide_core.api.graphene.mutations.piano import check_and_promote
+from serapide_core.api.graphene.mutations.piano import check_and_promote, try_and_close_avvio
 import serapide_core.api.auth.user as auth
 from strt_users.enums import Qualifica
 
 logger = logging.getLogger(__name__)
 
-
-def try_and_close_avvio(piano:Piano):
-
-    procedura_avvio = piano.procedura_avvio
-    procedura_vas = piano.procedura_vas
-
-    _conferenza_copianificazione_attiva = \
-        needsExecution(piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
-        needsExecution(piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
-
-    _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
-    _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
-
-    _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
-
-    _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
-
-    if not _conferenza_copianificazione_attiva and \
-            isExecuted(_protocollo_genio_civile) and \
-            isExecuted(_formazione_del_piano) and \
-            (not procedura_avvio.richiesta_integrazioni or (isExecuted(_integrazioni_richieste))) and \
-            (not procedura_vas or procedura_vas.conclusa):
-
-        if procedura_vas == procedura_vas.conclusa:
-            piano.chiudi_pendenti(attesa=True, necessaria=False)
-
-        piano.chiudi_pendenti(attesa=True, necessaria=False)
-
-        procedura_avvio.conclusa = True
-        procedura_avvio.save()
-
-        PianoControdedotto.objects.get_or_create(piano=piano)
-        PianoRevPostCP.objects.get_or_create(piano=piano)
-
-        procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
-            piano=piano, ente=piano.ente)
-        piano.procedura_adozione = procedura_adozione
-        piano.save()
 
 # class CreateProceduraAvvio(relay.ClientIDMutation):
 #
@@ -612,36 +569,36 @@ class IntegrazioniRichieste(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        _role = info.context.session['role'] if 'role' in info.context.session else None
-        _token = info.context.session['token'] if 'token' in info.context.session else None
-        _organization = _piano.ente
-        if info.context.user and \
-                rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-                rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
-            try:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+        # _role = info.context.session['role'] if 'role' in info.context.session else None
+        # _token = info.context.session['token'] if 'token' in info.context.session else None
+        # _organization = _piano.ente
 
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=info.context.user,
-                    piano=_piano,
-                    message_type="integrazioni_richieste")
+        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
+        #
+        # if info.context.user and \
+        #         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+        #         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+        try:
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
-                check_and_promote(_piano, info)
+            # Notify Users
+            piano_phase_changed.send(
+                sender=Piano,
+                user=info.context.user,
+                piano=_piano,
+                message_type="integrazioni_richieste")
 
-                return IntegrazioniRichieste(
-                    avvio_aggiornato=_procedura_avvio,
-                    errors=[]
-                )
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-        else:
-            return GraphQLError(_("Forbidden"), code=403)
+            check_and_promote(_piano, info)
 
-
+            return IntegrazioniRichieste(
+                avvio_aggiornato=_procedura_avvio,
+                errors=[]
+            )
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class InvioProtocolloGenioCivile(graphene.Mutation):

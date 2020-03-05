@@ -16,6 +16,7 @@ from serapide_core.modello.enums import (
     TipoRisorsa,
     TipologiaVAS
 )
+from strt_users.models import Utente
 
 from .test_data_setup import DataLoader
 
@@ -32,7 +33,8 @@ class AbstractSerapideTest(GraphQLTestCase):
     GET_PROFILES_URL =  '/users/membership-type-api/'
 
     def setUp(self):
-        DataLoader.loadData()
+        if Utente.objects.count() == 0:
+            DataLoader.loadData()
 
     def send3(self, file, title, codice, nome_campo='', valore_campo=None, extra_title='', expected_code=200, client=None):
         return self.send(file,
@@ -74,7 +76,7 @@ class AbstractSerapideTest(GraphQLTestCase):
         print("{title} ({code}) ^^^^^^^^^^^^^^^^^^^^".format(title=title, code=response.status_code))
         return response
 
-    def upload(self, codice, tipo:TipoRisorsa, file, extra_title='', expected_code=200, client=None):
+    def upload(self, file:str, codice:str, tipo:TipoRisorsa, extra_title='', expected_code=200, client=None):
         _client = client if client else self._client
         print("UPLOAD {tipo} ================================================== {extra_title}".format(tipo=tipo.name, extra_title=extra_title))
         with open(os.path.join(this_path, 'fixtures', file), 'r') as file:

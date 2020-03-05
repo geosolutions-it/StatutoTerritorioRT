@@ -23,7 +23,7 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
-from serapide_core.api.graphene.mutations.piano import check_and_promote
+from serapide_core.api.graphene.mutations.piano import check_and_promote, try_and_close_avvio
 
 from serapide_core.helpers import (
     is_RUP,
@@ -259,6 +259,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # update!
             procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
 
+            # CHIUSURA AZIONI VAS
             if _procedura_vas_data.pubblicazione_provvedimento_verifica_ap:
                 _pubblicazione_provvedimento_verifica_ap = _piano.getFirstAction(
                         TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
@@ -290,16 +291,18 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                         message_type="piano_verifica_vas_updated")
 
 
-            if procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ap and \
-                procedura_vas_aggiornata.pubblicazione_provvedimento_verifica_ac:
+            if isExecuted(_piano.getFirstAction(
+                        TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                        qualifica_richiesta=QualificaRichiesta.AC)) and \
+                isExecuted(_piano.getFirstAction(
+                    TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                    qualifica_richiesta=QualificaRichiesta.COMUNE)):
 
-                _procedura_avvio = ProceduraAvvio.objects.filter(piano=_piano).last()
-                if not _procedura_avvio or _procedura_avvio.conclusa:
-                    _piano.chiudi_pendenti(attesa=True, necessaria=False)
                 procedura_vas_aggiornata.conclusa = True
                 procedura_vas_aggiornata.save()
 
-                check_and_promote(_piano, info)
+                if try_and_close_avvio(_piano):
+                    check_and_promote(_piano, info)
 
             return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
         except BaseException as e:
