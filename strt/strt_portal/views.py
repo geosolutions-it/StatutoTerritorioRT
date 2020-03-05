@@ -20,7 +20,10 @@ from django.contrib.auth import authenticate, login
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import slugify
 # from django.contrib.auth import logout
-
+from serapide_core.api.auth.user import (
+    is_recognizable,
+    has_profile
+)
 from strt_tests.forms import UserAuthenticationForm
 from rules.contrib.views import permission_required
 
@@ -30,6 +33,8 @@ from django_currentuser.middleware import (
 from django.shortcuts import (
     render, redirect
 )
+
+from strt_users.enums import Profilo
 from strt_users.models import Ente
 
 from .glossario import glossario
@@ -39,17 +44,25 @@ from .glossario import glossario
 def privateAreaView(request):
     current_user = get_current_authenticated_user()
     if current_user:
-        if 'role' in request.session and request.session['role']:
-            current_role = current_user.memberships.filter(pk=request.session['role']).first()
-            if current_role:
-                if current_role.type.code == settings.RESPONSABILE_ISIDE_CODE:
-                    return redirect('users_list')
-        if current_user.has_perm('strt_users.can_access_serapide'):
+        # TODO
+        if is_recognizable(current_user) and \
+                ( has_profile(current_user, Profilo.OPERATORE) or
+                  has_profile(current_user, Profilo.ADMIN_ENTE)):
             return redirect('serapide')
         else:
             return redirect('/')
-        #    logout(request)
-        #    return redirect('user_registration')
+        #
+        # if 'role' in request.session and request.session['role']:
+        #     current_role = current_user.memberships.filter(pk=request.session['role']).first()
+        #     if current_role:
+        #         if current_role.type.code == settings.RESPONSABILE_ISIDE_CODE:
+        #             return redirect('users_list')
+        # if current_user.has_perm('strt_users.can_access_serapide'):
+        #     return redirect('serapide')
+        # else:
+        #     return redirect('/')
+        # #    logout(request)
+        # #    return redirect('user_registration')
     else:
         # TODO: redirect to RT SSO service endpoint
         if request.method == "POST":
@@ -61,8 +74,8 @@ def privateAreaView(request):
                         'organization': org
                     }
                     for org
-                    in form_cleaned_data['hidden_orgs'].split('-')
-                    if org
+                        in form_cleaned_data['hidden_orgs'].split('-')
+                            if org
                 ]
                 form_cleaned_data.pop('hidden_orgs')
                 form_cleaned_data['organizations'] = orgs

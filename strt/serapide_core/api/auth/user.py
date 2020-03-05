@@ -58,6 +58,10 @@ def can_create_piano(utente, ente):
 
     return False
 
+def has_profile(utente, p:Profilo):
+    return ProfiloUtente.objects \
+        .filter(utente=utente, profilo=p) \
+        .exists()
 
 def can_edit_piano(utente, ente):
     if not isinstance(utente, Utente):

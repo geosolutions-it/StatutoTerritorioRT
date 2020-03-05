@@ -36,7 +36,8 @@ logger = logging.getLogger(__name__)
 class UserMembershipDataView(APIView):
 
     def get(self, request):
-        # DataLoader.loadData()
+        if Utente.objects.count() == 0:
+            DataLoader.loadData()
 
         # usando SPID, dovremo avere tutti le informazioni dell'utente negli header
         # - controllare se esiste l'utente in locale tramite CF
