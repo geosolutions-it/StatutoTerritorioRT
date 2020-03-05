@@ -23,7 +23,7 @@ class FlussiTest(AbstractSerapideProcsTest):
         self.vas_verifica_no_assoggettamento()
 
         self.contributi_tecnici()
-        self.confcop_no_int()
+        self.copianificazione(TipologiaCopianificazione.POSTICIPATA, False)
 
         self.genio_civile()
 
@@ -40,7 +40,7 @@ class FlussiTest(AbstractSerapideProcsTest):
         self.avvio_piano(TipologiaCopianificazione.POSTICIPATA)
 
         self.contributi_tecnici()
-        self.confcop_no_int()
+        self.copianificazione(TipologiaCopianificazione.POSTICIPATA, False)
 
         self.genio_civile()
 
@@ -61,7 +61,7 @@ class FlussiTest(AbstractSerapideProcsTest):
         self.vas_verifica_no_assoggettamento()
 
         self.contributi_tecnici()
-        self.confcop_IR()
+        self.copianificazione(TipologiaCopianificazione.POSTICIPATA, True)
 
         self.genio_civile()
 
@@ -81,6 +81,26 @@ class FlussiTest(AbstractSerapideProcsTest):
         self.vas_verifica_no_assoggettamento()
 
         self.contributi_tecnici()
+        self.copianificazione(TipologiaCopianificazione.NON_NECESSARIA, True)
+
+        self.genio_civile()
+
+        self.check_fase(Fase.ANAGRAFICA)
+
+        self.formazione_piano()
+
+        self.check_fase(Fase.AVVIO)
+
+    def test_flow_vasverificanoass_ccsiirno_form(self):
+
+        self.do_login()
+        self.create_piano_and_promote(TipologiaVAS.VERIFICA)
+        self.avvio_piano(TipologiaCopianificazione.NECESSARIA)
+
+        self.vas_verifica_no_assoggettamento()
+
+        self.contributi_tecnici()
+        self.copianificazione(TipologiaCopianificazione.NECESSARIA, False)
 
         self.genio_civile()
 

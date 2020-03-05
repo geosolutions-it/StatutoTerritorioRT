@@ -9,10 +9,7 @@
 #
 #########################################################################
 
-from enum import Enum
-
 from model_utils import Choices
-from django.db import models
 from django.utils.translation import gettext as _
 
 from strt_users.enums import (
@@ -70,35 +67,26 @@ TIPOLOGIA_RISORSA = {
         'label': 'Delibera di avvio ',
         'tooltip': 'ai sensi dell’articolo. 17 L.R. 65/2014'
     },
-    'obiettivi_piano': {
+    TipoRisorsa.OBIETTIVI_PIANO.value: {
         'label': 'Obiettivi del Piano',
         'tooltip': ''
     },
-    'quadro_conoscitivo': {
+    TipoRisorsa.QUADRO_CONOSCITIVO.value: {
         'label': 'Quadro Conoscitivo',
         'tooltip': 'art. 17, lett.b, L.R. 65/2014'
     },
-    'programma_attivita': {
+    TipoRisorsa.PROGRAMMA_ATTIVITA.value: {
         'label': 'Programma delle attività di inforamazione ai cittadini',
         'tooltip': ''
     },
-    'individuazione_garante_informazione': {
+    TipoRisorsa.INDIVIDUAZIONE_GARANTE_INFORMAZIONE.value: {
         'label': 'Individuazione del garante dell\'informazione',
         'tooltip': ''
     }
 }
 
-# TIPOLOGIA_CONTATTO = Choices(
-#         ('unknown', _('UNKNOWN')),
-#         ('generico', _('GENERICO')),
-#         ('acvas', _('AUT_COMP_VAS')),
-#         ('sca', _('SOGGETTO_SCA')),
-#         ('ente', _('ENTE')),
-#         ('genio_civile', _('GENIO_CIVILE')),
-#     )
 
 class TipologiaPiano(SerapideEnum):
-
     UNKNOWN = 'UNKNOWN'
     OPERATIVO = 'OPERATIVO'
     STRUTTURALE = 'STRUTTURALE'
@@ -114,34 +102,12 @@ class TipologiaVAS(SerapideEnum):
     PROCEDIMENTO_SEMPLIFICATO = 'PROCEDIMENTO_SEMPLIFICATO'
     NON_NECESSARIA = 'NON_NECESSARIA'
 
-    # @classmethod
-    # def create_choices(cls):
-    #     return  [(tag, _(tag.value)) for tag in cls]
-    #
-    # @classmethod
-    # def fix_enum(cls, obj):
-    #     return fix_enum(cls, obj)
-
-
-# TIPOLOGIA_VAS = Choices(
-#         ('unknown', _('UNKNOWN')),
-#         ('semplificata', _('SEMPLIFICATA')),
-#         ('verifica', _('VERIFICA')),
-#         ('procedimento', _('PROCEDIMENTO')),
-#         ('procedimento_semplificato', _('PROCEDIMENTO_SEMPLIFICATO')),
-#         ('non_necessaria', _('NON_NECESSARIA')),
-#     )
 
 class TipologiaCopianificazione(SerapideEnum):
     POSTICIPATA = 'posticipata'
     NECESSARIA = 'necessaria'
     NON_NECESSARIA = 'non_necessaria'
 
-# TIPOLOGIA_CONF_COPIANIFIZAZIONE = Choices(
-#         ('necessaria', _('NECESSARIA')),
-#         ('posticipata', _('POSTICIPATA')),
-#         ('non_necessaria', _('NON_NECESSARIA')),
-#     )
 
 STATO_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
@@ -149,6 +115,7 @@ STATO_AZIONE = Choices(
         ('attesa', _('ATTESA')),
         ('necessaria', _('NECESSARIA')),
     )
+
 
 TIPOLOGIA_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
@@ -265,16 +232,6 @@ TOOLTIP_AZIONE = Choices(
         ('esito_conferenza_paesaggistica', _('art.19 L.R. 65/2014')),
         ('rev_piano_post_cp', _('art.19 L.R. 65/2014')),
     )
-
-# TIPOLOGIA_ATTORE = Choices(
-#         ('unknown', _('UNKNOWN')),
-#         ('comune', _('Comune')),
-#         ('regione', _('Regione')),
-#         ('ac', _('AC')),
-#         ('sca', _('SCA')),
-#         ('enti', _('ENTI')),
-#         ('genio_civile', _('GENIO_CIVILE')),
-#     )
 
 
 AZIONI_BASE = {

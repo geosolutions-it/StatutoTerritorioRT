@@ -161,46 +161,36 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.send3('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, expected_code=403)
         self.send3('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, client=self.client_pian) # questo crea le azioni di CC
 
-    def confcop_no_int(self):
-        self.send3('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
+    def copianificazione(self, tipo:TipologiaCopianificazione, richiedi_integrazioni:bool):
+
+        if tipo == TipologiaCopianificazione.NON_NECESSARIA:
+            return
 
         response = self.send3('021_get_cc.query', 'GET CONF COP', self.codice_piano)
         content = json.loads(response.content)
         codice_cc = content['data']['modello']['edges'][0]['node']['uuid']
 
-        self.upload('022_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
-        self.send3('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio,
-                   expected_code=403)
-        self.send3('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio,
-                   client=self.client_pian)
-
-        self.send3('024_richiesta_integrazioni.query', 'RICHIESTA INT NO', self.codice_avvio, expected_code=403)
-        self.send3('024_richiesta_integrazioni.query', 'RICHIESTA INT NO', self.codice_avvio, client=self.client_pian)
-
-    def confcop_IR(self):
-        self.send3('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
-
-        response = self.send3('021_get_cc.query', 'GET CONF COP', self.codice_piano)
-        content = json.loads(response.content)
-        codice_cc = content['data']['modello']['edges'][0]['node']['uuid']
+        if tipo == TipologiaCopianificazione.POSTICIPATA:
+            self.send3('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
 
         self.upload('022_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
         self.send3('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, expected_code=403)
         self.send3('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, client=self.client_pian)
 
+        self.send3('024_richiesta_integrazioni.query', 'RICHIESTA INT NO', self.codice_avvio, expected_code=403)
+
         # richiediamo integrazioni!
-        self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'messaggioIntegrazione', 'servono integrazioni', extra_title='messaggioIntegrazione')
-        self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'richiestaIntegrazioni', True, extra_title='richiestaIntegrazioni')
+        self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'messaggioIntegrazione', 'msg integr', extra_title='integrazioni')
+        self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'richiestaIntegrazioni', richiedi_integrazioni, extra_title='richiestaIntegrazioni')
         self.send3('024_richiesta_integrazioni.query', 'RICHIESTA INT', self.codice_avvio, client=self.client_pian)
 
-        # inviamo integrazioni
-        self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.INTEGRAZIONI)
-        self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'dataScadenzaRisposta', _get_date(days=20).isoformat(), extra_title='dataScadenzaRisposta')
-
-        self.send3('025_integrazioni_richieste.query', 'INTEGRAZIONI RICH', self.codice_avvio)
-
-
-
+        if richiedi_integrazioni:
+            # le integrazioni sono state richieste, quindi serve chiudere "integrazioni richieste"
+            # inviamo integrazioni
+            self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.INTEGRAZIONI)
+            self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'dataScadenzaRisposta',
+                       _get_date(days=20).isoformat(), extra_title='dataScadenzaRisposta')
+            self.send3('025_integrazioni_richieste.query', 'INTEGRAZIONI RICH', self.codice_avvio)
 
     def genio_civile(self):
         self.send3('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', expected_code=403)
