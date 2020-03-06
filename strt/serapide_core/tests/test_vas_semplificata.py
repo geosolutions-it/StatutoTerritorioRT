@@ -93,15 +93,15 @@ class FullFlowTestCase(AbstractSerapideTest):
             ("descrizione", "Piano di test - VAS SEMPLIFICATA [{}]".format(now)),
             ("soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
         ]:
-            self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, nome, val)
+            self.sendCNV('002_update_piano.query', 'UPDATE PIANO', codice_piano, nome, val)
 
-        self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettoProponenteUuid", uuid.uuid4().__str__(), expected_code=404)
+        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettoProponenteUuid", uuid.uuid4().__str__(), expected_code=404)
 
 
         response = self.upload(codice_piano, TipoRisorsa.DELIBERA, '003_upload_file.query')
 
-        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', "fake_vas_type", expected_code=400)
-        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', TipologiaVAS.SEMPLIFICATA.name)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', "fake_vas_type", expected_code=400)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', TipologiaVAS.SEMPLIFICATA.name)
 
         response = self.upload(codice_vas, TipoRisorsa.VAS_SEMPLIFICATA, '005_vas_upload_file.query')
 

@@ -68,11 +68,11 @@ class FullFlowTestCase(AbstractSerapideTest):
             ("descrizione", "Piano di test - VAS VERIFICA [{}]".format(now)),
             ("soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
         ]:
-            self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, nome, val)
+            self.sendCNV('002_update_piano.query', 'UPDATE PIANO', codice_piano, nome, val)
 
         self.upload(codice_piano, TipoRisorsa.DELIBERA, '003_upload_file.query')
 
-        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', TipologiaVAS.VERIFICA.value)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', TipologiaVAS.VERIFICA.value)
         self.upload(codice_vas, TipoRisorsa.VAS_VERIFICA, '005_vas_upload_file.query')
 
         sogg_op = []
@@ -89,8 +89,8 @@ class FullFlowTestCase(AbstractSerapideTest):
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_LU][DataLoader.UFF1].uuid.__str__(),
             'qualifica': Qualifica.SCA.name})
 
-        self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettiOperanti", sogg_op)
-        self.send3('006_promozione.query', 'PROMUOVI PIANO', codice_piano)
+        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettiOperanti", sogg_op)
+        self.sendCNV('006_promozione.query', 'PROMUOVI PIANO', codice_piano)
 
 
         # Promozione effettuata DRAFT --> ANAGRAFICA
@@ -105,7 +105,7 @@ class FullFlowTestCase(AbstractSerapideTest):
             ('garantePec', 'pippo@pec.pec'),
             ('conferenzaCopianificazione', TipologiaCopianificazione.POSTICIPATA.name), # questo modifica la sequenza in CC
         ]:
-            self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', codice_avvio, nome, val, extra_title=nome)
+            self.sendCNV('010_update_procedura_avvio.query', 'UPDATE AVVIO', codice_avvio, nome, val, extra_title=nome)
 
         for tipo in [
             TipoRisorsa.OBIETTIVI_PIANO,
@@ -117,10 +117,10 @@ class FullFlowTestCase(AbstractSerapideTest):
 
         # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", expected_code=403)
         # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", client=client_gc)
-        self.send3('012_avvio_piano.query', 'AVVIO PIANO', codice_avvio)
+        self.sendCNV('012_avvio_piano.query', 'AVVIO PIANO', codice_avvio)
 
         # {"operationName": "UpdateProceduraVas", "variables": {"input": {"proceduraVas": {"assoggettamento": false},
-        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'assoggettamento', False)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'assoggettamento', False)
 
 
         # SCA
@@ -134,35 +134,35 @@ class FullFlowTestCase(AbstractSerapideTest):
         self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': codice_vas}, expected_code=403)
         self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': codice_vas}, client=self.client_ac)
 
-        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", expected_code=403)
-        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", client=self.client_ac)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", expected_code=403)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", client=self.client_ac)
 
-        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
 
         # VAS COMPLETATO
-        response = self.send3('999_get_vas.query', 'GET VAS', codice_piano)
+        response = self.sendCNV('999_get_vas.query', 'GET VAS', codice_piano)
         content = json.loads(response.content)
         vas_conclusa = content['data']['modello']['edges'][0]['node']['conclusa']
         self.assertTrue(vas_conclusa, 'VAS non conclusa')
 
 
-        self.send3('999_get_avvio.query', 'GET AVVIO', codice_piano)
+        self.sendCNV('999_get_avvio.query', 'GET AVVIO', codice_piano)
         self.upload(codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI, '011_avvio_upload_file.query')
-        self.send3('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', codice_avvio, expected_code=403)
+        self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', codice_avvio, expected_code=403)
 
 
-        self.send3('010_update_procedura_avvio.query', 'UPDATE AVVIO', codice_avvio, 'conferenzaCopianificazione', TipologiaCopianificazione.POSTICIPATA.name, extra_title='CC posticipata')
-        self.send3('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', codice_avvio, client=self.client_pian) # questo crea le azioni di CC
+        self.sendCNV('010_update_procedura_avvio.query', 'UPDATE AVVIO', codice_avvio, 'conferenzaCopianificazione', TipologiaCopianificazione.POSTICIPATA.name, extra_title='CC posticipata')
+        self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', codice_avvio, client=self.client_pian) # questo crea le azioni di CC
 
-        self.send3('016_richiesta_conferenza_copianificazione.query', 'RICHIESTA CONF COP', codice_avvio)
+        self.sendCNV('016_richiesta_conferenza_copianificazione.query', 'RICHIESTA CONF COP', codice_avvio)
 
-        response = self.send3('017_get_conferenza_copianificazione.query', 'GET CONF COP', codice_piano)
+        response = self.sendCNV('017_get_conferenza_copianificazione.query', 'GET CONF COP', codice_piano)
         content = json.loads(response.content)
         codice_cc = content['data']['modello']['edges'][0]['node']['uuid']
 
         self.upload(codice_cc, TipoRisorsa.ELABORATI_CONFERENZA, '018_conferenza_upload_file.query')
-        self.send3('019_chiusura_conferenza_copianificazione.query', 'CHIUSURA CONF COP', codice_avvio, expected_code=403)
-        self.send3('019_chiusura_conferenza_copianificazione.query', 'CHIUSURA CONF COP', codice_avvio, client=self.client_pian)
+        self.sendCNV('019_chiusura_conferenza_copianificazione.query', 'CHIUSURA CONF COP', codice_avvio, expected_code=403)
+        self.sendCNV('019_chiusura_conferenza_copianificazione.query', 'CHIUSURA CONF COP', codice_avvio, client=self.client_pian)
 
       #   update procedura avvia
       #    "uuid" : "7fc7c9ad-9064-47a9-9cc0-1162c0907ab7",
@@ -174,20 +174,20 @@ class FullFlowTestCase(AbstractSerapideTest):
      # {"operationName":"UpdateProceduraAvvio","variables":{"input":{"proceduraAvvio":{"richiestaIntegrazioni":true},"uuid":"7fc7c9ad-9064-47a9-9cc0-1162c0907ab7"}}
         #richiesta int può creare ultriori azioni
 
-        self.send3('020_richiesta_integrazioni.query', 'CHIUSURA CONF COP', codice_avvio, expected_code=403)
-        self.send3('020_richiesta_integrazioni.query', 'CHIUSURA CONF COP', codice_avvio, client=self.client_pian)
+        self.sendCNV('020_richiesta_integrazioni.query', 'CHIUSURA CONF COP', codice_avvio, expected_code=403)
+        self.sendCNV('020_richiesta_integrazioni.query', 'CHIUSURA CONF COP', codice_avvio, client=self.client_pian)
 
-        self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', expected_code=403)
-        self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', client=self.client_gc)
-        self.send3('021_invio_protocollo_genio_civile.query', 'INVIO PROT GC', codice_avvio, expected_code=403)
-        self.send3('021_invio_protocollo_genio_civile.query', 'INVIO PROT GC', codice_avvio, client=self.client_gc)
+        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', expected_code=403)
+        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', client=self.client_gc)
+        self.sendCNV('021_invio_protocollo_genio_civile.query', 'INVIO PROT GC', codice_avvio, expected_code=403)
+        self.sendCNV('021_invio_protocollo_genio_civile.query', 'INVIO PROT GC', codice_avvio, client=self.client_gc)
 
         #{"operationName":"UploadFile","variables":{"file":null,"codice":"SCND_FI200200017","tipo":"norme_tecniche_attuazione"}
         self.upload(codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE, '003_upload_file.query')
-        self.send3('022_formazione_piano.query', 'FORMAZIONE PIANO', codice_piano)
+        self.sendCNV('022_formazione_piano.query', 'FORMAZIONE PIANO', codice_piano)
 
         # l'azione precedente promuove automaticamente alla fase AVVIO
-        response = self.send3('999_get_piani.query', 'GET PIANI', codice_piano)
+        response = self.sendCNV('999_get_piani.query', 'GET PIANI', codice_piano)
         content = json.loads(response.content)
         fase = content['data']['piani']['edges'][0]['node']['fase']
         self.assertEqual(Fase.AVVIO, Fase.fix_enum(fase), "Fase errata")

@@ -633,27 +633,30 @@ class DeleteRisorsa(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _codice_piano = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _piano = Piano.objects.get(codice=_codice_piano)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsa(piano_aggiornato=_piano, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
 
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _codice_piano = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _piano = Piano.objects.get(codice=_codice_piano)
+
+            # if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+            # rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+            if auth.is_soggetto(info.context.user, _piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsa(piano_aggiornato=_piano, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+
 
 
 class DeleteRisorsaVAS(DeleteRisorsaBase):
@@ -663,36 +666,36 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_vas = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
 
-                    if _risorsa.tipo == 'parere_sca' and \
-                    not rules.test_rule('strt_core.api.parere_sca_ok', info.context.user, _procedura_vas):
-                        return GraphQLError(_("Forbidden"), code=403)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _uuid_vas = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
+            # if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+            if auth.is_soggetto(info.context.user, _procedura_vas.piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
 
-                    if _risorsa.tipo == 'parere_verifica_vas' and \
-                    not rules.test_rule('strt_core.api.parere_verifica_vas_ok', info.context.user, _procedura_vas):
-                        return GraphQLError(_("Forbidden"), code=403)
+                if _risorsa.tipo == TipoRisorsa.PARERE_SCA and \
+                        not auth_vas.parere_sca_ok(info.context.user, _procedura_vas):
+                    return GraphQLError("Risorsa non eliminabile", code=403)
 
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+                if _risorsa.tipo == TipoRisorsa.PARERE_VERIFICA_VAS and \
+                        not auth_vas.parere_verifica_vas_ok(info.context.user, _procedura_vas):
+                    return GraphQLError("Risorsa non eliminabile", code=403)
 
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
-
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 class DeleteRisorsaAdozioneVAS(DeleteRisorsaBase):
 
@@ -701,27 +704,27 @@ class DeleteRisorsaAdozioneVAS(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_vas = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=_uuid_vas)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
 
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsaAdozioneVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _uuid_vas = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=_uuid_vas)
+            if auth.is_soggetto(info.context.user, _procedura_vas.piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
 
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaAdozioneVAS(procedura_vas_aggiornata=_procedura_vas, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class DeleteRisorsaAvvio(DeleteRisorsaBase):
@@ -731,27 +734,25 @@ class DeleteRisorsaAvvio(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_avvio = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _procedura_avvio = ProceduraAvvio.objects.get(uuid=_uuid_avvio)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_avvio.piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsaAvvio(procedura_avvio_aggiornata=_procedura_avvio, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
-
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _uuid_avvio = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _procedura_avvio = ProceduraAvvio.objects.get(uuid=_uuid_avvio)
+            if auth.is_soggetto(info.context.user, _procedura_avvio.piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaAvvio(procedura_avvio_aggiornata=_procedura_avvio, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 class DeleteRisorsaAdozione(DeleteRisorsaBase):
 
@@ -760,26 +761,25 @@ class DeleteRisorsaAdozione(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_adozione = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _procedura_adozione = ProceduraAdozione.objects.get(uuid=_uuid_adozione)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_adozione.piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsaAdozione(procedura_adozione_aggiornata=_procedura_adozione, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _uuid_adozione = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _procedura_adozione = ProceduraAdozione.objects.get(uuid=_uuid_adozione)
+            if auth.is_soggetto(info.context.user, _procedura_adozione.piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaAdozione(procedura_adozione_aggiornata=_procedura_adozione, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class DeleteRisorsaApprovazione(DeleteRisorsaBase):
@@ -789,27 +789,26 @@ class DeleteRisorsaApprovazione(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_approvazione = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=_uuid_approvazione)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_approvazione.piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsaApprovazione(
-                        procedura_approvazione_aggiornata=_procedura_approvazione, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _uuid_approvazione = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=_uuid_approvazione)
+            if auth.is_soggetto(info.context.user, _procedura_approvazione.piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaApprovazione(
+                    procedura_approvazione_aggiornata=_procedura_approvazione, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class DeleteRisorsaPubblicazione(DeleteRisorsaBase):
@@ -819,27 +818,26 @@ class DeleteRisorsaPubblicazione(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_pubblicazione = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _procedura_pubblicazione = ProceduraPubblicazione.objects.get(uuid=_uuid_pubblicazione)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_pubblicazione.piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsaPubblicazione(
-                        procedura_pubblicazione_aggiornata=_procedura_pubblicazione, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _uuid_pubblicazione = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _procedura_pubblicazione = ProceduraPubblicazione.objects.get(uuid=_uuid_pubblicazione)
+            if auth.is_soggetto(info.context.user, _procedura_pubblicazione.piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaPubblicazione(
+                    procedura_pubblicazione_aggiornata=_procedura_pubblicazione, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class DeleteRisorsaCopianificazione(DeleteRisorsaBase):
@@ -849,29 +847,26 @@ class DeleteRisorsaCopianificazione(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_cc = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
-                if rules.test_rule('strt_core.api.can_edit_piano',
-                                   info.context.user,
-                                   _conferenza_copianificazione.piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsaCopianificazione(
-                        conferenza_copianificazione_aggiornata=_conferenza_copianificazione, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _uuid_cc = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
+            if auth.is_soggetto(info.context.user, _conferenza_copianificazione.piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaCopianificazione(
+                    conferenza_copianificazione_aggiornata=_conferenza_copianificazione, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class DeleteRisorsaPianoControdedotto(DeleteRisorsaBase):
@@ -881,29 +876,26 @@ class DeleteRisorsaPianoControdedotto(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_cc = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _piano_controdedotto = PianoControdedotto.objects.get(uuid=_uuid_cc)
-                if rules.test_rule('strt_core.api.can_edit_piano',
-                                   info.context.user,
-                                   _piano_controdedotto.piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsaPianoControdedotto(
-                        piano_controdedotto_aggiornato_aggiornato=_piano_controdedotto, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _uuid_cc = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _piano_controdedotto = PianoControdedotto.objects.get(uuid=_uuid_cc)
+            if auth.is_soggetto(info.context.user, _piano_controdedotto.piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaPianoControdedotto(
+                    piano_controdedotto_aggiornato_aggiornato=_piano_controdedotto, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class DeleteRisorsaPianoRevPostCP(DeleteRisorsaBase):
@@ -913,26 +905,24 @@ class DeleteRisorsaPianoRevPostCP(DeleteRisorsaBase):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _id = input['risorsa_id']
-            _uuid_cc = input['codice']
-            # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
-            try:
-                _piano_rev_post_cp = PianoRevPostCP.objects.get(uuid=_uuid_cc)
-                if rules.test_rule('strt_core.api.can_edit_piano',
-                                   info.context.user,
-                                   _piano_rev_post_cp.piano):
-                    _risorsa = Risorsa.objects.get(uuid=_id)
-                    _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
-                    return DeleteRisorsaPianoRevPostCP(
-                        piano_rev_post_cp_aggiornato=_piano_rev_post_cp, success=_success)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+        # if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
+        if not auth.is_recognizable(info.context.user):
+            return GraphQLError("Utente non autenticato", code=401)
+        # Fetching input arguments
+        _id = input['risorsa_id']
+        _uuid_cc = input['codice']
+        # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
+        try:
+            _piano_rev_post_cp = PianoRevPostCP.objects.get(uuid=_uuid_cc)
+            if auth.is_soggetto(info.context.user, _piano_rev_post_cp.piano):
+                _risorsa = Risorsa.objects.get(uuid=_id)
+                _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
+                return DeleteRisorsaPianoRevPostCP(
+                    piano_rev_post_cp_aggiornato=_piano_rev_post_cp, success=_success)
+            else:
+                return GraphQLError(_("Forbidden"), code=403)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)

@@ -14,7 +14,7 @@ from strt_users.enums import (
     Qualifica)
 
 from .test_data_setup import DataLoader
-from .test_serapide_abs import AbstractSerapideTest
+from .test_serapide_abs import AbstractSerapideTest, dump_result
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,6 @@ class FullFlowTestCase(AbstractSerapideTest):
         )
         self.assertEqual(200, response.status_code, 'GET PROFILES failed')
 
-
         ### Now we should select a profile
         # not really needed
 
@@ -64,13 +63,13 @@ class FullFlowTestCase(AbstractSerapideTest):
             ("descrizione", "Piano di test - VAS PROCEDIMENTO [{}]".format(now)),
             ("soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
         ]:
-            self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, nome, val)
+            self.sendCNV('002_update_piano.query', 'UPDATE PIANO', codice_piano, nome, val)
 
         response = self.upload(codice_piano, TipoRisorsa.DELIBERA, '003_upload_file.query')
 
-        self.send3('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', TipologiaVAS.PROCEDIMENTO.name)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', codice_vas, 'tipologia', TipologiaVAS.PROCEDIMENTO.name)
 
-        response = self.send3('006_promozione.query', 'PROMUOVI PIANO', codice_piano, expected_code=409)
+        response = self.sendCNV('006_promozione.query', 'PROMUOVI PIANO', codice_piano, expected_code=409)
         content = json.loads(response.content)
         errors = content['errors'][0]['data']['errors']
         self.assertEqual(2, len(errors))
@@ -83,7 +82,7 @@ class FullFlowTestCase(AbstractSerapideTest):
         so_err = [{
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_PI][DataLoader.UFF1].uuid.__str__(),
             'qualifica': Qualifica.SCA.name}]
-        self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettiOperanti", so_err, expected_code=404)
+        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettiOperanti", so_err, expected_code=404)
 
         # add soggetto operante AC
         sogg_op = []
@@ -95,6 +94,6 @@ class FullFlowTestCase(AbstractSerapideTest):
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_LU][DataLoader.UFF1].uuid.__str__(),
             'qualifica': Qualifica.SCA.name})
 
-        self.send3('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettiOperanti", sogg_op)
+        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', codice_piano, "soggettiOperanti", sogg_op)
 
         # response = self.send3('006_promozione.query', 'PROMUOVI PIANO', codice_piano)

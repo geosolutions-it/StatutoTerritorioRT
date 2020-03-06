@@ -36,7 +36,7 @@ class AbstractSerapideTest(GraphQLTestCase):
         if Utente.objects.count() == 0:
             DataLoader.loadData()
 
-    def send3(self, file, title, codice, nome_campo='', valore_campo=None, extra_title='', expected_code=200, client=None):
+    def sendCNV(self, file, title, codice, nome_campo='', valore_campo=None, extra_title='', expected_code=200, client=None):
         return self.send(file,
                          title + ' ' + nome_campo,
                          extra_title=extra_title,
@@ -46,6 +46,17 @@ class AbstractSerapideTest(GraphQLTestCase):
                             'codice': codice,
                             'nome_campo': nome_campo,
                             'valore_campo': valore_campo
+                         })
+
+    def sendCXX(self, file, title, codice, nome_codice2, codice2, extra_title='', expected_code=200, client=None):
+        return self.send(file,
+                         title + ' ' + nome_codice2,
+                         extra_title=extra_title,
+                         expected_code=expected_code,
+                         client=client,
+                         replace_args={
+                            'codice': codice,
+                            nome_codice2: codice2,
                          })
 
     def send(self, file, title, extra_title='', expected_code=200, replace_args={}, client=None):
@@ -104,9 +115,7 @@ class AbstractSerapideTest(GraphQLTestCase):
         dump_result('UPLOAD FILE', response)
         self.assertEqual(expected_code, response.status_code, "upload " + tipo.name  + ' failed')
         print("UPLOAD {tipo}: ({code}) ^^^^^^^^^^^^^^^^^^^^".format(tipo=tipo.name, code=response.status_code))
-        return response
-
-
+        return os.path.basename(tmp_filename),response
 
     def create_piano(self, ipa, expected_code=200, extra_title=''):
         return self.send('001_create_piano.query', 'CREATE PIANO', extra_title, expected_code, {'IPA': ipa})
