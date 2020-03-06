@@ -118,8 +118,9 @@ def is_soggetto_proponente(utente, piano:Piano):
         exists()
 
 def is_soggetto(utente, piano:Piano):
-    return is_soggetto_operante(utente, piano) or is_soggetto_proponente(utente, piano)
-
+    return is_soggetto_operante(utente, piano) or \
+           is_soggetto_proponente(utente, piano) or \
+           has_qualifica(utente, piano.ente, Qualifica.RESP)
 
 @rules.predicate
 def can_access_piano(user, piano):
