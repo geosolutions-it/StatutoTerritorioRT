@@ -42,7 +42,9 @@ from serapide_core.api.graphene.mutations import (
 
 from strt_users.models import (
     Utente,
-    QualificaUfficio)
+    Qualifica,
+    QualificaUfficio,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +95,7 @@ class Query(object):
 
     user_choices = graphene.Field(types.UtenteChoiceNode)
 
-    uffici = DjangoFilterConnectionField(types.QualificaUfficioNode)
+    uffici = graphene.List(types.QualificaUfficioNode, qualifica=graphene.String(), ipa=graphene.String())
 
     # soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
     #                                     filterset_class=types.SoggettoOperanteFilter)
@@ -131,6 +133,23 @@ class Query(object):
             return None
         else:
             return info.context.user
+
+
+    def resolve_uffici(self, info, qualifica=None, ipa=None, **args):
+        # Warning this is not currently paginated
+        qs = QualificaUfficio.objects
+
+        if ipa:
+            qs = qs.filter(ufficio__ente__ipa=ipa)
+
+        if qualifica:
+            qualifica = Qualifica.fix_enum(qualifica, none_on_error=True)
+            if qualifica:
+                qs = qs.filter(qualifica=qualifica)
+            else:
+                qs = qs.none()
+
+        return qs.all()
 
     def resolve_tipologia_conferenza_copianificazione(self, info):
         return [enums.TipologiaConferenzaCopianificazione(value=t.name, label=t.value)

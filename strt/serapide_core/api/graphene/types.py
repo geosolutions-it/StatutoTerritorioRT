@@ -641,7 +641,7 @@ class UfficioNode(DjangoObjectType):
     class Meta:
         model = Ufficio # ufficio, qualifica
         filter_fields = ['uuid', 'nome', 'ente', 'ente__ipa']
-        interfaces = (relay.Node, )
+        # interfaces = (relay.Node, )
 
 
 class QualificaUfficioNode(DjangoObjectType):
@@ -650,7 +650,7 @@ class QualificaUfficioNode(DjangoObjectType):
         model = QualificaUfficio # ufficio, qualifica
         filter_fields = ['qualifica', 'ufficio']
         convert_choices_to_enum = False
-        interfaces = (relay.Node, )
+        # interfaces = (relay.Node, )
 
     def resolve_qualifica(self, info, **args):
         return self.qualifica.name
