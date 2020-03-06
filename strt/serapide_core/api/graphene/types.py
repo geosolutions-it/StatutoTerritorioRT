@@ -471,6 +471,10 @@ class ProceduraVASNode(DjangoObjectType):
             _risorsa = self.risorse.filter(tipo='vas_semplificata').first()
         return _risorsa
 
+    def resolve_tipo(self, info, **args):
+        return self.tipologia.name
+
+
     class Meta:
         model = ProceduraVAS
         # Allow for some more advanced filtering here
