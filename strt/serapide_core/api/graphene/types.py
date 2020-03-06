@@ -570,7 +570,7 @@ class SoggettoOperanteFilter(django_filters.FilterSet):
         fields = ['id', 'piano', 'qualifica']
 
         def qualifica_filter(self, queryset, name, val):
-            logger.warning("*** FILTERING SOGGETTO OPERANTE BY QUALIFICA")
+            # logger.warning("*** FILTERING SOGGETTO OPERANTE BY QUALIFICA")
             return queryset.filter(qualifica_ufficio__qualifica=val)
 
 
@@ -636,22 +636,24 @@ class PianoControdedottoNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
-class QualificaUfficioNode(DjangoObjectType):
-
-    class Meta:
-        model = QualificaUfficio # ufficio, qualifica
-        filter_fields = ['qualifica, ufficio']
-        convert_choices_to_enum = False
-
-    def resolve_qualifica(self, info, **args):
-        return self.qualifica.name
-
-
 class UfficioNode(DjangoObjectType):
 
     class Meta:
         model = Ufficio # ufficio, qualifica
-        filter_fields = ['uuid', 'name', 'ente']
+        filter_fields = ['uuid', 'nome', 'ente', 'ente__ipa']
+        interfaces = (relay.Node, )
+
+
+class QualificaUfficioNode(DjangoObjectType):
+
+    class Meta:
+        model = QualificaUfficio # ufficio, qualifica
+        filter_fields = ['qualifica', 'ufficio']
+        convert_choices_to_enum = False
+        interfaces = (relay.Node, )
+
+    def resolve_qualifica(self, info, **args):
+        return self.qualifica.name
 
 
 class PianoRevPostCPNode(DjangoObjectType):

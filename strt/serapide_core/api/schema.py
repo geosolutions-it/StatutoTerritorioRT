@@ -41,8 +41,8 @@ from serapide_core.api.graphene.mutations import (
 )
 
 from strt_users.models import (
-    Utente
-)
+    Utente,
+    QualificaUfficio)
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +92,8 @@ class Query(object):
     piano_rev_post_cp = DjangoFilterConnectionField(types.PianoRevPostCPNode)
 
     user_choices = graphene.Field(types.UtenteChoiceNode)
+
+    uffici = DjangoFilterConnectionField(types.QualificaUfficioNode)
 
     # soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
     #                                     filterset_class=types.SoggettoOperanteFilter)
