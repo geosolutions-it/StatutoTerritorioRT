@@ -24,10 +24,11 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
+from strt_users.enums import Profilo
 from strt_users.models import (
     Ente, Ufficio,
     Qualifica,
-    QualificaUfficio)
+    QualificaUfficio, ProfiloUtente)
 
 from serapide_core.helpers import (
     is_RUP,
@@ -507,23 +508,29 @@ class DeletePiano(graphene.Mutation):
     codice_piano = graphene.String()
 
     def mutate(self, info, **input):
-        if info.context.user and is_RUP(info.context.user):
+        if not ProfiloUtente.objects\
+                .filter(utente=info.context.user, profilo=Profilo.ADMIN_ENTE)\
+                .exists():
+            return GraphQLError("Utente non abilitato alle eliminazioni di piano", code=403)
 
-            # Fetching input arguments
-            _id = input['codice_piano']
-            try:
-                _piano = Piano.objects.get(codice=_id)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-                rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-                    _piano.delete()
+        # Fetching input arguments
+        _id = input['codice_piano']
+        try:
+            _piano = Piano.objects.get(codice=_id)
+            # if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
+            # rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
+            if ProfiloUtente.objects\
+                    .filter(utente=info.context.user, profilo=Profilo.ADMIN_ENTE, ente=_piano.ente)\
+                    .exists():
+                _piano.delete()
+                return DeletePiano(success=True, codice_piano=_id)
+            else:
+                return GraphQLError("Utente non abilitato in questo ente", code=403)
 
-                    return DeletePiano(success=True, codice_piano=_id)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
-
-        return DeletePiano(success=False)
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
 
 
 class PromozionePiano(graphene.Mutation):

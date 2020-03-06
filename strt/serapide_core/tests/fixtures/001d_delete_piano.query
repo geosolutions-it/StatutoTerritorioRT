@@ -1,0 +1,16 @@
+{
+   "operationName" : null,
+
+   "variables" : {
+      "codice" : "{codice}"
+   },
+
+   "query" : "mutation ($codice: String!) {
+  deletePiano(codicePiano: $codice) {
+    success
+    codicePiano
+    __typename
+  }
+}
+"
+}

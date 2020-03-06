@@ -1226,8 +1226,8 @@ def delete_piano_associations(sender, instance, **kwargs):
     for _a in Azione.objects.filter(piano=instance):
         _a.delete()
 
-    for _t in Token.objects.filter(piano=instance): # TODO
-        _t.token.delete()
+    # for _t in Token.objects.filter(piano=instance): # TODO
+    #     _t.token.delete()
 
 
 def needsExecution(action:Azione):
