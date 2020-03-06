@@ -82,13 +82,23 @@ class EnteUserMembershipFilter(django_filters.FilterSet):
     @property
     def qs(self):
         # The query context can be found in self.request.
-        if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
-            if is_RUP(self.request.user):
+        if is_recognizable(self.request.user):
+            if ProfiloUtente.objects.filter(utente=self.request.user, profilo__in=[Profilo.ADMIN_PORTALE, Profilo.RESP_RUP]).exists():
                 return super(EnteUserMembershipFilter, self).qs.all()
-            else:
-                return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
-        else:
-            return super(EnteUserMembershipFilter, self).qs.none()
+            elif ProfiloUtente.objects.filter(utente=self.request.user, profilo__in=[Profilo.ADMIN_ENTE, Profilo.OPERATORE]).exists():
+                profili = ProfiloUtente.objects.filter(utente=self.request.user, profilo__in=[Profilo.ADMIN_ENTE, Profilo.OPERATORE])
+                enti = [p.ente.id for p in profili]
+                return super(EnteUserMembershipFilter, self).qs.filter(id__in=enti)
+
+        return super(EnteUserMembershipFilter, self).qs.none()
+        #
+        # if rules.test_rule('strt_core.api.can_access_private_area', self.request.user):
+        #     if is_RUP(self.request.user):
+        #         return super(EnteUserMembershipFilter, self).qs.all()
+        #     else:
+        #         return super(EnteUserMembershipFilter, self).qs.filter(usermembership__member=self.request.user)
+        # else:
+        #     return super(EnteUserMembershipFilter, self).qs.none()
 
 
 class CharInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
