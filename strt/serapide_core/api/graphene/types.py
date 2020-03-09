@@ -471,7 +471,7 @@ class ProceduraVASNode(DjangoObjectType):
             _risorsa = self.risorse.filter(tipo='vas_semplificata').first()
         return _risorsa
 
-    def resolve_tipo(self, info, **args):
+    def resolve_tipologia(self, info, **args):
         return self.tipologia.name
 
 
@@ -493,6 +493,9 @@ class ProceduraAdozioneVASNode(DjangoObjectType):
     ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseAdozioneVASType)
 
+    def resolve_tipologia(self, info, **args):
+        return self.tipologia.name
+
     class Meta:
         model = ProceduraAdozioneVAS
         # Allow for some more advanced filtering here
@@ -508,6 +511,10 @@ class ProceduraAvvioNode(DjangoObjectType):
 
     ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseAvvioType)
+
+    def resolve_conferenza_copianificazione(self, info, **args):
+        return self.conferenza_copianificazione.name if self.conferenza_copianificazione else None
+
 
     class Meta:
         model = ProceduraAvvio
