@@ -24,10 +24,11 @@ from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
-from strt_users.enums import  (
+from serapide_core.api.auth.user import is_soggetto_operante, has_qualifica
+from strt_users.enums import (
     Qualifica,
     Profilo,
-)
+    QualificaRichiesta)
 
 from strt_users.models import (
     Ente,
@@ -137,6 +138,7 @@ class AzioneNode(DjangoObjectType):
     fase = graphene.String()
     label = graphene.String()
     tooltip = graphene.String()
+    eseguibile = graphene.Boolean()
 
     def resolve_fase(self, info, **args):
         return FASE_AZIONE[self.tipologia] if self.tipologia in FASE_AZIONE else None
@@ -149,6 +151,20 @@ class AzioneNode(DjangoObjectType):
 
     def resolve_qualifica_richiesta(self, info, **args):
         return self.qualifica_richiesta.name
+
+    def resolve_eseguibile(self, info, **args):
+        qreq = self.qualifica_richiesta
+        user = info.context.user
+        piano = self.piano
+
+        if is_soggetto_operante(user, piano, qualifica_richiesta=qreq):
+            return True
+
+        if qreq == QualificaRichiesta.COMUNE:
+            if has_qualifica(user, piano.ente, Qualifica.RESP):
+                return True
+
+        return False
 
     class Meta:
         model = Azione
