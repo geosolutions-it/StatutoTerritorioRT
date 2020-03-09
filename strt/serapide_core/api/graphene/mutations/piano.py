@@ -114,28 +114,32 @@ def ensure_avvio_objects(piano):
     piano.save()
 
 
-def check_and_promote(_piano, info):
+def check_and_promote(piano:Piano, info):
+    logger.warning('Check promozione per piano [{c}]:"{d}"  '.format(c=piano.codice,d=piano.descrizione))
 
-    eligible, errs = auth_piano.is_eligible_for_promotion(_piano)
+    eligible, errs = auth_piano.is_eligible_for_promotion(piano)
     if eligible:
+        logger.warning('Promozione Piano [{c}]:"{d}"'.format(c=piano.codice, d=piano.descrizione))
 
-        if _piano.fase ==  Fase.ANAGRAFICA:
-            ensure_avvio_objects(_piano)
+        if piano.fase ==  Fase.ANAGRAFICA:
+            ensure_avvio_objects(piano)
 
-        _piano.fase = _fase = _piano.fase.getNext()
-        _piano.save()
+        piano.fase = _fase = piano.fase.getNext()
+        piano.save()
 
-        logger.warning("PIANO PROMOSSO {}".format(_piano))
+        logger.warning("PIANO PROMOSSO {}".format(piano))
 
         # Notify Users
         piano_phase_changed.send(
             sender=Piano,
             user=info.context.user,
-            piano=_piano,
+            piano=piano,
             message_type="piano_phase_changed")
 
-        promuovi_piano(_fase, _piano)
+        promuovi_piano(_fase, piano)
         return True, []
+    else:
+        logger.warning('Piano [{c}]:"{d}" non promosso'.format(c=piano.codice, d=piano.descrizione))
 
     return False, errs
 
@@ -453,7 +457,7 @@ class UpdatePiano(relay.ClientIDMutation):
                 # if not auth.is_soggetto(info.context.user, _piano):
                 #     return GraphQLError(_("Forbidden - L'utente non è soggetto"), code=403)
 
-                _soggetti_operanti = _piano_input.pop('soggetti_operanti')
+                _soggetti_operanti = _piano_input.pop('soggetti_operanti') # potrebbe essere vuoto
 
                 old_so_qs = SoggettoOperante.objects.filter(piano=_piano)
                 old_so_dict = {so.qualifica_ufficio.ufficio.uuid.__str__() + "_" + so.qualifica_ufficio.qualifica.name: so

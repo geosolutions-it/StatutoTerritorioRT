@@ -1220,6 +1220,7 @@ def ensure_fase(check:Fase, expected:Fase):
 
 
 def chiudi_azione(azione:Azione, data=None, set_data=True):
+    log.warning('Chiusura azione [{a}]:{qr} in piano [{p}]'.format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
     azione.stato = STATO_AZIONE.nessuna
     if set_data:
         azione.data = data if data else datetime.now(timezone.get_current_timezone())
@@ -1227,6 +1228,7 @@ def chiudi_azione(azione:Azione, data=None, set_data=True):
 
 
 def crea_azione(azione:Azione):
+    log.warning('Creazione azione [{a}]:{qr} in piano [{p}]'.format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
     if azione.order == None:
         _order = Azione.count_by_piano(azione.piano)
         azione.order = _order
