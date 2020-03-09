@@ -247,7 +247,7 @@ class CreatePiano(relay.ClientIDMutation):
                 _tipologia = TipologiaPiano.fix_enum(_tipologia, none_on_error=True)
                 _piano_data['tipologia'] = _tipologia
 
-            _piano_data['user'] = info.context.user
+            _piano_data['responsabile'] = info.context.user
 
             # Crea piano
             _piano = Piano()
@@ -404,7 +404,8 @@ class UpdatePiano(relay.ClientIDMutation):
         try:
 
             for fixed_field in ['codice', 'data_creazione', 'data_accettazione', 'data_avvio',
-                                'data_approvazione', 'ente', 'fase', 'tipologia', 'data_protocollo_genio_civile']:
+                                'data_approvazione', 'ente', 'fase', 'tipologia', 'data_protocollo_genio_civile',
+                                'responsabile']:
                 if fixed_field in _piano_input:
                     logger.warning('Il campo "{}" non può essere modificato attraverso questa operazione'.format(fixed_field))
                     _piano_input.pop(fixed_field)

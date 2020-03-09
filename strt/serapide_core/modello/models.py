@@ -216,30 +216,6 @@ class Piano(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='pubblicazione')
 
-    # autorita_competente_vas = models.ManyToManyField(
-    #     Contatto,
-    #     related_name='autorita_competente_vas',
-    #     through='AutoritaCompetenteVAS'
-    # )
-    #
-    # autorita_istituzionali = models.ManyToManyField(
-    #     Contatto,
-    #     related_name='autorita_istituzionali',
-    #     through='AutoritaIstituzionali'
-    # )
-    #
-    # altri_destinatari = models.ManyToManyField(
-    #     Contatto,
-    #     related_name='altri_destinatari',
-    #     through='AltriDestinatari'
-    # )
-    #
-    # soggetti_sca = models.ManyToManyField(
-    #     Contatto,
-    #     related_name='soggetti_sca',
-    #     through='SoggettiSCA'
-    # )
-    #
     soggetto_proponente = models.ForeignKey(
         to=QualificaUfficio,
         on_delete=models.DO_NOTHING,
@@ -258,14 +234,14 @@ class Piano(models.Model):
         # null=True
     )
 
-    # user = models.ForeignKey(
-    #     to=Utente,
-    #     on_delete=models.CASCADE,
-    #     verbose_name=_('user'),
-    #     default=None,
-    #     blank=True,
-    #     null=True
-    # )
+    responsabile = models.ForeignKey(
+        to=Utente,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+        default=None,
+        blank=True,
+        null=True
+    )
 
     def chiudi_pendenti(self, attesa=True, necessaria=True):
         # - Complete Current Actions

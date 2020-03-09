@@ -47,7 +47,7 @@ fragment Piano on PianoNode {
     __typename
   }
   fase
-  user {
+  responsabile {
     ...User
     __typename
   }

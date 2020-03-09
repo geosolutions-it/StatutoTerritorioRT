@@ -675,7 +675,7 @@ class PianoRevPostCPNode(DjangoObjectType):
 
 class PianoNode(DjangoObjectType):
 
-    user = graphene.Field(UtenteNode)
+    responsabile = graphene.Field(UtenteNode)
     ente = graphene.Field(EnteNode)
     storico_fasi = graphene.List(FasePianoStoricoType)
     risorsa = DjangoFilterConnectionField(RisorsePianoType)
