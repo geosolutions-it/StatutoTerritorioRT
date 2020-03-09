@@ -58,10 +58,12 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
 
         now = _get_datetime()
 
+        prop = DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__()
+
         for nome, val in [
             ("dataDelibera", now.isoformat()),
             ("descrizione", "Piano di test - Eliminazione Piano"),
-            ("soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
+            ("soggettoProponenteUuid", prop)
         ]:
             self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)
 
@@ -85,7 +87,8 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
             'qualifica': Qualifica.SCA.name})
 
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
-        # self.sendCNV('006_promozione.query', 'PROMUOVI PIANO', self.codice_piano)
+
+        # ===  CONTROLLA LISTA SOGGETTI
 
         response = self.sendCNV('999_get_piani.query', 'GET PIANO', self.codice_piano)
         content = json.loads(response.content)
@@ -94,6 +97,7 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
         so = piano['soggettiOperanti']
         self.assertEqual(4, len(so), 'sos len')
 
+        # ===  AGGIORNA LISTA SOGGETTI
 
         sogg_op = []
         sogg_op.append({
@@ -105,12 +109,8 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
         sogg_op.append({
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_PI][DataLoader.UFF1].uuid.__str__(),
             'qualifica': Qualifica.AC.name})
-        # sogg_op.append({
-        #     'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_LU][DataLoader.UFF1].uuid.__str__(),
-        #     'qualifica': Qualifica.SCA.name})
 
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
-        # self.sendCNV('006_promozione.query', 'PROMUOVI PIANO', self.codice_piano)
 
         response = self.sendCNV('999_get_piani.query', 'GET PIANO', self.codice_piano)
         content = json.loads(response.content)
@@ -119,3 +119,31 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
         so = piano['soggettiOperanti']
         self.assertEqual(3, len(so), 'sos len')
 
+        # === SVUOTA LISTA SOGGETTI
+
+        sogg_op = []
+
+        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
+
+        response = self.sendCNV('999_get_piani.query', 'GET PIANO', self.codice_piano)
+        content = json.loads(response.content)
+
+        piano = content['data']['piani']['edges'][0]['node']
+        so = piano['soggettiOperanti']
+        self.assertEqual(0, len(so), 'sos len')
+
+        # ===  CHECK PROPONENTE
+
+        proponente_read = piano['soggettoProponente']['ufficio']['uuid']
+        self.assertEqual(prop, proponente_read, 'Proponente errato')
+
+        # ===  ELIMINA PROPONENTE
+
+        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettoProponenteUuid", '')
+
+        response = self.sendCNV('999_get_piani.query', 'GET PIANO', self.codice_piano)
+        content = json.loads(response.content)
+
+        piano = content['data']['piani']['edges'][0]['node']
+        proponente_read = piano['soggettoProponente']
+        self.assertIsNone(proponente_read, 'Proponente non vuoto')

@@ -434,15 +434,19 @@ class UpdatePiano(relay.ClientIDMutation):
                     return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
 
                 _soggetto_proponente_uuid = _piano_input.pop('soggetto_proponente_uuid')
-                ufficio = Ufficio.objects.filter(uuid=_soggetto_proponente_uuid).get()
-                if not ufficio:
-                    return GraphQLError(_("Not found - Ufficio proponente sconosciuto"), code=404)
+                if _soggetto_proponente_uuid:
+                    ufficio = Ufficio.objects.filter(uuid=_soggetto_proponente_uuid).get()
+                    if not ufficio:
+                        return GraphQLError(_("Not found - Ufficio proponente sconosciuto"), code=404)
 
-                qu = QualificaUfficio.objects.filter(ufficio=ufficio, qualifica=Qualifica.RESP).get()
-                if not qu:
-                    return GraphQLError(_("Not found - L'ufficio proponente non è responsabile di Comune"), code=404)
+                    qu = QualificaUfficio.objects.filter(ufficio=ufficio, qualifica=Qualifica.RESP).get()
+                    if not qu:
+                        return GraphQLError(_("Not found - L'ufficio proponente non è responsabile di Comune"), code=404)
 
-                _piano.soggetto_proponente = qu
+                    _piano.soggetto_proponente = qu
+
+                else:
+                    _piano.soggetto_proponente = None
 
             if 'soggetti_operanti' in _piano_input:
 
@@ -450,38 +454,37 @@ class UpdatePiano(relay.ClientIDMutation):
                 #     return GraphQLError(_("Forbidden - L'utente non è soggetto"), code=403)
 
                 _soggetti_operanti = _piano_input.pop('soggetti_operanti')
-                if _soggetti_operanti:
 
-                    old_so_qs = SoggettoOperante.objects.filter(piano=_piano)
-                    old_so_dict = {so.qualifica_ufficio.ufficio.uuid.__str__() + "_" + so.qualifica_ufficio.qualifica.name: so
-                                   for so in old_so_qs}
-                    add_so = []
+                old_so_qs = SoggettoOperante.objects.filter(piano=_piano)
+                old_so_dict = {so.qualifica_ufficio.ufficio.uuid.__str__() + "_" + so.qualifica_ufficio.qualifica.name: so
+                               for so in old_so_qs}
+                add_so = []
 
-                    for so in _soggetti_operanti:
-                        uff = Ufficio.objects.filter(uuid=so.ufficio_uuid).get() # TODO: 404
-                        qualifica = Qualifica[so.qualifica]                      # TODO: 404
-                        hash = so.ufficio_uuid + "_" + so.qualifica
-                        if hash in old_so_dict:
-                            del old_so_dict[hash]
-                        else:
-                            qu = QualificaUfficio.objects \
-                                .filter(ufficio=uff, qualifica=qualifica).get()  # TODO: 404
-                            new_so = SoggettoOperante(qualifica_ufficio=qu, piano=_piano)
-                            add_so.append(new_so)
+                for so in _soggetti_operanti:
+                    uff = Ufficio.objects.filter(uuid=so.ufficio_uuid).get() # TODO: 404
+                    qualifica = Qualifica[so.qualifica]                      # TODO: 404
+                    hash = so.ufficio_uuid + "_" + so.qualifica
+                    if hash in old_so_dict:
+                        del old_so_dict[hash]
+                    else:
+                        qu = QualificaUfficio.objects \
+                            .filter(ufficio=uff, qualifica=qualifica).get()  # TODO: 404
+                        new_so = SoggettoOperante(qualifica_ufficio=qu, piano=_piano)
+                        add_so.append(new_so)
 
-                    # pre-check
-                    if not auth.has_qualifica(info.context.user, _ente, Qualifica.RESP):
-                        for so in old_so_dict.values() + add_so:
-                            if so.qualifica_ufficio.qualifica in [Qualifica.AC, Qualifica.SCA]:
-                                return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
+                # pre-check
+                if not auth.has_qualifica(info.context.user, _ente, Qualifica.RESP):
+                    for so in old_so_dict.values() + add_so:
+                        if so.qualifica_ufficio.qualifica in [Qualifica.AC, Qualifica.SCA]:
+                            return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
 
-                    ## remove all SO left in the old_so_dict since they are not in the input list
-                    for so in old_so_dict.values():
-                        so.delete()
+                ## remove all SO left in the old_so_dict since they are not in the input list
+                for so in old_so_dict.values():
+                    so.delete()
 
-                    # create new SO
-                    for so in add_so:
-                        so.save()
+                # create new SO
+                for so in add_so:
+                    so.save()
 
             if 'numero_protocollo_genio_civile' in _piano_input:
                 if not auth.is_soggetto_operante(info.context.user, _piano, Qualifica.GC):
