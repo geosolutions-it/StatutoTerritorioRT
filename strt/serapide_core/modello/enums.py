@@ -61,6 +61,9 @@ class TipoRisorsa(SerapideEnum):
     INTEGRAZIONI = 'integrazioni'
     NORME_TECNICHE_ATTUAZIONE = 'norme_tecniche_attuazione'
 
+    # adozione
+    PARERE_ADOZIONE_SCA = 'parere_adozione_sca'
+
 
 TIPOLOGIA_RISORSA = {
     TipoRisorsa.DELIBERA.value: {
