@@ -95,7 +95,7 @@ class Query(object):
 
     user_choices = graphene.Field(types.UtenteChoiceNode)
 
-    uffici = graphene.List(types.QualificaUfficioNode, qualifica=graphene.String(), ipa=graphene.String())
+    uffici = graphene.List(types.QualificaUfficioNode, qualifica=graphene.String(), ipa=graphene.String(), qualifiche=graphene.List(graphene.String))
 
     # soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
     #                                     filterset_class=types.SoggettoOperanteFilter)
@@ -135,7 +135,7 @@ class Query(object):
             return info.context.user
 
 
-    def resolve_uffici(self, info, qualifica=None, ipa=None, **args):
+    def resolve_uffici(self, info, qualifica=None, ipa=None, qualifiche=None, **args):
         # Warning this is not currently paginated
         qs = QualificaUfficio.objects
 
@@ -148,6 +148,9 @@ class Query(object):
                 qs = qs.filter(qualifica=qualifica)
             else:
                 qs = qs.none()
+        elif qualifiche:
+            q_ok = [Qualifica.fix_enum(q, none_on_error=True) for q in qualifiche if Qualifica.fix_enum(q, none_on_error=True)]
+            qs = qs.filter(qualifica__in=q_ok)
 
         return qs.all()
 
@@ -198,7 +201,7 @@ class Mutation(object):
     chiusura_conferenza_copianificazione = avvio.ChiusuraConferenzaCopianificazione.Field()
     formazione_del_piano = avvio.FormazionePiano.Field()
 
-    create_procedura_adozione = adozione.CreateProceduraAdozione.Field()
+    # create_procedura_adozione = adozione.CreateProceduraAdozione.Field()
     update_procedura_adozione = adozione.UpdateProceduraAdozione.Field()
     trasmissione_adozione = adozione.TrasmissioneAdozione.Field()
     trasmissione_osservazioni = adozione.TrasmissioneOsservazioni.Field()
