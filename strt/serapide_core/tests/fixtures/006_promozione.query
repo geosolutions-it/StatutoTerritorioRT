@@ -115,6 +115,7 @@ fragment Azioni on AzioneNode {
       tipologia
       stato
       qualificaRichiesta
+      eseguibile
       data
       uuid
       label
