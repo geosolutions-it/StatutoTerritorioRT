@@ -14,9 +14,9 @@ import NuovoPiano from './pages/NuovoPiano'
 import CreaAnagrafica from './pages/CreaAnagrafica'
 import Piano from './pages/Piano'
 import Injector from './components/Injector'
-import ThemeInjector from './components/InjectSerapideTheme'
+// import ThemeInjector from './components/InjectSerapideTheme'
 import NavBar from './components/NavigationBar'
-import {globalAuth} from './autorizzazioni'
+import { setAuthProperty} from './autorizzazioni'
 
 import  {ToastContainer} from 'react-toastify'
 import {Query} from 'react-apollo'
@@ -24,16 +24,23 @@ import ReactTooltip from 'react-tooltip'
 
 import '../node_modules/react-toastify/dist/ReactToastify.min.css'
 import {GET_UTENTE} from "./graphql"
-import {pollingInterval} from 'utils'
+import * as Utils from './utils';
 export default () => {
 return (
     <ApolloProvider client={client}>
         <ToastContainer/>
         
-        <Query query={GET_UTENTE} pollInterval={pollingInterval}>
-        {({loading, data: {utenti: {edges = [{}]} = {}} = {}, error}) => {
-            const {node: utente = {}} = edges[0]
-            const {attore: themeClass, role: {type: ruolo} = {} } = utente
+        <Query query={GET_UTENTE}>
+        {({loading, data: { auth: {profili = []} = {}, utenti: {edges: [{node: utente = {}} = {}] = []} = {}} = {}, error}) => {
+
+            const canCreatePiano = Utils.isAdminEnte(profili);
+            const enti = Utils.getAdminEnti(profili);
+            console.log(profili, utente, enti);
+            
+            setAuthProperty("utente", utente)
+            setAuthProperty("profile", profili)
+            setAuthProperty("isAdminEnte", canCreatePiano)
+            setAuthProperty("entiAdmin", enti)
             
             if (loading) return (
                 <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
@@ -43,14 +50,12 @@ return (
                     </div>
                 </div>
                 </div>)
-                globalAuth._attore_attivo = themeClass
-                globalAuth._ruolo = ruolo
-            
+    
             return(
                 <React.Fragment>
-                    <ThemeInjector themeClass={themeClass}/>
+                    {/* <ThemeInjector themeClass={themeClass}/> */}
                     <Injector el="user-navbar-list">
-                        <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount} attore={utente.attore} roleType={ruolo}/>
+                        <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount} attore={utente.attore} canCreatePiano/>
                     </Injector>
                     <ReactTooltip></ReactTooltip>
                     <div className="serapide-content serapide-top-offset position-relative overflow-auto">
@@ -59,9 +64,9 @@ return (
                                     <Route  path="/piano/:code" render={(props) => <Piano utente={utente} {...props}/>} />
                                     <Route  path="/crea_anagrafica/:code" component={CreaAnagrafica}/>
                                     <Route  path="/nuovo_piano/" >
-                                    {utente && utente.role && utente.role.type === "RUP" && <NuovoPiano utente={utente}></NuovoPiano>}
+                                    {canCreatePiano && <NuovoPiano enti={enti}></NuovoPiano>}
                                     </Route>             
-                                    <Route  path="/" render={(props) => <Dashboard utente={utente} {...props}/>}/>
+                                    <Route  path="/" render={(props) => <Dashboard canCreatePiano utente={utente} {...props}/>}/>
                                 </Switch>
                             </Router>
                     </div>

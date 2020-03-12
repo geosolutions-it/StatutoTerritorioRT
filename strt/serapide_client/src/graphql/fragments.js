@@ -1,16 +1,50 @@
 import gql from "graphql-tag";
-/** Fragment sheare field between queries */
+/** Fragment share field between queries */
 export const USER = gql`
-fragment User on AppUserNode {
-    id
-    email
-    fiscalCode
-    firstName
-    lastName
-    dateJoined
-    alertsCount
+fragment User on UtenteNode {
+      fiscalCode
+    	firstName
+    	lastName
+    	email
+    	isStaff
+      unreadThreadsCount
+      unreadMessages {
+          thread {
+            id
+            subject
+            absoluteUrl
+          }
+          sender {
+            email
+            firstName
+            lastName
+          }
+          sentAt
+          content
+        }
 }
 `
+export const PROFILES = gql`
+fragment Profiles on ProfiloChoiceNode {
+      ente{
+        ipa
+        nome
+        descrizione
+        tipo
+      }
+      profilo
+      qualifiche{
+        qualifica
+        ufficio
+        qualificaUfficio{
+          qualifica
+        }
+      }
+    
+    }
+`
+
+
 export const RISORSA = gql`
 fragment Risorsa on RisorsaNode {
     nome
@@ -29,27 +63,34 @@ fragment Risorsa on RisorsaNode {
 }
 `
 export const CONTATTO = gql`
-fragment Contatto on ContattoNode{
-        nome
-        tipologia
-        uuid
+fragment Contatto on QualificaUfficioNode{
+        id
+        qualifica 
+        ufficio{
+          uuid
+          descrizione
+          email
+          nome
+        ente{
+          descrizione
+          ipa
+          nome
+    }
+  }
 }
 `
 export const AZIONI = gql`
-fragment Azioni on AzioneNodeConnection {
-  edges {
-    node {
+fragment Azioni on AzioneNode {
       order
       tipologia
       stato
-      attore
+      qualificaRichiesta
       data
       uuid
       label
       tooltip
       fase
-    }
-  }
+      eseguibile
 }
 `
 export const RISORSE = gql`
@@ -65,11 +106,7 @@ ${RISORSA}`
 export const AZIONI_PIANO = gql`
 fragment AzioniPiano on PianoNode {
   codice
-  fase{
-        nome
-        codice
-        descrizione
-  }  
+  fase 
   azioni {
       ...Azioni
   }
@@ -91,24 +128,31 @@ fragment VAS on ProceduraVASNode {
         assoggettamento
         nonNecessaria
         piano {
-            codice
-            autoritaCompetenteVas{
-                edges{
-                  node{
-                    ...Contatto
+          codice
+            soggettoProponente {
+              qualifica
+              ufficio {
+                  uuid
+                  nome
+                  ente {
+                    ipa
+                    nome
                   }
                 }
+              }
+          soggettiOperanti {
+            qualificaUfficio {
+              qualifica
+                ufficio {
+                uuid
+                nome
+                ente {
+                    ipa
+                    nome
+                  }
+              }
             }
-            soggettiSca {
-                edges{
-                    node{
-                        ...Contatto
-                    }
-                }
-            }
-            soggettoProponente {
-              ...Contatto
-            }
+          }
         }
         risorse(archiviata: false){
             ...Risorse
@@ -121,7 +165,6 @@ fragment VAS on ProceduraVASNode {
         }
 }
 ${RISORSE}
-${CONTATTO}
 `
 export const PIANO = gql`
 fragment Piano on PianoNode {
@@ -145,59 +188,47 @@ fragment Piano on PianoNode {
         ...Azioni
     }
     ente {
-      code
-      name
-      type {
-        tipoente: name
-      }
+      ipa
+      nome
+      tipo
     }
-    fase{
-        nome
-        codice
-        descrizione
-    }
-    user{
+    fase
+    responsabile{
         ...User
     }
     risorse(archiviata: false){
         ...Risorse
       }
-    autoritaCompetenteVas{
-        edges{
-          node{
-            ...Contatto
-          }
-        }
-    }
-    soggettiSca{
-        edges{
-          node{
-            ...Contatto
-          }
-        }
-    }
-    autoritaIstituzionali{
-                edges{
-                    node{
-                        ...Contatto
-                    }
-                }
-            }
-            altriDestinatari{
-                edges{
-                    node{
-                        ...Contatto
-                    }
-                }
-            }
-    
     soggettoProponente {
-      ...Contatto
+        qualifica
+        ufficio {
+          uuid
+          nome
+          ente{
+              ipa
+               nome
+          }
+        }
     }
+    soggettiOperanti {
+      qualificaUfficio{
+					          qualifica
+          ufficio{
+            uuid
+            nome
+            ente {
+              ipa
+               nome
+            }
+          }
+        }
+  }
+  proceduraVas {uuid}
+  proceduraAvvio {uuid}
+  
 }
 ${RISORSE}
 ${USER}
-${CONTATTO}
 ${AZIONI}
 ` 
 

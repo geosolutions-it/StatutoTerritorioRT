@@ -15,18 +15,18 @@ import EnteSelector from "components/EnteSelector"
 import { toast } from 'react-toastify'
 import  {rebuildTooltip} from 'enhancers'
 import {CREA_PIANO, CREA_PIANO_PAGE, GET_PIANI} from 'schema'
+import {getEnteLabel, getEnteLabelID} from '../utils'
 
 
-/** 
- * TODO:: Manca la gestione errore 
-*/
 const enhancer = compose(rebuildTooltip({onUpdate: false}), withStateHandlers( ({}),
     {
-        selectTipo: () => value => ({tipo: value})
+        selectTipo: () => value => ({tipo: value}),
+        selectEnte: () => value => ({ente: value})
     }),
-    withPropsOnChange(["isLoading", "isSaving","tipiPiano", "tipo"], ({tipiPiano= [], tipo, ...rest}) => {
+    withPropsOnChange(["isLoading", "isSaving","tipiPiano", "tipo", "ente"], ({tipiPiano= [], tipo, enti, ente, ...rest}) => {
         return{
             tipo: !tipo && tipiPiano.length > 0 ? tipiPiano[0] : tipo,
+            ente: !ente && enti.length > 0 ? enti[0] : ente,
             ...rest
     }})
     )
@@ -34,12 +34,12 @@ const enhancer = compose(rebuildTooltip({onUpdate: false}), withStateHandlers( (
 
 const canSubmit = (ente, isLoading, tipo, isSaving) => ente && !isLoading && tipo && !isSaving
 
-const getInput = ( codeEnte, {value} = {}) => ({ 
+const getInput = ( {ipa}, {value: tipologia} = {}) => ({ 
         variables: {  
             input: {
                 "pianoOperativo": {
-                    ente: {code: codeEnte},
-                    tipologia: value
+                    ente: {ipa},
+                    tipologia
                     }
             }
         }})
@@ -58,10 +58,10 @@ const updateCache = (cache, { data: {createPiano : {nuovoPiano: node}}  = {}} = 
             console.warn("Query piani non inizializzata")
         }
   }
-const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti, ente, selectEnte, tipiPiano , utente: {role: { organization: {name, code: codeEnte, type: {tipo: tipoEnte} = {}} = {}} = {}} = {}}) => {
-            return (
+const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti, ente, selectEnte, tipiPiano}) => {  
+    return (
                 <div className="py-5 px-7">
-                    <h4 className="text-uppercase">{tipoEnte} di {name}</h4>  
+                    <h4 className="text-uppercase">{getEnteLabel(ente)}</h4>  
                     <div className="row">
                         <div className="col-6">
                             <div className="row pb-4 pt-3">
@@ -70,14 +70,14 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                                 </div>
                                 <div style={{paddingLeft: 49, maxWidth: 400}} className="col-sm-12">
                                         <span className="pt-6 d-flex flex-row justify-content-between text-uppercase">
-                                            {`id ${tipoEnte} ${name}`}
+                                            {getEnteLabelID(ente)}
                                         </span>
 
-                                    {enti && (<EnteSelector className="" enti={enti} onChange={selectEnte} isLoading={isLoading} value={ente}></EnteSelector>)}
+                                    {enti && (<EnteSelector className="" enti={enti} onChange={selectEnte} isLoading={isLoading} value={ente} showSelected={false}/>)}
                                     <div className="pt-4 pb-2 font-weight-bold">Atto di governo del territorio</div><br/>
                                     <div className="pb-1 small">Seleziona il tipo di atto</div>
                                     <SelectTipo className="mb-5 text-capitolize" onChange={selectTipo} tipiPiano={tipiPiano} value={tipo} isLoading={isLoading}></SelectTipo>
-                                    <Button disabled={!canSubmit(codeEnte, isLoading, tipo, isSaving)} onClick={() => creaPiano(getInput(codeEnte, tipo))}
+                                    <Button disabled={!canSubmit(ente.ipa, isLoading, tipo, isSaving)} onClick={() => creaPiano(getInput(ente, tipo))}
                                         size='md' tag="a" href="./#/nuovo_piano" 
                                         className="mt-5 flex-column d-flex ext-uppercase align-items-center" 
                                         color="serapide" label="CREA PIANO" isLoading={isSaving}>
@@ -124,9 +124,9 @@ const Page = enhancer( ({creaPiano, selectTipo, tipo, isLoading, isSaving, enti,
                     </div>
                 </div>)}
             )
-export default ({utente}) => (
+export default ({enti}) => (
     <Query query={CREA_PIANO_PAGE}>
-        {({loading: loadingDataQuery, data: {enti: {edges = []} = [] , tipologiaPiano: tipiPiano = []} = {}, error: errorQuery}) => {
+        {({loading: loadingDataQuery, data: {tipologiaPiano: tipiPiano = []} = {}, error: errorQuery}) => {
             if (errorQuery) {
                 toast.error(errorQuery.message,  {autoClose: true})
             }
@@ -137,7 +137,7 @@ export default ({utente}) => (
                     toast.error(mutationError.message)
                 }
                     return (
-                    <Page  utente={utente} tipiPiano={tipiPiano.filter(({value: v}) => v !== "unknown")} creaPiano={creaPiano} isLoading={loadingDataQuery} isSaving={isSaving}/>)}}
+                    <Page  enti={enti} tipiPiano={tipiPiano.filter(({value: v}) => v !== "UNKNOWN")} creaPiano={creaPiano} isLoading={loadingDataQuery} isSaving={isSaving}/>)}}
             </Mutation>)
             }
         }

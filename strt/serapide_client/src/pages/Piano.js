@@ -49,7 +49,6 @@ class Piano extends React.PureComponent {
         const {piano, url, path,location: {pathname} = {}, utente = {}, startPolling, stopPolling} = this.props;
 
         const activeLocation = getActive(url, pathname)
-        const {edges: azioni} = piano.azioni || {}
     return (<React.Fragment>
                 <Injector el="serapide-sidebar">
                     <SideBar url={url} piano={piano} active={activeLocation} expanded={this.props.expanded} toggleOpen={this.props.toggleOpen} unreadMessages={utente.unreadThreadsCount}></SideBar>
@@ -80,7 +79,7 @@ class Piano extends React.PureComponent {
                             <Route  path={`${path}/pubblicazione`} >
                                 <Pubblicazione piano={piano}></Pubblicazione>
                             </Route>
-                            <Route  path={`${path}/home`} render={(props) => <Home startPolling={startPolling} stopPolling={stopPolling} utente={utente} azioni={azioni} piano={piano} {...props}></Home>}/>
+                            <Route  path={`${path}/home`} render={(props) => <Home startPolling={startPolling} stopPolling={stopPolling} utente={utente} azioni={piano.azioni} piano={piano} {...props}></Home>}/>
                             <Route path={path}>
                                 <div className="p-6"><h1> Works in progress </h1> 
                                     <div className="d-flex justify-content-center">
@@ -99,6 +98,7 @@ class Piano extends React.PureComponent {
 }
 
 const PianoWithControlledSideBar = enhancer(Piano);
+
 export default ({match: {url, path, params: {code} = {}} = {}, history, ...props}) => (
     <Query query={GET_PIANI} pollInterval={pollingInterval} variables={{codice: code}}>
         {({loading, data: {piani: {edges: [{node: piano} = {}] = []} = {}} = {}, error, networkStatus, ...queryProps}) => {

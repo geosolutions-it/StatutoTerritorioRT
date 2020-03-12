@@ -9,8 +9,8 @@ import React from 'react'
 import Select from 'react-select'
 import {branch, renderComponent} from 'recompose'
 
-const getOptionLabel = ({node: {type: {tipo} = {}, name} = {}}) => `${tipo} - ${name}`
-const getOptionValue = ({node: {code} = {}}) => code
+const getOptionLabel = ({tipo, nome} = {}) => `${tipo} - ${nome}`
+const getOptionValue = ({ipa}) => ipa
 
 const Comune = ({className, enti = [], value: {node: {code, type: {tipo} = {}} ={}} = {}, onChange = () =>{}, isLoading = false}) => (
         <span className={`${className} d-flex flex-row justify-content-between text-uppercase`}>

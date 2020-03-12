@@ -14,8 +14,8 @@ import Confirm from './ConfirmToast'
 
 
 const {Fragment} = React;
-const goToAnagrafica = (codice, {nome} = {}) => {
-    if(nome === "DRAFT"){
+const goToAnagrafica = (codice, fase) => {
+    if(fase === "DRAFT"){
          window.location.href=`#/crea_anagrafica/${codice}`
         }else {
             window.location.href=`#/piano/${codice}/anagrafica`
@@ -24,7 +24,7 @@ const goToAnagrafica = (codice, {nome} = {}) => {
 const goToPiano = (codice) => {
         window.location.href=`#/piano/${codice}/home`
 }
-const isDelete = ({nome = "Unknown"}) => (nome === 'DRAFT' || nome === "Unknown")
+const isDelete = (fase = "Unknown") => (fase.toLowerCase() === 'draft' || fase === "unknown")
 
 const reverseOrderByUpdate = ({node: {lastUpdate: a}}, {node: {lastUpdate: b}}) => {
     if(a === b) {
@@ -68,7 +68,7 @@ export default ({title, piani = [], onDeletePiano = () => console.warn("Aggiunge
                 </tr>
             </thead>
             <tbody>
-                {piani.sort(reverseOrderByUpdate).map(({node: {alertsCount = 0, descrizione, tipo, lastUpdate, codice, fase = {}, user= {}}} = {}) => (
+                {piani.sort(reverseOrderByUpdate).map(({node: {alertsCount = 0, descrizione, tipo, lastUpdate, codice, fase, responsabile = {}}} = {}) => (
                     <tr key={codice}>
                         <td className="text-center">{alertsCount > 0 && (<i className="material-icons text-danger">notification_important</i>)}</td>
                         <td style={{maxWidth: 350}}>{descrizione}</td>
@@ -79,7 +79,7 @@ export default ({title, piani = [], onDeletePiano = () => console.warn("Aggiunge
                         <td>
                             <StatoProgress stato={fase}></StatoProgress>
                         </td>
-                        <td className="text-justify text-center">{user && `${user.firstName || ''} ${user.lastName || ''}`}</td>
+                        <td className="text-justify text-center">{responsabile && `${responsabile.firstName || ''} ${responsabile.lastName || ''}`}</td>
                         <td className="text-center" style={{cursor: "pointer"}} onClick={() => (isDelete(fase) ? confirm(codice) :  goToPiano(codice))}><i className="material-icons text-serapide">{isDelete(fase) ? "delete" : "play_circle_filled"}</i></td>
                     </tr>))}
                 </tbody>

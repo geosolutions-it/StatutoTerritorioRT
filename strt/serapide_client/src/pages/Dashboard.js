@@ -56,8 +56,7 @@ const Piani = () => (
 //         }}
 //     </Query>)
 
-export default ({utente, ...props}) => {
-    const {role: {type} = {}, attore} = utente || {}
+export default ({utente: {firstName, lastName, unreadMessages} = {}, canCreatePiano = false, ...props}) => {
     return (
         <React.Fragment>
             <div className="py-5 px-7">
@@ -66,9 +65,9 @@ export default ({utente, ...props}) => {
                 <hr className="border-serapide border-bottom"></hr>
                 <div className="py-4 d-flex flex-row">
                     <div className="d-flex flex-column ">
-                        <h2>{`${utente.firstName || ""} ${utente.lastName || ""}`}</h2>
+                        <h2>{`${firstName || ""} ${lastName || ""}`}</h2>
                     </div>
-                    {type === "RUP" && attore === "Comune" && <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="serapide" icon="note_add" label="Crea nuovo piano"></Button>}
+                    {canCreatePiano && <Button size='md' tag="a" href="./#/nuovo_piano" className="ml-auto my-auto text-uppercase" color="serapide" icon="note_add" label="Crea nuovo piano"></Button>}
                 </div>
                 
                 <h5 className="py-5">I MIEI PIANI</h5>
@@ -78,7 +77,7 @@ export default ({utente, ...props}) => {
                     <i className="material-icons mr-1 urgente">notification_important</i><span>Il piano ha della azioni necessarie o in attesa</span>
                 </div>
                 <h6 className="py-5">MESSAGGI </h6>
-                <TabellaMessaggi messaggi={utente.unreadMessages}></TabellaMessaggi>
+                <TabellaMessaggi messaggi={unreadMessages}></TabellaMessaggi>
                 <a href="/users/messages/inbox/" className="mr-4 pt-4 pb-5 d-flex flex-row justify-content-end nav-link text-dark"><i className="material-icons mr-2">email</i><span>Tutti i messaggi</span></a>
                 {/* <PianiArchiviati></PianiArchiviati>
                 <a href="#/archivio" className="mr-4 pt-4 pb-5 d-flex flex-row justify-content-end nav-link text-dark"><i className="material-icons mr-2">view_list</i><span>Vai all'archivio piani</span></a> */}
