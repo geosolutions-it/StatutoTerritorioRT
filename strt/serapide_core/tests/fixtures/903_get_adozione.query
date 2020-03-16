@@ -1,0 +1,69 @@
+{
+   "operationName" : "GetAdozione",
+
+   "variables" : {
+      "codice" : "{codice}"
+   },
+
+   "query" : "query GetAdozione($codice: String!) {
+  modello: procedureAdozione(piano_Codice: $codice) {
+    edges {
+      node {
+        ...ADOZIONE
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment ADOZIONE on ProceduraAdozioneNode {
+  uuid
+  dataCreazione
+  dataDeliberaAdozione
+  dataRicezioneOsservazioni
+  dataRicezionePareri
+  pubblicazioneBurtUrl
+  pubblicazioneBurtData
+  pubblicazioneSitoUrl
+  pubblicazioneSitoData
+  osservazioniConcluse
+  conclusa
+  richiestaConferenzaPaesaggistica
+  urlPianoControdedotto
+  risorse(archiviata: false) {
+    ...Risorse
+    __typename
+  }
+  __typename
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+  __typename
+}"}

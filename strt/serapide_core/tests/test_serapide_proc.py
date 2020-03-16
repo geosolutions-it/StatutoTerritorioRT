@@ -150,13 +150,13 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
 
         # VAS COMPLETATO
-        response = self.sendCNV('999_get_vas.query', 'GET VAS', self.codice_piano)
+        response = self.sendCNV('901_get_vas.query', 'GET VAS', self.codice_piano)
         content = json.loads(response.content)
         vas_conclusa = content['data']['modello']['edges'][0]['node']['conclusa']
         self.assertTrue(vas_conclusa, 'VAS non conclusa')
 
     def contributi_tecnici(self):
-        self.sendCNV('999_get_avvio.query', 'GET AVVIO', self.codice_piano)
+        self.sendCNV('902_get_avvio.query', 'GET AVVIO', self.codice_piano)
         self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
         self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, expected_code=403)
         self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, client=self.client_pian) # questo crea le azioni di CC
@@ -203,9 +203,116 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE)
         self.sendCNV('040_formazione_piano.query', 'FORMAZIONE PIANO', self.codice_piano)
 
+    ### ADOZIONE
+    def trasmissione_adozione(self):
+        response = self.sendCNV('903_get_adozione.query', 'GET ADOZIONE', self.codice_piano)
+        content = json.loads(response.content)
+        self.codice_adozione = content['data']['modello']['edges'][0]['node']['uuid']
+
+        for nome, val in [
+                ("compilazioneRapportoAmbientaleUrl", 'http://compilazioneRapportoAmbientaleUrl'),
+                ("conformazionePitPprUrl", 'http://conformazionePitPprUrl'),
+                ("monitoraggioUrbanisticoUrl", 'http://monitoraggioUrbanisticoUrl')]:
+            self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)
+
+        self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.DELIBERA_ADOZIONE)
+
+        self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'dataDeliberaAdozione', _get_date().isoformat())
+        self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'pubblicazioneBurtData', _get_date().isoformat())
+
+
+
+        for tipo in [
+                TipoRisorsa.RELAZIONE_GENERALE,
+                TipoRisorsa.DISCIPLINA_PIANO,
+                TipoRisorsa.RELAZIONE_RESPONSABILE,
+                TipoRisorsa.RELAZIONE_GARANTE_INFORMAZIONE_PARTECIPAZIONE,
+                TipoRisorsa.VALUTAZIONE,
+                TipoRisorsa.ELABORATI_CONFORMAZIONE,
+                TipoRisorsa.PIANI_ATTUATIVI_BP,
+                TipoRisorsa.INDAGINI_G_I_S]:
+            self.upload('050_adozione_upload_file.query', self.codice_adozione, tipo)
+
+        for tipo in [
+                TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
+                TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
+                TipoRisorsa.ASSETTI_INSEDIATIVI,]:
+            self.upload('050_adozione_upload_file.query', self.codice_adozione, tipo, suffix='.zip')
+
+        self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
+
+    def adozione_osservazione(self, richiesta_cp: bool = True):
+        self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_PRIVATI)
+        self.sendCNV('053_trasmissione_osservazioni.query', 'TRASMISSIONE OSSERVAZIONI', self.codice_adozione)
+
+        self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_ENTI)
+
+        self.sendCNV('054_controdeduzioni.query', 'CONTRODEDUZIONI', self.codice_adozione)
+        response = self.sendCNV('055_get_risorse_pcd.query', 'GET RISORSE PIANO CD', self.codice_piano)
+        content = json.loads(response.content)
+        self.codice_pcd = content['data']['modello']['edges'][0]['node']['uuid']
+
+        for tipo in [
+                TipoRisorsa.RELAZIONE_GENERALE,
+                # TipoRisorsa.DISCIPLINA_PIANO,
+                TipoRisorsa.RELAZIONE_RESPONSABILE,
+                # TipoRisorsa.RELAZIONE_GARANTE_INFORMAZIONE_PARTECIPAZIONE,
+                TipoRisorsa.VALUTAZIONE,
+                # TipoRisorsa.ELABORATI_CONFORMAZIONE,
+                # TipoRisorsa.PIANI_ATTUATIVI_BP,
+                TipoRisorsa.INDAGINI_G_I_S]:
+            self.upload('056_controdedotto_upload_file.query', self.codice_pcd, tipo)
+
+        for tipo in [
+                # TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
+                # TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
+                TipoRisorsa.ASSETTI_INSEDIATIVI,]:
+            self.upload('056_controdedotto_upload_file.query', self.codice_pcd, tipo, suffix='.zip')
+
+        self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'richiestaConferenzaPaesaggistica', richiesta_cp)
+        self.sendCNV('057_piano_controdedotto.query', 'PIANO CONTRODEDOTTO', self.codice_adozione)
+
+        if richiesta_cp:
+            self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.ELABORATI_CONF_P)
+            self.sendCNV('058_esito_cp.query', 'ESITO CONF PAESGG', self.codice_adozione, expected_code=403)
+            self.sendCNV('058_esito_cp.query', 'ESITO CONF PAESGG', self.codice_adozione, client=self.client_pian)
+
+            response = self.sendCNV('059_piano_rev_post_cp.query', 'PIANO REV POST CP', self.codice_piano)
+            content = json.loads(response.content)
+            self.codice_rpcp = content['data']['modello']['edges'][0]['node']['uuid']
+            for tipo in [
+                    # TipoRisorsa.RELAZIONE_GENERALE,
+                    TipoRisorsa.DISCIPLINA_PIANO,
+                    # TipoRisorsa.RELAZIONE_RESPONSABILE,
+                    TipoRisorsa.RELAZIONE_GARANTE_INFORMAZIONE_PARTECIPAZIONE,
+                    # TipoRisorsa.VALUTAZIONE,
+                    TipoRisorsa.ELABORATI_CONFORMAZIONE,
+                    # TipoRisorsa.PIANI_ATTUATIVI_BP,
+                    TipoRisorsa.INDAGINI_G_I_S]:
+                self.upload('060_prcp_upload_file.query', self.codice_rpcp, tipo)
+
+            for tipo in [
+                    TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
+                    # TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
+                    TipoRisorsa.ASSETTI_INSEDIATIVI,]:
+                self.upload('060_prcp_upload_file.query', self.codice_rpcp, tipo, suffix='.zip')
+
+        self.sendCNV('061_revisione_cp.query', 'REVISIONE CONF PAESGG', self.codice_adozione)
+
+    def adozione_vas(self):
+        response = self.sendCNV('062_adozione_vas.query', 'GET ADOZIONE VAS', self.codice_piano)
+        content = json.loads(response.content)
+        self.codice_adozione_vas = content['data']['modello']['edges'][0]['node']['uuid']
+
+        self.upload('064_adozionevas_file_upload.query', self.codice_adozione_vas, TipoRisorsa.PARERE_ADOZIONE_SCA)
+        self.sendCNV('065_invio_pareri_adozione.query', 'INVIO_PARERI AD VAS', self.codice_adozione_vas, expected_code=403)
+        self.sendCNV('065_invio_pareri_adozione.query', 'INVIO_PARERI AD VAS', self.codice_adozione_vas, client=self.client_sca)
+
+        pass
+
     def check_fase(self, fase_expected:Fase):
         # l'azione precedente promuove automaticamente alla fase AVVIO
-        response = self.sendCNV('999_get_piani.query', 'GET PIANI', self.codice_piano)
+        response = self.sendCNV('900_get_piani.query', 'GET PIANI', self.codice_piano)
         content = json.loads(response.content)
         fase = content['data']['piani']['edges'][0]['node']['fase']
         self.assertEqual(fase_expected, Fase.fix_enum(fase), "Fase errata")

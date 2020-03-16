@@ -1,14 +1,16 @@
 {
-   "operationName" : "ForamzioneDelPiano",
+   "operationName" : "Contorodeduzioni",
 
    "variables" : {
       "codice" : "{codice}"
    },
-
-   "query" : "mutation ForamzioneDelPiano($codice: String!) {
-  formazioneDelPiano(codicePiano: $codice) {
-    pianoAggiornato {
-      ...AzioniPiano
+   "query" : "mutation Contorodeduzioni($codice: String!) {
+  controdeduzioni(uuid: $codice) {
+    errors
+    adozioneAggiornata {
+      piano {
+        ...AzioniPiano
+      }
     }
   }
 }
@@ -31,5 +33,6 @@ fragment Azioni on AzioneNode {
       label
       tooltip
       fase
-}"
+}
+"
 }

@@ -87,16 +87,16 @@ class AbstractSerapideTest(GraphQLTestCase):
         print("{title} ({code}) ^^^^^^^^^^^^^^^^^^^^".format(title=title, code=response.status_code))
         return response
 
-    def upload(self, file:str, codice:str, tipo:TipoRisorsa, extra_title='', expected_code=200, client=None):
+    def upload(self, file:str, codice:str, tipo:TipoRisorsa, extra_title='', expected_code=200, client=None, suffix='.pdf'):
         _client = client if client else self._client
         print("UPLOAD {tipo} ================================================== {extra_title}".format(tipo=tipo.name, extra_title=extra_title))
         with open(os.path.join(this_path, 'fixtures', file), 'r') as file:
-            query = file.read().replace('\n', '')
+            query = file.read().replace('\n', '').replace('__typename', '')
 
         query = query.replace('{codice}', codice)
         query = query.replace('{tipo_risorsa}', tipo.value)
 
-        with tempfile.NamedTemporaryFile(mode='w+', prefix=tipo.name, suffix=".pdf", delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode='w+', prefix=tipo.name, suffix=suffix, delete=False) as f:
             f.write("this is a fake PDF file\n")
             tmp_filename = f.name
 

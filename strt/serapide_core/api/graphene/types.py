@@ -506,19 +506,19 @@ class ProceduraVASNode(DjangoObjectType):
 
 class ProceduraAdozioneVASNode(DjangoObjectType):
 
-    ente = graphene.Field(EnteNode)
+    # ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseAdozioneVASType)
 
-    def resolve_tipologia(self, info, **args):
-        return self.tipologia.name
+    # def resolve_tipologia(self, info, **args):
+    #     return self.tipologia.name
 
     class Meta:
         model = ProceduraAdozioneVAS
         # Allow for some more advanced filtering here
         filter_fields = {
-            'ente': ['exact'],
+            # 'ente': ['exact'],
             'piano__codice': ['exact'],
-            'tipologia': ['exact', 'icontains'],
+            # 'tipologia': ['exact', 'icontains'],
         }
         interfaces = (relay.Node, )
 
@@ -545,14 +545,14 @@ class ProceduraAvvioNode(DjangoObjectType):
 
 class ProceduraAdozioneNode(DjangoObjectType):
 
-    ente = graphene.Field(EnteNode)
+    # ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseAdozioneType)
 
     class Meta:
         model = ProceduraAdozione
         # Allow for some more advanced filtering here
         filter_fields = {
-            'ente': ['exact'],
+            # 'ente': ['exact'],
             'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )

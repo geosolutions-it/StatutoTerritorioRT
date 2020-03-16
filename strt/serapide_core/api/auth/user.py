@@ -79,6 +79,8 @@ def can_edit_piano(utente, ente):
     return False
 
 def has_qualifica(utente, ente:Ente, qualifica:Qualifica):
+    # TODO aggiungere check token
+
     return Assegnatario.objects. \
         filter(utente=utente). \
         filter(qualifica_ufficio__qualifica=qualifica). \
@@ -87,20 +89,20 @@ def has_qualifica(utente, ente:Ente, qualifica:Qualifica):
 
 def is_soggetto_operante(utente, piano:Piano, qualifica:Qualifica=None, qualifica_richiesta:QualificaRichiesta=None):
     # TODO aggiungere gestione deleghe
-    logger.warning("is_soggetto_operante: USER {utente}".format(utente=utente))
+    # logger.warning("is_soggetto_operante: USER {utente}".format(utente=utente))
     assegnatario = Assegnatario.objects.filter(utente=utente)
     if qualifica:
         assegnatario = assegnatario.filter(qualifica_ufficio__qualifica=qualifica)
     qu_set = [a.qualifica_ufficio for a in assegnatario]
     # if len(qu_set) == 0: # shortcut
     #     return False
-    logger.warning("qu_set {}".format(qu_set))
+    # logger.warning("qu_set {}".format(qu_set))
 
     qs =  SoggettoOperante.objects. \
         filter(piano=piano). \
         filter(qualifica_ufficio__in=qu_set)
 
-    logger.warning("SOps {}".format(qs))
+    # logger.warning("SOps {}".format(qs))
 
     if qualifica:
         qs = qs.filter(qualifica_ufficio__qualifica=qualifica)

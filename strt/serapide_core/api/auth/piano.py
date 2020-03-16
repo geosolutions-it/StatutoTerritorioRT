@@ -164,10 +164,7 @@ def adozione_piano_conclusa(piano):
 @rules.predicate
 def adozione_vas_piano_conclusa(piano):
     _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).first()
-    if not _procedura_adozione_vas or \
-    _procedura_adozione_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
-        return True
-    return _procedura_adozione_vas.conclusa
+    return not _procedura_adozione_vas or _procedura_adozione_vas.conclusa
 
 
 @rules.predicate
@@ -179,7 +176,24 @@ def approvazione_piano_conclusa(piano):
 @rules.predicate
 def has_pending_alerts(piano):
     _alert_states = [STATO_AZIONE.necessaria]
-    return Azione.objects.filter(piano=piano, stato__in=_alert_states).count() > 1
+    return Azione.objects.filter(piano=piano, stato__in=_alert_states).exists()
+
+def get_pending_alerts(piano):
+    _alert_states = [STATO_AZIONE.necessaria]
+    return Azione.objects.filter(piano=piano, stato__in=_alert_states)
+
+
+def load_pending_alerts(piano:Piano, msg:list):
+    # FIXME il saltare la prima azione è un pessimo hack già esistente.
+    # dovrebbe servire solo per il create_piano. Da fixare!!! magari con un nuovo tipoazione=AUTO?
+
+    azcnt = 0
+    for azione in get_pending_alerts(piano):
+        if azcnt == 0:
+            logger.warning("Skipping pending alert {}".format(azione))
+        else:
+            msg.append("Azione non completata: {} [{}]".format(azione.tipologia, azione.qualifica_richiesta.name))
+        azcnt = azcnt + 1
 
 
 def is_eligible_for_promotion(piano:Piano):
@@ -187,19 +201,21 @@ def is_eligible_for_promotion(piano:Piano):
     logger.warning("Is eligible for promotion {p} {f}".format(p=piano, f=piano.fase))
 
     msg = []
+    load_pending_alerts(piano, msg)
 
     if piano.fase == Fase.DRAFT:
-        # 'strt_core.api.fase_anagrafica_completa',
-    # ~has_pending_alerts &
-    # is_draft &
-    # has_data_delibera &
-    # has_description &
-    # has_delibera_comunale &
-    # has_soggetto_proponente &
-    # has_procedura_vas &
-    # vas_rules.procedura_vas_is_valid
-        if has_pending_alerts(piano):
-            msg.append("Ci sono azioni non ancora completate")
+
+        # rules.add_rule('strt_core.api.fase_anagrafica_completa',
+        # ~has_pending_alerts &
+        # is_draft &
+        # has_data_delibera &
+        # has_description &
+        # has_delibera_comunale &
+        # has_soggetto_proponente &
+        # has_procedura_vas &
+        # vas_rules.procedura_vas_is_valid
+
+        # load_pending_alerts(piano, msg)
         # if not is_draft(piano):
         #     msg.append("Piano non in stato di bozza")
         if piano.data_delibera is None:
@@ -210,7 +226,7 @@ def is_eligible_for_promotion(piano:Piano):
             msg.append("Delibera comunale mancante")
         if piano.soggetto_proponente is None:
             msg.append("Soggetto proponente mancante")
-        if ProceduraVAS.objects.filter(piano=piano).count() == 0:
+        if not ProceduraVAS.objects.filter(piano=piano).exists():
             msg.append("Procedura VAS mancante")
 
         vas_ok, vas_msg = auth_vas.procedura_vas_is_valid(piano)
@@ -220,8 +236,19 @@ def is_eligible_for_promotion(piano:Piano):
         return len(msg) == 0, msg
 
     elif piano.fase == Fase.ANAGRAFICA:
-        if has_pending_alerts(piano):
-            msg.append("Ci sono azioni non ancora completate")
+
+        # rules.add_rule('strt_core.api.fase_avvio_completa',
+        #     ~has_pending_alerts &
+        #     is_anagrafica &
+        #     protocollo_genio_inviato &
+        #     formazione_piano_conclusa &
+        #     has_procedura_avvio &
+        #     avvio_piano_conclusa &
+        #     (~has_procedura_vas | vas_piano_conclusa)
+        # )
+
+        # if has_pending_alerts(piano):
+        #     msg.append("Ci sono azioni non ancora completate")
         if not protocollo_genio_inviato(piano):
             msg.append("Protocollo Genio Civile mancante")
         if not formazione_piano_conclusa(piano):
@@ -230,36 +257,38 @@ def is_eligible_for_promotion(piano:Piano):
             msg.append("Procedura di avvio mancante")
         if not avvio_piano_conclusa(piano):
             msg.append("Procedura di avvio non conclusa")
-        if  not vas_piano_conclusa(piano):
+        if not vas_piano_conclusa(piano):
             msg.append("Procedura VAS non conclusa")
 
         return len(msg) == 0, msg
 
-    #     has_procedura_avvio &
-    #     avvio_piano_conclusa &
-    #     (~has_procedura_vas | vas_piano_conclusa)
+    elif piano.fase == Fase.AVVIO:
+
+        # rules.add_rule(
+        #     'strt_core.api.fase_adozione_completa',
+        #     ~has_pending_alerts &
+        #     is_avvio &
+        #     has_procedura_adozione &
+        #     adozione_piano_conclusa &
+        #     (~has_procedura_adozione_vas | adozione_vas_piano_conclusa)
+        # )
+
+        # if has_pending_alerts(piano):
+        #     msg.append("Ci sono azioni non ancora completate")
+
+        if not has_procedura_adozione(piano):
+            msg.append("Procedura di adpzione mancante")
+        if not adozione_piano_conclusa(piano):
+            msg.append("Procedura di adozione non conclusa")
+        if not adozione_vas_piano_conclusa(piano):
+            msg.append("Procedura AdozioneVAS non conclusa")
+
+        return len(msg) == 0, msg
 
     raise Exception('NOT IMPLEMENTED YET')
 
-# rules.add_rule(
-#     'strt_core.api.fase_avvio_completa',
-#     ~has_pending_alerts &
-#     is_anagrafica &
-#     protocollo_genio_inviato &
-#     formazione_piano_conclusa &
-#     has_procedura_avvio &
-#     avvio_piano_conclusa &
-#     (~has_procedura_vas | vas_piano_conclusa)
-# )
-#
-# rules.add_rule(
-#     'strt_core.api.fase_adozione_completa',
-#     ~has_pending_alerts &
-#     is_avvio &
-#     has_procedura_adozione &
-#     adozione_piano_conclusa &
-#     (~has_procedura_adozione_vas | adozione_vas_piano_conclusa)
-# )
+
+
 #
 # rules.add_rule(
 #     'strt_core.api.fase_approvazione_completa',

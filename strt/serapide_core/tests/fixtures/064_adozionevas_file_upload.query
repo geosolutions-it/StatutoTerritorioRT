@@ -1,0 +1,45 @@
+{
+  "operationName": "AozioneVasFileUpload",
+  "variables": {
+    "file": null,
+    "codice": "{codice}",
+      "tipo" : "{tipo_risorsa}"
+  },
+  "query": "mutation AozioneVasFileUpload($file: Upload!, $codice: String!, $tipo: String!) {
+  upload: uploadRisorsaAdozioneVas(file: $file, codice: $codice, tipoFile: $tipo) {
+    success
+    fileName
+    proceduraVasAggiornata {
+      uuid
+      risorse(archiviata: false) {
+        ...Risorse
+      }
+    }
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+  }
+  label
+  tooltip
+}
+"
+}

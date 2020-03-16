@@ -80,38 +80,38 @@ logger = logging.getLogger(__name__)
 # Management Passaggio di Stato Piano
 # ############################################################################ #
 
-def check_and_close_avvio(piano):
-    _conferenza_copianificazione_attiva = \
-        needsExecution(
-            piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
-        needsExecution(
-            piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
+# def check_and_close_avvio(piano):
+#     _conferenza_copianificazione_attiva = \
+#         needsExecution(
+#             piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
+#         needsExecution(
+#             piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
+#
+#     _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+#     _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
+#
+#     if not _conferenza_copianificazione_attiva and \
+#             isExecuted(_protocollo_genio_civile) and \
+#             isExecuted(_integrazioni_richieste):
+#
+#         procedura_vas = ProceduraVAS.objects.get(piano=piano)
+#         if procedura_vas.conclusa:
+#             piano.chiudi_pendenti(attesa=True, necessaria=False)
+#
+#         procedura_avvio, _ = ProceduraAvvio.objects.get_or_create(piano=piano)
+#         procedura_avvio.conclusa = True
+#         procedura_avvio.save()
+#
+#         ensure_avvio_objects(piano)
 
-    _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
-    _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
 
-    if not _conferenza_copianificazione_attiva and \
-            isExecuted(_protocollo_genio_civile) and \
-            isExecuted(_integrazioni_richieste):
-
-        procedura_vas = ProceduraVAS.objects.get(piano=piano)
-        if procedura_vas.conclusa:
-            piano.chiudi_pendenti(attesa=True, necessaria=False)
-
-        procedura_avvio, _ = ProceduraAvvio.objects.get_or_create(piano=piano)
-        procedura_avvio.conclusa = True
-        procedura_avvio.save()
-
-        ensure_avvio_objects(piano)
-
-
-def ensure_avvio_objects(piano):
-    PianoControdedotto.objects.get_or_create(piano=piano)
-    PianoRevPostCP.objects.get_or_create(piano=piano)
-
-    procedura_adozione, _ = ProceduraAdozione.objects.get_or_create(piano=piano, ente=piano.ente)
-    piano.procedura_adozione = procedura_adozione
-    piano.save()
+# def ensure_avvio_objects(piano):
+#     PianoControdedotto.objects.get_or_create(piano=piano)
+#     PianoRevPostCP.objects.get_or_create(piano=piano)
+#
+#     procedura_adozione, _ = ProceduraAdozione.objects.get_or_create(piano=piano, ente=piano.ente)
+#     piano.procedura_adozione = procedura_adozione
+#     piano.save()
 
 
 def check_and_promote(piano:Piano, info):
@@ -121,8 +121,8 @@ def check_and_promote(piano:Piano, info):
     if eligible:
         logger.warning('Promozione Piano [{c}]:"{d}"'.format(c=piano.codice, d=piano.descrizione))
 
-        if piano.fase ==  Fase.ANAGRAFICA:
-            ensure_avvio_objects(piano)
+        # if piano.fase == Fase.ANAGRAFICA:
+        #     ensure_avvio_objects(piano)
 
         piano.fase = _fase = piano.fase.getNext()
         piano.save()
@@ -140,6 +140,8 @@ def check_and_promote(piano:Piano, info):
         return True, []
     else:
         logger.warning('Piano [{c}]:"{d}" non promosso'.format(c=piano.codice, d=piano.descrizione))
+        for err in errs:
+            logger.warning('  -> {}'.format(err))
 
     return False, errs
 
@@ -172,6 +174,7 @@ def promuovi_piano(fase:Fase, piano):
         chiudi_azione(_creato)
 
     elif fase == Fase.AVVIO:
+        ## WTF?????
         _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
         if needsExecution(_richiesta_integrazioni):
             chiudi_azione(_richiesta_integrazioni)
@@ -579,8 +582,8 @@ class PromozionePiano(graphene.Mutation):
 
 def try_and_close_avvio(piano:Piano):
 
-    procedura_avvio = piano.procedura_avvio
-    procedura_vas = piano.procedura_vas
+    procedura_avvio: ProceduraAvvio = piano.procedura_avvio
+    procedura_vas: ProceduraVAS = piano.procedura_vas
 
     _conferenza_copianificazione_attiva = \
         needsExecution(piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
@@ -597,7 +600,7 @@ def try_and_close_avvio(piano:Piano):
             isExecuted(_protocollo_genio_civile) and \
             isExecuted(_formazione_del_piano) and \
             (not procedura_avvio.richiesta_integrazioni or (isExecuted(_integrazioni_richieste))) and \
-            (not procedura_vas or procedura_vas.conclusa):
+            (not procedura_vas or procedura_vas.conclusa or procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA):
 
         if procedura_vas and procedura_vas.conclusa:
             piano.chiudi_pendenti(attesa=True, necessaria=False)
@@ -609,7 +612,7 @@ def try_and_close_avvio(piano:Piano):
         PianoRevPostCP.objects.get_or_create(piano=piano)
 
         procedura_adozione, created = ProceduraAdozione.objects.get_or_create(
-            piano=piano, ente=piano.ente)
+            piano=piano)
         piano.procedura_adozione = procedura_adozione
         piano.save()
 

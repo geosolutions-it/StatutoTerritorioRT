@@ -214,7 +214,7 @@ class Mutation(object):
     invio_parere_motivato_ac = adozione.InvioParereMotivatoAC.Field()
     upload_elaborati_adozione_vas = adozione.UploadElaboratiAdozioneVAS.Field()
 
-    create_procedura_approvazione = approvazione.CreateProceduraApprovazione.Field()
+    # create_procedura_approvazione = approvazione.CreateProceduraApprovazione.Field()
     update_procedura_approvazione = approvazione.UpdateProceduraApprovazione.Field()
     trasmissione_approvazione = approvazione.TrasmissioneApprovazione.Field()
     esito_conferenza_paesaggistica_ap = approvazione.EsitoConferenzaPaesaggisticaAP.Field()

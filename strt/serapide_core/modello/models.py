@@ -246,12 +246,15 @@ class Piano(models.Model):
     def chiudi_pendenti(self, attesa=True, necessaria=True):
         # - Complete Current Actions
         _now = datetime.now(timezone.get_current_timezone())
+        stati = []
         if attesa:
-            Azione.objects.filter(piano=self, stato=STATO_AZIONE.attesa)\
-                .update(stato=STATO_AZIONE.nessuna, data=_now)
+            stati.append(STATO_AZIONE.attesa)
         if necessaria:
-            Azione.objects.filter(piano=self, stato=STATO_AZIONE.necessaria)\
-                .update(stato=STATO_AZIONE.nessuna, data=_now)
+            stati.append(STATO_AZIONE.necessaria)
+
+        for azione in Azione.objects.filter(piano=self, stato__in=stati):
+            log.warning('Chiusura forzata azione pendente {n}:{q}[{s}]'.format(n=azione.tipologia, q=azione.qualifica_richiesta.name, s=azione.stato))
+            chiudi_azione(azione, data=_now)
 
     # @property
     # def next_phase(self):
@@ -375,7 +378,7 @@ class Azione(models.Model):
         verbose_name_plural = 'Azioni'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.qualifica_richiesta, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
+        return '{} - {} [{}]'.format(self.qualifica_richiesta.name, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
 
     def count_by_piano(piano, tipo=None):
         qs = Azione.objects.filter(piano=piano)
@@ -872,14 +875,14 @@ class ProceduraAdozione(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAdozione')
 
-    ente = models.ForeignKey(
-        to=Ente,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -888,7 +891,7 @@ class ProceduraAdozione(models.Model):
         verbose_name_plural = 'Procedure Adozione'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+        return '{} [{}]'.format(self.piano.codice, self.uuid)
 
 
 class RisorseAdozione(models.Model):
@@ -999,12 +1002,6 @@ class ProceduraAdozioneVAS(models.Model):
         null=True
     )
 
-    tipologia = models.CharField(
-        choices=TipologiaVAS.create_choices(),
-        default=TipologiaVAS.UNKNOWN,
-        max_length=TipologiaVAS.get_max_len()
-    )
-
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     last_update = models.DateTimeField(auto_now=True, blank=True)
 
@@ -1012,14 +1009,14 @@ class ProceduraAdozioneVAS(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAdozioneVas')
 
-    ente = models.ForeignKey(
-        to=Ente,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -1028,13 +1025,13 @@ class ProceduraAdozioneVAS(models.Model):
         verbose_name_plural = 'Procedure Adozione VAS'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.tipologia, self.uuid)
+        return 'ProceduraAdozioneVAS {} [{}]'.format(self.piano.codice, self.uuid)
 
-    @classmethod
-    def from_db(cls, db, field_names, values):
-        instance = super(ProceduraVAS, cls).from_db(db, field_names, values)
-        instance.tipologia = TipologiaVAS.fix_enum(instance.tipologia)
-        return instance
+    # @classmethod
+    # def from_db(cls, db, field_names, values):
+    #     instance = super(ProceduraVAS, cls).from_db(db, field_names, values)
+    #     instance.tipologia = TipologiaVAS.fix_enum(instance.tipologia)
+    #     return instance
 
 
 class RisorseAdozioneVas(models.Model):

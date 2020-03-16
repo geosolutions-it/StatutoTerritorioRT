@@ -1,0 +1,43 @@
+{
+   "operationName" : "GetRisorsePianoControdedotto",
+   "variables" : {
+      "codice" : "{codice}"
+   },
+
+   "query" : "query GetRisorsePianoControdedotto($codice: String!) {
+  modello: pianoControdedotto(piano_Codice: $codice) {
+    edges {
+      node {
+        uuid
+        risorse(archiviata: false) {
+          ...Risorse
+        }
+      }
+    }
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+  }
+  label
+  tooltip
+}"
+}

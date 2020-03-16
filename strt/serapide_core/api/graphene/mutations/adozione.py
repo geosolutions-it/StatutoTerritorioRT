@@ -65,19 +65,23 @@ from strt_users.models import Utente, Assegnatario
 logger = logging.getLogger(__name__)
 
 
-def check_and_close_adozione(piano:Piano):
-    procedura_adozione = piano.procedura_adozione
+def check_and_close_adozione(piano: Piano):
+    logger.warning('check_and_close_adozione')
+
+    procedura_adozione: ProceduraAdozione = piano.procedura_adozione
 
     if not procedura_adozione.conclusa:
 
-        _osservazioni_regione = piano.getFirstAction(TIPOLOGIA_AZIONE.osservazioni_regione)
-        _controdeduzioni = piano.getFirstAction(TIPOLOGIA_AZIONE.controdeduzioni)
+        piano_controdedotto = piano.getFirstAction(TIPOLOGIA_AZIONE.piano_controdedotto)
+        rev_piano_post_cp = piano.getFirstAction(TIPOLOGIA_AZIONE.rev_piano_post_cp)
 
         _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
 
-        if isExecuted(_controdeduzioni) \
-            and isExecuted(_osservazioni_regione) \
-            and (not _procedura_adozione_vas or _procedura_adozione_vas.conclusa):
+        if isExecuted(piano_controdedotto) \
+                and (not procedura_adozione.richiesta_conferenza_paesaggistica or isExecuted(rev_piano_post_cp)) \
+                and (not _procedura_adozione_vas or _procedura_adozione_vas.conclusa):
+
+            logger.warning('CHIUSURA FASE ADOZIONE {} {}'.format(_procedura_adozione_vas, _procedura_adozione_vas.conclusa))
 
             piano.chiudi_pendenti(attesa=True, necessaria=False)
 
@@ -88,7 +92,9 @@ def check_and_close_adozione(piano:Piano):
                 piano=piano, ente=piano.ente)
             piano.procedura_approvazione = procedura_approvazione
             piano.save()
+            return True
 
+    return False
 
 # class CreateProceduraAdozione(relay.ClientIDMutation):
 #
@@ -201,7 +207,8 @@ class TrasmissioneAdozione(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
-        _trasmissione_adozione = Piano.getFirstAction(TIPOLOGIA_AZIONE.trasmissione_adozione)
+        _trasmissione_adozione = piano.getFirstAction(TIPOLOGIA_AZIONE.trasmissione_adozione)
+
         if needsExecution(_trasmissione_adozione):
             chiudi_azione(_trasmissione_adozione)
 
@@ -234,17 +241,13 @@ class TrasmissioneAdozione(graphene.Mutation):
                 ))
 
             if procedura_adozione.pubblicazione_burt_data and \
-                    piano.procedura_vas and not piano.procedura_vas.non_necessaria and \
                     piano.procedura_vas.tipologia != TipologiaVAS.NON_NECESSARIA:
 
                 _expire_days = getattr(settings, 'ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS', 60)
                 _alert_delta = datetime.timedelta(days=_expire_days)
                 _pareri_adozione_sca_expire = procedura_adozione.pubblicazione_burt_data + _alert_delta
 
-                _procedura_adozione_vas, created = ProceduraAdozioneVAS.objects.get_or_create(
-                    piano=piano,
-                    ente=piano.ente
-                )
+                _procedura_adozione_vas, created = ProceduraAdozioneVAS.objects.get_or_create(piano=piano)
 
                 if created:
                     crea_azione(
@@ -302,11 +305,11 @@ class TrasmissioneOsservazioni(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
-        _osservazioni_regione = Piano.getFirstAction(TIPOLOGIA_AZIONE.osservazioni_regione)
-        _upload_osservazioni_privati = Piano.getFirstAction(TIPOLOGIA_AZIONE.upload_osservazioni_privati)
-        _controdeduzioni = Piano.getFirstAction(TIPOLOGIA_AZIONE.controdeduzioni)
+        _osservazioni_regione = piano.getFirstAction(TIPOLOGIA_AZIONE.osservazioni_regione)
+        _upload_osservazioni_privati = piano.getFirstAction(TIPOLOGIA_AZIONE.upload_osservazioni_privati)
+        _controdeduzioni = piano.getFirstAction(TIPOLOGIA_AZIONE.controdeduzioni)
 
-        if auth.is_soggetto_operante(user, QualificaRichiesta.REGIONE):
+        if auth.is_soggetto_operante(user, piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
             if needsExecution(_osservazioni_regione):
                 chiudi_azione(_osservazioni_regione)
 
@@ -405,6 +408,7 @@ class Controdeduzioni(graphene.Mutation):
             logger.error(tb)
             return GraphQLError(e, code=500)
 
+
 class PianoControdedotto(graphene.Mutation):
 
     class Arguments:
@@ -434,10 +438,7 @@ class PianoControdedotto(graphene.Mutation):
         if needsExecution(_piano_controdedotto):
             chiudi_azione(_piano_controdedotto)
 
-            if not procedura_adozione.richiesta_conferenza_paesaggistica:
-                check_and_close_adozione(piano)
-
-            else:
+            if procedura_adozione.richiesta_conferenza_paesaggistica:
                 crea_azione(
                     Azione(
                         piano=piano,
@@ -445,6 +446,11 @@ class PianoControdedotto(graphene.Mutation):
                         qualifica_richiesta=QualificaRichiesta.REGIONE,
                         stato=STATO_AZIONE.attesa
                     ))
+
+            else:
+                return check_and_close_adozione(piano)
+
+        return False
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -455,7 +461,7 @@ class PianoControdedotto(graphene.Mutation):
             return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
 
         try:
-            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
+            closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
             # Notify Users
             piano_phase_changed.send(
@@ -464,7 +470,8 @@ class PianoControdedotto(graphene.Mutation):
                 piano=_piano,
                 message_type="piano_controdedotto")
 
-            check_and_promote(_piano, info)
+            if closed:
+                check_and_promote(_piano, info)
 
             return PianoControdedotto(
                 adozione_aggiornata=_procedura_adozione,
@@ -518,7 +525,7 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
 
-        if not auth.is_soggetto_operante(info.context.user, qualifica_richiesta=QualificaRichiesta.REGIONE):
+        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -569,7 +576,9 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
         if needsExecution(_rev_piano_post_cp):
             chiudi_azione(_rev_piano_post_cp)
 
-            check_and_close_adozione(piano)
+            return check_and_close_adozione(piano)
+
+        return False
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -580,7 +589,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
             return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
 
         try:
-            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
+            closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
             # Notify Users
             piano_phase_changed.send(
@@ -589,7 +598,8 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
                 piano=_piano,
                 message_type="rev_piano_post_cp")
 
-            check_and_promote(_piano, info)
+            if closed or True:
+                check_and_promote(_piano, info)
 
             return RevisionePianoPostConfPaesaggistica(
                 adozione_aggiornata=_procedura_adozione,
@@ -650,11 +660,11 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        _procedura_ad_vas:ProceduraAdozioneVAS = ProceduraAdozioneVAS.objects.get(uuid=input['uuid'])
-        _piano:Piano = _procedura_ad_vas.piano
-        _procedura_adozione:ProceduraAdozione = ProceduraAdozione.objects.get(piano=_piano)
+        _procedura_ad_vas: ProceduraAdozioneVAS = ProceduraAdozioneVAS.objects.get(uuid=input['uuid'])
+        _piano: Piano = _procedura_ad_vas.piano
+        _procedura_adozione: ProceduraAdozione = ProceduraAdozione.objects.get(piano=_piano)
 
-        if not auth.is_soggetto_operante(info.context.user, qualifica_richiesta=QualificaRichiesta.SCA):
+        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.SCA):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -663,6 +673,9 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
                     .filter(tipo=TipoRisorsa.PARERE_ADOZIONE_SCA, archiviata=False, user=info.context.user)\
                     .exists()
             if not _esiste_risorsa:
+                for r in _procedura_ad_vas.risorse.filter(tipo=TipoRisorsa.PARERE_ADOZIONE_SCA, archiviata=False):
+                    logger.warning('Risorsa {tipo} per utente {u}'.format(tipo=r.tipo, u=r.user))
+
                 return GraphQLError("File relativo al pareri SCA mancante", code=409)
 
             # controlla se l'utente ha già validato il parere

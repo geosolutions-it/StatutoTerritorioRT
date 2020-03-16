@@ -63,6 +63,26 @@ class TipoRisorsa(SerapideEnum):
 
     # adozione
     PARERE_ADOZIONE_SCA = 'parere_adozione_sca'
+    DELIBERA_ADOZIONE = 'delibera_adozione'
+    # adozione - elaborati testuali
+    RELAZIONE_GENERALE = "realzaione_generale"
+    DISCIPLINA_PIANO = "disciplina_piano"
+    RELAZIONE_RESPONSABILE = "relazione_responsabile"
+    RELAZIONE_GARANTE_INFORMAZIONE_PARTECIPAZIONE = "relazione_garante_informazione_partecipazione"
+    VALUTAZIONE = "valutazioni"
+    ELABORATI_CONFORMAZIONE = "elaborati_conformazione"
+    PIANI_ATTUATIVI_BP = "piani_attuativi_beni_paseaggistici"
+    INDAGINI_G_I_S = "indagini_geologiche_idrauliche_sismiche"
+    # adozione - elaborati cartografici
+    SUPPORTO_PREVISIONI_P_C = 'supporto_previsioni_piano_carto'
+    DISCIPLINA_INSEDIAMENTI = 'disciplina_insediamenti_esistenti_carto'
+    ASSETTI_INSEDIATIVI = 'assetti_insiedativi_infrastrutturali_edilizi_carto'
+
+    OSSERVAZIONI_PRIVATI = 'osservazioni_privati'
+    OSSERVAZIONI_ENTI = 'osservazioni_enti'
+
+    ELABORATI_CONF_P = 'elaborati_conferenza_paesaggistica'
+
 
 
 TIPOLOGIA_RISORSA = {

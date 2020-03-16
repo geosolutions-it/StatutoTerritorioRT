@@ -1,0 +1,44 @@
+{
+  "operationName": "PianoRevPostCp",
+  "variables": {
+    "codice": "{codice}"
+  },
+  "query": "query PianoRevPostCp($codice: String!) {
+  modello: pianoRevPostCp(piano_Codice: $codice) {
+    edges {
+      node {
+        uuid
+        risorse(archiviata: false) {
+          ...Risorse
+          __typename
+        }
+      }
+    }
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+  }
+  label
+  tooltip
+}
+"
+}

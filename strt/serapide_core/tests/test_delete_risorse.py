@@ -169,13 +169,13 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
 
         # VAS COMPLETATO
-        response = self.sendCNV('999_get_vas.query', 'GET VAS', self.codice_piano)
+        response = self.sendCNV('901_get_vas.query', 'GET VAS', self.codice_piano)
         content = json.loads(response.content)
         vas_conclusa = content['data']['modello']['edges'][0]['node']['conclusa']
         self.assertTrue(vas_conclusa, 'VAS non conclusa')
 
     def contributi_tecnici(self):
-        self.sendCNV('999_get_avvio.query', 'GET AVVIO', self.codice_piano)
+        self.sendCNV('902_get_avvio.query', 'GET AVVIO', self.codice_piano)
 
         nome,response = self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
         content = json.loads(response.content)
@@ -243,7 +243,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
     def check_fase(self, fase_expected:Fase):
         # l'azione precedente promuove automaticamente alla fase AVVIO
-        response = self.sendCNV('999_get_piani.query', 'GET PIANI', self.codice_piano)
+        response = self.sendCNV('900_get_piani.query', 'GET PIANI', self.codice_piano)
         content = json.loads(response.content)
         fase = content['data']['piani']['edges'][0]['node']['fase']
         self.assertEqual(fase_expected, Fase.fix_enum(fase), "Fase errata")

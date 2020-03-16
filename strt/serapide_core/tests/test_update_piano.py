@@ -90,7 +90,7 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
 
         # ===  CONTROLLA LISTA SOGGETTI
 
-        response = self.sendCNV('999_get_piani.query', 'GET PIANO', self.codice_piano)
+        response = self.sendCNV('900_get_piani.query', 'GET PIANO', self.codice_piano)
         content = json.loads(response.content)
 
         piano = content['data']['piani']['edges'][0]['node']
@@ -112,7 +112,7 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
 
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
 
-        response = self.sendCNV('999_get_piani.query', 'GET PIANO', self.codice_piano)
+        response = self.sendCNV('900_get_piani.query', 'GET PIANO', self.codice_piano)
         content = json.loads(response.content)
 
         piano = content['data']['piani']['edges'][0]['node']
@@ -125,7 +125,7 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
 
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
 
-        response = self.sendCNV('999_get_piani.query', 'GET PIANO', self.codice_piano)
+        response = self.sendCNV('900_get_piani.query', 'GET PIANO', self.codice_piano)
         content = json.loads(response.content)
 
         piano = content['data']['piani']['edges'][0]['node']
@@ -141,7 +141,7 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
 
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettoProponenteUuid", '')
 
-        response = self.sendCNV('999_get_piani.query', 'GET PIANO', self.codice_piano)
+        response = self.sendCNV('900_get_piani.query', 'GET PIANO', self.codice_piano)
         content = json.loads(response.content)
 
         piano = content['data']['piani']['edges'][0]['node']
