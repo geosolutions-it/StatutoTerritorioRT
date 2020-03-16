@@ -82,7 +82,7 @@ def check_and_close_adozione(piano: Piano):
                 and (not procedura_adozione.richiesta_conferenza_paesaggistica or isExecuted(rev_piano_post_cp)) \
                 and (not _procedura_adozione_vas or _procedura_adozione_vas.conclusa):
 
-            logger.warning('CHIUSURA FASE ADOZIONE {} {}'.format(_procedura_adozione_vas, _procedura_adozione_vas.conclusa))
+            logger.warning('CHIUSURA FASE ADOZIONE')
 
             piano.chiudi_pendenti(attesa=True, necessaria=False)
 
