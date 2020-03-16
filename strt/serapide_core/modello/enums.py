@@ -82,6 +82,9 @@ class TipoRisorsa(SerapideEnum):
     OSSERVAZIONI_ENTI = 'osservazioni_enti'
 
     ELABORATI_CONF_P = 'elaborati_conferenza_paesaggistica'
+    PARERE_MOTIVATO = 'parere_motivato'
+    DOCUMENTO_SINTESI = "documento_sintesi"
+    RAPPORTO_AMBIENTALE = "rapporto_ambientale"
 
 
 

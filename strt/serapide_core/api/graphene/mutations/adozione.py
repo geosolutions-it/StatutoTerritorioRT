@@ -39,6 +39,7 @@ from serapide_core.modello.models import (
     ParereAdozioneVAS,
     ProceduraAdozioneVAS,
     ProceduraApprovazione,
+    RisorseAdozioneVas,
 
     needsExecution,
     chiudi_azione,
@@ -154,7 +155,7 @@ class UpdateProceduraAdozione(relay.ClientIDMutation):
         _piano = _procedura_adozione.piano
 
         if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - L'utente non può editare questo piano", code=403)
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
             if fixed_field in _procedura_adozione_data:
@@ -332,7 +333,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
         _piano = _procedura_adozione.piano
 
         if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - Pre-check: L'utente non può editare questo piano", code=403)
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
@@ -639,7 +640,7 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
             raise Exception("Tipologia VAS incongruente con l'azione richiesta")
 
         # TODO: controllare se possibile usare --> _pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_adozione_sca)
-        _pareri_sca_list = Piano.azioni(tipologia_azione=TIPOLOGIA_AZIONE.pareri_adozione_sca)
+        _pareri_sca_list = piano.azioni(tipologia_azione=TIPOLOGIA_AZIONE.pareri_adozione_sca)
         _pareri_sca = next((x for x in _pareri_sca_list if needsExecution(x)), None)
 
         if _pareri_sca:
@@ -670,11 +671,14 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
         try:
             # controlla se l'utente ha caricato il suo file parere
             _esiste_risorsa = _procedura_ad_vas.risorse\
-                    .filter(tipo=TipoRisorsa.PARERE_ADOZIONE_SCA, archiviata=False, user=info.context.user)\
+                    .filter(tipo=TipoRisorsa.PARERE_ADOZIONE_SCA.value, archiviata=False, user=info.context.user)\
                     .exists()
             if not _esiste_risorsa:
-                for r in _procedura_ad_vas.risorse.filter(tipo=TipoRisorsa.PARERE_ADOZIONE_SCA, archiviata=False):
+                logger.warning("RISORSA NON TROVATA per utente {}".format(info.context.user))
+                for r in _procedura_ad_vas.risorse.filter(archiviata=False):
                     logger.warning('Risorsa {tipo} per utente {u}'.format(tipo=r.tipo, u=r.user))
+                for r in RisorseAdozioneVas.objects.all():
+                    logger.warning('RisorseAdozioneVas {tipo} per utente {u}'.format(tipo=r.risorsa.tipo, u=r.risorsa.user))
 
                 return GraphQLError("File relativo al pareri SCA mancante", code=409)
 
@@ -695,8 +699,8 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
 
             # controlla se l'azione può essere chiusa
             _tutti_pareri_inviati = True
-            for _sca in SoggettoOperante.get_by_qualifica(_piano, Qualifica.SCA):
-                ass = Assegnatario.objects.filter(qualifica=_sca.qualifica_ufficio)
+            for _so_sca in SoggettoOperante.get_by_qualifica(_piano, Qualifica.SCA):
+                ass = Assegnatario.objects.filter(qualifica_ufficio=_so_sca.qualifica_ufficio)
                 utenti_sca = [a.utente for a in ass]
                 _parere_sent = ParereAdozioneVAS.objects\
                     .filter(
@@ -781,26 +785,26 @@ class InvioParereMotivatoAC(graphene.Mutation):
             return GraphQLError("Errore - burtdata mancante", code=500)
 
         try:
-            _tutti_pareri_inviati = True
-            for _sca in _piano.soggetti_sca.all():
-                _pareri_vas_count = ParereAdozioneVAS.objects.filter(
-                    user=_sca.user,
-                    procedura_adozione=_procedura_adozione
-                ).count()
+            # _tutti_pareri_inviati = True
+            # for _sca in _piano.soggetti_sca.all():
+            #     _pareri_vas_count = ParereAdozioneVAS.objects.filter(
+            #         user=_sca.user,
+            #         procedura_adozione=_procedura_adozione
+            #     ).count()
+            #
+            #     if _pareri_vas_count == 0:
+            #         _tutti_pareri_inviati = False
+            #         break
+            #
+            # if _tutti_pareri_inviati:
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
-                if _pareri_vas_count == 0:
-                    _tutti_pareri_inviati = False
-                    break
-
-            if _tutti_pareri_inviati:
-                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
-
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=info.context.user,
-                    piano=_piano,
-                    message_type="parere_motivato_ac")
+            # Notify Users
+            piano_phase_changed.send(
+                sender=Piano,
+                user=info.context.user,
+                piano=_piano,
+                message_type="parere_motivato_ac")
 
             return InvioParereMotivatoAC(
                 vas_aggiornata=_procedura_vas,

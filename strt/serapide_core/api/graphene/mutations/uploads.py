@@ -227,41 +227,43 @@ class UploadRisorsaAdozioneVAS(UploadBaseBase):
 
     @classmethod
     def mutate(cls, root, info, file, **input):
-        if info.context.user and rules.test_rule('strt_core.api.can_access_private_area', info.context.user):
-            # Fetching input arguments
-            _uuid_vas = input['codice']
-            _tipo_file = input['tipo_file']
+        if not info.context.user or not  auth.is_recognizable(info.context.user):
+            return GraphQLError("Not Authorized - Utente non riconosciuto", code=401)
 
-            try:
-                # Validating 'Procedura VAS'
-                _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=_uuid_vas)
-                if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+        # Fetching input arguments
+        _uuid_vas = input['codice']
+        _tipo_file = input['tipo_file']
 
-                    _resources = UploadBaseBase.handle_uploaded_data(
-                        file,
-                        _uuid_vas,
-                        _procedura_vas.piano.fase,
-                        _tipo_file,
-                        info.context.user
-                    )
-                    _success = False
-                    if _resources and len(_resources) > 0:
-                        _success = True
-                        for _risorsa in _resources:
-                            RisorseAdozioneVas(procedura_adozione_vas=_procedura_vas, risorsa=_risorsa).save()
-                    return UploadRisorsaAdozioneVAS(
-                        procedura_vas_aggiornata=_procedura_vas,
-                        success=_success,
-                        file_name=_resources[0].nome)
-                else:
-                    return GraphQLError(_("Forbidden"), code=403)
-            except BaseException as e:
-                tb = traceback.format_exc()
-                logger.error(tb)
-                return GraphQLError(e, code=500)
+        try:
+            # Validating 'Procedura VAS'
+            _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=_uuid_vas)
+            _piano = _procedura_vas.piano
+            # if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _procedura_vas.piano):
+            if not auth.is_soggetto(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        # Something went wrong
-        return GraphQLError(_("Not Allowed"), code=405)
+            _resources = UploadBaseBase.handle_uploaded_data(
+                file,
+                _uuid_vas,
+                _procedura_vas.piano.fase,
+                _tipo_file,
+                info.context.user
+            )
+            _success = False
+            if _resources and len(_resources) > 0:
+                _success = True
+                for _risorsa in _resources:
+                    RisorseAdozioneVas(procedura_adozione_vas=_procedura_vas, risorsa=_risorsa).save()
+            return UploadRisorsaAdozioneVAS(
+                procedura_vas_aggiornata=_procedura_vas,
+                success=_success,
+                file_name=_resources[0].nome)
+
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+
 
 
 class UploadRisorsaAvvio(UploadBaseBase):

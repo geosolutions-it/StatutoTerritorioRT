@@ -3,9 +3,7 @@ import logging
 import json
 import os
 import datetime
-from ast import dump
-from contextlib import redirect_stderr
-from functools import partial
+
 
 from django.test import TestCase, Client
 
@@ -35,6 +33,7 @@ def _get_datetime(**argw_delta):
         date = date + datetime.timedelta(**argw_delta)
     return date
 
+
 def _get_date(**argw_delta):
     date = _get_datetime(**argw_delta)
     date = date.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -63,7 +62,6 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         print("GET_PROFILES ====================")
         response = self._client.get(self.GET_PROFILES_URL)
         self.assertEqual(200, response.status_code, 'GET PROFILES failed')
-
 
     def create_piano_and_promote(self, tipovas:TipologiaVAS):
         response = self.create_piano(DataLoader.IPA_FI)
@@ -104,7 +102,6 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
         self.sendCNV('006_promozione.query', 'PROMUOVI PIANO', self.codice_piano)
 
-
     def avvio_piano(self, copianificazione:TipologiaCopianificazione):
         avvio_scadenza = _get_date(days=10)
 
@@ -132,14 +129,12 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         # {"operationName": "UpdateProceduraVas", "variables": {"input": {"proceduraVas": {"assoggettamento": false},
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'assoggettamento', False)
 
-
         # SCA
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_VERIFICA_VAS)
         self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, expected_code=403)
         self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, client=self.client_sca)
 
         # AC
-        # {"operationName":"VasUploadFile","variables":{"file":null,"codice":"a62a4292-bc89-4a54-9361-ba7d0472d317","tipo":"provvedimento_verifica_vas"}
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PROVVEDIMENTO_VERIFICA_VAS)
         self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, expected_code=403)
         self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, client=self.client_ac)
@@ -199,7 +194,6 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, client=self.client_gc)
 
     def formazione_piano(self):
-        #{"operationName":"UploadFile","variables":{"file":null,"codice":"SCND_FI200200017","tipo":"norme_tecniche_attuazione"}
         self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE)
         self.sendCNV('040_formazione_piano.query', 'FORMAZIONE PIANO', self.codice_piano)
 
@@ -219,8 +213,6 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
         self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'dataDeliberaAdozione', _get_date().isoformat())
         self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'pubblicazioneBurtData', _get_date().isoformat())
-
-
 
         for tipo in [
                 TipoRisorsa.RELAZIONE_GENERALE,
@@ -266,7 +258,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         for tipo in [
                 # TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
                 # TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
-                TipoRisorsa.ASSETTI_INSEDIATIVI,]:
+                TipoRisorsa.ASSETTI_INSEDIATIVI, ]:
             self.upload('056_controdedotto_upload_file.query', self.codice_pcd, tipo, suffix='.zip')
 
         self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'richiestaConferenzaPaesaggistica', richiesta_cp)
@@ -294,7 +286,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
             for tipo in [
                     TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
                     # TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
-                    TipoRisorsa.ASSETTI_INSEDIATIVI,]:
+                    TipoRisorsa.ASSETTI_INSEDIATIVI, ]:
                 self.upload('060_prcp_upload_file.query', self.codice_rpcp, tipo, suffix='.zip')
 
         self.sendCNV('061_revisione_cp.query', 'REVISIONE CONF PAESGG', self.codice_adozione)
@@ -304,11 +296,16 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         content = json.loads(response.content)
         self.codice_adozione_vas = content['data']['modello']['edges'][0]['node']['uuid']
 
-        self.upload('064_adozionevas_file_upload.query', self.codice_adozione_vas, TipoRisorsa.PARERE_ADOZIONE_SCA)
-        self.sendCNV('065_invio_pareri_adozione.query', 'INVIO_PARERI AD VAS', self.codice_adozione_vas, expected_code=403)
+        self.upload('064_adozionevas_file_upload.query', self.codice_adozione_vas, TipoRisorsa.PARERE_ADOZIONE_SCA, client=self.client_sca)
         self.sendCNV('065_invio_pareri_adozione.query', 'INVIO_PARERI AD VAS', self.codice_adozione_vas, client=self.client_sca)
 
-        pass
+        self.upload('064_adozionevas_file_upload.query', self.codice_adozione_vas, TipoRisorsa.PARERE_MOTIVATO,
+                    client=self.client_ac)
+        self.sendCNV('066_invio_parere_m_ac.query', 'INVIO_PARERI AD AC', self.codice_adozione_vas, client=self.client_ac)
+
+        self.upload('064_adozionevas_file_upload.query', self.codice_adozione_vas, TipoRisorsa.DOCUMENTO_SINTESI)
+        self.upload('064_adozionevas_file_upload.query', self.codice_adozione_vas, TipoRisorsa.RAPPORTO_AMBIENTALE)
+        self.sendCNV('067_up_elabo_adozione_vas.query', 'UP ELABORATO ADOZ VAS', self.codice_adozione_vas)
 
     def check_fase(self, fase_expected:Fase):
         # l'azione precedente promuove automaticamente alla fase AVVIO
