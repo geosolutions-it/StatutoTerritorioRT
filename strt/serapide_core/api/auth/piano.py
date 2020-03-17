@@ -123,9 +123,9 @@ def has_procedura_adozione_vas(piano):
     return ProceduraAdozioneVAS.objects.filter(piano=piano).count() > 0
 
 
-@rules.predicate
-def has_procedura_approvazione(piano):
-    return ProceduraApprovazione.objects.filter(piano=piano).count() > 0
+# @rules.predicate
+# def has_procedura_approvazione(piano):
+#     return ProceduraApprovazione.objects.filter(piano=piano).count() > 0
 
 
 @rules.predicate
@@ -167,10 +167,10 @@ def adozione_vas_piano_conclusa(piano):
     return not _procedura_adozione_vas or _procedura_adozione_vas.conclusa
 
 
-@rules.predicate
-def approvazione_piano_conclusa(piano):
-    _procedura_approvazione = ProceduraApprovazione.objects.filter(piano=piano).first()
-    return _procedura_approvazione.conclusa
+# @rules.predicate
+# def approvazione_piano_conclusa(piano):
+#     _procedura_approvazione = ProceduraApprovazione.objects.filter(piano=piano).first()
+#     return _procedura_approvazione.conclusa
 
 
 @rules.predicate
@@ -277,7 +277,7 @@ def is_eligible_for_promotion(piano:Piano):
         #     msg.append("Ci sono azioni non ancora completate")
 
         if not has_procedura_adozione(piano):
-            msg.append("Procedura di adpzione mancante")
+            msg.append("Procedura di adozione mancante")
         if not adozione_piano_conclusa(piano):
             msg.append("Procedura di adozione non conclusa")
         if not adozione_vas_piano_conclusa(piano):
@@ -285,15 +285,27 @@ def is_eligible_for_promotion(piano:Piano):
 
         return len(msg) == 0, msg
 
-    raise Exception('NOT IMPLEMENTED YET')
+    elif piano.fase == Fase.ADOZIONE:
+
+        # rules.add_rule(
+        #     'strt_core.api.fase_approvazione_completa',
+        #     ~has_pending_alerts &
+        #     is_adozione &
+        #     has_procedura_approvazione &
+        #     approvazione_piano_conclusa
+        # )
+
+        _procedura_approvazione = ProceduraApprovazione.objects.filter(piano=piano).first()
+
+        if not _procedura_approvazione:
+            msg.append("Procedura di approvazione mancante")
+
+        if not _procedura_approvazione.conclusa:
+            msg.append("Procedura di approvazione non conclusa")
+
+        return len(msg) == 0, msg
+
+    else:
+        raise Exception('Fase non riconosciute [{}]'.format(fase))
 
 
-
-#
-# rules.add_rule(
-#     'strt_core.api.fase_approvazione_completa',
-#     ~has_pending_alerts &
-#     is_adozione &
-#     has_procedura_approvazione &
-#     approvazione_piano_conclusa
-# )

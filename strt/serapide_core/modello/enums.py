@@ -86,6 +86,10 @@ class TipoRisorsa(SerapideEnum):
     DOCUMENTO_SINTESI = "documento_sintesi"
     RAPPORTO_AMBIENTALE = "rapporto_ambientale"
 
+    # approvazione
+    DELIBERA_APPROVAZIONE = "delibera_approvazione"
+    CONFORMITA_PIT = "conformita-pit"
+
 
 
 TIPOLOGIA_RISORSA = {

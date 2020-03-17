@@ -307,6 +307,47 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.upload('064_adozionevas_file_upload.query', self.codice_adozione_vas, TipoRisorsa.RAPPORTO_AMBIENTALE)
         self.sendCNV('067_up_elabo_adozione_vas.query', 'UP ELABORATO ADOZ VAS', self.codice_adozione_vas)
 
+    def approvazione(self):
+        response = self.sendCNV('904_get_approvazione.query', 'GET APPROVAZIONE', self.codice_piano)
+        content = json.loads(response.content)
+        self.codice_approvazione = content['data']['modello']['edges'][0]['node']['uuid']
+
+        self.upload('070_approvazione_file_upload.query', self.codice_approvazione, TipoRisorsa.DELIBERA_APPROVAZIONE)
+        self.sendCNV('071_update_approvazione.query', 'UPDATE APPROVAZIONE', self.codice_approvazione,
+                     'dataDeliberaApprovazione', _get_datetime().isoformat())
+
+        for tipo in [
+                # TipoRisorsa.RELAZIONE_GENERALE,
+                TipoRisorsa.DISCIPLINA_PIANO,
+                # TipoRisorsa.RELAZIONE_RESPONSABILE,
+                TipoRisorsa.RELAZIONE_GARANTE_INFORMAZIONE_PARTECIPAZIONE,
+                # TipoRisorsa.VALUTAZIONE,
+                TipoRisorsa.ELABORATI_CONFORMAZIONE,
+                # TipoRisorsa.PIANI_ATTUATIVI_BP,
+                TipoRisorsa.INDAGINI_G_I_S]:
+            self.upload('070_approvazione_file_upload.query', self.codice_approvazione, tipo)
+
+        for tipo in [
+                TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
+                # TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
+                TipoRisorsa.ASSETTI_INSEDIATIVI, ]:
+            self.upload('070_approvazione_file_upload.query', self.codice_approvazione, tipo, suffix='.zip')
+
+        self.sendCNV('071_update_approvazione.query', 'UPDATE APPROVAZIONE', self.codice_approvazione,
+                     'urlPianoPubblicato', 'http://approvazione.serapide')
+        self.sendCNV('072_trasmissione_approvazione.query', 'TRASMISSIONE APPROVAZIONE', self.codice_approvazione)
+
+        for nome, val in [
+                ("pubblicazioneUrl", 'http://compilazioneRapportoAmbientaleUrl'),
+                ("pubblicazioneUrlData", _get_datetime().isoformat())]:
+            self.sendCNV('071_update_approvazione.query', 'UPDATE APPROVAZIONE', self.codice_approvazione, nome, val)
+
+        self.sendCNV('073_pubblicazione_approvazione.query', 'PUBBLICAZIONE APPROVAZIONE', self.codice_approvazione)
+
+        self.upload('070_approvazione_file_upload.query', self.codice_approvazione, TipoRisorsa.CONFORMITA_PIT)
+        self.sendCNV('074_attrib_conformita_pit.query', 'CONFORMITA PIT', self.codice_approvazione, client=self.client_pian)
+
+
     def check_fase(self, fase_expected:Fase):
         # l'azione precedente promuove automaticamente alla fase AVVIO
         response = self.sendCNV('900_get_piani.query', 'GET PIANI', self.codice_piano)

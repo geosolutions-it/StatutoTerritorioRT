@@ -114,7 +114,7 @@ class UpdateProceduraApprovazione(relay.ClientIDMutation):
         _piano = _procedura_approvazione.piano
 
         if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - L'utente non può editare questo piano", code=403)
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo pianoù", code=403)
 
         for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
             if fixed_field in _procedura_approvazione_data:
@@ -187,7 +187,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
         _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=input['uuid'])
         _piano = _procedura_approvazione.piano
 
-        if not auth.has_qualifica(info.context.user, _piano, Qualifica.RESP):
+        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
             return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
 
         try:
