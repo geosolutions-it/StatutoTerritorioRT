@@ -554,14 +554,14 @@ class ProceduraVAS(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseVas')
 
-    ente = models.ForeignKey(
-        to=Ente,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -777,14 +777,14 @@ class ProceduraAvvio(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
 
-    ente = models.ForeignKey(
-        to=Ente,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -793,7 +793,7 @@ class ProceduraAvvio(models.Model):
         verbose_name_plural = 'Procedure Avvio'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+        return '{} [{}]'.format(self.piano.codice, self.uuid)
 
     @classmethod
     def from_db(cls, db, field_names, values):
@@ -1067,14 +1067,14 @@ class ProceduraApprovazione(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseApprovazione')
 
-    ente = models.ForeignKey(
-        to=Ente,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -1083,7 +1083,7 @@ class ProceduraApprovazione(models.Model):
         verbose_name_plural = 'Procedure Approvazione'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+        return '{} [{}]'.format(self.piano.codice, self.uuid)
 
 
 class RisorseApprovazione(models.Model):
@@ -1115,15 +1115,6 @@ class ProceduraPubblicazione(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorsePubblicazione')
 
-    ente = models.ForeignKey(
-        to=Ente,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
-
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     class Meta:
@@ -1131,7 +1122,7 @@ class ProceduraPubblicazione(models.Model):
         verbose_name_plural = 'Procedure Pubblicazione'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+        return '{} [{}]'.format(self.piano.codice, self.uuid)
 
 
 class RisorsePubblicazione(models.Model):

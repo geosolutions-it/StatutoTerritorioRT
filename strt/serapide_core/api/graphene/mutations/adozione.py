@@ -89,8 +89,7 @@ def check_and_close_adozione(piano: Piano):
             procedura_adozione.conclusa = True
             procedura_adozione.save()
 
-            procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(
-                piano=piano, ente=piano.ente)
+            procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(piano=piano)
             piano.procedura_approvazione = procedura_approvazione
             piano.save()
             return True
@@ -159,7 +158,7 @@ class UpdateProceduraAdozione(relay.ClientIDMutation):
 
         for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
             if fixed_field in _procedura_adozione_data:
-                logger.warning('Il campo "{}" non può essere modificato attraverso questa operazione'.format(fixed_field))
+                logger.warning('Il campo "{}" non può essere modificato'.format(fixed_field))
                 _procedura_adozione_data.pop(fixed_field)
 
         try:

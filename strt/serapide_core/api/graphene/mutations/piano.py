@@ -279,13 +279,10 @@ class CreatePiano(relay.ClientIDMutation):
             # Inizializzazione Procedura VAS
             _procedura_vas, created = ProceduraVAS.objects.get_or_create(
                 piano=nuovo_piano,
-                ente=nuovo_piano.ente,
                 tipologia=TipologiaVAS.UNKNOWN)
 
             # Inizializzazione Procedura Avvio
-            _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
-                piano=nuovo_piano,
-                ente=nuovo_piano.ente)
+            _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(piano=nuovo_piano)
 
             nuovo_piano.procedura_vas = _procedura_vas
             nuovo_piano.procedura_avvio = _procedura_avvio

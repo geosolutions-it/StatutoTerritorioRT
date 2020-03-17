@@ -347,6 +347,16 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.upload('070_approvazione_file_upload.query', self.codice_approvazione, TipoRisorsa.CONFORMITA_PIT)
         self.sendCNV('074_attrib_conformita_pit.query', 'CONFORMITA PIT', self.codice_approvazione, client=self.client_pian)
 
+    def pubblicazione(self):
+        response = self.sendCNV('905_get_pubblicazione.query', 'GET PUBBLICAZIONE', self.codice_piano)
+        content = json.loads(response.content)
+        self.codice_pubblicazione = content['data']['modello']['edges'][0]['node']['uuid']
+
+        for nome, val in [
+                ("pubblicazioneUrl", 'http://compilazioneRapportoAmbientaleUrl'),
+                ("pubblicazioneUrlData", _get_datetime().isoformat())]:
+            self.sendCNV('080_update_pubblicazione.query', 'UPDATE PUBBLICAZIONE', self.codice_pubblicazione, nome, val)
+        self.sendCNV('081_pubblicazione_piano.query', 'PUBBLICAZIONE PIANO', self.codice_pubblicazione)
 
     def check_fase(self, fase_expected:Fase):
         # l'azione precedente promuove automaticamente alla fase AVVIO

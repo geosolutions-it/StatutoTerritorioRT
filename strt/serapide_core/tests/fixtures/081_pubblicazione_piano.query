@@ -1,0 +1,37 @@
+{
+  "operationName": "PubblicazionePiano",
+  "variables": {
+    "codice": "{codice}"
+  },
+  "query": "mutation PubblicazionePiano($codice: String!) {
+  pubblicazionePiano(uuid: $codice) {
+    errors
+    pubblicazioneAggiornata {
+      piano {
+        ...AzioniPiano
+      }
+    }
+  }
+}
+
+fragment AzioniPiano on PianoNode {
+  codice
+  fase
+  azioni {
+    ...Azioni
+  }
+}
+
+fragment Azioni on AzioneNode {
+      order
+      tipologia
+      stato
+      qualificaRichiesta
+      data
+      uuid
+      label
+      tooltip
+      fase
+}
+"
+}

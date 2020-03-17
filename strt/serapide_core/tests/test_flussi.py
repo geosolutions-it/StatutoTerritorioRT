@@ -120,6 +120,11 @@ class FlussiTest(AbstractSerapideProcsTest):
 
         self.check_fase(Fase.APPROVAZIONE)
 
+        self.pubblicazione()
+
+        self.check_fase(Fase.APPROVAZIONE)
+
+
     def test_flow_vasverificanoass_ccsiirno_form(self):
 
         self.do_login()

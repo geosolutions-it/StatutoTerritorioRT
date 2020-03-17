@@ -118,7 +118,7 @@ class UpdateProceduraApprovazione(relay.ClientIDMutation):
 
         for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
             if fixed_field in _procedura_approvazione_data:
-                logger.warning('Il campo "{}" non può essere modificato attraverso questa operazione'.format(fixed_field))
+                logger.warning('Il campo "{}" non può essere modificato'.format(fixed_field))
                 _procedura_approvazione_data.pop(fixed_field)
 
         try:
@@ -378,8 +378,7 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
             procedura_approvazione.conclusa = True
             procedura_approvazione.save()
 
-            procedura_pubblicazione, created = ProceduraPubblicazione.objects.get_or_create(
-                piano=piano, ente=piano.ente)
+            procedura_pubblicazione, created = ProceduraPubblicazione.objects.get_or_create(piano=piano)
             piano.procedura_pubblicazione = procedura_pubblicazione
             piano.save()
 

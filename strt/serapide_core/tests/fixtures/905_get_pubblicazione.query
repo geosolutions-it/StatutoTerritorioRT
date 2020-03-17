@@ -1,0 +1,51 @@
+{
+  "operationName": "GetPubblicazione",
+  "variables": {
+    "codice": "{codice}"
+  },
+  "query": "query GetPubblicazione($codice: String!) {
+  modello: procedurePubblicazione(piano_Codice: $codice) {
+    edges {
+      node {
+        ...PUBBLICAZIONE
+        __typename
+      }
+    }
+  }
+}
+
+fragment PUBBLICAZIONE on ProceduraPubblicazioneNode {
+  uuid
+  pubblicazioneUrl
+  pubblicazioneUrlData
+  risorse(archiviata: false) {
+    ...Risorse
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+  }
+  label
+  tooltip
+}
+"
+}

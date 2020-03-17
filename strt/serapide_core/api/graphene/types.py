@@ -459,7 +459,7 @@ class EnteNode(DjangoObjectType):
 
 class ProceduraVASNode(DjangoObjectType):
 
-    ente = graphene.Field(EnteNode)
+    # ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseVASType)
     documento_preliminare_vas = graphene.Field(RisorsaNode)
     documento_preliminare_verifica = graphene.Field(RisorsaNode)
@@ -495,7 +495,7 @@ class ProceduraVASNode(DjangoObjectType):
         model = ProceduraVAS
         # Allow for some more advanced filtering here
         filter_fields = {
-            'ente': ['exact'],
+            # 'ente': ['exact'],
             'piano__codice': ['exact'],
             'note': ['exact', 'icontains'],
             'tipologia': ['exact', 'icontains'],
@@ -525,18 +525,17 @@ class ProceduraAdozioneVASNode(DjangoObjectType):
 
 class ProceduraAvvioNode(DjangoObjectType):
 
-    ente = graphene.Field(EnteNode)
+    # ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseAvvioType)
 
     def resolve_conferenza_copianificazione(self, info, **args):
         return self.conferenza_copianificazione.name if self.conferenza_copianificazione else None
 
-
     class Meta:
         model = ProceduraAvvio
         # Allow for some more advanced filtering here
         filter_fields = {
-            'ente': ['exact'],
+            # 'ente': ['exact'],
             'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )
@@ -560,14 +559,14 @@ class ProceduraAdozioneNode(DjangoObjectType):
 
 class ProceduraApprovazioneNode(DjangoObjectType):
 
-    ente = graphene.Field(EnteNode)
+    # ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseApprovazioneType)
 
     class Meta:
         model = ProceduraApprovazione
         # Allow for some more advanced filtering here
         filter_fields = {
-            'ente': ['exact'],
+            # 'ente': ['exact'],
             'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )
@@ -575,14 +574,14 @@ class ProceduraApprovazioneNode(DjangoObjectType):
 
 class ProceduraPubblicazioneNode(DjangoObjectType):
 
-    ente = graphene.Field(EnteNode)
+    # ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorsePubblicazioneType)
 
     class Meta:
         model = ProceduraPubblicazione
         # Allow for some more advanced filtering here
         filter_fields = {
-            'ente': ['exact'],
+            # 'ente': ['exact'],
             'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )

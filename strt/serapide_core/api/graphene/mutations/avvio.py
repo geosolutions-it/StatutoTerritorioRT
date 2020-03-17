@@ -122,7 +122,7 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
 
         for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
             if fixed_field in _procedura_avvio_data:
-                logger.warning('Il campo "{}" non può essere modificato attraverso questa operazione'.format(fixed_field))
+                logger.warning('Il campo "{}" non può essere modificato'.format(fixed_field))
                 _procedura_avvio_data.pop(fixed_field)
 
         try:

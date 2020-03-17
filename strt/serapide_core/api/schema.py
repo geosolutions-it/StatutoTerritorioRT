@@ -221,7 +221,7 @@ class Mutation(object):
     pubblicazione_approvazione = approvazione.PubblicazioneApprovazione.Field()
     attribuzione_conformita_pit = approvazione.AttribuzioneConformitaPIT.Field()
 
-    create_procedura_pubblicazione = pubblicazione.CreateProceduraPubblicazione.Field()
+    # create_procedura_pubblicazione = pubblicazione.CreateProceduraPubblicazione.Field()
     update_procedura_pubblicazione = pubblicazione.UpdateProceduraPubblicazione.Field()
     pubblicazione_piano = pubblicazione.PubblicazionePiano.Field()
 
