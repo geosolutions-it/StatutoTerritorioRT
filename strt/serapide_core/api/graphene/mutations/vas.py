@@ -254,7 +254,8 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # perform check before update
             if _procedura_vas_data.pubblicazione_provvedimento_verifica_ac:
                 if not auth.is_soggetto_operante(info.context.user, _piano, Qualifica.AC):
-                    return GraphQLError("Forbidden - Non è permesso modificare un campo AC", code=403)
+                    if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                        return GraphQLError("Forbidden - Non è permesso modificare un campo AC", code=403)
 
             # update!
             procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
