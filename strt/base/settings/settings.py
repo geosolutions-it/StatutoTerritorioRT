@@ -42,7 +42,8 @@ SITE_NAME = EnvUtil.get_env_var('DJANGO_SITE_NAME', default='Statuto Territorio 
 
 ALLOWED_HOSTS = EnvUtil.get_env_var('DJANGO_ALLOWED_HOSTS', type=list, default=[HOSTNAME, ], separator=' ')
 
-LOGIN_URL = EnvUtil.get_env_var('LOGIN_URL', default='/private-area/')
+LOGIN_URL = EnvUtil.get_env_var('LOGIN_URL', default='/users/login/')
+# LOGIN_URL = EnvUtil.get_env_var('LOGIN_URL', default='/private-area/')
 LOGOUT_REDIRECT_URL = EnvUtil.get_env_var('LOGOUT_REDIRECT_URL', default='/')
 
 LOGIN_FRONTEND_URL = EnvUtil.get_env_var('LOGIN_FRONTEND_URL', default='users/login')
@@ -128,7 +129,7 @@ INSTALLED_APPS = [
     # Crispy forms
     'crispy_forms',
     # Rules
-    'rules.apps.AutodiscoverRulesConfig',
+    # 'rules.apps.AutodiscoverRulesConfig',
     # DRF
     'rest_framework',
     # TEST
@@ -209,7 +210,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
     'strt_users.backends.StrtPortalAuthentication',
-    'rules.permissions.ObjectPermissionBackend',
+    # 'rules.permissions.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
