@@ -31,9 +31,9 @@ export default ({piano = {}, expanded, url, active, toggleOpen, unreadMessages =
                 
                 <MenuItem href={`${url}/avvio`} active={active === "avvio"} title="AVVIO" subtitle="Avvio del Procedimento" icon="dashboard" expanded={expanded}/>
                 
-                <MenuItem locked={!showAdozione(piano.fase.nomefase)} href={`${url}/adozione`} active={active === "adozione"} title="ADOZIONE" icon="library_add" expanded={expanded}/>
-                <MenuItem locked={!showApprovazione(piano.fase.nomefase)} href={`${url}/approvazione`} active={active === "approvazione"} title="APPROVAZIONE" icon="offline_pin" expanded={expanded}/>
-                <MenuItem locked={!showPubblicazione(piano.fase.nomefase)} href={`${url}/pubblicazione`} active={active === "pubblicazione"} title="PUBBLICAZIONE" icon="turned_in" expanded={expanded}/>
+                <MenuItem locked={!showAdozione(piano.fase)} href={`${url}/adozione`} active={active === "adozione"} title="ADOZIONE" icon="library_add" expanded={expanded}/>
+                <MenuItem locked={!showApprovazione(piano.fase)} href={`${url}/approvazione`} active={active === "approvazione"} title="APPROVAZIONE" icon="offline_pin" expanded={expanded}/>
+                <MenuItem locked={!showPubblicazione(piano.fase)} href={`${url}/pubblicazione`} active={active === "pubblicazione"} title="PUBBLICAZIONE" icon="turned_in" expanded={expanded}/>
                 {/* <MenuItem href="/users/messages/inbox/" active={active === "/messaggi"} title="MESSAGGI" icon="email" expanded={expanded}>
                     <Badge color="light">{unreadMessages}</Badge>
                 </MenuItem> */}

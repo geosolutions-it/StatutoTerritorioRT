@@ -20,8 +20,10 @@ export const View = ({soggettiOperanti = [], containerClass="col-6 pt-3 mb-3", t
         </div>);
     }
 
-    export const List = ({soggettiOperanti = []}, title="SOGGETTI ISTITUZIONALI")  => (
-        <Li 
-            title={title}
-            contacts={getSoggettiIsti(soggettiOperanti).map(({qualificaUfficio} = {}) => (qualificaUfficio))}/>
-        );
+    export const List = ({soggettiOperanti = [], title="SOGGETTI ISTITUZIONALI"})  => {
+        return (
+            <Li 
+                title={title}
+                contacts={getSoggettiIsti(soggettiOperanti).map(({qualificaUfficio} = {}) => (qualificaUfficio))}/>
+            );
+        };

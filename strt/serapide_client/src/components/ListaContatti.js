@@ -14,7 +14,7 @@ export default ({hideTitle = false, title = "SOGGETTI ISTITUZIONALI", contacts =
         <React.Fragment>
             {!hideTitle && (<ActionSubParagraphTitle className="pb-1 size-13 mt-2">{title}</ActionSubParagraphTitle>)}
                 <div className="d-flex flex-wrap mt-2">
-                    {contacts.map(({ufficio: {nome, uuid, ente: {nome: nomeEnte}} = {}}) => (<div className="d-flex mr-2 flex-fill align-items-center size-11" key={uuid}>
+                    {contacts.map(({ufficio: {nome, uuid, ente: {nome: nomeEnte}} = {}}) => (<div key={uuid} className="d-flex mr-2 flex-fill align-items-center size-11" key={uuid}>
                                  <i className="material-icons text-serapide icon-13">{icon}</i>
                                  {`${nomeEnte} ${nome}`}
                         </div>))}
