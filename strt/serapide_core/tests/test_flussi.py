@@ -117,7 +117,6 @@ class FlussiTest(AbstractSerapideProcsTest):
         self.check_fase(Fase.ADOZIONE)
 
         self.approvazione()
-
         self.check_fase(Fase.APPROVAZIONE)
 
         self.pubblicazione()
@@ -145,11 +144,19 @@ class FlussiTest(AbstractSerapideProcsTest):
         self.check_fase(Fase.AVVIO)
 
         self.trasmissione_adozione()
-        self.adozione_osservazione(richiesta_cp=True)
+        self.adozione_osservazione(richiesta_cp=False)
 
         self.check_fase(Fase.AVVIO)
         self.adozione_vas()
         self.check_fase(Fase.ADOZIONE)
+
+        self.approvazione()
+        self.check_fase(Fase.APPROVAZIONE)
+
+        self.pubblicazione()
+
+
+
 
         # {"operationName":"AdozioneUploadFile","variables":{"file":null,"codice":"865c0650-1f35-436f-ae00-3995a1128a97","tipo":"osservazioni_privati"}
 

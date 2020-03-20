@@ -10,7 +10,6 @@
 #########################################################################
 
 import logging
-import rules
 
 from strt_users.enums import (
     Profilo, Qualifica,
@@ -36,12 +35,14 @@ logger = logging.getLogger(__name__)
 # User
 # ############################################################################ #
 
+
 def is_recognizable(user):
     # logger.warning("is_recognizable: USER {user} {anon} {act} {auth}".format(user=user, anon=user.is_anonymous, act=user.is_active, auth=user.is_authenticated))
     return user \
            and not user.is_anonymous \
            and user.is_active \
            and user.is_authenticated
+
 
 def can_create_piano(utente, ente):
     if not isinstance(utente, Utente):
@@ -58,10 +59,13 @@ def can_create_piano(utente, ente):
 
     return False
 
-def has_profile(utente, p:Profilo):
-    return ProfiloUtente.objects \
-        .filter(utente=utente, profilo=p) \
-        .exists()
+
+def has_profile(utente, p:Profilo=None):
+    qs = ProfiloUtente.objects.filter(utente=utente)
+    if p:
+        qs = qs.filter(profilo=p)
+    return qs.exists()
+
 
 def can_edit_piano(utente, ente):
     if not isinstance(utente, Utente):
@@ -78,6 +82,7 @@ def can_edit_piano(utente, ente):
 
     return False
 
+
 def has_qualifica(utente, ente:Ente, qualifica:Qualifica):
     # TODO aggiungere check token
 
@@ -86,6 +91,7 @@ def has_qualifica(utente, ente:Ente, qualifica:Qualifica):
         filter(qualifica_ufficio__qualifica=qualifica). \
         filter(qualifica_ufficio__ufficio__ente=ente). \
         exists()
+
 
 def is_soggetto_operante(utente, piano:Piano, qualifica:Qualifica=None, qualifica_richiesta:QualificaRichiesta=None):
     # TODO aggiungere gestione deleghe
@@ -112,6 +118,7 @@ def is_soggetto_operante(utente, piano:Piano, qualifica:Qualifica=None, qualific
 
     return qs.exists()
 
+
 def is_soggetto_proponente(utente, piano:Piano):
 
     return Assegnatario.objects. \
@@ -119,12 +126,14 @@ def is_soggetto_proponente(utente, piano:Piano):
         filter(qualifica_ufficio=piano.soggetto_proponente). \
         exists()
 
+
 def is_soggetto(utente, piano:Piano):
     return is_soggetto_operante(utente, piano) or \
            is_soggetto_proponente(utente, piano) or \
            has_qualifica(utente, piano.ente, Qualifica.RESP)
 
-@rules.predicate
+
+# @rules.predicate
 def can_access_piano(user, piano):
     _has_access = any(
         m.organization == piano.ente
@@ -142,7 +151,7 @@ def can_access_piano(user, piano):
     return _has_access
 
 
-@rules.predicate
+# @rules.predicateCs
 def is_actor_for_token(token, actor):
     return True
     # _attore = None
@@ -187,11 +196,12 @@ def is_actor_for_token(token, actor):
 #     else:
 #         return (_attore == actor)
 
+
 def get_piani_visibili_id(utente:Utente):
     # TODO aggiungere gestione deleghe
     assegnatario = Assegnatario.objects.filter(utente=utente)
     qu_set = [a.qualifica_ufficio for a in assegnatario]
-    logger.warning("qu_set {}".format(qu_set))
+    # logger.warning("qu_set {}".format(qu_set))
 
     qs =  SoggettoOperante.objects. \
         filter(qualifica_ufficio__in=qu_set)
@@ -200,7 +210,7 @@ def get_piani_visibili_id(utente:Utente):
     id_piani = {so.piano.id for so in qs.all()}
 
     # piani per i quali enti l'utente è RESP
-    ass_resp =  Assegnatario.objects.filter(utente=utente, qualifica_ufficio__qualifica=Qualifica.RESP)
+    ass_resp = Assegnatario.objects.filter(utente=utente, qualifica_ufficio__qualifica=Qualifica.RESP)
     enti_resp = { ass.qualifica_ufficio.ufficio.ente for ass in ass_resp}
     piani_resp = Piano.objects.filter(ente__in=enti_resp)
     id_piani |= {p.id for p in piani_resp}

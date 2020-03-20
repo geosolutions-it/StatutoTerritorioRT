@@ -10,7 +10,6 @@
 #########################################################################
 
 import os
-import rules
 
 from serapide_core.modello.models import (
     SoggettoOperante,
@@ -37,7 +36,7 @@ from serapide_core.modello.models import (
 from strt_users.enums import Qualifica
 
 
-@rules.predicate
+# @rules.predicate
 def parere_sca_ok(user, procedura_vas):
     if user and procedura_vas:
         _piano = procedura_vas.piano
@@ -62,7 +61,7 @@ def parere_sca_ok(user, procedura_vas):
     return False
 
 
-@rules.predicate
+# @rules.predicate
 def parere_verifica_vas_ok(user, procedura_vas):
     if user and procedura_vas:
         _resources = procedura_vas.risorse.filter(tipo=TipoRisorsa.PARERE_VERIFICA_VAS.value, archiviata=False, user=user)
@@ -80,7 +79,7 @@ def parere_verifica_vas_ok(user, procedura_vas):
     return False
 
 
-@rules.predicate
+# @rules.predicate
 def procedura_vas_is_valid(piano, procedura_vas=None):
     if procedura_vas == None:
         procedura_vas = piano.procedura_vas

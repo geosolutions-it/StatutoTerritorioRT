@@ -21,8 +21,8 @@ from .models import (
 from django_currentuser.middleware import (
     get_current_authenticated_user
 )
-from django.contrib.auth.decorators import login_required
-from rules.contrib.views import permission_required
+from django.contrib.auth.decorators import login_required, permission_required
+# from rules.contrib.views import permission_required
 
 
 def get_managed_users(current_user, current_role, organization, organizazions_enabled, full=False):

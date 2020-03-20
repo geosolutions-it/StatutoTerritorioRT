@@ -22,7 +22,7 @@ LICENSE file in the root directory of this source tree.
                 {% csrf_token %}
                 {{ form|crispy }}
                 <input type="submit" class="btn btn-secondary my-2 my-lg-4" value="Login">
-                <input type="hidden" name="next" value="/">
+                <input type="hidden" name="next" value="{{ next }}">
             </form>
             <p><a href="{% url 'password_reset' %}">Password dimenticata?</a></p>
         </div>

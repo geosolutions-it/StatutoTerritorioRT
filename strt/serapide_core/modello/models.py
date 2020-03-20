@@ -15,7 +15,6 @@ import uuid
 
 from django.core.exceptions import ValidationError
 
-import rules
 import logging
 from datetime import datetime
 

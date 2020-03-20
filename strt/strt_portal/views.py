@@ -10,6 +10,7 @@
 #########################################################################
 
 import jwt
+import logging
 
 from django.conf import settings
 
@@ -25,8 +26,7 @@ from serapide_core.api.auth.user import (
     has_profile
 )
 from strt_tests.forms import UserAuthenticationForm
-from rules.contrib.views import permission_required
-
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django_currentuser.middleware import (
     get_current_authenticated_user
 )
@@ -39,6 +39,7 @@ from strt_users.models import Ente
 
 from .glossario import glossario
 
+logger = logging.getLogger(__name__)
 
 
 def privateAreaView(request):
@@ -48,8 +49,10 @@ def privateAreaView(request):
         if is_recognizable(current_user) and \
                 ( has_profile(current_user, Profilo.OPERATORE) or
                   has_profile(current_user, Profilo.ADMIN_ENTE)):
+            logger.warning('Redirecting to serapide')
             return redirect('serapide')
         else:
+            logger.warning('Redirecting to /')
             return redirect('/')
         #
         # if 'role' in request.session and request.session['role']:
@@ -132,8 +135,10 @@ def privateAreaView(request):
     return render(request, 'strt_tests/user_authentication_test.html', context)
 
 
-@permission_required('strt_users.can_access_serapide')
+# @permission_required('strt_users.can_access_serapide')
+@user_passes_test(has_profile)
 def serapideView(request):
+    logger.warning('Rendering serapideView')
     return render(request, 'index.html')  # serapide-client
 
 

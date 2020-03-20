@@ -10,9 +10,7 @@
 #########################################################################
 
 import os
-import rules
 import logging
-
 
 from serapide_core.modello.enums import TipoRisorsa
 import serapide_core.api.auth.vas as auth_vas
@@ -30,51 +28,54 @@ from serapide_core.modello.models import (
     ProceduraAvvio,
     ProceduraAdozione,
     ProceduraAdozioneVAS,
-    ProceduraApprovazione,)
+    ProceduraApprovazione,
+
+    isExecuted,
+)
 
 logger = logging.getLogger(__name__)
 
 # ############################################################################ #
 # Piano
 # ############################################################################ #
-@rules.predicate
-def is_draft(user, obj):
-    if isinstance(obj, Piano):
-        return obj.fase == Fase.DRAFT
-    elif isinstance(obj, ProceduraVAS):
-        return obj.piano.fase == Fase.DRAFT
-    else:
-        return False
+# @rules.predicate
+# def is_draft(user, obj):
+#     if isinstance(obj, Piano):
+#         return obj.fase == Fase.DRAFT
+#     elif isinstance(obj, ProceduraVAS):
+#         return obj.piano.fase == Fase.DRAFT
+#     else:
+#         return False
+#
+#
+# @rules.predicate
+# def is_anagrafica(user, obj):
+#     if isinstance(obj, Piano):
+#         return obj.fase == Fase.ANAGRAFICA
+#     elif isinstance(obj, ProceduraVAS):
+#         return obj.piano.fase == Fase.ANAGRAFICA
+#     else:
+#         return False
+#
+
+# @rules.predicate
+# def is_avvio(user, obj):
+#     if isinstance(obj, Piano):
+#         return obj.fase == Fase.AVVIO
+#     elif isinstance(obj, ProceduraVAS):
+#         return obj.piano.fase == Fase.AVVIO
+#     else:
+#         return False
 
 
-@rules.predicate
-def is_anagrafica(user, obj):
-    if isinstance(obj, Piano):
-        return obj.fase == Fase.ANAGRAFICA
-    elif isinstance(obj, ProceduraVAS):
-        return obj.piano.fase == Fase.ANAGRAFICA
-    else:
-        return False
-
-
-@rules.predicate
-def is_avvio(user, obj):
-    if isinstance(obj, Piano):
-        return obj.fase == Fase.AVVIO
-    elif isinstance(obj, ProceduraVAS):
-        return obj.piano.fase == Fase.AVVIO
-    else:
-        return False
-
-
-@rules.predicate
-def is_adozione(user, obj):
-    if isinstance(obj, Piano):
-        return obj.fase == Fase.ADOZIONE
-    elif isinstance(obj, ProceduraVAS):
-        return obj.piano.fase == Fase.ADOZIONE
-    else:
-        return False
+# @rules.predicate
+# def is_adozione(user, obj):
+#     if isinstance(obj, Piano):
+#         return obj.fase == Fase.ADOZIONE
+#     elif isinstance(obj, ProceduraVAS):
+#         return obj.piano.fase == Fase.ADOZIONE
+#     else:
+#         return False
 
 
 # @rules.predicate
@@ -87,7 +88,7 @@ def is_adozione(user, obj):
 #     return piano.descrizione is not None
 
 
-@rules.predicate
+# @rules.predicate
 def has_delibera_comunale(piano):
     return (
         piano.risorse.count() > 0 and
@@ -108,19 +109,19 @@ def has_delibera_comunale(piano):
 #     return ProceduraVAS.objects.filter(piano=piano).count() > 0
 
 
-@rules.predicate
-def has_procedura_avvio(piano):
-    return ProceduraAvvio.objects.filter(piano=piano).count() > 0
+# @rules.predicate
+# def has_procedura_avvio(piano):
+#     return ProceduraAvvio.objects.filter(piano=piano).count() > 0
 
 
-@rules.predicate
-def has_procedura_adozione(piano):
-    return ProceduraAdozione.objects.filter(piano=piano).count() > 0
+# @rules.predicate
+# def has_procedura_adozione(piano):
+#     return ProceduraAdozione.objects.filter(piano=piano).count() > 0
 
 
-@rules.predicate
-def has_procedura_adozione_vas(piano):
-    return ProceduraAdozioneVAS.objects.filter(piano=piano).count() > 0
+# @rules.predicate
+# def has_procedura_adozione_vas(piano):
+#     return ProceduraAdozioneVAS.objects.filter(piano=piano).count() > 0
 
 
 # @rules.predicate
@@ -128,19 +129,19 @@ def has_procedura_adozione_vas(piano):
 #     return ProceduraApprovazione.objects.filter(piano=piano).count() > 0
 
 
-@rules.predicate
-def protocollo_genio_inviato(piano):
-    az = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
-    return az and az.stato == STATO_AZIONE.nessuna
+# @rules.predicate
+# def protocollo_genio_inviato(piano):
+#     az = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+#     return az and az.stato == STATO_AZIONE.nessuna
 
 
-@rules.predicate
+# @rules.predicate
 def formazione_piano_conclusa(piano):
     az = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
     return az and az.stato == STATO_AZIONE.nessuna
 
 
-@rules.predicate
+# @rules.predicate
 def vas_piano_conclusa(piano):
     _procedura_vas = ProceduraVAS.objects.filter(piano=piano).first()
     if not _procedura_vas or \
@@ -149,22 +150,22 @@ def vas_piano_conclusa(piano):
     return _procedura_vas.conclusa
 
 
-@rules.predicate
+# @rules.predicate
 def avvio_piano_conclusa(piano):
     _procedura_avvio = ProceduraAvvio.objects.filter(piano=piano).first()
     return _procedura_avvio.conclusa
 
 
-@rules.predicate
-def adozione_piano_conclusa(piano):
-    _procedura_adozione = ProceduraAdozione.objects.filter(piano=piano).first()
-    return _procedura_adozione.conclusa
+# @rules.predicate
+# def adozione_piano_conclusa(piano):
+#     _procedura_adozione = ProceduraAdozione.objects.filter(piano=piano).first()
+#     return _procedura_adozione.conclusa
 
 
-@rules.predicate
-def adozione_vas_piano_conclusa(piano):
-    _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).first()
-    return not _procedura_adozione_vas or _procedura_adozione_vas.conclusa
+# @rules.predicate
+# def adozione_vas_piano_conclusa(piano):
+#     _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).first()
+#     return not _procedura_adozione_vas or _procedura_adozione_vas.conclusa
 
 
 # @rules.predicate
@@ -173,7 +174,7 @@ def adozione_vas_piano_conclusa(piano):
 #     return _procedura_approvazione.conclusa
 
 
-@rules.predicate
+# @rulesC.predicate
 def has_pending_alerts(piano):
     _alert_states = [STATO_AZIONE.necessaria]
     return Azione.objects.filter(piano=piano, stato__in=_alert_states).exists()
@@ -249,11 +250,14 @@ def is_eligible_for_promotion(piano:Piano):
 
         # if has_pending_alerts(piano):
         #     msg.append("Ci sono azioni non ancora completate")
-        if not protocollo_genio_inviato(piano):
+
+        if not isExecuted(piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)):
             msg.append("Protocollo Genio Civile mancante")
+
         if not formazione_piano_conclusa(piano):
             msg.append("Formazione piano non conclusa")
-        if not has_procedura_avvio(piano):
+
+        if not ProceduraAvvio.objects.filter(piano=piano).exists():
             msg.append("Procedura di avvio mancante")
         if not avvio_piano_conclusa(piano):
             msg.append("Procedura di avvio non conclusa")
@@ -276,11 +280,14 @@ def is_eligible_for_promotion(piano:Piano):
         # if has_pending_alerts(piano):
         #     msg.append("Ci sono azioni non ancora completate")
 
-        if not has_procedura_adozione(piano):
+        _procedura_adozione = ProceduraAdozione.objects.filter(piano=piano).first()
+        if not _procedura_adozione:
             msg.append("Procedura di adozione mancante")
-        if not adozione_piano_conclusa(piano):
+        if not _procedura_adozione.conclusa:
             msg.append("Procedura di adozione non conclusa")
-        if not adozione_vas_piano_conclusa(piano):
+
+        _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).first()
+        if _procedura_adozione_vas and not _procedura_adozione_vas.conclusa:
             msg.append("Procedura AdozioneVAS non conclusa")
 
         return len(msg) == 0, msg
@@ -306,6 +313,6 @@ def is_eligible_for_promotion(piano:Piano):
         return len(msg) == 0, msg
 
     else:
-        raise Exception('Fase non riconosciute [{}]'.format(fase))
+        raise Exception('Fase non riconosciute [{}]'.format(piano.fase))
 
 

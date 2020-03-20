@@ -9,7 +9,6 @@
 #
 #########################################################################
 
-import rules
 import logging
 import datetime
 import graphene
@@ -31,7 +30,6 @@ from strt_users.models import (
     QualificaUfficio, ProfiloUtente)
 
 from serapide_core.helpers import (
-    is_RUP,
     update_create_instance,
 )
 
@@ -50,7 +48,6 @@ from serapide_core.modello.models import (
     ProceduraAdozione,
     PianoControdedotto,
     PianoRevPostCP,
-    # PianoAuthTokens,
 
     needsExecution,
     isExecuted,
@@ -275,7 +272,6 @@ class CreatePiano(relay.ClientIDMutation):
                     ))
                 _order += 1
 
-
             # Inizializzazione Procedura VAS
             _procedura_vas, created = ProceduraVAS.objects.get_or_create(
                 piano=nuovo_piano,
@@ -393,17 +389,14 @@ class UpdatePiano(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice'])
         _piano_input = input.get('piano_operativo')
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
         _ente = _piano.ente
 
         if not info.context.user:
             return GraphQLError("Unauthorized", code=401)
 
         # Primo chek generico di autorizzazione
-        if not auth.has_qualifica(info.context.user, _ente, Qualifica.RESP):
-            if not auth.is_soggetto(info.context.user, _piano):
-                return GraphQLError("Forbidden - Pre-check: L'utente non può editare piani in questo Ente", code=403)
+        if not auth.is_soggetto(info.context.user, _piano):
+            return GraphQLError("Forbidden - Pre-check: L'utente non può editare piani in questo Ente", code=403)
 
         try:
 
@@ -465,14 +458,14 @@ class UpdatePiano(relay.ClientIDMutation):
                 add_so = []
 
                 for so in _soggetti_operanti:
-                    uff = Ufficio.objects.filter(uuid=so.ufficio_uuid).get() # TODO: 404
+                    uff = Ufficio.objects.filter(uuid=so.ufficio_uuid).get()
                     qualifica = Qualifica[so.qualifica]                      # TODO: 404
                     hash = so.ufficio_uuid + "_" + so.qualifica
                     if hash in old_so_dict:
                         del old_so_dict[hash]
                     else:
                         qu = QualificaUfficio.objects \
-                            .filter(ufficio=uff, qualifica=qualifica).get()  # TODO: 404
+                            .filter(ufficio=uff, qualifica=qualifica).get()
                         new_so = SoggettoOperante(qualifica_ufficio=qu, piano=_piano)
                         add_so.append(new_so)
 
@@ -554,11 +547,8 @@ class PromozionePiano(graphene.Mutation):
         _piano = Piano.objects.get(codice=input['codice_piano'])
 
         # Primo chek generico di autorizzazione
-
-        # if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano):
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            if not auth.is_soggetto(info.context.user, _piano):
-                return GraphQLError("Forbidden - Pre-check: L'utente non può editare piani in questo Ente", code=403)
+        if not auth.is_soggetto(info.context.user, _piano):
+            return GraphQLError("Forbidden - Pre-check: L'utente non può editare piani in questo Ente", code=403)
 
         try:
             promoted, errors = check_and_promote(_piano, info)

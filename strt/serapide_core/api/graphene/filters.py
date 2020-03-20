@@ -9,7 +9,6 @@
 #
 #########################################################################
 
-import rules
 import logging
 import django_filters
 
@@ -19,7 +18,7 @@ from strt_users.enums import Profilo
 from strt_users.models import (
     Utente,
     Ente,
-    ProfiloUtente)
+    ProfiloUtente, QualificaUfficio)
 
 from serapide_core.helpers import is_RUP
 

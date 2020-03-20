@@ -9,7 +9,6 @@
 #
 #########################################################################
 
-import rules
 import logging
 import graphene
 
@@ -356,7 +355,6 @@ class UtenteNode(DjangoObjectType):
 
         return None
 
-
     def resolve_alerts_count(self, info, **args):
         _alerts_count = 0
 
@@ -489,7 +487,6 @@ class ProceduraVASNode(DjangoObjectType):
 
     def resolve_tipologia(self, info, **args):
         return self.tipologia.name
-
 
     class Meta:
         model = ProceduraVAS
@@ -708,7 +705,6 @@ class PianoNode(DjangoObjectType):
     alerts_count = graphene.String()
     azioni = graphene.List(AzioneNode)
 
-
     def resolve_azioni(self, info, **args):
         return Azione.objects.filter(piano=self)
 
@@ -746,7 +742,7 @@ class PianoNode(DjangoObjectType):
         return self.soggetto_proponente
 
     def resolve_tipologia(self, info, **args):
-        logger.warning("*** RESOLVING TIPOLOGIA [type:{t}]: {o}".format(t=type(self.tipologia), o=self.tipologia))
+        # logger.warning("*** RESOLVING TIPOLOGIA [type:{t}]: {o}".format(t=type(self.tipologia), o=self.tipologia))
         return self.tipologia.name
 
     def resolve_fase(self, info, **args):
@@ -839,5 +835,3 @@ class UtenteChoiceNode(DjangoObjectType):
             return queryset.none()
         else:
             return queryset.filter(id=info.context.user.id)
-
-        return queryset

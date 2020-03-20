@@ -9,7 +9,6 @@
 #
 #########################################################################
 
-import rules
 import logging
 import datetime
 import graphene
