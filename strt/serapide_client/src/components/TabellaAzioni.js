@@ -15,14 +15,10 @@ import {formatDate, getActionIcon, getActionIconColor, getAction} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
 const adjustStato = (stato = "", eseguibile) => {
-    
     if(stato.toLowerCase() === "nessuna") {
         return stato.toLowerCase();
     }
-    if(eseguibile) {
-        return "necessaria"
-    }
-     return "attesa"
+    return eseguibile ? "necessaria" : "attesa"
 }
 const reverseOrder = ({order: a}, {order: b}) => (b - a)
 

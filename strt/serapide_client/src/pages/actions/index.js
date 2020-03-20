@@ -42,7 +42,7 @@ import { GET_AVVIO, DELETE_RISORSA_AVVIO } from '../../graphql/index';
 
 export default {
         avvioConsultazioniSca: (props) => (<AvvioConsultazioniSCA {...props}/>),
-        pareriVerificaSca: (props) => (<PareriSCA  {...props}/>),
+        pareriVerificaVas: (props) => (<PareriSCA  {...props}/>),
         pareriSca: (props) => (<PareriSCA tipo="parere_sca"
                                       saveMutation={INVIO_PARERI_VAS}
                                       tipoVas="documento_preliminare_vas"

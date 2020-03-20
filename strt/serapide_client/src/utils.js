@@ -123,3 +123,10 @@ export const showPubblicazione = (f) => f === "APPROVAZIONE" || f === "PUBBLICAZ
 
 export const getAdminEnti = (profiles = []) => profiles.filter(({profilo}) => profilo === "ADMIN_ENTE").map(({ente}) => ente); 
 export const isAdminEnte = (profiles = []) => getAdminEnti(profiles).length > 0;
+
+
+
+// Lista delle qualifiche per soggetti istituzionali
+export const SOGGETTI_ISTITUZIONALI = ["GC", "PIAN"]
+// Restituisce i soggetti istituzionali
+export const getSoggettiIsti = (soggettiOperanti = []) => soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => SOGGETTI_ISTITUZIONALI.includes(qualifica));

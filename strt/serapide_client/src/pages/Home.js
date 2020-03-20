@@ -83,12 +83,12 @@ render () {
             <div className={classNames("d-flex flex-column", {"action-container flex-1 border  border-piano overflow-auto bg-white": action})}>
                 {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
                 <Switch>
-                    { azioni.map(({uuid, tipologia = "", label = "", attore = "", eseguibile= false} = {}) => {
+                    { azioni.map(({uuid, tipologia = "", label = "", attore = "", qualificaRichiesta, eseguibile= false} = {}) => {
                         const tipo = tipologia.toLowerCase()
                         const El = components[camelCase(tipo)]
                         return El && (
                                 <Route exact key={tipo} path={`${path}/${tipo}/${uuid}`} >
-                                    {eseguibile ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
+                                    {eseguibile ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack}  qualificaRichiesta={qualificaRichiesta} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
                                 </Route>)
                     })}
                     {/* {map(components, (El, key) => {

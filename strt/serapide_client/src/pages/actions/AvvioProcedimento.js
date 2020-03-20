@@ -24,7 +24,7 @@ import Input from 'components/EnhancedInput'
 import Spinner from 'components/Spinner'
 
 import {rebuildTooltip} from 'enhancers'
-import  {showError, getInputFactory, getCodice, getContatti, daysAdd} from 'utils'
+import  {showError, getInputFactory, getCodice, getContatti, daysAdd, getSoggettiIsti, SOGGETTI_ISTITUZIONALI} from 'utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
@@ -62,7 +62,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
             const quadro = edges.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").map(({node}) => node).shift()
             const programma = edges.filter(({node: {tipo}}) => tipo === "programma_attivita").map(({node}) => node).shift()
             const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
-            const si = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "GC" || qualifica === "PIAN").map(({qualificaUfficio} = {}) => (qualificaUfficio))
+            const si = getSoggettiIsti(soggettiOperanti).map(({qualificaUfficio} = {}) => (qualificaUfficio))
             // const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             // const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
             return (<React.Fragment>
@@ -137,7 +137,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                     selected={si.map(({ufficio: {uuid} = {}}) => uuid)}
                                     query={GET_CONTATTI_M}
                                     getList={getContatti}
-                                    variables={{tipo: ["GC", "PIAN"]}}
+                                    variables={{tipo: SOGGETTI_ISTITUZIONALI}}
                                     onChange={changed}
                                     size="lg"
                                     label="SOGGETTI ISTITUZIONALI"

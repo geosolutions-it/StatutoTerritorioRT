@@ -193,14 +193,13 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
             { !isLocked ? (<Mutation mutation={UPDATE_PIANO} onError={showError}>
                 {(onChange) => {
                     const changed = (val, {tipologia: qualifica, uuid}) => {
-                        let newSO = soggettiOperanti.map(({qualificaUfficio: {qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}} = {}) => ({qualifica, ufficioUuid}))
-                        newSO = newSO.filter(({ufficioUuid}) =>  ufficioUuid !== uuid)
-
-                        if (newSO.length === soggettiOperanti.length){
-                                newSO = newSO.filter(({qualifica}) => qualifica !== 'AC').concat({qualifica, ufficioUuid: uuid})
+                        let newAC = acs.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid}))
+                            newAC = newAC.filter(({ufficioUuid}) => uuid !== ufficioUuid)
+                        if (newAC.length === acs.length){
+                            newAC = [{qualifica, ufficioUuid: uuid}]
                             }
                         onChange({variables:{ input:{
-                                    pianoOperativo: { soggettiOperanti: newSO}, codice}
+                                    pianoOperativo: { soggettiOperanti: newAC.concat(scas.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid})))}, codice}
                             }})
                     }
                     return (
@@ -229,13 +228,14 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
             { !isLocked ? ( <Mutation mutation={UPDATE_PIANO} onError={showError}>
             {(onChange) => {
                     const changed = (val, {tipologia: qualifica, uuid}) => {
-                        let newSO = soggettiOperanti.map(({qualificaUfficio: {qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}} = {}) => ({qualifica, ufficioUuid}))
-                        newSO = newSO.filter(({ufficioUuid}) => ufficioUuid !== uuid)
-                        if (newSO.length === soggettiOperanti.length) {
-                                newSO = newSO.concat({qualifica, ufficioUuid: uuid})
-                            }
+                        let newSCA = scas.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid}))
+                        
+                        newSCA = newSCA.filter(({ufficioUuid}) => ufficioUuid !== uuid)
+                        if (newSCA.length === scas.length) {
+                            newSCA = newSCA.concat({qualifica, ufficioUuid: uuid})
+                        }
                         onChange({variables:{ input:{
-                                    pianoOperativo: { soggettiOperanti: newSO}, codice}
+                                    pianoOperativo: { soggettiOperanti: newSCA.concat(acs.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid}) ))}, codice}
                             }})
                     }
                     return (
