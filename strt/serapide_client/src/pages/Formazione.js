@@ -33,8 +33,8 @@ export default ({utente: {attore} = {},
                     <Button disabled={!urlNorme} onClick={() => goTo(urlNorme)}
                             className="margin-auto align-self-center" style={{minWidth: "20rem", maxWidth:"20rem"}} size="lg" color="serapide">
                         <div  className="d-flex flex-column size-16">
-                            <span>REDAZIONE NORME TECNICHE</span>
-                            <span>DI ATTUAZIONE DEL PIANO</span>
+                            <span>REDAZIONE DISCIPINA</span>
+                            <span>DEL PIANO</span>
                             <span>[Minerva]</span>
                         </div>
                     </Button>
@@ -46,8 +46,8 @@ export default ({utente: {attore} = {},
                     <Button disabled={!compilazioneRapportoAmbientaleUrl} onClick={() => goTo( compilazioneRapportoAmbientaleUrl)} 
                             className="margin-auto align-self-center" style={{minWidth: "20rem", maxWidth:"20rem"}}  size="lg" color="serapide">
                         <div className="d-flex flex-column size-16">
-                            <span>COMPILAZIONE DEL</span>
-                            <span>RAPPORTO AMBIENTALE</span>
+                            <span>VALUTAZIONE E MONITORAGGIO</span>
+                            <span>DEGLI EFFETTI AMBIENTALI</span>
                             <span>[Minerva]</span>
                         </div>
                     </Button>
