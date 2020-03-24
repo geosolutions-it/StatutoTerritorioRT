@@ -175,7 +175,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
         ('controdeduzioni', _('Controdeduzioni')),  # Comune
         ('piano_controdedotto', _('Piano Controdedotto')),  # Comune
-        ('esito_conferenza_paesaggistica', _('Esiti conferenza paesaggistica')),  # Regione
+        ('esito_conferenza_paesaggistica', _('Risultanze conferenza paesaggistica')),  # Regione
         ('rev_piano_post_cp', _('Revisione Piano post Conf. Paesaggistica')),  # Comune
         # Adozione VAS
         ('pareri_adozione_sca', _('Pareri SCA')),  # SCA
