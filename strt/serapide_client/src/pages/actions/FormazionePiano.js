@@ -11,6 +11,7 @@ import {Query} from 'react-apollo'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
+import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
 import Spinner from 'components/Spinner'
 import Input from 'components/EnhancedInput'
 import FileUpload from 'components/UploadSingleFile'
@@ -43,12 +44,13 @@ const UI = rebuildTooltip()(({ back,
         return (
             <React.Fragment>
                 <ActionTitle>Formazione del Piano</ActionTitle>                
-                <ActionParagraphTitle>REDAZIONE NORME TECNICHE DI ATTUAZIONE</ActionParagraphTitle>
+                {/* <ActionParagraphTitle>Per la redazione della Disciplina del Piano è suggerito l'utilizzo del software "Redazione Norme"</ActionParagraphTitle> */}
+                <ActionSubParagraphTitle>Per la redazione della Disciplina del Piano è suggerito l'utilizzo del software "Redazione Norme"</ActionSubParagraphTitle>
                 <div className="action-uploader py-1 mt-3 align-self-start border-bottom">
                 <FileUpload 
                     iconSize="icon-15" fontSize="size-11" vertical useLabel
                     className="border-0"
-                    placeholder="NORME TECNICHE DI ATTUAZIONE"
+                    placeholder="DISCIPLINA DEL PIANO"
                     mutation={FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA} disabled={false} 
                     isLocked={false} risorsa={norme} variables={{codice, tipo: "norme_tecniche_attuazione" }}/>
