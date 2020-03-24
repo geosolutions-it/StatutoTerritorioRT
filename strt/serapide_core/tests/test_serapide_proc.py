@@ -139,7 +139,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, expected_code=403)
         self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, client=self.client_ac)
 
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", expected_code=403)
+        # self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", expected_code=403)
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", client=self.client_ac)
 
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
