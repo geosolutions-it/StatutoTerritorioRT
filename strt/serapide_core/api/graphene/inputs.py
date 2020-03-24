@@ -14,34 +14,33 @@ import graphene
 from graphene import InputObjectType
 
 
-class FaseCreateInput(InputObjectType):
-    """
-    Class created to accept input data
-    from the interactive graphql console.
-    """
-    nome = graphene.String(source='nome', required=False)
-    codice = graphene.String(required=True)
-    descrizione = graphene.String(required=False)
-
-
 class EnteCreateInput(InputObjectType):
     """
     Class created to accept input data
     from the interactive graphql console.
     """
-    name = graphene.String(source='name', required=False)
-    code = graphene.String(required=True)
+    nome = graphene.String(source='nome', required=False)
+    ipa = graphene.String(required=True)
 
 
-class ContattoCreateInput(InputObjectType):
-    """
-    Class created to accept input data
-    from the interactive graphql console.
-    """
-    nome = graphene.String(source='nome', required=True)
-    email = graphene.String(source='email', required=True)
-    tipologia = graphene.String(required=True)
-    ente = graphene.InputField(EnteCreateInput, required=True)
+# class ContattoCreateInput(InputObjectType):
+#     """
+#     Class created to accept input data
+#     from the interactive graphql console.
+#     """
+#     nome = graphene.String(source='nome', required=True)
+#     email = graphene.String(source='email', required=True)
+#     tipologia = graphene.String(required=True)
+#     ente = graphene.InputField(EnteCreateInput, required=True)
+
+# class SoggettoOperanteCreateInput(InputObjectType):
+#     """
+#     Class created to accept input data
+#     from the interactive graphql console.
+#     """
+#     ufficio_id = graphene.ID(source='ufficio_id', required=True)
+#     qualifica = graphene.ID(source='qualifica', required=True)
+#     piano = graphene.String(source='piano', required=True)
 
 
 class PianoCreateInput(InputObjectType):
@@ -57,7 +56,12 @@ class PianoCreateInput(InputObjectType):
     data_creazione = graphene.types.datetime.DateTime(required=False)
     data_delibera = graphene.types.datetime.DateTime(required=False)
     descrizione = graphene.InputField(graphene.List(graphene.String), required=False)
-    fase = graphene.InputField(FaseCreateInput, required=False)
+    fase = graphene.String(required=False)
+
+
+class SoggettoOperanteInput(InputObjectType):
+    ufficio_uuid = graphene.String(required=True)
+    qualifica = graphene.String(required=True)
 
 
 class PianoUpdateInput(InputObjectType):
@@ -71,17 +75,16 @@ class PianoUpdateInput(InputObjectType):
     data_avvio = graphene.types.datetime.DateTime(required=False)
     data_approvazione = graphene.types.datetime.DateTime(required=False)
     descrizione = graphene.InputField(graphene.List(graphene.String), required=False)
+
     soggetto_proponente_uuid = graphene.String(required=False)
-    autorita_competente_vas = graphene.List(graphene.String, required=False)
-    soggetti_sca = graphene.List(graphene.String, required=False)
-    autorita_istituzionali = graphene.List(graphene.String, required=False)
-    altri_destinatari = graphene.List(graphene.String, required=False)
+
+    soggetti_operanti = graphene.List(SoggettoOperanteInput, required=False)
+
     numero_protocollo_genio_civile = graphene.String(required=False)
     redazione_norme_tecniche_attuazione_url = graphene.String(required=False)
     compilazione_rapporto_ambientale_url = graphene.String(required=False)
     conformazione_pit_ppr_url = graphene.String(required=False)
     monitoraggio_urbanistico_url = graphene.String(required=False)
-
 
 class ProceduraVASCreateInput(InputObjectType):
     """

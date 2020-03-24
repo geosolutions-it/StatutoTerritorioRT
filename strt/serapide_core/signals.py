@@ -13,9 +13,12 @@ import logging
 
 from django.dispatch import Signal
 
+from serapide_core.modello.models import SoggettoOperante
+from strt_users.models import Assegnatario
+
 from .notifications_helper import send_now_notification
 
-from serapide_core.modello.models import PianoAuthTokens
+# from serapide_core.modello.models import PianoAuthTokens
 
 logger = logging.getLogger(__name__)
 
@@ -69,39 +72,36 @@ def piano_phase_changed_notification(sender, **kwargs):
         from_user = kwargs['user']
         piano = kwargs['piano']
 
-        users = []
+        ufficio = []
+        utenti = []
         tokens = []
-        if piano.soggetto_proponente:
-            users.append(piano.soggetto_proponente.user)
-            log(piano, notification_type, "proponente", piano.soggetto_proponente.user)
 
-        if piano.autorita_competente_vas:
-            for _c in piano.autorita_competente_vas.all():
-                users.append(_c.user)
-                log(piano, notification_type, "autorita_competente_vas", _c.user)
+        soqs = SoggettoOperante.objects.filter(piano=piano)
+        qu_list = [so.qualifica_ufficio for so in soqs]
 
-        if piano.autorita_istituzionali:
-            for _c in piano.autorita_istituzionali.all():
-                users.append(_c.user)
-                log(piano, notification_type, "autorita_istituzionali", _c.user)
+        ass_list = Assegnatario.objects.filter(qualifica_ufficio__in=qu_list)
 
-        if piano.altri_destinatari:
-            for _c in piano.altri_destinatari.all():
-                users.append(_c.user)
-                log(piano, notification_type, "altri_destinatari", _c.user)
+        dest_uff = [{
+            'first_name':qu.ufficio.nome,
+            'last_name':qu.ufficio.ente.nome,
+            'email':qu.ufficio.email}
+                for qu in qu_list ]
+        dest_utenti = [{
+            'first_name':ass.utente.first_name,
+            'last_name':ass.utente.first_name,
+            'email':ass.utente.email}
+                for ass in ass_list ]
+        # TODO tokens
 
-        if piano.soggetti_sca:
-            for _c in piano.soggetti_sca.all():
-                users.append(_c.user)
-                log(piano, notification_type, "soggetti_sca", _c.user)
+        # if PianoAuthTokens.objects.filter(piano=piano).count() > 0:
+        #     tokens = [_p.token for _p in PianoAuthTokens.objects.filter(piano=piano)]
 
-        if PianoAuthTokens.objects.filter(piano=piano).count() > 0:
-            tokens = [_p.token for _p in PianoAuthTokens.objects.filter(piano=piano)]
-
-        send_now_notification(users,
+        # todo : check for uffici
+        send_now_notification( #dest_uff + dest_utenti,
+                              [ass.utente for ass in ass_list],
                               notification_type,
                               {
-                                  "user": from_user,
-                                  "piano": piano,
-                                  "tokens": tokens
+                                "user": from_user,
+                                "piano": piano,
+                                "tokens": tokens
                               })

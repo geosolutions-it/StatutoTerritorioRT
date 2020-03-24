@@ -24,12 +24,12 @@ import Input from 'components/EnhancedInput'
 import Spinner from 'components/Spinner'
 
 import {rebuildTooltip} from 'enhancers'
-import  {showError, getInputFactory, getCodice, getContatti, daysAdd} from 'utils'
+import  {showError, getInputFactory, getCodice, getContatti, daysAdd, getSoggettiIsti, SOGGETTI_ISTITUZIONALI} from 'utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
     AVVIO_FILE_UPLOAD, UPDATE_PIANO,
-    GET_CONTATTI,
+    GET_CONTATTI_M,
     AVVIA_PIANO
 } from 'schema'
 import { addDays } from 'date-fns/esm';
@@ -50,7 +50,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
             risorse: {edges=[]} = {}
             } = {}} = {},
         piano: {
-            autoritaIstituzionali: {edges: aut =[]} = {},
+            soggettiOperanti,
             // altriDestinatari: {edges: dest = []} = {},
             codice,
             risorse: {edges: resPiano = []}} = {},
@@ -62,7 +62,8 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
             const quadro = edges.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").map(({node}) => node).shift()
             const programma = edges.filter(({node: {tipo}}) => tipo === "programma_attivita").map(({node}) => node).shift()
             const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
-            const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
+            const si = getSoggettiIsti(soggettiOperanti).map(({qualificaUfficio} = {}) => (qualificaUfficio))
+            // const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             // const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
             return (<React.Fragment>
                 <ActionTitle>
@@ -117,27 +118,26 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                 <div className="font-weight-light pb-1 size-8">
                         <TextWithTooltip text="Soggetti istituzionali a cui si chiede il contributo tecnico" dataTip="art. 17, lett.c, L.R. 65/2014"/>
                 </div>
-                <ListaContatti hideTitle contacts={aut}/>
+                <ListaContatti hideTitle contacts={si}/>
                     <div className="mt-4 pl-4 pb-4">
                     <Mutation mutation={UPDATE_PIANO} onError={showError}>
                         {(onChange) => {
-                            const changed = (val) => {
-                                let autoritaIstituzionali = []
-                                if(auths.indexOf(val)!== -1){
-                                    autoritaIstituzionali = auths.filter( uuid => uuid !== val)
-                                }else {
-                                    autoritaIstituzionali = auths.concat(val)
-                                }
-                                    onChange({variables:{ input:{
-                                            pianoOperativo: { autoritaIstituzionali}, codice}
+                            const changed = (val, {tipologia: qualifica, uuid}) => {
+                                let newSO = soggettiOperanti.map(({qualificaUfficio: {qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}} = {}) => ({qualifica, ufficioUuid}))
+                                newSO = newSO.filter(({ufficioUuid}) => ufficioUuid !== uuid)
+                                if (newSO.length === soggettiOperanti.length) {
+                                        newSO = newSO.concat({qualifica, ufficioUuid: uuid})
+                                    }
+                                onChange({variables:{ input:{
+                                            pianoOperativo: { soggettiOperanti: newSO}, codice}
                                     }})
                             }
                             return (
                                 <EnhancedListSelector
-                                    selected={auths}
-                                    query={GET_CONTATTI}
+                                    selected={si.map(({ufficio: {uuid} = {}}) => uuid)}
+                                    query={GET_CONTATTI_M}
                                     getList={getContatti}
-                                    variables={{tipo: "ente,genio_civile"}}
+                                    variables={{tipo: SOGGETTI_ISTITUZIONALI}}
                                     onChange={changed}
                                     size="lg"
                                     label="SOGGETTI ISTITUZIONALI"
@@ -243,7 +243,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
 
 
                 <div className="align-self-center mt-7">
-                <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={obiettivi && quadro && garante && programma && auths.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
+                <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={obiettivi && quadro && garante && programma && si.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
 
                 </div>
             </React.Fragment>)})

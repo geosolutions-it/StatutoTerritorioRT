@@ -1,0 +1,99 @@
+{
+   "operationName" : "getVas",
+
+   "variables" : {
+      "codice" : "{codice}"
+   },
+
+   "query" : "query getVas($codice: String!) {
+        modello: procedureVas(piano_Codice: $codice) {
+            edges {
+                node {
+                    ...VAS
+                    __typename
+                }
+            __typename
+            }
+            __typename
+        }
+    }
+
+fragment VAS on ProceduraVASNode {
+    uuid
+    tipologia
+
+    conclusa
+    verificaEffettuata
+    procedimentoEffettuato
+    assoggettamento
+    nonNecessaria
+
+    dataVerifica
+    dataCreazione
+    dataProcedimento
+    dataApprovazione
+    dataAssoggettamento
+
+    piano {
+        codice
+
+        soggettoProponente {
+            qualifica
+            ufficio {uuid nome}
+            __typename
+        }
+        soggettiOperanti {
+            qualificaUfficio {
+                qualifica
+                ufficio {uuid nome}
+                __typename
+            }
+            __typename
+        }
+
+        risorse(archiviata: false) {
+            ...Risorse
+            __typename
+        }
+    }
+
+    documentoPreliminareVerifica {
+        ...Risorsa
+        __typename
+    }
+    relazioneMotivataVasSemplificata {
+        ...Risorsa
+        __typename
+    }
+    __typename
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+  __typename
+}"
+}

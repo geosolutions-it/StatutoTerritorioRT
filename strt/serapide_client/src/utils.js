@@ -7,9 +7,9 @@ import elaborati from './Elaborati'
 export const pollingInterval = 10000
 export {get, map, isEmpty} from "lodash"
 
-export const getEnteLabel = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `${tipoente} di ${name}`
+export const getEnteLabel = ({nome = "", ipa, tipo = ""  } = {}) => `${tipo}${ipa && ' di '}${nome}`
 
-export const getEnteLabelID = ({name = "", code, type: {tipoente = ""} ={}} = {}) => `${tipoente} ${code}`
+export const getEnteLabelID = ({ipa}= {}) => `${ipa && 'ID '}${ipa}`
 
 export const getPianoLabel = (tipo = "") => (tipo === "VARIANTE" ? tipo.toLowerCase() : `piano ${tipo.toLowerCase()}`)
 
@@ -109,9 +109,24 @@ export const groupResourcesByUser = (resources = []) => resources.reduce((acc, {
 export const filterAndGroupResourcesByUser = ( resources, type = "") => groupResourcesByUser(resources.filter(({node: {tipo}}) => tipo === type))
 
 
-export const getContatti = ({contatti: {edges = []} = {}} = {}) => {
-    return edges.map(({node: {nome, uuid, tipologia}}) => ({label: nome, value: uuid, tipologia}))
+export const getContatti = ({ uffici = []} = {}) => {
+    return uffici.map(({qualifica: tipologia, ufficio: {uuid,
+        descrizione,
+        nome,
+        ente: {
+            nome: nomeEnte} = {}
+        } = {}} = {}) => ({label: `Ente ${nomeEnte} ufficio ${nome}`, value: uuid, tipologia}))
 }
 export const showAdozione = (f) => f === "AVVIO" || f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 export const showApprovazione = (f) => f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 export const showPubblicazione = (f) => f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
+
+export const getAdminEnti = (profiles = []) => profiles.filter(({profilo}) => profilo === "ADMIN_ENTE").map(({ente}) => ente); 
+export const isAdminEnte = (profiles = []) => getAdminEnti(profiles).length > 0;
+
+
+
+// Lista delle qualifiche per soggetti istituzionali
+export const SOGGETTI_ISTITUZIONALI = ["GC", "PIAN"]
+// Restituisce i soggetti istituzionali
+export const getSoggettiIsti = (soggettiOperanti = []) => soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => SOGGETTI_ISTITUZIONALI.includes(qualifica));

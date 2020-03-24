@@ -10,20 +10,18 @@
 #########################################################################
 
 from rest_framework import serializers
-from strt_users.models import MembershipType, UserMembership
+from strt_users.models import (Qualifica, Profilo)
 
 
-class MembershipTypeSerializer(serializers.ModelSerializer):
+class QualificaSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = MembershipType
+        model = Qualifica
         fields = '__all__'
 
 
-class UserMembershipSerializer(serializers.ModelSerializer):
-
-    type = MembershipTypeSerializer()
+class ProfiloSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = UserMembership
+        model = Profilo
         fields = '__all__'

@@ -13,24 +13,22 @@ from django import forms
 from django.forms import ModelChoiceField
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import (AppUser, Token,
-                     Organization, OrganizationType,
-                     UserMembership, MembershipType)
+from .models import (Utente, Ente)
 from django.utils.translation import gettext_lazy as _
 
 
-@admin.register(Organization)
-class OrganizationModelAdmin(admin.ModelAdmin):
-    list_display = ['name', 'code', 'description', 'type']
-    search_fields = ['name', 'code', 'description', 'type']
-    list_filter = ['name', 'code', 'description', 'type']
+@admin.register(Ente)
+class EnteModelAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'id', 'descrizione']
+    search_fields = ['nome', 'id', 'descrizione']
+    list_filter = ['nome', 'id', 'descrizione']
 
 
-@admin.register(OrganizationType)
-class OrganizationTypeModelAdmin(admin.ModelAdmin):
-    list_display = ['name', 'code', 'description']
-    search_fields = ['name', 'code', 'description']
-    list_filter = ['name', 'code', 'description']
+# @admin.register(OrganizationType)
+# class OrganizationTypeModelAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'code', 'description']
+#     search_fields = ['name', 'code', 'description']
+#     list_filter = ['name', 'code', 'description']
 
 
 class MyModelChoiceField(ModelChoiceField):
@@ -44,27 +42,27 @@ class UserMembershipModelAdminForm(forms.ModelForm):
         self.fields['type'] = MyModelChoiceField(queryset=self.fields['type'].queryset)
 
 
-@admin.register(UserMembership)
-class UserMembershipModelAdmin(admin.ModelAdmin):
-    form = UserMembershipModelAdminForm
-    list_display = ['name', 'description', 'member', 'attore', 'organization', 'type']
-    search_fields = ['name', 'description', 'attore', 'organization__name', 'member__fiscal_code', 'member__first_name', 'member__last_name', 'type__name']
-    list_filter = ['name', 'description', 'member', 'attore', 'organization', 'type']
+# @admin.register(Ruolo)
+# class RuoloModelAdmin(admin.ModelAdmin):
+#     form = UserMembershipModelAdminForm
+#     list_display = ['utente', 'qualifica', 'ente', 'profilo']
+#     search_fields = ['utente', 'ente__nome', 'utente__fiscal_code', 'utente__first_name', 'utente__last_name', 'qualifica__name']
+#     list_filter = ['utente', 'qualifica', 'ente', 'profilo']
 
 
-@admin.register(MembershipType)
-class MembershipTypeModelAdmin(admin.ModelAdmin):
-    list_display = ['name', 'code', 'description', 'organization_type']
-    search_fields = ['name', 'code', 'description', 'organization_type']
-    list_filter = ['name', 'code', 'description', 'organization_type']
+# @admin.register(Qualifica)
+# class QualificaModelAdmin(admin.ModelAdmin):
+#     list_display = ['nome', 'id', 'descrizione']
+#     search_fields = ['nome', 'id', 'descrizione']
+#     list_filter = ['nome', 'id', 'descrizione']
 
 
-@admin.register(AppUser)
-class AppUserAdmin(UserAdmin):
+@admin.register(Utente)
+class UtenteAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('fiscal_code', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+        (_('Permissions'), {'fields': ('is_active', 'is_superuser',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login',)}),
     )
@@ -74,15 +72,10 @@ class AppUserAdmin(UserAdmin):
             'fields': ('fiscal_code', 'password1', 'password2'),
         }),
     )
-    list_display = ('fiscal_code', 'email', 'first_name', 'last_name', 'is_staff')
-    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    list_display = ('fiscal_code', 'email', 'first_name', 'last_name')
+    list_filter = ('is_superuser', 'is_active', 'groups')
     list_editable = ('first_name', 'last_name', 'email')
     search_fields = ('fiscal_code', 'first_name', 'last_name', 'email')
     ordering = ('fiscal_code',)
 
 
-@admin.register(Token)
-class TokenModelAdmin(admin.ModelAdmin):
-    list_display = ['key', 'user', 'created']
-    search_fields = ['key', 'user', 'created']
-    list_filter = ['key', 'user', 'created']

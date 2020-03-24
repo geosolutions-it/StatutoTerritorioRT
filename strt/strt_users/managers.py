@@ -13,7 +13,7 @@ from django.contrib.auth.models import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 
 
-class AppUserManager(BaseUserManager):
+class IsideUserManager(BaseUserManager):
 
     use_in_migrations = True
 
@@ -26,6 +26,7 @@ class AppUserManager(BaseUserManager):
         if password:
             user.set_password(password)
         user.save(using=self._db)
+
         return user
 
     def create_user(self, fiscal_code, email=None, **extra_fields):

@@ -12,12 +12,11 @@ import classNames from "classnames"
 import {capitalize} from 'lodash'
 import {rebuildTooltip} from 'enhancers'
 
-export default  rebuildTooltip({onUpdate: true, log: false, comp: "Stato Progres"})(({
-    stato: {nome = "Unknown", codice},
+export default  rebuildTooltip({onUpdate: true, log: false, comp: "Stato Progres"})(({stato: fase = "",
     className= "stato-progress",
     legend= false}) => {
     const id =  `_${shortid.generate()}`
-    const activeIdx = fasi.indexOf(nome.toLocaleLowerCase()) + 1
+    const activeIdx = fasi.indexOf(fase.toLocaleLowerCase()) + 1
     const activeFase = fasi[activeIdx]
     return (
         <span className={className}>

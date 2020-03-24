@@ -12,81 +12,132 @@
 from model_utils import Choices
 from django.utils.translation import gettext as _
 
+from strt_users.enums import (
+    QualificaRichiesta,
+    SerapideEnum)
 
-FASE = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('draft', _('DRAFT')),
-        ('anagrafica', _('ANAGRAFICA')),
-        ('avvio', _('AVVIO')),
-        ('adozione', _('ADOZIONE')),
-        ('approvazione', _('APPROVAZIONE')),
-        ('pubblicazione', _('PUBBLICAZIONE')),
-    )
 
-FASE_NEXT = {
-    'unknown': None,
-    'draft': FASE.anagrafica,
-    'anagrafica': FASE.avvio,
-    'avvio': FASE.adozione,
-    'adozione': FASE.approvazione,
-    'approvazione': FASE.pubblicazione,
-    'pubblicazione': None
+class Fase(SerapideEnum):
+    UNKNOWN = 'UNKNOWN'
+    DRAFT = 'DRAFT'
+    ANAGRAFICA = 'ANAGRAFICA'
+    AVVIO = 'AVVIO'
+    ADOZIONE = 'ADOZIONE'
+    APPROVAZIONE = 'APPROVAZIONE'
+    PUBBLICAZIONE = 'PUBBLICAZIONE'
+
+    def getNext(self):
+        return _FASE_NEXT[self]
+
+_FASE_NEXT = {
+    Fase.UNKNOWN: None,
+    Fase.DRAFT: Fase.ANAGRAFICA,
+    Fase.ANAGRAFICA: Fase.AVVIO,
+    Fase.AVVIO: Fase.ADOZIONE,
+    Fase.ADOZIONE: Fase.APPROVAZIONE,
+    Fase.APPROVAZIONE: Fase.PUBBLICAZIONE,
+    Fase.PUBBLICAZIONE: None
 }
 
+
+class TipoRisorsa(SerapideEnum):
+    # piano
+    DELIBERA = 'delibera'
+
+    # VAS
+    VAS_SEMPLIFICATA = 'vas_semplificata'
+    VAS_VERIFICA = 'vas_verifica'
+    PARERE_VERIFICA_VAS = 'parere_verifica_vas'
+    PARERE_SCA = 'parere_sca'
+    PROVVEDIMENTO_VERIFICA_VAS = 'provvedimento_verifica_vas'
+
+    # avvio
+    OBIETTIVI_PIANO = 'obiettivi_piano'
+    QUADRO_CONOSCITIVO = 'quadro_conoscitivo'
+    PROGRAMMA_ATTIVITA = 'programma_attivita'
+    INDIVIDUAZIONE_GARANTE_INFORMAZIONE = 'individuazione_garante_informazione'
+    CONTRIBUTI_TECNICI = 'contributi_tecnici'
+    ELABORATI_CONFERENZA = 'elaborati_conferenza'
+    INTEGRAZIONI = 'integrazioni'
+    NORME_TECNICHE_ATTUAZIONE = 'norme_tecniche_attuazione'
+
+    # adozione
+    PARERE_ADOZIONE_SCA = 'parere_adozione_sca'
+    DELIBERA_ADOZIONE = 'delibera_adozione'
+    # adozione - elaborati testuali
+    RELAZIONE_GENERALE = "realzaione_generale"
+    DISCIPLINA_PIANO = "disciplina_piano"
+    RELAZIONE_RESPONSABILE = "relazione_responsabile"
+    RELAZIONE_GARANTE_INFORMAZIONE_PARTECIPAZIONE = "relazione_garante_informazione_partecipazione"
+    VALUTAZIONE = "valutazioni"
+    ELABORATI_CONFORMAZIONE = "elaborati_conformazione"
+    PIANI_ATTUATIVI_BP = "piani_attuativi_beni_paseaggistici"
+    INDAGINI_G_I_S = "indagini_geologiche_idrauliche_sismiche"
+    # adozione - elaborati cartografici
+    SUPPORTO_PREVISIONI_P_C = 'supporto_previsioni_piano_carto'
+    DISCIPLINA_INSEDIAMENTI = 'disciplina_insediamenti_esistenti_carto'
+    ASSETTI_INSEDIATIVI = 'assetti_insiedativi_infrastrutturali_edilizi_carto'
+
+    OSSERVAZIONI_PRIVATI = 'osservazioni_privati'
+    OSSERVAZIONI_ENTI = 'osservazioni_enti'
+
+    ELABORATI_CONF_P = 'elaborati_conferenza_paesaggistica'
+    PARERE_MOTIVATO = 'parere_motivato'
+    DOCUMENTO_SINTESI = "documento_sintesi"
+    RAPPORTO_AMBIENTALE = "rapporto_ambientale"
+
+    # approvazione
+    DELIBERA_APPROVAZIONE = "delibera_approvazione"
+    CONFORMITA_PIT = "conformita-pit"
+
+
+
 TIPOLOGIA_RISORSA = {
-    'delibera': {
+    TipoRisorsa.DELIBERA.value: {
         'label': 'Delibera di avvio ',
         'tooltip': 'ai sensi dell’articolo. 17 L.R. 65/2014'
     },
-    'obiettivi_piano': {
+    TipoRisorsa.OBIETTIVI_PIANO.value: {
         'label': 'Obiettivi del Piano',
         'tooltip': ''
     },
-    'quadro_conoscitivo': {
+    TipoRisorsa.QUADRO_CONOSCITIVO.value: {
         'label': 'Quadro Conoscitivo',
         'tooltip': 'art. 17, lett.b, L.R. 65/2014'
     },
-    'programma_attivita': {
+    TipoRisorsa.PROGRAMMA_ATTIVITA.value: {
         'label': 'Programma delle attività di inforamazione ai cittadini',
         'tooltip': ''
     },
-    'individuazione_garante_informazione': {
+    TipoRisorsa.INDIVIDUAZIONE_GARANTE_INFORMAZIONE.value: {
         'label': 'Individuazione del garante dell\'informazione',
         'tooltip': ''
     }
 }
 
-TIPOLOGIA_CONTATTO = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('generico', _('GENERICO')),
-        ('acvas', _('AUT_COMP_VAS')),
-        ('sca', _('SOGGETTO_SCA')),
-        ('ente', _('ENTE')),
-        ('genio_civile', _('GENIO_CIVILE')),
-    )
 
-TIPOLOGIA_PIANO = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('operativo', _('OPERATIVO')),
-        ('strutturale', _('STRUTTURALE')),
-        ('variante_operativo', _('VARIANTE_OPERATIVO')),
-        ('variante_strutturale', _('VARIANTE_STRUTTURALE')),
-    )
+class TipologiaPiano(SerapideEnum):
+    UNKNOWN = 'UNKNOWN'
+    OPERATIVO = 'OPERATIVO'
+    STRUTTURALE = 'STRUTTURALE'
+    VARIANTE_OPERATIVO = 'VARIANTE_OPERATIVO'
+    VARIANTE_STRUTTURALE = 'VARIANTE_STRUTTURALE'
 
-TIPOLOGIA_VAS = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('semplificata', _('SEMPLIFICATA')),
-        ('verifica', _('VERIFICA')),
-        ('procedimento', _('PROCEDIMENTO')),
-        ('procedimento_semplificato', _('PROCEDIMENTO_SEMPLIFICATO')),
-        ('non_necessaria', _('NON_NECESSARIA')),
-    )
 
-TIPOLOGIA_CONF_COPIANIFIZAZIONE = Choices(
-        ('necessaria', _('NECESSARIA')),
-        ('posticipata', _('POSTICIPATA')),
-        ('non_necessaria', _('NON_NECESSARIA')),
-    )
+class TipologiaVAS(SerapideEnum):
+    UNKNOWN = 'UNKNOWN'
+    SEMPLIFICATA = 'SEMPLIFICATA'
+    VERIFICA = 'VERIFICA'
+    PROCEDIMENTO = 'PROCEDIMENTO'
+    PROCEDIMENTO_SEMPLIFICATO = 'PROCEDIMENTO_SEMPLIFICATO'
+    NON_NECESSARIA = 'NON_NECESSARIA'
+
+
+class TipologiaCopianificazione(SerapideEnum):
+    POSTICIPATA = 'posticipata'
+    NECESSARIA = 'necessaria'
+    NON_NECESSARIA = 'non_necessaria'
+
 
 STATO_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
@@ -95,12 +146,13 @@ STATO_AZIONE = Choices(
         ('necessaria', _('NECESSARIA')),
     )
 
+
 TIPOLOGIA_AZIONE = Choices(
         ('unknown', _('UNKNOWN')),
         ('creato_piano', _('Creato Piano/Variante')),  # Comune
         # Procedura VAS
         ('richiesta_verifica_vas', _('Documento Preliminare VAS')),  # AC
-        ('pareri_verifica_sca', _('Pareri verifica VAS')),  # SCA
+        ('pareri_verifica_vas', _('Pareri verifica VAS')),  # SCA
         ('emissione_provvedimento_verifica', _('Emissione Provvedimento di verifica')),  # AC
         ('pubblicazione_provvedimento_verifica', _('Pubblicazione provvedimento di verifica')),  # AC/Comune
         ('avvio_consultazioni_sca', _('Avvio consultazioni SCA')),  # Comune/AC
@@ -123,7 +175,7 @@ TIPOLOGIA_AZIONE = Choices(
         ('upload_osservazioni_privati', _('Upload Osservazioni Privati')),  # Comune
         ('controdeduzioni', _('Controdeduzioni')),  # Comune
         ('piano_controdedotto', _('Piano Controdedotto')),  # Comune
-        ('esito_conferenza_paesaggistica', _('Esiti conferenza paesaggistica')),  # Regione
+        ('esito_conferenza_paesaggistica', _('Risultanze conferenza paesaggistica')),  # Regione
         ('rev_piano_post_cp', _('Revisione Piano post Conf. Paesaggistica')),  # Comune
         # Adozione VAS
         ('pareri_adozione_sca', _('Pareri SCA')),  # SCA
@@ -145,7 +197,7 @@ FASE_AZIONE = Choices(
         ('creato_piano', 'draft'),
         # Procedura VAS
         ('richiesta_verifica_vas', 'anagrafica'),
-        ('pareri_verifica_sca', 'anagrafica'),
+        ('pareri_verifica_vas', 'anagrafica'),
         ('emissione_provvedimento_verifica', 'anagrafica'),
         ('pubblicazione_provvedimento_verifica', 'anagrafica'),
         ('avvio_consultazioni_sca', 'anagrafica'),
@@ -211,42 +263,34 @@ TOOLTIP_AZIONE = Choices(
         ('rev_piano_post_cp', _('art.19 L.R. 65/2014')),
     )
 
-TIPOLOGIA_ATTORE = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('comune', _('Comune')),
-        ('regione', _('Regione')),
-        ('ac', _('AC')),
-        ('sca', _('SCA')),
-        ('enti', _('ENTI')),
-        ('genio_civile', _('GENIO_CIVILE')),
-    )
 
 AZIONI_BASE = {
-    FASE.draft: [
+    Fase.DRAFT: [
         {
             "tipologia": TIPOLOGIA_AZIONE.creato_piano,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE,
+            "stato": STATO_AZIONE.necessaria,
         }
     ],
-    FASE.anagrafica: [
+    Fase.ANAGRAFICA: [
         {
             "tipologia": TIPOLOGIA_AZIONE.avvio_procedimento,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE
         }
     ],
-    FASE.avvio: [
+    Fase.AVVIO: [
         {
             "tipologia": TIPOLOGIA_AZIONE.trasmissione_adozione,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE
         },
     ],
-    FASE.adozione: [
+    Fase.ADOZIONE: [
         {
             "tipologia": TIPOLOGIA_AZIONE.trasmissione_approvazione,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE
         },
     ],
-    FASE.approvazione: [
+    Fase.APPROVAZIONE: [
         # {
         #     "tipologia": TIPOLOGIA_AZIONE.convocazione_commissione_paritetica,
         #     "attore": TIPOLOGIA_ATTORE.comune
@@ -257,7 +301,7 @@ AZIONI_BASE = {
         # },
         {
             "tipologia": TIPOLOGIA_AZIONE.pubblicazione_piano,
-            "attore": TIPOLOGIA_ATTORE.comune
+            "qualifica": QualificaRichiesta.COMUNE
         },
     ]
 }

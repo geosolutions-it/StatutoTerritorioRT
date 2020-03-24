@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'serapide_core',
     'serapide_core.modello',
     'serapide_core.api',
-    'tests'
+    'tests',
+    # 'serapide_core.tests',
 ]
 
 MIDDLEWARE = [
@@ -100,6 +101,12 @@ DATABASES = {
     }
 }
 
+# FIXTURE_DIRS = ["fixtures", "tests/fixtures",
+#                 "/mnt/ssd2/homeext/geosol/prj/serapide/StatutoTerritorioRT/strt/serapide_core/tests/fixtures",
+#                 "strt/serapide_core/tests/fixtures",
+#                 "serapide_core/tests/fixtures",
+#                 ]
+
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -117,6 +124,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'strt_users.backends.StrtPortalAuthentication',
+    'rules.permissions.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 
 # Internationalization

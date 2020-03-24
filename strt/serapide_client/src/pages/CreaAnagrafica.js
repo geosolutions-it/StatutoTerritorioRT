@@ -43,7 +43,7 @@ const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera &&
 
 export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {
     return (<Query query={GET_PIANI} variables={{codice: code}}>
-        {({loading, data: {piani: {edges = []} = []} = {}, error}) => {
+        {({loading, data: {piani: {edges: [{node: piano = {}} = {}]= []} = []} = {}, error}) => {
             if(loading){
                 return (
                     <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
@@ -53,16 +53,18 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                         </div>
                     </div>
                     </div>)
-            } else if(edges.length === 0) {
+            } else if(!piano.codice) {
                 toast.error(`Impossobile trovare il piano: ${code}`,  {autoClose: true})
                 return <div></div>
             }
-            const {node: {ente, fase: {nome: faseNome}, risorse : {edges: resources = []} = {}, tipo = "", codice = "", dataDelibera, descrizione} = {}} = edges[0] || {}
+            console.log(piano);
+            const {ente, fase: faseNome, risorse : {edges: resources = []} = {}, tipo = "", codice = "", dataDelibera, descrizione} = piano;
             const locked = faseNome !== "DRAFT"
+            
             const {node: delibera} = resources.filter(({node: n}) => n.tipo === "delibera").pop() || {};
             const optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || {};
             if(locked) {
-                window.location.href=`#/pino/${code}/anagrafica`
+               window.location.href=`#/pino/${code}/anagrafica`
             }
             return(
             <div className="py-5 px-7">

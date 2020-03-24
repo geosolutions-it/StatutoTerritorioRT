@@ -1,0 +1,47 @@
+{
+   "operationName" : "ProvveddimentoVerificaVAS",
+
+   "variables" : {
+      "uuid" : "{codice}"
+   },
+
+   "query" : "mutation ProvveddimentoVerificaVAS($uuid: String!) {
+  assoggettamentoVas(uuid: $uuid) {
+    vasAggiornata {
+      uuid
+      verificaEffettuata
+      dataAssoggettamento
+      piano {
+        ...AzioniPiano
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment AzioniPiano on PianoNode {
+  codice
+  fase
+  azioni {
+    ...Azioni
+    __typename
+  }
+  __typename
+}
+
+fragment Azioni on AzioneNode {
+      order
+      tipologia
+      stato
+      qualificaRichiesta
+      data
+      uuid
+      label
+      tooltip
+      fase
+      __typename
+}
+"
+}

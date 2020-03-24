@@ -10,8 +10,13 @@
 #########################################################################
 
 import rules
+import logging
 from django.conf import settings
 
+from serapide_core.api.auth.user import has_profile
+from strt_users.enums import Profilo
+
+logger = logging.getLogger(__name__)
 
 @rules.predicate
 def is_superuser(user):
@@ -27,26 +32,35 @@ def is_recognizable(user):
 
 @rules.predicate
 def is_member(user, user_memberships=None):
-    if user_memberships:
-        return any([mu.member == user for mu in user_memberships])
-    else:
-        return len(list(user.memberships)) > 0
+    # TODO: replace
+    logger.warning("TODO: replace RULE is_member")
+    return has_profile(user, Profilo.OPERATORE)
+    # if user_memberships:
+    #     return any([mu.member == user for mu in user_memberships])
+    # else:
+    #     return len(list(user.memberships)) > 0
 
 
 @rules.predicate
 def is_responsabile_ISIDE(user):
-    return any(
-        m.type.code == settings.RESPONSABILE_ISIDE_CODE
-        for m in user.memberships
-    )
+    # TODO: replace
+    logger.warning("TODO: replace RULE is_responsabile_ISIDE")
+    return has_profile(user, Profilo.ADMIN_PORTALE)
+    # return any(
+    #     m.type.code == settings.RESPONSABILE_ISIDE_CODE
+    #     for m in user.memberships
+    # )
 
 
 @rules.predicate
 def is_RUP(user):
-    return any(
-        m.type.code == settings.RUP_CODE
-        for m in user.memberships
-    )
+    # TODO: replace
+    logger.warning("TODO: replace RULE is_RUP")
+    return has_profile(user, Profilo.ADMIN_ENTE)
+    # return any(
+    #     m.type.code == settings.RUP_CODE
+    #     for m in user.memberships
+    # )
 
 
 @rules.predicate

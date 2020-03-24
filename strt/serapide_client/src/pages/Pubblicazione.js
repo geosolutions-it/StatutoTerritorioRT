@@ -11,9 +11,9 @@ import {Query} from 'react-apollo'
 import {formatDate, showError} from 'utils'
 
 import {GET_PUBBLICAZIONE} from 'schema'
-import PianoPageContainer from '../components/PianoPageContainer';
-import PianoSubPageTitle from '../components/PianoSubPageTitle';
-
+import PianoPageContainer from 'components/PianoPageContainer';
+import PianoSubPageTitle from 'components/PianoSubPageTitle';
+import {View as Si} from 'components/SoggettiIstituzionali';
 
 
 
@@ -23,8 +23,7 @@ import PianoSubPageTitle from '../components/PianoSubPageTitle';
 const UI = ({
     pubblicazione: { pubblicazioneUrl, pubblicazioneUrlData} = {},
     piano: {
-        autoritaIstituzionali: {edges: aut =[]} = {},
-        // altriDestinatari: {edges: dest = []} = {}
+        soggettiOperanti= []
     } = {}
     } = {}) => {
 
@@ -40,18 +39,7 @@ const UI = ({
                 </div>
                 <div className="border-top w-100 my-5"></div>  
                 <div className="col-12 pt-3">DESTINATARI</div>
-                <div className="col-6 pt-3 mb-3"><div className="mb-3">SOGGETTI ISTITUZIONALI</div>
-                {aut.map(({node: {nome, uuid} = {}}) => (
-                        <div className="col-12 px-0 py-1" key={uuid}>
-                                 {nome}
-                        </div>))}
-                </div>
-                {/* <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
-                {dest.map(({node: {nome, uuid} = {}}) => (
-                        <div className="col-12 px-0 p-1" key={uuid}>
-                                 {nome}
-                        </div>))}
-                </div> */}
+                <Si soggettiOperanti={soggettiOperanti}/>
                 <div className="border-top w-100 my-4"></div>
             </div>
                     

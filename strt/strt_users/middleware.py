@@ -17,8 +17,8 @@ from django.urls import reverse
 from django.contrib.auth import logout
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 
-from strt_users.models import Token, Organization
-from serapide_core.modello.models import PianoAuthTokens, Contatto
+from strt_users.models import Ente
+from serapide_core.modello.models import Token
 
 
 class TokenMiddleware(object):
@@ -44,16 +44,18 @@ class TokenMiddleware(object):
 
         if token:
             user = auth.authenticate(token=token)
-            _allowed_pianos = [_pt.piano for _pt in PianoAuthTokens.objects.filter(token__key=token)]
-            if user and _allowed_pianos and len(_allowed_pianos) > 0:
+            t = Token.objects.filter(key=token).first()
+            if t and user:
+                piano = t.delega.delegante.piano # ???
                 request.user = request._cached_user = user
-                organization = _allowed_pianos[0].ente
-                request.session['organization'] = organization.code
+                organization = piano.ente
+                request.session['ente'] = organization.code
                 if not role:
                     request.session['role'] = user.memberships.all().first().pk if user.memberships.all().first() \
                     else None
-                attore = Contatto.attore(user, token=token)
-                request.session['attore'] = attore
+                # TODO
+                # attore = Contatto.attore(user, token=token)
+                # request.session['attore'] = attore
                 auth.login(request, user)
 
         # ------------------------
@@ -75,52 +77,57 @@ class SessionControlMiddleware(object):
             # One-time configuration and initialization.
 
         def __call__(self, request):
-            if not request.user.is_authenticated or \
-            not request.user.is_active or \
-            request.user.is_anonymous:
+            if not request.user.is_authenticated \
+                    or not request.user.is_active \
+                    or request.user.is_anonymous:
+
                 self.redirect_to_login(request)
-            else:
-                role = request.session['role'] if 'role' in request.session else None
-                token = request.session['token'] if 'token' in request.session else None
-                if token:
-                    try:
-                        _t = Token.objects.get(key=token)
-                        if _t.is_expired():
-                            if not request.user.is_superuser:
-                                return self.redirect_to_login(request)
-                    except BaseException:
-                        del request.session['token']
-                        traceback.print_exc()
-
-                organization = request.session['organization'] if 'organization' in request.session else None
-                if not organization:
-                    if not request.user.is_superuser:
-                        return self.redirect_to_login(request)
-                else:
-                    try:
-                        Organization.objects.get(code=organization)
-                    except BaseException:
-                        traceback.print_exc()
-                        if not request.user.is_superuser:
-                            return self.redirect_to_login(request)
-
-                attore = request.session['attore'] if 'attore' in request.session else None
-                if not attore:
-                    try:
-                        if token:
-                            attore = Contatto.attore(request.user, token=token)
-                        elif role:
-                            attore = Contatto.attore(request.user, role=role)
-                        elif organization:
-                            attore = Contatto.attore(request.user, organization=organization)
-                        request.session['attore'] = attore
-                    except BaseException:
-                        traceback.print_exc()
-
-                    if not attore:
-                        if not request.user.is_superuser:
-                            return self.redirect_to_login(request)
-                # print(" ----------------------------- %s / %s " % (request.user, attore))
+            # else:
+            #     role = request.session['role'] if 'role' in request.session else None
+            #     token = request.session['token'] if 'token' in request.session else None
+            #     # TODO
+            #     # if token:
+            #     #     try:
+            #     #         _t = Token.objects.get(key=token)
+            #     #         if _t.is_expired():
+            #     #             if not request.user.is_superuser:
+            #     #                 return self.redirect_to_login(request)
+            #     #     except BaseException:
+            #     #         del request.session['token']
+            #     #         traceback.print_exc()
+            #
+            #     ente = request.session.get('ente', None)
+            #     if not ente:
+            #         if not request.user.is_superuser:
+            #             return self.redirect_to_login(request)
+            #     else:
+            #         try:
+            #             Ente.objects.get(code=ente)
+            #         except BaseException:
+            #             traceback.print_exc()
+            #             if not request.user.is_superuser:
+            #                 return self.redirect_to_login(request)
+            #
+            #     attore = request.session['attore'] if 'attore' in request.session else None
+            #     if not attore:
+            #         # TODO
+            #         return self.redirect_to_login(request)
+            #
+            #         # try:
+            #         #     if token:
+            #         #         attore = Contatto.attore(request.user, token=token)
+            #         #     elif role:
+            #         #         attore = Contatto.attore(request.user, role=role)
+            #         #     elif organization:
+            #         #         attore = Contatto.attore(request.user, organization=organization)
+            #         #     request.session['attore'] = attore
+            #         # except BaseException:
+            #         #     traceback.print_exc()
+            #         #
+            #         # if not attore:
+            #         #     if not request.user.is_superuser:
+            #         #         return self.redirect_to_login(request)
+            #     print(" ----------------------------- %s / %s " % (request.user, attore))
             # ------------------------
             response = self.get_response(request)
             # ------------------------
@@ -131,16 +138,16 @@ class SessionControlMiddleware(object):
             return response
 
         def redirect_to_login(self, request):
-            if 'organization' in request.session:
-                del request.session['organization']
-            if 'attore' in request.session:
-                del request.session['attore']
+            if 'ente' in request.session:
+                del request.session['ente']
+            if 'profilo' in request.session:
+                del request.session['profilo']
             if 'token' in request.session:
                 del request.session['token']
             logout(request)
             redirect_to = getattr(settings, 'LOGOUT_REDIRECT_URL', reverse('user_registration'))
             return HttpResponseRedirect(
-                '{login_path}?next={request_path}'.format(
+                '{login_path}?next={request_path}&redirected_by=SessionControlMiddleware'.format(
                     login_path=redirect_to,
                     request_path=request.path))
-            return HttpResponseRedirect('{login_path}'.format(login_path=redirect_to))
+            # return HttpResponseRedirect('{login_path}'.format(login_path=redirect_to))

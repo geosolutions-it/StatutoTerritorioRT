@@ -1,0 +1,37 @@
+{
+  "operationName": "PubblicazioneApprovazione",
+  "variables": {
+    "codice": "{codice}"
+  },
+  "query": "mutation PubblicazioneApprovazione($codice: String!) {
+  pubblicazioneApprovazione(uuid: $codice) {
+    errors
+    approvazioneAggiornata {
+      piano {
+        ...AzioniPiano
+      }
+    }
+  }
+}
+
+fragment AzioniPiano on PianoNode {
+  codice
+  fase
+  azioni {
+    ...Azioni
+  }
+}
+
+fragment Azioni on AzioneNode {
+      order
+      tipologia
+      stato
+      qualificaRichiesta
+      data
+      uuid
+      label
+      tooltip
+      fase
+}
+"
+}

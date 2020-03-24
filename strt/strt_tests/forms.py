@@ -13,7 +13,7 @@ from django import forms
 from django.core.validators import RegexValidator
 
 from strt_users.models import (
-    Organization,
+    Ente,
     # MembershipType
 )
 
@@ -42,7 +42,7 @@ class UserAuthenticationForm(forms.Form):
     )
     organizations = forms.ModelChoiceField(
         label='Enti',
-        queryset=Organization.objects.all(),
+        queryset=Ente.objects.all(),
         required=False
     )
 

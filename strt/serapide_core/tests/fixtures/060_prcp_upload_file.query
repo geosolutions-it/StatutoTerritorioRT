@@ -1,0 +1,47 @@
+{
+  "operationName": "PianoRevPortCpUploadFile",
+
+  "variables": {
+    "file": null,
+      "codice" : "{codice}",
+      "tipo" : "{tipo_risorsa}"
+  },
+
+  "query": "mutation PianoRevPortCpUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+  upload: uploadRisorsaPianoRevPostCp(file: $file, codice: $codice, tipoFile: $tipo) {
+    success
+    fileName
+    pianoRevPostCpAggiornato {
+      uuid
+      risorse(archiviata: false) {
+        ...Risorse
+      }
+    }
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+  }
+  label
+  tooltip
+}
+"
+}

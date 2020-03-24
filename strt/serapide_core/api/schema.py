@@ -16,11 +16,11 @@ from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 
 from serapide_core.modello.enums import (
-    FASE,
-    TIPOLOGIA_VAS,
-    TIPOLOGIA_PIANO,
-    TIPOLOGIA_CONTATTO,
-    TIPOLOGIA_CONF_COPIANIFIZAZIONE,
+    Fase,
+    TipologiaVAS,
+    TipologiaPiano,
+    # TIPOLOGIA_CONTATTO,
+    TipologiaCopianificazione,
 )
 
 from serapide_core.api.graphene import (
@@ -40,6 +40,12 @@ from serapide_core.api.graphene.mutations import (
     pubblicazione,
 )
 
+from strt_users.models import (
+    Utente,
+    Qualifica,
+    QualificaUfficio,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -49,9 +55,9 @@ logger = logging.getLogger(__name__)
 class Query(object):
 
     # Models
-    fasi = DjangoFilterConnectionField(types.FaseNode)
+    # fasi = DjangoFilterConnectionField(types.FaseNode)
 
-    utenti = DjangoFilterConnectionField(types.AppUserNode,
+    utenti = DjangoFilterConnectionField(types.UtenteNode,
                                          filterset_class=filters.UserMembershipFilter)
 
     enti = DjangoFilterConnectionField(types.EnteNode,
@@ -87,45 +93,70 @@ class Query(object):
 
     piano_rev_post_cp = DjangoFilterConnectionField(types.PianoRevPostCPNode)
 
-    contatti = DjangoFilterConnectionField(types.ContattoNode,
-                                           filterset_class=filters.EnteContattoMembershipFilter)
+    user_choices = graphene.Field(types.UtenteChoiceNode)
+
+    uffici = graphene.List(types.QualificaUfficioNode, qualifica=graphene.String(), ipa=graphene.String(), qualifiche=graphene.List(graphene.String))
+
+    # soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
+    #                                     filterset_class=types.SoggettoOperanteFilter)
+
+
+    # TODO
+    # contatti = DjangoFilterConnectionField(types.ContattoNode,
+    #                                        filterset_class=filters.EnteContattoMembershipFilter)
 
     # Enums
-    fase_piano = graphene.List(enums.FasePiano)
+    # fase_piano = graphene.List(enums.FasePiano) # TODO
     tipologia_vas = graphene.List(enums.TipologiaVAS)
     tipologia_piano = graphene.List(enums.TipologiaPiano)
     tipologia_contatto = graphene.List(enums.TipologiaContatto)
-    tipologia_conferenza_copianificazione = graphene.List(enums.TipologiaContatto)
+    tipologia_conferenza_copianificazione = graphene.List(enums.TipologiaConferenzaCopianificazione)
 
     def resolve_fase_piano(self, info):
         _l = []
-        for _f in FASE:
+        for _f in Fase:
             _l.append(enums.FasePiano(_f[0], _f[1]))
         return _l
 
     def resolve_tipologia_vas(self, info):
         _l = []
-        for _t in TIPOLOGIA_VAS:
+        for _t in TipologiaVAS:
             _l.append(enums.TipologiaVAS(_t[0], _t[1]))
         return _l
 
     def resolve_tipologia_piano(self, info):
-        _l = []
-        for _t in TIPOLOGIA_PIANO:
-            _l.append(enums.TipologiaPiano(_t[0], _t[1]))
-        return _l
+        return [enums.TipologiaPiano(value=t.name, label=t.value)
+                    for t in TipologiaPiano]
 
-    def resolve_tipologia_contatto(self, info):
-        _l = []
-        for _t in TIPOLOGIA_CONTATTO:
-            _l.append(enums.TipologiaContatto(_t[0], _t[1]))
-        return _l
+    def resolve_user_choices(self, info):
+        if info.context.user.is_anonymous:
+            return None
+        else:
+            return info.context.user
+
+
+    def resolve_uffici(self, info, qualifica=None, ipa=None, qualifiche=None, **args):
+        # Warning this is not currently paginated
+        qs = QualificaUfficio.objects
+
+        if ipa:
+            qs = qs.filter(ufficio__ente__ipa=ipa)
+
+        if qualifica:
+            qualifica = Qualifica.fix_enum(qualifica, none_on_error=True)
+            if qualifica:
+                qs = qs.filter(qualifica=qualifica)
+            else:
+                qs = qs.none()
+        elif qualifiche:
+            q_ok = [Qualifica.fix_enum(q, none_on_error=True) for q in qualifiche if Qualifica.fix_enum(q, none_on_error=True)]
+            qs = qs.filter(qualifica__in=q_ok)
+
+        return qs.all()
 
     def resolve_tipologia_conferenza_copianificazione(self, info):
-        _l = []
-        for _t in TIPOLOGIA_CONF_COPIANIFIZAZIONE:
-            _l.append(enums.TipologiaConferenzaCopianificazione(_t[0], _t[1]))
-        return _l
+        return [enums.TipologiaConferenzaCopianificazione(value=t.name, label=t.value)
+                    for t in TipologiaCopianificazione]
 
     # Debug
     debug = graphene.Field(DjangoDebug, name='__debug')
@@ -136,19 +167,19 @@ class Query(object):
 # ############################################################################ #
 class Mutation(object):
 
-    create_fase = core.CreateFase.Field()
-    update_fase = core.UpdateFase.Field()
+    # create_fase = core.CreateFase.Field()
+    # update_fase = core.UpdateFase.Field()
 
-    create_contatto = core.CreateContatto.Field()
-    delete_contatto = core.DeleteContatto.Field()
+    # TODO
+    # create_contatto = core.CreateContatto.Field()
+    # delete_contatto = core.DeleteContatto.Field()
 
     create_piano = piano.CreatePiano.Field()
     update_piano = piano.UpdatePiano.Field()
     delete_piano = piano.DeletePiano.Field()
     promozione_piano = piano.PromozionePiano.Field()
-    formazione_del_piano = piano.FormazionePiano.Field()
 
-    create_procedura_vas = vas.CreateProceduraVAS.Field()
+    # create_procedura_vas = vas.CreateProceduraVAS.Field()
     update_procedura_vas = vas.UpdateProceduraVAS.Field()
     invio_pareri_verifica_vas = vas.InvioPareriVerificaVAS.Field()
     assoggettamento_vas = vas.AssoggettamentoVAS.Field()
@@ -159,7 +190,7 @@ class Mutation(object):
     avvio_esame_pareri_sca = vas.AvvioEsamePareriSCA.Field()
     upload_elaborati_vas = vas.UploadElaboratiVAS.Field()
 
-    create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
+    # create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
     update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()
     avvia_piano = avvio.AvvioPiano.Field()
     contributi_tecnici = avvio.ContributiTecnici.Field()
@@ -168,8 +199,9 @@ class Mutation(object):
     integrazioni_richieste = avvio.IntegrazioniRichieste.Field()
     richiesta_conferenza_copianificazione = avvio.RichiestaConferenzaCopianificazione.Field()
     chiusura_conferenza_copianificazione = avvio.ChiusuraConferenzaCopianificazione.Field()
+    formazione_del_piano = avvio.FormazionePiano.Field()
 
-    create_procedura_adozione = adozione.CreateProceduraAdozione.Field()
+    # create_procedura_adozione = adozione.CreateProceduraAdozione.Field()
     update_procedura_adozione = adozione.UpdateProceduraAdozione.Field()
     trasmissione_adozione = adozione.TrasmissioneAdozione.Field()
     trasmissione_osservazioni = adozione.TrasmissioneOsservazioni.Field()
@@ -182,14 +214,14 @@ class Mutation(object):
     invio_parere_motivato_ac = adozione.InvioParereMotivatoAC.Field()
     upload_elaborati_adozione_vas = adozione.UploadElaboratiAdozioneVAS.Field()
 
-    create_procedura_approvazione = approvazione.CreateProceduraApprovazione.Field()
+    # create_procedura_approvazione = approvazione.CreateProceduraApprovazione.Field()
     update_procedura_approvazione = approvazione.UpdateProceduraApprovazione.Field()
     trasmissione_approvazione = approvazione.TrasmissioneApprovazione.Field()
     esito_conferenza_paesaggistica_ap = approvazione.EsitoConferenzaPaesaggisticaAP.Field()
     pubblicazione_approvazione = approvazione.PubblicazioneApprovazione.Field()
     attribuzione_conformita_pit = approvazione.AttribuzioneConformitaPIT.Field()
 
-    create_procedura_pubblicazione = pubblicazione.CreateProceduraPubblicazione.Field()
+    # create_procedura_pubblicazione = pubblicazione.CreateProceduraPubblicazione.Field()
     update_procedura_pubblicazione = pubblicazione.UpdateProceduraPubblicazione.Field()
     pubblicazione_piano = pubblicazione.PubblicazionePiano.Field()
 

@@ -21,10 +21,10 @@ import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from 'schema'
 
 const enhancers = withControllableState("url", "onUrlChange","")
 
-const UI = enhancers(({back, url, onUrlChange, vas: {node: {uuid, risorse : {edges: resources = []} = {}} = {}}, utente: {attore}}) => {
-    
+const UI = enhancers(({back, qualificaRichiesta, url, onUrlChange, vas: {node: {uuid, risorse : {edges: resources = []} = {}} = {}}, utente: {attore}}) => {
+    console.log(qualificaRichiesta);
     const provvedimentoVerificaVas  = resources.filter(({node: {tipo, user = {}}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
-    const pubblicazione_provvedimento_verifica = attore === 'AC' ? "pubblicazioneProvvedimentoVerificaAc" : "pubblicazioneProvvedimentoVerificaAp"
+    const pubblicazione_provvedimento_verifica = qualificaRichiesta === 'AC' ? "pubblicazioneProvvedimentoVerificaAc" : "pubblicazioneProvvedimentoVerificaAp"
     return (
         <React.Fragment>
             <ActionTitle>Pubblicazione Provvedimento di Verifica</ActionTitle>

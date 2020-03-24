@@ -18,10 +18,12 @@ const _axios = axios.create({xsrfCookieName: 'csrftoken',xsrfHeaderName: "X-CSRF
 const cache = new InMemoryCache({fragmentMatcher,
         dataIdFromObject: object => {
           switch (object.__typename) {
+            case 'UserNode' : return object.fiscalCode
+            case 'RisorsaNode': return object.uuid
             case 'PianoNode': return object.codice // use `key` as the primary key
             case 'ProceduraVASNode': return object.uuid
-            case 'RisorsaNode': return object.uuid
-            case 'ContattoNode': return object.uuid
+            case 'EnteNode': return object.ipa
+            case 'UfficioNode': return object.uuid
             case 'ConsultazioneVASNode': return object.uuid
             case 'ProceduraAvvioNode': return object.uuid
             case 'ConferenzaCopianificazioneNode': return object.uuid

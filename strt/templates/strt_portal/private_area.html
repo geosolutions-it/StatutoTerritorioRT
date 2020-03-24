@@ -13,7 +13,6 @@ LICENSE file in the root directory of this source tree.
 
 {% load static %}
 {% load i18n %}
-{% load rules %}
 
 {% block head_title %}{{ block.super }} - {% trans 'area riservata'|capfirst %}{% endblock head_title %}
 
@@ -39,18 +38,17 @@ LICENSE file in the root directory of this source tree.
             <div class="collapse navbar-collapse" id="userNavbarSupportedContent">
 
                 <h5>
-                    {% for m in request.user.memberships %}
-                        {% if m.pk == request.session.role %}
-                          <span class="d-block role role-item text-white pb-1 size-11">{{ request.user }} - {{ m.organization.description|default:m.organization.name }}</span>
-                          {% if request.session.attore != 'UNKNOWN' %}
-                            <span class="d-block role role-item text-white" style="font-size: 12px"><em>{{ m.type.description|default:m.type.name }}</em></span>
-                          {% endif %}
+                    {% if request.user %}
+                        <span class="d-block role role-item text-white pb-1 size-11">{{ request.user.fiscal_code }}</span>
+                          
+                        <span class="d-block role role-item text-white" style="font-size: 12px"><em>{{ request.user.first_name }} {{request.user.last_name  }}</em></span>
+                        
                         {% endif %}
-                    {% endfor %}
+                    
                 </h5>
                 <ul class="ml-auto text-center align-items-center navbar-nav" id="user-navbar-list">
 
-                    {% has_perm 'strt_users.can_manage_users' request.user as can_manage_users %}
+                    {#%  has_perm 'strt_users.can_manage_users' request.user as can_manage_users %#}
                     {% if can_manage_users %}
 
                         <!-- User management menu -->
@@ -91,12 +89,12 @@ LICENSE file in the root directory of this source tree.
                         </span>
                         <div role="menu" aria-hidden="true"
                              class="dropdown-menu dropdown-menu-right">
-                            <!-- <span class="role text-serapide">{% trans 'ruolo'|upper %}:</span>
+                            <span class="role text-serapide">{% trans 'ruolo'|upper %}:</span>
                             {% for m in request.user.memberships %}
                                 {% if m.organization.code == request.session.organization %}
                                 <span class="d-block role role-item text-serapide">{{ m.description|default_if_none:m.type }}</span>
                                 {% endif %}
-                            {% endfor %} -->
+                            {% endfor %}
                             
                                     
                             

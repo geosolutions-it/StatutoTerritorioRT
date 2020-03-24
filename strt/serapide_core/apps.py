@@ -28,3 +28,11 @@ class AppConfig(NotificationsAppConfigBase):
         """Connect relevant signals to their corresponding handlers"""
         super(AppConfig, self).ready()
         run_setup_hooks()
+
+        # WARNING SOME MONKEY PATCHING HERE
+        # import graphene_django
+        # import graphene_django_extras
+        # import logging
+        # logging.getLogger(__name__).warning("MONKEY PATCHING convert_django_field_with_choices")
+        # graphene_django.converter.convert_django_field_with_choices = graphene_django_extras.converter.convert_django_field_with_choices
+        # graphene_django.types.convert_django_field_with_choices = graphene_django_extras.converter.convert_django_field_with_choices

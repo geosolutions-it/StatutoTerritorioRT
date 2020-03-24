@@ -1,0 +1,53 @@
+{
+  "operationName": "GetApprovazione",
+  "variables": {
+    "codice": "{codice}"
+  },
+  "query": "query GetApprovazione($codice: String!) {
+  modello: procedureApprovazione(piano_Codice: $codice) {
+    edges {
+      node {
+        ...APPROVAZIONE
+      }
+    }
+  }
+}
+
+fragment APPROVAZIONE on ProceduraApprovazioneNode {
+  uuid
+  dataCreazione
+  dataDeliberaApprovazione
+  richiestaConferenzaPaesaggistica
+  urlPianoPubblicato
+  pubblicazioneUrl
+  pubblicazioneUrlData
+  risorse(archiviata: false) {
+    ...Risorse
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+  }
+  label
+  tooltip
+}
+"
+}

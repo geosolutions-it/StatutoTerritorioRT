@@ -14,7 +14,6 @@ import rules
 from strt_users.rules import (
     is_RUP,
     is_recognizable,
-    # is_responsabile_ISIDE
 )
 
 from .auth import (
@@ -37,10 +36,13 @@ rules.add_rule(
     is_RUP | user_rules.can_access_piano
 )
 
-rules.add_rule(
-    'strt_core.api.is_actor',
-    user_rules.is_actor_for_token | user_rules.is_actor_for_role | user_rules.is_actor_for_organization
-)
+# TODO
+# rules.add_rule(
+#     'strt_core.api.is_actor',
+#     user_rules.is_actor_for_token |
+#         # user_rules.is_actor_for_role |  # TODO
+#         user_rules.is_actor_for_organization
+# )
 
 rules.add_rule(
     'strt_core.api.can_update_piano',
@@ -57,46 +59,42 @@ rules.add_rule(
     vas_rules.parere_verifica_vas_ok
 )
 
-# ############################################################################ #
-# RULES FOR FASI
-# ############################################################################ #
+# rules.add_rule(
+#     'strt_core.api.fase_anagrafica_completa',
+#     ~piano_rules.has_pending_alerts &
+#     piano_rules.is_draft &
+#     piano_rules.has_data_delibera &
+#     piano_rules.has_description &
+#     piano_rules.has_delibera_comunale &
+#     piano_rules.has_soggetto_proponente &
+#     piano_rules.has_procedura_vas &
+#     vas_rules.procedura_vas_is_valid
+# )
 
-rules.add_rule(
-    'strt_core.api.fase_anagrafica_completa',
-    ~piano_rules.has_pending_alerts &
-    piano_rules.is_draft &
-    piano_rules.has_data_delibera &
-    piano_rules.has_description &
-    piano_rules.has_delibera_comunale &
-    piano_rules.has_soggetto_proponente &
-    piano_rules.has_procedura_vas &
-    vas_rules.procedura_vas_is_valid
-)
-
-rules.add_rule(
-    'strt_core.api.fase_avvio_completa',
-    ~piano_rules.has_pending_alerts &
-    piano_rules.is_anagrafica &
-    piano_rules.protocollo_genio_inviato &
-    piano_rules.formazione_piano_conclusa &
-    piano_rules.has_procedura_avvio &
-    piano_rules.avvio_piano_conclusa &
-    (~piano_rules.has_procedura_vas | piano_rules.vas_piano_conclusa)
-)
-
-rules.add_rule(
-    'strt_core.api.fase_adozione_completa',
-    ~piano_rules.has_pending_alerts &
-    piano_rules.is_avvio &
-    piano_rules.has_procedura_adozione &
-    piano_rules.adozione_piano_conclusa &
-    (~piano_rules.has_procedura_adozione_vas | piano_rules.adozione_vas_piano_conclusa)
-)
-
-rules.add_rule(
-    'strt_core.api.fase_approvazione_completa',
-    ~piano_rules.has_pending_alerts &
-    piano_rules.is_adozione &
-    piano_rules.has_procedura_approvazione &
-    piano_rules.approvazione_piano_conclusa
-)
+# rules.add_rule(
+#     'strt_core.api.fase_avvio_completa',
+#     ~piano_rules.has_pending_alerts &
+#     piano_rules.is_anagrafica &
+#     piano_rules.protocollo_genio_inviato &
+#     piano_rules.formazione_piano_conclusa &
+#     piano_rules.has_procedura_avvio &
+#     piano_rules.avvio_piano_conclusa &
+#     (~piano_rules.has_procedura_vas | piano_rules.vas_piano_conclusa)
+# )
+#
+# rules.add_rule(
+#     'strt_core.api.fase_adozione_completa',
+#     ~piano_rules.has_pending_alerts &
+#     piano_rules.is_avvio &
+#     piano_rules.has_procedura_adozione &
+#     piano_rules.adozione_piano_conclusa &
+#     (~piano_rules.has_procedura_adozione_vas | piano_rules.adozione_vas_piano_conclusa)
+# )
+#
+# rules.add_rule(
+#     'strt_core.api.fase_approvazione_completa',
+#     ~piano_rules.has_pending_alerts &
+#     piano_rules.is_adozione &
+#     piano_rules.has_procedura_approvazione &
+#     piano_rules.approvazione_piano_conclusa
+# )

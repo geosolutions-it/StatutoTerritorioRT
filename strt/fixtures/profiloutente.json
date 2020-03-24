@@ -1,0 +1,74 @@
+[
+   {
+      "pk" : 1,
+      "fields" : {
+         "ente" : 2,
+         "profilo" : "Profilo.ADMIN_ENTE",
+         "utente" : "ACTIVE11A15E715G"
+      },
+      "model" : "strt_users.profiloutente"
+   },
+   {
+      "pk" : 2,
+      "fields" : {
+         "utente" : "ACTIVE11A15E715G",
+         "profilo" : "Profilo.OPERATORE",
+         "ente" : 2
+      },
+      "model" : "strt_users.profiloutente"
+   },
+   {
+      "pk" : 3,
+      "fields" : {
+         "ente" : 2,
+         "profilo" : "Profilo.OPERATORE",
+         "utente" : "ACTIVE22A15E715G"
+      },
+      "model" : "strt_users.profiloutente"
+   },
+   {
+      "model" : "strt_users.profiloutente",
+      "fields" : {
+         "profilo" : "Profilo.OPERATORE",
+         "ente" : 3,
+         "utente" : "ACTIVE22A15E715G"
+      },
+      "pk" : 4
+   },
+   {
+      "fields" : {
+         "profilo" : "Profilo.OPERATORE",
+         "ente" : 1,
+         "utente" : "GCGCGC22A15E715G"
+      },
+      "model" : "strt_users.profiloutente",
+      "pk" : 5
+   },
+   {
+      "pk" : 6,
+      "model" : "strt_users.profiloutente",
+      "fields" : {
+         "ente" : 1,
+         "profilo" : "Profilo.OPERATORE",
+         "utente" : "PIANRT22A15E715G"
+      }
+   },
+   {
+      "pk" : 7,
+      "fields" : {
+         "profilo" : "Profilo.OPERATORE",
+         "ente" : 4,
+         "utente" : "ACACAC22A15E715G"
+      },
+      "model" : "strt_users.profiloutente"
+   },
+   {
+      "model" : "strt_users.profiloutente",
+      "fields" : {
+         "ente" : 3,
+         "profilo" : "Profilo.OPERATORE",
+         "utente" : "SKASKA22A15E715G"
+      },
+      "pk" : 8
+   }
+]

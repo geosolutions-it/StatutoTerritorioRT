@@ -1,0 +1,71 @@
+
+{
+   "operationName" : "UpdateProceduraAvvio",
+
+   "variables" : {
+      "input" : {
+         "uuid" : "{codice}",
+         "proceduraAvvio" : {
+            "{nome_campo}" : "{valore_campo}"
+         }
+      }
+   },
+
+   "query" : "mutation UpdateProceduraAvvio($input: UpdateProceduraAvvioInput!) {
+  updateProceduraAvvio(input: $input) {
+    proceduraAvvioAggiornata {
+      ...AVVIO
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment AVVIO on ProceduraAvvioNode {
+  uuid
+  conferenzaCopianificazione
+  dataCreazione
+  dataScadenzaRisposta
+  garanteNominativo
+  garantePec
+  richiestaIntegrazioni
+  messaggioIntegrazione
+  risorse(archiviata: false) {
+    ...Risorse
+    __typename
+  }
+  __typename
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+  __typename
+}
+"
+
+}
+

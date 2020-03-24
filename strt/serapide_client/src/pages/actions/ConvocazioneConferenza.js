@@ -20,7 +20,7 @@ import {EnhancedListSelector} from 'components/ListSelector'
 
 import {compose} from 'recompose'
 import {toggleControllableState, rebuildTooltip} from 'enhancers'
-import {showError, getCodice, getContatti} from 'utils'
+import {showError, getCodice, getContatti, getSoggettiIsti, SOGGETTI_ISTITUZIONALI} from 'utils'
 
 import {
     UPDATE_PIANO,
@@ -62,13 +62,17 @@ const Messaggio = () => (<React.Fragment>
         </React.Fragment>)
 
 const UI = enhancer(({ back,
-    piano: {numeroProtocolloGenioCivile, codice} = {},
+    piano: {
+        numeroProtocolloGenioCivile, codice,
+        soggettiOperanti
+    
+    } = {},
     proceduraAvvio: {node: {
         uuid}} = {},
         isChecked,
         toggleCheck
     }) => {
-        const auths = []
+        const si = getSoggettiIsti(soggettiOperanti).map(({qualificaUfficio} = {}) => (qualificaUfficio))
         const dataDelibera = new Date().toDateString()
         const allegati = []
         return (
@@ -82,24 +86,23 @@ const UI = enhancer(({ back,
                         <div className="col-auto">
                             <Mutation mutation={UPDATE_PIANO} onError={showError}>
                                 {(onChange) => {
-                                    const changed = (val) => {
-                                        let autoritaIstituzionali = []
-                                        if(auths.indexOf(val)!== -1){
-                                            autoritaIstituzionali = auths.filter( uuid => uuid !== val)
-                                        }else {
-                                            autoritaIstituzionali = auths.concat(val)
-                                        }
-                                            onChange({variables:{ input:{
-                                                    pianoOperativo: { autoritaIstituzionali}, codice}
+                                    const changed = (val, {tipologia: qualifica, uuid}) => {
+                                        let newSO = soggettiOperanti.map(({qualificaUfficio: {qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}} = {}) => ({qualifica, ufficioUuid}))
+                                        newSO = newSO.filter(({ufficioUuid}) => ufficioUuid !== uuid)
+                                        if (newSO.length === soggettiOperanti.length) {
+                                                newSO = newSO.concat({qualifica, ufficioUuid: uuid})
+                                            }
+                                        onChange({variables:{ input:{
+                                                    pianoOperativo: { soggettiOperanti: newSO}, codice}
                                             }})
                                     }
                                     return (
                                         <EnhancedListSelector
-                                            selected={auths}
+                                            selected={si.map(({ufficio: {uuid} = {}}) => uuid)}
                                             query={GET_CONTATTI}
                                             getList={getContatti}
                                             onChange={changed}
-                                            variables={{}}
+                                            variables={{tipo: SOGGETTI_ISTITUZIONALI}}
                                             size="lg"
                                             label="SOGGETTI ISTITUZIONALI"
                                             btn={(toggleOpen) => (

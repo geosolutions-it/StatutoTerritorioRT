@@ -17,9 +17,9 @@ import {withControllableState} from 'enhancers'
 import {formatDate, showError} from 'utils'
 
 import {GET_AVVIO_PAGE, GET_CONFERENZA} from 'schema'
-import PianoPageContainer from '../components/PianoPageContainer';
-import PianoSubPageTitle from '../components/PianoSubPageTitle';
-
+import PianoPageContainer from 'components/PianoPageContainer';
+import PianoSubPageTitle from 'components/PianoSubPageTitle';
+import {View as Si} from 'components/SoggettiIstituzionali';
 
 
 
@@ -37,13 +37,11 @@ const UI = enhancers(({
         codice,
         numeroProtocolloGenioCivile,
         dataProtocolloGenioCivile,
-        autoritaIstituzionali: {edges: aut =[]} = {},
-        // altriDestinatari: {edges: dest = []} = {},
+        soggettiOperanti = [],
         risorse: {edges: risorsePiano = []},
         dataDelibera
     } = {}
     , toggleSection, section} = {}) => {
-        
         const {node: delibera} = risorsePiano.filter(({node: n}) => n.tipo === "delibera").shift() || {}
         const {node: obiettivi} = risorseAvvio.filter(({node: {tipo}}) => tipo === "obiettivi_piano").shift() || {}
         const {node: quadro} = risorseAvvio.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").shift() || {}
@@ -99,18 +97,7 @@ const UI = enhancers(({
                 <div className="col-12">{garantePec}</div>
                 </div>
                 <div className="col-12 d-flex align-items-center pt-4">TERMINI SCADENZA PER LA PROPOSTA{dataScadenzaRisposta && (<span className="p-2 ml-4 border bg-serapide"><i className="material-icons pr-1">date_range</i><span style={{verticalAlign: 'super'}}>{formatDate(dataScadenzaRisposta)}</span></span>)}</div>
-                <div className="col-6 pt-4 mb-3"><div className="mb-3">NOTIFICHE SOGGETTI ISTITUZIONALI</div>
-                {aut.map(({node: {nome, uuid} = {}}) => (
-                        <div className="col-12 px-0 py-1" key={uuid}>
-                                 {nome}
-                        </div>))}
-                </div>
-                {/* <div className="col-6 pt-4 pb-3"><div className="mb-3">NOTIFICHE ALTRI SOGGETTI NON ISTITUZIONALI</div>
-                {dest.map(({node: {nome, uuid} = {}}) => (
-                        <div className="col-12 px-0 p-1" key={uuid}>
-                                 {nome}
-                        </div>))}
-                </div> */}
+                <Si soggettiOperanti={soggettiOperanti}/>
             </div>    
             <div className="border-serapide border-top w-100 my-4"></div>   
             

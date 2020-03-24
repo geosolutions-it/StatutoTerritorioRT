@@ -51,18 +51,21 @@ const fileProps = {className:"col-xl-12", iconSize: "icon-24", fontSize: "size-1
 
 
 const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, canUpdate, isLocked, Vas = {}}) => {
+    
+    const {node: {uuid, tipologia, dataAssoggettamento, assoggettamento, piano: { soggettoProponente, soggettiOperanti = [] } = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
+        
+    const {ufficio: sP = {}} = soggettoProponente || {};
 
-    const {node: {uuid, tipologia, dataAssoggettamento, assoggettamento,
-        piano: {soggettoProponente: sP, autoritaCompetenteVas: {edges: aut =[]} = {}, soggettiSca: {edges: sca = []} = {}} = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
     const {node: {avvioConsultazioniSca, dataAvvioConsultazioniSca} = {}} = consultazioneSCA
     const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
     const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
     const {node: docProcSemp} = resources.filter(({node: n}) => n.tipo === "doc_proc_semplificato").pop() || {};
 
+
     const disableSCA = tipologia === "SEMPLIFICATA" || tipologia === "NON_NECESSARIA"
-    const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
-    const scas = sca.map(({node: {uuid} = {}} = {}) => uuid)
-    const canCommit = !isLocked && canUpdate && checkAnagrafica(tipologia, sP, auths, scas, semplificata, verifica, docProcSemp)
+    const acs = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "AC").map(({qualificaUfficio} = {}) => (qualificaUfficio))
+    const scas = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "SCA").map(({qualificaUfficio} = {}) => (qualificaUfficio))
+    const canCommit = !isLocked && canUpdate && checkAnagrafica(tipologia, sP, acs, scas, semplificata, verifica, docProcSemp)
     const getInputTipologia = getVasTypeInput(uuid, "tipologia")
     const pareriUser =  resources.filter(({node: {tipo}}) => tipo === "parere_sca").reduce((acc, {node}) => {
         if (acc[node.user.fiscalCode]) {
@@ -158,7 +161,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         const changed = (val) => {
                             let soggettoProponenteUuid = val;
                             if(sP && sP.uuid === val){
-                                soggettoProponenteUuid = ""
+                                soggettoProponenteUuid = null
                             }
                             onChange({variables:{ input:{
                                         pianoOperativo: { soggettoProponenteUuid}, codice}
@@ -168,7 +171,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                     <EnhancedListSelector
                             selected={sP ? [sP.uuid] : []}
                             query={GET_CONTATTI}
-                            variables={{tipo: "generico"}}
+                            variables={{tipo: "resp"}}
                             getList={getContatti}
                             label="DEFINISCI SOGGETTO PROPONENTE"
                             size="lg"
@@ -177,61 +180,67 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         >
                         {/*<AddContact className="mt-2"
                          tipologia="generico"></AddContact>*/}
-                        </EnhancedListSelector>)}
+                        </EnhancedListSelector>
+                        )}
                     }
                 </Mutation>) : (<span>SOGGETTO PROPONENTE</span>) }
                     {sP && sP.nome && (<div className="d-flex pt-3" key={sP.uuid}>
                             <i className="material-icons text-serapide">bookmark</i>
-                            {sP.nome}
+                            {`${sP.ente && sP.ente.nome} ${sP.nome}`}
                     </div>)}
                 </div>
             <div style={{minWidth: "33%"}}>
             { !isLocked ? (<Mutation mutation={UPDATE_PIANO} onError={showError}>
                 {(onChange) => {
-                    const changed = (val) => {
-                        const autoritaCompetenteVas = auths.indexOf(val) !== -1 ? [] : [val]
+                    const changed = (val, {tipologia: qualifica, uuid}) => {
+                        let newAC = acs.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid}))
+                            newAC = newAC.filter(({ufficioUuid}) => uuid !== ufficioUuid)
+                        if (newAC.length === acs.length){
+                            newAC = [{qualifica, ufficioUuid: uuid}]
+                            }
                         onChange({variables:{ input:{
-                                    pianoOperativo: { autoritaCompetenteVas}, codice}
+                                    pianoOperativo: { soggettiOperanti: newAC.concat(scas.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid})))}, codice}
                             }})
                     }
                     return (
                         <EnhancedListSelector
-                            selected={auths}
+                            selected={acs.map(({ufficio: {uuid} = {}}) => uuid)}
                             query={GET_CONTATTI}
                             getList={getContatti}
                             onChange={changed}
-                            variables={{tipo: "acvas"}}
+                            variables={{tipo: "ac"}}
                             size="lg"
                             label="SELEZIONA AUTORITA’ COMPETENTE VAS"
                             btn={(toggleOpen) => (<Button iconSize="icon-20" fontSize="size-11" disabled={isLocked} onClick={toggleOpen} className="text-uppercase" color="serapide" icon="add_circle" label="AUTORITA’ COMPETENTE VAS (AC)"/>)}
                             >
                             {/*<AddContact className="mt-2"
                              tipologia="acvas"></AddContact>*/}
-                            </EnhancedListSelector>)}
+                            </EnhancedListSelector>
+                            )}
                 }
                 </Mutation>) : (<span>AUTORITA’ COMPETENTE VAS</span>) }
-                {aut.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pt-3" key={uuid}>
+                {acs.map(({ufficio: {nome, uuid, ente: {nome: nomeEnte} = {}} = {}}) => (<div className="d-flex pt-3" key={uuid}>
                             <i className="material-icons text-serapide">bookmark</i>
-                            {nome}
+                            {`${nomeEnte} ${nome}`}
                 </div>))}
             </div>
             <div style={{minWidth: "33%"}}>
             { !isLocked ? ( <Mutation mutation={UPDATE_PIANO} onError={showError}>
             {(onChange) => {
-                    const changed = (val) => {
-                        let nscas = []
-                        if(scas.indexOf(val)!== -1){
-                            nscas = scas.filter( uuid => uuid !== val)
-                        }else {
-                            nscas = scas.concat(val)
+                    const changed = (val, {tipologia: qualifica, uuid}) => {
+                        let newSCA = scas.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid}))
+                        
+                        newSCA = newSCA.filter(({ufficioUuid}) => ufficioUuid !== uuid)
+                        if (newSCA.length === scas.length) {
+                            newSCA = newSCA.concat({qualifica, ufficioUuid: uuid})
                         }
                         onChange({variables:{ input:{
-                                    pianoOperativo: { soggettiSca: nscas}, codice}
+                                    pianoOperativo: { soggettiOperanti: newSCA.concat(acs.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid}) ))}, codice}
                             }})
                     }
                     return (
                 <EnhancedListSelector
-                        selected={scas}
+                        selected={scas.map(({ufficio: {uuid} = {}}) => uuid)}
                         query={GET_CONTATTI}
                         variables={{tipo: "sca"}}
                         getList={getContatti}
@@ -242,12 +251,13 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                     >
                     {/*<AddContact className="mt-2"
                      tipologia="sca"></AddContact>*/}
-                    </EnhancedListSelector>)}
+                    </EnhancedListSelector>
+                )}
                 }
                 </Mutation>) : (<span>SOGGETTI COMPETENTI IN MATERIA AMBIENTALE</span>) }
-                {sca.map(({node: {nome, uuid} = {}}) => (<div className="d-flex pt-3" key={uuid}>
+                {scas.map(({ufficio: {nome, uuid, ente: {nome: nomeEnte} = {}} = {}}) => (<div className="d-flex pt-3" key={uuid}>
                             <i className="material-icons text-serapide">bookmark</i>
-                            {nome}
+                            {`${nomeEnte} ${nome}`}
                 </div>))}
             </div>
         </div>

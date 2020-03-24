@@ -1,1 +1,99 @@
-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"EnteNode"},{"name":"EnteTipoNode"},{"name":"ContattoNode"},{"name":"PianoNode"},{"name":"FaseNode"},{"name":"RisorsaNode"},{"name":"RisorsePianoType"},{"name":"ProceduraVASNode"},{"name":"RisorseVASType"},{"name":"FasePianoStoricoType"},{"name":"AppUserNode"}]}]}}
+{
+    "__schema": {
+        "types": [
+            {
+                "kind": "INTERFACE",
+                "name": "Node",
+                "possibleTypes": [
+                    {
+                        "name": "UtenteNode"
+                    },
+                    {
+                        "name": "UserThreadType"
+                    },
+                    {
+                        "name": "UserMessageType"
+                    },
+                    {
+                        "name": "RisorsaNode"
+                    },
+                    {
+                        "name": "PianoNode"
+                    },
+                    {
+                        "name": "ProceduraVASNode"
+                    },
+                    {
+                        "name": "EnteNode"
+                    },
+                    {
+                        "name": "ProceduraAvvioNode"
+                    },
+                    {
+                        "name": "RisorseAvvioType"
+                    },
+                    {
+                        "name": "ProceduraAdozioneNode"
+                    },
+                    {
+                        "name": "RisorseAdozioneType"
+                    },
+                    {
+                        "name": "ProceduraAdozioneVASNode"
+                    },
+                    {
+                        "name": "RisorseAdozioneVASType"
+                    },
+                    {
+                        "name": "ProceduraApprovazioneNode"
+                    },
+                    {
+                        "name": "RisorseApprovazioneType"
+                    },
+                    {
+                        "name": "ProceduraPubblicazioneNode"
+                    },
+                    {
+                        "name": "RisorsePubblicazioneType"
+                    },
+                    {
+                        "name": "RisorseVASType"
+                    },
+                    {
+                        "name": "ConsultazioneVASNode"
+                    },
+                    {
+                        "name": "SoggettoOperanteNode"
+                    },
+                    {
+                        "name": "AzioneNode"
+                    },
+                    {
+                        "name": "FasePianoStoricoType"
+                    },
+                    {
+                        "name": "RisorsePianoType"
+                    },
+                    {
+                        "name": "ConferenzaCopianificazioneNode"
+                    },
+                    {
+                        "name": "RisorseCopianificazioneType"
+                    },
+                    {
+                        "name": "PianoControdedottoNode"
+                    },
+                    {
+                        "name": "RisorsePianoControdedottoType"
+                    },
+                    {
+                        "name": "PianoRevPostCPNode"
+                    },
+                    {
+                        "name": "RisorsePianoRevPostCPType"
+                    }
+                ]
+            }
+        ]
+    }
+}

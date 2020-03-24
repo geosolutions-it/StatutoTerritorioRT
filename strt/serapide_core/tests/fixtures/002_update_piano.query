@@ -1,0 +1,129 @@
+{
+   "operationName" : "UpdatePiano",
+   "variables" : {
+      "input" : {
+         "codice" : "{codice}",
+         "pianoOperativo" : {
+            "{nome_campo}" : "{valore_campo}"
+         }
+      }
+   },
+   "query" : "mutation UpdatePiano($input: UpdatePianoInput!) {
+  updatePiano(input: $input) {
+    pianoAggiornato {
+      ...Piano
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment Piano on PianoNode {
+  codice
+  tipo: tipologia
+  descrizione
+  lastUpdate
+  dataDelibera
+  dataCreazione
+  dataAccettazione
+  dataAvvio
+  dataApprovazione
+  alertsCount
+  numeroProtocolloGenioCivile
+  dataProtocolloGenioCivile
+  redazioneNormeTecnicheAttuazioneUrl
+  compilazioneRapportoAmbientaleUrl
+  conformazionePitPprUrl
+  monitoraggioUrbanisticoUrl
+  azioni {
+    ...Azioni
+    __typename
+  }
+  ente {
+    ipa
+    nome
+    tipo
+    __typename
+  }
+  fase
+  responsabile {
+    ...User
+    __typename
+  }
+  risorse(archiviata: false) {
+    ...Risorse
+    __typename
+  }
+  soggettoProponente {
+        qualifica
+        ufficio {uuid nome}
+        __typename
+  }
+  soggettiOperanti {
+      qualificaUfficio {
+        qualifica
+        ufficio {uuid nome}
+        __typename
+      }
+      __typename
+  }
+
+  proceduraVas {uuid}
+  proceduraAvvio {uuid}
+
+  __typename
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+  __typename
+}
+
+fragment User on UtenteNode {
+  id
+  email
+  fiscalCode
+  firstName
+  lastName
+  dateJoined
+  alertsCount
+  __typename
+}
+
+fragment Azioni on AzioneNode {
+      order
+      tipologia
+      stato
+      qualificaRichiesta
+      data
+      uuid
+      label
+      tooltip
+      fase
+      __typename
+}
+"}

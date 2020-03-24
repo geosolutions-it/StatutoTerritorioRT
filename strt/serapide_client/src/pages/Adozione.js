@@ -20,7 +20,7 @@ import {formatDate, showError, getNominativo, filterAndGroupResourcesByUser, map
 import {GET_ADOZIONE_PAGE} from 'schema'
 import PianoSubPageTitle from '../components/PianoSubPageTitle';
 import PianoPageContainer from '../components/PianoPageContainer';
-
+import {View as Si} from '../components/SoggettiIstituzionali';
 
 
 
@@ -40,8 +40,7 @@ const UI = enhancers(({
     pianoRev: { node: {risorse : {edges: risorsePostCP = []} = {}} = {}} = {},
     vas: { node: { risorse : {edges: risorseVas = []} = {}} = {}} = {},
     piano: {
-        autoritaIstituzionali: {edges: aut =[]} = {},
-        // altriDestinatari: {edges: dest = []} = {}
+        soggettiOperanti = []
     } = {}
     , toggleSection, section} = {}) => {
         
@@ -69,18 +68,7 @@ const UI = enhancers(({
                 </div>
                 <div className="border-top w-100 my-5"></div>  
                 <div className="col-12 pt-3">DESTINATARI</div>
-                <div className="col-6 pt-3 mb-3"><div className="mb-3">SOGGETTI ISTITUZIONALI</div>
-                {aut.map(({node: {nome, uuid} = {}}) => (
-                        <div className="col-12 px-0 py-1" key={uuid}>
-                                 {nome}
-                        </div>))}
-                </div>
-                {/* <div className="col-6 pt-3 pb-3"><div className="mb-3">ALTRI SOGGETTI NON ISTITUZIONALI</div>
-                {dest.map(({node: {nome, uuid} = {}}) => (
-                        <div className="col-12 px-0 p-1" key={uuid}>
-                                 {nome}
-                        </div>))}
-                </div> */}
+                <Si soggettiOperanti={soggettiOperanti}/>
                 <div className="border-top w-100 my-4"></div>
                 <div className="col-4 pb-2">PUBBLICAZIONE B.U.R.T.</div>
                 <div className="col-5 d-flex">

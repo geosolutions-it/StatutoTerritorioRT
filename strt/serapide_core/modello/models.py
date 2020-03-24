@@ -9,58 +9,52 @@
 #
 #########################################################################
 
+import os
 import pytz
 import uuid
-import rules
+
+from django.core.exceptions import ValidationError
+
 import logging
 from datetime import datetime
 
 from django.db import models
+from django.db.models import Q
+from django.core import checks
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_delete  # , post_delete
+from model_utils import Choices
 
 from strt_users.models import (
-    AppUser,
-    Organization,
-    UserMembership,
+    Ente,
+    Ufficio,
+    QualificaUfficio,
+    Utente,
     Token,
+    Assegnatario
 )
 
-from .enums import (FASE,
-                    FASE_NEXT,
+from strt_users.enums import (
+    Qualifica,
+    Profilo,
+    QualificaRichiesta,
+    TipoEnte,
+)
+
+from .enums import (Fase,
                     STATO_AZIONE,
-                    TIPOLOGIA_VAS,
-                    TIPOLOGIA_PIANO,
-                    TIPOLOGIA_ATTORE,
+                    TipologiaVAS,
+                    TipologiaPiano,
                     TIPOLOGIA_AZIONE,
-                    TIPOLOGIA_CONTATTO,
-                    TIPOLOGIA_CONF_COPIANIFIZAZIONE
+                    # TIPOLOGIA_CONTATTO,
+                    TipologiaCopianificazione,
+                    # TIPOLOGIA_CONF_COPIANIFIZAZIONE
                     )
 
 
 log = logging.getLogger(__name__)
-
-
-class Fase(models.Model):
-
-    codice = models.CharField(max_length=255, primary_key=True)
-
-    nome = models.CharField(
-        choices=FASE,
-        default=FASE.draft,
-        max_length=20
-    )
-
-    descrizione = models.TextField(null=True, blank=True)
-
-    class Meta:
-        db_table = "strt_core_fase"
-        verbose_name_plural = 'Fasi'
-
-    def __str__(self):
-        return '{} [{}]'.format(self.codice, self.nome)
 
 
 class Risorsa(models.Model):
@@ -69,7 +63,7 @@ class Risorsa(models.Model):
     """
 
     """
-    Every "Piano" in the serapide_core application has a unique uuid
+    Every "Risorsa" in the serapide_core application has a unique uuid
     """
     uuid = models.UUIDField(
         default=uuid.uuid4,
@@ -79,7 +73,7 @@ class Risorsa(models.Model):
 
     nome = models.TextField(null=False, blank=False)
     file = models.FileField(max_length=500, upload_to='uploads/%Y/%m/%d/')
-    tipo = models.TextField(null=False, blank=False)
+    tipo = models.TextField(null=False, blank=False) # TODO usare enum
 
     dimensione = models.DecimalField(
         null=False,
@@ -93,10 +87,15 @@ class Risorsa(models.Model):
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     last_update = models.DateTimeField(auto_now=True, blank=True)
 
-    fase = models.ForeignKey(Fase, on_delete=models.CASCADE)
+    # fase = models.ForeignKey(Fase, on_delete=models.CASCADE)
+    fase = models.CharField(
+        choices=Fase.create_choices(),
+        default=Fase.UNKNOWN,
+        max_length=Fase.get_max_len()
+    )
 
     user = models.ForeignKey(
-        to=AppUser,
+        to=Utente,
         on_delete=models.CASCADE,
         verbose_name=_('user'),
         default=None,
@@ -119,210 +118,12 @@ class Risorsa(models.Model):
     def __str__(self):
         return '{} [{}]'.format(self.nome, self.uuid)
 
-
-class Contatto(models.Model):
-
-    uuid = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False,
-        null=True
-    )
-
-    nome = models.CharField(
-        max_length=255,
-        null=False,
-        blank=False
-    )
-
-    tipologia = models.CharField(
-        choices=TIPOLOGIA_CONTATTO,
-        default=TIPOLOGIA_CONTATTO.unknown,
-        max_length=20
-    )
-
-    email = models.EmailField(null=True, blank=True)
-
-    ente = models.ForeignKey(
-        to=Organization,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        null=False,
-        blank=False
-    )
-
-    user = models.ForeignKey(
-        to=AppUser,
-        on_delete=models.CASCADE,
-        verbose_name=_('user'),
-        default=None,
-        blank=True,
-        null=True
-    )
-
     @classmethod
-    def tipologia_contatto(cls, user, role=None, organization=None, token=None):
-        contact_type = ""
-        if user:
-            membership = None
-            if token:
-                membership = Token.objects.get(key=token).membership
-            elif role:
-                membership = user.memberships.filter(pk=role).first()
+    def from_db(cls, db, field_names, values):
+        instance = super(Risorsa, cls).from_db(db, field_names, values)
+        instance.fase = Fase.fix_enum(instance.fase)
+        return instance
 
-            if membership:
-                _tipologia = TIPOLOGIA_CONTATTO.unknown
-                if membership.attore == TIPOLOGIA_ATTORE.ac:
-                    _tipologia = TIPOLOGIA_CONTATTO.acvas
-
-                contact = Contatto.objects.filter(
-                    user=user,
-                    tipologia=_tipologia).first()
-
-            if contact:
-                contact_type = TIPOLOGIA_CONTATTO[contact.tipologia]
-
-        return contact_type
-
-    @classmethod
-    def attore(cls, user, role=None, organization=None, token=None, tipologia=None):
-        attore = ""
-        if isinstance(user, str):
-            user_membership = UserMembership._default_manager.filter(member__fiscal_code=user).first()
-        else:
-            user_membership = UserMembership._default_manager.filter(member=user).first()
-        if user_membership or token:
-            if token:
-                membership = Token.objects.get(key=token).membership
-                if membership and membership.organization:
-                    attore = membership.organization.type.name
-                else:
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-            elif role:
-                user = user_membership.member
-                membership = user.memberships.filter(pk=role).first()
-                if membership and membership.organization:
-                    attore = membership.organization.type.name
-                else:
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-            elif tipologia:
-                user = user_membership.member
-                membership = user.memberships.filter(organization__type__name=tipologia).first()
-                if membership and membership.organization:
-                    attore = membership.organization.type.name
-                else:
-                    attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-            else:
-                attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-
-            # print(" IN. -------------------------- ATTORE: %s" % attore)
-            if attore in \
-            (TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown],
-             TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.comune],
-             TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
-                kw = None
-                membership = None
-                if token:
-                    membership = Token.objects.get(key=token).membership
-                    kw = membership.attore
-                elif role:
-                    membership = user.memberships.filter(pk=role).first()
-                    kw = membership.attore
-                elif organization:
-                    membership = user.memberships.filter(organization__code=organization).first()
-                if attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] and \
-                membership and membership.organization and membership.organization.type:
-                    attore = membership.organization.type.name
-
-                for contact in Contatto.objects.filter(user=user):
-                    if kw and kw == TIPOLOGIA_ATTORE.ac and contact.tipologia == 'acvas':
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
-                        break
-                    if kw and kw == TIPOLOGIA_ATTORE.sca and contact.tipologia == 'sca':
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
-                        break
-                    if kw and kw == TIPOLOGIA_ATTORE.genio_civile:
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
-                        break
-                    if kw and kw == TIPOLOGIA_ATTORE.regione:
-                        attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]
-                        break
-
-                    if not kw:
-                        if contact.tipologia == 'acvas':
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.ac]
-                        elif contact.tipologia == 'sca':
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.sca]
-                        elif contact.tipologia == 'generico' and \
-                        attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]:
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown]
-                        elif contact.tipologia == 'ente' and \
-                        (attore == TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.unknown] or
-                         attore != TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.regione]):
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.enti]
-                        elif contact.tipologia == 'genio_civile':
-                            attore = TIPOLOGIA_ATTORE[TIPOLOGIA_ATTORE.genio_civile]
-
-        # print(" FIN. -------------------------- ATTORE: %s" % attore)
-        return attore
-
-    class Meta:
-        db_table = "strt_core_contatto"
-        verbose_name_plural = 'Contatti'
-
-    def __str__(self):
-        return '{} <{}> - {} [{}] - {}'.format(
-            self.nome, self.email, self.ente, self.uuid, TIPOLOGIA_CONTATTO[self.tipologia])
-
-
-class Azione(models.Model):
-
-    uuid = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False,
-        null=True
-    )
-
-    tipologia = models.CharField(
-        choices=TIPOLOGIA_AZIONE,
-        default=TIPOLOGIA_AZIONE.unknown,
-        max_length=80
-    )
-
-    attore = models.CharField(
-        choices=TIPOLOGIA_ATTORE,
-        default=TIPOLOGIA_ATTORE.unknown,
-        max_length=80
-    )
-
-    stato = models.CharField(
-        choices=STATO_AZIONE,
-        default=STATO_AZIONE.unknown,
-        max_length=20
-    )
-
-    data = models.DateTimeField(null=True, blank=True)
-
-    order = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        db_table = "strt_core_azione"
-        verbose_name_plural = 'Azioni'
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        super().save(force_insert, force_update, using, update_fields)
-
-        verb = "CHIUDI" if self.stato == STATO_AZIONE.nessuna else \
-               "APRI  " if self.stato in (STATO_AZIONE.attesa, STATO_AZIONE.necessaria) else \
-               "CREA  "
-
-        log.info("{verb} azione {tipo:<38}  STATO:{stato:<10} ATT:{attore}".format(
-            verb=verb,
-            tipo=self.tipologia,
-            attore=self.attore,
-            stato=self.stato))
-
-    def __str__(self):
-        return '{} - {} [{}]'.format(self.attore, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
 
 
 # ############################################################################ #
@@ -346,13 +147,14 @@ class Piano(models.Model):
     )
 
     tipologia = models.CharField(
-        choices=TIPOLOGIA_PIANO,
-        default=TIPOLOGIA_PIANO.unknown,
-        max_length=80
+        choices=TipologiaPiano.create_choices(),
+        default=TipologiaPiano.UNKNOWN,
+        max_length=TipologiaPiano.get_max_len()
     )
 
     descrizione = models.TextField(null=True, blank=True)
     url = models.URLField(null=True, blank=True, default='')
+
     data_delibera = models.DateTimeField(null=True, blank=True)
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     data_accettazione = models.DateTimeField(null=True, blank=True)
@@ -363,10 +165,15 @@ class Piano(models.Model):
     data_protocollo_genio_civile = models.DateTimeField(null=True, blank=True)
     numero_protocollo_genio_civile = models.TextField(null=True, blank=True)
 
-    fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
-    storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
+    # fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
+    fase = models.CharField(
+        choices=Fase.create_choices(),
+        default=Fase.UNKNOWN,
+        max_length=Fase.get_max_len()
+    )
+    #¯storico_fasi = models.ManyToManyField(Fase, through='FasePianoStorico')
     risorse = models.ManyToManyField(Risorsa, through='RisorsePiano')
-    azioni = models.ManyToManyField(Azione, through='AzioniPiano')
+    # azioni = models.ManyToManyField(Azione, through='AzioniPiano')
 
     redazione_norme_tecniche_attuazione_url = models.URLField(null=True, blank=True, default='')
     compilazione_rapporto_ambientale_url = models.URLField(null=True, blank=True, default='')
@@ -408,32 +215,8 @@ class Piano(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='pubblicazione')
 
-    autorita_competente_vas = models.ManyToManyField(
-        Contatto,
-        related_name='autorita_competente_vas',
-        through='AutoritaCompetenteVAS'
-    )
-
-    autorita_istituzionali = models.ManyToManyField(
-        Contatto,
-        related_name='autorita_istituzionali',
-        through='AutoritaIstituzionali'
-    )
-
-    altri_destinatari = models.ManyToManyField(
-        Contatto,
-        related_name='altri_destinatari',
-        through='AltriDestinatari'
-    )
-
-    soggetti_sca = models.ManyToManyField(
-        Contatto,
-        related_name='soggetti_sca',
-        through='SoggettiSCA'
-    )
-
     soggetto_proponente = models.ForeignKey(
-        to=Contatto,
+        to=QualificaUfficio,
         on_delete=models.DO_NOTHING,
         verbose_name=_('soggetto proponente'),
         default=None,
@@ -442,16 +225,16 @@ class Piano(models.Model):
     )
 
     ente = models.ForeignKey(
-        to=Organization,
+        to=Ente,
         on_delete=models.CASCADE,
         verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
+        # default=None,
+        # blank=True,
+        # null=True
     )
 
-    user = models.ForeignKey(
-        to=AppUser,
+    responsabile = models.ForeignKey(
+        to=Utente,
         on_delete=models.CASCADE,
         verbose_name=_('user'),
         default=None,
@@ -462,42 +245,68 @@ class Piano(models.Model):
     def chiudi_pendenti(self, attesa=True, necessaria=True):
         # - Complete Current Actions
         _now = datetime.now(timezone.get_current_timezone())
+        stati = []
         if attesa:
-            self.azioni.filter(
-                stato=STATO_AZIONE.attesa).update(stato=STATO_AZIONE.nessuna, data=_now)
+            stati.append(STATO_AZIONE.attesa)
         if necessaria:
-            self.azioni.filter(
-                stato=STATO_AZIONE.necessaria).update(stato=STATO_AZIONE.nessuna, data=_now)
+            stati.append(STATO_AZIONE.necessaria)
 
-    @property
-    def next_phase(self):
-        return FASE_NEXT[self.fase.nome]
+        for azione in Azione.objects.filter(piano=self, stato__in=stati):
+            log.warning('Chiusura forzata azione pendente {n}:{q}[{s}]'.format(n=azione.tipologia, q=azione.qualifica_richiesta.name, s=azione.stato))
+            chiudi_azione(azione, data=_now)
 
-    @property
-    def is_eligible_for_promotion(self):
-        _res = rules.test_rule('strt_core.api.fase_{next}_completa'.format(next=self.next_phase),
-                               self,
-                               self.procedura_vas)
-        log.info("is_eligible_for_promotion CURR:{curr} FASE:{fase} RESULT:{result}".format(
-            curr=self.fase,
-            fase=self.next_phase,
-            result=_res))
-        return _res
+    # @property
+    # def next_phase(self):
+    #     # return FASE_NEXT[self.fase.nome]
+    #     return self.fase.get_next()
+
+    # @property
+    # def is_eligible_for_promotion(self):
+    #     _res = rules.test_rule('strt_core.api.fase_{next}_completa'.format(
+    #                            next=self.next_phase),
+    #                            self,
+    #                            self.procedura_vas)
+    #     return _res
 
     class Meta:
         db_table = "strt_core_piano"
         verbose_name_plural = 'Piani'
         # unique_together = (('nome', 'codice',),)
 
-    def __str__(self):
-        return '{} - {} [{}]'.format(self.codice, TIPOLOGIA_PIANO[self.tipologia], self.uuid)
+        # Next constr would generate a "django.core.exceptions.FieldError: Joined field references are not permitted in this query"
+        # constraints = [
+        #     models.CheckConstraint(
+        #         name='Ente deve essere un comune',
+        #         check= Q(ente__tipo = TipoEnte.COMUNE))
+        # ]
 
+    # OVERRIDE
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        self._check_ente_comune()
+
+    def _check_ente_comune(self):
+        if self.ente.tipo != TipoEnte.COMUNE:
+            raise ValidationError('Ente deve essere un Comune')
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.codice, self.tipologia, self.uuid)
+
+    def save(self, *args, **kwargs):
+        self._check_ente_comune()
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+
+    # OVERRIDE
     def post_save(self):
-        _now = datetime.utcnow().replace(tzinfo=pytz.utc)
-        _full_hist = list(self.storico_fasi.all())
-        _prev_state = _full_hist[len(_full_hist) - 1] if len(_full_hist) > 0 else None
         if self.fase:
-            if not _prev_state or _prev_state.codice != self.fase.codice:
+
+            # _full_hist = list(self.storico_fasi.all())
+            _full_hist = FasePianoStorico.get_all_by_piano(self)
+            _prev_state = _full_hist[len(_full_hist) - 1] if len(_full_hist) > 0 else None  # TODO CHECK: senza ordinamento?!?!?
+
+            if not _prev_state or _prev_state.fase != self.fase:
+                _now = datetime.utcnow().replace(tzinfo=pytz.utc)
+
                 _state_hist = FasePianoStorico()
                 _state_hist.piano = self
                 _state_hist.fase = self.fase
@@ -505,24 +314,109 @@ class Piano(models.Model):
                 _state_hist.save()
 
                 if _prev_state:
-                    _state_hist = FasePianoStorico.objects.filter(piano=self, fase=_prev_state).first()
+                    _state_hist = FasePianoStorico.objects.filter(piano=self, fase=_prev_state.fase).first()
                     _state_hist.data_chiusura = _now
                     _state_hist.save()
 
-    def getFirstAction(self, tipologia_azione:TIPOLOGIA_AZIONE):
-        return self.azioni \
-            .filter(tipologia=tipologia_azione) \
-            .first()
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(Piano, cls).from_db(db, field_names, values)
+        instance.fase = Fase.fix_enum(instance.fase)
+        instance.tipologia = TipologiaPiano.fix_enum(instance.tipologia)
+        return instance
+
+    def getFirstAction(self, tipologia_azione:TIPOLOGIA_AZIONE, qualifica_richiesta:QualificaRichiesta=None):
+        qs = Azione.objects.filter(piano=self, tipologia=tipologia_azione)
+        if qualifica_richiesta:
+            qs = qs.filter(qualifica_richiesta=qualifica_richiesta)
+        return qs.first()
+
+    def azioni(self, tipologia_azione:TIPOLOGIA_AZIONE=None, qualifica_richiesta:QualificaRichiesta=None):
+        qs = Azione.objects.filter(piano=self)
+        if tipologia_azione:
+            qs = qs.filter(tipologia=tipologia_azione)
+        if qualifica_richiesta:
+            qs = qs.filter(qualifica_richiesta=qualifica_richiesta)
+        return qs
+
+
+class Azione(models.Model):
+
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        null=False
+    )
+
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+
+    tipologia = models.CharField(
+        choices=TIPOLOGIA_AZIONE,
+        default=TIPOLOGIA_AZIONE.unknown,
+        max_length=80
+    )
+
+    qualifica_richiesta = models.CharField(
+        choices=QualificaRichiesta.create_choices(),
+        null=False,
+        max_length=QualificaRichiesta.get_max_len()
+    )
+
+    stato = models.CharField(
+        choices=STATO_AZIONE,
+        default=STATO_AZIONE.unknown,
+        max_length=20
+    )
+
+    data = models.DateTimeField(null=True, blank=True)
+
+    order = models.PositiveIntegerField(null=False)
+
+    class Meta:
+        db_table = "strt_core_azione"
+        verbose_name_plural = 'Azioni'
+
+    def __str__(self):
+        return '{} - {} [{}]'.format(self.qualifica_richiesta.name, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
+
+    def count_by_piano(piano, tipo=None):
+        qs = Azione.objects.filter(piano=piano)
+        if tipo:
+            qs = qs.filter(tipologia=tipo)
+        return qs.count()
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(Azione, cls).from_db(db, field_names, values)
+        instance.qualifica_richiesta = QualificaRichiesta.fix_enum(instance.qualifica_richiesta)
+        return instance
 
 
 class FasePianoStorico(models.Model):
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
-    fase = models.ForeignKey(Fase, on_delete=models.CASCADE)
+    # fase = models.ForeignKey(Fase, on_delete=models.CASCADE)
+    fase = models.CharField(
+        choices=Fase.create_choices(),
+        default=Fase.UNKNOWN,
+        max_length=Fase.get_max_len()
+    )
+
     data_apertura = models.DateTimeField()
     data_chiusura = models.DateTimeField(null=True, blank=True)
 
+    @classmethod
+    def get_all_by_piano(cls, piano):
+        return list(FasePianoStorico.objects.filter(piano=piano).all())
+
     class Meta:
         db_table = "strt_core_piano_storico_fasi"
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(FasePianoStorico, cls).from_db(db, field_names, values)
+        instance.fase = Fase.fix_enum(instance.fase)
+        return instance
+
 
 
 class RisorsePiano(models.Model):
@@ -533,12 +427,93 @@ class RisorsePiano(models.Model):
         db_table = "strt_core_piano_risorse"
 
 
-class AzioniPiano(models.Model):
-    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
-    azione = models.ForeignKey(Azione, on_delete=models.CASCADE)
+###########
+
+class SoggettoOperante(models.Model):
+    """
+OLD    Puo' essere un utente o un ufficio.
+OLD    Rende disponibili: mail, ente, qualifica
+    """
+    # TIPO_VAS =  'vas'
+    # TIPO_ISTITUZ = 'autorita'
+    # TIPO_ALTRI = 'altri'
+    # TIPO_SCA = 'sca'
+    # TIPO_PROPONENTE = 'proponente'
+
+    # TIPOLOGIA_REFERENTE = Choices(
+    #     (TIPO_VAS, _('autorita_competente_vas utenti')),
+    #     (TIPO_ISTITUZ, _('autorita_istituzionali piani')),
+    #     (TIPO_ALTRI, _('altri_destinatari piani')),
+    #     (TIPO_SCA, _('soggetti_sca piani')),
+    #     (TIPO_PROPONENTE, _('proponente piani')),
+    # )
+
+    id = models.AutoField(
+        auto_created=True, primary_key=True, serialize=False, verbose_name=_('id')
+    )
+
+    qualifica_ufficio = models.ForeignKey(QualificaUfficio, related_name="+", on_delete=models.CASCADE, null=True)
+    # ufficio = models.ForeignKey(Ufficio, related_name="ufficio+", on_delete=models.CASCADE, null=True)
+    piano = models.ForeignKey(Piano, related_name="so+", on_delete=models.CASCADE, null=False)
+
+    # tipo = models.CharField(max_length=10, choices=TIPOLOGIA_REFERENTE, null=False)
 
     class Meta:
-        db_table = "strt_core_piano_azioni"
+        db_table = "strt_core_soggettooperante"
+
+    def __unicode__(self):
+        return "P:{piano} {ufficio} T:{qualifica} <mail>".format(
+            piano = self.piano,
+            ufficio = self.qualifica_ufficio.ufficio,
+            qualifica= self.qualifica_ufficio.qualifica,
+            mail=self.qualifica_ufficio.ufficio.mail,
+        )
+
+    def get_ente(self):
+            return self.qualifica_ufficio.ufficio.ente
+
+    def get_qualifica(self):
+        return self.qualifica_ufficio.qualifica
+
+    @classmethod
+    def get_by_qualifica(cls, piano, qualifica):
+        return SoggettoOperante.objects.filter(piano=piano, qualifica_ufficio__qualifica=qualifica)
+
+
+class Delega(models.Model):
+    """
+    An access token that is associated with a user.
+    This is essentially the same as the token model from Django REST Framework
+    """
+    # key = models.CharField(max_length=40, primary_key=True)
+
+    delegante = models.ForeignKey(SoggettoOperante, related_name="+", on_delete=models.CASCADE, null=False)
+    token = models.ForeignKey(Token, related_name="delega+", on_delete=models.CASCADE, null=False)
+
+    # can be READONLY or the Qualifica related to SoggettoOperante
+    qualifica = models.CharField(
+        choices=Qualifica.create_choices(),
+        max_length=Qualifica.get_max_len(),
+        null=False)
+
+    created = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(Utente, related_name="+", on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "strt_core_delega"
+
+
+    def is_expired(self):
+        """
+        Check token expiration with timezone awareness
+        """
+        if not self.expires:
+            return True
+
+        return timezone.now() >= self.expires
+
+    def __unicode__(self):
+        return self.key
 
 
 # ############################################################################ #
@@ -553,9 +528,9 @@ class ProceduraVAS(models.Model):
     )
 
     tipologia = models.CharField(
-        choices=TIPOLOGIA_VAS,
-        default=TIPOLOGIA_VAS.unknown,
-        max_length=50
+        choices=TipologiaVAS.create_choices(),
+        default=TipologiaVAS.UNKNOWN,
+        max_length=TipologiaVAS.get_max_len()
     )
 
     note = models.TextField(null=True, blank=True)
@@ -578,14 +553,14 @@ class ProceduraVAS(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseVas')
 
-    ente = models.ForeignKey(
-        to=Organization,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -594,7 +569,13 @@ class ProceduraVAS(models.Model):
         verbose_name_plural = 'Procedure VAS'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, TIPOLOGIA_VAS[self.tipologia], self.uuid)
+        return '{} - {} [{}]'.format(self.piano.codice, self.tipologia, self.uuid)
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(ProceduraVAS, cls).from_db(db, field_names, values)
+        instance.tipologia = TipologiaVAS.fix_enum(instance.tipologia)
+        return instance
 
 
 class RisorseVas(models.Model):
@@ -622,7 +603,7 @@ class ParereVerificaVAS(models.Model):
     inviata = models.BooleanField(null=False, blank=False, default=False)
 
     user = models.ForeignKey(
-        to=AppUser,
+        to=Utente,
         on_delete=models.CASCADE,
         verbose_name=_('user'),
         default=None,
@@ -656,7 +637,7 @@ class ConsultazioneVAS(models.Model):
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
 
     user = models.ForeignKey(
-        to=AppUser,
+        to=Utente,
         on_delete=models.CASCADE,
         verbose_name=_('user'),
         default=None,
@@ -690,7 +671,7 @@ class ParereVAS(models.Model):
     inviata = models.BooleanField(null=False, blank=False, default=False)
 
     user = models.ForeignKey(
-        to=AppUser,
+        to=Utente,
         on_delete=models.CASCADE,
         verbose_name=_('user'),
         default=None,
@@ -706,60 +687,61 @@ class ParereVAS(models.Model):
         return '{} - [{}]'.format(self.procedura_vas, self.uuid)
 
 
-class AutoritaCompetenteVAS(models.Model):
-    autorita_competente = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
-    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+# class AutoritaCompetenteVAS(models.Model):
+#     autorita_competente = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+#     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+#
+#     class Meta:
+#         db_table = "strt_core_autorita_competente"
+#
+#     def __str__(self):
+#         return '{} <---> {}'.format(self.piano.codice, self.autorita_competente.email)
+#
+#
+# class SoggettiSCA(models.Model):
+#     soggetto_sca = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+#     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+#
+#     class Meta:
+#         db_table = "strt_core_soggetti_sca"
+#
+#     def __str__(self):
+#         return '{} <---> {}'.format(self.piano.codice, self.soggetto_sca.email)
+#
+#
+# class AutoritaIstituzionali(models.Model):
+#     autorita_istituzionale = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+#     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+#
+#     class Meta:
+#         db_table = "strt_core_autorita_istituzionale"
+#
+#     def __str__(self):
+#         return '{} <---> {}'.format(self.piano.codice, self.autorita_istituzionale.email)
+#
+#
+# class AltriDestinatari(models.Model):
+#     altro_destinatario = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
+#     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
+#
+#     class Meta:
+#         db_table = "strt_core_altri_destinatari"
+#
+#     def __str__(self):
+#         return '{} <---> {}'.format(self.piano.codice, self.altro_destinatario.email)
 
-    class Meta:
-        db_table = "strt_core_autorita_competente"
 
-    def __str__(self):
-        return '{} <---> {}'.format(self.piano.codice, self.autorita_competente.email)
-
-
-class SoggettiSCA(models.Model):
-    soggetto_sca = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
-    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
-
-    class Meta:
-        db_table = "strt_core_soggetti_sca"
-
-    def __str__(self):
-        return '{} <---> {}'.format(self.piano.codice, self.soggetto_sca.email)
-
-
-class AutoritaIstituzionali(models.Model):
-    autorita_istituzionale = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
-    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
-
-    class Meta:
-        db_table = "strt_core_autorita_istituzionale"
-
-    def __str__(self):
-        return '{} <---> {}'.format(self.piano.codice, self.autorita_istituzionale.email)
-
-
-class AltriDestinatari(models.Model):
-    altro_destinatario = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
-    piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
-
-    class Meta:
-        db_table = "strt_core_altri_destinatari"
-
-    def __str__(self):
-        return '{} <---> {}'.format(self.piano.codice, self.altro_destinatario.email)
-
-
-class PianoAuthTokens(models.Model):
-    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
-    token = models.ForeignKey(Token, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "strt_core_piano_auth_tokens"
-        unique_together = ('piano', 'token')
-
-    def __str__(self):
-        return '{} <---> {}'.format(self.piano.codice, self.token.key)
+# class PianoAuthTokens(models.Model):
+#     soggetto_operante = models.ForeignKey(SoggettoOperante, on_delete=models.CASCADE)
+#     # token = models.ForeignKey(Delega, on_delete=models.CASCADE)
+#
+#     class Meta:
+#         db_table = "strt_core_piano_auth_tokens"
+#         # TODO unique_together = ('soggetto_operante', 'token')
+#
+#     def __str__(self):
+# #        return '{} <---> {}'.format(self.piano.codice, self.token.key)
+#         return '{} <---> ???'.format(self.soggetto_operante.id)
 
 
 # ############################################################################ #
@@ -774,11 +756,10 @@ class ProceduraAvvio(models.Model):
     )
 
     conferenza_copianificazione = models.CharField(
-        choices=TIPOLOGIA_CONF_COPIANIFIZAZIONE,
-        null=True,
-        blank=True,
+        choices=TipologiaCopianificazione.create_choices(),
+        null=True, blank=True,
         default=None,
-        max_length=20
+        max_length=TipologiaCopianificazione.get_max_len()
     )
 
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
@@ -795,14 +776,14 @@ class ProceduraAvvio(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
 
-    ente = models.ForeignKey(
-        to=Organization,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -811,7 +792,13 @@ class ProceduraAvvio(models.Model):
         verbose_name_plural = 'Procedure Avvio'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+        return '{} [{}]'.format(self.piano.codice, self.uuid)
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(ProceduraAvvio, cls).from_db(db, field_names, values)
+        instance.conferenza_copianificazione = TipologiaCopianificazione.fix_enum(instance.conferenza_copianificazione)
+        return instance
 
 
 class RisorseAvvio(models.Model):
@@ -887,14 +874,14 @@ class ProceduraAdozione(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAdozione')
 
-    ente = models.ForeignKey(
-        to=Organization,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -903,7 +890,7 @@ class ProceduraAdozione(models.Model):
         verbose_name_plural = 'Procedure Adozione'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+        return '{} [{}]'.format(self.piano.codice, self.uuid)
 
 
 class RisorseAdozione(models.Model):
@@ -990,7 +977,7 @@ class ParereAdozioneVAS(models.Model):
     inviata = models.BooleanField(null=False, blank=False, default=False)
 
     user = models.ForeignKey(
-        to=AppUser,
+        to=Utente,
         on_delete=models.CASCADE,
         verbose_name=_('user'),
         default=None,
@@ -1014,12 +1001,6 @@ class ProceduraAdozioneVAS(models.Model):
         null=True
     )
 
-    tipologia = models.CharField(
-        choices=TIPOLOGIA_VAS,
-        default=TIPOLOGIA_VAS.unknown,
-        max_length=50
-    )
-
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     last_update = models.DateTimeField(auto_now=True, blank=True)
 
@@ -1027,14 +1008,14 @@ class ProceduraAdozioneVAS(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAdozioneVas')
 
-    ente = models.ForeignKey(
-        to=Organization,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -1043,7 +1024,13 @@ class ProceduraAdozioneVAS(models.Model):
         verbose_name_plural = 'Procedure Adozione VAS'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, TIPOLOGIA_VAS[self.tipologia], self.uuid)
+        return 'ProceduraAdozioneVAS {} [{}]'.format(self.piano.codice, self.uuid)
+
+    # @classmethod
+    # def from_db(cls, db, field_names, values):
+    #     instance = super(ProceduraVAS, cls).from_db(db, field_names, values)
+    #     instance.tipologia = TipologiaVAS.fix_enum(instance.tipologia)
+    #     return instance
 
 
 class RisorseAdozioneVas(models.Model):
@@ -1079,14 +1066,14 @@ class ProceduraApprovazione(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseApprovazione')
 
-    ente = models.ForeignKey(
-        to=Organization,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
+    # ente = models.ForeignKey(
+    #     to=Ente,
+    #     on_delete=models.CASCADE,
+    #     verbose_name=_('ente'),
+    #     default=None,
+    #     blank=True,
+    #     null=True
+    # )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
@@ -1095,7 +1082,7 @@ class ProceduraApprovazione(models.Model):
         verbose_name_plural = 'Procedure Approvazione'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+        return '{} [{}]'.format(self.piano.codice, self.uuid)
 
 
 class RisorseApprovazione(models.Model):
@@ -1127,15 +1114,6 @@ class ProceduraPubblicazione(models.Model):
 
     risorse = models.ManyToManyField(Risorsa, through='RisorsePubblicazione')
 
-    ente = models.ForeignKey(
-        to=Organization,
-        on_delete=models.CASCADE,
-        verbose_name=_('ente'),
-        default=None,
-        blank=True,
-        null=True
-    )
-
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     class Meta:
@@ -1143,7 +1121,7 @@ class ProceduraPubblicazione(models.Model):
         verbose_name_plural = 'Procedure Pubblicazione'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.piano.codice, self.ente, self.uuid)
+        return '{} [{}]'.format(self.piano.codice, self.uuid)
 
 
 class RisorsePubblicazione(models.Model):
@@ -1168,10 +1146,7 @@ class RisorsePubblicazione(models.Model):
 
 @receiver(pre_delete, sender=Piano)
 def delete_piano_associations(sender, instance, **kwargs):
-    AutoritaCompetenteVAS.objects.filter(piano=instance).delete()
-    AutoritaIstituzionali.objects.filter(piano=instance).delete()
-    AltriDestinatari.objects.filter(piano=instance).delete()
-    SoggettiSCA.objects.filter(piano=instance).delete()
+    SoggettoOperante.objects.filter(piano=instance).delete()
     instance.risorse.all().delete()
     RisorsePiano.objects.filter(piano=instance).delete()
 
@@ -1211,15 +1186,39 @@ def delete_piano_associations(sender, instance, **kwargs):
         _approvazione.risorse.all().delete()
         RisorseApprovazione.objects.filter(procedura_approvazione=_approvazione).delete()
 
-    for _a in AzioniPiano.objects.filter(piano=instance):
-        _a.azione.delete()
+    for _a in Azione.objects.filter(piano=instance):
+        _a.delete()
 
-    for _t in PianoAuthTokens.objects.filter(piano=instance):
-        _t.token.delete()
+    # for _t in Token.objects.filter(piano=instance): # TODO
+    #     _t.token.delete()
 
 
 def needsExecution(action:Azione):
     return action and action.stato != STATO_AZIONE.nessuna
 
+
 def isExecuted(action:Azione):
     return action and action.stato == STATO_AZIONE.nessuna
+
+
+def ensure_fase(check:Fase, expected:Fase):
+    if check !=expected:
+        raise Exception(_("Fase Piano incongruente con l'azione richiesta") + " -- " + _(check.name))
+
+
+def chiudi_azione(azione:Azione, data=None, set_data=True):
+    log.warning('Chiusura azione [{a}]:{qr} in piano [{p}]'.format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
+    azione.stato = STATO_AZIONE.nessuna
+    if set_data:
+        azione.data = data if data else datetime.now(timezone.get_current_timezone())
+    azione.save()
+
+
+def crea_azione(azione:Azione):
+    log.warning('Creazione azione [{a}]:{qr} in piano [{p}]'.format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
+    if azione.order == None:
+        _order = Azione.count_by_piano(azione.piano)
+        azione.order = _order
+
+    azione.save()
+

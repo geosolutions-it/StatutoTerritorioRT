@@ -18,8 +18,11 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 
 from .models import (
-    Token, Organization, UserMembership, MembershipType
+    Token,
+    # Organization, UserMembership, MembershipType
+    Ente
 )
+
 
 
 UserModel = get_user_model()
@@ -53,20 +56,20 @@ class StrtPortalAuthentication:
 
             with transaction.atomic():
 
-                if len(payload['organizations']) != 1:
+                if len(payload['enti']) != 1:
                     raise forms.ValidationError(_('Ente obbligatorio.'))
 
-                _organization = payload['organizations'].pop()['organization'].strip()
+                _ente = payload['enti'].pop()['ente'].strip()
 
                 org = None
                 try:
                     # Organizations must be already registered
-                    org = Organization._default_manager.get(
-                        code=_organization
+                    org = Ente._default_manager.get(
+                        code=_ente
                     )
-                except Organization.DoesNotExist:
+                except Ente.DoesNotExist:
                     raise forms.ValidationError(
-                        _("L'ente {} non risulta censito.".format(_organization))
+                        _("L'ente {} non risulta censito.".format(_ente))
                     )
 
                 if 'fiscal_code' in payload and payload['fiscal_code']:

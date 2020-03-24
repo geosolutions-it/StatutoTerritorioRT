@@ -16,13 +16,13 @@ LICENSE file in the root directory of this source tree.
 
 {% block content %}
 
-    <div class="row justify-content-center">
+    <div class="bg-light h-100 py-5 m-0 px-6">
         <div class="col-12">
             <form class="" action="{% url 'login' %}" method="POST" novalidate>
                 {% csrf_token %}
                 {{ form|crispy }}
                 <input type="submit" class="btn btn-secondary my-2 my-lg-4" value="Login">
-                <input type="hidden" name="next" value="/">
+                <input type="hidden" name="next" value="{{ next }}">
             </form>
             <p><a href="{% url 'password_reset' %}">Password dimenticata?</a></p>
         </div>

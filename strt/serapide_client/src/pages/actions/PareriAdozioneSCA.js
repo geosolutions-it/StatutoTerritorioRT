@@ -28,7 +28,7 @@ const UI = ({
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
     utente: {fiscalCode} = {},
     scadenza,
-    tipo: tipoDoc = "parere_sca",
+    tipo: tipoDoc = "parere_adozione_sca",
     label = "Pareri",
     saveMutation = INVIO_PARERI_ADOZIONE}) => {
         

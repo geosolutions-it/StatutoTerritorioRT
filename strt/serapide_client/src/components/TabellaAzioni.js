@@ -10,23 +10,20 @@ import { Table } from 'reactstrap'
 
 import TextWithTooltip from './TextWithTooltip'
 
-import {canExecuteAction} from '../autorizzazioni'
+
 import {formatDate, getActionIcon, getActionIconColor, getAction} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
-const adjustStato = (stato, attore, tipologia) => {
-    
-    if(stato === "NESSUNA") {
-        return stato
+const adjustStato = (stato = "", eseguibile) => {
+    if(stato.toLowerCase() === "nessuna") {
+        return stato.toLowerCase();
     }
-    if(canExecuteAction({attore, tipologia})) {
-        return "NECESSARIA"
-    }
-     return "ATTESA"
+    return eseguibile ? "necessaria" : "attesa"
 }
-const reverseOrder = ({node: {order: a}}, {node: {order: b}}) => (b - a)
+const reverseOrder = ({order: a}, {order: b}) => (b - a)
 
 export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", className, onExecute = () => {}}) => {
+    
     return (
     <Table size="sm" className={className} hover>
         <thead>
@@ -39,14 +36,14 @@ export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", classN
             </tr>
         </thead>
         <tbody>
-            {azioni.filter(({node: {fase}}) => fase === filtroFase).sort(reverseOrder).map(({node: {stato = "", tipologia = "",label = "", attore = "", tooltip = "", data, uuid}} = {}) => {
-                let adjustedStato = adjustStato(stato, attore, tipologia)
+            {azioni.filter(({fase = "" }) => fase.toLowerCase() === filtroFase).sort(reverseOrder).map(({stato = "", qualificaRichiesta= "", tipologia = "",label = "", eseguibile = false, tooltip = "", data, uuid} = {}) => {
+                let adjustedStato = adjustStato(stato, eseguibile)
                 return (<tr key={uuid}>
                             <td><i className={`icon-18 material-icons ${getActionIconColor(adjustedStato)}`}>{getActionIcon(adjustedStato)}</i></td>
                 <td>{tooltip ? (<TextWithTooltip className="size-11" dataTip={tooltip} dataTipDisable={!tooltip} text={label}/>) :<span className="size-11">{label}</span>}</td>
-                            <td><span className="size-11">{attore}</span></td>
-                            <td className={`${adjustedStato === "ATTESA" ? "text-serapide" : ""}`}><span className="d-flex size-11">{adjustedStato === "ATTESA" && <i className="material-icons icon-18 text-serapide" >notifications_activex</i>}<span className="my-auto size-11">{data && formatDate(data)}</span></span></td>
-                            <td className={`${getAction(adjustedStato) && canExecuteAction({attore, tipologia})  ? "pointer": ""}`}>{getAction(adjustedStato) && canExecuteAction({attore, tipologia}) && <i className="material-icons text-serapide" onClick={() => onExecute(tipologia, uuid)}>play_circle_filled</i>}</td>
+                            <td><span className="size-11">{qualificaRichiesta}</span></td>
+                            <td className={`${adjustedStato === "attesa" ? "text-serapide" : ""}`}><span className="d-flex size-11">{adjustedStato === "attesa" && <i className="material-icons icon-18 text-serapide" >notifications_activex</i>}<span className="my-auto size-11">{data && formatDate(data)}</span></span></td>
+                            <td className={`${adjustedStato !== "nessuna" && eseguibile ? "pointer": ""}`}>{adjustedStato !== "nessuna" && eseguibile && <i className="material-icons text-serapide" onClick={() => onExecute(tipologia, uuid)}>play_circle_filled</i>}</td>
                         </tr>)}
                 )}
         </tbody>

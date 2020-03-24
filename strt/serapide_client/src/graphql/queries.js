@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import * as FR from './fragments'
+import * as FR from './fragments';
 
 /** queries */
 export const GET_ENTI = gql`
@@ -72,18 +72,6 @@ ${FR.CONSULTAZIONE_VAS}
 
 export const CREA_PIANO_PAGE = gql`
 query CreaPianoPage{
-    enti{
-        edges{
-            node{
-                name
-                code
-                role
-                type{
-                    tipo: name
-                }
-            }
-        }
-    }
     tipologiaPiano{
         value
         label
@@ -93,47 +81,20 @@ query CreaPianoPage{
 
 
 export const GET_UTENTE = gql`
-query{
-  utenti {
-    edges {
-      node {
-        ...User
-        contactType
-        attore
-        role{
-          type
-          name
-          code
-          description
-          organization {
-            name
-            description
-            code
-            type {
-              tipo: name
-              code
-            }
-          }
-        }
-        unreadThreadsCount
-        unreadMessages {
-          thread {
-            id
-            subject
-            absoluteUrl
-          }
-          sender {
-            email
-            firstName
-            lastName
-          }
-          sentAt
-          content
-        }
-      }
+query {
+	auth: userChoices{
+    profili {
+      ...Profiles
     }
   }
-}
+  utenti {
+  edges{
+    node{
+      ...User
+  	}
+  }
+  }}
+${FR.PROFILES}
 ${FR.USER}`
 
 
@@ -165,13 +126,17 @@ ${FR.VAS}
 `
 
 export const GET_CONTATTI = gql`
-query getContatti($tipo: String){
-    contatti(tipologiain: $tipo) {
-      edges {
-        node{
-          ...Contatto
-        }
-      }
+query getUffici($tipo: String){
+  uffici(qualifica: $tipo) {
+      ...Contatto
+    }
+  }
+  ${FR.CONTATTO}
+`
+export const GET_CONTATTI_M = gql`
+query getUffici($tipo: [String]){
+  uffici(qualifiche: $tipo) {
+      ...Contatto
     }
   }
   ${FR.CONTATTO}

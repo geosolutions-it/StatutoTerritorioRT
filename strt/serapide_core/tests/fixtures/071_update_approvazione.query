@@ -1,0 +1,57 @@
+{
+  "operationName": "UpdateApprovazione",
+  "variables": {
+    "input": {
+      "proceduraApprovazione": {
+       "{nome_campo}" : "{valore_campo}"
+      },
+      "uuid": "{codice}"
+    }
+  },
+  "query": "mutation UpdateApprovazione($input: UpdateProceduraApprovazioneInput!) {
+  updateProceduraApprovazione(input: $input) {
+    proceduraApprovazioneAggiornata {
+      ...APPROVAZIONE
+    }
+  }
+}
+
+fragment APPROVAZIONE on ProceduraApprovazioneNode {
+  uuid
+  dataCreazione
+  dataDeliberaApprovazione
+  richiestaConferenzaPaesaggistica
+  urlPianoPubblicato
+  pubblicazioneUrl
+  pubblicazioneUrlData
+  risorse(archiviata: false) {
+    ...Risorse
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+}
+"
+}

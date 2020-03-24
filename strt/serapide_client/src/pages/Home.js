@@ -13,7 +13,6 @@ import actions from './actions'
 
 import classNames from 'classnames'
 import { getAction, pollingInterval, showAdozione, showApprovazione, showPubblicazione} from 'utils'
-import {canExecuteAction} from '../autorizzazioni'
 import {stopStartPolling} from 'enhancers'
 
 import {camelCase} from 'lodash'
@@ -34,16 +33,16 @@ export default class Home extends React.PureComponent{
 render () {
     
     const {match: {url, path} = {},
-           location: {pathname} = {}, history, utente = {}, piano = {},
+           location: {pathname} = {}, history, utente = {attore: ""}, piano = {},
            azioni = [],
            startPolling, stopPolling} = this.props;
-    
+    console.log("Home", azioni)
     const action = getCurrentAction(url, pathname)
-    const scadenza = azioni.filter(({node: {tipologia}}) => tipologia.toLowerCase().replace(" ","_") === action).map(({node: {data, }}) => data).shift()
+    const scadenza = azioni.filter(({tipologia = ""} = {}) => tipologia.toLowerCase().replace(" ","_") === action).map(({data, }) => data).shift()
     const goToAction = (action = "", uuid) => {
         history.push(`${url}/${action.toLowerCase().replace(" ","_")}/${uuid}`)
     }
-    const {fase: {nome: nomeFase}} = piano
+    const {fase: nomeFase} = piano
     const goBack = () => {
         history.push(url)
     }
@@ -84,12 +83,12 @@ render () {
             <div className={classNames("d-flex flex-column", {"action-container flex-1 border  border-piano overflow-auto bg-white": action})}>
                 {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
                 <Switch>
-                    {azioni.filter(({node: {attore, tipologia}}) => attore.toLowerCase() === utente.attore.toLowerCase() || tipologia === "OSSERVAZIONI_ENTI").map(({node: {uuid, stato = "", tipologia = "",label = "", attore = ""}}) => {
+                    { azioni.map(({uuid, tipologia = "", label = "", attore = "", qualificaRichiesta, eseguibile= false} = {}) => {
                         const tipo = tipologia.toLowerCase()
                         const El = components[camelCase(tipo)]
                         return El && (
                                 <Route exact key={tipo} path={`${path}/${tipo}/${uuid}`} >
-                                    {getAction(stato) && canExecuteAction({attore, tipologia}) ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
+                                    {eseguibile ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack}  qualificaRichiesta={qualificaRichiesta} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
                                 </Route>)
                     })}
                     {/* {map(components, (El, key) => {

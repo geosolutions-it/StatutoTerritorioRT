@@ -11,24 +11,24 @@
 
 from django import forms
 from django.contrib.auth.forms import UsernameField
-from .models import UserMembership, AppUser
+from .models import Utente
 
 
-class UserMembershipForm(forms.ModelForm):
+# class RuoloForm(forms.ModelForm):
+#
+#     class Meta:
+#         model = Ruolo
+#         fields = '__all__'
+#         exclude = ('id', 'name', 'permissions',)
 
-    class Meta:
-        model = UserMembership
-        fields = '__all__'
-        exclude = ('code', 'name', 'permissions',)
 
-
-class AppUserForm(forms.ModelForm):
+class UtenteForm(forms.ModelForm):
     """
     A form that creates a user, with no privileges, from the given fiscal code
     """
 
     class Meta:
-        model = AppUser
+        model = Utente
         fields = (
             'first_name', 'last_name', 'fiscal_code', 'email'
         )

@@ -1,0 +1,56 @@
+{
+   "operationName" : "ControdedottoUploadFile",
+
+   "variables" : {
+      "tipo" : "relazione_responsabile",
+      "codice" : "{codice}",
+      "file" : null
+   },
+
+
+   "query" : "mutation ControdedottoUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+  upload: uploadRisorsaPianoControdedotto(file: $file, codice: $codice, tipoFile: $tipo) {
+    success
+    fileName
+    pianoControdedottoAggiornato {
+      uuid
+      risorse(archiviata: false) {
+        ...Risorse
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+  __typename
+}
+"
+}

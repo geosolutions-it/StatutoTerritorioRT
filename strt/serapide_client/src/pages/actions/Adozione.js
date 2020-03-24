@@ -14,13 +14,12 @@ import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
-import ListaContatti from 'components/ListaContatti'
 import Spinner from 'components/Spinner'
 
 import {EnhancedDateSelector} from 'components/DateSelector'
 import Input from 'components/EnhancedInput'
-import Elaborati from "components/ElaboratiPiano"
-
+import Elaborati from 'components/ElaboratiPiano'
+import {List as Si} from 'components/SoggettiIstituzionali'
 
 import  {showError, formatDate, getInputFactory, getCodice} from 'utils'
 import {rebuildTooltip} from 'enhancers'
@@ -73,7 +72,8 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
             tipo: tipoPiano = "",
             redazioneNormeTecnicheAttuazioneUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl,
             compilazioneRapportoAmbientaleUrl,
-            autoritaIstituzionali: {edges: aut =[]} = {},
+
+            soggettiOperanti,
             risorse: {edges: resources=[]} = {}
             // altriDestinatari: {edges: dest = []} = {}
             },
@@ -113,7 +113,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                 </div>
                 <div className="w-100 border-top m-0 mt-4"></div>
                 <ActionSubParagraphTitle className="pt-4 font-weight-light">DESTINATARI</ActionSubParagraphTitle>
-                <ListaContatti title="SOGGETTI ISTITUZIONALI" contacts={aut}/>
+                <Si soggettiOperanti={soggettiOperanti}/>
                 {/* <h6 className="font-weight-light pb-1 mt-4">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h6>
                 <div className="row">
                             {dest.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>

@@ -9,12 +9,18 @@
 #
 #########################################################################
 
-import os
 import logging
-import binascii
+import os
 import traceback
+import binascii
+import uuid
 
+from django.dispatch import receiver
+from django.db.models.signals import post_init
+
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin
@@ -24,13 +30,17 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_currentuser.db.models import CurrentUserField
 
-from .managers import AppUserManager
-from serapide_core.modello.enums import TIPOLOGIA_ATTORE
+from .enums import (
+    Qualifica,
+    Profilo,
+    TipoEnte,
+)
+from .managers import IsideUserManager
 
 logger = logging.getLogger(__name__)
 
 
-class AppUser(AbstractBaseUser, PermissionsMixin):
+class Utente(AbstractBaseUser, PermissionsMixin):
     """
     Statuto del Territorio Base User.
     Fiscal code is a required/unique extra field.
@@ -49,7 +59,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
                 message=_('Codice fiscale errato.'),
             ),
         ],
-        unique=True, db_index=True, blank=False, null=False,
+        unique=True, db_index=True, blank=False, null=False, primary_key=True
     )
     first_name = models.CharField(
         verbose_name=_('nome'), max_length=255, blank=True, null=True
@@ -91,15 +101,15 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'fiscal_code'
 
-    objects = AppUserManager()
+    objects = IsideUserManager()
 
     def __str__(self):
         if self.first_name or self.last_name:
             first_name = self.first_name if self.first_name else ''
             last_name = self.last_name if self.last_name else ''
-            return "{} {}".format(first_name, last_name)
+            return "Utente[{} - {} {}]".format(self.fiscal_code.upper(), first_name, last_name)
         else:
-            return self.fiscal_code.upper()
+            return "Utente[{}]".format(self.fiscal_code.upper())
 
     def get_full_name(self):
         if self.first_name and self.last_name:
@@ -113,13 +123,12 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         else:
             return self.fiscal_code.upper()
 
-    @property
-    def memberships(self):
-        """
-        User membership type for each organization
-        :return: UserMembership queryset
-        """
-        return UserMembership._default_manager.filter(member=self)
+    # def get_ruoli(self):
+    #     """
+    #     User membership type for each organization
+    #     :return: UserMembership queryset
+    #     """
+    #     return Ruolo._default_manager.filter(utente=self)
 
     class Meta:
         ordering = [
@@ -129,15 +138,206 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('utenti')
 
 
+class Ente(models.Model):
+    """
+    Organizations (also called 'Ente') wich can deal with Statuto Del Territorio
+    """
+
+    # id = models.CharField(
+    #     max_length=50, primary_key=True, verbose_name=_('id')
+    # )
+    ipa = models.CharField(
+        max_length=255, null=False, blank=False, verbose_name=_('codice ipa')
+    )
+    nome = models.CharField(
+        max_length=255, null=False, blank=False, verbose_name=_('nome')
+    )
+    descrizione = models.TextField(
+        max_length=500, null=True, blank=True, verbose_name=_('descrizione')
+    )
+
+    tipo = models.CharField(
+        choices=TipoEnte.create_choices(),
+        max_length=TipoEnte.get_max_len(),
+        null=False)
+
+    class Meta:
+        verbose_name = _('ente')
+        verbose_name_plural = _('enti')
+
+    def __str__(self):
+        return "{nome} ({ipa})".format(nome=self.nome, ipa=self.ipa)
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(Ente, cls).from_db(db, field_names, values)
+        instance.tipo = TipoEnte.fix_enum(instance.tipo)
+        return instance
+
+    def is_comune(self):
+        return self.tipo == TipoEnte.COMUNE
+
+
+class ProfiloUtente(models.Model):
+
+    utente = models.ForeignKey(Utente, related_name="+", on_delete=models.CASCADE, null=False)
+    profilo = models.CharField(
+        choices=Profilo.create_choices(),
+        max_length=Profilo.get_max_len(),
+        null=False)
+    ente = models.ForeignKey(Ente, related_name="+", on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        p = self.profilo.name if isinstance(self.profilo, Profilo) else "!!!{}".format(self.profilo)
+
+        return "{profilo}:{utente}@{ente}".format(
+            profilo=p,
+            utente=self.utente.fiscal_code,
+            ente=self.ente)
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(ProfiloUtente, cls).from_db(db, field_names, values)
+        instance.profilo = Profilo.fix_enum(instance.profilo)
+        return instance
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                name='No ENTE for global admins',
+                check= ~Q(profilo = Profilo.ADMIN_PORTALE) |
+                       ( Q(profilo = Profilo.ADMIN_PORTALE) & Q(ente__isnull = True))),
+            models.CheckConstraint(
+                name='ENTE required for non-admins',
+                check= Q(profilo = Profilo.ADMIN_PORTALE) |
+                       ( ~Q(profilo = Profilo.ADMIN_PORTALE) & Q(ente__isnull = False))),
+        ]
+
+# @receiver(post_init, sender=ProfiloUtente)
+# def fix_profilo_enum(sender, instance, **kwargs):
+#     instance.profilo = Profilo.fix_enum(instance.profilo)
+
+
+class Ufficio(models.Model):
+    """
+
+    """
+
+    # id = models.CharField(
+    #     max_length=50, primary_key=True, verbose_name=_('id')
+    # )
+    uuid = models.UUIDField(
+        default=uuid.uuid4, editable=False,
+    )
+
+    nome = models.CharField(
+        max_length=255, null=False, blank=False, verbose_name=_('nome')
+    )
+    descrizione = models.TextField(
+        max_length=500, null=True, blank=True, verbose_name=_('descrizione')
+    )
+    ente = models.ForeignKey(Ente, related_name="+", on_delete=models.CASCADE)
+
+    email = models.EmailField(
+        verbose_name=_('indirizzo email'), blank=True, null=True
+    )
+
+    # qualifica = models.ForeignKey(Qualifica, related_name="qualifica", on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return '{ente}: {uff}'.format(ente=self.ente.nome, uff=self.nome)
+
+class QualificaUfficio(models.Model):
+    """
+
+    """
+    ufficio = models.ForeignKey(Ufficio, related_name="+", on_delete=models.CASCADE)
+    qualifica = models.CharField(
+        choices=Qualifica.create_choices(),
+        max_length=Qualifica.get_max_len(),
+        null=False)
+
+    def __str__(self):
+        q = self.qualifica.name if isinstance(self.qualifica, Qualifica) else "!!!{}".format(self.qualifica)
+
+        return '{qualifica}::{nome}'.format(
+            qualifica= q,
+            nome=self.ufficio)
+
+    class Meta:
+        pass
+        # constraints = [
+        #     # Next constr would generate a "django.core.exceptions.FieldError: Joined field references are not permitted in this query"
+        #     models.CheckConstraint(
+        #         name='Qualifica ristretta per ente',
+        #         # check= Q(ufficio__ente__tipo__in =  Qualifica._ALLOWED_ENTE[qualifica]))
+        #         check = _create_qualificaufficio_constraint())
+        # ]
+
+    def _check_allowed_qualifica(self):
+        if not self.qualifica.is_allowed(self.ufficio.ente.tipo):
+            raise ValidationError('Qualifica "{qualifica}" non permessa per ufficio [{ufficio}] per ente [{ente}] {tipo}'.format(
+                qualifica=self.qualifica,
+                ufficio=self.ufficio,
+                ente=self.ufficio.ente,
+                tipo=self.ufficio.ente.tipo
+            ))
+
+    # OVERRIDE
+    def save(self, *args, **kwargs):
+        self._check_allowed_qualifica()
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(QualificaUfficio, cls).from_db(db, field_names, values)
+        instance.qualifica = Qualifica.fix_enum(instance.qualifica)
+        return instance
+
+
+# @receiver(post_init, sender=QualificaUfficio)
+# def fix_qualifica_enum(sender, instance, **kwargs):
+#     instance.qualifica = Qualifica.fix_enum(instance.qualifica)
+
+
+class Assegnatario(models.Model):
+    """
+        Qualifiche fisse assegnate ad un utente da parte di un ufficio
+    """
+    qualifica_ufficio = models.ForeignKey(QualificaUfficio, related_name="+", on_delete=models.CASCADE)
+    utente = models.ForeignKey(Utente, related_name="+", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{qu}::{utente} @{ufficio}'.format(
+            qu=self.qualifica_ufficio.qualifica.name,
+            utente=self.utente,
+            ufficio=self.qualifica_ufficio.ufficio)
+
+    def _check_user_is_op(self):
+        if not ProfiloUtente.objects\
+                .filter(utente=self.utente) \
+                .filter(ente=self.qualifica_ufficio.ufficio.ente) \
+                .filter(profilo=Profilo.OPERATORE)\
+                .exists():
+            raise ValidationError('Utente "{utente}" non è un operatore per ente [{ente}]'.format(
+                utente=self.utente,
+                ente=self.qualifica_ufficio.ufficio.ente,
+            ))
+
+    # OVERRIDE
+    def save(self, *args, **kwargs):
+        self._check_user_is_op()
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+
+
 class Token(models.Model):
     """
     An access token that is associated with a user.
     This is essentially the same as the token model from Django REST Framework
     """
     key = models.CharField(max_length=40, primary_key=True)
-    user = models.ForeignKey(AppUser, related_name="user", on_delete=models.CASCADE)
-    membership = models.ForeignKey('UserMembership', related_name="role", on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(Utente, related_name="+", on_delete=models.CASCADE, null=True)
+
     expires = models.DateTimeField()
 
     def save(self, *args, **kwargs):
@@ -161,138 +361,6 @@ class Token(models.Model):
     def __unicode__(self):
         return self.key
 
-
-class OrganizationType(models.Model):
-    """
-    Organizations Type
-    """
-
-    code = models.CharField(
-        max_length=50, primary_key=True, verbose_name=_('codice')
-    )
-    name = models.CharField(
-        max_length=255, null=False, blank=False, verbose_name=_('nome')
-    )
-    description = models.TextField(
-        max_length=500, null=True, blank=True, verbose_name=_('descrizione')
-    )
-
-    class Meta:
-        verbose_name = _('tipo di ente')
-        verbose_name_plural = _('tipi di ente')
-
-    def __str__(self):
-        return self.name
-
-
-class Organization(models.Model):
-    """
-    Organizations (also called 'Ente') wich can deal with Statuto Del Territorio
-    """
-
-    code = models.CharField(
-        max_length=50, primary_key=True, verbose_name=_('codice')
-    )
-    name = models.CharField(
-        max_length=255, null=False, blank=False, verbose_name=_('nome')
-    )
-    description = models.TextField(
-        max_length=500, null=True, blank=True, verbose_name=_('descrizione')
-    )
-    type = models.ForeignKey(
-        to='OrganizationType', on_delete=models.CASCADE, verbose_name=_('tipo'),
-        default=None, blank=True, null=True
-    )
-
-    class Meta:
-        verbose_name = _('ente')
-        verbose_name_plural = _('enti')
-
-    def __str__(self):
-        return self.name
-
-
-class MembershipType(models.Model):
-    """
-    Role types
-    """
-
-    code = models.CharField(
-        max_length=50, null=False, blank=False, verbose_name=_('codice')
-    )
-    name = models.CharField(
-        max_length=255, null=False, blank=False, verbose_name=_('nome')
-    )
-    description = models.TextField(
-        max_length=500, null=True, blank=True, verbose_name=_('descrizione')
-    )
-    organization_type = models.ForeignKey(
-        to='OrganizationType', on_delete=models.CASCADE, verbose_name=_('tipo di ente'),
-        default=None, blank=True, null=True
-    )
-
-    class Meta:
-        unique_together = ('code', 'name', 'organization_type')
-        verbose_name = _('tipo di ruolo')
-        verbose_name_plural = _('tipi di ruolo')
-
-    def __str__(self):
-        return '{}'.format(self.name)
-
-
-class UserMembership(models.Model):
-    """
-    Roles
-    """
-
-    code = models.AutoField(
-        auto_created=True, primary_key=True, serialize=False, verbose_name=_('codice')
-    )
-    name = models.CharField(
-        max_length=255, null=False, blank=False, verbose_name=_('nome')
-    )
-    description = models.TextField(
-        max_length=500, null=True, blank=True, verbose_name=_('descrizione')
-    )
-    member = models.ForeignKey(
-        to='AppUser', on_delete=models.CASCADE, verbose_name=_('utente'),
-        default=None, blank=True, null=True
-    )
-    organization = models.ForeignKey(
-        to='Organization', on_delete=models.CASCADE, verbose_name=_('ente'),
-        default=None, blank=True, null=True
-    )
-    type = models.ForeignKey(
-        to='MembershipType', on_delete=models.CASCADE, verbose_name=_('tipo'),
-        default=None, blank=True, null=True
-    )
-    date_joined = models.DateTimeField(
-        verbose_name=_('data creazione'), auto_now_add=True
-    )
-    date_updated = models.DateTimeField(
-        verbose_name=_('data ultima modifica'), auto_now=True
-    )
-    created_by = CurrentUserField(
-        verbose_name=_('creato da'), editable=False,
-        related_name='%(class)s_created'
-    )
-    updated_by = CurrentUserField(
-        verbose_name=_('modificato da'), editable=False,
-        related_name='%(class)s_updated'
-    )
-    attore = models.CharField(
-        choices=TIPOLOGIA_ATTORE,
-        default=TIPOLOGIA_ATTORE.unknown,
-        max_length=80
-    )
-
-    class Meta:
-        unique_together = ('code', 'member', 'organization', 'type')
-        verbose_name = _('ruolo')
-        verbose_name_plural = _('ruoli')
-
-    def __str__(self):
-        return self.name
 
 
 # ############################################################################ #
