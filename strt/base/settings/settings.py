@@ -113,18 +113,6 @@ INSTALLED_APPS = [
     'pinax.messages',
     'pinax.templates',
     'pinax.notifications',
-    # Wagtail apps
-    'wagtail.contrib.forms',
-    'wagtail.contrib.redirects',
-    'wagtail.embeds',
-    'wagtail.sites',
-    'wagtail.users',
-    'wagtail.snippets',
-    'wagtail.documents',
-    'wagtail.images',
-    'wagtail.search',
-    'wagtail.admin',
-    'wagtail.core',
     'modelcluster',
     'taggit',
     # Crispy forms
@@ -328,9 +316,6 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Wagtail middleware
-    'wagtail.core.middleware.SiteMiddleware',
-    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     # Django current user
     'django_currentuser.middleware.ThreadLocalUserMiddleware',
     # Strt Users middleware
