@@ -7,7 +7,6 @@
 - Install
 - Environment setup
 - Project setup
-- Wagtail setup
 
 
 ## Python/Django versions
@@ -69,7 +68,6 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 
 - Load default data:
   ```
-  python manage.py loaddata fixtures/strt_homepage.json
   python manage.py loaddata fixtures/utente.json
   python manage.py loaddata fixtures/ente.json
   python manage.py loaddata fixtures/ufficio.json
@@ -83,8 +81,6 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 
 - Visit http://127.0.0.1:8000/ with your web browser
 
-
-## Wagtail setup
 
 ### Prepare the client and theme:
 
@@ -103,22 +99,3 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
   npm run build-with-theme
   ```
 
-### Setup an HomePage for your project:
-
-- Log in to the Wagtail admin panel (as superuser):
-http://127.0.0.1:8000/admin/
-
-- Delete the existing Pages and Sites
-
-- Add a new Page to the Root, insert your contents and publish the Page
-
-- Add a new Site with this configuration:
-  - `Hostname: localhost`
-  - `Port: 8000`
-  - `Site name: Statuto del Territorio RT`
-  - `Root page:` the new Page created
-  - `Is default site: True`
-
-- Save the new Site
-
-- Visit http://127.0.0.1:8000/ with your web browser to check the HomePage is visible

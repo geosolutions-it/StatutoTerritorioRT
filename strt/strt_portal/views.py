@@ -42,6 +42,10 @@ from .glossario import glossario
 logger = logging.getLogger(__name__)
 
 
+def homeView(request):
+    return render(request, "strt_portal/home.html")
+
+
 def privateAreaView(request):
     current_user = get_current_authenticated_user()
     if current_user:
