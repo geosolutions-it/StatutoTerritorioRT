@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     'base',
     'strt_portal',
     'strt_users',
+    'strt_geoportale',
     # Django apps
     'django.contrib.auth',
     'django.contrib.admin',
