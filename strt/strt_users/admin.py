@@ -13,7 +13,7 @@ from django import forms
 from django.forms import ModelChoiceField
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import (Utente, Ente)
+from .models import (Utente, Ente, Ufficio, QualificaUfficio, Assegnatario)
 from django.utils.translation import gettext_lazy as _
 
 
@@ -22,6 +22,28 @@ class EnteModelAdmin(admin.ModelAdmin):
     list_display = ['nome', 'id', 'descrizione']
     search_fields = ['nome', 'id', 'descrizione']
     list_filter = ['nome', 'id', 'descrizione']
+
+
+@admin.register(Ufficio)
+class UfficioModelAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'id', 'descrizione']
+    search_fields = ['nome', 'id', 'descrizione']
+    list_filter = ['nome', 'id', 'descrizione']
+
+
+@admin.register(QualificaUfficio)
+class QualificaUfficioModelAdmin(admin.ModelAdmin):
+    list_display = ['ufficio', 'qualifica']
+    search_fields = ['ufficio', 'qualifica']
+    list_filter = ['ufficio', 'qualifica']
+
+
+@admin.register(Assegnatario)
+class AssegnatarioUfficioModelAdmin(admin.ModelAdmin):
+    list_display = ['utente', 'qualifica_ufficio']
+    search_fields = ['utente', 'qualifica_ufficio']
+    list_filter = ['utente', 'qualifica_ufficio']
+
 
 
 # @admin.register(OrganizationType)

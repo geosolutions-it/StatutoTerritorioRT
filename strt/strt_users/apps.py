@@ -14,3 +14,4 @@ from django.apps import AppConfig
 
 class UsersConfig(AppConfig):
     name = 'strt_users'
+    verbose_name = 'Utenti'

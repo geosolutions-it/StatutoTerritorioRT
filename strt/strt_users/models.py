@@ -247,6 +247,10 @@ class Ufficio(models.Model):
     def __str__(self):
         return '{ente}: {uff}'.format(ente=self.ente.nome, uff=self.nome)
 
+    class Meta:
+        verbose_name_plural = "Uffici"
+
+
 class QualificaUfficio(models.Model):
     """
 
@@ -265,7 +269,7 @@ class QualificaUfficio(models.Model):
             nome=self.ufficio)
 
     class Meta:
-        pass
+        verbose_name_plural = "Qualifiche uffici"
         # constraints = [
         #     # Next constr would generate a "django.core.exceptions.FieldError: Joined field references are not permitted in this query"
         #     models.CheckConstraint(
@@ -307,6 +311,9 @@ class Assegnatario(models.Model):
     qualifica_ufficio = models.ForeignKey(QualificaUfficio, related_name="+", on_delete=models.CASCADE)
     utente = models.ForeignKey(Utente, related_name="+", on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name_plural = "Assegnatari"
+
     def __str__(self):
         return '{qu}::{utente} @{ufficio}'.format(
             qu=self.qualifica_ufficio.qualifica.name,
@@ -328,6 +335,7 @@ class Assegnatario(models.Model):
     def save(self, *args, **kwargs):
         self._check_user_is_op()
         super().save(*args, **kwargs)  # Call the "real" save() method.
+
 
 
 class Token(models.Model):
