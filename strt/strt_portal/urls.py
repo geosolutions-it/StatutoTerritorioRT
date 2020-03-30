@@ -11,15 +11,13 @@
 
 from django.urls import path
 from .views import (
-    privateAreaView, GeoportalView,
-    OpendataView, GlossaryView, serapideView
+    privateAreaView, OpendataView, GlossaryView, serapideView
 )
 
 
 urlpatterns = [
     path('private-area/', privateAreaView, name='private_area'),
     path('serapide/', serapideView, name='serapide'),
-    path('geoportal/', GeoportalView.as_view(), name='geoportal'),
     path('opendata/', OpendataView.as_view(), name='opendata'),
     path('glossario/', GlossaryView.as_view(), name='glossary'),
 ]

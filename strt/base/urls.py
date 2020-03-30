@@ -14,6 +14,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 # APIs imports
+from strt_geoportale import urls as geoportale_urls
 from serapide_core import urls as serapide_code_urls
 # Wagatail imports
 from wagtail.admin import urls as wagtailadmin_urls
@@ -36,6 +37,11 @@ urlpatterns += [
 # APIs urls
 urlpatterns += [
     path('', include(serapide_code_urls)),
+]
+
+# Geoportale urls
+urlpatterns += [
+    path('geoportale/', include(geoportale_urls)),
 ]
 
 # Wagtail urls

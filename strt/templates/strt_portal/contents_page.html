@@ -9,13 +9,13 @@ LICENSE file in the root directory of this source tree.
 -->
 
 
-{% extends "strt_portal/public_area.html" %}
+{% extends "strt_portal/page_inner_menu.html" %}
 
 {% load static %}
 {% load i18n %}
 {% load wagtailcore_tags %}
 
-{% block head_title %}{{ block.super }} - {% trans 'glossario' %}{% endblock head_title %}
+{% block head_title %}{{ block.super }}{% endblock head_title %}
 {% block content %}
         <div class="col">
             <div class="pagina-container">
@@ -29,16 +29,4 @@ LICENSE file in the root directory of this source tree.
         </div>
 {% endblock content %}
 {% block add_script %}
-<script>
-    function scrollToTermine(selector){
-        let el = $("#"+selector);
-        $('html,body').animate({scrollTop: el.offset().top-5},'fast');
-    }
-    $(".lettera-indice").click(function(){
-        let termine = $(this).data('termine');
-        if (termine) {
-            scrollToTermine(termine)
-        }
-    })
-</script>
 {% endblock add_script %}

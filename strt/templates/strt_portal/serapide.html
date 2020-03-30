@@ -9,19 +9,12 @@ LICENSE file in the root directory of this source tree.
 -->
 
 
-{% extends "base.html" %}
+{% extends "strt_portal/page_top_menu.html" %}
 
 {% load static %}
 {% load i18n %}
 
 {% block head_title %}{{ block.super }} - {% trans 'area riservata'|capfirst %}{% endblock head_title %}
-
-{% block top_navbar_items %}
-
-    {% include "strt_portal/navbar_menu.html" with text_color='white' bg_color='dark' %}
-
-{% endblock top_navbar_items %}
-
 {% block user_navbar %}
 
     <div class="serapide">
@@ -118,5 +111,4 @@ LICENSE file in the root directory of this source tree.
         <!-- USER-NAVBAR -->
 
     </div>
-
 {% endblock user_navbar %}

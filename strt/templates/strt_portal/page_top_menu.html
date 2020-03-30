@@ -1,0 +1,19 @@
+<!--
+
+Copyright 2019, GeoSolutions SAS.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree.
+
+-->
+{% extends "base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% block head_title %}{{ block.super }}{% endblock head_title %}
+{% block top_navbar_items %}
+    {% include "strt_portal/navbar_menu.html" with text_color='white' bg_color='dark' %}
+{% endblock top_navbar_items %}
+{% block user_navbar %}
+{% endblock user_navbar %}

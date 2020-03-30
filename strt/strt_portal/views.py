@@ -142,11 +142,6 @@ def serapideView(request):
     return render(request, 'index.html')  # serapide-client
 
 
-class GeoportalView(TemplateView):
-
-    template_name = "strt_portal/geoportal/geoportal.html"
-
-
 class OpendataView(TemplateView):
 
     template_name = "strt_portal/opendata/opendata.html"

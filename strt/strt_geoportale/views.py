@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def geportale_home(request):
+    return render(request, "geoportale/geoportale.html")
