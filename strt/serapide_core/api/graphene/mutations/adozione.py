@@ -40,6 +40,7 @@ from serapide_core.modello.models import (
     ProceduraAdozioneVAS,
     ProceduraApprovazione,
     RisorseAdozioneVas,
+    Delega,
 
     needsExecution,
     chiudi_azione,
@@ -96,45 +97,6 @@ def check_and_close_adozione(piano: Piano):
 
     return False
 
-# class CreateProceduraAdozione(relay.ClientIDMutation):
-#
-#     class Input:
-#         procedura_adozione = graphene.Argument(inputs.ProceduraAdozioneCreateInput)
-#         codice_piano = graphene.String(required=True)
-#
-#     nuova_procedura_adozione = graphene.Field(types.ProceduraAdozioneNode)
-#
-#     @classmethod
-#     def mutate_and_get_payload(cls, root, info, **input):
-#         _piano = Piano.objects.get(codice=input['codice_piano'])
-#         _procedura_adozione_data = input.get('procedura_adozione')
-#         if info.context.user and \
-#         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-#         rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-#             try:
-#                 # ProceduraAdozione (M)
-#                 _procedura_adozione_data['piano'] = _piano
-#                 # Ente (M)
-#                 _procedura_adozione_data['ente'] = _piano.ente
-#
-#                 _procedura_adozione = ProceduraAdozione()
-#                 _procedura_adozione.piano = _piano
-#                 _procedura_adozione.ente = _piano.ente
-#                 _procedura_adozione_data['id'] = _procedura_adozione.id
-#                 _procedura_adozione_data['uuid'] = _procedura_adozione.uuid
-#                 nuova_procedura_adozione = update_create_instance(_procedura_adozione, _procedura_adozione_data)
-#
-#                 _piano.procedura_adozione = nuova_procedura_adozione
-#                 _piano.save()
-#
-#                 return cls(nuova_procedura_adozione=nuova_procedura_adozione)
-#             except BaseException as e:
-#                 tb = traceback.format_exc()
-#                 logger.error(tb)
-#                 return GraphQLError(e, code=500)
-#         else:
-#             return GraphQLError(_("Forbidden"), code=403)
-
 
 class UpdateProceduraAdozione(relay.ClientIDMutation):
 
@@ -153,7 +115,7 @@ class UpdateProceduraAdozione(relay.ClientIDMutation):
 
         _piano = _procedura_adozione.piano
 
-        if not auth.is_soggetto(info.context.user, _piano):
+        if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
@@ -266,8 +228,11 @@ class TrasmissioneAdozione(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
@@ -331,7 +296,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
 
-        if not auth.is_soggetto(info.context.user, _piano):
+        if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         try:
@@ -393,8 +358,11 @@ class Controdeduzioni(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
@@ -457,8 +425,11 @@ class PianoControdedotto(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
@@ -525,7 +496,10 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, QualificaRichiesta.REGIONE):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -585,8 +559,11 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
         _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
         _piano = _procedura_adozione.piano
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
@@ -664,7 +641,10 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
         _piano: Piano = _procedura_ad_vas.piano
         _procedura_adozione: ProceduraAdozione = ProceduraAdozione.objects.get(piano=_piano)
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.SCA):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, QualificaRichiesta.SCA):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -706,6 +686,15 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
                         procedura_adozione=_procedura_adozione,
                         user__in=utenti_sca)\
                     .exists()
+
+                if not _parere_sent:
+                    deleghe = Delega.objects.filter(delegante=_so_sca)
+                    users = [d.token.user for d in deleghe]
+                    _parere_sent = ParereAdozioneVAS.objects.filter(
+                         procedura_adozione=_procedura_adozione,
+                         user__in=users,
+                    ).exists()
+
 
                 if not _parere_sent:
                     _tutti_pareri_inviati = False
@@ -777,7 +766,10 @@ class InvioParereMotivatoAC(graphene.Mutation):
         _piano = _procedura_vas.piano
         _procedura_adozione = ProceduraAdozione.objects.get(piano=_piano)
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.AC):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         if not _procedura_adozione.pubblicazione_burt_data:
@@ -858,8 +850,11 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
         _piano = _procedura_vas.piano
         _procedura_adozione = ProceduraAdozione.objects.get(piano=_piano)
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         if not _procedura_adozione.pubblicazione_burt_data:
             return GraphQLError("Errore - burtdata mancante", code=500)

@@ -120,8 +120,8 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
 
         _piano = _procedura_avvio.piano
 
-        if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - Pre-check: L'utente non può editare questo piano", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
             if fixed_field in _procedura_avvio_data:
@@ -176,30 +176,6 @@ class AvvioPiano(graphene.Mutation):
             if c > 0:
                 return True;
 
-            # for _c in piano.soggetti_sca.all():
-            #     _tipologia = _c.tipologia if contatto else \
-            #         Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
-            #     if _tipologia.upper() == tipologia.upper():
-            #         _has_tipologia = True
-            #         break
-            #
-            # if not _has_tipologia:
-            #     for _c in piano.autorita_istituzionali.all():
-            #         _tipologia = _c.tipologia if contatto else \
-            #             Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
-            #         if _tipologia.upper() == tipologia.upper():
-            #             _has_tipologia = True
-            #             break
-            #
-            # if not _has_tipologia:
-            #     for _c in piano.altri_destinatari.all():
-            #         _tipologia = _c.tipologia if contatto else \
-            #             Contatto.attore(_c.user, tipologia=TIPOLOGIA_ATTORE[tipologia])
-            #         if _tipologia.upper() == tipologia.upper():
-            #             _has_tipologia = True
-            #             break
-            #
-            # _res = _has_tipologia
         return False
 
     @classmethod
@@ -246,18 +222,13 @@ class AvvioPiano(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
-        # _organization = _piano.ente
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            # if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - L'utente non può editare questo piano", code=403)
-        # if info.context.user \
-        #         and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) \
-        #         and rules.test_rule('strt_core.api.is_actor', _token
-        #                                                     or (info.context.user, _role)
-        #                                                     or (info.context.user, _organization), 'Comune'):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -306,11 +277,12 @@ class FormazionePiano(graphene.Mutation):
         _piano = Piano.objects.get(codice=input['codice_piano'])
         _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
-        # if info.context.user and \
-        #         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        #         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
@@ -428,20 +400,13 @@ class ContributiTecnici(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
-        # _organization = _piano.ente
 
-
-        if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - Pre-check: Utente non abilitato ad editare questo piano", code=403)
-
-        # if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
-        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica = Qualifica.PIAN):
+        if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        # if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        # rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.PIAN):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             _res = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -507,17 +472,13 @@ class RichiestaIntegrazioni(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
-        # _organization = _piano.ente
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
-        # if info.context.user \
-        #     and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) \
-        #     and rules.test_rule('strt_core.api.is_actor', _token  \
-        #                                                 or (info.context.user, _role) \
-        #                                                 or (info.context.user, _organization), 'Regione'):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, QualificaRichiesta.REGIONE):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -572,16 +533,13 @@ class IntegrazioniRichieste(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
-        # _organization = _piano.ente
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
-        #
-        # if info.context.user and \
-        #         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        #         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -642,15 +600,13 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
-        # _organization = _piano.ente
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.GC):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
-        #
-        # if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        # rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'GENIO_CIVILE'):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.GC):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -725,14 +681,13 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
-        # _organization = _piano.ente
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+        if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
-        # if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        # rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Comune'):
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 
@@ -751,6 +706,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
             tb = traceback.format_exc()
             logger.error(tb)
             return GraphQLError(e, code=500)
+
 
 class ChiusuraConferenzaCopianificazione(graphene.Mutation):
 
@@ -804,14 +760,13 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=input['uuid'])
         _piano = _procedura_avvio.piano
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
-        # _organization = _piano.ente
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
-        # if info.context.user and rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        # rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'Regione'):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, QualificaRichiesta.REGIONE):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
 

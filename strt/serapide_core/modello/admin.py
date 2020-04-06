@@ -162,6 +162,24 @@ admin.site.register(PianoRevPostCP, PianoRevPostCPAdmin)
 
 @admin.register(Delega)
 class DelegaModelAdmin(admin.ModelAdmin):
-    list_display = ['created', 'created_by']
+    # list_display = ['qualifica', 'delegante', 'piano','created', 'created_by']
+    list_display = ['_piano', 'qualifica', '_delegante', '_key', '_user', 'created', '_created_by']
     search_fields = ['created', 'created_by']
     list_filter = ['created', 'created_by']
+
+    def _delegante(self, obj):
+        return '{}:{}'.format(
+            obj.delegante.qualifica_ufficio.qualifica.name,
+            obj.delegante.qualifica_ufficio.ufficio)
+
+    def _piano(self, obj):
+        return obj.delegante.piano.codice
+
+    def _key(self, obj):
+        return obj.token.key
+
+    def _user(self, obj):
+        return obj.token.user.get_full_name() if obj.token.user else None
+
+    def _created_by(self, obj):
+        return obj.created_by.get_full_name() if obj.created_by else None

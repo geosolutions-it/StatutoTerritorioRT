@@ -23,11 +23,12 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
+from serapide_core.api.auth.user import get_assegnamenti
 from strt_users.enums import Profilo
 from strt_users.models import (
     Ente, Ufficio,
     Qualifica,
-    QualificaUfficio, ProfiloUtente)
+    QualificaUfficio, ProfiloUtente, Token)
 
 from serapide_core.helpers import (
     update_create_instance,
@@ -395,8 +396,8 @@ class UpdatePiano(relay.ClientIDMutation):
             return GraphQLError("Unauthorized", code=401)
 
         # Primo chek generico di autorizzazione
-        if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - Pre-check: L'utente non può editare piani in questo Ente", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         try:
 
@@ -427,8 +428,8 @@ class UpdatePiano(relay.ClientIDMutation):
             # Soggetto Proponente (O)
             if 'soggetto_proponente_uuid' in _piano_input:
 
-                if not auth.has_qualifica(info.context.user, _ente, Qualifica.RESP):
-                    return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
+                if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+                    return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
                 _soggetto_proponente_uuid = _piano_input.pop('soggetto_proponente_uuid')
                 if _soggetto_proponente_uuid:
@@ -484,7 +485,7 @@ class UpdatePiano(relay.ClientIDMutation):
                     so.save()
 
             if 'numero_protocollo_genio_civile' in _piano_input:
-                if not auth.is_soggetto_operante(info.context.user, _piano, Qualifica.GC):
+                if not auth.can_edit_piano(info.context.user, _piano, Qualifica.GC):
                     return GraphQLError("Forbidden - Campo modificabile solo dal GC", code=403)
                     # This can be changed only by Genio Civile
 
@@ -547,8 +548,8 @@ class PromozionePiano(graphene.Mutation):
         _piano = Piano.objects.get(codice=input['codice_piano'])
 
         # Primo chek generico di autorizzazione
-        if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - Pre-check: L'utente non può editare piani in questo Ente", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         try:
             promoted, errors = check_and_promote(_piano, info)
@@ -560,6 +561,94 @@ class PromozionePiano(graphene.Mutation):
                 )
             else:
                 return GraphQLError("Dati non corretti", code=409, errors=errors)
+
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+
+
+class CreaDelega(graphene.Mutation):
+
+    class Arguments:
+        codice_piano = graphene.String(required=True)
+        # ufficio_uuid = graphene.String(required=True)
+        qualifica = graphene.String(required=True)
+        mail = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    token = graphene.String()
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        def _get_or_create_resp_so():
+            so = auth.get_so(info.context.user, _piano, Qualifica.RESP).first()
+
+            if not so:
+                # l'utente non ha SO direttamente associato, quindi lo creiamo
+                ass = get_assegnamenti(info.context.user, _piano.ente, Qualifica.RESP).first()
+                so = SoggettoOperante(piano=_piano, qualifica_ufficio=ass.qualifica_ufficio)
+                so.save()
+            return so
+
+        _piano = Piano.objects.get(codice=input['codice_piano'])
+
+        # Primo check generico di autorizzazione
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        try:
+            qualifica = Qualifica.fix_enum(input['qualifica'], none_on_error=True)
+            is_resp = auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP)
+
+            if not qualifica:
+                return GraphQLError("Qualifica sconosciuta", code=404)
+
+            elif qualifica == Qualifica.RESP:
+                return GraphQLError("Qualifica non delegabile", code=400)
+
+            elif qualifica == Qualifica.READONLY:
+                # associa alla delega un qualiasi SO associato all'utente
+                so = auth.get_so(info.context.user, _piano).first()
+                if not so:
+                    if is_resp:
+                        # l'utente è RESP per l'ente, ma non ha SO direttamente associato, quindi lo creiamo
+                        so = _get_or_create_resp_so()
+                    else:
+                        return GraphQLError("Forbidden - Utente non assegnatario", code=403)
+            else:
+                #
+                so = auth.get_so(info.context.user, _piano, qualifica).first()
+                if not so:
+                    if is_resp:
+                        # l'utente è RESP per l'ente, ma non ha SO direttamente associato, quindi lo creiamo
+                        so = _get_or_create_resp_so()
+                    else:
+                        return GraphQLError("Forbidden - Qualifica non assegnabile", code=403)
+
+            token = Token()
+            token.key = Token.generate_key()
+            token.expires = datetime.datetime.now() + datetime.timedelta(days=30)  # TODO
+            token.save()
+
+            delega = Delega()
+            delega.qualifica = qualifica
+            delega.delegante = so
+            delega.created_by = info.context.user
+            delega.token = token
+            delega.save()
+
+            # TODO: USE EMAIL
+            # piano_phase_changed.send(
+            #     sender=Piano,
+            #     user=info.context.user,
+            #     piano=_piano,
+            #     message_type="delega")
+
+            return CreaDelega(
+                token = token.key,
+                errors=[]
+            )
 
         except BaseException as e:
             tb = traceback.format_exc()

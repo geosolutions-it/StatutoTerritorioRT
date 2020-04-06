@@ -3,9 +3,6 @@ import logging
 import json
 import os
 import datetime
-from ast import dump
-from contextlib import redirect_stderr
-from functools import partial
 
 from django.test import TestCase, Client
 
@@ -34,6 +31,7 @@ def _get_datetime(**argw_delta):
     if argw_delta:
         date = date + datetime.timedelta(**argw_delta)
     return date
+
 
 def _get_date(**argw_delta):
     date = _get_datetime(**argw_delta)
@@ -151,22 +149,23 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         # {"operationName": "UpdateProceduraVas", "variables": {"input": {"proceduraVas": {"assoggettamento": false},
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'assoggettamento', False)
 
-
         # SCA
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_VERIFICA_VAS)
-        self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, expected_code=403)
-        self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, client=self.client_sca)
+        self.sendCNV('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', self.codice_vas, expected_code=403)
+        self.sendCNV('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', self.codice_vas, client=self.client_sca)
 
         # AC
         # {"operationName":"VasUploadFile","variables":{"file":null,"codice":"a62a4292-bc89-4a54-9361-ba7d0472d317","tipo":"provvedimento_verifica_vas"}
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PROVVEDIMENTO_VERIFICA_VAS)
-        self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, expected_code=403)
-        self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, client=self.client_ac)
+        self.sendCNV('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, expected_code=403)
+        self.sendCNV('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, client=self.client_ac)
 
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", expected_code=403)
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", client=self.client_ac)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas,
+                     'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide",
+                     client=self.client_ac)
 
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas,
+                     'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
 
         # VAS COMPLETATO
         response = self.sendCNV('901_get_vas.query', 'GET VAS', self.codice_piano)

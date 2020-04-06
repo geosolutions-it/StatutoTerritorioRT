@@ -379,7 +379,8 @@ class Azione(models.Model):
     def __str__(self):
         return '{} - {} [{}]'.format(self.qualifica_richiesta.name, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
 
-    def count_by_piano(piano, tipo=None):
+    @classmethod
+    def count_by_piano(cls, piano: Piano, tipo=None):
         qs = Azione.objects.filter(piano=piano)
         if tipo:
             qs = qs.filter(tipologia=tipo)
@@ -1201,13 +1202,14 @@ def isExecuted(action:Azione):
     return action and action.stato == STATO_AZIONE.nessuna
 
 
-def ensure_fase(check:Fase, expected:Fase):
-    if check !=expected:
+def ensure_fase(check: Fase, expected: Fase):
+    if check != expected:
         raise Exception(_("Fase Piano incongruente con l'azione richiesta") + " -- " + _(check.name))
 
 
-def chiudi_azione(azione:Azione, data=None, set_data=True):
-    log.warning('Chiusura azione [{a}]:{qr} in piano [{p}]'.format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
+def chiudi_azione(azione: Azione, data=None, set_data=True):
+    log.warning('Chiusura azione [{a}]:{qr} in piano [{p}]'
+                .format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
     azione.stato = STATO_AZIONE.nessuna
     if set_data:
         azione.data = data if data else datetime.now(timezone.get_current_timezone())
@@ -1216,7 +1218,7 @@ def chiudi_azione(azione:Azione, data=None, set_data=True):
 
 def crea_azione(azione:Azione):
     log.warning('Creazione azione [{a}]:{qr} in piano [{p}]'.format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
-    if azione.order == None:
+    if azione.order is None:
         _order = Azione.count_by_piano(azione.piano)
         azione.order = _order
 

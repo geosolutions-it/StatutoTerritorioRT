@@ -36,16 +36,15 @@ def _get_datetime(**argw_delta):
         date = date + datetime.timedelta(**argw_delta)
     return date
 
-
 def _get_date(**argw_delta):
     date = _get_datetime(**argw_delta)
     date = date.replace(hour=0, minute=0, second=0, microsecond=0)
     return date
 
 
-class DeletePianoTest(AbstractSerapideProcsTest):
+class DelegaTest(AbstractSerapideProcsTest):
 
-    def test_delete_piano(self):
+    def test_crea_delega(self):
 
         self.do_login()
 
@@ -88,4 +87,7 @@ class DeletePianoTest(AbstractSerapideProcsTest):
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
         # self.sendCNV('006_promozione.query', 'PROMUOVI PIANO', self.codice_piano)
 
-        self.sendCNV('001d_delete_piano.query', 'DELETE PIANO', self.codice_piano)
+
+
+        self.send('100_crea_delega.query', 'CREA DELEGA',
+            replace_args={'codice':self.codice_piano, 'qualifica':Qualifica.AC.name, 'mail':'fkame@mail'})

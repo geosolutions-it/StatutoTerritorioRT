@@ -12,6 +12,9 @@
                 {{ form|crispy }}
                 <input type="submit" class="btn btn-secondary my-2 my-lg-4" value="Login">
                 <input type="hidden" name="next" value="{{ next }}">
+                {% if 'token' in request.GET %}
+                <input type="hidden" name="token" value="{{ request.GET.token }}">
+                {% endif %}
             </form>
             <p><a href="{% url 'password_reset' %}">Password dimenticata?</a></p>
         </div>

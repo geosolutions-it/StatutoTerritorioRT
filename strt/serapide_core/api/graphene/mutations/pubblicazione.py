@@ -105,8 +105,8 @@ class UpdateProceduraPubblicazione(relay.ClientIDMutation):
 
         _piano = _procedura_pubblicazione.piano
 
-        if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - Utente non abilitato ad editare questo pianoù", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
             if fixed_field in _procedura_pubblicazione_data:
@@ -162,8 +162,11 @@ class PubblicazionePiano(graphene.Mutation):
         _procedura_pubblicazione = ProceduraPubblicazione.objects.get(uuid=input['uuid'])
         _piano = _procedura_pubblicazione.piano
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_pubblicazione, info.context.user)

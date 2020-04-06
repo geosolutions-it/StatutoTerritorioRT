@@ -1,0 +1,15 @@
+{
+   "operationName" : "CreaDelega",
+
+   "variables" : {
+         "codice" : "{codice}",
+         "qualifica" : "{qualifica}",
+         "mail" : "{mail}"
+   },
+
+   "query" : "mutation CreaDelega($codice: String!,$qualifica: String!, $mail: String!) {
+        creaDelega(codicePiano: $codice, qualifica: $qualifica, mail: $mail) {
+            token
+        }
+   }"
+}

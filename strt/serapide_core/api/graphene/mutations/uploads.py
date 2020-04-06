@@ -129,8 +129,8 @@ class UploadFile(UploadBaseBase):
             # Validating 'Piano'
             _piano = Piano.objects.get(codice=_codice_piano)  # TODO 404
 
-            if not auth.is_soggetto(info.context.user, _piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
@@ -173,8 +173,8 @@ class UploadRisorsaVAS(UploadBaseBase):
             _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
             _piano = _procedura_vas.piano
 
-            if not auth.is_soggetto(info.context.user, _piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             if _tipo_file == TipoRisorsa.PARERE_SCA.value and \
                     not auth_vas.parere_sca_ok(info.context.user, _procedura_vas):
@@ -230,8 +230,8 @@ class UploadRisorsaAdozioneVAS(UploadBaseBase):
             _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=_uuid_vas)
             _piano = _procedura_vas.piano
 
-            if not auth.is_soggetto(info.context.user, _piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
@@ -275,8 +275,8 @@ class UploadRisorsaAvvio(UploadBaseBase):
         _procedura_avvio = ProceduraAvvio.objects.get(uuid=_uuid_avvio)
         _piano = _procedura_avvio.piano
 
-        if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         try:
             _resources = UploadBaseBase.handle_uploaded_data(
@@ -321,9 +321,10 @@ class UploadRisorsaAdozione(UploadBaseBase):
 
         try:
             _procedura_adozione = ProceduraAdozione.objects.get(uuid=_uuid_adozione)
+            _piano = _procedura_adozione.piano
 
-            if not auth.is_soggetto(info.context.user, _procedura_adozione.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
@@ -366,9 +367,10 @@ class UploadRisorsaApprovazione(UploadBaseBase):
 
         try:
             _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=_uuid_approvazione)
+            _piano = _procedura_approvazione.piano
 
-            if not auth.is_soggetto(info.context.user, _procedura_approvazione.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
@@ -411,9 +413,10 @@ class UploadRisorsaPubblicazione(UploadBaseBase):
 
         try:
             _procedura_pubblicazione = ProceduraPubblicazione.objects.get(uuid=_uuid_pubblicazione)
+            _piano = _procedura_pubblicazione.piano
 
-            if not auth.is_soggetto(info.context.user, _procedura_pubblicazione.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
@@ -457,9 +460,10 @@ class UploadRisorsaCopianificazione(UploadBaseBase):
 
         try:
             _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
+            _piano = _conferenza_copianificazione.piano
 
-            if not auth.is_soggetto(info.context.user, _conferenza_copianificazione.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo Piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
@@ -504,9 +508,10 @@ class UploadRisorsaPianoControdedotto(UploadBaseBase):
 
         try:
             _piano_controdedotto = PianoControdedotto.objects.get(uuid=_uuid_cc)
+            _piano = _piano_controdedotto.piano
 
-            if not auth.is_soggetto(info.context.user, _piano_controdedotto.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
@@ -551,9 +556,10 @@ class UploadRisorsaPianoRevPostCP(UploadBaseBase):
 
         try:
             _piano_rev_post_cp = PianoRevPostCP.objects.get(uuid=_uuid_cc)
+            _piano = _piano_rev_post_cp.piano
 
-            if not auth.is_soggetto(info.context.user, _piano_rev_post_cp.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
@@ -628,8 +634,8 @@ class DeleteRisorsa(DeleteRisorsaBase):
         try:
             _piano = Piano.objects.get(codice=_codice_piano)
 
-            if not auth.is_soggetto(info.context.user, _piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
             _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
@@ -658,9 +664,10 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
         # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
         try:
             _procedura_vas = ProceduraVAS.objects.get(uuid=_uuid_vas)
+            _piano = _procedura_vas.piano
 
-            if not auth.is_soggetto(info.context.user, _procedura_vas.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
 
@@ -698,9 +705,10 @@ class DeleteRisorsaAdozioneVAS(DeleteRisorsaBase):
         # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
         try:
             _procedura_vas = ProceduraAdozioneVAS.objects.get(uuid=_uuid_vas)
+            _piano = _procedura_vas.piano
 
-            if not auth.is_soggetto(info.context.user, _procedura_vas.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
 
@@ -730,9 +738,10 @@ class DeleteRisorsaAvvio(DeleteRisorsaBase):
         # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
         try:
             _procedura_avvio = ProceduraAvvio.objects.get(uuid=_uuid_avvio)
+            _piano = _procedura_avvio.piano
 
-            if not auth.is_soggetto(info.context.user, _procedura_avvio.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
             _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
@@ -760,9 +769,10 @@ class DeleteRisorsaAdozione(DeleteRisorsaBase):
         # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
         try:
             _procedura_adozione = ProceduraAdozione.objects.get(uuid=_uuid_adozione)
+            _piano = _procedura_adozione.piano
 
-            if not auth.is_soggetto(info.context.user, _procedura_adozione.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
             _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
@@ -791,9 +801,10 @@ class DeleteRisorsaApprovazione(DeleteRisorsaBase):
         # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
         try:
             _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=_uuid_approvazione)
+            _piano = _procedura_approvazione.piano
 
-            if not auth.is_soggetto(info.context.user, _procedura_approvazione.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
             _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
@@ -823,9 +834,10 @@ class DeleteRisorsaPubblicazione(DeleteRisorsaBase):
         # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
         try:
             _procedura_pubblicazione = ProceduraPubblicazione.objects.get(uuid=_uuid_pubblicazione)
+            _piano = _procedura_pubblicazione.piano
 
-            if not auth.is_soggetto(info.context.user, _procedura_pubblicazione.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
             _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
@@ -855,9 +867,10 @@ class DeleteRisorsaCopianificazione(DeleteRisorsaBase):
         # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
         try:
             _conferenza_copianificazione = ConferenzaCopianificazione.objects.get(uuid=_uuid_cc)
+            _piano = _conferenza_copianificazione.piano
 
-            if not auth.is_soggetto(info.context.user, _conferenza_copianificazione.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
             _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
@@ -887,9 +900,10 @@ class DeleteRisorsaPianoControdedotto(DeleteRisorsaBase):
         # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
         try:
             _piano_controdedotto = PianoControdedotto.objects.get(uuid=_uuid_cc)
+            _piano = _piano_controdedotto.piano
 
-            if not auth.is_soggetto(info.context.user, _piano_controdedotto.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
             _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)
@@ -919,9 +933,10 @@ class DeleteRisorsaPianoRevPostCP(DeleteRisorsaBase):
         # TODO: Andrebbe controllato se la risorsa in funzione del tipo e della fase del piano è eliminabile o meno
         try:
             _piano_rev_post_cp = PianoRevPostCP.objects.get(uuid=_uuid_cc)
+            _piano = _piano_rev_post_cp.piano
 
-            if not auth.is_soggetto(info.context.user, _piano_rev_post_cp.piano):
-                return GraphQLError("Forbidden - Utente non abilitato ad operare su questo piano", code=403)
+            if not auth.can_access_piano(info.context.user, _piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             _risorsa = Risorsa.objects.get(uuid=_id)
             _success = DeleteRisorsaBase.handle_downloaded_data(_risorsa)

@@ -113,8 +113,8 @@ class UpdateProceduraApprovazione(relay.ClientIDMutation):
         _procedura_approvazione_data = input.get('procedura_approvazione')
         _piano = _procedura_approvazione.piano
 
-        if not auth.is_soggetto(info.context.user, _piano):
-            return GraphQLError("Forbidden - Utente non abilitato ad editare questo pianoù", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         for fixed_field in ['uuid', 'piano', 'data_creazione', 'ente']:
             if fixed_field in _procedura_approvazione_data:
@@ -187,8 +187,11 @@ class TrasmissioneApprovazione(graphene.Mutation):
         _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=input['uuid'])
         _piano = _procedura_approvazione.piano
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
@@ -253,8 +256,11 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
         _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=input['uuid'])
         _piano = _procedura_approvazione.piano
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, QualificaRichiesta.REGIONE):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
@@ -324,8 +330,11 @@ class PubblicazioneApprovazione(graphene.Mutation):
         _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=input['uuid'])
         _piano = _procedura_approvazione.piano
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
@@ -387,8 +396,11 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
         _procedura_approvazione = ProceduraApprovazione.objects.get(uuid=input['uuid'])
         _piano = _procedura_approvazione.piano
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
-            return GraphQLError("Forbidden - Utente non abilitato ad eseguire questa azione", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, QualificaRichiesta.REGIONE):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)

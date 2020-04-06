@@ -43,6 +43,7 @@ from serapide_core.modello.models import (
     ConsultazioneVAS,
     ParereVerificaVAS,
     SoggettoOperante,
+    Delega,
 
     isExecuted,
     needsExecution,
@@ -210,13 +211,10 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
         _procedura_vas_data = input.get('procedura_vas')
         _piano = _procedura_vas.piano
 
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
-        _ente = _piano.ente
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-            if not auth.is_soggetto(info.context.user, _piano):
-                return GraphQLError(_("Forbidden"), code=403)
+        _ente = _piano.ente
 
         try:
             # These fields cannot be changed
@@ -230,7 +228,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             if 'tipologia' in _procedura_vas_data:
                 _tipologia = _procedura_vas_data.pop('tipologia')
                 if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
-                    if _tipologia: #  and _tipologia in TipologiaVAS:
+                    if _tipologia:  #  and _tipologia in TipologiaVAS:
                         _tipo_parsed = TipologiaVAS.fix_enum(_tipologia, none_on_error=True)
                         if not _tipo_parsed:
                             return GraphQLError("Tipologia non riconosciuta [{}]".format(_tipologia), code=400)
@@ -253,7 +251,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
             # perform check before update
             if _procedura_vas_data.pubblicazione_provvedimento_verifica_ac:
-                if not auth.is_soggetto_operante(info.context.user, _piano, Qualifica.AC):
+                if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
                     if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
                         return GraphQLError("Forbidden - Non è permesso modificare un campo AC", code=403)
 
@@ -290,7 +288,6 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                         user=info.context.user,
                         piano=_piano,
                         message_type="piano_verifica_vas_updated")
-
 
             if isExecuted(_piano.getFirstAction(
                         TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
@@ -341,8 +338,11 @@ class InvioPareriVerificaVAS(graphene.Mutation):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, Qualifica.SCA):
-            return GraphQLError("Forbidden - Azione non permessa", code=403)
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.SCA):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
             _pareri_vas_count = ParereVerificaVAS.objects.filter(
@@ -364,15 +364,23 @@ class InvioPareriVerificaVAS(graphene.Mutation):
 
             _tutti_pareri_inviati = True
             for _sca in SoggettoOperante.get_by_qualifica(_piano, Qualifica.SCA):
-
                 # controlliamo che per ogni ufficio SCA assegnato come SO, almeno un assegnatario abbia inviato parere
-                # TODO: controllare anche i token
+
                 assegnatari = Assegnatario.objects.filter(qualifica_ufficio=_sca.qualifica_ufficio)
                 users = [a.utente for a in assegnatari]
                 _pareri_vas_exists = ParereVerificaVAS.objects.filter(
                     procedura_vas=_procedura_vas,
                     user__in=users,
                 ).exists()
+
+                if not _pareri_vas_exists:
+                    deleghe = Delega.objects.filter(delegante=_sca)
+                    users = [d.token.user for d in deleghe]
+                    _pareri_vas_exists = ParereVerificaVAS.objects.filter(
+                         procedura_vas=_procedura_vas,
+                         user__in=users,
+                    ).exists()
+
                 if not _pareri_vas_exists:
                     _tutti_pareri_inviati = False
                     break
@@ -454,15 +462,13 @@ class AssoggettamentoVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
-        # _role = info.context.session['role'] if 'role' in info.context.session else None
-        # _token = info.context.session['token'] if 'token' in info.context.session else None
-        # _organization = _piano.ente
 
-        if not auth.is_soggetto_operante(info.context.user, _piano, Qualifica.AC):
-            return GraphQLError("Forbidden - Azione non permessa", code=403)
-        # if info.context.user and \
-        #         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-        #         rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _organization), 'AC'):
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             _pareri_verifica_vas = _piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_verifica_vas)
 
@@ -495,6 +501,10 @@ class CreateConsultazioneVAS(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         _piano = Piano.objects.get(codice=input['codice_piano'])
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
         _procedura_vas = ProceduraVAS.objects.get(piano=_piano)
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
@@ -535,6 +545,10 @@ class UpdateConsultazioneVAS(relay.ClientIDMutation):
         _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
         _consultazione_vas_data = input.get('consultazione_vas')
         _piano = _consultazione_vas.procedura_vas.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -591,6 +605,10 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
         _procedura_vas = _consultazione_vas.procedura_vas
         _piano = _procedura_vas.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -656,7 +674,7 @@ class InvioPareriVAS(graphene.Mutation):
             chiudi_azione(_pareri_sca)
 
             # TODO blocco if da rivedere
-            if  (_avvio_consultazioni_sca or
+            if (_avvio_consultazioni_sca or
                   ((_avvio_consultazioni_sca_list.count() == 1 and
                         procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO) or
                    (_avvio_consultazioni_sca_list.count() == 1 and
@@ -704,6 +722,10 @@ class InvioPareriVAS(graphene.Mutation):
             .order_by('data_creazione')\
             .first()
         _piano = _procedura_vas.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -820,6 +842,10 @@ class AvvioEsamePareriSCA(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente
@@ -882,6 +908,10 @@ class UploadElaboratiVAS(graphene.Mutation):
     def mutate(cls, root, info, **input):
         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
         _role = info.context.session['role'] if 'role' in info.context.session else None
         _token = info.context.session['token'] if 'token' in info.context.session else None
         _organization = _piano.ente

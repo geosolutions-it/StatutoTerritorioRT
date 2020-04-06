@@ -597,7 +597,22 @@ class SoggettoOperanteFilter(django_filters.FilterSet):
             return queryset.filter(qualifica_ufficio__qualifica=val)
 
 
+class DelegaNode(DjangoObjectType):
+
+    key = graphene.Boolean()
+    utente = graphene.Field(UtenteNode)
+    expires = graphene.DateTime()
+    url = graphene.String()
+
+
+    class Meta:
+        model = Delega
+
+
 class SoggettoOperanteNode(DjangoObjectType):
+
+    delegabile = graphene.Boolean()
+    deleghe = graphene.List(DelegaNode)
 
     class Meta:
         model = SoggettoOperante

@@ -13,7 +13,7 @@ from django import forms
 from django.forms import ModelChoiceField
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import (Utente, Ente, Ufficio, QualificaUfficio, Assegnatario)
+from .models import (Utente, Ente, Ufficio, QualificaUfficio, Assegnatario, Token)
 from django.utils.translation import gettext_lazy as _
 
 
@@ -100,4 +100,14 @@ class UtenteAdmin(UserAdmin):
     search_fields = ('fiscal_code', 'first_name', 'last_name', 'email')
     ordering = ('fiscal_code',)
 
+
+@admin.register(Token)
+class TokenAdmin(admin.ModelAdmin):
+    list_display = ('key', 'view_user', 'expires')
+    search_fields = ('key', 'user', 'expires')
+    # list_filter = ('key', 'user', 'expires')
+
+    def view_user(self, obj):
+        return obj.user
+    view_user.empty_value_display = '== Non assegnato =='
 

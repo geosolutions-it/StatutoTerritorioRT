@@ -179,6 +179,8 @@ class Mutation(object):
     delete_piano = piano.DeletePiano.Field()
     promozione_piano = piano.PromozionePiano.Field()
 
+    crea_delega = piano.CreaDelega.Field()
+
     # create_procedura_vas = vas.CreateProceduraVAS.Field()
     update_procedura_vas = vas.UpdateProceduraVAS.Field()
     invio_pareri_verifica_vas = vas.InvioPareriVerificaVAS.Field()

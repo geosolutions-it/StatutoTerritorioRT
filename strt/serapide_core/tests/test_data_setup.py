@@ -109,6 +109,7 @@ class DataLoader:
     FC_AC1     =  'ACACAC22A15E715G'
     FC_SCA1    =  'SKASKA22A15E715G'
     FC_PIAN    =  'PIANRT22A15E715G'
+    FC_DELEGATO = 'DELGAT22A15E715G'
 
     utenti = [
         {
@@ -148,6 +149,11 @@ class DataLoader:
             'first_name': 'Pino',
             'last_name': 'Piano',
             'fiscal_code': FC_PIAN
+        },
+        {
+            'first_name': 'Dele',
+            'last_name': 'Gato',
+            'fiscal_code': FC_DELEGATO
         },
     ]
 
@@ -226,7 +232,6 @@ class DataLoader:
         for u in utenti:
             logger.warning("UTENTE: {}".format(u))
 
-
         for cf, profilo, ipa in cls.profili_to_store:
             pu = ProfiloUtente()
             pu.utente = cls.utenti_stored[cf]
@@ -254,7 +259,6 @@ class DataLoader:
                     ass.save()
                     logger.warning("STORED ASSEGNATARIO: {} id:{}".format(ass, ass.id))
 
-
         prof_loaded = ProfiloUtente.objects.all()
         for a in prof_loaded:
             logger.warning("LOADED PU: {} : id:{}".format(a, a.id))
@@ -267,5 +271,3 @@ class DataLoader:
             .filter(utente__fiscal_code=cls.FC_RUP_RESP)
         for a in assegnatari:
             logger.warning("LOADED ASSEGNATARIO: {} : id:{}".format(a, a.id))
-
-
