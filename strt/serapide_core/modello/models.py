@@ -502,6 +502,7 @@ class Delega(models.Model):
 
     class Meta:
         db_table = "strt_core_delega"
+        verbose_name_plural = 'Deleghe'
 
 
     def is_expired(self):
