@@ -320,71 +320,12 @@ class UpdatePiano(relay.ClientIDMutation):
     errors = graphene.List(graphene.String)
     piano_aggiornato = graphene.Field(types.PianoNode)
 
-    # @staticmethod
-    # def get_role(contact, actor):
-    #
-    #     _new_role = Ruolo.objects.filter(
-    #         qualifica=actor,
-    #         utente=contact.user,
-    #         ente=contact.ente
-    #     ).first()
-    #
-    #     if not _new_role:
-    #         _new_role_type, created = Ruolo.objects.get_or_create(
-    #             code=settings.TEMP_USER_CODE,
-    #             organization_type=contact.ente.type
-    #         )
-    #
-    #         _new_role_name = '%s-%s-%s' % (contact.user.fiscal_code,
-    #                                        contact.ente.code,
-    #                                        actor)
-    #         _new_role, created = Ruolo.objects.get_or_create(
-    #             nome=_new_role_name,
-    #             qualifica=actor,
-    #             description='%s - %s' % (_new_role_type.description, contact.ente.name),
-    #             utente=contact.user,
-    #             ente=contact.ente,
-    #             type=_new_role_type
-    #         )
-    #     return _new_role
-
     @staticmethod
     def make_token_expiration(days=365):
         _expire_days = getattr(settings, 'TOKEN_EXPIRE_DAYS', days)
         _expire_time = datetime.datetime.now(timezone.get_current_timezone())
         _expire_delta = datetime.timedelta(days=_expire_days)
         return _expire_time + _expire_delta
-
-    # @staticmethod
-    # def get_or_create_token(user, piano, role):
-    #     _allowed_tokens = Delega.objects.filter(user=user, membership=role)
-    #     _auth_token = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
-    #     if not _auth_token:
-    #         _token_key = Delega.generate_key()
-    #         _new_token, created = Delega.objects.get_or_create(
-    #             key=_token_key,
-    #             defaults={
-    #                 'user': user,
-    #                 'membership': role,
-    #                 'expires': UpdatePiano.make_token_expiration()
-    #             }
-    #         )
-    #
-    #         _auth_token, created = PianoAuthTokens.objects.get_or_create(
-    #             piano=piano,
-    #             token=_new_token
-    #         )
-    #
-    #         _new_token.save()
-    #         _auth_token.save()
-
-    # @staticmethod
-    # def delete_token(user, piano):
-    #     _allowed_tokens = Delega.objects.filter(user=user)
-    #     _auth_tokens = PianoAuthTokens.objects.filter(piano=piano, token__in=_allowed_tokens)
-    #     for _at in _auth_tokens:
-    #         _at.token.delete()
-    #     _auth_tokens.delete()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -476,8 +417,11 @@ class UpdatePiano(relay.ClientIDMutation):
                         if so.qualifica_ufficio.qualifica in [Qualifica.AC, Qualifica.SCA]:
                             return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
 
-                ## remove all SO left in the old_so_dict since they are not in the input list
+                # remove all SO left in the old_so_dict since they are not in the input list
                 for so in old_so_dict.values():
+                    for d in Delega.objects.filter(delegante=so):
+                        d.token.delete()
+                        d.delete()
                     so.delete()
 
                 # create new SO

@@ -3,25 +3,25 @@ import logging
 import json
 import os
 import datetime
-from ast import dump
-from contextlib import redirect_stderr
-from functools import partial
 
 from django.test import TestCase, Client
 
 from serapide_core.modello.enums import (
     TipoRisorsa,
     TipologiaVAS,
-    TipologiaCopianificazione,
-    Fase,
+)
+
+from serapide_core.modello.models import (
+    Delega,
 )
 
 from strt_users.enums import (
     Qualifica,
 )
+from strt_users.models import Token
 
 from .test_data_setup import DataLoader
-from .test_serapide_abs import AbstractSerapideTest, dump_result
+
 from .test_serapide_proc import AbstractSerapideProcsTest
 
 logger = logging.getLogger(__name__)
@@ -35,6 +35,7 @@ def _get_datetime(**argw_delta):
     if argw_delta:
         date = date + datetime.timedelta(**argw_delta)
     return date
+
 
 def _get_date(**argw_delta):
     date = _get_datetime(**argw_delta)
@@ -86,6 +87,15 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_LU][DataLoader.UFF1].uuid.__str__(),
             'qualifica': Qualifica.SCA.name})
 
+        # Crea Delega
+        client_delega = Client()
+        self.assertTrue(client_delega.login(username=DataLoader.FC_DELEGATO, password='42'), "Error in login - DELEGATO")
+        key = self.get_delega(self.codice_piano, Qualifica.SCA, 'CREA DELEGA SCA by RESP')
+        self.bind_delega(client_delega, key)
+
+        self.assertEqual(1, Token.objects.all().count(), 'Missing token')
+        self.assertEqual(1, Delega.objects.all().count(), 'Missing delega')
+
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
 
         # ===  CONTROLLA LISTA SOGGETTI
@@ -111,6 +121,9 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
             'qualifica': Qualifica.AC.name})
 
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
+
+        self.assertEqual(0, Token.objects.all().count(), 'Token non eliminato')
+        self.assertEqual(0, Delega.objects.all().count(), 'Delega non eliminata')
 
         response = self.sendCNV('900_get_piani.query', 'GET PIANO', self.codice_piano)
         content = json.loads(response.content)

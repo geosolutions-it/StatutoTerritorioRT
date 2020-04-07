@@ -3,9 +3,6 @@ import logging
 import json
 import os
 import datetime
-from ast import dump
-from contextlib import redirect_stderr
-from functools import partial
 
 from django.test import TestCase, Client
 
@@ -16,8 +13,16 @@ from serapide_core.modello.enums import (
     Fase,
 )
 
+from serapide_core.modello.models import (
+    Delega,
+)
+
 from strt_users.enums import (
     Qualifica,
+)
+
+from strt_users.models import (
+    Token
 )
 
 from .test_data_setup import DataLoader
@@ -92,7 +97,12 @@ class DeletePianoTest(AbstractSerapideProcsTest):
         self.assertTrue(client.login(username=DataLoader.FC_DELEGATO, password='42'), "Error in login - DELEGATO")
         key = self.get_delega(self.codice_piano, Qualifica.GC, 'CREA DELEGA GC by RESP')
         self.bind_delega(client, key)
+        self.assertEqual(1, Token.objects.all().count(), 'Token non creato')
+        self.assertEqual(1, Delega.objects.all().count(), 'Delega non creata')
 
         self.sendCNV('001d_delete_piano.query', 'DELETE PIANO', self.codice_piano,
                      client=self.client_sca, expected_code=403)
         self.sendCNV('001d_delete_piano.query', 'DELETE PIANO', self.codice_piano)
+
+        self.assertEqual(0, Token.objects.all().count(), 'Token non eliminato')
+        self.assertEqual(0, Delega.objects.all().count(), 'Delega non eliminata')
