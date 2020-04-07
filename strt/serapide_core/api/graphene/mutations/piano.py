@@ -519,11 +519,10 @@ class DeletePiano(graphene.Mutation):
         _id = input['codice_piano']
         try:
             _piano = Piano.objects.get(codice=_id)
-            # if rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-            # rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
             if ProfiloUtente.objects\
                     .filter(utente=info.context.user, profilo=Profilo.ADMIN_ENTE, ente=_piano.ente)\
                     .exists():
+                logger.warning("Eliminazione Piano {}".format(_piano))
                 _piano.delete()
                 return DeletePiano(success=True, codice_piano=_id)
             else:

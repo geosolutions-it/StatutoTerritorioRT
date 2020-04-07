@@ -45,19 +45,5 @@ class FlussiDelegatiTest(FlussiTest):
         self.client_ac = client
         self.client_sca = client
 
-    def get_delega(self, codice_piano, qualifica: Qualifica, msg, client=None):
-        response = self.send('100_crea_delega.query', msg,
-                             replace_args={'codice': codice_piano, 'qualifica': qualifica.name, 'mail': 'fkame@mail'},
-                             client=client)
-
-        content = json.loads(response.content)
-        key = content['data']['creaDelega']['token']
-        return key
-
-    def bind_delega(self, client, key):
-
-        response = client.post("/serapide/?token="+key)
-
-        self.assertEqual(302, response.status_code, 'Delega binding failed')
 
 

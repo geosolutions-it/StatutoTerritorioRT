@@ -419,7 +419,6 @@ class FasePianoStorico(models.Model):
         return instance
 
 
-
 class RisorsePiano(models.Model):
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
     risorsa = models.ForeignKey(Risorsa, on_delete=models.CASCADE)
@@ -432,32 +431,14 @@ class RisorsePiano(models.Model):
 
 class SoggettoOperante(models.Model):
     """
-OLD    Puo' essere un utente o un ufficio.
-OLD    Rende disponibili: mail, ente, qualifica
     """
-    # TIPO_VAS =  'vas'
-    # TIPO_ISTITUZ = 'autorita'
-    # TIPO_ALTRI = 'altri'
-    # TIPO_SCA = 'sca'
-    # TIPO_PROPONENTE = 'proponente'
-
-    # TIPOLOGIA_REFERENTE = Choices(
-    #     (TIPO_VAS, _('autorita_competente_vas utenti')),
-    #     (TIPO_ISTITUZ, _('autorita_istituzionali piani')),
-    #     (TIPO_ALTRI, _('altri_destinatari piani')),
-    #     (TIPO_SCA, _('soggetti_sca piani')),
-    #     (TIPO_PROPONENTE, _('proponente piani')),
-    # )
 
     id = models.AutoField(
         auto_created=True, primary_key=True, serialize=False, verbose_name=_('id')
     )
 
     qualifica_ufficio = models.ForeignKey(QualificaUfficio, related_name="+", on_delete=models.CASCADE, null=True)
-    # ufficio = models.ForeignKey(Ufficio, related_name="ufficio+", on_delete=models.CASCADE, null=True)
     piano = models.ForeignKey(Piano, related_name="so+", on_delete=models.CASCADE, null=False)
-
-    # tipo = models.CharField(max_length=10, choices=TIPOLOGIA_REFERENTE, null=False)
 
     class Meta:
         db_table = "strt_core_soggettooperante"
@@ -471,7 +452,7 @@ OLD    Rende disponibili: mail, ente, qualifica
         )
 
     def get_ente(self):
-            return self.qualifica_ufficio.ufficio.ente
+        return self.qualifica_ufficio.ufficio.ente
 
     def get_qualifica(self):
         return self.qualifica_ufficio.qualifica
@@ -503,7 +484,6 @@ class Delega(models.Model):
     class Meta:
         db_table = "strt_core_delega"
         verbose_name_plural = 'Deleghe'
-
 
     def is_expired(self):
         """
@@ -554,16 +534,6 @@ class ProceduraVAS(models.Model):
     conclusa = models.BooleanField(null=False, blank=False, default=False)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseVas')
-
-    # ente = models.ForeignKey(
-    #     to=Ente,
-    #     on_delete=models.CASCADE,
-    #     verbose_name=_('ente'),
-    #     default=None,
-    #     blank=True,
-    #     null=True
-    # )
-
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     class Meta:
@@ -689,63 +659,6 @@ class ParereVAS(models.Model):
         return '{} - [{}]'.format(self.procedura_vas, self.uuid)
 
 
-# class AutoritaCompetenteVAS(models.Model):
-#     autorita_competente = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
-#     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
-#
-#     class Meta:
-#         db_table = "strt_core_autorita_competente"
-#
-#     def __str__(self):
-#         return '{} <---> {}'.format(self.piano.codice, self.autorita_competente.email)
-#
-#
-# class SoggettiSCA(models.Model):
-#     soggetto_sca = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
-#     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
-#
-#     class Meta:
-#         db_table = "strt_core_soggetti_sca"
-#
-#     def __str__(self):
-#         return '{} <---> {}'.format(self.piano.codice, self.soggetto_sca.email)
-#
-#
-# class AutoritaIstituzionali(models.Model):
-#     autorita_istituzionale = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
-#     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
-#
-#     class Meta:
-#         db_table = "strt_core_autorita_istituzionale"
-#
-#     def __str__(self):
-#         return '{} <---> {}'.format(self.piano.codice, self.autorita_istituzionale.email)
-#
-#
-# class AltriDestinatari(models.Model):
-#     altro_destinatario = models.ForeignKey(Contatto, on_delete=models.DO_NOTHING)
-#     piano = models.ForeignKey(Piano, on_delete=models.DO_NOTHING)
-#
-#     class Meta:
-#         db_table = "strt_core_altri_destinatari"
-#
-#     def __str__(self):
-#         return '{} <---> {}'.format(self.piano.codice, self.altro_destinatario.email)
-
-
-# class PianoAuthTokens(models.Model):
-#     soggetto_operante = models.ForeignKey(SoggettoOperante, on_delete=models.CASCADE)
-#     # token = models.ForeignKey(Delega, on_delete=models.CASCADE)
-#
-#     class Meta:
-#         db_table = "strt_core_piano_auth_tokens"
-#         # TODO unique_together = ('soggetto_operante', 'token')
-#
-#     def __str__(self):
-# #        return '{} <---> {}'.format(self.piano.codice, self.token.key)
-#         return '{} <---> ???'.format(self.soggetto_operante.id)
-
-
 # ############################################################################ #
 # - Avvio
 # ############################################################################ #
@@ -777,16 +690,6 @@ class ProceduraAvvio(models.Model):
     conclusa = models.BooleanField(null=False, blank=False, default=False)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAvvio')
-
-    # ente = models.ForeignKey(
-    #     to=Ente,
-    #     on_delete=models.CASCADE,
-    #     verbose_name=_('ente'),
-    #     default=None,
-    #     blank=True,
-    #     null=True
-    # )
-
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     class Meta:
@@ -826,7 +729,6 @@ class ConferenzaCopianificazione(models.Model):
     data_chiusura_conferenza = models.DateTimeField(null=True, blank=True)
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
-
     risorse = models.ManyToManyField(Risorsa, through='RisorseCopianificazione')
 
     class Meta:
@@ -875,16 +777,6 @@ class ProceduraAdozione(models.Model):
     conclusa = models.BooleanField(null=False, blank=False, default=False)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAdozione')
-
-    # ente = models.ForeignKey(
-    #     to=Ente,
-    #     on_delete=models.CASCADE,
-    #     verbose_name=_('ente'),
-    #     default=None,
-    #     blank=True,
-    #     null=True
-    # )
-
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     class Meta:
@@ -912,7 +804,6 @@ class PianoControdedotto(models.Model):
     )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
-
     risorse = models.ManyToManyField(Risorsa, through='RisorsePianoControdedotto')
 
     class Meta:
@@ -940,7 +831,6 @@ class PianoRevPostCP(models.Model):
     )
 
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
-
     risorse = models.ManyToManyField(Risorsa, through='RisorsePianoRevPostCP')
 
     class Meta:
@@ -1009,16 +899,6 @@ class ProceduraAdozioneVAS(models.Model):
     conclusa = models.BooleanField(null=False, blank=False, default=False)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseAdozioneVas')
-
-    # ente = models.ForeignKey(
-    #     to=Ente,
-    #     on_delete=models.CASCADE,
-    #     verbose_name=_('ente'),
-    #     default=None,
-    #     blank=True,
-    #     null=True
-    # )
-
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     class Meta:
@@ -1067,16 +947,6 @@ class ProceduraApprovazione(models.Model):
     conclusa = models.BooleanField(null=False, blank=False, default=False)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorseApprovazione')
-
-    # ente = models.ForeignKey(
-    #     to=Ente,
-    #     on_delete=models.CASCADE,
-    #     verbose_name=_('ente'),
-    #     default=None,
-    #     blank=True,
-    #     null=True
-    # )
-
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     class Meta:
@@ -1115,7 +985,6 @@ class ProceduraPubblicazione(models.Model):
     conclusa = models.BooleanField(null=False, blank=False, default=False)
 
     risorse = models.ManyToManyField(Risorsa, through='RisorsePubblicazione')
-
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     class Meta:
@@ -1148,7 +1017,7 @@ class RisorsePubblicazione(models.Model):
 
 @receiver(pre_delete, sender=Piano)
 def delete_piano_associations(sender, instance, **kwargs):
-    SoggettoOperante.objects.filter(piano=instance).delete()
+
     instance.risorse.all().delete()
     RisorsePiano.objects.filter(piano=instance).delete()
 
@@ -1191,8 +1060,11 @@ def delete_piano_associations(sender, instance, **kwargs):
     for _a in Azione.objects.filter(piano=instance):
         _a.delete()
 
-    # for _t in Token.objects.filter(piano=instance): # TODO
-    #     _t.token.delete()
+    for d in Delega.objects.filter(delegante__piano=instance):
+        d.token.delete()
+        d.delete()
+
+    SoggettoOperante.objects.filter(piano=instance).delete()
 
 
 def needsExecution(action:Azione):

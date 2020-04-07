@@ -86,6 +86,13 @@ class DeletePianoTest(AbstractSerapideProcsTest):
             'qualifica': Qualifica.SCA.name})
 
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
-        # self.sendCNV('006_promozione.query', 'PROMUOVI PIANO', self.codice_piano)
 
+        # Crea Delega
+        client = Client()
+        self.assertTrue(client.login(username=DataLoader.FC_DELEGATO, password='42'), "Error in login - DELEGATO")
+        key = self.get_delega(self.codice_piano, Qualifica.GC, 'CREA DELEGA GC by RESP')
+        self.bind_delega(client, key)
+
+        self.sendCNV('001d_delete_piano.query', 'DELETE PIANO', self.codice_piano,
+                     client=self.client_sca, expected_code=403)
         self.sendCNV('001d_delete_piano.query', 'DELETE PIANO', self.codice_piano)
