@@ -10,6 +10,8 @@
 #########################################################################
 
 import logging
+from builtins import getattr
+
 import graphene
 
 from urllib.parse import urljoin
@@ -23,7 +25,7 @@ from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
-from serapide_core.api.auth.user import is_soggetto_operante, has_qualifica
+from serapide_core.api.auth.user import is_soggetto_operante, has_qualifica, get_so, can_edit_piano
 from strt_users.enums import (
     Qualifica,
     Profilo,
@@ -156,14 +158,7 @@ class AzioneNode(DjangoObjectType):
         user = info.context.user
         piano = self.piano
 
-        if is_soggetto_operante(user, piano, qualifica_richiesta=qreq):
-            return True
-
-        if qreq == QualificaRichiesta.COMUNE:
-            if has_qualifica(user, piano.ente, Qualifica.RESP):
-                return True
-
-        return False
+        return can_edit_piano(user, piano, qreq)
 
     class Meta:
         model = Azione
@@ -393,38 +388,6 @@ class UtenteNode(DjangoObjectType):
             unread_messages.append(_t.latest_message)
         return unread_messages
 
-    # def resolve_contact_type(self, info, **args):
-    #     organization = info.context.session.get('organization', None)
-    #     token = info.context.session.get('token', None)
-    #     role = info.context.session.get('role', None)
-    #     _tipologia_contatto = None
-    #     try:
-    #         if token:
-    #             _tipologia_contatto = Contatto.tipologia_contatto(self, token=token)
-    #         elif role:
-    #             _tipologia_contatto = Contatto.tipologia_contatto(self, role=role)
-    #         elif organization:
-    #             _tipologia_contatto = Contatto.tipologia_contatto(self, organization=organization)
-    #     except Exception as e:
-    #         logger.exception(e)
-    #     return _tipologia_contatto
-
-    # def resolve_attore(self, info, **args):
-    #     organization = info.context.session.get('organization', None)
-    #     token = info.context.session.get('token', None)
-    #     role = info.context.session.get('role', None)
-    #     _attore = None
-    #     try:
-    #         if role:
-    #             _attore = Contatto.attore(self, role=role)
-    #         elif token:
-    #             _attore = Contatto.attore(self, token=token)
-    #         elif organization:
-    #             _attore = Contatto.attore(self, organization=organization)
-    #     except Exception as e:
-    #         logger.exception(e)
-    #     return _attore
-
     class Meta:
         model = Utente
         # Allow for some more advanced filtering here
@@ -466,9 +429,9 @@ class ProceduraVASNode(DjangoObjectType):
     def resolve_documento_preliminare_vas(self, info, **args):
         _risorsa = None
         if self.verifica_effettuata and \
-        self.tipologia in (TipologiaVAS.VERIFICA,
-                           TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO,
-                           TipologiaVAS.SEMPLIFICATA):
+            self.tipologia in (TipologiaVAS.VERIFICA,
+                               TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO,
+                               TipologiaVAS.SEMPLIFICATA):
             _risorsa = self.risorse.filter(tipo='documento_preliminare_vas').first()
         return _risorsa
 
@@ -599,14 +562,42 @@ class SoggettoOperanteFilter(django_filters.FilterSet):
 
 class DelegaNode(DjangoObjectType):
 
-    key = graphene.Boolean()
+    key = graphene.String()
     utente = graphene.Field(UtenteNode)
     expires = graphene.DateTime()
     url = graphene.String()
 
-
     class Meta:
         model = Delega
+        convert_choices_to_enum = False
+
+    def resolve_qualifica(self, info, **args):
+        return self.qualifica.name
+
+    @classmethod
+    def is_key_visibile(cls, delega, info):
+        utente = info.context.user
+        piano = delega.delegante.piano
+        return has_qualifica(utente, piano.ente, Qualifica.RESP) or \
+            Assegnatario.objects\
+            .filter(qualifica_ufficio=delega.delegante.qualifica_ufficio, utente=utente)\
+            .exists()
+
+    def resolve_key(self, info, **args):
+        return self.token.key if DelegaNode.is_key_visibile(self, info) else None
+
+    def resolve_utente(self, info, **args):
+        return self.token.user
+
+    def resolve_expires(self, info, **args):
+        return self.token.expires
+
+    def resolve_url(self, info, **args):
+        if not DelegaNode.is_key_visibile(self, info):
+            return None
+
+        baseurl = getattr(settings, 'SITE_URL')
+        return '{baseurl}?token={key}'.format(key=self.token.key, baseurl=baseurl)
 
 
 class SoggettoOperanteNode(DjangoObjectType):
@@ -623,7 +614,29 @@ class SoggettoOperanteNode(DjangoObjectType):
             'qualifica_ufficio'
         ]
         interfaces = (relay.Node, )
-        # filterset_class = SoggettoOperanteFilter
+
+    def resolve_deleghe(self, info, **args):
+        return Delega.objects.filter(delegante=self)
+
+        # # responsabili: tutte le deleghe visibili
+        # # operatori: solo le deleghe relative al SoggettoOperante di cui sono assegnatari
+        #
+        # utente = info.context.user
+        # piano = self.piano
+        # if has_qualifica(utente, piano.ente, Qualifica.RESP) or \
+        #    Assegnatario.objects.filter(qualifica_ufficio=self.qualifica_ufficio, utente=utente).exists():
+        #     return Delega.objects.filter(delegante=self)
+        # return None
+
+    def resolve_delegabile(self, info, **args):
+        utente = info.context.user
+        piano = self.piano
+
+        if self.qualifica_ufficio.qualifica == Qualifica.RESP:
+            return False
+
+        return has_qualifica(utente, piano.ente, Qualifica.RESP) or \
+            Assegnatario.objects.filter(qualifica_ufficio=self.qualifica_ufficio, utente=utente).exists()
 
 
 class ConsultazioneVASNode(DjangoObjectType):

@@ -495,7 +495,13 @@ class Delega(models.Model):
         return timezone.now() >= self.expires
 
     def __unicode__(self):
-        return self.key
+        return '{piano}:{qualifica}'.format(piano=self.delegante.piano.codice, qualifica=self.qualifica.name)
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(Delega, cls).from_db(db, field_names, values)
+        instance.qualifica = Qualifica.fix_enum(instance.qualifica)
+        return instance
 
 
 # ############################################################################ #
