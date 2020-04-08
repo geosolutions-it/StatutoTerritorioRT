@@ -19,9 +19,14 @@ from django.urls import reverse
 from django.contrib.auth import logout
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 
-from strt_users.enums import Profilo
+from serapide_core.api.auth.user import (
+    has_qualifica,
+    is_soggetto_operante,
+    can_access_piano,
+    is_recognizable)
+from strt_users.enums import Profilo, Qualifica
 from strt_users.models import (
-    Ente, Token,
+    Utente, Token,
     ProfiloUtente)
 from serapide_core.modello.models import (
     Delega,
@@ -31,7 +36,22 @@ from serapide_core.modello.models import (
 logger = logging.getLogger(__name__)
 
 
-def assegnaToken(token, utente, ente: Ente):
+def assegna_token(delega: Delega, utente: Utente):
+
+    logger.warning("Richiesta assegnazione Token [{}] a {}".format(delega.token, utente))
+
+    piano = delega.delegante.piano
+    ente = delega.delegante.qualifica_ufficio.ufficio.ente
+
+    if has_qualifica(utente, ente, Qualifica.RESP):
+        logger.warning("Assegnazione token rifiutata a responsabile")
+        return False, "Assegnazione token rifiutata a responsabile"
+
+    if is_soggetto_operante(utente, piano, delega.qualifica):
+        logger.warning("Assegnazione token rifiutata a utente con qualifica già assegnata")
+        return False, "Assegnazione token rifiutata a utente con qualifica già assegnata"
+
+    token = delega.token
     token.user = utente
     token.save()
 
@@ -45,6 +65,8 @@ def assegnaToken(token, utente, ente: Ente):
         )
         p.save()
 
+    return True, None
+
 
 class TokenMiddleware(object):
     """
@@ -56,6 +78,12 @@ class TokenMiddleware(object):
 
     def __call__(self, request):
         # Code to be executed for each request before the view (and later middleware) are called.
+
+        def create_redirect_piano(request, piano):
+            return HttpResponseRedirect(
+                '{request_path}/#/piano/{piano}/home'.format(
+                    request_path=request.path,
+                    piano=piano.codice))
 
         # Read token either from param or from header
         token = request.GET.get('token', None)
@@ -69,57 +97,40 @@ class TokenMiddleware(object):
 
         if token:
 
-            if not request.user.is_authenticated \
-                    or not request.user.is_active \
-                    or request.user.is_anonymous:
-
-                logger.warning("Token specificato su utente sconosciuto")
+            if not is_recognizable(request.user):
+                logger.debug("Token specificato su utente sconosciuto")
 
                 redirected = request.GET.get('redirected_by', None)
                 if not redirected == 'TokenMiddleware':  # did we just redirect this
-
                     return HttpResponseRedirect(
                         '{login_path}?next={request_path}%3Ftoken={token}&redirected_by=TokenMiddleware'.format(
                             login_path=getattr(settings, 'LOGIN_URL', '/'),
                             request_path=request.path,
                             token=token))
-                # return HttpResponseRedirect('{login_path}'.format(login_path=redirect_to))
-
-                # return redirect_to_login(request)
-
             else:
-                logger.warning("Token e utente specificati. Token [{}]".format(token))
+                logger.debug("Token e utente specificati. Token [{}]".format(token))
 
                 t: Token = Token.objects.filter(key=token).first()
                 if t:
                     if not t.is_expired():
                         utente = request.user
+                        d: Delega = Delega.objects.get(token=t)
+                        piano = d.delegante.piano
 
                         if t.user is None:
-                            d: Delega = Delega.objects.get(token=t)
-                            piano = d.delegante.piano
-                            ente = d.delegante.qualifica_ufficio.ufficio.ente
-
-                            logger.warning("Assegnazione Token [{}] a {}".format(token, utente))
-                            assegnaToken(t, utente, ente)
-
-                            return HttpResponseRedirect(
-                                '{request_path}/#/piano/{piano}/home'.format(
-                                    request_path=request.path,
-                                    piano=piano.codice))
+                            ok, err = assegna_token(d, utente)
+                            return create_redirect_piano(request, piano)
 
                         elif t.user == utente:
-                            logger.warning("Token già in uso [{}]".format(token))
-                            d: Delega = Delega.objects.get(token=t)
-
-                            piano = d.delegante.piano
-                            return HttpResponseRedirect(
-                                '{request_path}/#/piano/{piano}/home'.format(
-                                    request_path=request.path,
-                                    piano=piano.codice))
+                            logger.info("Token già in uso [{}]".format(token))
+                            return create_redirect_piano(request, piano)
 
                         else:
                             logger.warning("Token già assegnato ad altro utente [{}]".format(token))
+
+                            # se l'utente ha cmq accesso al piano, usiamo il token come semplice bookmark
+                            if can_access_piano(utente, piano):
+                                return create_redirect_piano(request, piano)
                     else:
                         logger.warning("Token expired [{}]".format(token))
                 else:
@@ -131,7 +142,6 @@ class TokenMiddleware(object):
         # ------------------------
 
         # Code to be executed for each request/response after the view is called.
-
 
         return response
 
