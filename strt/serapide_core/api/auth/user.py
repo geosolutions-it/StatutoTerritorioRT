@@ -187,77 +187,7 @@ def can_edit_piano(utente: Utente, piano: Piano, q):
     return qs.exists()
 
 
-# def is_soggetto(utente, piano:Piano):
-#     return is_soggetto_operante(utente, piano) or \
-#            is_soggetto_proponente(utente, piano) or \
-#            has_qualifica(utente, piano.ente, Qualifica.RESP)
-
-
-# @rules.predicate
-# def can_access_piano(user, piano):
-#     _has_access = any(
-#         m.organization == piano.ente
-#         for m in user.memberships
-#     )
-#
-#     if not _has_access:
-#         _tokens = Delega.objects.filter(user=user)
-#         for _t in _tokens:
-#             if not _t.is_expired():
-#                 _allowed_pianos = [_pt.piano for _pt in PianoAuthTokens.objects.filter(token__key=_t.key)]
-#                 _has_access = piano in _allowed_pianos
-#                 if _has_access:
-#                     break
-#     return _has_access
-
-
-# @rules.predicateCs
-# def is_actor_for_token(token, actor):
-#     return True
-    # _attore = None
-    # if token and \
-    # (isinstance(token, str) or isinstance(token, Delega):
-    #     token = Delega.objects.get(key=token)
-    #     _attore = Contatto.attore(token.user, token=token.key)
-    #
-    # if _attore is None:
-    #     return False
-    # else:
-    #     return (_attore.lower() == actor.lower())
-
-
-# @rules.predicate
-# def is_actor_for_role(user_info, actor):
-#     _user = user_info[0]
-#     _role = user_info[1]
-#     _attore = None
-#     if _user and \
-#     _role and not isinstance(_role, Ente):
-#         _attore = Referente.attore(_user, role=_role)
-#
-#     if _attore is None:
-#         return False
-#     else:
-#         return (_attore.lower() == actor.lower())
-
-
-# TODO
-# @rules.predicate
-# def is_actor_for_organization(user_info, actor):
-#     _user = user_info[0]
-#     _organization = user_info[1]
-#     _attore = None
-#     if _user and \
-#     _organization and isinstance(_organization, Ente):
-#         _attore = Referente.attore(_user, organization=_organization.code)
-#
-#     if _attore is None:
-#         return False
-#     else:
-#         return (_attore == actor)
-
-
-def get_piani_visibili_id(utente:Utente):
+def get_piani_visibili_id(utente: Utente):
     assegnatario = Assegnatario.objects.filter(utente=utente)
     qu_set = [a.qualifica_ufficio for a in assegnatario]
     # logger.warning("qu_set {}".format(qu_set))
@@ -279,3 +209,10 @@ def get_piani_visibili_id(utente:Utente):
 
     return id_piani
 
+
+def can_admin_delega(utente: Utente, delega: Delega):
+    piano = delega.delegante.piano
+    return has_qualifica(utente, piano.ente, Qualifica.RESP) or \
+        Assegnatario.objects\
+        .filter(qualifica_ufficio=delega.delegante.qualifica_ufficio, utente=utente)\
+        .exists()

@@ -25,7 +25,7 @@ from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
-from serapide_core.api.auth.user import is_soggetto_operante, has_qualifica, get_so, can_edit_piano
+from serapide_core.api.auth.user import is_soggetto_operante, has_qualifica, get_so, can_edit_piano, can_admin_delega
 from strt_users.enums import (
     Qualifica,
     Profilo,
@@ -574,17 +574,8 @@ class DelegaNode(DjangoObjectType):
     def resolve_qualifica(self, info, **args):
         return self.qualifica.name
 
-    @classmethod
-    def is_key_visibile(cls, delega, info):
-        utente = info.context.user
-        piano = delega.delegante.piano
-        return has_qualifica(utente, piano.ente, Qualifica.RESP) or \
-            Assegnatario.objects\
-            .filter(qualifica_ufficio=delega.delegante.qualifica_ufficio, utente=utente)\
-            .exists()
-
     def resolve_key(self, info, **args):
-        return self.token.key if DelegaNode.is_key_visibile(self, info) else None
+        return self.token.key if can_admin_delega(info.context.user, self) else None
 
     def resolve_utente(self, info, **args):
         return self.token.user
@@ -593,7 +584,7 @@ class DelegaNode(DjangoObjectType):
         return self.token.expires
 
     def resolve_url(self, info, **args):
-        if not DelegaNode.is_key_visibile(self, info):
+        if not can_admin_delega(info.context.user, self):
             return None
 
         baseurl = getattr(settings, 'SITE_URL')

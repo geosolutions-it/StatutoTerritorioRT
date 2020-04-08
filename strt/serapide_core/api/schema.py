@@ -180,6 +180,7 @@ class Mutation(object):
     promozione_piano = piano.PromozionePiano.Field()
 
     crea_delega = piano.CreaDelega.Field()
+    delete_delega = piano.DeleteDelega.Field()
 
     # create_procedura_vas = vas.CreateProceduraVAS.Field()
     update_procedura_vas = vas.UpdateProceduraVAS.Field()

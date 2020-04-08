@@ -23,7 +23,7 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
-from serapide_core.api.auth.user import get_assegnamenti
+from serapide_core.api.auth.user import get_assegnamenti, can_admin_delega
 from strt_users.enums import Profilo
 from strt_users.models import (
     Ente, Ufficio,
@@ -592,6 +592,44 @@ class CreaDelega(graphene.Mutation):
                 token = token.key,
                 errors=[]
             )
+
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+
+
+class DeleteDelega(graphene.Mutation):
+
+    class Arguments:
+        token = graphene.String()
+
+    errors = graphene.List(graphene.String)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+
+        try:
+            key = input['token']
+            token: Token = Token.objects.get(key=key)
+            delega: Delega = Delega.objects.get(token=token)
+            piano = delega.delegante.piano
+
+            if not auth.can_access_piano(info.context.user, piano):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+            if not can_admin_delega(info.context.user, delega):
+                return GraphQLError("Forbidden - Utente non abilitato ad editare questa delega", code=403)
+
+            delega.token.delete()
+            delega.delete()
+
+            return DeleteDelega(
+                errors=[]
+            )
+
+        except (Token.DoesNotExist, Delega.DoesNotExist) as e:
+            return GraphQLError(e, code=404)
 
         except BaseException as e:
             tb = traceback.format_exc()

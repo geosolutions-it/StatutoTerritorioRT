@@ -200,3 +200,10 @@ class DelegaTest(AbstractSerapideProcsTest):
                 self.assertIsNotNone(deleghe[0]['utente'])
             else:
                 self.assertEqual(0, len(deleghe))
+
+        self.sendCNV('101_delete_delega.query', 'DELETE_DELEGA', key_sca, client=self.client_pian, expected_code=403)
+        self.sendCNV('101_delete_delega.query', 'DELETE_DELEGA', 'xxx', expected_code=404)
+
+        self.sendCNV('101_delete_delega.query', 'DELETE_DELEGA', key_sca)
+        self.assertEqual(1, Token.objects.all().count(), 'Token non eliminato')
+        self.assertEqual(1, Delega.objects.all().count(), 'Delega non eliminato')

@@ -1,0 +1,11 @@
+{
+   "operationName" : "DeleteDelega",
+
+   "variables" : {
+         "token" : "{codice}"
+   },
+
+   "query" : "mutation DeleteDelega($token: String!) {
+        deleteDelega(token: $token) { errors}
+   }"
+}
