@@ -680,6 +680,7 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
             _tutti_pareri_inviati = True
             for _so_sca in SoggettoOperante.get_by_qualifica(_piano, Qualifica.SCA):
                 ass = Assegnatario.objects.filter(qualifica_ufficio=_so_sca.qualifica_ufficio)
+                # todo aggiungi token
                 utenti_sca = [a.utente for a in ass]
                 _parere_sent = ParereAdozioneVAS.objects\
                     .filter(
@@ -694,7 +695,6 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
                          procedura_adozione=_procedura_adozione,
                          user__in=users,
                     ).exists()
-
 
                 if not _parere_sent:
                     _tutti_pareri_inviati = False

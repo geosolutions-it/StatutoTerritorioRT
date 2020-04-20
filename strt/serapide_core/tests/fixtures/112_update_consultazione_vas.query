@@ -1,0 +1,73 @@
+{
+  "operationName": "UpdateConsultazioneVas",
+
+  "variables": {
+    "input": {
+      "consultazioneVas": {
+        "{nome_campo}" : "{valore_campo}"
+
+      },
+      "uuid": "{codice}"
+    }
+  },
+
+  "query": "mutation UpdateConsultazioneVas($input: UpdateConsultazioneVASInput!) {
+  updateConsultazioneVas(input: $input) {
+    consultazioneVasAggiornata {
+      ...ConsultazioneVAS
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment ConsultazioneVAS on ConsultazioneVASNode {
+  uuid
+  avvioConsultazioniSca
+  dataCreazione
+  dataScadenza
+  dataAvvioConsultazioniSca
+  dataRicezionePareri
+  proceduraVas {
+    uuid
+    tipologia
+    dataAssoggettamento
+    risorse(archiviata: false) {
+      ...Risorse
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+  __typename
+}
+"
+}

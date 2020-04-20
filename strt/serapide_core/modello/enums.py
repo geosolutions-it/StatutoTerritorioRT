@@ -50,6 +50,7 @@ class TipoRisorsa(SerapideEnum):
     PARERE_VERIFICA_VAS = 'parere_verifica_vas'
     PARERE_SCA = 'parere_sca'
     PROVVEDIMENTO_VERIFICA_VAS = 'provvedimento_verifica_vas'
+    DOCUMENTO_PRELIMINARE_VAS = 'documento_preliminare_vas'
 
     # avvio
     OBIETTIVI_PIANO = 'obiettivi_piano'

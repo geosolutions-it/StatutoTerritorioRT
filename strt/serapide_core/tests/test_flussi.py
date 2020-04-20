@@ -123,7 +123,6 @@ class FlussiTest(AbstractSerapideProcsTest):
 
         self.check_fase(Fase.APPROVAZIONE)
 
-
     def test_flow_vasverificanoass_ccsiirno_form(self):
 
         self.do_login()
@@ -155,9 +154,43 @@ class FlussiTest(AbstractSerapideProcsTest):
 
         self.pubblicazione()
 
-
-
-
         # {"operationName":"AdozioneUploadFile","variables":{"file":null,"codice":"865c0650-1f35-436f-ae00-3995a1128a97","tipo":"osservazioni_privati"}
 
+    def test_flow_vasprocedimento(self):
+
+        self.do_login()
+        self.create_piano_and_promote(TipologiaVAS.PROCEDIMENTO)  # Promozione effettuata DRAFT --> ANAGRAFICA
+        self.avvio_piano(TipologiaCopianificazione.NON_NECESSARIA)
+
+        self.vas_procedimento()
+
+        self.contributi_tecnici()
+        self.copianificazione(TipologiaCopianificazione.NON_NECESSARIA, False)
+
+        self.genio_civile()
+
+        self.check_fase(Fase.ANAGRAFICA)
+
+        self.formazione_piano()
+
+        self.check_fase(Fase.AVVIO)
+
+    def test_flow_vasprocedimento_autoclose(self):
+
+        self.do_login()
+        self.create_piano_and_promote(TipologiaVAS.PROCEDIMENTO)  # Promozione effettuata DRAFT --> ANAGRAFICA
+        self.avvio_piano(TipologiaCopianificazione.NON_NECESSARIA)
+
+        self.contributi_tecnici()
+        self.copianificazione(TipologiaCopianificazione.NON_NECESSARIA, False)
+
+        self.genio_civile()
+
+        self.formazione_piano()
+
+        self.check_fase(Fase.ANAGRAFICA)
+
+        self.vas_procedimento()
+
+        self.check_fase(Fase.AVVIO)
 

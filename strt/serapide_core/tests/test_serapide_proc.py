@@ -4,7 +4,6 @@ import json
 import os
 import datetime
 
-
 from django.test import TestCase, Client
 
 from serapide_core.modello.enums import (
@@ -12,6 +11,10 @@ from serapide_core.modello.enums import (
     TipologiaVAS,
     TipologiaCopianificazione,
     Fase,
+    TIPOLOGIA_AZIONE,
+)
+from serapide_core.modello.models import (
+    Piano,
 )
 
 from strt_users.enums import (
@@ -149,6 +152,47 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         content = json.loads(response.content)
         vas_conclusa = content['data']['modello']['edges'][0]['node']['conclusa']
         self.assertTrue(vas_conclusa, 'VAS non conclusa')
+
+    def vas_procedimento(self):
+        # AC
+        response = self.sendCNV('110_consultazioni_vas.query', 'GET CONSULTAZIONI VAS', self.codice_piano, client=self.client_ac)
+        response = self.sendCNV('111_crea_consultazione.query', 'CREA CONSULTAZIONE VAS', self.codice_piano, client=self.client_ac)
+        content = json.loads(response.content)
+        codice_consultazione = content['data']['createConsultazioneVas']['nuovaConsultazioneVas']['uuid']
+
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS, client=self.client_ac)
+
+        self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True, client=self.client_ac)
+
+        # AC avvio_consultazioni_vas
+        self.sendCNV('113_avvio_consultazioni_vas.query', 'AVVIO CONSULTAZIONE VAS -- AC', codice_consultazione, client=self.client_ac)
+
+        # SCA
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca)
+
+        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #1", self.codice_vas,  expected_code=403)
+        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #1", self.codice_vas, client=self.client_sca)
+
+        # # COMUNE
+        self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True)
+        self.sendCNV('113_avvio_consultazioni_vas.query', 'AVVIO CONSULTAZIONE VAS - bad', codice_consultazione, client=self.client_ac, expected_code=403)
+        self.sendCNV('113_avvio_consultazioni_vas.query', 'AVVIO CONSULTAZIONE VAS -- OPCOM', codice_consultazione)
+
+        # # SCA
+        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #2", self.codice_vas,  expected_code=403)
+        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #2", self.codice_vas, client=self.client_sca)
+
+        piano = Piano.objects.get(codice=self.codice_piano)
+        self.assertIsNotNone(piano)
+        self.assertIsNotNone(piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_esame_pareri_sca))
+
+        self.vas_avvio_esame_pareri()
+
+    def vas_avvio_esame_pareri(self):
+        """ chiamato sia alla fine di PROCEDIMENTO che alla fine di SEMPLIFICATA con ASSOGGETTAMENTO"""
+        self.sendCNV('115_avvio_esame_pareri.query', "INVIO ESAME PARERI", self.codice_vas)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.RAPPORTO_AMBIENTALE)
+        self.sendCNV('116_upload_elaborati_vas.query', "UPLOAD ELBORATI VAS", self.codice_vas)
 
     def contributi_tecnici(self):
         self.sendCNV('902_get_avvio.query', 'GET AVVIO', self.codice_piano)

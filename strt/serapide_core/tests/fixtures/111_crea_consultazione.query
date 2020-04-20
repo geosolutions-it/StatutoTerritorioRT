@@ -1,0 +1,57 @@
+{
+  "operationName": "CreaConsultazione",
+  "variables": {
+    "input": {
+      "codicePiano": "{codice}"
+    }
+  },
+  "query": "mutation CreaConsultazione($input: CreateConsultazioneVASInput!) {
+  createConsultazioneVas(input: $input) {
+    nuovaConsultazioneVas {
+      ...ConsultazioneVAS
+    }
+  }
+}
+
+fragment ConsultazioneVAS on ConsultazioneVASNode {
+  uuid
+  avvioConsultazioniSca
+  dataCreazione
+  dataScadenza
+  dataAvvioConsultazioniSca
+  dataRicezionePareri
+  proceduraVas {
+    uuid
+    tipologia
+    dataAssoggettamento
+    risorse(archiviata: false) {
+      ...Risorse
+    }
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+  }
+  label
+  tooltip
+}
+"
+}

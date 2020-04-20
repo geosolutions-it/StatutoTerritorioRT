@@ -192,7 +192,7 @@ def get_piani_visibili_id(utente: Utente):
     qu_set = [a.qualifica_ufficio for a in assegnatario]
     # logger.warning("qu_set {}".format(qu_set))
 
-    qs =  SoggettoOperante.objects. \
+    qs = SoggettoOperante.objects. \
         filter(qualifica_ufficio__in=qu_set)
 
     # piani per i quali l'utente è soggetto operante
@@ -200,7 +200,7 @@ def get_piani_visibili_id(utente: Utente):
 
     # piani per i quali enti l'utente è RESP
     ass_resp = Assegnatario.objects.filter(utente=utente, qualifica_ufficio__qualifica=Qualifica.RESP)
-    enti_resp = { ass.qualifica_ufficio.ufficio.ente for ass in ass_resp}
+    enti_resp = {ass.qualifica_ufficio.ufficio.ente for ass in ass_resp}
     piani_resp = Piano.objects.filter(ente__in=enti_resp)
     id_piani |= {p.id for p in piani_resp}
 

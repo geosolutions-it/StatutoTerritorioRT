@@ -1,0 +1,57 @@
+{
+  "operationName": "ConsultazioniVas",
+  "variables": {
+    "codice": "{codice}"
+  },
+  "query": "query ConsultazioniVas($codice: String) {
+  modello: consultazioneVas(proceduraVas_Piano_Codice: $codice) {
+    edges {
+      node {
+        ...ConsultazioneVAS
+      }
+    }
+  }
+}
+
+fragment ConsultazioneVAS on ConsultazioneVASNode {
+  uuid
+  avvioConsultazioniSca
+  dataCreazione
+  dataScadenza
+  dataAvvioConsultazioniSca
+  dataRicezionePareri
+  proceduraVas {
+    uuid
+    tipologia
+    dataAssoggettamento
+    risorse(archiviata: false) {
+      ...Risorse
+    }
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+  }
+  label
+  tooltip
+}
+"
+}
