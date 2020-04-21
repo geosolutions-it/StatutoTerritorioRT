@@ -28,7 +28,11 @@
     font-size: 0.8rem;
 }
 @at-root .brand-text {
-    font-size: 1.2rem;
+    font-size: 1.0rem;
+}
+@at-root .navbar-brand {
+    margin-right: 0px;
+    font-size: 1.0rem;
 }
 .user-navbar {
     height: $portal-header !important;

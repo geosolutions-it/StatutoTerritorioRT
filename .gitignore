@@ -115,3 +115,7 @@ local.env
 
 # Wagtail
 #media/
+
+#Geoportale
+strt/strt_geoportale/client/web/client/libs/Cesium
+strt/strt_geoportale/client/static

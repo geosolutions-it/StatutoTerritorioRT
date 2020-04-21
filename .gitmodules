@@ -1,0 +1,3 @@
+[submodule "strt/strt_geoportale/client/MapStore2"]
+	path = strt/strt_geoportale/client/MapStore2
+	url = https://github.com/geosolutions-it/MapStore2.git
