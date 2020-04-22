@@ -21,6 +21,7 @@ from django.utils.translation import gettext_lazy as _
 # ############################################################################ #
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
 REACT_APP_DIR = os.path.join(BASE_DIR, 'serapide_client') # serapide-client
+GEOPORTALE_REACT_APP_DIR = os.path.join(BASE_DIR, 'strt_geoportale', 'client') # serapide-client
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -275,7 +276,10 @@ STATIC_ROOT = EnvUtil.get_env_var(
 )
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    os.path.join(os.path.join(REACT_APP_DIR, 'build'), 'static')  # serapide-client
+    os.path.join(os.path.join(REACT_APP_DIR, 'build'), 'static'),  # serapide-client
+    os.path.join(GEOPORTALE_REACT_APP_DIR, 'MapStore2', 'web', 'client', 'translations'),  # geoportale-client
+    os.path.join(GEOPORTALE_REACT_APP_DIR, 'static'),  # geoportale-client config files
+    os.path.join(GEOPORTALE_REACT_APP_DIR, 'dist'),  # geoportale-client build
 ]
 
 # Media
@@ -331,7 +335,7 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d '
                       '%(thread)d %(message)s'
         },
-        'avg0': {
+         'avg0': {
             'format': '%(levelname)s %(asctime)s %(message)s'
         },
         'simple': {

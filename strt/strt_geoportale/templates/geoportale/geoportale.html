@@ -1,5 +1,156 @@
-{% extends "strt_portal/page_top_menu.html" %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    {% load static %}
+    {% load i18n %}
 
-{% load static %}
-{% load i18n %}
-{% block head_title %}{{ block.super }} - {% trans 'Geoportale' %}{% endblock head_title %}
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block head_title %}Statuto Territorio RT {% trans 'Geoportale' %} {% endblock head_title %}</title>
+        <link href="{% static 'fonts/icon.css' %}"rel="stylesheet">
+        <!-- CSS -->
+        <link rel="stylesheet" href="{% static 'css/serapide.css' %}"/>
+        <style>
+            body {
+                margin: 0;
+            }
+            ._ms2_init_center {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                overflow: show;
+                margin: auto;
+                display: flex;
+                align-items: center;
+            }
+            ._ms2_init_spinner {
+                height: 176px;
+                width: 176px;
+            }
+            ._ms2_init_spinner > div,
+            ._ms2_init_spinner > div:after {
+              border-radius: 50%;
+              width: 176px;
+              height: 176px;
+            }
+            ._ms2_init_spinner > div {
+                box-sizing: border-box;
+                text-indent: -9999em;
+                border: 16px solid rgba(119,119,119, 0.2);
+                border-left: 16px solid #777777;
+                -webkit-transform: translateZ(0);
+                -ms-transform: translateZ(0);
+                transform: translateZ(0);
+                -webkit-animation: _ms2_init_anim 1.1s infinite linear;
+                animation: _ms2_init_anim 1.1s infinite linear;
+            }
+            @-webkit-keyframes _ms2_init_anim {
+              0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+              }
+            }
+            @keyframes _ms2_init_anim {
+              0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+              }
+            }
+            ._ms2_init_text {
+                -webkit-animation: _ms2_init_text_anim 2s linear 0s infinite normal;
+                animation: _ms2_init_text_anim 2s linear 0s infinite normal;
+                color: #6F6F6f;
+                font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+                font-size: 20px;
+                font-weight: bold;
+                height: 0.75em;
+                width:  6em;
+                text-align: center;
+                margin: auto;
+                z-index: 1000;
+            }
+            @keyframes _ms2_init_text_anim {
+                0%  {opacity: 0}
+                20% {opacity: 0}
+                50% {opacity: 1}
+                70% {opacity: .75}
+                100%{opacity: 0}
+            }
+            </style>
+    </head>
+    <body>
+        <!-- CONTAINER-FLUID -->
+        <div class="container-fluid p-0" >
+
+            <!-- TOP-NAVBAR -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark
+                        sticky-top pl-0 py-0 top-navbar">
+
+                    <!-- BRAND -->
+                    <a class="navbar-brand p-0 d-inline-block" href="/">
+                        <div class="d-inline-block pr-lg-3">
+                            <img src="{% static 'img/RT_logo.png' %}" alt="RT Logo"
+                                class="d-inline-block img-fluid rt-logo p-0">
+                            <span class="d-none d-xl-inline-block pl-2 brand-text">
+                                {% trans 'Regione Toscana' %}
+                            </span>
+                        </div>
+                        <div class="d-inline-block border-left border-white px-2 px-lg-4">
+                            <img src="{% static 'img/RT_logo_governo.png' %}" alt="RT Logo Governo"
+                                class="d-inline-block img-fluid rt-logo-gov p-0">
+                            <span class="d-none d-lg-inline-block pl-2 brand-text">
+                                {% trans 'Governo del Territorio' %}
+                            </span>
+                        </div>
+                    </a><!-- end BRAND -->
+
+                {% block top_navbar_items %}
+                    {% include "strt_portal/navbar_menu.html" with text_color='white' bg_color='dark' %}
+                {% endblock top_navbar_items %}
+
+            </nav><!-- end TOP-NAVBAR -->
+
+    
+            <div id="geoportale" >
+                <div id="container" style="height: calc(100% - 70px);">
+                    <div class="_ms2_init_spinner _ms2_init_center"><div></div></div>
+                    <div class="_ms2_init_text _ms2_init_center">Loading MapStore</div>
+            
+                </div>
+            </div>
+
+
+
+        </div> <!-- end CONTAINER-FLUID -->
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    
+        
+
+        <script>
+
+            if ($('.serapide').length > 0) {
+                $('.content').css('padding-top', '70px');
+            }
+            if ($('#home').length > 0) {
+                $('.content').css('padding', '0px');
+                $('.content').css('padding-top', '70px');
+            }
+
+        </script>
+        <script src="{% static 'Geoportale.js' %}"></script>
+        
+
+    </body>
+
+</html>
