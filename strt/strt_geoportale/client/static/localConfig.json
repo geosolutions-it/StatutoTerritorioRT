@@ -11,7 +11,7 @@
           "https://gs-stable.geo-solutions.it:443/geoserver"
         ]
     },
-    "geoStoreUrl": "rest/geostore/",
+    "geoStoreUrl": "./",
     "mailingList": "https://groups.google.com/forum/#!forum/mapstore-users",
     "printUrl": "pdf/info.json",
     "bingApiKey": "AhuXBu7ipR1gNbBfXhtUAyCZ6rkC5PkWpxs2MnMRZ1ZupxQfivjLCch22ozKSCAn",

@@ -1,0 +1,19 @@
+{
+    "success": true,
+    "totalCount": 1,
+    "results": [
+        {
+            "canDelete": false,
+            "canEdit": false,
+            "canCopy": true,
+            "creation": "2020-02-29 16:15:01.964",
+            "lastUpdate": "2020-03-29 14:48:39.418",
+            "description": "Piano operativo del comune di Scandicci",
+            "id": 0,
+            "name": "Piano operativo Scandicci",
+            "owner": "geosolutions",
+            "details": "NODATA",
+            "thumbnail": "/static/Thumb.0.jpeg"
+        }        
+    ]
+}
