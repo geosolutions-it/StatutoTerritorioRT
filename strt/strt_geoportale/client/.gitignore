@@ -1,12 +1,10 @@
 node_modules/
-libs/Cesium/
-dist/
+web/client/libs/Cesium/
 target/
 *.sublime-*
 npm-debug.log
 coverage/
 web/.classpath
 web/.project
-web/client/lib/Cesium
-backend/.classpath
-backend/.project
+
+

@@ -1,0 +1,1823 @@
+{
+  "version": 2,
+  "map": {
+    "center": {
+      "x": 12.045751367187503,
+      "y": 43.26966280764071,
+      "crs": "EPSG:4326"
+    },
+    "maxExtent": [
+      -20037508.34,
+      -20037508.34,
+      20037508.34,
+      20037508.34
+    ],
+    "projection": "EPSG:900913",
+    "units": "m",
+    "zoom": 8,
+    "mapOptions": {},
+    "layers": [
+      {
+        "id": "mapnik__0",
+        "group": "background",
+        "source": "osm",
+        "name": "mapnik",
+        "title": "Open Street Map",
+        "type": "osm",
+        "visibility": true,
+        "singleTile": false,
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "useForElevation": false,
+        "hidden": false
+      },
+      {
+        "id": "Night2012__3",
+        "group": "background",
+        "source": "nasagibs",
+        "name": "Night2012",
+        "provider": "NASAGIBS.ViirsEarthAtNight2012",
+        "title": "NASAGIBS Night 2012",
+        "type": "tileprovider",
+        "visibility": false,
+        "singleTile": false,
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "useForElevation": false,
+        "hidden": false
+      },
+      {
+        "id": "OpenTopoMap__4",
+        "group": "background",
+        "source": "OpenTopoMap",
+        "name": "OpenTopoMap",
+        "provider": "OpenTopoMap",
+        "title": "OpenTopoMap",
+        "type": "tileprovider",
+        "visibility": false,
+        "singleTile": false,
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "useForElevation": false,
+        "hidden": false
+      },
+      {
+        "id": "undefined__5",
+        "group": "background",
+        "source": "ol",
+        "title": "Empty Background",
+        "type": "empty",
+        "visibility": false,
+        "singleTile": false,
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "useForElevation": false,
+        "hidden": false
+      },
+      {
+        "id": "DBTM_DataBaseTopograficoMultiscala__42",
+        "group": "Geoscopio_DBTM",
+        "name": "DBTM_DataBaseTopograficoMultiscala",
+        "opacity": 1,
+        "description": "DBTM_DataBaseTopograficoMultiscala",
+        "title": "DBTM_DataBaseTopograficoMultiscala",
+        "type": "wms",
+        "url": "http://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "8.14065",
+            "miny": "42.101",
+            "maxx": "13.9843",
+            "maxy": "44.5339"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:3003": true,
+          "EPSG:4326": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {
+          "map": "dbtm_rt.qgs"
+        }
+      },
+      {
+        "id": "rt_ofc.5k16.32bit__13",
+        "group": "Basi Cartografiche",
+        "name": "rt_ofc.5k16.32bit",
+        "opacity": 1,
+        "description": "OFC 2012 5K (20cm) propr. RT esec. volo BLOM-CGR Parma. Le Ortofoto 2016 di proprieta' del Consorzio Tea sono state concesse in licenza d'uso alla Agenzia per le Erogazioni in Agricoltura - AGEA ed in sublicenza a Regione Toscana esclusivamente per i compiti istituzionali e per la pubblicazione su wms e webgis, ma senza che in alcun modo sia consentito il download delle immagini. Scala di visibilita 1:1 - 1:50.000. Dettaglio 1:5000. Copertura del territorio: completa. Foto a 32 bit di colore. Testo da citare in caso di utilizzo in pubblicazioni: 'Ortofoto 20 cm copyright 2016 Consorzio TeA - TUTTI I DIRITTI RISERVATI'.",
+        "title": "OFC 2016 20cm - 32 bit colore - RGB",
+        "type": "wms",
+        "url": "http://www502.regione.toscana.it/ows_ofc/com.rt.wms.RTmap/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "9.363",
+            "miny": "42.079",
+            "maxx": "12.7825",
+            "maxy": "44.7022"
+          }
+        },
+        "visibility": false,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:3003": true,
+          "EPSG:4326": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {
+          "map": "owsofc",
+          "map_resolution": "91"
+        }
+      },
+      {
+        "id": "rt_ofc.10k13__14",
+        "group": "Basi Cartografiche",
+        "name": "rt_ofc.10k13",
+        "opacity": 1,
+        "description": "OFC 2013 10K propr. AGEA esec. volo BLOM-CGR Parma. Scala di visibilita 1:1 - 1:5.000.000. Dettaglio 1:10000. Copertura totale del territorio. 32 bit di colore. I voli da cui deriva l' ortofoto vanno da Giugno 2013 a Luglio 2103.",
+        "title": "OFC 2013 col",
+        "type": "wms",
+        "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "9.63972",
+            "miny": "42.1676",
+            "maxx": "12.4645",
+            "maxy": "44.504"
+          }
+        },
+        "visibility": false,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:3003": true,
+          "EPSG:4326": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {
+          "map": "wmsofc",
+          "map_resolution": "91",
+          "language": "ita"
+        }
+      },
+      {
+        "id": "rt_ambamm.idcomuni.rt.poly__15",
+        "group": "Ambiti amministrativi",
+        "name": "rt_ambamm.idcomuni.rt.poly",
+        "opacity": 1,
+        "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Comuni' multiscala di provenienza CTR10k, CTR2k, Catasto e Ortofoto. Territorio coperto: intera regione. E' possibile applicare un filtro sul campo 'codcom', IL dataset riporta i confini comunali in vigore dal 01/01/2018",
+        "title": "Comuni areali 01-01-2018",
+        "type": "wms",
+        "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "9.363",
+            "miny": "42.079",
+            "maxx": "12.7825",
+            "maxy": "44.7022"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:3003": true,
+          "EPSG:4326": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {
+          "map": "wmsambamm",
+          "map_resolution": "91"
+        }
+      },
+      {
+        "id": "prova_vaglia:URB_PS__11",
+        "group": "ADOZIONE.Piano Strutturale (PS)",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "prova_vaglia:URB_PS",
+        "opacity": 1,
+        "description": "URB_PS",
+        "title": "Territorio Urbanizzato (URB_PS)",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "11.2695079920834",
+            "miny": "43.839708249439134",
+            "maxx": "11.352544754834677",
+            "maxy": "43.91620713781701"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "prova_vaglia:NED_PO__7",
+        "group": "ADOZIONE.Piano Operativo (PO)",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "prova_vaglia:NED_PO",
+        "opacity": 1,
+        "description": "NED_PO",
+        "title": "Nuova Edificazione (NED_PO)",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "11.274402341635453",
+            "miny": "43.844552609793936",
+            "maxx": "11.323089110296968",
+            "maxy": "43.91285818016428"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "prova_vaglia:PAT_PO__8",
+        "group": "ADOZIONE.Piano Operativo (PO)",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "prova_vaglia:PAT_PO",
+        "opacity": 1,
+        "description": "PAT_PO",
+        "title": "Piano Attuativo (PAT_PO)",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "11.279249702729645",
+            "miny": "43.842604576858086",
+            "maxx": "11.34003804468147",
+            "maxy": "43.91594541743974"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "prova_vaglia:PUC_PO__10",
+        "group": "ADOZIONE.Piano Operativo (PO)",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "prova_vaglia:PUC_PO",
+        "opacity": 1,
+        "description": "PUC_PO",
+        "title": "Piani Unitari Convenzionali (PUC_PO)",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "11.276101061751579",
+            "miny": "43.873211704833174",
+            "maxx": "11.325599764355335",
+            "maxy": "43.91248256572729"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "prova_vaglia:perimetro_territorio_urbanizzato14052018_pre__12",
+        "group": "ADOZIONE.Conferenze Copianificazione (CC).Aree sottoposte a trasformazione fuori TU.Pre Conferenza",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "prova_vaglia:perimetro_territorio_urbanizzato14052018_pre",
+        "opacity": 1,
+        "description": "perimetro_territorio_urbanizzato14052018_pre",
+        "title": "Perimetro TU Vaglia Pre",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "11.269507928847663",
+            "miny": "43.83970414393866",
+            "maxx": "11.352663437000535",
+            "maxy": "43.91620713781701"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "prova_vaglia:AREE_COPIANIFICAZIONE_VAGLIA_pre__6",
+        "group": "ADOZIONE.Conferenze Copianificazione (CC).Aree sottoposte a trasformazione fuori TU.Pre Conferenza",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "prova_vaglia:AREE_COPIANIFICAZIONE_VAGLIA_pre",
+        "opacity": 1,
+        "description": "AREE_COPIANIFICAZIONE_VAGLIA_pre",
+        "title": "Aree copianificazione Vaglia Pre",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "11.272682620967014",
+            "miny": "43.842604487683204",
+            "maxx": "11.340482635118391",
+            "maxy": "43.92741475522979"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "prova_vaglia:PERIMETRO_TU_VAGLIA_post__9",
+        "group": "ADOZIONE.Conferenze Copianificazione (CC).Aree sottoposte a trasformazione fuori TU.Post Conferenza",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "prova_vaglia:PERIMETRO_TU_VAGLIA_post",
+        "opacity": 1,
+        "description": "PERIMETRO_TU_VAGLIA_post",
+        "title": "Perimetro TU Vaglia Post",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "11.2695079920834",
+            "miny": "43.83971090883544",
+            "maxx": "11.352415290496332",
+            "maxy": "43.91620713781701"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "prova_vaglia:AREE_COPIANIFICAZIONE_VAGLIA_post__5",
+        "group": "ADOZIONE.Conferenze Copianificazione (CC).Aree sottoposte a trasformazione fuori TU.Post Conferenza",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "prova_vaglia:AREE_COPIANIFICAZIONE_VAGLIA_post",
+        "opacity": 1,
+        "description": "AREE_COPIANIFICAZIONE_VAGLIA_post",
+        "title": "Aree copianificazione Vaglia Post",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "11.272682620967014",
+            "miny": "43.842604487683204",
+            "maxx": "11.340482635118391",
+            "maxy": "43.92741475522979"
+          }
+        },
+        "visibility": true,
+        "singleTile": true,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "BENZENE_MEDIE_2009_2017__41",
+        "group": "RISORSE.Energia",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "BENZENE_MEDIE_2009_2017",
+        "opacity": 1,
+        "description": "BENZENE_MEDIE_2009_2017",
+        "title": "Test_energia",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.91987821619535",
+            "maxx": "11.289840475294794",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "BENZOAPIRENE_MEDIE_2009_2017__40",
+        "group": "RISORSE.Rifiuti",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "BENZOAPIRENE_MEDIE_2009_2017",
+        "opacity": 1,
+        "description": "BENZOAPIRENE_MEDIE_2009_2017",
+        "title": "Test_rifiuti",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.906291889810994",
+            "maxx": "11.907057713551938",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "PM10_MEDIE_2007_2017__38",
+        "group": "RISORSE.Salute umana",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "PM10_MEDIE_2007_2017",
+        "opacity": 1,
+        "description": "PM10_MEDIE_2007_2017",
+        "title": "Test_salute umana",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.073083205135477",
+            "miny": "42.74525905284962",
+            "maxx": "11.919479055130077",
+            "maxy": "44.077475654182344"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "arpat:BENZENE_MEDIE_2009_2017__36",
+        "group": "RISORSE.Processi socio-economici",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "arpat:BENZENE_MEDIE_2009_2017",
+        "opacity": 1,
+        "description": "BENZENE_MEDIE_2009_2017",
+        "title": "Test_proc.socio-economici",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.91987821619535",
+            "maxx": "11.289840475294794",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "BENZENE_MEDIE_2009_2017__39",
+        "group": "RISORSE.Popolazione",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "BENZENE_MEDIE_2009_2017",
+        "opacity": 1,
+        "description": "BENZENE_MEDIE_2009_2017",
+        "title": "Test_popolazione",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.91987821619535",
+            "maxx": "11.289840475294794",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_MEDIE_2009_2018__38",
+        "group": "RISORSE.Clima",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_MEDIE_2009_2018",
+        "opacity": 1,
+        "description": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_MEDIE_2009_2018",
+        "title": "Test_clima",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.376699693548202",
+            "miny": "42.65303261368734",
+            "maxx": "11.912145194661969",
+            "maxy": "43.924111467081154"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "arpat:BENZENE_MEDIE_2009_2017__37",
+        "group": "RISORSE.Territorio rurale",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "arpat:BENZENE_MEDIE_2009_2017",
+        "opacity": 1,
+        "description": "BENZENE_MEDIE_2009_2017",
+        "title": "Test_territorio rurale",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.91987821619535",
+            "maxx": "11.289840475294794",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "sar_rt:elem_ferr__35",
+        "group": "RISORSE.Infr${dot}per la mobilità",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/wfs",
+          "type": "wfs"
+        },
+        "name": "sar_rt:elem_ferr",
+        "opacity": 1,
+        "description": "elem_ferr",
+        "title": "Test_infr.mobilità",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "9.770848827920315",
+            "miny": "42.35937268569042",
+            "maxx": "12.220555074954808",
+            "maxy": "44.460918011529344"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "BENZENE_MEDIE_2009_2017__34",
+        "group": "RISORSE.Città e insediamenti",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "BENZENE_MEDIE_2009_2017",
+        "opacity": 1,
+        "description": "BENZENE_MEDIE_2009_2017",
+        "title": "Test_città e insediamenti",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.91987821619535",
+            "maxx": "11.289840475294794",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "O3_SUP_SOGLIA_OBIETTIVO_SALUTE_2007_2018__34",
+        "group": "RISORSE.Paesaggio",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "O3_SUP_SOGLIA_OBIETTIVO_SALUTE_2007_2018",
+        "opacity": 1,
+        "description": "O3_SUP_SOGLIA_OBIETTIVO_SALUTE_2007_2018",
+        "title": "Test_paesaggio",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.376699693548202",
+            "miny": "42.65303261368734",
+            "maxx": "11.912145194661969",
+            "maxy": "43.924111467081154"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "BENZENE_MEDIE_2009_2017__33",
+        "group": "RISORSE.Doc${dot}della cultura",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "BENZENE_MEDIE_2009_2017",
+        "opacity": 1,
+        "description": "BENZENE_MEDIE_2009_2017",
+        "title": "Test_doc.della cultura",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.91987821619535",
+            "maxx": "11.289840475294794",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "FIUMI_STATO_ECOLOGICO_2010_2018__32",
+        "group": "RISORSE.Fauna",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "FIUMI_STATO_ECOLOGICO_2010_2018",
+        "opacity": 1,
+        "description": "FIUMI_STATO_ECOLOGICO_2010_2018",
+        "title": "Test_fauna",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "9.78949308714865",
+            "miny": "42.38001769850326",
+            "maxx": "12.231946638423835",
+            "maxy": "44.42764837733057"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "BENZOAPIRENE_MEDIE_2009_2017__31",
+        "group": "RISORSE.Flora",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "BENZOAPIRENE_MEDIE_2009_2017",
+        "opacity": 1,
+        "description": "BENZOAPIRENE_MEDIE_2009_2017",
+        "title": "Test_flora",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.906291889810994",
+            "maxx": "11.907057713551938",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "FIUMI_STATO_CHIMICO_2010_2018__30",
+        "group": "RISORSE.Biodiversità",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "FIUMI_STATO_CHIMICO_2010_2018",
+        "opacity": 1,
+        "description": "FIUMI_STATO_CHIMICO_2010_2018",
+        "title": "Test_Biodiversità",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "9.78949308714865",
+            "miny": "42.38001769850326",
+            "maxx": "12.231946638423835",
+            "maxy": "44.42764837733057"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "FIUMI_STATO_ECOLOGICO_2010_2018__29",
+        "group": "RISORSE.Suolo e Sottosuolo",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "FIUMI_STATO_ECOLOGICO_2010_2018",
+        "opacity": 1,
+        "description": "",
+        "style": "",
+        "availableStyles": [
+          {
+            "TYPE_NAME": "WMS_1_3_0.Style",
+            "name": "point",
+            "title": "Default Point",
+            "_abstract": "A sample style that draws a point",
+            "legendURL": [
+              {
+                "TYPE_NAME": "WMS_1_3_0.LegendURL",
+                "width": 20,
+                "height": 20,
+                "format": "image/png",
+                "onlineResource": {
+                  "TYPE_NAME": "WMS_1_3_0.OnlineResource",
+                  "type": "simple",
+                  "href": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=FIUMI_STATO_ECOLOGICO_2010_2018&authkey=cc66f092-d196-4659-9db3-c9cb309de4ad"
+                }
+              }
+            ]
+          }
+        ],
+        "title": "Test_suolo",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "9.78949308714865",
+            "miny": "42.38001769850326",
+            "maxx": "12.231946638423835",
+            "maxy": "44.42764837733057"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "FIUMI_STATO_CHIMICO_2010_2018__27",
+        "group": "RISORSE.Acqua",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "FIUMI_STATO_CHIMICO_2010_2018",
+        "description": "FIUMI_STATO_CHIMICO_2010_2018",
+        "title": "FIUMI_STATO_CHIMICO_2010_2018",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "9.78949308714865",
+            "miny": "42.38001769850326",
+            "maxx": "12.231946638423835",
+            "maxy": "44.42764837733057"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "FIUMI_STATO_ECOLOGICO_2010_2018__28",
+        "group": "RISORSE.Acqua",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "FIUMI_STATO_ECOLOGICO_2010_2018",
+        "description": "FIUMI_STATO_ECOLOGICO_2010_2018",
+        "title": "FIUMI_STATO_ECOLOGICO_2010_2018",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "9.78949308714865",
+            "miny": "42.38001769850326",
+            "maxx": "12.231946638423835",
+            "maxy": "44.42764837733057"
+          }
+        },
+        "visibility": true,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "BENZENE_MEDIE_2009_2017__29",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "BENZENE_MEDIE_2009_2017",
+        "description": "BENZENE_MEDIE_2009_2017",
+        "title": "BENZENE_MEDIE_2009_2017",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.91987821619535",
+            "maxx": "11.289840475294794",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "BENZOAPIRENE_MEDIE_2009_2017__30",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "BENZOAPIRENE_MEDIE_2009_2017",
+        "description": "BENZOAPIRENE_MEDIE_2009_2017",
+        "title": "BENZOAPIRENE_MEDIE_2009_2017",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.317615767543657",
+            "miny": "42.906291889810994",
+            "maxx": "11.907057713551938",
+            "maxy": "43.884711685140466"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "NO2_MEDIE_2007_2018__31",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "NO2_MEDIE_2007_2018",
+        "description": "NO2_MEDIE_2007_2018",
+        "title": "NO2_MEDIE_2007_2018",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.071493236991472",
+            "miny": "42.65303261368734",
+            "maxx": "11.919479055130077",
+            "maxy": "44.077475654182344"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "NO2_SUPERAMENTI_2007_2018__32",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "NO2_SUPERAMENTI_2007_2018",
+        "description": "NO2_SUPERAMENTI_2007_2018",
+        "title": "NO2_SUPERAMENTI_2007_2018",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.071493236991472",
+            "miny": "42.65303261368734",
+            "maxx": "11.919479055130077",
+            "maxy": "44.077475654182344"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "O3_SUP_SOGLIA_INFORMAZIONE_2007_2018__33",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "O3_SUP_SOGLIA_INFORMAZIONE_2007_2018",
+        "description": "O3_SUP_SOGLIA_INFORMAZIONE_2007_2018",
+        "title": "O3_SUP_SOGLIA_INFORMAZIONE_2007_2018",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.376699693548202",
+            "miny": "42.65303261368734",
+            "maxx": "11.912145194661969",
+            "maxy": "43.924111467081154"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "O3_SUP_SOGLIA_OBIETTIVO_SALUTE_MEDIE_2010_2018__35",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "O3_SUP_SOGLIA_OBIETTIVO_SALUTE_MEDIE_2010_2018",
+        "description": "O3_SUP_SOGLIA_OBIETTIVO_SALUTE_MEDIE_2010_2018",
+        "title": "O3_SUP_SOGLIA_OBIETTIVO_SALUTE_MEDIE_2010_2018",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.376699693548202",
+            "miny": "42.65303261368734",
+            "maxx": "11.912145194661969",
+            "maxy": "43.924111467081154"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_2008_2018__36",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_2008_2018",
+        "description": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_2008_2018",
+        "title": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_2008_2018",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.376699693548202",
+            "miny": "42.65303261368734",
+            "maxx": "11.912145194661969",
+            "maxy": "43.924111467081154"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_MEDIE_2009_2018__37",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_MEDIE_2009_2018",
+        "description": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_MEDIE_2009_2018",
+        "title": "O3_SUP_SOGLIA_OBIETTIVO_VEGETAZIONE_MEDIE_2009_2018",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.376699693548202",
+            "miny": "42.65303261368734",
+            "maxx": "11.912145194661969",
+            "maxy": "43.924111467081154"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "PM10_SUPERAMENTI_2007_2017__39",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "PM10_SUPERAMENTI_2007_2017",
+        "description": "PM10_SUPERAMENTI_2007_2017",
+        "title": "PM10_SUPERAMENTI_2007_2017",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.073083205135477",
+            "miny": "42.74525905284962",
+            "maxx": "11.919479055130077",
+            "maxy": "44.077475654182344"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      },
+      {
+        "id": "PM25_MEDIE_2007_2018__40",
+        "group": "RISORSE.Aria",
+        "search": {
+          "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wfs",
+          "type": "wfs"
+        },
+        "name": "PM25_MEDIE_2007_2018",
+        "description": "PM25_MEDIE_2007_2018",
+        "title": "PM25_MEDIE_2007_2018",
+        "type": "wms",
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "10.109918549081108",
+            "miny": "42.76166909886128",
+            "maxx": "11.914083982877594",
+            "maxy": "44.03110476073717"
+          }
+        },
+        "visibility": false,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:4326": true,
+          "EPSG:3003": true,
+          "EPSG:900913": true,
+          "EPSG:3857": true,
+          "EPSG:6707": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "params": {}
+      }
+    ],
+    "groups": [
+      {
+        "id": "RISORSE",
+        "expanded": true
+      },
+      {
+        "id": "ADOZIONE",
+        "expanded": false
+      },
+      {
+        "id": "Ambiti amministrativi",
+        "expanded": false
+      },
+      {
+        "id": "Basi Cartografiche",
+        "expanded": false
+      },
+      {
+        "id": "Geoscopio_DBTM",
+        "expanded": true
+      },
+      {
+        "id": "RISORSE.Aria",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Acqua",
+        "expanded": true
+      },
+      {
+        "id": "RISORSE.Suolo e Sottosuolo",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Biodiversità",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Flora",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Fauna",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Doc${dot}della cultura",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Paesaggio",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Città e insediamenti",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Infr${dot}per la mobilità",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Territorio rurale",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Clima",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Popolazione",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Processi socio-economici",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Salute umana",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Rifiuti",
+        "expanded": false
+      },
+      {
+        "id": "RISORSE.Energia",
+        "expanded": false
+      },
+      {
+        "id": "ADOZIONE.Conferenze Copianificazione (CC).Aree sottoposte a trasformazione fuori TU.Post Conferenza",
+        "expanded": false
+      },
+      {
+        "id": "ADOZIONE.Conferenze Copianificazione (CC).Aree sottoposte a trasformazione fuori TU.Pre Conferenza",
+        "expanded": false
+      },
+      {
+        "id": "ADOZIONE.Conferenze Copianificazione (CC).Aree sottoposte a trasformazione fuori TU",
+        "expanded": true
+      },
+      {
+        "id": "ADOZIONE.Conferenze Copianificazione (CC)",
+        "expanded": false
+      },
+      {
+        "id": "ADOZIONE.Piano Operativo (PO)",
+        "expanded": false
+      },
+      {
+        "id": "ADOZIONE.Piano Strutturale (PS)",
+        "expanded": false
+      }
+    ]
+  },
+  "catalogServices": {
+    "services": {
+      "Vaglia": {
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows?",
+        "type": "wms",
+        "title": "Vaglia",
+        "autoload": false
+      },
+      "CASTORE": {
+        "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmscastore&",
+        "type": "wms",
+        "title": "CASTORE",
+        "autoload": false
+      },
+      "PIANO_PAESAGGISTICO": {
+        "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmspiapae&map_resolution=91&",
+        "type": "wms",
+        "title": "PIANO_PAESAGGISTICO",
+        "autoload": false
+      },
+      "Ortofoto 20cm 2016 AGEA - Consorzio TeA": {
+        "url": "http://www502.regione.toscana.it/ows_ofc/com.rt.wms.RTmap/wms?map=owsofc&map_resolution=91&",
+        "type": "wms",
+        "title": "Ortofoto 20cm 2016 AGEA - Consorzio TeA",
+        "autoload": false
+      },
+      "Ortofoto": {
+        "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsofc&map_resolution=91&language=ita&",
+        "type": "wms",
+        "title": "Ortofoto",
+        "autoload": false,
+        "oldService": "ORTOFOTO"
+      },
+      "AMBITI AMMINISTRATIVI": {
+        "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsambamm&map_resolution=91&",
+        "type": "wms",
+        "title": "AMBITI AMMINISTRATIVI",
+        "autoload": false
+      },
+      "INDICATORI ARPAT": {
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+        "type": "wms",
+        "title": "INDICATORI ARPAT",
+        "autoload": false
+      },
+      "Geoscopio_wms CTR": {
+        "url": "http://www502.regione.toscana.it/ows_ctr/com.rt.wms.RTmap/ows?map=owsctr&",
+        "type": "wms",
+        "title": "Geoscopio_wms CTR",
+        "autoload": false,
+        "showAdvancedSettings": false,
+        "showTemplate": false,
+        "hideThumbnail": false,
+        "metadataTemplate": "<p>${description}</p>"
+      },
+      "Geoscopio_wms PIANO_PAESAGGISTICO": {
+        "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmspiapae&map_resolution=91&",
+        "type": "wms",
+        "title": "Geoscopio_wms PIANO_PAESAGGISTICO",
+        "autoload": false,
+        "showAdvancedSettings": false,
+        "showTemplate": false,
+        "hideThumbnail": false,
+        "metadataTemplate": "<p>${description}</p>"
+      },
+      "Geoscopio_DBTM": {
+        "url": "http://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv?map=dbtm_rt.qgs&",
+        "type": "wms",
+        "title": "Geoscopio_DBTM",
+        "autoload": false,
+        "showAdvancedSettings": false,
+        "showTemplate": false,
+        "hideThumbnail": false,
+        "metadataTemplate": "<p>${description}</p>"
+      },
+      "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA I INVARIANTE DEL PIT-PPR": {
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/invarianti/wms?",
+        "type": "wms",
+        "title": "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA I INVARIANTE DEL PIT-PPR",
+        "autoload": false,
+        "showAdvancedSettings": true,
+        "showTemplate": false,
+        "hideThumbnail": false,
+        "metadataTemplate": "<p>${description}</p>",
+        "oldService": "INVARIANTI LAMMA"
+      },
+      "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA II INVARIANTE DEL PIT-PPR": {
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/invariante_II/wms?",
+        "type": "wms",
+        "title": "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA II INVARIANTE DEL PIT-PPR",
+        "autoload": false,
+        "showAdvancedSettings": false,
+        "showTemplate": false,
+        "hideThumbnail": false,
+        "metadataTemplate": "<p>${description}</p>",
+        "oldService": "INVARIANTE II LaMMA"
+      },
+      "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA IV INVARIANTE DEL PIT-PPR": {
+        "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/invariante_IV/wms?",
+        "type": "wms",
+        "title": "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA IV INVARIANTE DEL PIT-PPR",
+        "autoload": false,
+        "showAdvancedSettings": false,
+        "showTemplate": false,
+        "hideThumbnail": false,
+        "metadataTemplate": "<p>${description}</p>"
+      }
+    },
+    "selectedService": "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA IV INVARIANTE DEL PIT-PPR"
+  },
+  "widgetsConfig": {},
+  "mapInfoConfiguration": {
+    "infoFormat": "text/html"
+  }
+}
