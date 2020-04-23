@@ -1,6 +1,7 @@
 {
     "proxyUrl": {
         "url": "/proxy/?url=",
+        "autoDetectCORS": true,
         "useCORS": [
           "http://demo.geo-solutions.it/geoserver",
           "https://demo.geo-solutions.it:443/geoserver",
