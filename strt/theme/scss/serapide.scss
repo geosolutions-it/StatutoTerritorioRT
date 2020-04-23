@@ -1,21 +1,85 @@
 // Local variables
-
-@import "./__variables";
+.strt {
+    @import "./__variables";
 
 // Bootstrap and its default variables
-@import "node_modules/bootstrap/scss/bootstrap";
-
-
+    @import "node_modules/bootstrap/scss/bootstrap";
+    
+    @at-root :root {
+        // Custom variable values only support SassScript inside `#{}`.
+        @each $color, $value in $colors {
+          --#{$color}: #{$value};
+        }
+      
+        @each $color, $value in $theme-colors {
+          --#{$color}: #{$value};
+        }
+      
+        @each $bp, $value in $grid-breakpoints {
+          --breakpoint-#{$bp}: #{$value};
+        }
+      
+        // Use `inspect` for lists so that quoted items keep the quotes.
+        // See https://github.com/sass/sass/issues/2383#issuecomment-336349172
+        --font-family-sans-serif: #{inspect($font-family-sans-serif)};
+        --font-family-monospace: #{inspect($font-family-monospace)};
+      }
+      @at-root html {
+        font-family: sans-serif; // 2
+        line-height: 1.15; // 3
+        -webkit-text-size-adjust: 100%; // 4
+        -webkit-tap-highlight-color: rgba($black, 0); // 5
+      }
+      @at-root body {
+        margin: 0; // 1
+        font-family: $font-family-base;
+        font-size: $font-size-base;
+        font-weight: $font-weight-base;
+        line-height: $line-height-base;
+        color: $body-color;
+        text-align: left; // 3
+        background-color: $body-bg; // 2
+        div {
+          padding: 0px;
+          margin: 0px;
+          border: 0px;
+          border-bottom: 0px;
+          border-top: 0px;
+          border-right: 0px;
+          border-left: 0px;
+        }
+      }
+      div {
+        padding: 0px;
+        margin: 0px;
+        border: 0px;
+        border-bottom: 0px;
+        border-top: 0px;
+        border-right: 0px;
+        border-left: 0px;
+      }
+      padding: 0px;
+      margin: 0px;
+      border: 0px;
+      border-bottom: 0px;
+      border-top: 0px;
+      border-right: 0px;
+      border-left: 0px;
 // Use to move under the 
-.serapide {
-    @import "./_table_piani";
-    @import "./_statoProgress";
-    @import "./_navbar";
-    @import "./_usermenu";
-    @import "./_menumessaggi";
-    @import "./_fileChooser";
-    @import "./_switch"; 
-}
-@import "./_sidebar";
-@import "./_base";
-@import "./_glossario";
+    .serapide {
+        @import "./_table_piani";
+        @import "./_statoProgress";
+        @import "./_navbar";
+        @import "./_usermenu";
+        @import "./_menumessaggi";
+        @import "./_fileChooser";
+        @import "./_switch"; 
+    }
+    @import "./_sidebar";
+    @import "./_base";
+    @import "./_glossario";
+      
+      
+    }
+    
+    

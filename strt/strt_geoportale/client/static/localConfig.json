@@ -49,6 +49,9 @@
     "projectionDefs": [],
     "initialState": {
       "defaultState": {
+        "locale": {
+          "current": "it-IT"
+        },
         "annotations": {
           "config": {
             "multiGeometry": true,

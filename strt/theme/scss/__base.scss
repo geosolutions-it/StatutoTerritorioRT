@@ -28,7 +28,7 @@ $sizeBase: 15;
 
 @mixin generateMediaQuery($width, $size){
     @media (min-width: $width#{px}) { 
-        html {
+        @at-root html {
             font-size: $size#{px};
         }
     }
@@ -113,10 +113,10 @@ $sizeBase: 15;
 .vertical-divider-right {
     border-right: 1px solid rgba(255,255,255, 0.8);
 }
-@at-root  .rt-logo {
+.rt-logo {
     height: $portal-header;
 }
-@at-root  .rt-logo-gov {
+.rt-logo-gov {
     height: $portal-header - ($portal-header/3);
 }
 .pX{
@@ -330,7 +330,7 @@ a {
 }
 // modifiche revisione Elena
 
-html {
+@at-root html {
     font-size: 8px;
 }
 
