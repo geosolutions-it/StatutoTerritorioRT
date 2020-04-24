@@ -278,7 +278,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     os.path.join(os.path.join(REACT_APP_DIR, 'build'), 'static'),  # serapide-client
     os.path.join(GEOPORTALE_REACT_APP_DIR, 'MapStore2', 'web', 'client', 'translations'),  # geoportale-client
-    os.path.join(GEOPORTALE_REACT_APP_DIR, 'static'),  # geoportale-client config files
+    os.path.join(GEOPORTALE_REACT_APP_DIR, 'static'),  # geoportale-client
     os.path.join(GEOPORTALE_REACT_APP_DIR, 'dist'),  # geoportale-client build
 ]
 

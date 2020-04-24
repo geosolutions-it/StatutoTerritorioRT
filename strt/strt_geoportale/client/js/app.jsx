@@ -11,31 +11,30 @@ import axios from '@mapstore/libs/ajax';
 
 import ConfigUtils from '@mapstore/utils/ConfigUtils';
 
-
+// redirect all relative requests to mapstore
 axios.interceptors.request.use(
     config => {
-        console.log(config);
         if (config.url && !config.url.startsWith("http") && !config.url.startsWith("/")) {
-            console.log("has geoportale");
             return {
                 ...config,
                 url: `/static/${config.url}`
             };
         }
-        console.log("not geoportale");
         return config;
     }
 );
 
 
+// Fix mapLayout 
 
+ConfigUtils.setConfigProp('mapLayout', {left: {sm: 300, md: 500, lg: 600}, right: {md: 658}, bottom: {sm: 0}});
 
 /**
  * Add custom (overriding) translations with:
  *
  * ConfigUtils.setConfigProp('translationsPath', ['./MapStore2/web/client/translations', './translations']);
  */
-ConfigUtils.setConfigProp('translationsPath', '/static');
+ConfigUtils.setConfigProp('translationsPath', ['/static/mapstore/translations', '/MapStore2/web/client/translations']);
 ConfigUtils.setConfigProp('themePrefix', 'Geoportale');
 
 /**
@@ -43,7 +42,7 @@ ConfigUtils.setConfigProp('themePrefix', 'Geoportale');
  *
  * ConfigUtils.setLocalConfigurationFile('localConfig.json');
  */
-ConfigUtils.setLocalConfigurationFile('/static/localConfig.json');
+ConfigUtils.setLocalConfigurationFile('/static/mapstore/localConfig.json');
 
 /**
  * Use a custom application configuration file with:
@@ -68,7 +67,7 @@ import appConfig from '@mapstore/product/appConfig';
  *
  * const plugins = require('./plugins');
  */
-import plugins from '@mapstore/product/plugins';
+import plugins from './plugins';
 
 
 
@@ -90,4 +89,4 @@ main({...appConfig, pages: [{
         name: "mapviewer",
         path: "/viewer/:mapId",
         component: require('@mapstore/product/pages/MapViewer')
-    }], themeCfg: {path: '/static/themes', prefixContainer: '#geoportale'}}, plugins);
+    }], themeCfg: {path: '/static/mapstore/themes', prefixContainer: '#geoportale'}}, plugins);
