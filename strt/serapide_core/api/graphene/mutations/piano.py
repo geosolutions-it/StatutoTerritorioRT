@@ -14,6 +14,7 @@ import datetime
 import graphene
 import traceback
 
+from django.db.models import Max
 from django.conf import settings
 
 from django.utils import timezone
@@ -212,24 +213,20 @@ class CreatePiano(relay.ClientIDMutation):
             if not auth.can_create_piano(info.context.user, _ente):
                 return GraphQLError("Forbidden: user can't create piano", code=403)
 
-            #     and \
-            # rules.test_rule('strt_users.is_RUP_of', info.context.user, _ente) and \
-            # rules.test_rule('strt_core.api.is_actor', _token or (info.context.user, _role) or (info.context.user, _ente), 'Comune'):
+            # create Piano and assign id
+            _piano = Piano()
+            _piano.ente = _ente  # mandatory field
+            _piano.codice = "temp"  # mandatory field
+            _piano.save()
 
             # Codice (M)
             if 'codice' in _piano_data:
-                _data = _piano_data.pop('codice')
-                _codice = _data
+                _codice = _piano_data.pop('codice')
             else:
                 _year = str(datetime.date.today().year)[2:]
                 _month = datetime.date.today().month
-                _piano_id = Piano.objects.filter(ente=_ente).count() + 1
-                _codice = '%s%02d%02d%05d' % (_ente.ipa, int(_year), _month, _piano_id)
-                _cnt = 1
-                while Piano.objects.filter(codice=_codice).count() > 0:
-                    _cnt += 1
-                    _piano_id = Piano.objects.filter(ente=_ente).count() + _cnt
-                    _codice = '%s%02d%02d%05d' % (_ente.ipa, int(_year), _month, _piano_id)
+                _codice = '%s%02d%02d%05d' % (_ente.ipa, int(_year), _month, _piano.id)
+
             _piano_data['codice'] = _codice
 
             # Fase (O)
@@ -255,7 +252,7 @@ class CreatePiano(relay.ClientIDMutation):
             _piano_data['responsabile'] = info.context.user
 
             # Crea piano
-            _piano = Piano()
+            # _piano = Piano()
 
             nuovo_piano = update_create_instance(_piano, _piano_data)
 

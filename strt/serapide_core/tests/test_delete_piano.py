@@ -106,3 +106,23 @@ class DeletePianoTest(AbstractSerapideProcsTest):
 
         self.assertEqual(0, Token.objects.all().count(), 'Token non eliminato')
         self.assertEqual(0, Delega.objects.all().count(), 'Delega non eliminata')
+
+    def test_codici_piano(self):
+
+        self.do_login()
+
+        response = self.create_piano(DataLoader.IPA_FI)
+        content = json.loads(response.content)
+        codice_1 = content['data']['createPiano']['nuovoPiano']['codice']
+        self.assertTrue(codice_1.endswith("00001"))
+
+        response = self.create_piano(DataLoader.IPA_FI)
+        content = json.loads(response.content)
+        codice_2 = content['data']['createPiano']['nuovoPiano']['codice']
+        self.assertTrue(codice_2.endswith("00002"))
+
+        self.sendCNV('001d_delete_piano.query', 'DELETE PIANO', codice_2)
+
+        response = self.create_piano(DataLoader.IPA_FI)
+        codice_3 = json.loads(response.content)['data']['createPiano']['nuovoPiano']['codice']
+        self.assertTrue(codice_3.endswith("00003"))
