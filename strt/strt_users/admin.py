@@ -13,7 +13,9 @@ from django import forms
 from django.forms import ModelChoiceField
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import (Utente, Ente, Ufficio, QualificaUfficio, Assegnatario, Token)
+
+from .enums import Profilo
+from .models import (Utente, Ente, Ufficio, QualificaUfficio, Assegnatario, Token, ProfiloUtente)
 from django.utils.translation import gettext_lazy as _
 
 
@@ -99,6 +101,31 @@ class UtenteAdmin(UserAdmin):
     list_editable = ('first_name', 'last_name', 'email')
     search_fields = ('fiscal_code', 'first_name', 'last_name', 'email')
     ordering = ('fiscal_code',)
+
+
+class ProfiloFilter(admin.SimpleListFilter):
+    title = _('Profilo')
+    parameter_name = 'profilo'
+
+    def lookups(self, request, model_admin):
+        return Profilo.create_choices()
+
+    def queryset(self, request, queryset):
+        return queryset.filter(profilo=Profilo.fix_enum(self.value())) if self.value() else queryset
+
+
+@admin.register(ProfiloUtente)
+class ProfiloUtenteAdmin(admin.ModelAdmin):
+    list_display = ['utente', 'ente', '_profilo']
+    search_fields = ['utente', 'ente', '_profilo']
+    list_filter = ['ente', ProfiloFilter]
+
+    # render profilo in lista
+    def _profilo(self, obj):
+        return obj.profilo.value
+
+    # TODO: edit: choose profilo in dropdown choice
+    # TODO: edit: store proper profilo in DB
 
 
 @admin.register(Token)

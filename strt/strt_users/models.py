@@ -213,6 +213,8 @@ class ProfiloUtente(models.Model):
                        ( ~Q(profilo = Profilo.ADMIN_PORTALE) & Q(ente__isnull = False))),
         ]
 
+        verbose_name_plural = "Profili utente"
+
 # @receiver(post_init, sender=ProfiloUtente)
 # def fix_profilo_enum(sender, instance, **kwargs):
 #     instance.profilo = Profilo.fix_enum(instance.profilo)
