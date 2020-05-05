@@ -35,7 +35,7 @@ return (
 
             const canCreatePiano = Utils.isAdminEnte(profili);
             const enti = Utils.getAdminEnti(profili);
-            console.log(profili, utente, enti);
+            
             
             setAuthProperty("utente", utente)
             setAuthProperty("profile", profili)

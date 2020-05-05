@@ -36,7 +36,7 @@ render () {
            location: {pathname} = {}, history, utente = {attore: ""}, piano = {},
            azioni = [],
            startPolling, stopPolling} = this.props;
-    console.log("Home", azioni)
+    
     const action = getCurrentAction(url, pathname)
     const scadenza = azioni.filter(({tipologia = ""} = {}) => tipologia.toLowerCase().replace(" ","_") === action).map(({data, }) => data).shift()
     const goToAction = (action = "", uuid) => {

@@ -77,7 +77,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
         return acc
     } , {})
 
-
+    
     return(
     <React.Fragment>
         <span className="pt-4">PROCEDIMENTO VAS</span>
@@ -300,10 +300,14 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
 
 export default ({codice, canUpdate, isLocked}) => {
     return (
-        <Query query={GET_VAS} variables={{codice}} onError={showError}>
-            {({loading, data: {modello: {edges: [vas] = []} = {}} = {}}) => (
+        <Query query={GET_VAS} variables={{codice}} onError={showError} fetchPolicy='network-only'>
+            {({loading, data: {modello: {edges: [vas = {}] = []} = {}} = {}}) => {
+               
+                return (
+                
                 <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
                 {({loadingC, data: {modello: {edges: cons = []} = {}} = {}}) => {
+                
                 if(loading || loadingC){
                     return (
                     <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
@@ -316,6 +320,8 @@ export default ({codice, canUpdate, isLocked}) => {
                 }
             return <UI codice={codice}  consultazioneSCA={cons[0]} canUpdate={canUpdate} isLocked={isLocked} Vas={vas}/>
             }}
-            </Query>)}
+            </Query>);}
+            }
         </Query>)
+        
     }

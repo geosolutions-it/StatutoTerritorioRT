@@ -51,7 +51,7 @@ class TipoRisorsa(SerapideEnum):
     PARERE_SCA = 'parere_sca'
     PROVVEDIMENTO_VERIFICA_VAS = 'provvedimento_verifica_vas'
     DOCUMENTO_PRELIMINARE_VAS = 'documento_preliminare_vas'
-
+    DOCUMENTO_PRELIMINARE_VAS_SEMPLIFICATO = 'doc_proc_semplificato'
     # avvio
     OBIETTIVI_PIANO = 'obiettivi_piano'
     QUADRO_CONOSCITIVO = 'quadro_conoscitivo'

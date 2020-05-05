@@ -42,7 +42,7 @@ const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera &&
 
 
 export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {
-    return (<Query query={GET_PIANI} variables={{codice: code}}>
+    return (<Query query={GET_PIANI} variables={{codice: code}} fetchPolicy='network-only'>
         {({loading, data: {piani: {edges: [{node: piano = {}} = {}]= []} = []} = {}, error}) => {
             if(loading){
                 return (
@@ -57,7 +57,6 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                 toast.error(`Impossobile trovare il piano: ${code}`,  {autoClose: true})
                 return <div></div>
             }
-            console.log(piano);
             const {ente, fase: faseNome, risorse : {edges: resources = []} = {}, tipo = "", codice = "", dataDelibera, descrizione} = piano;
             const locked = faseNome !== "DRAFT"
             

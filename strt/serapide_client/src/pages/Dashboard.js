@@ -14,21 +14,23 @@ import TabellaMessaggi from 'components/TabellaMessaggi'
 import Button from 'components/IconButton'
 import TextWithTooltip from 'components/TextWithTooltip'
 
-import {GET_PIANI, DELETE_PIANO} from 'schema'
+import {GET_PIANI, DELETE_PIANO, GET_VAS} from 'schema'
 
 const showError = (error) => {
     toast.error(error.message,  {autoClose: true})
 }
  
-const update = (cache, { data: {deletePiano : {success, codicePiano}}  = {}} = {}) => {
+const update = (    cache, { data: {deletePiano : {success, codicePiano}}  = {}} = {}) => {
     if (success) {
         let { piani ={}} = cache.readQuery({ query: GET_PIANI}) || {}
+        const piano = piani.edges.filter(({node}) => node.codice === codicePiano).pop()
         const edges = piani.edges.filter(({node}) => node.codice !== codicePiano)
         piani.edges = edges
         cache.writeQuery({
-                        query: GET_PIANI,
-                        data: { piani}
-                    })
+                          query: GET_PIANI,
+                          data: { piani}
+                      })
+        
     }
 }
 const Piani = () => (
