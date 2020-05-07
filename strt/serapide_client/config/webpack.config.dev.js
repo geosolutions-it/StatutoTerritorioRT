@@ -228,6 +228,8 @@ module.exports = {
               ),
               
               plugins: [
+                "@babel/plugin-proposal-nullish-coalescing-operator",
+                "@babel/plugin-proposal-optional-chaining",
                 [
                   require.resolve('babel-plugin-named-asset-import'),
                   {
