@@ -107,9 +107,9 @@ class Utente(AbstractBaseUser, PermissionsMixin):
         if self.first_name or self.last_name:
             first_name = self.first_name if self.first_name else ''
             last_name = self.last_name if self.last_name else ''
-            return "Utente[{} - {} {}]".format(self.fiscal_code.upper(), first_name, last_name)
+            return "{n1} {n2} [{cf}]".format(cf=self.fiscal_code.upper(), n1=first_name, n2=last_name)
         else:
-            return "Utente[{}]".format(self.fiscal_code.upper())
+            return "-- [{}]".format(self.fiscal_code.upper())
 
     def get_full_name(self):
         if self.first_name and self.last_name:
@@ -205,12 +205,12 @@ class ProfiloUtente(models.Model):
         constraints = [
             models.CheckConstraint(
                 name='No ENTE for global admins',
-                check= ~Q(profilo = Profilo.ADMIN_PORTALE) |
-                       ( Q(profilo = Profilo.ADMIN_PORTALE) & Q(ente__isnull = True))),
+                check=~Q(profilo=Profilo.ADMIN_PORTALE) |
+                        (Q(profilo=Profilo.ADMIN_PORTALE) & Q(ente__isnull=True))),
             models.CheckConstraint(
                 name='ENTE required for non-admins',
-                check= Q(profilo = Profilo.ADMIN_PORTALE) |
-                       ( ~Q(profilo = Profilo.ADMIN_PORTALE) & Q(ente__isnull = False))),
+                check=Q(profilo=Profilo.ADMIN_PORTALE) |
+                       (~Q(profilo=Profilo.ADMIN_PORTALE) & Q(ente__isnull=False))),
         ]
 
         verbose_name_plural = "Profili utente"
@@ -281,6 +281,9 @@ class QualificaUfficio(models.Model):
         # ]
 
     def _check_allowed_qualifica(self):
+        if not isinstance(self.qualifica, Qualifica):
+            raise ValidationError('Qualifica "{qualifica}" non riconosciuta'.format(qualifica=self.qualifica))
+
         if not self.qualifica.is_allowed(self.ufficio.ente.tipo):
             raise ValidationError('Qualifica "{qualifica}" non permessa per ufficio [{ufficio}] per ente [{ente}] {tipo}'.format(
                 qualifica=self.qualifica,
@@ -291,6 +294,7 @@ class QualificaUfficio(models.Model):
 
     # OVERRIDE
     def save(self, *args, **kwargs):
+        self.qualifica = Qualifica.fix_enum(self.qualifica)  # django admin salva il campo come stringa
         self._check_allowed_qualifica()
         super().save(*args, **kwargs)  # Call the "real" save() method.
 
@@ -337,7 +341,6 @@ class Assegnatario(models.Model):
     def save(self, *args, **kwargs):
         self._check_user_is_op()
         super().save(*args, **kwargs)  # Call the "real" save() method.
-
 
 
 class Token(models.Model):

@@ -18,11 +18,14 @@ from model_utils import Choices
 
 logger = logging.getLogger(__name__)
 
+
 class SerapideEnum(Enum):
+    def __str__(self):
+        return self._name_
 
     @classmethod
     def create_choices(cls):
-        return  [(tag.name, _(tag.value)) for tag in cls]
+        return [(tag, tag.value) for tag in cls]
 
     @classmethod
     def fix_enum(cls, obj, none_on_error=False):
@@ -55,10 +58,10 @@ class Priv(Enum):
 
 
 class Profilo(SerapideEnum):
-    ADMIN_PORTALE = 'ADMIN_PORTALE'
-    RESP_RUP = 'RESP_RUP'
-    ADMIN_ENTE = 'ADMIN_ENTE'
-    OPERATORE = 'OPERATORE'
+    ADMIN_PORTALE = 'Amministratore Portale'
+    RESP_RUP = 'Responsabile RUP'
+    ADMIN_ENTE = 'Amministratore Ente'
+    OPERATORE = 'Operatore'
 
     def get_priv(self):
         '''
@@ -66,6 +69,7 @@ class Profilo(SerapideEnum):
         '''
 
         return PRIV_BY_PROFILE[self]
+
 
 PRIV_BY_PROFILE = {
     Profilo.ADMIN_PORTALE:
@@ -90,22 +94,23 @@ PRIV_BY_PROFILE = {
 #     URB = 'URB', _('Responsabile Urbanistica')
 #     GUEST = 'GUEST', _('Guest')
 
+
 class TipoEnte(SerapideEnum):
-    COMUNE = 'COMUNE'
-    REGIONE = 'REGIONE'
-    ALTRO = 'ALTRO'
+    COMUNE = 'Comune'
+    REGIONE = 'Regione'
+    ALTRO = 'Altro'
 
 
 class Qualifica(SerapideEnum):
-    RESP = 'RESP'
-    AC = 'AC'
+    RESP = 'Responsabile Comunale'
+    AC = 'AC - Aut Competente'
     SCA = 'SCA'
-    GC = 'GENIO_CIVILE'
-    PIAN = 'PIANIFICAZIONE'
-    URB = 'URBANISTICA'
-    READONLY = 'READONLY'
+    GC = 'Genio Civile'
+    PIAN = 'Pianificazione'
+    URB = 'Urbanistica'
+    READONLY = 'Sola lettura'
 
-    def is_allowed(self, tipo:TipoEnte):
+    def is_allowed(self, tipo: TipoEnte):
         return tipo in ALLOWED_QUALIFICA_BY_TIPOENTE[self]
 
 
@@ -118,6 +123,7 @@ ALLOWED_QUALIFICA_BY_TIPOENTE = {
     Qualifica.URB: [TipoEnte.REGIONE],
     Qualifica.READONLY: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
 }
+
 
 class QualificaRichiesta(SerapideEnum):
     COMUNE = 'Responsabile Comunale'
