@@ -39,7 +39,8 @@ const UI = enhancers(({
         dataProtocolloGenioCivile,
         soggettiOperanti = [],
         risorse: {edges: risorsePiano = []},
-        dataDelibera
+        dataDelibera,
+        numeroDelibera
     } = {}
     , toggleSection, section} = {}) => {
         const {node: delibera} = risorsePiano.filter(({node: n}) => n.tipo === "delibera").shift() || {}
@@ -55,7 +56,7 @@ const UI = enhancers(({
         <PianoPageContainer>
             <PianoSubPageTitle icon="dashboard" title="AVVIO DEL PROCEDIMENTO"/>
             <div className="row pt-5">
-                <div className="col-12 py-2">DELIBERA DEL {formatDate(dataDelibera)}</div>
+                <div className="col-12 py-2">DELIBERA DEL {formatDate(dataDelibera)}  &nbsp; N° {numeroDelibera ?? "N° delibera non selezionato"} </div>
                 <div className="col-12 py-2">
                         <Risorsa fileSize={false} useLabel resource={delibera} isLocked={true}/> 
                         </div>

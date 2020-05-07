@@ -29,6 +29,13 @@ const getDescrizioneInput = (codice) => (val) => ({
             descrizione: val}, 
         codice}
     }})
+const getNumeroDeliberaInput = (codice) => (val) => ({
+        variables: {
+            input: { 
+                pianoOperativo: {
+                numeroDelibera: val}, 
+            codice}
+        }})
 
 const getDataDeliberaInput = (codice) => (val) => ({
     variables: {
@@ -41,7 +48,7 @@ const getDataDeliberaInput = (codice) => (val) => ({
 const canCommit = (dataDelibera, delibera, descrizione = "") =>  dataDelibera && delibera && descrizione
 
 
-export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, ...props}) => {
+export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDelibera, numeroDelibera, ...props}) => {
     return (<Query query={GET_PIANI} variables={{codice: code}} fetchPolicy='network-only'>
         {({loading, data: {piani: {edges: [{node: piano = {}} = {}]= []} = []} = {}, error}) => {
             if(loading){
@@ -83,6 +90,11 @@ export default ({match: {params: {code} = {}} = {}, selectDataDelibera, dataDeli
                                 <div className="row d-flex pt-5 align-items-center ">
                                     <span className="col-4">DENOMINAZIONE DELL’ATTO</span>
                                     <div className="col-8 "><EnhanchedInput disabled={locked} value={descrizione} mutation={UPDATE_PIANO} getInput={getDescrizioneInput(codice)}></EnhanchedInput></div>
+                                    
+                                </div>
+                                <div className="row d-flex pt-5 align-items-center ">
+                                    <span className="col-4">NUMERO DELIBERA</span>
+                                    <div className="col-8 "><EnhanchedInput disabled={locked} rows={1} value={numeroDelibera} mutation={UPDATE_PIANO} getInput={getNumeroDeliberaInput(codice)}></EnhanchedInput></div>
                                     
                                 </div>
                                 <span className="pt-5">DELIBERA DI AVVIO DEL PROCEDIMENTO</span>

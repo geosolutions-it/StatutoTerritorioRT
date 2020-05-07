@@ -36,7 +36,7 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                 toast.error(`Impossobile trovare il piano: ${code}`,  {autoClose: true})
                 return <div></div>
             }
-            const {node: {ente, fase: {nome: faseNome}, risorse : {edges: resources = []} = {}, codice = "", dataDelibera} = {}} = piano
+            const {node: {ente, fase: {nome: faseNome}, risorse : {edges: resources = []} = {}, codice = "", dataDelibera, numeroDelibera} = {}} = piano
             const locked = faseNome !== "DRAFT"
             const {node: delibera} = resources.filter(({node: n}) => n.tipo === "delibera").pop() || {};
             let optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || [];
@@ -50,7 +50,7 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                             <div className="d-flex flex-column flex-fill">
                                 <div className="pt-5 row">
                                     <div className="col-12 py-2">ID {getEnteLabelID(ente)}</div>
-                                    <div className="col-12 py-2 pt-4">DELIBERA DEL {formatDate(dataDelibera)}</div>
+                                    <div className="col-12 py-2 pt-4">DELIBERA DEL {formatDate(dataDelibera)}  &nbsp; N° {numeroDelibera ?? "N° delibera non selezionato"}</div>
                                     <div className="col-12 py-2">
                                     <Risorsa fileSize={false} useLabel resource={delibera} isLocked/> </div>
                                 

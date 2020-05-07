@@ -173,6 +173,7 @@ fragment Piano on PianoNode {
     descrizione
     lastUpdate
     dataDelibera
+    numeroDelibera
     dataCreazione
     dataAccettazione
     dataAvvio
