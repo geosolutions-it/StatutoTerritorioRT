@@ -70,6 +70,7 @@ class PianoUpdateInput(InputObjectType):
     from the interactive graphql console.
     """
     url = graphene.String(required=False)
+    numero_delibera = graphene.String(required=False)
     data_delibera = graphene.types.datetime.DateTime(required=False)
     data_accettazione = graphene.types.datetime.DateTime(required=False)
     data_avvio = graphene.types.datetime.DateTime(required=False)

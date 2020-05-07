@@ -155,6 +155,7 @@ class Piano(models.Model):
     descrizione = models.TextField(null=True, blank=True)
     url = models.URLField(null=True, blank=True, default='')
 
+    numero_delibera = models.TextField(null=True, blank=True)
     data_delibera = models.DateTimeField(null=True, blank=True)
     data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
     data_accettazione = models.DateTimeField(null=True, blank=True)
