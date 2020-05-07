@@ -18,6 +18,7 @@ const enhancer = toggleControllableState("isOpen", "toggleOpen", false)
 const Messaggio = () => (<React.Fragment>
                     <h4>STAI PER INVIARE I DOCUMENTI</h4>
                     <h4> AL SISTEMA</h4>
+                    <h6>Attenzione! La procedura non è reversibile</h6>
                     </React.Fragment>)
 export default enhancer(({mutation, variables, fontSize, iconSize, toggleOpen, isOpen, canCommit = false, onCompleted, label="SALVA ED INVIA", tipIconColor = "danger", messaggio = (<Messaggio/>) }) => {
     const lab = !canCommit ? (<TextWithTooltip color={tipIconColor} dataTip="Informazioni mancanti" text={label}/>) : label
