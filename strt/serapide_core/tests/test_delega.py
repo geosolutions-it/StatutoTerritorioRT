@@ -109,7 +109,7 @@ class DelegaTest(AbstractSerapideProcsTest):
         for so in piano['soggettiOperanti']:
             q = so['qualificaUfficio']['qualifica']
             deleghe = so['deleghe']
-            if q == Qualifica.RESP.name:
+            if q == Qualifica.OPCOM.name:
                 self.assertEqual(1, len(deleghe))
                 self.assertEqual(key_ac, deleghe[0]['key'])
                 self.assertIsNotNone(deleghe[0]['utente'])
@@ -125,7 +125,7 @@ class DelegaTest(AbstractSerapideProcsTest):
         for so in piano['soggettiOperanti']:
             q = so['qualificaUfficio']['qualifica']
             deleghe = so['deleghe']
-            if q == Qualifica.RESP.name:
+            if q == Qualifica.OPCOM.name:
                 self.assertEqual(1, len(deleghe))
                 self.assertIsNone(deleghe[0]['key'])  # key non visibile
                 self.assertIsNotNone(deleghe[0]['utente'])
@@ -150,7 +150,7 @@ class DelegaTest(AbstractSerapideProcsTest):
         for so in piano['soggettiOperanti']:
             q = so['qualificaUfficio']['qualifica']
             deleghe = so['deleghe']
-            if q == Qualifica.RESP.name:
+            if q == Qualifica.OPCOM.name:
                 self.assertEqual(1, len(deleghe))
                 self.assertEqual(key_ac, deleghe[0]['key'])
                 self.assertIsNotNone(deleghe[0]['utente'])
@@ -170,7 +170,7 @@ class DelegaTest(AbstractSerapideProcsTest):
         for so in piano['soggettiOperanti']:
             q = so['qualificaUfficio']['qualifica']
             deleghe = so['deleghe']
-            if q == Qualifica.RESP.name:
+            if q == Qualifica.OPCOM.name:
                 self.assertEqual(1, len(deleghe))
                 self.assertIsNone(deleghe[0]['key'])  # key non visibile
                 self.assertIsNotNone(deleghe[0]['utente'])
@@ -190,7 +190,7 @@ class DelegaTest(AbstractSerapideProcsTest):
         for so in piano['soggettiOperanti']:
             q = so['qualificaUfficio']['qualifica']
             deleghe = so['deleghe']
-            if q == Qualifica.RESP.name:
+            if q == Qualifica.OPCOM.name:
                 self.assertEqual(1, len(deleghe))
                 self.assertIsNone(deleghe[0]['key'])  # key non visibile
                 self.assertIsNotNone(deleghe[0]['utente'])

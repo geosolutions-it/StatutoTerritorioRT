@@ -180,7 +180,7 @@ class UsersDBTests(TestCase):
     def test_qualuff_checks(self):
         qu = QualificaUfficio()
         qu.ufficio = self.uffici_db[IPA_RT][0]
-        qu.qualifica = Qualifica.RESP
+        qu.qualifica = Qualifica.OPCOM
 
         with transaction.atomic():
             try:

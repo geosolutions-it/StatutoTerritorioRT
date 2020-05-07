@@ -134,7 +134,7 @@ def is_soggetto_proponente(utente, piano:Piano):
 def can_access_piano(utente: Utente, piano: Piano):
 
     # responsabile di ente ok
-    if has_qualifica(utente, piano.ente, Qualifica.RESP):
+    if has_qualifica(utente, piano.ente, Qualifica.OPCOM):
         return True
 
     # soggetto ok
@@ -162,8 +162,8 @@ def can_edit_piano(utente: Utente, piano: Piano, q):
     else:
         raise Exception("Qualifica inattesa [{}]".format(q))
 
-    if qualifica == Qualifica.RESP or qualifica_richiesta == QualificaRichiesta.COMUNE:
-        return has_qualifica(utente, piano.ente, Qualifica.RESP)
+    if qualifica == Qualifica.OPCOM or qualifica_richiesta == QualificaRichiesta.COMUNE:
+        return has_qualifica(utente, piano.ente, Qualifica.OPCOM)
 
     # cerca fra i soggetti operanti
     qs = get_so(utente, piano, qualifica)
@@ -199,7 +199,7 @@ def get_piani_visibili_id(utente: Utente):
     id_piani = {so.piano.id for so in qs.all()}
 
     # piani per i quali enti l'utente è RESP
-    ass_resp = Assegnatario.objects.filter(utente=utente, qualifica_ufficio__qualifica=Qualifica.RESP)
+    ass_resp = Assegnatario.objects.filter(utente=utente, qualifica_ufficio__qualifica=Qualifica.OPCOM)
     enti_resp = {ass.qualifica_ufficio.ufficio.ente for ass in ass_resp}
     piani_resp = Piano.objects.filter(ente__in=enti_resp)
     id_piani |= {p.id for p in piani_resp}
@@ -212,7 +212,7 @@ def get_piani_visibili_id(utente: Utente):
 
 def can_admin_delega(utente: Utente, delega: Delega):
     piano = delega.delegante.piano
-    return has_qualifica(utente, piano.ente, Qualifica.RESP) or \
-        Assegnatario.objects\
+    return has_qualifica(utente, piano.ente, Qualifica.OPCOM) or \
+           Assegnatario.objects\
         .filter(qualifica_ufficio=delega.delegante.qualifica_ufficio, utente=utente)\
         .exists()

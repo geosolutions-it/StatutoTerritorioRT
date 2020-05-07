@@ -190,7 +190,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -333,7 +333,7 @@ class PubblicazioneApprovazione(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:

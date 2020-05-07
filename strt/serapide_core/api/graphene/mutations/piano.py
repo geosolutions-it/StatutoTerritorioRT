@@ -366,7 +366,7 @@ class UpdatePiano(relay.ClientIDMutation):
             # Soggetto Proponente (O)
             if 'soggetto_proponente_uuid' in _piano_input:
 
-                if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+                if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
                     return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
                 _soggetto_proponente_uuid = _piano_input.pop('soggetto_proponente_uuid')
@@ -375,7 +375,7 @@ class UpdatePiano(relay.ClientIDMutation):
                     if not ufficio:
                         return GraphQLError(_("Not found - Ufficio proponente sconosciuto"), code=404)
 
-                    qu = QualificaUfficio.objects.filter(ufficio=ufficio, qualifica=Qualifica.RESP).get()
+                    qu = QualificaUfficio.objects.filter(ufficio=ufficio, qualifica=Qualifica.OPCOM).get()
                     if not qu:
                         return GraphQLError(_("Not found - L'ufficio proponente non è responsabile di Comune"), code=404)
 
@@ -409,7 +409,7 @@ class UpdatePiano(relay.ClientIDMutation):
                         add_so.append(new_so)
 
                 # pre-check
-                if not auth.has_qualifica(info.context.user, _ente, Qualifica.RESP):
+                if not auth.has_qualifica(info.context.user, _ente, Qualifica.OPCOM):
                     for so in old_so_dict.values() + add_so:
                         if so.qualifica_ufficio.qualifica in [Qualifica.AC, Qualifica.SCA]:
                             return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
@@ -522,11 +522,11 @@ class CreaDelega(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, **input):
         def _get_or_create_resp_so():
-            so = auth.get_so(info.context.user, _piano, Qualifica.RESP).first()
+            so = auth.get_so(info.context.user, _piano, Qualifica.OPCOM).first()
 
             if not so:
                 # l'utente non ha SO direttamente associato, quindi lo creiamo
-                ass = get_assegnamenti(info.context.user, _piano.ente, Qualifica.RESP).first()
+                ass = get_assegnamenti(info.context.user, _piano.ente, Qualifica.OPCOM).first()
                 so = SoggettoOperante(piano=_piano, qualifica_ufficio=ass.qualifica_ufficio)
                 so.save()
             return so
@@ -539,12 +539,12 @@ class CreaDelega(graphene.Mutation):
 
         try:
             qualifica = Qualifica.fix_enum(input['qualifica'], none_on_error=True)
-            is_resp = auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP)
+            is_resp = auth.has_qualifica(info.context.user, _piano.ente, Qualifica.OPCOM)
 
             if not qualifica:
                 return GraphQLError("Qualifica sconosciuta", code=404)
 
-            elif qualifica == Qualifica.RESP:
+            elif qualifica == Qualifica.OPCOM:
                 return GraphQLError("Qualifica non delegabile", code=400)
 
             elif qualifica == Qualifica.READONLY:

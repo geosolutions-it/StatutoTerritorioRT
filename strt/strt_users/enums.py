@@ -102,7 +102,7 @@ class TipoEnte(SerapideEnum):
 
 
 class Qualifica(SerapideEnum):
-    RESP = 'Responsabile Comunale'
+    OPCOM = 'Operatore Comunale'
     AC = 'AC - Aut Competente'
     SCA = 'SCA'
     GC = 'Genio Civile'
@@ -115,7 +115,7 @@ class Qualifica(SerapideEnum):
 
 
 ALLOWED_QUALIFICA_BY_TIPOENTE = {
-    Qualifica.RESP: [TipoEnte.COMUNE],
+    Qualifica.OPCOM: [TipoEnte.COMUNE],
     Qualifica.AC: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
     Qualifica.SCA: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
     Qualifica.GC: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
@@ -142,7 +142,7 @@ class QualificaRichiesta(SerapideEnum):
 
 
 ALLOWED_QUALIFICA_BY_RICHIESTA = {
-    QualificaRichiesta.COMUNE: [Qualifica.RESP],
+    QualificaRichiesta.COMUNE: [Qualifica.OPCOM],
     QualificaRichiesta.AC: [Qualifica.AC],
     QualificaRichiesta.SCA: [Qualifica.SCA],
     QualificaRichiesta.GC: [Qualifica.GC],

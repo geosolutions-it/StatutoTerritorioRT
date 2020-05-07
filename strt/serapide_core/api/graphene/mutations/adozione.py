@@ -231,7 +231,7 @@ class TrasmissioneAdozione(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -278,7 +278,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
             if needsExecution(_osservazioni_regione):
                 chiudi_azione(_osservazioni_regione)
 
-        if auth.has_qualifica(user, piano.ente, Qualifica.RESP):
+        if auth.has_qualifica(user, piano.ente, Qualifica.OPCOM):
             if needsExecution(_upload_osservazioni_privati):
                 chiudi_azione(_upload_osservazioni_privati)
 
@@ -361,7 +361,7 @@ class Controdeduzioni(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -428,7 +428,7 @@ class PianoControdedotto(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -562,7 +562,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -853,7 +853,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         if not _procedura_adozione.pubblicazione_burt_data:

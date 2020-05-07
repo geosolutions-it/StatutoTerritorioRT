@@ -131,7 +131,7 @@ class UpdateProceduraAvvio(relay.ClientIDMutation):
         try:
             # Tipologia (O)
             if 'conferenza_copianificazione' in _procedura_avvio_data:
-                if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.OPCOM):
                     return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
 
                 _conferenza_copianificazione = TipologiaCopianificazione.fix_enum(
@@ -226,7 +226,7 @@ class AvvioPiano(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -280,7 +280,7 @@ class FormazionePiano(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -537,7 +537,7 @@ class IntegrazioniRichieste(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -685,7 +685,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:

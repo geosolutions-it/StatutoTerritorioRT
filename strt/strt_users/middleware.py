@@ -43,7 +43,7 @@ def assegna_token(delega: Delega, utente: Utente):
     piano = delega.delegante.piano
     ente = delega.delegante.qualifica_ufficio.ufficio.ente
 
-    if has_qualifica(utente, ente, Qualifica.RESP):
+    if has_qualifica(utente, ente, Qualifica.OPCOM):
         logger.warning("Assegnazione token rifiutata a responsabile")
         return False, "Assegnazione token rifiutata a responsabile"
 

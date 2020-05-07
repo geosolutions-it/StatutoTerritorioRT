@@ -3,7 +3,7 @@
    "model": "strt_users.ufficio",
    "pk": 1,
    "fields": {
-      "uuid": "b9a46ff4-2ff9-4141-95d2-61fb37604c54",
+      "uuid": "e874bfb7-7117-4cc2-a43b-09031dfdc8d4",
       "nome": "Ufficio 1",
       "descrizione": null,
       "ente": 1,
@@ -14,7 +14,7 @@
    "model": "strt_users.ufficio",
    "pk": 2,
    "fields": {
-      "uuid": "1a363988-465f-4154-91d6-131d3d4a26c0",
+      "uuid": "38a1ec80-d742-43f5-88e3-857e159cb9e2",
       "nome": "Ufficio 2",
       "descrizione": null,
       "ente": 1,
@@ -25,7 +25,7 @@
    "model": "strt_users.ufficio",
    "pk": 3,
    "fields": {
-      "uuid": "e31ce707-dccf-42b9-9cf7-c9d67a8f90b1",
+      "uuid": "12ca42a6-8f3b-4f94-bddd-1b0e3163b59a",
       "nome": "GENIO CIVILE TOSCANA NORD",
       "descrizione": null,
       "ente": 1,
@@ -36,7 +36,7 @@
    "model": "strt_users.ufficio",
    "pk": 4,
    "fields": {
-      "uuid": "f11187c2-79d0-49d6-8f9b-4d29c5d22042",
+      "uuid": "21c46882-f9ea-4b10-ad45-da4b0f94db86",
       "nome": "GENIO CIVILE TOSCANA SUD",
       "descrizione": null,
       "ente": 1,
@@ -47,7 +47,7 @@
    "model": "strt_users.ufficio",
    "pk": 5,
    "fields": {
-      "uuid": "e87f828a-bee1-45ea-91ab-cd0a97f68547",
+      "uuid": "ba6f654f-01f3-4f22-b44c-c6124bf8c951",
       "nome": "GENIO CIVILE TOSCANA VALDARNO CENTRALE",
       "descrizione": null,
       "ente": 1,
@@ -58,7 +58,7 @@
    "model": "strt_users.ufficio",
    "pk": 6,
    "fields": {
-      "uuid": "5e33f0c4-1ed7-48f0-930a-c76ef0cab7df",
+      "uuid": "9a8df31a-0c20-4858-9092-6c5cf71bb853",
       "nome": "GENIO CIVILE TOSCANA VALDARNO INFERIORE",
       "descrizione": null,
       "ente": 1,
@@ -69,7 +69,7 @@
    "model": "strt_users.ufficio",
    "pk": 7,
    "fields": {
-      "uuid": "98c3e4a2-edd1-475a-ad00-a97cbc0a2c69",
+      "uuid": "3c8072b9-736d-4715-a425-e9716d17a034",
       "nome": "GENIO CIVILE TOSCANA VALDARNO SUPERIORE",
       "descrizione": null,
       "ente": 1,
@@ -80,7 +80,7 @@
    "model": "strt_users.ufficio",
    "pk": 8,
    "fields": {
-      "uuid": "e5268ed9-7bee-4fb4-883d-a697fb185e38",
+      "uuid": "278fe432-a52c-4a0f-b5d8-0f27b0353abd",
       "nome": "Uff Pianificazione",
       "descrizione": null,
       "ente": 1,
@@ -91,7 +91,7 @@
    "model": "strt_users.ufficio",
    "pk": 9,
    "fields": {
-      "uuid": "b804d7a2-31b6-4c44-8c30-2ed4c5c90922",
+      "uuid": "b10bf6ce-752a-4434-8db7-56867b29db7b",
       "nome": "Ufficio 1",
       "descrizione": null,
       "ente": 2,
@@ -102,7 +102,7 @@
    "model": "strt_users.ufficio",
    "pk": 10,
    "fields": {
-      "uuid": "6607de4d-1853-479f-81b9-a5827bc424ad",
+      "uuid": "2ddf8195-adb2-40f6-ab7e-492d2341726e",
       "nome": "Ufficio 2",
       "descrizione": null,
       "ente": 2,
@@ -113,7 +113,7 @@
    "model": "strt_users.ufficio",
    "pk": 11,
    "fields": {
-      "uuid": "fc5b452b-a16c-47f3-bafe-8110c41e7765",
+      "uuid": "817929a5-19fd-4c29-afaf-139112d2eefb",
       "nome": "Ufficio 1",
       "descrizione": null,
       "ente": 3,
@@ -124,7 +124,7 @@
    "model": "strt_users.ufficio",
    "pk": 12,
    "fields": {
-      "uuid": "82caa258-6e12-4a8c-a004-b95e4821882b",
+      "uuid": "308c3021-f91f-4907-8d62-c0be5d284b06",
       "nome": "Ufficio 2",
       "descrizione": null,
       "ente": 3,
@@ -135,7 +135,7 @@
    "model": "strt_users.ufficio",
    "pk": 13,
    "fields": {
-      "uuid": "97ceb29f-4297-4146-bca5-2502d4527fe3",
+      "uuid": "9c1386e8-c0cf-403b-b455-0582d7df2f50",
       "nome": "Ufficio 1",
       "descrizione": null,
       "ente": 4,

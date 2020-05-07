@@ -227,7 +227,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # Tipologia (O)
             if 'tipologia' in _procedura_vas_data:
                 _tipologia = _procedura_vas_data.pop('tipologia')
-                if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.OPCOM):
                     if _tipologia:  #  and _tipologia in TipologiaVAS:
                         _tipo_parsed = TipologiaVAS.fix_enum(_tipologia, none_on_error=True)
                         if not _tipo_parsed:
@@ -239,20 +239,20 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # Note (O)
             if 'note' in _procedura_vas_data:
                 _data = _procedura_vas_data.pop('note')
-                if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                if auth.has_qualifica(info.context.user, _piano.ente, Qualifica.OPCOM):
                     _procedura_vas.note = _data[0]
                 else:
                     logger.info('Non si hanno i privilegi per modificare il campo "note"')
 
             # perform check before update
             if _procedura_vas_data.pubblicazione_provvedimento_verifica_ap:
-                if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.OPCOM):
                     return GraphQLError("Forbidden - Non è permesso modificare un campo AP", code=403)
 
             # perform check before update
             if _procedura_vas_data.pubblicazione_provvedimento_verifica_ac:
                 if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
-                    if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.RESP):
+                    if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.OPCOM):
                         return GraphQLError("Forbidden - Non è permesso modificare un campo AC", code=403)
 
             # update!
@@ -506,7 +506,7 @@ class CreateConsultazioneVAS(relay.ClientIDMutation):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
-            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
                 return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -544,7 +544,7 @@ class UpdateConsultazioneVAS(relay.ClientIDMutation):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
-            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
                 return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -596,7 +596,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
 
         # check generico
         if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
-            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
                 return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         # check sullo stato
@@ -609,7 +609,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
             else:
                 return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
         elif azione_avvio_comune and needsExecution(azione_avvio_comune):
-            if auth.can_edit_piano(user, _piano, Qualifica.RESP):
+            if auth.can_edit_piano(user, _piano, Qualifica.OPCOM):
                 azione_avvio = azione_avvio_comune
             else:
                 return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
@@ -861,7 +861,7 @@ class AvvioEsamePareriSCA(graphene.Mutation):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
         if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
-            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
                 return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
@@ -916,7 +916,7 @@ class UploadElaboratiVAS(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.RESP):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:

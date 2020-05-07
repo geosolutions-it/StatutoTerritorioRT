@@ -169,8 +169,8 @@ class DataLoader:
     ]
 
     qu_to_store = [
-        (IPA_FI, UFF1, [Qualifica.AC, Qualifica.RESP, Qualifica.SCA], {
-            FC_RUP_RESP: [Qualifica.RESP],
+        (IPA_FI, UFF1, [Qualifica.AC, Qualifica.OPCOM, Qualifica.SCA], {
+            FC_RUP_RESP: [Qualifica.OPCOM],
             FC_ACTIVE2: [Qualifica.AC, Qualifica.SCA],
         }),
         (IPA_FI, UFF2, [Qualifica.AC], {

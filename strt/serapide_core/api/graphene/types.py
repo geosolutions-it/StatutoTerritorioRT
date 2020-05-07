@@ -623,11 +623,11 @@ class SoggettoOperanteNode(DjangoObjectType):
         utente = info.context.user
         piano = self.piano
 
-        if self.qualifica_ufficio.qualifica == Qualifica.RESP:
+        if self.qualifica_ufficio.qualifica == Qualifica.OPCOM:
             return False
 
-        return has_qualifica(utente, piano.ente, Qualifica.RESP) or \
-            Assegnatario.objects.filter(qualifica_ufficio=self.qualifica_ufficio, utente=utente).exists()
+        return has_qualifica(utente, piano.ente, Qualifica.OPCOM) or \
+               Assegnatario.objects.filter(qualifica_ufficio=self.qualifica_ufficio, utente=utente).exists()
 
 
 class ConsultazioneVASNode(DjangoObjectType):
