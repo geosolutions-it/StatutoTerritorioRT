@@ -58,6 +58,7 @@ export default ({title, piani = [], onDeletePiano = () => console.warn("Aggiunge
                 <tr>
                     <th >Notifiche</th>
                     <th >Nome Piano</th>
+                    <th >Comune</th>
                     <th >Tipo</th>
                     <th >Ultima Modifica</th>
                     <th >Codice Unico</th>
@@ -68,10 +69,11 @@ export default ({title, piani = [], onDeletePiano = () => console.warn("Aggiunge
                 </tr>
             </thead>
             <tbody>
-                {piani.sort(reverseOrderByUpdate).map(({node: {alertsCount = 0, descrizione, tipo, lastUpdate, codice, fase, responsabile = {}}} = {}) => (
+                {piani.sort(reverseOrderByUpdate).map(({node: {alertsCount = 0,ente: {nome= ""} = {}, descrizione, tipo, lastUpdate, codice, fase, responsabile = {}}} = {}) => (
                     <tr key={codice}>
                         <td className="text-center">{alertsCount > 0 && (<i className="material-icons text-danger">notification_important</i>)}</td>
                         <td style={{maxWidth: 350}}>{descrizione}</td>
+                        <td style={{maxWidth: 350}}>{nome}</td>
                         <td className="text-center text-capitalize">{tipo}</td>
                         <td className="text-center">{formatDate(lastUpdate)}</td>
                         <td className="text-center">{codice}</td>
