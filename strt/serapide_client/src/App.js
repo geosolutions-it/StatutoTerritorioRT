@@ -22,7 +22,7 @@ import  {ToastContainer} from 'react-toastify'
 import {Query} from 'react-apollo'
 import ReactTooltip from 'react-tooltip'
 
-import '../node_modules/react-toastify/dist/ReactToastify.min.css'
+
 import {GET_UTENTE} from "./graphql"
 import * as Utils from './utils';
 export default () => {
