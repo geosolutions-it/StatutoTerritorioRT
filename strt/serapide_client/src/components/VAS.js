@@ -171,7 +171,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                     <EnhancedListSelector
                             selected={sP ? [sP.uuid] : []}
                             query={GET_CONTATTI}
-                            variables={{tipo: "resp"}}
+                            variables={{tipo: "opcom"}}
                             getList={getContatti}
                             label="DEFINISCI SOGGETTO PROPONENTE"
                             size="lg"
