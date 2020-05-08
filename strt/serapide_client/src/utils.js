@@ -110,7 +110,7 @@ export const filterAndGroupResourcesByUser = ( resources, type = "") => groupRes
 
 
 export const getContatti = ({ uffici = []} = {}) => {
-    return uffici.map(({qualifica: tipologia, ufficio: {uuid,
+    return uffici.map(({qualificaLabel: tipologia, ufficio: {uuid,
         descrizione,
         nome,
         ente: {

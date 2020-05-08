@@ -38,6 +38,7 @@ fragment Profiles on ProfiloChoiceNode {
         ufficio
         qualificaUfficio{
           qualifica
+          qualificaLabel
         }
       }
     
@@ -65,7 +66,8 @@ fragment Risorsa on RisorsaNode {
 export const CONTATTO = gql`
 fragment Contatto on QualificaUfficioNode{
         id
-        qualifica 
+        qualifica
+        qualificaLabel
         ufficio{
           uuid
           descrizione
@@ -131,6 +133,7 @@ fragment VAS on ProceduraVASNode {
           codice
             soggettoProponente {
               qualifica
+              qualificaLabel
               ufficio {
                   uuid
                   nome
@@ -143,6 +146,7 @@ fragment VAS on ProceduraVASNode {
           soggettiOperanti {
             qualificaUfficio {
               qualifica
+              qualificaLabel
                 ufficio {
                 uuid
                 nome
@@ -202,6 +206,7 @@ fragment Piano on PianoNode {
       }
     soggettoProponente {
         qualifica
+        qualificaLabel
         ufficio {
           uuid
           nome
@@ -213,7 +218,8 @@ fragment Piano on PianoNode {
     }
     soggettiOperanti {
       qualificaUfficio{
-					          qualifica
+					qualifica
+          qualificaLabel
           ufficio{
             uuid
             nome
