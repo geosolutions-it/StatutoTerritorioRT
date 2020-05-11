@@ -66,19 +66,20 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 - Create a super user:\
 `python manage.py createsuperuser`
 
-- Load default data:
+- Load default data:\
   `cd StatutoTerritorioRT/strt`
   ```
   ./load_dump.sh
   ```
 
 - Run the Django development server:\
+`cd StatutoTerritorioRT/strt`
 `python manage.py runserver`
 
 - Visit http://localhost:8000/admin/strt_users/utente/
 
-- Set the passwords for the predefined users
- .. note:: The default password is `42`
+- Set the passwords for the predefined users\
+The default password is `42`
 
 - Visit http://localhost:8000/ with your web browser
 
