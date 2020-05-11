@@ -75,7 +75,13 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 - Run the Django development server:\
 `python manage.py runserver`
 
-- Visit http://127.0.0.1:8000/ with your web browser
+- Visit http://localhost:8000/admin/strt_users/utente/
+
+- Set the passwords for the predefined users
+
+- Visit http://localhost:8000/ with your web browser
+
+- Login with one of the roles defined above
 
 
 ### Prepare the client and theme:
