@@ -37,3 +37,5 @@ pytz==2018.5
 flake8==3.5.0
 python-codicefiscale==0.3.4
 django-bootstrap-form
+django-modelcluster==5.0.1
+django-taggit==1.2.0
