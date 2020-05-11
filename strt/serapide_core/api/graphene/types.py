@@ -688,6 +688,8 @@ class UfficioNode(DjangoObjectType):
 
 class QualificaUfficioNode(DjangoObjectType):
 
+    qualifica_label = graphene.String()
+
     class Meta:
         model = QualificaUfficio # ufficio, qualifica
         filter_fields = ['qualifica', 'ufficio']
@@ -696,6 +698,9 @@ class QualificaUfficioNode(DjangoObjectType):
 
     def resolve_qualifica(self, info, **args):
         return self.qualifica.name
+
+    def resolve_qualifica_label(self, info, **args):
+        return self.qualifica.value
 
 
 class PianoRevPostCPNode(DjangoObjectType):

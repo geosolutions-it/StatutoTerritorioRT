@@ -19,7 +19,6 @@ from serapide_core.modello.enums import (
     Fase,
     TipologiaVAS,
     TipologiaPiano,
-    # TIPOLOGIA_CONTATTO,
     TipologiaCopianificazione,
 )
 
@@ -97,19 +96,10 @@ class Query(object):
 
     uffici = graphene.List(types.QualificaUfficioNode, qualifica=graphene.String(), ipa=graphene.String(), qualifiche=graphene.List(graphene.String))
 
-    # soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
-    #                                     filterset_class=types.SoggettoOperanteFilter)
-
-
-    # TODO
-    # contatti = DjangoFilterConnectionField(types.ContattoNode,
-    #                                        filterset_class=filters.EnteContattoMembershipFilter)
-
     # Enums
     # fase_piano = graphene.List(enums.FasePiano) # TODO
     tipologia_vas = graphene.List(enums.TipologiaVAS)
     tipologia_piano = graphene.List(enums.TipologiaPiano)
-    tipologia_contatto = graphene.List(enums.TipologiaContatto)
     tipologia_conferenza_copianificazione = graphene.List(enums.TipologiaConferenzaCopianificazione)
 
     def resolve_fase_piano(self, info):
@@ -121,7 +111,7 @@ class Query(object):
     def resolve_tipologia_vas(self, info):
         _l = []
         for _t in TipologiaVAS:
-            _l.append(enums.TipologiaVAS(_t[0], _t[1]))
+            _l.append(enums.TipologiaVAS(_t.name, _t.value))
         return _l
 
     def resolve_tipologia_piano(self, info):
@@ -133,7 +123,6 @@ class Query(object):
             return None
         else:
             return info.context.user
-
 
     def resolve_uffici(self, info, qualifica=None, ipa=None, qualifiche=None, **args):
         # Warning this is not currently paginated
@@ -166,13 +155,6 @@ class Query(object):
 # Default Mutation Proxy
 # ############################################################################ #
 class Mutation(object):
-
-    # create_fase = core.CreateFase.Field()
-    # update_fase = core.UpdateFase.Field()
-
-    # TODO
-    # create_contatto = core.CreateContatto.Field()
-    # delete_contatto = core.DeleteContatto.Field()
 
     create_piano = piano.CreatePiano.Field()
     update_piano = piano.UpdatePiano.Field()

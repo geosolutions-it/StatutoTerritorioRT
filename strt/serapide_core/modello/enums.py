@@ -45,8 +45,8 @@ class TipoRisorsa(SerapideEnum):
     DELIBERA = 'delibera'
 
     # VAS
-    VAS_SEMPLIFICATA = 'vas_semplificata'
-    VAS_VERIFICA = 'vas_verifica'
+    RELAZIONE_MOTIVATA = 'relazione_motivata'
+    DOCUMENTO_PRELIMINARE_VERIFICA_VAS = 'documento_preliminare_verifica_vas'
     PARERE_VERIFICA_VAS = 'parere_verifica_vas'
     PARERE_SCA = 'parere_sca'
     PROVVEDIMENTO_VERIFICA_VAS = 'provvedimento_verifica_vas'
@@ -121,8 +121,8 @@ class TipologiaPiano(SerapideEnum):
     UNKNOWN = 'UNKNOWN'
     OPERATIVO = 'OPERATIVO'
     STRUTTURALE = 'STRUTTURALE'
-    VARIANTE_OPERATIVO = 'VARIANTE_OPERATIVO'
-    VARIANTE_STRUTTURALE = 'VARIANTE_STRUTTURALE'
+    VARIANTE_OPERATIVO = 'Variante operativo'
+    VARIANTE_STRUTTURALE = 'Variante strutturale'
 
 
 class TipologiaVAS(SerapideEnum):
@@ -135,9 +135,9 @@ class TipologiaVAS(SerapideEnum):
 
 
 class TipologiaCopianificazione(SerapideEnum):
-    POSTICIPATA = 'posticipata'
-    NECESSARIA = 'necessaria'
-    NON_NECESSARIA = 'non_necessaria'
+    POSTICIPATA = 'Posticipata'
+    NECESSARIA = 'Necessaria'
+    NON_NECESSARIA = 'Non necessaria'
 
 
 STATO_AZIONE = Choices(

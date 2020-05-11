@@ -88,9 +88,9 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
         # Perform checks specifically for the current "Fase"
         if piano.fase == Fase.DRAFT:
             if procedura_vas.tipologia == TipologiaVAS.SEMPLIFICATA:
-                risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.VAS_SEMPLIFICATA.value, archiviata=False)
+                risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.RELAZIONE_MOTIVATA.value, archiviata=False)
                 if risorse.all().count() == 1:
-                    risorsa = procedura_vas.risorse.get(tipo=TipoRisorsa.VAS_SEMPLIFICATA.value, archiviata=False)
+                    risorsa = procedura_vas.risorse.get(tipo=TipoRisorsa.RELAZIONE_MOTIVATA.value, archiviata=False)
                     if risorsa.dimensione > 0 and \
                             risorsa.file and \
                             os.path.exists(risorsa.file.path):
@@ -105,7 +105,7 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                 if SoggettoOperante.get_by_qualifica(piano, Qualifica.SCA).count() == 0:
                     msg.append("Soggetto SCA mancante")
 
-                risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.VAS_VERIFICA.value, archiviata=False)
+                risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS.value, archiviata=False)
                 if risorse.all().count() > 0:
                     for r in risorse:
                         if r.dimensione == 0 or not r.file or not os.path.exists(r.file.path):

@@ -86,7 +86,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
 
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.value)
-        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.VAS_VERIFICA)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS)
 
         sogg_op = []
         sogg_op.append({

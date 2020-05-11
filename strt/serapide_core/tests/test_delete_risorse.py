@@ -93,7 +93,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.value)
 
         # CREATE and DELETE
-        nome,response = self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.VAS_VERIFICA)
+        nome,response = self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS)
         content = json.loads(response.content)
         risorse = content['data']['upload']['proceduraVasAggiornata']['risorse']['edges']
         logger.warning("LOOK FOR FILE %s"%nome)
@@ -101,7 +101,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         logger.warning("CODICE RISORSA %s"% res_code)
         response = self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', res_code)
 
-        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.VAS_VERIFICA)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS)
 
 
         sogg_op = []
