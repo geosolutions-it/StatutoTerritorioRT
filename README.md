@@ -73,7 +73,7 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
   ```
 
 - Run the Django development server:\
-`cd StatutoTerritorioRT/strt`
+`cd StatutoTerritorioRT/strt`\
 `python manage.py runserver`
 
 - Visit http://localhost:8000/admin/strt_users/utente/
