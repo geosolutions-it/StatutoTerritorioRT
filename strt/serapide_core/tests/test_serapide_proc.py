@@ -165,8 +165,8 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True, client=self.client_ac)
 
         # OPCOM: invio_doc_preliminare
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'INVIO DOC PRELIMINARE', codice_consultazione, client=self.client_ac, expected_code=403)
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'INVIO DOC PRELIMINARE', codice_consultazione)
+        self.sendCNV('113_avvio_consultazioni_vas.query', 'INVIO DOC PRELIMINARE', self.codice_vas, client=self.client_ac, expected_code=403)
+        self.sendCNV('113_avvio_consultazioni_vas.query', 'INVIO DOC PRELIMINARE', self.codice_vas)
 
         # SCA
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca)

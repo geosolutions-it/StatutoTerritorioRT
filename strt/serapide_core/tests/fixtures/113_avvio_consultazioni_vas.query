@@ -6,12 +6,10 @@
   "query": "mutation InvioDocPreliminare($codice: String!) {
   invioDocPreliminare(uuid: $codice) {
     errors
-    consultazioneVasAggiornata {
-      proceduraVas {
+    proceduraVasAggiornata {
         piano {
           ...AzioniPiano
         }
-      }
     }
   }
 }

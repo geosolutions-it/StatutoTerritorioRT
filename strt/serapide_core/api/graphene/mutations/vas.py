@@ -644,21 +644,16 @@ class InvioDocPreliminare(graphene.Mutation):
         uuid = graphene.String(required=True)
 
     errors = graphene.List(graphene.String)
-    consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
+    procedura_vas_aggiornata = graphene.Field(types.ProceduraVASNode)
 
     @classmethod
-    def update_actions_for_phase(cls, fase, piano, consultazione_vas, user):
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
 
         ensure_fase(fase, Fase.ANAGRAFICA)
 
         _invio_doc_preliminare = piano.getFirstAction(TipologiaAzione.invio_doc_preliminare)
         if needsExecution(_invio_doc_preliminare):
-            now = datetime.datetime.now(timezone.get_current_timezone())
-            chiudi_azione(_invio_doc_preliminare, data=now)
-
-            consultazione_vas.data_avvio_consultazioni_sca = now
-
-            _pareri_vas_expire_days = getattr(settings, 'PARERI_VAS_EXPIRE_DAYS', 60)
+            chiudi_azione(_invio_doc_preliminare)
 
             crea_azione(
                     Azione(
@@ -680,8 +675,7 @@ class InvioDocPreliminare(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, **input):
-        _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
-        _procedura_vas = _consultazione_vas.procedura_vas
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
         _piano = _procedura_vas.piano
 
         # check generico sul piano
@@ -699,7 +693,7 @@ class InvioDocPreliminare(graphene.Mutation):
             return GraphQLError("Risorsa mancante: {}".format(TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS.value), code=409)
 
         try:
-            cls.update_actions_for_phase(_piano.fase, _piano, _consultazione_vas, info.context.user)
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
             # Notify Users
             piano_phase_changed.send(
@@ -709,7 +703,7 @@ class InvioDocPreliminare(graphene.Mutation):
                 message_type="piano_verifica_vas_updated")
 
             return InvioDocPreliminare(
-                consultazione_vas_aggiornata=_consultazione_vas,
+                procedura_vas_aggiornata=_procedura_vas,
                 errors=[]
             )
         except BaseException as e:
