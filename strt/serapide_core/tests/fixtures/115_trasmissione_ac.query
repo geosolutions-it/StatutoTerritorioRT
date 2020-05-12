@@ -1,10 +1,10 @@
 {
-  "operationName": "UploadElaboratiVas",
+  "operationName": "TrasmissionePareriAc",
   "variables": {
     "uuid": "{codice}"
   },
-  "query": "mutation UploadElaboratiVas($uuid: String!) {
-  uploadElaboratiVas(uuid: $uuid) {
+  "query": "mutation TrasmissionePareriAc($uuid: String!) {
+  trasmissionePareriAc(uuid: $uuid) {
     vasAggiornata {
       piano {
         ...AzioniPiano

@@ -147,6 +147,9 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
 
+        self.assert_vas_conclusa()
+
+    def assert_vas_conclusa(self):
         # VAS COMPLETATO
         response = self.sendCNV('901_get_vas.query', 'GET VAS', self.codice_piano)
         content = json.loads(response.content)
@@ -165,35 +168,36 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True, client=self.client_ac)
 
         # OPCOM: invio_doc_preliminare
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'INVIO DOC PRELIMINARE', self.codice_vas, client=self.client_ac, expected_code=403)
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'INVIO DOC PRELIMINARE', self.codice_vas)
+        self.sendCNV('113_invio_doc_preliminare.query', 'INVIO DOC PRELIMINARE', self.codice_vas, client=self.client_ac, expected_code=403)
+        self.sendCNV('113_invio_doc_preliminare.query', 'INVIO DOC PRELIMINARE', self.codice_vas)
 
         # SCA
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca, expected_code=412)
 
-        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #1", self.codice_vas,  expected_code=403)
-        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #1", self.codice_vas, client=self.client_sca)
+        self.sendCNV('114_trasmissione_sca.query', "TRASMISSIONE PARERI SCA", self.codice_vas,  expected_code=403)
+        self.sendCNV('114_trasmissione_sca.query', "TRASMISSIONE PARERI SCA", self.codice_vas, client=self.client_sca)
 
-        # # COMUNE
-        self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True)
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'AVVIO CONSULTAZIONE VAS - bad', codice_consultazione, client=self.client_ac, expected_code=403)
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'AVVIO CONSULTAZIONE VAS -- OPCOM', codice_consultazione)
-
-        # # SCA
-        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #2", self.codice_vas,  expected_code=403)
-        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #2", self.codice_vas, client=self.client_sca)
+        # AC
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_AC, client=self.client_ac)
+        self.sendCNV('115_trasmissione_ac.query', "TRASMISSIONE PARERI AC", self.codice_vas, client=self.client_ac)
 
         piano = Piano.objects.get(codice=self.codice_piano)
         self.assertIsNotNone(piano)
-        self.assertIsNotNone(piano.getFirstAction(TipologiaAzione.avvio_esame_pareri_sca))
+        self.assertIsNotNone(piano.getFirstAction(TipologiaAzione.redazione_documenti_vas))
 
-        self.vas_avvio_esame_pareri()
+        self.redazione_documenti_vas()
 
-    def vas_avvio_esame_pareri(self):
-        """ chiamato sia alla fine di PROCEDIMENTO che alla fine di SEMPLIFICATA con ASSOGGETTAMENTO"""
-        self.sendCNV('115_avvio_esame_pareri.query', "INVIO ESAME PARERI", self.codice_vas)
+    def redazione_documenti_vas(self):
+        # chiamato sia alla fine di PROCEDURA ORDINARIA che alla fine di PROCEDIMENTO SEMPLIFICATO con ASSOGGETTAMENTO
+        self.sendCNV('116_redazione_documenti_vas.query', "UPLOAD ELBORATI VAS", self.codice_vas, expected_code=409)
+
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.RAPPORTO_AMBIENTALE)
-        self.sendCNV('116_upload_elaborati_vas.query', "UPLOAD ELBORATI VAS", self.codice_vas)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_SINTESI)
+
+        self.sendCNV('116_redazione_documenti_vas.query', "REDAZIONE DOCUMENTI VAS", self.codice_vas)
+
+        self.assert_vas_conclusa()
 
     def contributi_tecnici(self):
         self.sendCNV('902_get_avvio.query', 'GET AVVIO', self.codice_piano)

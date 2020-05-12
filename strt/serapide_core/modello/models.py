@@ -644,7 +644,7 @@ class ParereVAS(models.Model):
     data_ricezione_parere = models.DateTimeField(null=True, blank=True)
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
-    consultazione_vas = models.ForeignKey(ConsultazioneVAS, on_delete=models.CASCADE)
+    consultazione_vas = models.ForeignKey(ConsultazioneVAS, on_delete=models.CASCADE, null=True)
 
     inviata = models.BooleanField(null=False, blank=False, default=False)
 

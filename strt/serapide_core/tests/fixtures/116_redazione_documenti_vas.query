@@ -1,10 +1,10 @@
 {
-  "operationName": "AvvioEsamePareriSCA",
+  "operationName": "RedazioneDocumentiVas",
   "variables": {
     "uuid": "{codice}"
   },
-  "query": "mutation AvvioEsamePareriSCA($uuid: String!) {
-  avvioEsamePareriSca(uuid: $uuid) {
+  "query": "mutation RedazioneDocumentiVas($uuid: String!) {
+  redazioneDocumentiVas(uuid: $uuid) {
     vasAggiornata {
       piano {
         ...AzioniPiano

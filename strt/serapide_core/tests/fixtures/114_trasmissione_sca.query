@@ -1,10 +1,10 @@
 {
-  "operationName": "InvioPareriVAS",
+  "operationName": "TrasmissionePareriSca",
   "variables": {
     "codice": "{codice}"
   },
-  "query": "mutation InvioPareriVAS($codice: String!) {
-  invioPareriVas(uuid: $codice) {
+  "query": "mutation TrasmissionePareriSca($codice: String!) {
+  trasmissionePareriSca(uuid: $codice) {
     vasAggiornata {
       ...VAS
       piano {

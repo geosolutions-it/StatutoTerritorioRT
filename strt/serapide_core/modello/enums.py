@@ -50,6 +50,7 @@ class TipoRisorsa(SerapideEnum):
     DOCUMENTO_PRELIMINARE_VERIFICA_VAS = 'documento_preliminare_verifica_vas'
     PARERE_VERIFICA_VAS = 'parere_verifica_vas'
     PARERE_SCA = 'parere_sca'
+    PARERE_AC = 'parere_ac'
     PROVVEDIMENTO_VERIFICA_VAS = 'provvedimento_verifica_vas'
     DOCUMENTO_PRELIMINARE_VAS = 'documento_preliminare_vas'
     DOCUMENTO_PRELIMINARE_VAS_SEMPLIFICATO = 'doc_proc_semplificato'
@@ -163,7 +164,7 @@ class TipologiaAzione(SerapideEnum):
     invio_doc_preliminare = 'Invio documentazione preliminare'  # Comune
     trasmissione_pareri_sca = 'Trasmissione pareri SCA'  # SCA
     trasmissione_pareri_ac = 'Trasmissione pareri AC'  # AC
-    esame_pareri_vas = 'Esame pareri VAS'  # Comune
+    redazione_documenti_vas = 'Redazione documenti VAS'  # Comune
     # Avvio
     avvio_procedimento = 'Avvio del Procedimento'  # Comune
     contributi_tecnici = 'Contributi Tecnici'  # Regione
@@ -225,7 +226,7 @@ InfoAzioni = {
         TipologiaAzione.invio_doc_preliminare: AzioneInfo(Fase.ANAGRAFICA, ART22),
         TipologiaAzione.trasmissione_pareri_sca: AzioneInfo(Fase.ANAGRAFICA, ART22),
         TipologiaAzione.trasmissione_pareri_ac: AzioneInfo(Fase.ANAGRAFICA, ART22),
-        TipologiaAzione.esame_pareri_vas: AzioneInfo(Fase.ANAGRAFICA, ART22),
+        TipologiaAzione.redazione_documenti_vas: AzioneInfo(Fase.ANAGRAFICA, ART22),
         # Avvio
         TipologiaAzione.avvio_procedimento: AzioneInfo(Fase.ANAGRAFICA, ART17),
         TipologiaAzione.contributi_tecnici: AzioneInfo(Fase.ANAGRAFICA, ART17),
