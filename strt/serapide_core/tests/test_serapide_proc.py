@@ -66,7 +66,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         response = self._client.get(self.GET_PROFILES_URL)
         self.assertEqual(200, response.status_code, 'GET PROFILES failed')
 
-    def create_piano_and_promote(self, tipovas:TipologiaVAS):
+    def create_piano_and_promote(self, tipovas: TipologiaVAS):
         response = self.create_piano(DataLoader.IPA_FI)
 
         content = json.loads(response.content)
@@ -85,7 +85,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
         self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
 
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.value)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.name)
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS)
 
         sogg_op = []
@@ -160,12 +160,13 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         content = json.loads(response.content)
         codice_consultazione = content['data']['createConsultazioneVas']['nuovaConsultazioneVas']['uuid']
 
-        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS, client=self.client_ac)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS)
 
         self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True, client=self.client_ac)
 
-        # AC avvio_consultazioni_vas
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'AVVIO CONSULTAZIONE VAS -- AC', codice_consultazione, client=self.client_ac)
+        # OPCOM: invio_doc_preliminare
+        self.sendCNV('113_avvio_consultazioni_vas.query', 'INVIO DOC PRELIMINARE', codice_consultazione, client=self.client_ac, expected_code=403)
+        self.sendCNV('113_avvio_consultazioni_vas.query', 'INVIO DOC PRELIMINARE', codice_consultazione)
 
         # SCA
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca)

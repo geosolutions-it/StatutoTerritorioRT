@@ -159,7 +159,7 @@ class FlussiTest(AbstractSerapideProcsTest):
     def test_flow_vasprocedimento(self):
 
         self.do_login()
-        self.create_piano_and_promote(TipologiaVAS.PROCEDIMENTO)  # Promozione effettuata DRAFT --> ANAGRAFICA
+        self.create_piano_and_promote(TipologiaVAS.PROCEDURA_ORDINARIA)  # Promozione effettuata DRAFT --> ANAGRAFICA
         self.avvio_piano(TipologiaCopianificazione.NON_NECESSARIA)
 
         self.vas_procedimento()
@@ -178,7 +178,7 @@ class FlussiTest(AbstractSerapideProcsTest):
     def test_flow_vasprocedimento_autoclose(self):
 
         self.do_login()
-        self.create_piano_and_promote(TipologiaVAS.PROCEDIMENTO)  # Promozione effettuata DRAFT --> ANAGRAFICA
+        self.create_piano_and_promote(TipologiaVAS.PROCEDURA_ORDINARIA)  # Promozione effettuata DRAFT --> ANAGRAFICA
         self.avvio_piano(TipologiaCopianificazione.NON_NECESSARIA)
 
         self.contributi_tecnici()

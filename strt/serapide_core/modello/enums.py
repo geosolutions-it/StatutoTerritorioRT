@@ -127,11 +127,11 @@ class TipologiaPiano(SerapideEnum):
 
 class TipologiaVAS(SerapideEnum):
     UNKNOWN = 'UNKNOWN'
-    SEMPLIFICATA = 'SEMPLIFICATA'
-    VERIFICA = 'VERIFICA'
-    PROCEDIMENTO = 'PROCEDIMENTO'
-    PROCEDIMENTO_SEMPLIFICATO = 'PROCEDIMENTO_SEMPLIFICATO'
-    NON_NECESSARIA = 'NON_NECESSARIA'
+    VERIFICA_SEMPLIFICATA = 'Verifica semplificata'
+    VERIFICA = 'Verifica'
+    PROCEDURA_ORDINARIA = 'Procedura ordinaria'
+    PROCEDIMENTO_SEMPLIFICATO = 'Procedimento semplificato'
+    NON_NECESSARIA = 'VAS non necessaria'
 
 
 class TipologiaCopianificazione(SerapideEnum):
@@ -152,14 +152,18 @@ class TipologiaAzione(SerapideEnum):
     unknown = 'UNKNOWN'
     creato_piano = 'Creato Piano/Variante'  # Comune
     # Procedura VAS
-    richiesta_verifica_vas = 'Documento Preliminare VAS'  # AC
+    selezione_tipologia_vas = 'Selezione tipologia VAS'  # OPCOM
     pareri_verifica_vas = 'Pareri verifica VAS'  # SCA
     emissione_provvedimento_verifica = 'Emissione Provvedimento di verifica'  # AC
     pubblicazione_provvedimento_verifica = 'Pubblicazione provvedimento di verifica'  # AC/Comune
-    avvio_consultazioni_sca = 'Avvio consultazioni SCA'  # Comune/AC
-    pareri_sca = 'Pareri SCA'  # SCA
-    avvio_esame_pareri_sca = 'Avvio esame pareri SCA'  # Comune
-    upload_elaborati_vas = 'Upload elaborati VAS'  # Comune
+    # avvio_consultazioni_sca = 'Avvio consultazioni SCA'  # Comune/AC
+    # pareri_sca = 'Pareri SCA'  # SCA
+    # avvio_esame_pareri_sca = 'Avvio esame pareri SCA'  # Comune
+    # upload_elaborati_vas = 'Upload elaborati VAS'  # Comune
+    invio_doc_preliminare = 'Invio documentazione preliminare'  # Comune
+    trasmissione_pareri_sca = 'Trasmissione pareri SCA'  # SCA
+    trasmissione_pareri_ac = 'Trasmissione pareri AC'  # AC
+    esame_pareri_vas = 'Esame pareri VAS'  # Comune
     # Avvio
     avvio_procedimento = 'Avvio del Procedimento'  # Comune
     contributi_tecnici = 'Contributi Tecnici'  # Regione
@@ -210,14 +214,18 @@ InfoAzioni = {
         TipologiaAzione.unknown: AzioneInfo(Fase.UNKNOWN, 'Unknown'),
         TipologiaAzione.creato_piano: AzioneInfo(Fase.DRAFT),
         # Procedura VAS
-        TipologiaAzione.richiesta_verifica_vas: AzioneInfo(Fase.ANAGRAFICA, ART23),
+        TipologiaAzione.selezione_tipologia_vas: AzioneInfo(Fase.ANAGRAFICA, ART23),
         TipologiaAzione.pareri_verifica_vas: AzioneInfo(Fase.ANAGRAFICA),
         TipologiaAzione.emissione_provvedimento_verifica: AzioneInfo(Fase.ANAGRAFICA, ART22),
         TipologiaAzione.pubblicazione_provvedimento_verifica: AzioneInfo(Fase.ANAGRAFICA, ART22),
-        TipologiaAzione.avvio_consultazioni_sca: AzioneInfo(Fase.ANAGRAFICA, ART22),
-        TipologiaAzione.pareri_sca: AzioneInfo(Fase.ANAGRAFICA),
-        TipologiaAzione.avvio_esame_pareri_sca: AzioneInfo(Fase.ANAGRAFICA),
-        TipologiaAzione.upload_elaborati_vas: AzioneInfo(Fase.ANAGRAFICA),
+        # TipologiaAzione.avvio_consultazioni_sca: AzioneInfo(Fase.ANAGRAFICA, ART22),
+        # TipologiaAzione.pareri_sca: AzioneInfo(Fase.ANAGRAFICA),
+        # TipologiaAzione.avvio_esame_pareri_sca: AzioneInfo(Fase.ANAGRAFICA),
+        # TipologiaAzione.upload_elaborati_vas: AzioneInfo(Fase.ANAGRAFICA),
+        TipologiaAzione.invio_doc_preliminare: AzioneInfo(Fase.ANAGRAFICA, ART22),
+        TipologiaAzione.trasmissione_pareri_sca: AzioneInfo(Fase.ANAGRAFICA, ART22),
+        TipologiaAzione.trasmissione_pareri_ac: AzioneInfo(Fase.ANAGRAFICA, ART22),
+        TipologiaAzione.esame_pareri_vas: AzioneInfo(Fase.ANAGRAFICA, ART22),
         # Avvio
         TipologiaAzione.avvio_procedimento: AzioneInfo(Fase.ANAGRAFICA, ART17),
         TipologiaAzione.contributi_tecnici: AzioneInfo(Fase.ANAGRAFICA, ART17),

@@ -1,10 +1,10 @@
 {
-  "operationName": "AvvioConsultazioniVAS",
+  "operationName": "InvioDocPreliminare",
   "variables": {
     "codice": "{codice}"
   },
-  "query": "mutation AvvioConsultazioniVAS($codice: String!) {
-  avvioConsultazioniVas(uuid: $codice) {
+  "query": "mutation InvioDocPreliminare($codice: String!) {
+  invioDocPreliminare(uuid: $codice) {
     errors
     consultazioneVasAggiornata {
       proceduraVas {

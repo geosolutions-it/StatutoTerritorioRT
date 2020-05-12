@@ -87,7 +87,7 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
     if procedura_vas.piano == piano:
         # Perform checks specifically for the current "Fase"
         if piano.fase == Fase.DRAFT:
-            if procedura_vas.tipologia == TipologiaVAS.SEMPLIFICATA:
+            if procedura_vas.tipologia == TipologiaVAS.VERIFICA_SEMPLIFICATA:
                 risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.RELAZIONE_MOTIVATA.value, archiviata=False)
                 if risorse.all().count() == 1:
                     risorsa = procedura_vas.risorse.get(tipo=TipoRisorsa.RELAZIONE_MOTIVATA.value, archiviata=False)
@@ -131,7 +131,7 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                     msg.append('Risorsa mancante per VAS proceimento semplificato')
                 return len(msg) == 0, msg
 
-            elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO:
+            elif procedura_vas.tipologia == TipologiaVAS.PROCEDURA_ORDINARIA:
                 msg = []
                 if SoggettoOperante.get_by_qualifica(piano, Qualifica.AC).count() == 0:
                     msg.append("Soggetto AC mancante")
@@ -145,11 +145,11 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                 return False, ['Tipologia VAS sconosciuta [{}]'.format(procedura_vas.tipologia)]
 
         elif piano.fase.nome == Fase.ANAGRAFICA:
-            if procedura_vas.tipologia == TipologiaVAS.SEMPLIFICATA:
+            if procedura_vas.tipologia == TipologiaVAS.VERIFICA_SEMPLIFICATA:
                 return procedura_vas.conclusa
             elif procedura_vas.tipologia in [TipologiaVAS.VERIFICA, TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO]:
                 return procedura_vas.conclusa
-            elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO:
+            elif procedura_vas.tipologia == TipologiaVAS.PROCEDURA_ORDINARIA:
                 return procedura_vas.conclusa
             elif procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
                 return True

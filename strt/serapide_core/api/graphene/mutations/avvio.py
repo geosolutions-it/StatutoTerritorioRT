@@ -211,7 +211,7 @@ class AvvioPiano(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TipologiaAzione.richiesta_verifica_vas,
+                    tipologia=TipologiaAzione.selezione_tipologia_vas,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.attesa
                 ))

@@ -430,7 +430,7 @@ class ProceduraVASNode(DjangoObjectType):
         if self.verifica_effettuata and \
             self.tipologia in (TipologiaVAS.VERIFICA,
                                TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO,
-                               TipologiaVAS.SEMPLIFICATA):
+                               TipologiaVAS.VERIFICA_SEMPLIFICATA):
             _risorsa = self.risorse.filter(tipo='documento_preliminare_vas').first()
         return _risorsa
 
@@ -443,7 +443,7 @@ class ProceduraVASNode(DjangoObjectType):
 
     def resolve_relazione_motivata_vas_semplificata(self, info, **args):
         _risorsa = None
-        if self.tipologia == TipologiaVAS.SEMPLIFICATA:
+        if self.tipologia == TipologiaVAS.VERIFICA_SEMPLIFICATA:
             _risorsa = self.risorse.filter(tipo='vas_semplificata').first()
         return _risorsa
 
