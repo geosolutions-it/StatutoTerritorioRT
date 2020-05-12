@@ -21,7 +21,7 @@ from serapide_core.modello.models import (
 from serapide_core.modello.enums import (
     Fase,
     TipologiaVAS,
-    TIPOLOGIA_AZIONE,
+    TipologiaAzione,
     TipoRisorsa
 )
 
@@ -45,7 +45,7 @@ def parere_sca_ok(user, procedura_vas):
             .filter(procedura_vas=procedura_vas)\
             .order_by('data_creazione')\
             .first()
-        _avvio_consultazioni_sca_count = Azione.count_by_piano(_piano, TIPOLOGIA_AZIONE.avvio_consultazioni_sca)
+        _avvio_consultazioni_sca_count = Azione.count_by_piano(_piano, TipologiaAzione.avvio_consultazioni_sca)
         _pareri_vas = ParereVAS.objects\
             .filter(
                 user=user,

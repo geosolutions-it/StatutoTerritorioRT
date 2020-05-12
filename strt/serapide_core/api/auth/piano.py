@@ -19,7 +19,7 @@ from serapide_core.modello.enums import (
     Fase,
     STATO_AZIONE,
     TipologiaVAS,
-    TIPOLOGIA_AZIONE,)
+    TipologiaAzione,)
 
 
 from serapide_core.modello.models import (
@@ -137,7 +137,7 @@ def has_delibera_comunale(piano):
 
 # @rules.predicate
 def formazione_piano_conclusa(piano):
-    az = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+    az = piano.getFirstAction(TipologiaAzione.formazione_del_piano)
     return az and az.stato == STATO_AZIONE.nessuna
 
 
@@ -251,7 +251,7 @@ def is_eligible_for_promotion(piano:Piano):
         # if has_pending_alerts(piano):
         #     msg.append("Ci sono azioni non ancora completate")
 
-        if not isExecuted(piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)):
+        if not isExecuted(piano.getFirstAction(TipologiaAzione.protocollo_genio_civile)):
             msg.append("Protocollo Genio Civile mancante")
 
         if not formazione_piano_conclusa(piano):

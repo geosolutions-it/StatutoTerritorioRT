@@ -52,7 +52,7 @@ from serapide_core.modello.models import (
 from serapide_core.modello.enums import (
     STATO_AZIONE,
     TipologiaVAS,
-    TIPOLOGIA_AZIONE,
+    TipologiaAzione,
     TipoRisorsa
 )
 
@@ -74,8 +74,8 @@ def check_and_close_adozione(piano: Piano):
 
     if not procedura_adozione.conclusa:
 
-        piano_controdedotto = piano.getFirstAction(TIPOLOGIA_AZIONE.piano_controdedotto)
-        rev_piano_post_cp = piano.getFirstAction(TIPOLOGIA_AZIONE.rev_piano_post_cp)
+        piano_controdedotto = piano.getFirstAction(TipologiaAzione.piano_controdedotto)
+        rev_piano_post_cp = piano.getFirstAction(TipologiaAzione.rev_piano_post_cp)
 
         _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
 
@@ -157,7 +157,7 @@ class TrasmissioneAdozione(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.trasmissione_adozione
+        return TipologiaAzione.trasmissione_adozione
 
     @staticmethod
     def procedura(piano):
@@ -169,7 +169,7 @@ class TrasmissioneAdozione(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
-        _trasmissione_adozione = piano.getFirstAction(TIPOLOGIA_AZIONE.trasmissione_adozione)
+        _trasmissione_adozione = piano.getFirstAction(TipologiaAzione.trasmissione_adozione)
 
         if needsExecution(_trasmissione_adozione):
             chiudi_azione(_trasmissione_adozione)
@@ -177,7 +177,7 @@ class TrasmissioneAdozione(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.osservazioni_enti,
+                    tipologia=TipologiaAzione.osservazioni_enti,
                     # attore=TIPOLOGIA_ATTORE.enti,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
@@ -187,7 +187,7 @@ class TrasmissioneAdozione(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.osservazioni_regione,
+                    tipologia=TipologiaAzione.osservazioni_regione,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
                     data=procedura_adozione.data_ricezione_osservazioni
@@ -196,7 +196,7 @@ class TrasmissioneAdozione(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.upload_osservazioni_privati,
+                    tipologia=TipologiaAzione.upload_osservazioni_privati,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.attesa,
                     data=procedura_adozione.data_ricezione_osservazioni
@@ -215,7 +215,7 @@ class TrasmissioneAdozione(graphene.Mutation):
                     crea_azione(
                         Azione(
                             piano=piano,
-                            tipologia=TIPOLOGIA_AZIONE.pareri_adozione_sca,
+                            tipologia=TipologiaAzione.pareri_adozione_sca,
                             qualifica_richiesta=QualificaRichiesta.SCA,
                             stato=STATO_AZIONE.attesa,
                             data=_pareri_adozione_sca_expire
@@ -270,9 +270,9 @@ class TrasmissioneOsservazioni(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
-        _osservazioni_regione = piano.getFirstAction(TIPOLOGIA_AZIONE.osservazioni_regione)
-        _upload_osservazioni_privati = piano.getFirstAction(TIPOLOGIA_AZIONE.upload_osservazioni_privati)
-        _controdeduzioni = piano.getFirstAction(TIPOLOGIA_AZIONE.controdeduzioni)
+        _osservazioni_regione = piano.getFirstAction(TipologiaAzione.osservazioni_regione)
+        _upload_osservazioni_privati = piano.getFirstAction(TipologiaAzione.upload_osservazioni_privati)
+        _controdeduzioni = piano.getFirstAction(TipologiaAzione.controdeduzioni)
 
         if auth.is_soggetto_operante(user, piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
             if needsExecution(_osservazioni_regione):
@@ -286,7 +286,7 @@ class TrasmissioneOsservazioni(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.controdeduzioni,
+                    tipologia=TipologiaAzione.controdeduzioni,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.attesa
                 ))
@@ -322,7 +322,7 @@ class Controdeduzioni(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.controdeduzioni
+        return TipologiaAzione.controdeduzioni
 
     @staticmethod
     def procedura(piano):
@@ -336,8 +336,8 @@ class Controdeduzioni(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
-        _controdeduzioni = piano.getFirstAction(TIPOLOGIA_AZIONE.controdeduzioni)
-        _osservazioni_enti = piano.getFirstAction(TIPOLOGIA_AZIONE.osservazioni_enti)
+        _controdeduzioni = piano.getFirstAction(TipologiaAzione.controdeduzioni)
+        _osservazioni_enti = piano.getFirstAction(TipologiaAzione.osservazioni_enti)
 
         if needsExecution(_controdeduzioni):
             chiudi_azione(_controdeduzioni)
@@ -348,7 +348,7 @@ class Controdeduzioni(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.piano_controdedotto,
+                    tipologia=TipologiaAzione.piano_controdedotto,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.attesa
                 ))
@@ -387,7 +387,7 @@ class PianoControdedotto(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.piano_controdedotto
+        return TipologiaAzione.piano_controdedotto
 
     @staticmethod
     def procedura(piano):
@@ -401,7 +401,7 @@ class PianoControdedotto(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
-        _piano_controdedotto = piano.getFirstAction(TIPOLOGIA_AZIONE.piano_controdedotto)
+        _piano_controdedotto = piano.getFirstAction(TipologiaAzione.piano_controdedotto)
 
         if needsExecution(_piano_controdedotto):
             chiudi_azione(_piano_controdedotto)
@@ -410,7 +410,7 @@ class PianoControdedotto(graphene.Mutation):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica,
+                        tipologia=TipologiaAzione.esito_conferenza_paesaggistica,
                         qualifica_richiesta=QualificaRichiesta.REGIONE,
                         stato=STATO_AZIONE.attesa
                     ))
@@ -464,7 +464,7 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica
+        return TipologiaAzione.esito_conferenza_paesaggistica
 
     @staticmethod
     def procedura(piano):
@@ -478,7 +478,7 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
-        _esito_cp = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica)
+        _esito_cp = piano.getFirstAction(TipologiaAzione.esito_conferenza_paesaggistica)
 
         if needsExecution(_esito_cp):
             chiudi_azione(_esito_cp)
@@ -486,7 +486,7 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.rev_piano_post_cp,
+                    tipologia=TipologiaAzione.rev_piano_post_cp,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria
                 ))
@@ -532,7 +532,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.rev_piano_post_cp
+        return TipologiaAzione.rev_piano_post_cp
 
     @staticmethod
     def procedura(piano):
@@ -545,7 +545,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
-        _rev_piano_post_cp = piano.getFirstAction(TIPOLOGIA_AZIONE.rev_piano_post_cp)
+        _rev_piano_post_cp = piano.getFirstAction(TipologiaAzione.rev_piano_post_cp)
 
         if needsExecution(_rev_piano_post_cp):
             chiudi_azione(_rev_piano_post_cp)
@@ -598,7 +598,7 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.pareri_adozione_sca
+        return TipologiaAzione.pareri_adozione_sca
 
     @staticmethod
     def procedura(piano):
@@ -616,7 +616,7 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
             raise Exception("Tipologia VAS incongruente con l'azione richiesta")
 
         # TODO: controllare se possibile usare --> _pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_adozione_sca)
-        _pareri_sca_list = piano.azioni(tipologia_azione=TIPOLOGIA_AZIONE.pareri_adozione_sca)
+        _pareri_sca_list = piano.azioni(tipologia_azione=TipologiaAzione.pareri_adozione_sca)
         _pareri_sca = next((x for x in _pareri_sca_list if needsExecution(x)), None)
 
         if _pareri_sca:
@@ -629,7 +629,7 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.parere_motivato_ac,
+                    tipologia=TipologiaAzione.parere_motivato_ac,
                     qualifica_richiesta=QualificaRichiesta.AC,
                     stato=STATO_AZIONE.attesa,
                     data=_parere_motivato_ac_expire
@@ -730,7 +730,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.parere_motivato_ac
+        return TipologiaAzione.parere_motivato_ac
 
     @staticmethod
     def procedura(piano):
@@ -747,7 +747,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
         if not piano.procedura_vas or (piano.procedura_vas and piano.procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA):
             raise Exception("Tipologia VAS incongruente con l'azione richiesta")
 
-        _parere_motivato_ac = piano.getFirstAction(TIPOLOGIA_AZIONE.parere_motivato_ac)
+        _parere_motivato_ac = piano.getFirstAction(TipologiaAzione.parere_motivato_ac)
 
         if needsExecution(_parere_motivato_ac):
             chiudi_azione(_parere_motivato_ac)
@@ -755,7 +755,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas,
+                    tipologia=TipologiaAzione.upload_elaborati_adozione_vas,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.attesa
                 ))
@@ -817,7 +817,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas
+        return TipologiaAzione.upload_elaborati_adozione_vas
 
     @staticmethod
     def procedura(piano):
@@ -833,7 +833,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
         if not piano.procedura_vas or (piano.procedura_vas and piano.procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA):
             raise Exception("Tipologia VAS incongruente con l'azione richiesta")
 
-        _upload_elaborati_adozione_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.upload_elaborati_adozione_vas)
+        _upload_elaborati_adozione_vas = piano.getFirstAction(TipologiaAzione.upload_elaborati_adozione_vas)
 
         if needsExecution(_upload_elaborati_adozione_vas):
             chiudi_azione(_upload_elaborati_adozione_vas)

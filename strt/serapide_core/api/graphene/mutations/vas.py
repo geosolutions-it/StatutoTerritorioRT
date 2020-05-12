@@ -55,8 +55,7 @@ from serapide_core.modello.enums import (
     Fase,
     STATO_AZIONE,
     TipologiaVAS,
-    TIPOLOGIA_AZIONE,
-    # TIPOLOGIA_ATTORE,
+    TipologiaAzione,
 )
 
 from strt_users.enums import QualificaRichiesta, Qualifica
@@ -75,7 +74,7 @@ logger = logging.getLogger(__name__)
 def init_vas_procedure(piano:Piano):
 
     procedura_vas = piano.procedura_vas
-    _verifica_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_verifica_vas)
+    _verifica_vas = piano.getFirstAction(TipologiaAzione.richiesta_verifica_vas)
 
     if _verifica_vas:
         if procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
@@ -91,7 +90,7 @@ def init_vas_procedure(piano:Piano):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                    tipologia=TipologiaAzione.avvio_consultazioni_sca,
                     qualifica_richiesta=QualificaRichiesta.AC,
                     stato=STATO_AZIONE.attesa,
                     data=datetime.datetime.now(timezone.get_current_timezone()) +
@@ -105,7 +104,7 @@ def init_vas_procedure(piano:Piano):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
+                    tipologia=TipologiaAzione.emissione_provvedimento_verifica,
                     qualifica_richiesta=QualificaRichiesta.AC,
                     stato=STATO_AZIONE.attesa,
                     data=datetime.datetime.now(timezone.get_current_timezone()) +
@@ -124,7 +123,7 @@ def init_vas_procedure(piano:Piano):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.pareri_verifica_vas,
+                    tipologia=TipologiaAzione.pareri_verifica_vas,
                     qualifica_richiesta=QualificaRichiesta.SCA,
                     stato=STATO_AZIONE.attesa,
                     data=datetime.datetime.now(timezone.get_current_timezone()) +
@@ -135,7 +134,7 @@ def init_vas_procedure(piano:Piano):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.emissione_provvedimento_verifica,
+                    tipologia=TipologiaAzione.emissione_provvedimento_verifica,
                     qualifica_richiesta=QualificaRichiesta.AC,
                     stato=STATO_AZIONE.attesa,
                     data=datetime.datetime.now(timezone.get_current_timezone()) +
@@ -261,7 +260,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # CHIUSURA AZIONI VAS
             if _procedura_vas_data.pubblicazione_provvedimento_verifica_ap:
                 _pubblicazione_provvedimento_verifica_ap = _piano.getFirstAction(
-                        TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                        TipologiaAzione.pubblicazione_provvedimento_verifica,
                         QualificaRichiesta.COMUNE)
 
                 if needsExecution(_pubblicazione_provvedimento_verifica_ap):
@@ -276,7 +275,7 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
 
             if _procedura_vas_data.pubblicazione_provvedimento_verifica_ac:
                 _pubblicazione_provvedimento_verifica_ac = _piano.getFirstAction(
-                        TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                        TipologiaAzione.pubblicazione_provvedimento_verifica,
                         qualifica_richiesta=QualificaRichiesta.AC)
 
                 if needsExecution(_pubblicazione_provvedimento_verifica_ac):
@@ -290,10 +289,10 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
                         message_type="piano_verifica_vas_updated")
 
             if isExecuted(_piano.getFirstAction(
-                        TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                        TipologiaAzione.pubblicazione_provvedimento_verifica,
                         qualifica_richiesta=QualificaRichiesta.AC)) and \
                 isExecuted(_piano.getFirstAction(
-                    TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                    TipologiaAzione.pubblicazione_provvedimento_verifica,
                     qualifica_richiesta=QualificaRichiesta.COMUNE)):
 
                 procedura_vas_aggiornata.conclusa = True
@@ -319,7 +318,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.pareri_verifica_vas
+        return TipologiaAzione.pareri_verifica_vas
 
     @staticmethod
     def procedura(piano):
@@ -329,7 +328,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
         ensure_fase(fase, Fase.ANAGRAFICA)
 
-        _pareri_verifica_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_verifica_vas)
+        _pareri_verifica_vas = piano.getFirstAction(TipologiaAzione.pareri_verifica_vas)
         if needsExecution(_pareri_verifica_vas):
             chiudi_azione(_pareri_verifica_vas)
 
@@ -426,7 +425,7 @@ class AssoggettamentoVAS(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
+                    tipologia=TipologiaAzione.avvio_esame_pareri_sca,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria
                 ))
@@ -436,7 +435,7 @@ class AssoggettamentoVAS(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                    tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria
                 ))
@@ -444,7 +443,7 @@ class AssoggettamentoVAS(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.pubblicazione_provvedimento_verifica,
+                    tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica,
                     qualifica_richiesta=QualificaRichiesta.AC,
                     stato=STATO_AZIONE.necessaria
                 ))
@@ -454,7 +453,7 @@ class AssoggettamentoVAS(graphene.Mutation):
         procedura_vas.verifica_effettuata = True
         procedura_vas.save()
 
-        _emissione_provvedimento_verifica = piano.getFirstAction(TIPOLOGIA_AZIONE.emissione_provvedimento_verifica)
+        _emissione_provvedimento_verifica = piano.getFirstAction(TipologiaAzione.emissione_provvedimento_verifica)
         if needsExecution(_emissione_provvedimento_verifica):
             chiudi_azione(_emissione_provvedimento_verifica)
 
@@ -470,7 +469,7 @@ class AssoggettamentoVAS(graphene.Mutation):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
-            _pareri_verifica_vas = _piano.getFirstAction(TIPOLOGIA_AZIONE.pareri_verifica_vas)
+            _pareri_verifica_vas = _piano.getFirstAction(TipologiaAzione.pareri_verifica_vas)
 
             if needsExecution(_pareri_verifica_vas) or \
                     _procedura_vas.verifica_effettuata or \
@@ -577,7 +576,7 @@ class AvvioConsultazioniVAS(graphene.Mutation):
         crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.pareri_sca,
+                    tipologia=TipologiaAzione.pareri_sca,
                     qualifica_richiesta=QualificaRichiesta.SCA,
                     stato=STATO_AZIONE.attesa,
                     data=datetime.datetime.now(timezone.get_current_timezone()) +
@@ -600,8 +599,8 @@ class AvvioConsultazioniVAS(graphene.Mutation):
                 return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         # check sullo stato
-        azione_avvio_ac = _piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_consultazioni_sca, QualificaRichiesta.AC)
-        azione_avvio_comune = _piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_consultazioni_sca, QualificaRichiesta.COMUNE)
+        azione_avvio_ac = _piano.getFirstAction(TipologiaAzione.avvio_consultazioni_sca, QualificaRichiesta.AC)
+        azione_avvio_comune = _piano.getFirstAction(TipologiaAzione.avvio_consultazioni_sca, QualificaRichiesta.COMUNE)
 
         if azione_avvio_ac and needsExecution(azione_avvio_ac):
             if auth.can_edit_piano(user, _piano, Qualifica.AC):
@@ -638,6 +637,87 @@ class AvvioConsultazioniVAS(graphene.Mutation):
             return GraphQLError(e, code=500)
 
 
+# class InvioDocPreliminare(graphene.Mutation):
+#
+#     class Arguments:
+#         uuid = graphene.String(required=True)
+#
+#     errors = graphene.List(graphene.String)
+#     consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
+#
+#     @classmethod
+#     def update_actions_for_phase(cls, fase, piano, consultazione_vas, user):
+#
+#         ensure_fase(fase, Fase.ANAGRAFICA)
+#
+#         now = datetime.datetime.now(timezone.get_current_timezone())
+#         chiudi_azione(azione_avvio, data=now)
+#         consultazione_vas.data_avvio_consultazioni_sca = now
+#
+#         _pareri_vas_expire_days = getattr(settings, 'PARERI_VAS_EXPIRE_DAYS', 60)
+#         crea_azione(
+#                 Azione(
+#                     piano=piano,
+#                     tipologia=TIPOLOGIA_AZIONE.pareri_sca,
+#                     qualifica_richiesta=QualificaRichiesta.SCA,
+#                     stato=STATO_AZIONE.attesa,
+#                     data=datetime.datetime.now(timezone.get_current_timezone()) +
+#                          datetime.timedelta(days=_pareri_vas_expire_days)
+#                 ))
+#
+#     @classmethod
+#     def mutate(cls, root, info, **input):
+#         _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
+#         _procedura_vas = _consultazione_vas.procedura_vas
+#         _piano = _procedura_vas.piano
+#         user = info.context.user
+#
+#         if not auth.can_access_piano(info.context.user, _piano):
+#             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+#
+#         # check generico
+#         if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
+#             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+#
+#         # check sullo stato
+#         azione_avvio_ac = _piano.getFirstAction(TipologiaAzione.avvio_consultazioni_sca, QualificaRichiesta.AC)
+#         azione_avvio_comune = _piano.getFirstAction(TipologiaAzione.avvio_consultazioni_sca, QualificaRichiesta.COMUNE)
+#
+#         if azione_avvio_ac and needsExecution(azione_avvio_ac):
+#             if auth.can_edit_piano(user, _piano, Qualifica.AC):
+#                 azione_avvio = azione_avvio_ac
+#             else:
+#                 return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+#         elif azione_avvio_comune and needsExecution(azione_avvio_comune):
+#             if auth.can_edit_piano(user, _piano, Qualifica.OPCOM):
+#                 azione_avvio = azione_avvio_comune
+#             else:
+#                 return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+#         else:
+#             return GraphQLError("Azione non eseguibile in questo momento", code=400)
+#
+#         assert azione_avvio
+#
+#         try:
+#             cls.update_actions_for_phase(_piano.fase, _piano, _consultazione_vas, info.context.user, azione_avvio)
+#
+#             # Notify Users
+#             piano_phase_changed.send(
+#                 sender=Piano,
+#                 user=info.context.user,
+#                 piano=_piano,
+#                 message_type="piano_verifica_vas_updated")
+#
+#             return AvvioConsultazioniVAS(
+#                 consultazione_vas_aggiornata=_consultazione_vas,
+#                 errors=[]
+#             )
+#         except BaseException as e:
+#             tb = traceback.format_exc()
+#             logger.error(tb)
+#             return GraphQLError(e, code=500)
+
+
 class InvioPareriVAS(graphene.Mutation):
     """
     Questa mutation viene chiamata due volte:
@@ -658,7 +738,7 @@ class InvioPareriVAS(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.avvio_consultazioni_sca
+        return TipologiaAzione.avvio_consultazioni_sca
 
     @staticmethod
     def procedura(piano):
@@ -668,10 +748,10 @@ class InvioPareriVAS(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
         ensure_fase(fase, Fase.ANAGRAFICA)
 
-        azione_avvio_ac = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_consultazioni_sca, QualificaRichiesta.AC)
-        azione_avvio_comune = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_consultazioni_sca, QualificaRichiesta.COMUNE)
+        azione_avvio_ac = piano.getFirstAction(TipologiaAzione.avvio_consultazioni_sca, QualificaRichiesta.AC)
+        azione_avvio_comune = piano.getFirstAction(TipologiaAzione.avvio_consultazioni_sca, QualificaRichiesta.COMUNE)
 
-        _pareri_sca_list = piano.azioni(TIPOLOGIA_AZIONE.pareri_sca)
+        _pareri_sca_list = piano.azioni(TipologiaAzione.pareri_sca)
         _pareri_sca = next((x for x in _pareri_sca_list if needsExecution(x)), None)
 
         data_chiusura = datetime.datetime.now(timezone.get_current_timezone())
@@ -686,7 +766,7 @@ class InvioPareriVAS(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.avvio_consultazioni_sca,
+                    tipologia=TipologiaAzione.avvio_consultazioni_sca,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria
                 ))
@@ -705,7 +785,7 @@ class InvioPareriVAS(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.avvio_esame_pareri_sca,
+                    tipologia=TipologiaAzione.avvio_esame_pareri_sca,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria
                 ))
@@ -735,7 +815,7 @@ class InvioPareriVAS(graphene.Mutation):
 
             # ci sono 2 pareri_sca, una dopo avvio_consultazion_sca per COMUNE e una dopo pareri_sca per AC
             # dobbiamo vedere in quale punto del flusso siamo
-            _azioni_count = _piano.azioni(TIPOLOGIA_AZIONE.pareri_sca).count()
+            _azioni_count = _piano.azioni(TipologiaAzione.pareri_sca).count()
 
             # attenzione: se ci sono più utenti collegati ad uno stesso SO SCA, con questo controllo ognuno
             # puo caricare il proprio parere.
@@ -811,7 +891,7 @@ class AvvioEsamePareriSCA(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.avvio_esame_pareri_sca
+        return TipologiaAzione.avvio_esame_pareri_sca
 
     @staticmethod
     def procedura(piano):
@@ -823,13 +903,13 @@ class AvvioEsamePareriSCA(graphene.Mutation):
 
         # check pareri sca
         _sca_ok = False
-        _pareri_sca_list = piano.azioni(TIPOLOGIA_AZIONE.pareri_sca)
+        _pareri_sca_list = piano.azioni(TipologiaAzione.pareri_sca)
         if _pareri_sca_list.all().count() == 2:
             if isExecuted(_pareri_sca_list[0]) and isExecuted(_pareri_sca_list[1]):
                 _sca_ok = True
 
         # check emissione
-        _emissione_provvedimento_verifica = piano.getFirstAction(TIPOLOGIA_AZIONE.emissione_provvedimento_verifica)
+        _emissione_provvedimento_verifica = piano.getFirstAction(TipologiaAzione.emissione_provvedimento_verifica)
         _emissione_ok = isExecuted(_emissione_provvedimento_verifica)
 
         # controllo transizione: questa azione può essere eseguita a partire da due rami di flusso distinti
@@ -840,14 +920,14 @@ class AvvioEsamePareriSCA(graphene.Mutation):
         if not transition_ok:
             return GraphQLError("Stato VAS incongruente", code=409)
 
-        _avvio_esame_pareri_sca = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_esame_pareri_sca)
+        _avvio_esame_pareri_sca = piano.getFirstAction(TipologiaAzione.avvio_esame_pareri_sca)
         if needsExecution(_avvio_esame_pareri_sca):
             chiudi_azione(_avvio_esame_pareri_sca)
 
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.upload_elaborati_vas,
+                    tipologia=TipologiaAzione.upload_elaborati_vas,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria
                 ))
@@ -887,7 +967,7 @@ class UploadElaboratiVAS(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.upload_elaborati_vas
+        return TipologiaAzione.upload_elaborati_vas
 
     @staticmethod
     def procedura(piano):
@@ -898,7 +978,7 @@ class UploadElaboratiVAS(graphene.Mutation):
 
         ensure_fase(fase, Fase.ANAGRAFICA)
 
-        _upload_elaborati_vas = piano.getFirstAction(TIPOLOGIA_AZIONE.upload_elaborati_vas)
+        _upload_elaborati_vas = piano.getFirstAction(TipologiaAzione.upload_elaborati_vas)
         if needsExecution(_upload_elaborati_vas):
             chiudi_azione(_upload_elaborati_vas)
 

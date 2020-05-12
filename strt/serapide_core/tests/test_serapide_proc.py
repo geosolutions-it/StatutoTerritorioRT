@@ -11,7 +11,7 @@ from serapide_core.modello.enums import (
     TipologiaVAS,
     TipologiaCopianificazione,
     Fase,
-    TIPOLOGIA_AZIONE,
+    TipologiaAzione,
 )
 from serapide_core.modello.models import (
     Piano,
@@ -184,7 +184,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
         piano = Piano.objects.get(codice=self.codice_piano)
         self.assertIsNotNone(piano)
-        self.assertIsNotNone(piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_esame_pareri_sca))
+        self.assertIsNotNone(piano.getFirstAction(TipologiaAzione.avvio_esame_pareri_sca))
 
         self.vas_avvio_esame_pareri()
 

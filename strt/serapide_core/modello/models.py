@@ -47,10 +47,8 @@ from .enums import (Fase,
                     STATO_AZIONE,
                     TipologiaVAS,
                     TipologiaPiano,
-                    TIPOLOGIA_AZIONE,
-                    # TIPOLOGIA_CONTATTO,
+                    TipologiaAzione,
                     TipologiaCopianificazione,
-                    # TIPOLOGIA_CONF_COPIANIFIZAZIONE
                     )
 
 
@@ -326,13 +324,13 @@ class Piano(models.Model):
         instance.tipologia = TipologiaPiano.fix_enum(instance.tipologia)
         return instance
 
-    def getFirstAction(self, tipologia_azione:TIPOLOGIA_AZIONE, qualifica_richiesta:QualificaRichiesta=None):
+    def getFirstAction(self, tipologia_azione: TipologiaAzione, qualifica_richiesta: QualificaRichiesta = None):
         qs = Azione.objects.filter(piano=self, tipologia=tipologia_azione)
         if qualifica_richiesta:
             qs = qs.filter(qualifica_richiesta=qualifica_richiesta)
         return qs.first()
 
-    def azioni(self, tipologia_azione:TIPOLOGIA_AZIONE=None, qualifica_richiesta:QualificaRichiesta=None):
+    def azioni(self, tipologia_azione: TipologiaAzione=None, qualifica_richiesta: QualificaRichiesta = None):
         qs = Azione.objects.filter(piano=self)
         if tipologia_azione:
             qs = qs.filter(tipologia=tipologia_azione)
@@ -352,9 +350,9 @@ class Azione(models.Model):
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     tipologia = models.CharField(
-        choices=TIPOLOGIA_AZIONE,
-        default=TIPOLOGIA_AZIONE.unknown,
-        max_length=80
+        choices=TipologiaAzione.create_choices(),
+        default=TipologiaAzione.unknown,
+        max_length=TipologiaAzione.get_max_len()
     )
 
     qualifica_richiesta = models.CharField(
@@ -378,7 +376,7 @@ class Azione(models.Model):
         verbose_name_plural = 'Azioni'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.qualifica_richiesta.name, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
+        return '{} - {} [{}]'.format(self.qualifica_richiesta.name, self.tipologia.name, self.uuid)
 
     @classmethod
     def count_by_piano(cls, piano: Piano, tipo=None):
@@ -391,6 +389,7 @@ class Azione(models.Model):
     def from_db(cls, db, field_names, values):
         instance = super(Azione, cls).from_db(db, field_names, values)
         instance.qualifica_richiesta = QualificaRichiesta.fix_enum(instance.qualifica_richiesta)
+        instance.tipologia = TipologiaAzione.fix_enum(instance.tipologia)
         return instance
 
 

@@ -43,9 +43,8 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_RISORSA,
     TipologiaVAS,
-    FASE_AZIONE,
-    TIPOLOGIA_AZIONE,
-    TOOLTIP_AZIONE
+    TipologiaAzione,
+    InfoAzioni,
 )
 
 from serapide_core.modello.models import (
@@ -142,13 +141,13 @@ class AzioneNode(DjangoObjectType):
     eseguibile = graphene.Boolean()
 
     def resolve_fase(self, info, **args):
-        return FASE_AZIONE[self.tipologia] if self.tipologia in FASE_AZIONE else None
+        return InfoAzioni[self.tipologia].fase.name if self.tipologia in InfoAzioni else None
 
     def resolve_label(self, info, **args):
-        return TIPOLOGIA_AZIONE[self.tipologia] if self.tipologia in TIPOLOGIA_AZIONE else None
+        return self.tipologia.value
 
     def resolve_tooltip(self, info, **args):
-        return TOOLTIP_AZIONE[self.tipologia] if self.tipologia in TOOLTIP_AZIONE else None
+        return InfoAzioni[self.tipologia].tooltip if self.tipologia in InfoAzioni else None
 
     def resolve_qualifica_richiesta(self, info, **args):
         return self.qualifica_richiesta.name

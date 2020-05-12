@@ -62,7 +62,7 @@ from serapide_core.modello.enums import (
     AZIONI_BASE,
     STATO_AZIONE,
     TipologiaVAS,
-    TIPOLOGIA_AZIONE,
+    TipologiaAzione,
     TipologiaPiano,
 )
 
@@ -166,7 +166,7 @@ def promuovi_piano(fase:Fase, piano):
 
     # - Update Action state accordingly
     if fase == Fase.ANAGRAFICA:
-        _creato = piano.getFirstAction(TIPOLOGIA_AZIONE.creato_piano)
+        _creato = piano.getFirstAction(TipologiaAzione.creato_piano)
         if _creato.stato != STATO_AZIONE.necessaria:
             raise Exception("Stato Inconsistente!")
 
@@ -174,11 +174,11 @@ def promuovi_piano(fase:Fase, piano):
 
     elif fase == Fase.AVVIO:
         ## WTF?????
-        _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
+        _richiesta_integrazioni = piano.getFirstAction(TipologiaAzione.richiesta_integrazioni)
         if needsExecution(_richiesta_integrazioni):
             chiudi_azione(_richiesta_integrazioni)
 
-        _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
+        _integrazioni_richieste = piano.getFirstAction(TipologiaAzione.integrazioni_richieste)
         if needsExecution(_integrazioni_richieste):
             chiudi_azione(_integrazioni_richieste)
 
@@ -640,15 +640,15 @@ def try_and_close_avvio(piano:Piano):
     procedura_vas: ProceduraVAS = piano.procedura_vas
 
     _conferenza_copianificazione_attiva = \
-        needsExecution(piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)) or \
-        needsExecution(piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione))
+        needsExecution(piano.getFirstAction(TipologiaAzione.richiesta_conferenza_copianificazione)) or \
+        needsExecution(piano.getFirstAction(TipologiaAzione.esito_conferenza_copianificazione))
 
-    _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
-    _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
+    _richiesta_integrazioni = piano.getFirstAction(TipologiaAzione.richiesta_integrazioni)
+    _integrazioni_richieste = piano.getFirstAction(TipologiaAzione.integrazioni_richieste)
 
-    _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+    _protocollo_genio_civile = piano.getFirstAction(TipologiaAzione.protocollo_genio_civile)
 
-    _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+    _formazione_del_piano = piano.getFirstAction(TipologiaAzione.formazione_del_piano)
 
     if not _conferenza_copianificazione_attiva and \
             isExecuted(_protocollo_genio_civile) and \
