@@ -54,6 +54,8 @@ class TipoRisorsa(SerapideEnum):
     PROVVEDIMENTO_VERIFICA_VAS = 'provvedimento_verifica_vas'
     DOCUMENTO_PRELIMINARE_VAS = 'documento_preliminare_vas'
     DOCUMENTO_PRELIMINARE_VAS_SEMPLIFICATO = 'doc_proc_semplificato'
+    SINTESI_NON_TECNICA = "sintesi_non_tecnica"
+
     # avvio
     OBIETTIVI_PIANO = 'obiettivi_piano'
     QUADRO_CONOSCITIVO = 'quadro_conoscitivo'

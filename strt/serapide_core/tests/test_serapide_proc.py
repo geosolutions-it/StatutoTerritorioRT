@@ -165,7 +165,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS)
 
-        self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True, client=self.client_ac)
+        # self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True, client=self.client_ac)
 
         # OPCOM: invio_doc_preliminare
         self.sendCNV('113_invio_doc_preliminare.query', 'INVIO DOC PRELIMINARE', self.codice_vas, client=self.client_ac, expected_code=403)
@@ -173,7 +173,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
         # SCA
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca)
-        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca, expected_code=412)
+        # self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca, expected_code=412)
 
         self.sendCNV('114_trasmissione_sca.query', "TRASMISSIONE PARERI SCA", self.codice_vas,  expected_code=403)
         self.sendCNV('114_trasmissione_sca.query', "TRASMISSIONE PARERI SCA", self.codice_vas, client=self.client_sca)
@@ -193,7 +193,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('116_redazione_documenti_vas.query', "UPLOAD ELBORATI VAS", self.codice_vas, expected_code=409)
 
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.RAPPORTO_AMBIENTALE)
-        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_SINTESI)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.SINTESI_NON_TECNICA)
 
         self.sendCNV('116_redazione_documenti_vas.query', "REDAZIONE DOCUMENTI VAS", self.codice_vas)
 

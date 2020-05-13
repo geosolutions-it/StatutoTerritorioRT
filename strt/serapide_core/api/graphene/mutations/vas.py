@@ -809,7 +809,7 @@ class RedazioneDocumentiVAS(graphene.Mutation):
         try:
             errs = []
 
-            for tipo in [TipoRisorsa.RAPPORTO_AMBIENTALE, TipoRisorsa.DOCUMENTO_SINTESI]:
+            for tipo in [TipoRisorsa.RAPPORTO_AMBIENTALE, TipoRisorsa.SINTESI_NON_TECNICA]:
                 if not _procedura_vas.risorse\
                         .filter(tipo=tipo.value, archiviata=False, user=info.context.user)\
                         .exists():

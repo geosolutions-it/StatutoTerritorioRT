@@ -180,12 +180,11 @@ class UploadRisorsaVAS(UploadBaseBase):
                 return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
             if _tipo_file == TipoRisorsa.PARERE_SCA.value:
-                if _procedura_vas.risorse.filter(tipo=_tipo_file, archiviata=False, user=info.context.user).exists():
-                    return GraphQLError('Precondition failed - Non si possono aggiungere ulteriori pareri SCA', code=412)
+                # if _procedura_vas.risorse.filter(tipo=_tipo_file, archiviata=False, user=info.context.user).exists():
+                #     return GraphQLError('Precondition failed - Non si possono aggiungere ulteriori pareri SCA', code=412)
 
                 if isExecuted(_piano.getFirstAction(TipologiaAzione.trasmissione_pareri_sca)):
                     return GraphQLError('Risorsa inviata e non modificabile', code=403)
-
 
             if _tipo_file == TipoRisorsa.PARERE_VERIFICA_VAS.value and \
                     not auth_vas.parere_verifica_vas_ok(info.context.user, _procedura_vas):
