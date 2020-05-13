@@ -32,6 +32,8 @@ fragment Azioni on AzioneNode {
       label
       tooltip
       fase
+      avvioScadenza
+      scadenza
 }
 
 fragment VAS on ProceduraVASNode {

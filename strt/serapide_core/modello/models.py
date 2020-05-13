@@ -367,7 +367,10 @@ class Azione(models.Model):
         max_length=20
     )
 
-    data = models.DateTimeField(null=True, blank=True)
+    data = models.DateTimeField(null=True, blank=True)  # Data chiusura azione
+
+    avvio_scadenza = models.DateField(null=True, blank=True)  # Data da cui decorre la scadenza
+    scadenza = models.DateField(null=True, blank=True)  # Data ultima per eseguire l'azione
 
     order = models.PositiveIntegerField(null=False)
 

@@ -520,7 +520,8 @@ class InvioDocPreliminare(graphene.Mutation):
 
         _invio_doc_preliminare = piano.getFirstAction(TipologiaAzione.invio_doc_preliminare)
         if needsExecution(_invio_doc_preliminare):
-            chiudi_azione(_invio_doc_preliminare)
+            now = datetime.datetime.now(timezone.get_current_timezone())
+            chiudi_azione(_invio_doc_preliminare, now)
 
             crea_azione(
                     Azione(
@@ -528,8 +529,9 @@ class InvioDocPreliminare(graphene.Mutation):
                         tipologia=TipologiaAzione.trasmissione_pareri_sca,
                         qualifica_richiesta=QualificaRichiesta.SCA,
                         stato=STATO_AZIONE.attesa,
-                        data=datetime.datetime.now(timezone.get_current_timezone()) +
-                             datetime.timedelta(days=90)
+
+                        avvio_scadenza=now.date(),
+                        scadenza=now.date() + datetime.timedelta(days=90)
                     ))
 
             crea_azione(
