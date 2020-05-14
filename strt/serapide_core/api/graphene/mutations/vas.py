@@ -518,7 +518,7 @@ def check_join_pubblicazione_provvedimento(info, piano: Piano):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TipologiaAzione.invio_doc_preliminare,
+                        tipologia=TipologiaAzione.redazione_documenti_vas,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
                         stato=STATO_AZIONE.necessaria
                     ))
@@ -526,7 +526,7 @@ def check_join_pubblicazione_provvedimento(info, piano: Piano):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TipologiaAzione.redazione_documenti_vas,
+                        tipologia=TipologiaAzione.invio_doc_preliminare,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
                         stato=STATO_AZIONE.necessaria
                     ))

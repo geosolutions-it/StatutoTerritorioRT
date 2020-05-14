@@ -53,7 +53,7 @@ class TipoRisorsa(SerapideEnum):
     PARERE_AC = 'parere_ac'
     PROVVEDIMENTO_VERIFICA_VAS = 'provvedimento_verifica_vas'
     DOCUMENTO_PRELIMINARE_VAS = 'documento_preliminare_vas'
-    DOCUMENTO_PRELIMINARE_VAS_SEMPLIFICATO = 'doc_proc_semplificato'
+    # DOCUMENTO_PRELIMINARE_VAS_SEMPLIFICATO = 'doc_proc_semplificato'
     SINTESI_NON_TECNICA = "sintesi_non_tecnica"
 
     # avvio
@@ -134,6 +134,10 @@ TIPOLOGIA_RISORSA = {
         'label': 'Parere per la verifica VAS',
         'tooltip': ''
     },
+    TipoRisorsa.PROVVEDIMENTO_VERIFICA_VAS.value: {
+        'label': 'Provvedimento di verifica VAS',
+        'tooltip': ''
+    }
 }
 
 

@@ -1,10 +1,10 @@
 import logging
-import json
 
 from serapide_core.modello.enums import (
     TipoRisorsa,
     TipologiaVAS,
     TipologiaCopianificazione,
+    TipologiaAzione,
     Fase,
 )
 
@@ -91,6 +91,60 @@ class FlussiTest(AbstractSerapideProcsTest):
         self.formazione_piano()
 
         self.check_fase(Fase.AVVIO)
+
+    def test_flow_vasverifica_assogg_ccno_form(self):
+
+        self.do_login()
+        self.create_piano_and_promote(TipologiaVAS.VERIFICA)
+        self.avvio_piano(TipologiaCopianificazione.NON_NECESSARIA)
+
+        self.vas_verifica(True)
+        self.exist_action(TipologiaAzione.invio_doc_preliminare)
+
+        self.vas_procedimento()
+
+        self.contributi_tecnici()
+        self.copianificazione(TipologiaCopianificazione.NON_NECESSARIA, True)
+
+        self.genio_civile()
+
+        self.check_fase(Fase.ANAGRAFICA)
+
+        self.formazione_piano()
+
+        self.check_fase(Fase.AVVIO)
+
+    def test_flow_vasversemp_assogg_ccno_form(self):
+
+        self.do_login()
+        self.create_piano_and_promote(TipologiaVAS.VERIFICA_SEMPLIFICATA)
+        self.avvio_piano(TipologiaCopianificazione.NON_NECESSARIA)
+
+        self.vas_verifica(True, ver_sempl=True)
+        self.exist_action(TipologiaAzione.invio_doc_preliminare)
+
+        self.vas_procedimento()
+
+        self.contributi_tecnici()
+        self.copianificazione(TipologiaCopianificazione.NON_NECESSARIA, True)
+
+        self.genio_civile()
+
+        self.check_fase(Fase.ANAGRAFICA)
+
+        self.formazione_piano()
+
+        self.check_fase(Fase.AVVIO)
+
+    def test_flow_vasprocsemp_assogg_ccno_form(self):
+
+        self.do_login()
+        self.create_piano_and_promote(TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO)
+        self.avvio_piano(TipologiaCopianificazione.NON_NECESSARIA)
+
+        self.vas_verifica(True, proc_sempl=True)
+        self.exist_action(TipologiaAzione.redazione_documenti_vas)
+
 
     def test_flow_vasno_ccsiirno_form(self):
 

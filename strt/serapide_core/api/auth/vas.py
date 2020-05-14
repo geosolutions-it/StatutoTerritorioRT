@@ -122,11 +122,11 @@ def procedura_vas_is_valid(piano, procedura_vas=None):
                 if SoggettoOperante.get_by_qualifica(piano, Qualifica.SCA).count() == 0:
                     msg.append("Soggetto SCA mancante")
                     
-                risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS_SEMPLIFICATO.value, archiviata=False)
+                risorse = procedura_vas.risorse.filter(tipo=TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS.value, archiviata=False)
                 if risorse.all().count() > 0:
                     for r in risorse:
                         if r.dimensione == 0 or not r.file or not os.path.exists(r.file.path):
-                            msg.append('Errore nella risorsa VAS proceimento semplificato [{}]'.format(r))
+                            msg.append('Errore nella risorsa VAS procedimento semplificato [{}]'.format(r))
                 else:
                     msg.append('Risorsa mancante per VAS proceimento semplificato')
                 return len(msg) == 0, msg
