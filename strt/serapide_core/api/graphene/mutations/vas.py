@@ -184,12 +184,15 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             if _procedura_vas_data.pubblicazione_provvedimento_verifica_ap:
                 if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.OPCOM):
                     return GraphQLError("Forbidden - Non è permesso modificare un campo AP", code=403)
+                if isExecuted(_piano.getFirstAction(TipologiaAzione.pubblicazione_provvedimento_verifica_ap)):
+                    return GraphQLError("Il campo pubblicazione provvedimento è bloccato ", code=403)
 
             # perform check before update
             if _procedura_vas_data.pubblicazione_provvedimento_verifica_ac:
                 if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
-                    if not auth.has_qualifica(info.context.user, _piano.ente, Qualifica.OPCOM):
-                        return GraphQLError("Forbidden - Non è permesso modificare un campo AC", code=403)
+                    return GraphQLError("Forbidden - Non è permesso modificare un campo AC", code=403)
+                if isExecuted(_piano.getFirstAction(TipologiaAzione.pubblicazione_provvedimento_verifica_ac)):
+                    return GraphQLError("Il campo pubblicazione provvedimento è bloccato ", code=403)
 
             # update!
             procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
@@ -453,7 +456,7 @@ class EmissioneProvvedimentoVerifica(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica_com,
+                    tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica_ap,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria,
                 ))
@@ -478,6 +481,138 @@ class EmissioneProvvedimentoVerifica(graphene.Mutation):
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
             return EmissioneProvvedimentoVerifica(
+                vas_aggiornata=_procedura_vas,
+                errors=[]
+            )
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+
+
+def check_join_pubblicazione_provvedimento(info, piano: Piano):
+
+    pp_ap = piano.getFirstAction(TipologiaAzione.pubblicazione_provvedimento_verifica_ap)
+    pp_ac = piano.getFirstAction(TipologiaAzione.pubblicazione_provvedimento_verifica_ac)
+
+    if isExecuted(pp_ap) and isExecuted(pp_ac):
+
+        # Notify Users
+        piano_phase_changed.send(
+            sender=Piano,
+            user=info.context.user,
+            piano=piano,
+            message_type="piano_verifica_vas_updated")
+
+        _vas: ProceduraVAS = piano.procedura_vas
+
+        if not _vas.assoggettamento:
+            _vas.conclusa = True
+            _vas.save()
+
+            if try_and_close_avvio(piano):
+                check_and_promote(piano, info)
+
+        else:
+            if _vas.tipologia == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
+                crea_azione(
+                    Azione(
+                        piano=piano,
+                        tipologia=TipologiaAzione.invio_doc_preliminare,
+                        qualifica_richiesta=QualificaRichiesta.COMUNE,
+                        stato=STATO_AZIONE.necessaria
+                    ))
+            else:
+                crea_azione(
+                    Azione(
+                        piano=piano,
+                        tipologia=TipologiaAzione.redazione_documenti_vas,
+                        qualifica_richiesta=QualificaRichiesta.COMUNE,
+                        stato=STATO_AZIONE.necessaria
+                    ))
+
+
+class PubblicazioneProvvedimentoVerificaAp(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, info):
+        ensure_fase(fase, Fase.ANAGRAFICA)
+
+        _ppv = piano.getFirstAction(TipologiaAzione.pubblicazione_provvedimento_verifica_ap)
+        if needsExecution(_ppv):
+            chiudi_azione(_ppv)
+
+            check_join_pubblicazione_provvedimento(info, piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _piano = _procedura_vas.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
+        if not _procedura_vas.pubblicazione_provvedimento_verifica_ap:
+            return GraphQLError("URL di pubblicazione non impostata", code=409)
+
+        try:
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info)
+
+            return PubblicazioneProvvedimentoVerificaAp(
+                vas_aggiornata=_procedura_vas,
+                errors=[]
+            )
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+
+
+class PubblicazioneProvvedimentoVerificaAc(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, info):
+        ensure_fase(fase, Fase.ANAGRAFICA)
+
+        _ppv = piano.getFirstAction(TipologiaAzione.pubblicazione_provvedimento_verifica_ac)
+        if needsExecution(_ppv):
+            chiudi_azione(_ppv)
+
+            check_join_pubblicazione_provvedimento(info, piano)
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _piano = _procedura_vas.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
+        if not _procedura_vas.pubblicazione_provvedimento_verifica_ac:
+            return GraphQLError("URL di pubblicazione non impostata", code=409)
+
+        try:
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info)
+
+            return PubblicazioneProvvedimentoVerificaAc(
                 vas_aggiornata=_procedura_vas,
                 errors=[]
             )

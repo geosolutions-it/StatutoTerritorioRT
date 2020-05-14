@@ -132,22 +132,24 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         # {"operationName": "UpdateProceduraVas", "variables": {"input": {"proceduraVas": {"assoggettamento": false},
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'assoggettamento', False)
 
-        self.send('120_trasmissione_dpv_vas.query', 'TRASMISSIONE DPV', replace_args={'codice': self.codice_vas}, client=self.client_ac)
+        self.sendCNV('120_trasmissione_dpv_vas.query', 'TRASMISSIONE DPV', self.codice_vas, client=self.client_ac)
 
         # SCA
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_VERIFICA_VAS, client=self.client_sca)
-        self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, expected_code=403)
-        self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, client=self.client_sca)
+        self.sendCNV('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', self.codice_vas, expected_code=403)
+        self.sendCNV('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', self.codice_vas, client=self.client_sca)
 
         # AC
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PROVVEDIMENTO_VERIFICA_VAS)
-        self.send('014_emissione_provvedimento_verifica.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, expected_code=403)
-        self.send('014_emissione_provvedimento_verifica.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, client=self.client_ac)
+        self.sendCNV('014_emissione_provvedimento_verifica.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, expected_code=403)
+        self.sendCNV('014_emissione_provvedimento_verifica.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, client=self.client_ac)
 
-        # self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", expected_code=403)
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", client=self.client_ac)
-
+        self.sendCNV('121_trasmissione_provvedimento_verifica_ap.query', 'TRASMISSIONE PV', self.codice_vas, expected_code=409)
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
+        self.sendCNV('121_trasmissione_provvedimento_verifica_ap.query', 'TRASMISSIONE PV AP', self.codice_vas)
+
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", client=self.client_ac)
+        self.sendCNV('122_trasmissione_provvedimento_verifica_ac.query', 'TRASMISSIONE PV AC', self.codice_vas, client=self.client_ac)
 
         self.assert_vas_conclusa()
 

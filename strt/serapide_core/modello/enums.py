@@ -176,7 +176,7 @@ class TipologiaAzione(SerapideEnum):
     pareri_verifica_sca = 'Pareri verifica VAS'  # SCA
     emissione_provvedimento_verifica = 'Emissione Provvedimento di verifica'  # AC
     pubblicazione_provvedimento_verifica_ac = 'Pubblicazione provvedimento di verifica AC'
-    pubblicazione_provvedimento_verifica_com = 'Pubblicazione provvedimento di verifica AP'
+    pubblicazione_provvedimento_verifica_ap = 'Pubblicazione provvedimento di verifica AP'
     # avvio_consultazioni_sca = 'Avvio consultazioni SCA'  # Comune/AC
     # pareri_sca = 'Pareri SCA'  # SCA
     # avvio_esame_pareri_sca = 'Avvio esame pareri SCA'  # Comune
@@ -241,7 +241,7 @@ InfoAzioni = {
         TipologiaAzione.pareri_verifica_sca: AzioneInfo(Fase.ANAGRAFICA),
         TipologiaAzione.emissione_provvedimento_verifica: AzioneInfo(Fase.ANAGRAFICA, ART22),
         TipologiaAzione.pubblicazione_provvedimento_verifica_ac: AzioneInfo(Fase.ANAGRAFICA, ART22),
-        TipologiaAzione.pubblicazione_provvedimento_verifica_com: AzioneInfo(Fase.ANAGRAFICA, ART22),
+        TipologiaAzione.pubblicazione_provvedimento_verifica_ap: AzioneInfo(Fase.ANAGRAFICA, ART22),
         # TipologiaAzione.avvio_consultazioni_sca: AzioneInfo(Fase.ANAGRAFICA, ART22),
         # TipologiaAzione.pareri_sca: AzioneInfo(Fase.ANAGRAFICA),
         # TipologiaAzione.avvio_esame_pareri_sca: AzioneInfo(Fase.ANAGRAFICA),

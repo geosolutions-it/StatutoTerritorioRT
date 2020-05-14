@@ -183,7 +183,8 @@ class Mutation(object):
 
     trasmissione_dpv_vas = vas.TrasmissioneDPVVAS.Field()
     emissione_provvedimento_verifica = vas.EmissioneProvvedimentoVerifica.Field()
-    # pubblicazione_provvedimento_verifica = vas.PuEmissioneProvvedimentoVerifica.Field()
+    pubblicazione_provvedimento_verifica_ac = vas.PubblicazioneProvvedimentoVerificaAc.Field()
+    pubblicazione_provvedimento_verifica_ap = vas.PubblicazioneProvvedimentoVerificaAp.Field()
 
     # create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
     update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()
