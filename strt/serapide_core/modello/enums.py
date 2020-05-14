@@ -116,7 +116,24 @@ TIPOLOGIA_RISORSA = {
     TipoRisorsa.INDIVIDUAZIONE_GARANTE_INFORMAZIONE.value: {
         'label': 'Individuazione del garante dell\'informazione',
         'tooltip': ''
-    }
+    },
+
+    TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS.value: {
+        'label': 'Documento preliminare di verifica assoggettabilità',
+        'tooltip': 'art. 22 L.R. 10/2010'
+    },
+    TipoRisorsa.RELAZIONE_MOTIVATA.value: {
+        'label': 'Relazione motivata per verifica VAS semplificata',
+        'tooltip': 'art. 5 co.3ter L.R. 10/2010'
+    },
+    TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS.value: {
+        'label': 'Documento preliminare VAS',
+        'tooltip': 'art. 23 L.R. 10/2010'
+    },
+    TipoRisorsa.PARERE_VERIFICA_VAS.value: {
+        'label': 'Parere per la verifica VAS',
+        'tooltip': ''
+    },
 }
 
 
@@ -158,7 +175,8 @@ class TipologiaAzione(SerapideEnum):
     selezione_tipologia_vas = 'Selezione tipologia VAS'  # OPCOM
     pareri_verifica_sca = 'Pareri verifica VAS'  # SCA
     emissione_provvedimento_verifica = 'Emissione Provvedimento di verifica'  # AC
-    pubblicazione_provvedimento_verifica = 'Pubblicazione provvedimento di verifica'  # AC/Comune
+    pubblicazione_provvedimento_verifica_ac = 'Pubblicazione provvedimento di verifica AC'
+    pubblicazione_provvedimento_verifica_com = 'Pubblicazione provvedimento di verifica AP'
     # avvio_consultazioni_sca = 'Avvio consultazioni SCA'  # Comune/AC
     # pareri_sca = 'Pareri SCA'  # SCA
     # avvio_esame_pareri_sca = 'Avvio esame pareri SCA'  # Comune
@@ -222,7 +240,8 @@ InfoAzioni = {
         TipologiaAzione.trasmissione_dpv_vas: AzioneInfo(Fase.ANAGRAFICA),
         TipologiaAzione.pareri_verifica_sca: AzioneInfo(Fase.ANAGRAFICA),
         TipologiaAzione.emissione_provvedimento_verifica: AzioneInfo(Fase.ANAGRAFICA, ART22),
-        TipologiaAzione.pubblicazione_provvedimento_verifica: AzioneInfo(Fase.ANAGRAFICA, ART22),
+        TipologiaAzione.pubblicazione_provvedimento_verifica_ac: AzioneInfo(Fase.ANAGRAFICA, ART22),
+        TipologiaAzione.pubblicazione_provvedimento_verifica_com: AzioneInfo(Fase.ANAGRAFICA, ART22),
         # TipologiaAzione.avvio_consultazioni_sca: AzioneInfo(Fase.ANAGRAFICA, ART22),
         # TipologiaAzione.pareri_sca: AzioneInfo(Fase.ANAGRAFICA),
         # TipologiaAzione.avvio_esame_pareri_sca: AzioneInfo(Fase.ANAGRAFICA),
@@ -263,6 +282,9 @@ InfoAzioni = {
         TipologiaAzione.compilazione_finale_monitoraggio_urbanistico: AzioneInfo(Fase.APPROVAZIONE),
         TipologiaAzione.pubblicazione_piano: AzioneInfo(Fase.APPROVAZIONE),
 }
+
+if len(TipologiaAzione) != len(InfoAzioni):
+    raise Exception('Azioni non inizializzate correttamente')
 
 
 AZIONI_BASE = {

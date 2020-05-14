@@ -167,7 +167,9 @@ class Mutation(object):
     # create_procedura_vas = vas.CreateProceduraVAS.Field()
     update_procedura_vas = vas.UpdateProceduraVAS.Field()
     invio_pareri_verifica_vas = vas.InvioPareriVerificaVAS.Field()
-    assoggettamento_vas = vas.AssoggettamentoVAS.Field()
+
+    # assoggettamento_vas = vas.AssoggettamentoVAS.Field()
+
     create_consultazione_vas = vas.CreateConsultazioneVAS.Field()
     update_consultazione_vas = vas.UpdateConsultazioneVAS.Field()
     # avvio_consultazioni_vas = vas.AvvioConsultazioniVAS.Field()
@@ -180,6 +182,8 @@ class Mutation(object):
     redazione_documenti_vas = vas.RedazioneDocumentiVAS.Field()
 
     trasmissione_dpv_vas = vas.TrasmissioneDPVVAS.Field()
+    emissione_provvedimento_verifica = vas.EmissioneProvvedimentoVerifica.Field()
+    # pubblicazione_provvedimento_verifica = vas.PuEmissioneProvvedimentoVerifica.Field()
 
     # create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
     update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()

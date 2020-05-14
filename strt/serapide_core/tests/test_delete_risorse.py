@@ -157,8 +157,8 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         # AC
         # {"operationName":"VasUploadFile","variables":{"file":null,"codice":"a62a4292-bc89-4a54-9361-ba7d0472d317","tipo":"provvedimento_verifica_vas"}
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PROVVEDIMENTO_VERIFICA_VAS)
-        self.sendCNV('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, expected_code=403)
-        self.sendCNV('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, client=self.client_ac)
+        self.sendCNV('014_emissione_provvedimento_verifica.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, expected_code=403)
+        self.sendCNV('014_emissione_provvedimento_verifica.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, client=self.client_ac)
 
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas,
                      'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide",

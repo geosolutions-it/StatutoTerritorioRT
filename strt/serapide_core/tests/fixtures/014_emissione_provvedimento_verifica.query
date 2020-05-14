@@ -1,23 +1,20 @@
 {
-   "operationName" : "ProvveddimentoVerificaVAS",
+   "operationName" : "EmissioneProvvedimentoVerifica",
 
    "variables" : {
       "uuid" : "{codice}"
    },
 
-   "query" : "mutation ProvveddimentoVerificaVAS($uuid: String!) {
-  assoggettamentoVas(uuid: $uuid) {
+   "query" : "mutation EmissioneProvvedimentoVerifica($uuid: String!) {
+  emissioneProvvedimentoVerifica(uuid: $uuid) {
     vasAggiornata {
       uuid
       verificaEffettuata
       dataAssoggettamento
       piano {
         ...AzioniPiano
-        __typename
       }
-      __typename
     }
-    __typename
   }
 }
 
@@ -26,9 +23,7 @@ fragment AzioniPiano on PianoNode {
   fase
   azioni {
     ...Azioni
-    __typename
   }
-  __typename
 }
 
 fragment Azioni on AzioneNode {
@@ -41,7 +36,8 @@ fragment Azioni on AzioneNode {
       label
       tooltip
       fase
-      __typename
+      avvioScadenza
+      scadenza
 }
 "
 }
