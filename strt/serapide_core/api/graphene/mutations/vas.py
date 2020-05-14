@@ -57,6 +57,7 @@ from serapide_core.modello.enums import (
     TipologiaVAS,
     TipologiaAzione,
     TipoRisorsa,
+    TipoExpire,
 )
 
 from strt_users.enums import QualificaRichiesta, Qualifica
@@ -77,72 +78,58 @@ def init_vas_procedure(piano:Piano):
     procedura_vas = piano.procedura_vas
     _selezione_tipologia_vas = piano.getFirstAction(TipologiaAzione.selezione_tipologia_vas)
 
-    if _selezione_tipologia_vas:
-        if procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
-            _selezione_tipologia_vas.stato = STATO_AZIONE.nessuna
+    now = datetime.datetime.now(timezone.get_current_timezone())
 
-        elif procedura_vas.tipologia == TipologiaVAS.PROCEDURA_ORDINARIA:
+    if needsExecution(_selezione_tipologia_vas):
+        chiudi_azione(_selezione_tipologia_vas, now)
+    else:
+        raise GraphQLError("Stato inconsistente nell'inizializzazione VAS", code=500)
 
-            _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
-            chiudi_azione(_selezione_tipologia_vas, datetime.datetime.now(timezone.get_current_timezone()) + \
-                                 datetime.timedelta(days=_verifica_vas_expire_days))
+    if procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA:
+        pass
 
-            _avvio_consultazioni_sca_ac_expire_days = 10
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.invio_doc_preliminare,
-                    qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.attesa,
-                    data=datetime.datetime.now(timezone.get_current_timezone()) +
-                         datetime.timedelta(days=_avvio_consultazioni_sca_ac_expire_days)
-                ))
+    elif procedura_vas.tipologia == TipologiaVAS.PROCEDURA_ORDINARIA:
 
-        elif procedura_vas.tipologia == TipologiaVAS.VERIFICA_SEMPLIFICATA:
-            _selezione_tipologia_vas.stato = STATO_AZIONE.nessuna
+        crea_azione(
+            Azione(
+                piano=piano,
+                tipologia=TipologiaAzione.invio_doc_preliminare,
+                qualifica_richiesta=QualificaRichiesta.COMUNE,
+                stato=STATO_AZIONE.attesa,
+            ))
 
-            _emissione_provvedimento_verifica_expire_days = 30
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.emissione_provvedimento_verifica,
-                    qualifica_richiesta=QualificaRichiesta.AC,
-                    stato=STATO_AZIONE.attesa,
-                    data=datetime.datetime.now(timezone.get_current_timezone()) +
-                         datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
-                ))
+    elif procedura_vas.tipologia == TipologiaVAS.VERIFICA:
 
-        elif procedura_vas.tipologia in [TipologiaVAS.VERIFICA,
-                                         TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO]:
-            # _verifica_vas.stato = STATO_AZIONE.attesa
-            _selezione_tipologia_vas.stato = STATO_AZIONE.nessuna
-            _verifica_vas_expire_days = getattr(settings, 'VERIFICA_VAS_EXPIRE_DAYS', 60)
-            _selezione_tipologia_vas.data = datetime.datetime.now(timezone.get_current_timezone()) + \
-                                 datetime.timedelta(days=_verifica_vas_expire_days)
+        crea_azione(
+            Azione(
+                piano=piano,
+                tipologia=TipologiaAzione.trasmissione_dpv_vas,
+                qualifica_richiesta=QualificaRichiesta.AC,
+                stato=STATO_AZIONE.attesa,
+            ).imposta_scadenza(now, TipoExpire.TRASMISSIONE_DPV_VAS)
+        )
 
-            _pareri_vas_expire_days = getattr(settings, 'PARERI_VERIFICA_VAS_EXPIRE_DAYS', 30)
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.pareri_verifica_vas,
-                    qualifica_richiesta=QualificaRichiesta.SCA,
-                    stato=STATO_AZIONE.attesa,
-                    data=datetime.datetime.now(timezone.get_current_timezone()) +
-                         datetime.timedelta(days=_pareri_vas_expire_days)
-                ))
+    elif procedura_vas.tipologia == TipologiaVAS.VERIFICA_SEMPLIFICATA:
 
-            _emissione_provvedimento_verifica_expire_days = 90
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.emissione_provvedimento_verifica,
-                    qualifica_richiesta=QualificaRichiesta.AC,
-                    stato=STATO_AZIONE.attesa,
-                    data=datetime.datetime.now(timezone.get_current_timezone()) +
-                         datetime.timedelta(days=_emissione_provvedimento_verifica_expire_days)
-                ))
+        crea_azione(
+            Azione(
+                piano=piano,
+                tipologia=TipologiaAzione.emissione_provvedimento_verifica,
+                qualifica_richiesta=QualificaRichiesta.AC,
+                stato=STATO_AZIONE.attesa,
+            ).imposta_scadenza(now, TipoExpire.EMISSIONE_PV_VERIFICASEMPLIFICATA)
+        )
 
-        _selezione_tipologia_vas.save()
+    elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
+
+        crea_azione(
+            Azione(
+                piano=piano,
+                tipologia=TipologiaAzione.pareri_verifica_sca,
+                qualifica_richiesta=QualificaRichiesta.SCA,
+                stato=STATO_AZIONE.attesa,
+            ).imposta_scadenza(now, TipoExpire.PARERI_VERIFICA_SCA_PROCEDIMENTOSEMPLIFICATO)
+        )
 
 
 class UpdateProceduraVAS(relay.ClientIDMutation):
@@ -258,6 +245,65 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             return GraphQLError(e, code=500)
 
 
+class TrasmissioneDPVVAS(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
+        ensure_fase(fase, Fase.ANAGRAFICA)
+
+        _pareri_verifica_vas = piano.getFirstAction(TipologiaAzione.trasmissione_dpv_vas)
+        if needsExecution(_pareri_verifica_vas):
+            now = datetime.datetime.now(timezone.get_current_timezone())
+            chiudi_azione(_pareri_verifica_vas, now)
+
+            crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TipologiaAzione.pareri_verifica_sca,
+                    qualifica_richiesta=QualificaRichiesta.SCA,
+                    stato=STATO_AZIONE.attesa,
+                ).imposta_scadenza(now, TipoExpire.PARERI_VERIFICA_SCA)
+            )
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _piano = _procedura_vas.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
+        try:
+            if not _procedura_vas.risorse \
+                    .filter(tipo=TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS.value, archiviata=False) \
+                    .exists():
+                return GraphQLError("File mancante: {}".format(TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS.value), code=409)
+
+            if not SoggettoOperante.get_by_qualifica(_piano, Qualifica.SCA).exists() and \
+                    not Delega.objects.filter(qualifica=Qualifica.SCA, delegante__piano=_piano).exists():
+                return GraphQLError("Non sono associati SCA al piano", code=409)
+
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+
+            return InvioPareriVerificaVAS(
+                vas_aggiornata=_procedura_vas,
+                errors=[]
+            )
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+
+
 class InvioPareriVerificaVAS(graphene.Mutation):
 
     class Arguments:
@@ -268,7 +314,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TipologiaAzione.pareri_verifica_vas
+        return TipologiaAzione.pareri_verifica_sca
 
     @staticmethod
     def procedura(piano):
@@ -278,9 +324,28 @@ class InvioPareriVerificaVAS(graphene.Mutation):
     def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
         ensure_fase(fase, Fase.ANAGRAFICA)
 
-        _pareri_verifica_vas = piano.getFirstAction(TipologiaAzione.pareri_verifica_vas)
+        if procedura_vas.tipologia == TipologiaVAS.VERIFICA:
+            exp = TipoExpire.EMISSIONE_PV_VERIFICA
+        elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
+            exp = TipoExpire.EMISSIONE_PV_PROCEDIMENTOSEMPLIFICATO
+        else:
+            raise GraphQLError("Tipo procedura VAS inaspettata: {}".format(procedura_vas.tipologia), code=403)
+
+        _pareri_verifica_vas = piano.getFirstAction(TipologiaAzione.pareri_verifica_sca)
         if needsExecution(_pareri_verifica_vas):
             chiudi_azione(_pareri_verifica_vas)
+
+            _azione_start_vas = piano.getFirstAction(TipologiaAzione.selezione_tipologia_vas)
+            _data_start_vas = _azione_start_vas.data
+
+            crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TipologiaAzione.emissione_provvedimento_verifica,
+                    qualifica_richiesta=QualificaRichiesta.AC,
+                    stato=STATO_AZIONE.attesa,
+                ).imposta_scadenza(_data_start_vas, exp)
+            )
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -294,6 +359,12 @@ class InvioPareriVerificaVAS(graphene.Mutation):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
+
+            if not _procedura_vas.risorse\
+                    .filter(tipo=TipoRisorsa.PARERE_VERIFICA_VAS.value, archiviata=False, user=info.context.user)\
+                    .exists():
+                return GraphQLError("File mancante: {}".format(TipoRisorsa.PARERE_VERIFICA_VAS.value), code=409)
+
             _pareri_vas_count = ParereVerificaVAS.objects.filter(
                 user=info.context.user,
                 procedura_vas=_procedura_vas
@@ -323,7 +394,129 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                 ).exists()
 
                 if not _pareri_vas_exists:
-                    deleghe = Delega.objects.filter(delegante=_sca)
+                    deleghe = Delega.objects.filter(delegante=_sca, qualifica=Qualifica.SCA)
+                    users = [d.token.user for d in deleghe]
+                    _pareri_vas_exists = ParereVerificaVAS.objects.filter(
+                         procedura_vas=_procedura_vas,
+                         user__in=users,
+                    ).exists()
+
+                if not _pareri_vas_exists:
+                    _tutti_pareri_inviati = False
+                    break
+
+            if _tutti_pareri_inviati:
+
+                # Notify Users
+                piano_phase_changed.send(
+                    sender=Piano,
+                    user=info.context.user,
+                    piano=_piano,
+                    message_type="tutti_pareri_inviati")
+
+                cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
+
+            return InvioPareriVerificaVAS(
+                vas_aggiornata=_procedura_vas,
+                errors=[]
+            )
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+
+
+class EmissioneProvvedimentoVerifica(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
+
+    @staticmethod
+    def action():
+        return TipologiaAzione.pareri_verifica_sca
+
+    @staticmethod
+    def procedura(piano):
+        return piano.procedura_vas
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_vas, user):
+        ensure_fase(fase, Fase.ANAGRAFICA)
+
+        if procedura_vas.tipologia == TipologiaVAS.VERIFICA:
+            exp = TipoExpire.EMISSIONE_PV_VERIFICA
+        elif procedura_vas.tipologia == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
+            exp = TipoExpire.EMISSIONE_PV_PROCEDIMENTOSEMPLIFICATO
+        else:
+            raise GraphQLError("Tipo procedura VAS inaspettata: {}".format(procedura_vas.tipologia), code=403)
+
+        _pareri_verifica_vas = piano.getFirstAction(TipologiaAzione.pareri_verifica_sca)
+        if needsExecution(_pareri_verifica_vas):
+            chiudi_azione(_pareri_verifica_vas)
+
+            _azione_start_vas = piano.getFirstAction(TipologiaAzione.selezione_tipologia_vas)
+            _data_start_vas = _azione_start_vas.data
+
+            crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TipologiaAzione.emissione_provvedimento_verifica,
+                    qualifica_richiesta=QualificaRichiesta.AC,
+                    stato=STATO_AZIONE.attesa,
+                ).imposta_scadenza(_data_start_vas, TipoExpire.exp)
+            )
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+        _piano = _procedura_vas.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.SCA):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
+        try:
+
+            if not _procedura_vas.risorse\
+                    .filter(tipo=TipoRisorsa.PARERE_VERIFICA_VAS.value, archiviata=False, user=info.context.user)\
+                    .exists():
+                return GraphQLError("File mancante: {}".format(TipoRisorsa.PARERE_VERIFICA_VAS.value), code=409)
+
+            _pareri_vas_count = ParereVerificaVAS.objects.filter(
+                user=info.context.user,
+                procedura_vas=_procedura_vas
+            ).count()
+
+            if _pareri_vas_count == 0:
+                _parere_vas = ParereVerificaVAS(
+                    inviata=True,
+                    user=info.context.user,
+                    procedura_vas=_procedura_vas
+                )
+                _parere_vas.save()
+            elif _pareri_vas_count == 1:
+                pass
+            else:
+                return GraphQLError("L'utente ha già inviato un parere verifica VAS", code=400)
+
+            _tutti_pareri_inviati = True
+            for _sca in SoggettoOperante.get_by_qualifica(_piano, Qualifica.SCA):
+                # controlliamo che per ogni ufficio SCA assegnato come SO, almeno un assegnatario abbia inviato parere
+
+                assegnatari = Assegnatario.objects.filter(qualifica_ufficio=_sca.qualifica_ufficio)
+                users = [a.utente for a in assegnatari]
+                _pareri_vas_exists = ParereVerificaVAS.objects.filter(
+                    procedura_vas=_procedura_vas,
+                    user__in=users,
+                ).exists()
+
+                if not _pareri_vas_exists:
+                    deleghe = Delega.objects.filter(delegante=_sca, qualifica=Qualifica.SCA)
                     users = [d.token.user for d in deleghe]
                     _pareri_vas_exists = ParereVerificaVAS.objects.filter(
                          procedura_vas=_procedura_vas,
@@ -419,7 +612,7 @@ class AssoggettamentoVAS(graphene.Mutation):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
-            _pareri_verifica_vas = _piano.getFirstAction(TipologiaAzione.pareri_verifica_vas)
+            _pareri_verifica_vas = _piano.getFirstAction(TipologiaAzione.pareri_verifica_sca)
 
             if needsExecution(_pareri_verifica_vas) or \
                     _procedura_vas.verifica_effettuata or \
@@ -529,10 +722,8 @@ class InvioDocPreliminare(graphene.Mutation):
                         tipologia=TipologiaAzione.trasmissione_pareri_sca,
                         qualifica_richiesta=QualificaRichiesta.SCA,
                         stato=STATO_AZIONE.attesa,
-
-                        avvio_scadenza=now.date(),
-                        scadenza=now.date() + datetime.timedelta(days=90)
-                    ))
+                    ).imposta_scadenza(now, TipoExpire.TRASMISSIONE_PARERI_SCA)
+            )
 
             crea_azione(
                     Azione(
@@ -830,3 +1021,4 @@ class RedazioneDocumentiVAS(graphene.Mutation):
             tb = traceback.format_exc()
             logger.error(tb)
             return GraphQLError(e, code=500)
+

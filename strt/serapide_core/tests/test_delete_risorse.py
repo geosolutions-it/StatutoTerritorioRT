@@ -81,7 +81,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
             self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)
 
         # CREATE and DELETE
-        nome,response = self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
+        nome,response = self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
         content = json.loads(response.content)
         risorse = content['data']['upload']['pianoAggiornato']['risorse']['edges']
         logger.warning("LOOK FOR FILE %s"%nome)
@@ -89,7 +89,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         logger.warning("CODICE RISORSA %s"% res_code)
         response = self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', res_code)
 
-        self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
+        self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.value)
 
         # CREATE and DELETE
@@ -139,7 +139,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
             TipoRisorsa.PROGRAMMA_ATTIVITA,
             TipoRisorsa.INDIVIDUAZIONE_GARANTE_INFORMAZIONE,
         ]:
-            self.upload('011_avvio_upload_file.query', self.codice_avvio, tipo)
+            self.upload('802_avvio_upload_file.query', self.codice_avvio, tipo)
 
         # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", expected_code=403)
         # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", client=client_gc)
@@ -176,7 +176,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
     def contributi_tecnici(self):
         self.sendCNV('902_get_avvio.query', 'GET AVVIO', self.codice_piano)
 
-        nome,response = self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
+        nome,response = self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
         content = json.loads(response.content)
         risorse = content['data']['upload']['proceduraAvvioAggiornata']['risorse']['edges']
         logger.warning("LOOK FOR FILE %s"%nome)
@@ -184,7 +184,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         logger.warning("CODICE RISORSA %s"% res_code)
         response = self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', res_code)
 
-        self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
+        self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
 
         self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, expected_code=403)
         self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, client=self.client_pian) # questo crea le azioni di CC
@@ -201,7 +201,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         if tipo == TipologiaCopianificazione.POSTICIPATA:
             self.sendCNV('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
 
-        nome,response =  self.upload('022_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
+        nome,response =  self.upload('803_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
         content = json.loads(response.content)
         risorse = content['data']['upload']['conferenzaCopianificazioneAggiornata']['risorse']['edges']
         logger.warning("LOOK FOR FILE %s"%nome)
@@ -209,7 +209,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         logger.warning("CODICE RISORSA %s"% res_code)
         response = self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', res_code)
 
-        self.upload('022_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
+        self.upload('803_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
 
         self.sendCNV('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, expected_code=403)
         self.sendCNV('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, client=self.client_pian)
@@ -224,7 +224,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         if richiedi_integrazioni:
             # le integrazioni sono state richieste, quindi serve chiudere "integrazioni richieste"
             # inviamo integrazioni
-            self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.INTEGRAZIONI)
+            self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.INTEGRAZIONI)
             self.sendCNV('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'dataScadenzaRisposta',
                          _get_date(days=20).isoformat(), extra_title='dataScadenzaRisposta')
             self.sendCNV('025_integrazioni_richieste.query', 'INTEGRAZIONI RICH', self.codice_avvio)
@@ -237,7 +237,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
     def formazione_piano(self):
         #{"operationName":"UploadFile","variables":{"file":null,"codice":"SCND_FI200200017","tipo":"norme_tecniche_attuazione"}
-        self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE)
+        self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE)
         self.sendCNV('040_formazione_piano.query', 'FORMAZIONE PIANO', self.codice_piano)
 
     def check_fase(self, fase_expected:Fase):

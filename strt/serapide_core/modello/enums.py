@@ -156,7 +156,7 @@ class TipologiaAzione(SerapideEnum):
     creato_piano = 'Creato Piano/Variante'  # Comune
     # Procedura VAS
     selezione_tipologia_vas = 'Selezione tipologia VAS'  # OPCOM
-    pareri_verifica_vas = 'Pareri verifica VAS'  # SCA
+    pareri_verifica_sca = 'Pareri verifica VAS'  # SCA
     emissione_provvedimento_verifica = 'Emissione Provvedimento di verifica'  # AC
     pubblicazione_provvedimento_verifica = 'Pubblicazione provvedimento di verifica'  # AC/Comune
     # avvio_consultazioni_sca = 'Avvio consultazioni SCA'  # Comune/AC
@@ -167,6 +167,7 @@ class TipologiaAzione(SerapideEnum):
     trasmissione_pareri_sca = 'Trasmissione pareri SCA'  # SCA
     trasmissione_pareri_ac = 'Trasmissione pareri AC'  # AC
     redazione_documenti_vas = 'Redazione documenti VAS'  # Comune
+    trasmissione_dpv_vas = 'Trasmissione documento preliminare di verifica'  # AC
     # Avvio
     avvio_procedimento = 'Avvio del Procedimento'  # Comune
     contributi_tecnici = 'Contributi Tecnici'  # Regione
@@ -218,7 +219,7 @@ InfoAzioni = {
         TipologiaAzione.creato_piano: AzioneInfo(Fase.DRAFT),
         # Procedura VAS
         TipologiaAzione.selezione_tipologia_vas: AzioneInfo(Fase.ANAGRAFICA, ART23),
-        TipologiaAzione.pareri_verifica_vas: AzioneInfo(Fase.ANAGRAFICA),
+        TipologiaAzione.pareri_verifica_sca: AzioneInfo(Fase.ANAGRAFICA),
         TipologiaAzione.emissione_provvedimento_verifica: AzioneInfo(Fase.ANAGRAFICA, ART22),
         TipologiaAzione.pubblicazione_provvedimento_verifica: AzioneInfo(Fase.ANAGRAFICA, ART22),
         # TipologiaAzione.avvio_consultazioni_sca: AzioneInfo(Fase.ANAGRAFICA, ART22),
@@ -304,3 +305,15 @@ AZIONI_BASE = {
         },
     ]
 }
+
+
+class TipoExpire(SerapideEnum):
+
+    TRASMISSIONE_DPV_VAS = 90
+    PARERI_VERIFICA_SCA = 30
+    PARERI_VERIFICA_SCA_PROCEDIMENTOSEMPLIFICATO = 30
+    EMISSIONE_PV_VERIFICA = 90
+    EMISSIONE_PV_VERIFICASEMPLIFICATA = 30
+    EMISSIONE_PV_PROCEDIMENTOSEMPLIFICATO = 90
+
+    TRASMISSIONE_PARERI_SCA = 90

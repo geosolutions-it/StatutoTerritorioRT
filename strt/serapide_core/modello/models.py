@@ -12,19 +12,19 @@
 import os
 import pytz
 import uuid
+import logging
+from datetime import datetime, timedelta
 
 from django.core.exceptions import ValidationError
-
-import logging
-from datetime import datetime
+from django.conf import settings
 
 from django.db import models
+from django.db.models.signals import pre_delete  # , post_delete
 from django.db.models import Q
 from django.core import checks
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import pre_delete  # , post_delete
 from model_utils import Choices
 
 from strt_users.models import (
@@ -49,6 +49,7 @@ from .enums import (Fase,
                     TipologiaPiano,
                     TipologiaAzione,
                     TipologiaCopianificazione,
+                    TipoExpire,
                     )
 
 
@@ -394,6 +395,12 @@ class Azione(models.Model):
         instance.qualifica_richiesta = QualificaRichiesta.fix_enum(instance.qualifica_richiesta)
         instance.tipologia = TipologiaAzione.fix_enum(instance.tipologia)
         return instance
+
+    def imposta_scadenza(self, start_datetime: datetime, exp: TipoExpire):
+        start, end = get_scadenza(exp, start_datetime)
+        self.avvio_scadenza = start
+        self.scadenza = end
+        return self
 
 
 class FasePianoStorico(models.Model):
@@ -1098,7 +1105,7 @@ def chiudi_azione(azione: Azione, data=None, set_data=True):
     azione.save()
 
 
-def crea_azione(azione:Azione):
+def crea_azione(azione: Azione):
     log.warning('Creazione azione [{a}]:{qr} in piano [{p}]'.format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
     if azione.order is None:
         _order = Azione.count_by_piano(azione.piano)
@@ -1106,3 +1113,11 @@ def crea_azione(azione:Azione):
 
     azione.save()
 
+
+def get_scadenza(exp: TipoExpire, start_datetime: datetime):
+
+    delta_days = getattr(settings, exp.name, exp.value)
+    avvio_scadenza = start_datetime.date()
+    scadenza = avvio_scadenza + timedelta(days=delta_days)
+
+    return avvio_scadenza, scadenza

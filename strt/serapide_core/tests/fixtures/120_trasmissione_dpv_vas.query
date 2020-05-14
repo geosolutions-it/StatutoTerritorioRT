@@ -1,0 +1,38 @@
+{
+  "operationName": "TrasmissioneDpvVas",
+  "variables": {
+    "uuid": "{codice}"
+  },
+  "query": "mutation TrasmissioneDpvVas($uuid: String!) {
+  trasmissioneDpvVas(uuid: $uuid) {
+    vasAggiornata {
+      piano {
+        ...AzioniPiano
+      }
+    }
+  }
+}
+
+fragment AzioniPiano on PianoNode {
+  codice
+  fase
+  azioni {
+    ...Azioni
+  }
+}
+
+fragment Azioni on AzioneNode {
+      order
+      tipologia
+      stato
+      qualificaRichiesta
+      data
+      uuid
+      label
+      tooltip
+      fase
+      avvioScadenza
+      scadenza
+}
+"
+}

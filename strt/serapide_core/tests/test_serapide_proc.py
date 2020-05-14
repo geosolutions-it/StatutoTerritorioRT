@@ -83,7 +83,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         ]:
             self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)
 
-        self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
+        self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
 
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.name)
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS)
@@ -122,7 +122,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
             TipoRisorsa.PROGRAMMA_ATTIVITA,
             TipoRisorsa.INDIVIDUAZIONE_GARANTE_INFORMAZIONE,
         ]:
-            self.upload('011_avvio_upload_file.query', self.codice_avvio, tipo)
+            self.upload('802_avvio_upload_file.query', self.codice_avvio, tipo)
 
         # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", expected_code=403)
         # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", client=client_gc)
@@ -132,8 +132,10 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         # {"operationName": "UpdateProceduraVas", "variables": {"input": {"proceduraVas": {"assoggettamento": false},
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'assoggettamento', False)
 
+        self.send('120_trasmissione_dpv_vas.query', 'TRASMISSIONE DPV', replace_args={'codice': self.codice_vas}, client=self.client_ac)
+
         # SCA
-        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_VERIFICA_VAS)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_VERIFICA_VAS, client=self.client_sca)
         self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, expected_code=403)
         self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, client=self.client_sca)
 
@@ -201,7 +203,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
     def contributi_tecnici(self):
         self.sendCNV('902_get_avvio.query', 'GET AVVIO', self.codice_piano)
-        self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
+        self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
         self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, expected_code=403)
         self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, client=self.client_pian) # questo crea le azioni di CC
 
@@ -217,7 +219,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         if tipo == TipologiaCopianificazione.POSTICIPATA:
             self.sendCNV('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
 
-        self.upload('022_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
+        self.upload('803_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
         self.sendCNV('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, expected_code=403)
         self.sendCNV('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, client=self.client_pian)
 
@@ -231,7 +233,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         if richiedi_integrazioni:
             # le integrazioni sono state richieste, quindi serve chiudere "integrazioni richieste"
             # inviamo integrazioni
-            self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.INTEGRAZIONI)
+            self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.INTEGRAZIONI)
             self.sendCNV('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'dataScadenzaRisposta',
                          _get_date(days=20).isoformat(), extra_title='dataScadenzaRisposta')
             self.sendCNV('025_integrazioni_richieste.query', 'INTEGRAZIONI RICH', self.codice_avvio)
@@ -243,7 +245,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, client=self.client_gc)
 
     def formazione_piano(self):
-        self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE)
+        self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE)
         self.sendCNV('040_formazione_piano.query', 'FORMAZIONE PIANO', self.codice_piano)
 
     ### ADOZIONE
@@ -258,7 +260,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
                 ("monitoraggioUrbanisticoUrl", 'http://monitoraggioUrbanisticoUrl')]:
             self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)
 
-        self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.DELIBERA_ADOZIONE)
+        self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.DELIBERA_ADOZIONE)
 
         self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'dataDeliberaAdozione', _get_date().isoformat())
         self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'pubblicazioneBurtData', _get_date().isoformat())
@@ -272,21 +274,21 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
                 TipoRisorsa.ELABORATI_CONFORMAZIONE,
                 TipoRisorsa.PIANI_ATTUATIVI_BP,
                 TipoRisorsa.INDAGINI_G_I_S]:
-            self.upload('050_adozione_upload_file.query', self.codice_adozione, tipo)
+            self.upload('804_adozione_upload_file.query', self.codice_adozione, tipo)
 
         for tipo in [
                 TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
                 TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
                 TipoRisorsa.ASSETTI_INSEDIATIVI,]:
-            self.upload('050_adozione_upload_file.query', self.codice_adozione, tipo, suffix='.zip')
+            self.upload('804_adozione_upload_file.query', self.codice_adozione, tipo, suffix='.zip')
 
         self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
 
     def adozione_osservazione(self, richiesta_cp: bool = True):
-        self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_PRIVATI)
+        self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_PRIVATI)
         self.sendCNV('053_trasmissione_osservazioni.query', 'TRASMISSIONE OSSERVAZIONI', self.codice_adozione)
 
-        self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_ENTI)
+        self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_ENTI)
 
         self.sendCNV('054_controdeduzioni.query', 'CONTRODEDUZIONI', self.codice_adozione)
         response = self.sendCNV('055_get_risorse_pcd.query', 'GET RISORSE PIANO CD', self.codice_piano)
@@ -314,7 +316,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('057_piano_controdedotto.query', 'PIANO CONTRODEDOTTO', self.codice_adozione)
 
         if richiesta_cp:
-            self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.ELABORATI_CONF_P)
+            self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.ELABORATI_CONF_P)
             self.sendCNV('058_esito_cp.query', 'ESITO CONF PAESGG', self.codice_adozione, expected_code=403)
             self.sendCNV('058_esito_cp.query', 'ESITO CONF PAESGG', self.codice_adozione, client=self.client_pian)
 

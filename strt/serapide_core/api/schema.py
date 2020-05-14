@@ -179,6 +179,8 @@ class Mutation(object):
     trasmissione_pareri_ac = vas.TrasmissionePareriAC.Field()
     redazione_documenti_vas = vas.RedazioneDocumentiVAS.Field()
 
+    trasmissione_dpv_vas = vas.TrasmissioneDPVVAS.Field()
+
     # create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
     update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()
     avvia_piano = avvio.AvvioPiano.Field()
