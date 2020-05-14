@@ -219,6 +219,7 @@ InfoAzioni = {
         TipologiaAzione.creato_piano: AzioneInfo(Fase.DRAFT),
         # Procedura VAS
         TipologiaAzione.selezione_tipologia_vas: AzioneInfo(Fase.ANAGRAFICA, ART23),
+        TipologiaAzione.trasmissione_dpv_vas: AzioneInfo(Fase.ANAGRAFICA),
         TipologiaAzione.pareri_verifica_sca: AzioneInfo(Fase.ANAGRAFICA),
         TipologiaAzione.emissione_provvedimento_verifica: AzioneInfo(Fase.ANAGRAFICA, ART22),
         TipologiaAzione.pubblicazione_provvedimento_verifica: AzioneInfo(Fase.ANAGRAFICA, ART22),
