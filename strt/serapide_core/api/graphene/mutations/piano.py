@@ -396,10 +396,10 @@ class UpdatePiano(relay.ClientIDMutation):
                                for so in old_so_qs}
                 add_so = []
 
-                for so in _soggetti_operanti:
-                    uff = Ufficio.objects.filter(uuid=so.ufficio_uuid).get()
-                    qualifica = Qualifica[so.qualifica]                      # TODO: 404
-                    hash = so.ufficio_uuid + "_" + so.qualifica
+                for _so in _soggetti_operanti:
+                    uff = Ufficio.objects.filter(uuid=_so.ufficio_uuid).get()
+                    qualifica = Qualifica.fix_enum(_so.qualifica, none_on_error=True)         # TODO: 404
+                    hash = _so.ufficio_uuid + "_" + qualifica.name
                     if hash in old_so_dict:
                         del old_so_dict[hash]
                     else:
@@ -409,10 +409,14 @@ class UpdatePiano(relay.ClientIDMutation):
                         add_so.append(new_so)
 
                 # pre-check
-                if not auth.has_qualifica(info.context.user, _ente, Qualifica.OPCOM):
-                    for so in old_so_dict.values() + add_so:
-                        if so.qualifica_ufficio.qualifica in [Qualifica.AC, Qualifica.SCA]:
-                            return GraphQLError("Forbidden - Richiesta qualifica Responsabile", code=403)
+                # - OPCOM può modificare SO con qualunque qualifica
+                # - AC può modificare SO con qualifica SCA
+                for so in list(old_so_dict.values()) + add_so:
+                    if not auth.has_qualifica(info.context.user, _ente, Qualifica.OPCOM):
+                        if so.qualifica_ufficio.qualifica == Qualifica.SCA:
+                            if not auth.has_qualifica(info.context.user, _ente, Qualifica.AC):
+                                return GraphQLError("Utente non abilitato alla modifica di questo SoggettoOperante",
+                                                    code=403)
 
                 # remove all SO left in the old_so_dict since they are not in the input list
                 for so in old_so_dict.values():
