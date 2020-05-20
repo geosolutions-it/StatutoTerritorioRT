@@ -10,7 +10,7 @@ import {Query} from 'react-apollo'
 import {Nav, NavItem,NavLink, TabContent,TabPane} from 'reactstrap'
 
 import Risorsa from 'components/Resource'
-import VAS from 'components/VAS'
+import VAS from 'components/VisualizzaVAS'
 
 import classnames from 'classnames'
 import {withControllableState} from 'enhancers'
@@ -51,7 +51,7 @@ const UI = enhancers(({
         const {node: contributiTecnici } = risorseAvvio.filter(({node: {tipo}}) => tipo === "contributi_tecnici").shift() || {}
         const allegati = risorseAvvio.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node) 
         const integrazioni = risorseAvvio.filter(({node: {tipo}}) => tipo === "integrazioni").map(({node}) => node) 
-        const [{node: rapporto} = {}] = risorseVas.filter(({node: {tipo}}) => tipo === 'rapporto_ambientale')
+        // const [{node: rapporto} = {}] = risorseVas.filter(({node: {tipo}}) => tipo === 'rapporto_ambientale')
     return (
         <PianoPageContainer>
             <PianoSubPageTitle icon="dashboard" title="AVVIO DEL PROCEDIMENTO"/>
@@ -130,12 +130,12 @@ const UI = enhancers(({
                     {section === 'vas' && (<div className="row">
                         <div className="col-12 pt-4">
                          <VAS codice={codice} canUpdate={false} isLocked={true}></VAS>
-                         <div className="row pt-2">
-                            <div className="col-12 pt-4">RAPPORTO AMBIENTALE</div>
+                            {/* <div className="row pt-2">
+                                <div className="col-12 pt-4">RAPPORTO AMBIENTALE</div>
                                 <div className="col-12 pt-1">
                                     {rapporto ? <Risorsa className="border-0 mt-2" fileSize={false} useLabel resource={rapporto} isLocked={true}/> : ( <div className="col-12 samll">Nessun rapporto </div>)}
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>)}
                 </TabPane>

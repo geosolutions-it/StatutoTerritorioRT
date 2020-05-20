@@ -68,10 +68,23 @@ mutation UpdateConsultazioneVas($input: UpdateConsultazioneVASInput!) {
 ${FR.CONSULTAZIONE_VAS}
 `
 
-export const PUBBLICA_PROVV_VERIFICA = gql`
-mutation UpdateProceduraVas($input: UpdateProceduraVASInput!) {
-    updateProceduraVas(input: $input) {
-        proceduraVasAggiornata {
+export const PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA_AP = gql`
+mutation PubblicazioneProvvedimentoVerificaAp($uuid: String!) {
+  pubblicazioneProvvedimentoVerificaAp(uuid: $uuid) {
+        vasAggiornata {
+              piano {
+                ...AzioniPiano
+              }
+            }
+        }
+    }
+  ${FR.AZIONI_PIANO}
+`
+
+export const PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA_AC = gql`
+mutation PubblicazioneProvvedimentoVerificaAc($uuid: String!) {
+  pubblicazioneProvvedimentoVerificaAc(uuid: $uuid) {
+        vasAggiornata {
               piano {
                 ...AzioniPiano
               }
@@ -96,9 +109,27 @@ ${FR.AZIONI_PIANO}
 ${FR.VAS}
 `
 
-export const INVIO_PARERI_VAS = gql`
-mutation InvioPareriVAS($codice: String!) {
-  invioPareriVas(uuid: $codice) {
+
+/*
+  In procedimento ordinario VAS
+*/
+export const TRASMISSIONE_PRERI_SCA = gql`
+mutation TrasmissionePareriSCA($codice: String!) {
+  trasmissionePareriSca(uuid: $codice) {
+        vasAggiornata {
+          ...VAS
+          piano {
+            ...AzioniPiano
+          }
+        }
+    }
+}
+${FR.AZIONI_PIANO}
+${FR.VAS}
+`
+export const TRASMISSIONE_PRERI_AC = gql`
+mutation TrasmissionePareriAC($codice: String!) {
+  trasmissionePareriAc(uuid: $codice) {
         vasAggiornata {
           ...VAS
           piano {
@@ -111,11 +142,9 @@ ${FR.AZIONI_PIANO}
 ${FR.VAS}
 `
 
-
-
-export const PROVVEDIMENTO_VERIFICA_VAS = gql`
-mutation ProvveddimentoVerificaVAS($uuid: String!) {
-    assoggettamentoVas(uuid: $uuid){
+export const EMISSIONE_PROVVEDIMENTO_VERIFICA_VAS = gql`
+mutation emissioneProvvedimentoVerificaVAS($uuid: String!) {
+  emissioneProvvedimentoVerifica(uuid: $uuid){
         vasAggiornata{
           uuid
           verificaEffettuata
@@ -153,9 +182,9 @@ mutation AvvioEsamePareriSCA($uuid: String!) {
 ${FR.AZIONI_PIANO}
 `
 
-export const UPLOAD_ELABORATI_VAS = gql`
-mutation UploadElaboratiVas($uuid: String!) {
-    uploadElaboratiVas(uuid: $uuid) {
+export const REDAZIONE_DOCUMENTI_VAS = gql`
+mutation RedazioneDocumentiVAS($uuid: String!) {
+    redazioneDocumentiVas(uuid: $uuid) {
         vasAggiornata{
             piano{  
               ...AzioniPiano
@@ -166,32 +195,62 @@ mutation UploadElaboratiVas($uuid: String!) {
 ${FR.AZIONI_PIANO}
 `
 
-export const CREA_CONSULTAZIONE_VAS = gql`
-mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
-    createConsultazioneVas(input: $input){
-        nuovaConsultazioneVas{     
-            ...ConsultazioneVAS
-        }
+export const TRASMISSIONE_DPV_VAS = gql`
+mutation TrasmissioneDpvVAS($uuid: String!) {
+  trasmissioneDpvVas(uuid: $uuid) {
+    vasAggiornata {
+      piano {
+        ...AzioniPiano
+      }
     }
-}
-${FR.CONSULTAZIONE_VAS}
-`
-
-export const AVVIO_CONSULTAZIONE_VAS = gql`
-mutation AvvioConsultazioniVAS($codice: String!) {
-    avvioConsultazioniVas(uuid: $codice) {
-        errors
-        consultazioneVasAggiornata {
-            proceduraVas{
-              piano{
-                ...AzioniPiano
-              }
-            }
-        }
-    }
+  }
 }
 ${FR.AZIONI_PIANO}
 `
+
+
+// export const CREA_CONSULTAZIONE_VAS = gql`
+// mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
+//     createConsultazioneVas(input: $input){
+//         nuovaConsultazioneVas{     
+//             ...ConsultazioneVAS
+//         }
+//     }
+// }
+// ${FR.CONSULTAZIONE_VAS}
+// `
+
+// export const AVVIO_CONSULTAZIONE_VAS = gql`
+// mutation AvvioConsultazioniVAS($codice: String!) {
+//     avvioConsultazioniVas(uuid: $codice) {
+//         errors
+//         consultazioneVasAggiornata {
+//             proceduraVas{
+//               piano{
+//                 ...AzioniPiano
+//               }
+//             }
+//         }
+//     }
+// }
+// ${FR.AZIONI_PIANO}
+// `
+
+export const INVIO_DOC_PRELIMINARE = gql`
+mutation InvioDocPreliminare($codice: String!) {
+    invioDocPreliminare(uuid: $codice) {
+        errors
+        proceduraVasAggiornata {
+        piano {
+          ...AzioniPiano
+        }
+    }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
+
 
 export const INVIO_PROTOCOLLO_GENIO = gql`
 mutation InvioProtocolloGenioCivile($codice: String!) {

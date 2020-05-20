@@ -16,7 +16,7 @@ import RichiestaComune from 'components/RichiestaComune'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import Spinner from 'components/Spinner'
 
-import  {showError, formatDate, daysSub, getCodice} from 'utils'
+import  {showError, formatDate, getCodice, VAS_DOCS} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,
@@ -28,10 +28,11 @@ const UI = ({
     back, 
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
     utente: {fiscalCode} = {},
-    scadenza,
-    tipo: tipoDoc = "parere_verifica_vas",
-    tipoVas = "vas_verifica",
+    azione: {scadenza, avvioScadenza} = {},
+    tipo: tipoDoc = VAS_DOCS.PAR_VER_VAS,
+    tipoVas = VAS_DOCS.DOC_PRE_VER_VAS,
     label = "PARERI",
+    title = "Pareri SCA",
     saveMutation = INVIO_PARERI_VERIFICA}) => {
         
         const docsPareri =  resources.filter(({node: {tipo, user = {}}}) => tipo === tipoDoc && fiscalCode === user.fiscalCode).map(({node}) => node)
@@ -39,8 +40,8 @@ const UI = ({
         
         return (
             <React.Fragment>
-                <ActionTitle>Pareri SCA</ActionTitle>
-                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={scadenza && daysSub(scadenza, 30)}/>
+                <ActionTitle>{title}</ActionTitle>
+                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={avvioScadenza}/>
                 <Resource 
                 iconSize="icon-15" fontSize="size-11" vertical useLabel
                 className="border-0 mt-2" icon="attach_file" resource={documento}></Resource>
@@ -48,7 +49,7 @@ const UI = ({
                         <i className="material-icons text-serapide pr-3 icon-15">event_busy</i> 
                         <div className="d-flex flex-column size-11">
                             <span>{scadenza && formatDate(scadenza, "dd MMMM yyyy")}</span>
-                            <span>Data entro la quale ricevere i pareri</span>
+                            <span>Data entro la quale inviare i pareri</span>
                         </div>
                 </div>
                 <ActionParagraphTitle fontWeight="font-weight-light">{label}</ActionParagraphTitle>

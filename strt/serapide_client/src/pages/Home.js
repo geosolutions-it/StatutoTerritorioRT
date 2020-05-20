@@ -12,7 +12,7 @@ import FaseSwitch from 'components/FaseSwitch'
 import actions from './actions'
 
 import classNames from 'classnames'
-import { getAction, pollingInterval, showAdozione, showApprovazione, showPubblicazione} from 'utils'
+import { pollingInterval, showAdozione, showApprovazione, showPubblicazione} from 'utils'
 import {stopStartPolling} from 'enhancers'
 
 import {camelCase} from 'lodash'
@@ -31,14 +31,14 @@ const NotAvailable = () => (<div className="p-6">Azione non implementata</div>)
 export default class Home extends React.PureComponent{
 
 render () {
-    
+
     const {match: {url, path} = {},
            location: {pathname} = {}, history, utente = {attore: ""}, piano = {},
            azioni = [],
            startPolling, stopPolling} = this.props;
     
     const action = getCurrentAction(url, pathname)
-    const scadenza = azioni.filter(({tipologia = ""} = {}) => tipologia.toLowerCase().replace(" ","_") === action).map(({data, }) => data).shift()
+    
     const goToAction = (action = "", uuid) => {
         history.push(`${url}/${action.toLowerCase().replace(" ","_")}/${uuid}`)
     }
@@ -83,12 +83,15 @@ render () {
             <div className={classNames("d-flex flex-column", {"action-container flex-1 border  border-piano overflow-auto bg-white": action})}>
                 {action && <div  className="mb-3 close  align-self-end" onClick={() => history.push(url)}>x</div>}
                 <Switch>
-                    { azioni.map(({uuid, tipologia = "", label = "", attore = "", qualificaRichiesta, eseguibile= false} = {}) => {
+                    {
+                    azioni.map((azione = {}) => {
+                        const {uuid, tipologia = "", qualificaRichiesta, eseguibile= false} = azione;
                         const tipo = tipologia.toLowerCase()
                         const El = components[camelCase(tipo)]
+                        
                         return El && (
                                 <Route exact key={tipo} path={`${path}/${tipo}/${uuid}`} >
-                                    {eseguibile ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack}  qualificaRichiesta={qualificaRichiesta} utente={utente} scadenza={scadenza}/>) : (<Redirect to={url} />)}
+                                    {eseguibile ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack}  qualificaRichiesta={qualificaRichiesta} utente={utente} azione={azione}/>) : (<Redirect to={url} />)}
                                 </Route>)
                     })}
                     {/* {map(components, (El, key) => {

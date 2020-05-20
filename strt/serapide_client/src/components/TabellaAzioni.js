@@ -11,7 +11,7 @@ import { Table } from 'reactstrap'
 import TextWithTooltip from './TextWithTooltip'
 
 
-import {formatDate, getActionIcon, getActionIconColor, getAction} from 'utils'
+import {formatDate, getActionIcon, getActionIconColor} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
 const adjustStato = (stato = "", eseguibile) => {
@@ -36,7 +36,7 @@ export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", classN
             </tr>
         </thead>
         <tbody>
-            {azioni.filter(({fase = "" }) => fase.toLowerCase() === filtroFase).sort(reverseOrder).map(({stato = "", qualificaRichiesta= "", tipologia = "",label = "", eseguibile = false, tooltip = "", data, uuid} = {}) => {
+            {azioni.filter(({fase = "" }) => (fase ?? "").toLowerCase() === filtroFase).sort(reverseOrder).map(({stato = "", qualificaRichiesta= "", tipologia = "",label = "", eseguibile = false, tooltip = "", data, uuid} = {}) => {
                 let adjustedStato = adjustStato(stato, eseguibile)
                 return (<tr key={uuid}>
                             <td><i className={`icon-18 material-icons ${getActionIconColor(adjustedStato)}`}>{getActionIcon(adjustedStato)}</i></td>

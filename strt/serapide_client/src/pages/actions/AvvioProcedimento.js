@@ -24,7 +24,7 @@ import Input from 'components/EnhancedInput'
 import Spinner from 'components/Spinner'
 
 import {rebuildTooltip} from 'enhancers'
-import  {showError, getInputFactory, getCodice, getContatti, daysAdd, getSoggettiIsti, SOGGETTI_ISTITUZIONALI} from 'utils'
+import  {showError, getInputFactory, getCodice, getContatti, getSoggettiIsti, SOGGETTI_ISTITUZIONALI} from 'utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
@@ -55,7 +55,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
             codice,
             risorse: {edges: resPiano = []}} = {},
         back}) => {
-
+            
             const {node: delibera} = resPiano.filter(({node: n}) => n.tipo === "delibera").pop() || {};
             const obiettivi = edges.filter(({node: {tipo}}) => tipo === "obiettivi_piano").map(({node}) => node).shift()
             const allegati = edges.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node)
@@ -65,6 +65,8 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
             const si = getSoggettiIsti(soggettiOperanti).map(({qualificaUfficio} = {}) => (qualificaUfficio))
             // const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
             // const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
+
+
             return (<React.Fragment>
                 <ActionTitle>
                     Avvio del Procedimento | <span className="text-nowrap">(Atto di Avvio)<TextWithTooltip dataTip="art. 17 L.R. 65/2014"/></span>

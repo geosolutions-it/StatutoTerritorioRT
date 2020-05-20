@@ -49,23 +49,6 @@ export const getActionIconColor = (stato) => {
             return ""
     }
 }
-export const actionHasBtn = (actor = "") => {
-    switch (actor) {
-        case "AC":
-            return true
-        default:
-            return false
-    }
-}
-export const getAction = (stato) => {
-    switch (stato) {
-        case "NECESSARIA":
-        case "ATTESA":
-            return true
-        default:
-            return false
-    }
-}
 
 export const showError = ({graphQLErrors, message, networkError: {result:{errors = []} = {}} = {}}) => {
     let  er = [...graphQLErrors, ...errors]
@@ -110,12 +93,12 @@ export const filterAndGroupResourcesByUser = ( resources, type = "") => groupRes
 
 
 export const getContatti = ({ uffici = []} = {}) => {
-    return uffici.map(({qualificaLabel: tipologia, ufficio: {uuid,
+    return uffici.map(({qualifica: tipologia, qualificaLabel: tipologiaLabel, ufficio: {uuid,
         descrizione,
         nome,
         ente: {
             nome: nomeEnte} = {}
-        } = {}} = {}) => ({label: `Ente ${nomeEnte} ufficio ${nome}`, value: uuid, tipologia}))
+        } = {}} = {}) => ({label: `Ente ${nomeEnte} ufficio ${nome}`, value: uuid, tipologia, tipologiaLabel}))
 }
 export const showAdozione = (f) => f === "AVVIO" || f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
 export const showApprovazione = (f) => f === "ADOZIONE" || f === "APPROVAZIONE" || f === "PUBBLICAZIONE"
@@ -130,3 +113,33 @@ export const isAdminEnte = (profiles = []) => getAdminEnti(profiles).length > 0;
 export const SOGGETTI_ISTITUZIONALI = ["GC", "PIAN"]
 // Restituisce i soggetti istituzionali
 export const getSoggettiIsti = (soggettiOperanti = []) => soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => SOGGETTI_ISTITUZIONALI.includes(qualifica));
+
+// TIPI DI VAS DA enum in modello
+export const VAS_TYPES = {
+    "VERIFICA": "VERIFICA",
+    "VERIFICA_SEMPLIFICATA": "VERIFICA_SEMPLIFICATA",
+    "PROCEDIMENTO_SEMPLIFICATO": "PROCEDIMENTO_SEMPLIFICATO",
+    "PROCEDURA_ORDINARIA": "PROCEDURA_ORDINARIA",
+    "NON_NECESSARIA": "NON_NECESSARIA"
+}
+
+
+export const VAS_DOCS = {
+    REL_MOT: 'relazione_motivata',
+    DOC_PRE_VER_VAS: 'documento_preliminare_verifica_vas',
+    PAR_VER_VAS: 'parere_verifica_vas',
+    PAR_SCA: 'parere_sca',
+    PAR_AC: 'parere_ac',
+    PROV_VER_VAS: 'provvedimento_verifica_vas',
+    DOC_PRE_VAS: 'documento_preliminare_vas',
+    RAPPORTO_AMBIENTALE: 'rapporto_ambientale',
+    SINTESI_NON_TECNICA: 'sintesi_non_tecnica',
+}
+
+
+export const docByVASType = {
+    [VAS_TYPES.VERIFICA]: VAS_DOCS.DOC_PRE_VER_VAS,
+    [VAS_TYPES.VAS_VERIFICA_SEMPLIFICATA]: VAS_DOCS.REL_MOT,
+    [VAS_TYPES.PROCEDIMENTO_SEMPLIFICATO]: VAS_DOCS.DOC_PRE_VAS,
+    [VAS_TYPES.PROCEDURA_ORDINARIA]: VAS_DOCS.DOC_PRE_VAS
+}

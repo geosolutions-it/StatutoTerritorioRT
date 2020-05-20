@@ -20,13 +20,13 @@ import Spinner from 'components/Spinner'
 
 import {rebuildTooltip} from 'enhancers'
 import {map} from 'lodash'
-import  {showError, formatDate,daysSub, getNominativo, filterAndGroupResourcesByUser, getCodice} from 'utils'
+import  {showError, formatDate, getNominativo, filterAndGroupResourcesByUser, getCodice, docByVASType , VAS_DOCS} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,
     VAS_FILE_UPLOAD,
     UPDATE_VAS,
-    PROVVEDIMENTO_VERIFICA_VAS
+    EMISSIONE_PROVVEDIMENTO_VERIFICA_VAS
 } from 'schema'
 
 
@@ -36,17 +36,17 @@ const SwitchAssoggettamento = ({uuid, assoggettamento, fontSize, iconSize = "ico
             {(update) => {
                 const onClick = (val) =>{
                     if(val !== assoggettamento) {
-                        update({variables: {input: {proceduraVas: {assoggettamento: !assoggettamento}, uuid}}})
+                        update({variables: {input: {proceduraVas: {assoggettamento: val}, uuid}}})
                     }
                 }
                 return (
                     <div className="d-flex mt-3 justify-content-around">
                         <span className="d-flex justify-content-start pointer">
-                            <i className={`material-icons text-serapide ${iconSize} ${!assoggettamento ? '' : 'pointer'}`} onClick={() => onClick(false)}>{assoggettamento ? 'radio_button_unchecked' : 'radio_button_checked'}</i>
+                            <i className={`material-icons text-serapide ${iconSize} ${assoggettamento === false ? 'pointer': ''}`} onClick={() => onClick(false)}>{assoggettamento === false ? 'radio_button_checked' : 'radio_button_unchecked'}</i>
                             <span className={`pl-2 align-self-center ${fontSize}`}>esclusione da VAS</span>
                         </span>
                         <span className="d-flex justify-content-start pointer">
-                            <i className={`material-icons text-serapide ${iconSize} ${assoggettamento ? '' : 'pointer'}`} onClick={() =>  onClick(true)}>{!assoggettamento ? 'radio_button_unchecked' : 'radio_button_checked'}</i>
+                            <i className={`material-icons text-serapide ${iconSize} ${assoggettamento === true ? 'pointer' : ''}`} onClick={() =>  onClick(true)}>{assoggettamento === true ? 'radio_button_checked' : 'radio_button_unchecked' }</i>
                             <span className={`pl-2 align-self-center ${fontSize}`}>assoggettamento VAS</span>
                         </span>
                     </div>)
@@ -59,25 +59,28 @@ const SwitchAssoggettamento = ({uuid, assoggettamento, fontSize, iconSize = "ico
 
 const UI = rebuildTooltip()(({
     back,
-    vas: {node: {uuid, assoggettamento, relazioneMotivataVasSemplificata, documentoPreliminareVerifica, tipologia, risorse : {edges: resources = []} = {}} = {}} = {},
-    scadenza}) => {
-    
-        const IsSemplificata = tipologia === 'SEMPLIFICATA';
-        const pareriUser =  filterAndGroupResourcesByUser( resources, "parere_verifica_vas")
+    vas: {node: {uuid, assoggettamento, tipologia, risorse : {edges: resources = []} = {}} = {}} = {},
+    azione: {scadenza, avvioScadenza} = {}}) => {
     
         
+        const pareriUser =  filterAndGroupResourcesByUser( resources, VAS_DOCS.PAR_VER_VAS)
+        
+        const provvedimento =  resources.filter(({node: {tipo}}) => tipo === VAS_DOCS.PROV_VER_VAS).map(({node}) => node).shift()
+        
+        
+        const risorsa = resources.filter(({node: {tipo}}) => tipo === docByVASType[tipologia]).map(({node}) => node).shift() 
 
-        const provvedimento =  resources.filter(({node: {tipo}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
+
         return (
             <React.Fragment>
                 <ActionTitle><TextWithTooltip text="Provvedimento di Verifica" dataTip="art.22 L.R. 10/2010"/></ActionTitle>
-                <RichiestaComune iconSize="icon-15" fontSize="size-11" scadenza={scadenza && daysSub(scadenza, IsSemplificata ? 30 : 90)}/>  
-                <Resource useLabel iconSize="icon-15" fileSize={false} fontSize="size-11"  className="border-0 mt-3" icon="attach_file" resource={IsSemplificata ? relazioneMotivataVasSemplificata : documentoPreliminareVerifica}></Resource>
+                <RichiestaComune iconSize="icon-15" fontSize="size-11" scadenza={avvioScadenza}/>  
+                <Resource useLabel iconSize="icon-15" fileSize={false} fontSize="size-11"  className="border-0 mt-3" icon="attach_file" resource={risorsa}></Resource>
                 <div className="mt-4 border-bottom-2 pb-2 d-flex">
                         <i className="material-icons text-serapide pr-3 icon-15">event_busy</i> 
                         <div className="d-flex flex-column size-11">
                             <span>{scadenza && formatDate(scadenza, "dd MMMM yyyy")}</span>
-                            <span>Data entro la quale ricevere i pareri</span>
+                            <span>Data massima entro la quale inviare il provvedimento di verifica</span>
                         </div>
                 </div>
                 <div className={className(" mt-4", {"border-bottom-2": pareriUser.length > 0})}>
@@ -99,10 +102,10 @@ const UI = rebuildTooltip()(({
                         sz="sm" modal={false} showBtn={false} 
                         mutation={VAS_FILE_UPLOAD} 
                         resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
-                        isLocked={false} risorsa={provvedimento} variables={{codice: uuid, tipo: "provvedimento_verifica_vas" }}/>
+                        isLocked={false} risorsa={provvedimento} variables={{codice: uuid, tipo:VAS_DOCS.PROV_VER_VAS}}/>
                     </div>
                 <div className="align-self-center mt-7">
-                    <SalvaInvia fontSize="size-8" onCompleted={back} mutation={PROVVEDIMENTO_VERIFICA_VAS} variables={{uuid}} canCommit={!!provvedimento}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} mutation={EMISSIONE_PROVVEDIMENTO_VERIFICA_VAS} variables={{uuid}} canCommit={!!provvedimento && assoggettamento !== null}></SalvaInvia>
                 </div>
             </React.Fragment>)
     })

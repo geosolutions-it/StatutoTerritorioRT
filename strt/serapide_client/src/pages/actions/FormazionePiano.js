@@ -10,31 +10,20 @@ import {Query} from 'react-apollo'
 
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
-import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
 import Spinner from 'components/Spinner'
-import Input from 'components/EnhancedInput'
 import FileUpload from 'components/UploadSingleFile'
 
 import {rebuildTooltip} from 'enhancers'
 import {showError, getCodice} from 'utils'
 
 import {
-    UPDATE_PIANO,
     GET_VAS,
     FILE_UPLOAD,
     DELETE_RISORSA,
     FORMAZIONE_PIANO
 } from 'schema'
 
-const getInput = (codice, field) => (val) => ({
-    variables: {
-        input: { 
-            pianoOperativo: { [field]:  val }, 
-            codice
-        }
-    }
-})
 
 
 const UI = rebuildTooltip()(({ back, 
