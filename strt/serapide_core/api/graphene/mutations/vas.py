@@ -443,7 +443,12 @@ class EmissioneProvvedimentoVerifica(graphene.Mutation):
 
         _epv = piano.getFirstAction(TipologiaAzione.emissione_provvedimento_verifica)
         if needsExecution(_epv):
-            chiudi_azione(_epv)
+            now = datetime.datetime.now(timezone.get_current_timezone())
+            chiudi_azione(_epv, now)
+
+            procedura_vas.data_assoggettamento = now
+            procedura_vas.verifica_effettuata = True
+            procedura_vas.save()
 
             crea_azione(
                 Azione(
@@ -622,89 +627,89 @@ class PubblicazioneProvvedimentoVerificaAc(graphene.Mutation):
             return GraphQLError(e, code=500)
 
 
-class AssoggettamentoVAS(graphene.Mutation):
-
-    class Arguments:
-        uuid = graphene.String(required=True)
-
-    errors = graphene.List(graphene.String)
-    vas_aggiornata = graphene.Field(types.ProceduraVASNode)
-
-    @classmethod
-    def update_actions_for_phase(cls, fase, piano, procedura_vas):
-        # Update Azioni Piano
-        # - Complete Current Actions
-
-        ensure_fase(fase, Fase.ANAGRAFICA)
-
-        # - Update Action state accordingly
-        if procedura_vas.assoggettamento:
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.avvio_esame_pareri_sca,
-                    qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.necessaria
-                ))
-
-            procedura_vas.data_assoggettamento = datetime.datetime.now(timezone.get_current_timezone())
-        else:
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica,
-                    qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.necessaria
-                ))
-
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica,
-                    qualifica_richiesta=QualificaRichiesta.AC,
-                    stato=STATO_AZIONE.necessaria
-                ))
-
-            procedura_vas.non_necessaria = True
-
-        procedura_vas.verifica_effettuata = True
-        procedura_vas.save()
-
-        _emissione_provvedimento_verifica = piano.getFirstAction(TipologiaAzione.emissione_provvedimento_verifica)
-        if needsExecution(_emissione_provvedimento_verifica):
-            chiudi_azione(_emissione_provvedimento_verifica)
-
-    @classmethod
-    def mutate(cls, root, info, **input):
-        _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
-        _piano = _procedura_vas.piano
-
-        if not auth.can_access_piano(info.context.user, _piano):
-            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
-
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
-            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
-
-        try:
-            _pareri_verifica_vas = _piano.getFirstAction(TipologiaAzione.pareri_verifica_sca)
-
-            if needsExecution(_pareri_verifica_vas) or \
-                    _procedura_vas.verifica_effettuata or \
-                    _procedura_vas.tipologia not in (TipologiaVAS.VERIFICA,
-                                                     TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO,
-                                                     TipologiaVAS.VERIFICA_SEMPLIFICATA):
-                return GraphQLError("Stato o tipo VAS errato", code=409)
-
-            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
-
-            return AssoggettamentoVAS(
-                vas_aggiornata=_procedura_vas,
-                errors=[]
-            )
-        except BaseException as e:
-            tb = traceback.format_exc()
-            logger.error(tb)
-            return GraphQLError(e, code=500)
+# class AssoggettamentoVAS(graphene.Mutation):
+#
+#     class Arguments:
+#         uuid = graphene.String(required=True)
+#
+#     errors = graphene.List(graphene.String)
+#     vas_aggiornata = graphene.Field(types.ProceduraVASNode)
+#
+#     @classmethod
+#     def update_actions_for_phase(cls, fase, piano, procedura_vas):
+#         # Update Azioni Piano
+#         # - Complete Current Actions
+#
+#         ensure_fase(fase, Fase.ANAGRAFICA)
+#
+#         # - Update Action state accordingly
+#         if procedura_vas.assoggettamento:
+#             crea_azione(
+#                 Azione(
+#                     piano=piano,
+#                     tipologia=TipologiaAzione.avvio_esame_pareri_sca,
+#                     qualifica_richiesta=QualificaRichiesta.COMUNE,
+#                     stato=STATO_AZIONE.necessaria
+#                 ))
+#
+#             procedura_vas.data_assoggettamento = datetime.datetime.now(timezone.get_current_timezone())
+#         else:
+#             crea_azione(
+#                 Azione(
+#                     piano=piano,
+#                     tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica,
+#                     qualifica_richiesta=QualificaRichiesta.COMUNE,
+#                     stato=STATO_AZIONE.necessaria
+#                 ))
+#
+#             crea_azione(
+#                 Azione(
+#                     piano=piano,
+#                     tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica,
+#                     qualifica_richiesta=QualificaRichiesta.AC,
+#                     stato=STATO_AZIONE.necessaria
+#                 ))
+#
+#             procedura_vas.non_necessaria = True
+#
+#         procedura_vas.verifica_effettuata = True
+#         procedura_vas.save()
+#
+#         _emissione_provvedimento_verifica = piano.getFirstAction(TipologiaAzione.emissione_provvedimento_verifica)
+#         if needsExecution(_emissione_provvedimento_verifica):
+#             chiudi_azione(_emissione_provvedimento_verifica)
+#
+#     @classmethod
+#     def mutate(cls, root, info, **input):
+#         _procedura_vas = ProceduraVAS.objects.get(uuid=input['uuid'])
+#         _piano = _procedura_vas.piano
+#
+#         if not auth.can_access_piano(info.context.user, _piano):
+#             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+#
+#         if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
+#             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+#
+#         try:
+#             _pareri_verifica_vas = _piano.getFirstAction(TipologiaAzione.pareri_verifica_sca)
+#
+#             if needsExecution(_pareri_verifica_vas) or \
+#                     _procedura_vas.verifica_effettuata or \
+#                     _procedura_vas.tipologia not in (TipologiaVAS.VERIFICA,
+#                                                      TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO,
+#                                                      TipologiaVAS.VERIFICA_SEMPLIFICATA):
+#                 return GraphQLError("Stato o tipo VAS errato", code=409)
+#
+#             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas)
+#
+#             return AssoggettamentoVAS(
+#                 vas_aggiornata=_procedura_vas,
+#                 errors=[]
+#             )
+#         except BaseException as e:
+#             tb = traceback.format_exc()
+#             logger.error(tb)
+#             return GraphQLError(e, code=500)
 
 
 class CreateConsultazioneVAS(relay.ClientIDMutation):
