@@ -18,7 +18,7 @@ import Spinner from 'components/Spinner'
 import  {showError, getCodice} from 'utils'
 
 
-const UI = ({
+export const UI = ({
     back,
     fileType = 'rapporto_ambientale',
     title = "Upload file",
@@ -28,7 +28,9 @@ const UI = ({
     uploadRes,
     deleteRes,
     // piano: {tipo: tipoPiano} = {}, 
-    modello: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {}
+    modello: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
+    children,
+    canCommit = true
     }) => {
         
         const [{node: file} = {}] = resources.filter(({node: {tipo, user = {}}}) => tipo === fileType)
@@ -49,9 +51,9 @@ const UI = ({
                     resourceMutation={deleteRes} disabled={false} 
                     isLocked={false} risorsa={file} variables={{codice: uuid, tipo: fileType }}/>
                 </div>
-                
+                {children && children}
                 <div className="align-self-center mt-7">
-                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={closeAction} canCommit={file}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={closeAction} canCommit={canCommit && file}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }

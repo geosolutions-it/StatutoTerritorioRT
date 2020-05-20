@@ -19,7 +19,7 @@ import TextWithTooltip from 'components/TextWithTooltip'
 
 import  {rebuildTooltip} from 'enhancers'
 
-import { showError, getInputFactory, getContatti, VAS_DOCS, VAS_TYPES} from 'utils'
+import { showError, getInputFactory, getContatti, docByVASType, VAS_DOCS, VAS_TYPES} from 'utils'
 
 import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD,
     DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO,
@@ -33,13 +33,13 @@ const checkDoc = (tipologia, resources) => {
     if(tipologia === VAS_TYPES.NON_NECESSARIA  && tipologia === VAS_TYPES.PROCEDURA_ORDINARIA) {
         return true;
     }
-    const {node: doc} = resources.filter(({node: n}) => n.tipo === VAS_DOCS[tipologia]).pop() || {};
+    const {node: doc} = resources.filter(({node: n}) => n.tipo === docByVASType[tipologia]).pop() || {};
     return !!doc;
 }
 
 
 const checkSoggetti =  (tipologia = "" , sP, ac, scas) => {
-    if(!!sP) {
+    if(!sP) {
         return false;
     }
     switch (tipologia) {
@@ -69,11 +69,13 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
     const {node: verifica} = resources.filter(({node: n}) => n.tipo === VAS_DOCS.DOC_PRE_VER_VAS).pop() || {};
     const {node: docProcSemp} = resources.filter(({node: n}) => n.tipo === VAS_DOCS.DOC_PRE_VAS).pop() || {};
     
-
     const disableSCA = tipologia === VAS_TYPES.NON_NECESSARIA
+    
     const acs = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "AC").map(({qualificaUfficio} = {}) => (qualificaUfficio))
     const scas = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "SCA").map(({qualificaUfficio} = {}) => (qualificaUfficio))
+    
     const canCommit = !isLocked && canUpdate && checkSoggetti(tipologia, sP, acs, scas) && checkDoc(tipologia, resources)
+
     const getInputTipologia = getVasTypeInput(uuid, "tipologia")
 
 

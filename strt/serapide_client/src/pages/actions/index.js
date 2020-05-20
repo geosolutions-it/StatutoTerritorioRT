@@ -28,10 +28,10 @@ import UploadElaboratiAdozioneVAS from './UploadElaboratiVASAdozione'
 import Approvazione from './Approvazione'
 import UploadFile from "./UploadFile"
 import Pubblicazione from "./Pubblicazione"
+import InvioDocPreliminare from "./InvioDocPreliminare"
 import {VAS_DOCS} from "../../utils"
 
 import {GET_AVVIO, DELETE_RISORSA_AVVIO, 
-        GET_VAS, VAS_FILE_UPLOAD, DELETE_RISORSA_VAS,
         TRASMISSIONE_PRERI_SCA,TRASMISSIONE_PRERI_AC, CONTRODEDUZIONI,
         GET_APPROVAZIONE, APPROVAZIONE_FILE_UPLOAD, UPDATE_APPROVAZIONE,
         DELETE_RISORSA_APPROVAZIONE, ESITO_CONFERENZA_PAESAGGISTICA_AP,
@@ -49,15 +49,7 @@ export default {
         avvioProcedimento: (props) => (<AvvioProcedimento {...props}/>),
         
         /********   PROCEDURA ORDINARIA VAS *****************/
-        invioDocPreliminare: (props) => (<UploadFile  title="Procedura VAS Ordinaria"
-                                                placeholder="Documento preliminare VAS"
-                                                fileType="documento_preliminare_vas"
-                                                subTitle="Caricare il file del Documento preliminare VAS"
-                                                query={GET_VAS} 
-                                                deleteRes={DELETE_RISORSA_VAS} 
-                                                uploadRes={VAS_FILE_UPLOAD}
-                                                closeAction={INVIO_DOC_PRELIMINARE}
-                                                {...props}/>),
+        invioDocPreliminare: (props) => (<InvioDocPreliminare  {...props}/>),
         trasmissionePareriSca: (props) => (<PareriVAS tipo={VAS_DOCS.PAR_SCA}
                                       saveMutation={TRASMISSIONE_PRERI_SCA}
                                       tipoVas="documento_preliminare_vas"
@@ -91,8 +83,6 @@ export default {
         esitoConferenzaCopianificazione: (props) => (<SvolgimentoConferenza {...props}/>),
         richiestaIntegrazioni: (props) => (<RichiestaIntegrazioni  {...props}/>),
         integrazioniRichieste: (props) => (<IntegrazioniRichieste  {...props}/>),
-        
-
 /**********FASE ADOZIONE ******************/
         trasmissioneAdozione: (props) => (<Adozione  {...props}/>),
         uploadOsservazioniPrivati: (props) => (<Osservazioni  {...props}/>),

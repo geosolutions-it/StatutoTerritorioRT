@@ -51,6 +51,7 @@ const UI = enhancers(({
         const {node: contributiTecnici } = risorseAvvio.filter(({node: {tipo}}) => tipo === "contributi_tecnici").shift() || {}
         const allegati = risorseAvvio.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node) 
         const integrazioni = risorseAvvio.filter(({node: {tipo}}) => tipo === "integrazioni").map(({node}) => node) 
+        console.log(numeroProtocolloGenioCivile);
         // const [{node: rapporto} = {}] = risorseVas.filter(({node: {tipo}}) => tipo === 'rapporto_ambientale')
     return (
         <PianoPageContainer>
@@ -177,14 +178,14 @@ const UI = enhancers(({
                     <div className="row pt-4">
                     <div className="col-12 d-flex">
                         <i className="material-icons text-serapide self-align-center">check_circle</i>
-                        <span className="pl-1">NOTIFICA DEL GENIO CIVILE</span>
+                        <span className="pl-1 d-inline-flex align-items-center">NOTIFICA DEL GENIO CIVILE</span>
                     </div>
                     
                     </div>
                     {!!numeroProtocolloGenioCivile && (<div className="row pt-4">
                     <div className="col-12 d-flex">
                         <i className="material-icons text-serapide self-align-center">check_circle</i>
-                        <span className="pl-1">RICEZIONE PROTOCOLLO DAL GENIO CIVILE</span>
+                        <span className="pl-1 d-inline-flex align-items-center">RICEZIONE PROTOCOLLO DAL GENIO CIVILE</span>
                     </div>
                     
                     <div className="col-12 pt-3 pl-4 text-serapide">
