@@ -57,13 +57,14 @@ export default ({tipologia, docInizialeVAS = {}, pareriVerificaVAS = {}, provved
                 {assoggettamento !== null && (
                     <div className="mt-4">
                         <span>ESITO VERIFICA ASSOGGETTAMENTO:
-                            <span className="font-weight-bold ml-3 text-serapide">
+                            <span className="font-weight-bold ml-3 mr-3 text-serapide">
                             {assoggettamento ? "Assoggettamento VAS" : "Esclusione VAS"}
                             </span>
+                            {!!dataAssoggettamento && <span>
+                            il {formatDate(dataAssoggettamento)}
+                            </span>}
                         </span>
-                        {!!dataAssoggettamento && <span>
-                            {formatDate(dataAssoggettamento)}
-                        </span>}
+                        
                     </div>
                     )
                 }
