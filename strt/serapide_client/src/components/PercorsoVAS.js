@@ -11,7 +11,7 @@ import TextWithTooltip from './TextWithTooltip'
 import {isEmpty, map} from 'lodash'
 import {formatDate, getNominativo, VAS_TYPES} from 'utils'
 
-export default ({tipologia, docInizialeVAS, pareriVerificaVAS = {}, provvedimentoVerifica = {}, assoggettamento, dataAssoggettamento }) => (
+export default ({tipologia, docInizialeVAS = {}, pareriVerificaVAS = {}, provvedimentoVerifica = {}, assoggettamento, dataAssoggettamento }) => (
     <React.Fragment>
         <span className="pt-4">PERCORSO VAS SELEZIONATO:
             <span className="ml-3">
