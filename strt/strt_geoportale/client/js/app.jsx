@@ -69,7 +69,7 @@ import appConfig from '@mapstore/product/appConfig';
 import plugins from './plugins';
 
 import main from '@mapstore/product/main';
-const appEpics = {};
+import appEpics from '@js/epics/app';
 
 main({
     ...appConfig, pages: [{

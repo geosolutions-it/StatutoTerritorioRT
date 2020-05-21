@@ -1,6 +1,9 @@
     {
     "locale": "it-IT",
     "messages": {
-        "noLayerFilterResults": "Nessun livello disponibile per il filtro utilizzato"
+        "noLayerFilterResults": "Nessun livello disponibile per il filtro utilizzato",
+        "serapide": {
+            "userLayers": "Livelli Utente"
+        }
     }
 }
