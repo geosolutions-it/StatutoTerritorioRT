@@ -43,7 +43,7 @@ from serapide_core.modello.models import (
 
 from serapide_core.modello.enums import (
     STATO_AZIONE,
-    TIPOLOGIA_AZIONE,
+    TipologiaAzione,
     QualificaRichiesta,
 )
 
@@ -142,7 +142,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.trasmissione_approvazione
+        return TipologiaAzione.trasmissione_approvazione
 
     @staticmethod
     def procedura(piano):
@@ -156,7 +156,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
 
         ensure_fase(fase, Fase.ADOZIONE)
 
-        _trasmissione_approvazione = piano.getFirstAction(TIPOLOGIA_AZIONE.trasmissione_approvazione)
+        _trasmissione_approvazione = piano.getFirstAction(TipologiaAzione.trasmissione_approvazione)
         if needsExecution(_trasmissione_approvazione):
             chiudi_azione(_trasmissione_approvazione)
 
@@ -165,7 +165,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica_ap,
+                        tipologia=TipologiaAzione.esito_conferenza_paesaggistica_ap,
                         qualifica_richiesta=QualificaRichiesta.REGIONE,
                         stato=STATO_AZIONE.attesa
                     ))
@@ -177,7 +177,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione,
+                        tipologia=TipologiaAzione.pubblicazione_approvazione,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
                         stato=STATO_AZIONE.necessaria
                     ))
@@ -223,7 +223,7 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica_ap
+        return TipologiaAzione.esito_conferenza_paesaggistica_ap
 
     @staticmethod
     def procedura(piano):
@@ -238,7 +238,7 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
 
         ensure_fase(fase, Fase.ADOZIONE)
 
-        _esito_cp = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_paesaggistica_ap)
+        _esito_cp = piano.getFirstAction(TipologiaAzione.esito_conferenza_paesaggistica_ap)
 
         if needsExecution(_esito_cp):
             chiudi_azione(_esito_cp)
@@ -246,7 +246,7 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.pubblicazione_approvazione,
+                    tipologia=TipologiaAzione.pubblicazione_approvazione,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria
                 ))
@@ -292,7 +292,7 @@ class PubblicazioneApprovazione(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.pubblicazione_approvazione
+        return TipologiaAzione.pubblicazione_approvazione
 
     @staticmethod
     def procedura(piano):
@@ -307,19 +307,19 @@ class PubblicazioneApprovazione(graphene.Mutation):
 
         ensure_fase(fase, Fase.ADOZIONE)
 
-        _pubblicazione_approvazione = piano.getFirstAction(TIPOLOGIA_AZIONE.pubblicazione_approvazione)
+        _pubblicazione_approvazione = piano.getFirstAction(TipologiaAzione.pubblicazione_approvazione)
 
         if needsExecution(_pubblicazione_approvazione):
             chiudi_azione(_pubblicazione_approvazione)
 
-            _trasmissione_approvazione = piano.getFirstAction(TIPOLOGIA_AZIONE.trasmissione_approvazione)
+            _trasmissione_approvazione = piano.getFirstAction(TipologiaAzione.trasmissione_approvazione)
             _expire_days = getattr(settings, 'ATTRIBUZIONE_CONFORMITA_PIT_EXPIRE_DAYS', 30)
             _alert_delta = datetime.timedelta(days=_expire_days)
 
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.attribuzione_conformita_pit,
+                    tipologia=TipologiaAzione.attribuzione_conformita_pit,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
                     data=_trasmissione_approvazione.data + _alert_delta
@@ -366,7 +366,7 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.attribuzione_conformita_pit
+        return TipologiaAzione.attribuzione_conformita_pit
 
     @staticmethod
     def procedura(piano):
@@ -377,7 +377,7 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
 
         ensure_fase(fase, Fase.ADOZIONE)
 
-        _attribuzione_conformita_pit = piano.getFirstAction(TIPOLOGIA_AZIONE.attribuzione_conformita_pit)
+        _attribuzione_conformita_pit = piano.getFirstAction(TipologiaAzione.attribuzione_conformita_pit)
 
         if needsExecution(_attribuzione_conformita_pit):
             chiudi_azione(_attribuzione_conformita_pit)

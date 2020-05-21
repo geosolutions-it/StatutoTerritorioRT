@@ -11,7 +11,7 @@ from serapide_core.modello.enums import (
     TipologiaVAS,
     TipologiaCopianificazione,
     Fase,
-    TIPOLOGIA_AZIONE,
+    TipologiaAzione,
 )
 from serapide_core.modello.models import (
     Piano,
@@ -66,7 +66,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         response = self._client.get(self.GET_PROFILES_URL)
         self.assertEqual(200, response.status_code, 'GET PROFILES failed')
 
-    def create_piano_and_promote(self, tipovas:TipologiaVAS):
+    def create_piano_and_promote(self, tipovas: TipologiaVAS):
         response = self.create_piano(DataLoader.IPA_FI)
 
         content = json.loads(response.content)
@@ -83,10 +83,16 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         ]:
             self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)
 
-        self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
+        self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
 
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.value)
-        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.VAS_VERIFICA)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.name)
+
+        if tipovas == TipologiaVAS.VERIFICA:
+            self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS)
+        elif tipovas == TipologiaVAS.VERIFICA_SEMPLIFICATA:
+            self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.RELAZIONE_MOTIVATA)
+        elif tipovas == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
+            self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS)
 
         sogg_op = []
         sogg_op.append({
@@ -122,31 +128,47 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
             TipoRisorsa.PROGRAMMA_ATTIVITA,
             TipoRisorsa.INDIVIDUAZIONE_GARANTE_INFORMAZIONE,
         ]:
-            self.upload('011_avvio_upload_file.query', self.codice_avvio, tipo)
+            self.upload('802_avvio_upload_file.query', self.codice_avvio, tipo)
 
-        # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", expected_code=403)
-        # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", client=client_gc)
         self.sendCNV('012_avvio_piano.query', 'AVVIO PIANO', self.codice_avvio)
 
     def vas_verifica_no_assoggettamento(self):
-        # {"operationName": "UpdateProceduraVas", "variables": {"input": {"proceduraVas": {"assoggettamento": false},
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'assoggettamento', False)
+        self.vas_verifica(False)
+        self.assert_vas_conclusa()
 
-        # SCA
-        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_VERIFICA_VAS)
-        self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, expected_code=403)
-        self.send('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', replace_args={'codice': self.codice_vas}, client=self.client_sca)
+    def vas_verifica(self, assoggettamento: bool, ver_sempl: bool = False, proc_sempl: bool = False):
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'assoggettamento', assoggettamento)
+
+        if not ver_sempl and not proc_sempl:
+            self.sendCNV('120_trasmissione_dpv_vas.query', 'TRASMISSIONE DPV', self.codice_vas, client=self.client_ac)
+
+        if not ver_sempl:
+            # SCA
+            self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_VERIFICA_VAS, client=self.client_sca)
+            self.sendCNV('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', self.codice_vas, expected_code=403)
+            self.sendCNV('013_invio_pareri_verifica.query', 'INVIO PARERE VERIFICA', self.codice_vas, client=self.client_sca)
 
         # AC
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PROVVEDIMENTO_VERIFICA_VAS)
-        self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, expected_code=403)
-        self.send('014_provvedimento_verifica_vas.query', 'PROVVEDIMENTO VERIFICA VAS', replace_args={'codice': self.codice_vas}, client=self.client_ac)
+        self.sendCNV('014_emissione_provvedimento_verifica.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, expected_code=403)
+        self.sendCNV('014_emissione_provvedimento_verifica.query', 'PROVVEDIMENTO VERIFICA VAS', self.codice_vas, client=self.client_ac)
 
-        # self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", expected_code=403)
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide", client=self.client_ac)
+        # Trasmissione AP
+        self.sendCNV('121_trasmissione_provvedimento_verifica_ap.query', 'TRASMISSIONE PV', self.codice_vas, expected_code=409)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas,
+                     'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
+        self.sendCNV('121_trasmissione_provvedimento_verifica_ap.query', 'TRASMISSIONE PV AP', self.codice_vas)
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas,
+                     'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide",
+                     expected_code=403)
 
-        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'pubblicazioneProvvedimentoVerificaAp', "https://dev.serapide.geo-solutions.it/serapide")
+        # Trasmissione AC
+        self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas,
+                     'pubblicazioneProvvedimentoVerificaAc', "https://dev.serapide.geo-solutions.it/serapide",
+                     client=self.client_ac)
+        self.sendCNV('122_trasmissione_provvedimento_verifica_ac.query', 'TRASMISSIONE PV AC', self.codice_vas, client=self.client_ac)
 
+    def assert_vas_conclusa(self):
         # VAS COMPLETATO
         response = self.sendCNV('901_get_vas.query', 'GET VAS', self.codice_piano)
         content = json.loads(response.content)
@@ -154,49 +176,44 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.assertTrue(vas_conclusa, 'VAS non conclusa')
 
     def vas_procedimento(self):
-        # AC
-        response = self.sendCNV('110_consultazioni_vas.query', 'GET CONSULTAZIONI VAS', self.codice_piano, client=self.client_ac)
-        response = self.sendCNV('111_crea_consultazione.query', 'CREA CONSULTAZIONE VAS', self.codice_piano, client=self.client_ac)
-        content = json.loads(response.content)
-        codice_consultazione = content['data']['createConsultazioneVas']['nuovaConsultazioneVas']['uuid']
 
-        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS, client=self.client_ac)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS)
 
-        self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True, client=self.client_ac)
-
-        # AC avvio_consultazioni_vas
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'AVVIO CONSULTAZIONE VAS -- AC', codice_consultazione, client=self.client_ac)
+        # OPCOM: invio_doc_preliminare
+        self.sendCNV('113_invio_doc_preliminare.query', 'INVIO DOC PRELIMINARE', self.codice_vas, client=self.client_ac, expected_code=403)
+        self.sendCNV('113_invio_doc_preliminare.query', 'INVIO DOC PRELIMINARE', self.codice_vas)
 
         # SCA
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca)
+        # self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_SCA, client=self.client_sca, expected_code=412)
 
-        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #1", self.codice_vas,  expected_code=403)
-        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #1", self.codice_vas, client=self.client_sca)
+        self.sendCNV('114_trasmissione_sca.query', "TRASMISSIONE PARERI SCA", self.codice_vas,  expected_code=403)
+        self.sendCNV('114_trasmissione_sca.query', "TRASMISSIONE PARERI SCA", self.codice_vas, client=self.client_sca)
 
-        # # COMUNE
-        self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True)
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'AVVIO CONSULTAZIONE VAS - bad', codice_consultazione, client=self.client_ac, expected_code=403)
-        self.sendCNV('113_avvio_consultazioni_vas.query', 'AVVIO CONSULTAZIONE VAS -- OPCOM', codice_consultazione)
-
-        # # SCA
-        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #2", self.codice_vas,  expected_code=403)
-        self.sendCNV('114_invio_pareri_vas.query', "INVIO PARERI SCA #2", self.codice_vas, client=self.client_sca)
+        # AC
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.PARERE_AC, client=self.client_ac)
+        self.sendCNV('115_trasmissione_ac.query', "TRASMISSIONE PARERI AC", self.codice_vas, client=self.client_ac)
 
         piano = Piano.objects.get(codice=self.codice_piano)
         self.assertIsNotNone(piano)
-        self.assertIsNotNone(piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_esame_pareri_sca))
+        self.assertIsNotNone(piano.getFirstAction(TipologiaAzione.redazione_documenti_vas))
 
-        self.vas_avvio_esame_pareri()
+        self.redazione_documenti_vas()
 
-    def vas_avvio_esame_pareri(self):
-        """ chiamato sia alla fine di PROCEDIMENTO che alla fine di SEMPLIFICATA con ASSOGGETTAMENTO"""
-        self.sendCNV('115_avvio_esame_pareri.query', "INVIO ESAME PARERI", self.codice_vas)
+    def redazione_documenti_vas(self):
+        # chiamato sia alla fine di PROCEDURA ORDINARIA che alla fine di PROCEDIMENTO SEMPLIFICATO con ASSOGGETTAMENTO
+        self.sendCNV('116_redazione_documenti_vas.query', "UPLOAD ELBORATI VAS", self.codice_vas, expected_code=409)
+
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.RAPPORTO_AMBIENTALE)
-        self.sendCNV('116_upload_elaborati_vas.query', "UPLOAD ELBORATI VAS", self.codice_vas)
+        self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.SINTESI_NON_TECNICA)
+
+        self.sendCNV('116_redazione_documenti_vas.query', "REDAZIONE DOCUMENTI VAS", self.codice_vas)
+
+        self.assert_vas_conclusa()
 
     def contributi_tecnici(self):
         self.sendCNV('902_get_avvio.query', 'GET AVVIO', self.codice_piano)
-        self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
+        self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
         self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, expected_code=403)
         self.sendCNV('015_contributi_tecnici.query', 'CONTRIBUTI TECNICI', self.codice_avvio, client=self.client_pian) # questo crea le azioni di CC
 
@@ -212,7 +229,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         if tipo == TipologiaCopianificazione.POSTICIPATA:
             self.sendCNV('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
 
-        self.upload('022_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
+        self.upload('803_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
         self.sendCNV('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, expected_code=403)
         self.sendCNV('023_chiusura_cc.query', 'CHIUSURA CONF COP', self.codice_avvio, client=self.client_pian)
 
@@ -226,19 +243,18 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         if richiedi_integrazioni:
             # le integrazioni sono state richieste, quindi serve chiudere "integrazioni richieste"
             # inviamo integrazioni
-            self.upload('011_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.INTEGRAZIONI)
+            self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.INTEGRAZIONI)
             self.sendCNV('010_update_procedura_avvio.query', 'UPDATE AVVIO', self.codice_avvio, 'dataScadenzaRisposta',
                          _get_date(days=20).isoformat(), extra_title='dataScadenzaRisposta')
             self.sendCNV('025_integrazioni_richieste.query', 'INTEGRAZIONI RICH', self.codice_avvio)
 
     def genio_civile(self):
-        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', expected_code=403)
-        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', client=self.client_gc)
+        self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DOCUMENTO_GENIO_CIVILE, client=self.client_gc)
         self.sendCNV('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, expected_code=403)
         self.sendCNV('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, client=self.client_gc)
 
     def formazione_piano(self):
-        self.upload('003_upload_file.query', self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE)
+        self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.NORME_TECNICHE_ATTUAZIONE)
         self.sendCNV('040_formazione_piano.query', 'FORMAZIONE PIANO', self.codice_piano)
 
     ### ADOZIONE
@@ -253,7 +269,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
                 ("monitoraggioUrbanisticoUrl", 'http://monitoraggioUrbanisticoUrl')]:
             self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)
 
-        self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.DELIBERA_ADOZIONE)
+        self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.DELIBERA_ADOZIONE)
 
         self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'dataDeliberaAdozione', _get_date().isoformat())
         self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'pubblicazioneBurtData', _get_date().isoformat())
@@ -267,21 +283,21 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
                 TipoRisorsa.ELABORATI_CONFORMAZIONE,
                 TipoRisorsa.PIANI_ATTUATIVI_BP,
                 TipoRisorsa.INDAGINI_G_I_S]:
-            self.upload('050_adozione_upload_file.query', self.codice_adozione, tipo)
+            self.upload('804_adozione_upload_file.query', self.codice_adozione, tipo)
 
         for tipo in [
                 TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
                 TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
                 TipoRisorsa.ASSETTI_INSEDIATIVI,]:
-            self.upload('050_adozione_upload_file.query', self.codice_adozione, tipo, suffix='.zip')
+            self.upload('804_adozione_upload_file.query', self.codice_adozione, tipo, suffix='.zip')
 
         self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
 
     def adozione_osservazione(self, richiesta_cp: bool = True):
-        self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_PRIVATI)
+        self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_PRIVATI)
         self.sendCNV('053_trasmissione_osservazioni.query', 'TRASMISSIONE OSSERVAZIONI', self.codice_adozione)
 
-        self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_ENTI)
+        self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_ENTI)
 
         self.sendCNV('054_controdeduzioni.query', 'CONTRODEDUZIONI', self.codice_adozione)
         response = self.sendCNV('055_get_risorse_pcd.query', 'GET RISORSE PIANO CD', self.codice_piano)
@@ -309,7 +325,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.sendCNV('057_piano_controdedotto.query', 'PIANO CONTRODEDOTTO', self.codice_adozione)
 
         if richiesta_cp:
-            self.upload('050_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.ELABORATI_CONF_P)
+            self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.ELABORATI_CONF_P)
             self.sendCNV('058_esito_cp.query', 'ESITO CONF PAESGG', self.codice_adozione, expected_code=403)
             self.sendCNV('058_esito_cp.query', 'ESITO CONF PAESGG', self.codice_adozione, client=self.client_pian)
 
@@ -408,6 +424,16 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         content = json.loads(response.content)
         fase = content['data']['piani']['edges'][0]['node']['fase']
         self.assertEqual(fase_expected, Fase.fix_enum(fase), "Fase errata")
+
+    def exist_action(self, tipo:TipologiaAzione):
+        response = self.sendCNV('900_get_piani.query', 'GET PIANI', self.codice_piano)
+        content = json.loads(response.content)
+        azioni = content['data']['piani']['edges'][0]['node']['azioni']
+        for azione in azioni:
+            tipo_azione = azione['tipologia']
+            if tipo_azione == tipo.name:
+                return
+        self.fail("Azione non trovata {}".format(tipo))
 
     def get_delega(self, codice_piano, qualifica: Qualifica, msg, client=None):
         response = self.send('100_crea_delega.query', msg,

@@ -12,19 +12,19 @@
 import os
 import pytz
 import uuid
+import logging
+from datetime import datetime, timedelta
 
 from django.core.exceptions import ValidationError
-
-import logging
-from datetime import datetime
+from django.conf import settings
 
 from django.db import models
+from django.db.models.signals import pre_delete  # , post_delete
 from django.db.models import Q
 from django.core import checks
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import pre_delete  # , post_delete
 from model_utils import Choices
 
 from strt_users.models import (
@@ -47,10 +47,9 @@ from .enums import (Fase,
                     STATO_AZIONE,
                     TipologiaVAS,
                     TipologiaPiano,
-                    TIPOLOGIA_AZIONE,
-                    # TIPOLOGIA_CONTATTO,
+                    TipologiaAzione,
                     TipologiaCopianificazione,
-                    # TIPOLOGIA_CONF_COPIANIFIZAZIONE
+                    TipoExpire,
                     )
 
 
@@ -164,9 +163,7 @@ class Piano(models.Model):
     last_update = models.DateTimeField(auto_now=True, blank=True)
 
     data_protocollo_genio_civile = models.DateTimeField(null=True, blank=True)
-    numero_protocollo_genio_civile = models.TextField(null=True, blank=True)
 
-    # fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
     fase = models.CharField(
         choices=Fase.create_choices(),
         default=Fase.UNKNOWN,
@@ -326,13 +323,13 @@ class Piano(models.Model):
         instance.tipologia = TipologiaPiano.fix_enum(instance.tipologia)
         return instance
 
-    def getFirstAction(self, tipologia_azione:TIPOLOGIA_AZIONE, qualifica_richiesta:QualificaRichiesta=None):
+    def getFirstAction(self, tipologia_azione: TipologiaAzione, qualifica_richiesta: QualificaRichiesta = None):
         qs = Azione.objects.filter(piano=self, tipologia=tipologia_azione)
         if qualifica_richiesta:
             qs = qs.filter(qualifica_richiesta=qualifica_richiesta)
         return qs.first()
 
-    def azioni(self, tipologia_azione:TIPOLOGIA_AZIONE=None, qualifica_richiesta:QualificaRichiesta=None):
+    def azioni(self, tipologia_azione: TipologiaAzione=None, qualifica_richiesta: QualificaRichiesta = None):
         qs = Azione.objects.filter(piano=self)
         if tipologia_azione:
             qs = qs.filter(tipologia=tipologia_azione)
@@ -352,9 +349,9 @@ class Azione(models.Model):
     piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
 
     tipologia = models.CharField(
-        choices=TIPOLOGIA_AZIONE,
-        default=TIPOLOGIA_AZIONE.unknown,
-        max_length=80
+        choices=TipologiaAzione.create_choices(),
+        default=TipologiaAzione.unknown,
+        max_length=TipologiaAzione.get_max_len()
     )
 
     qualifica_richiesta = models.CharField(
@@ -369,7 +366,10 @@ class Azione(models.Model):
         max_length=20
     )
 
-    data = models.DateTimeField(null=True, blank=True)
+    data = models.DateTimeField(null=True, blank=True)  # Data chiusura azione
+
+    avvio_scadenza = models.DateField(null=True, blank=True)  # Data da cui decorre la scadenza
+    scadenza = models.DateField(null=True, blank=True)  # Data ultima per eseguire l'azione
 
     order = models.PositiveIntegerField(null=False)
 
@@ -378,7 +378,7 @@ class Azione(models.Model):
         verbose_name_plural = 'Azioni'
 
     def __str__(self):
-        return '{} - {} [{}]'.format(self.qualifica_richiesta.name, TIPOLOGIA_AZIONE[self.tipologia], self.uuid)
+        return '{} - {} [{}]'.format(self.qualifica_richiesta.name, self.tipologia.name, self.uuid)
 
     @classmethod
     def count_by_piano(cls, piano: Piano, tipo=None):
@@ -391,7 +391,19 @@ class Azione(models.Model):
     def from_db(cls, db, field_names, values):
         instance = super(Azione, cls).from_db(db, field_names, values)
         instance.qualifica_richiesta = QualificaRichiesta.fix_enum(instance.qualifica_richiesta)
+        instance.tipologia = TipologiaAzione.fix_enum(instance.tipologia)
         return instance
+
+    def imposta_scadenza(self, start_datetime: datetime, exp: TipoExpire = None, end_datetime: datetime = None):
+        if exp:
+            start, end = get_scadenza(exp, start_datetime)
+        else:
+            start = start_datetime.date()
+            end = end_datetime
+
+        self.avvio_scadenza = start
+        self.scadenza = end
+        return self
 
 
 class FasePianoStorico(models.Model):
@@ -598,40 +610,6 @@ class ParereVerificaVAS(models.Model):
         return '{} - [{}]'.format(self.procedura_vas, self.uuid)
 
 
-class ConsultazioneVAS(models.Model):
-
-    uuid = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False,
-        null=True
-    )
-
-    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
-    data_scadenza = models.DateTimeField(null=True, blank=True)
-    data_ricezione_pareri = models.DateTimeField(null=True, blank=True)
-
-    data_avvio_consultazioni_sca = models.DateTimeField(null=True, blank=True)
-    avvio_consultazioni_sca = models.BooleanField(null=False, blank=False, default=False)
-
-    procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
-
-    user = models.ForeignKey(
-        to=Utente,
-        on_delete=models.CASCADE,
-        verbose_name=_('user'),
-        default=None,
-        blank=True,
-        null=True
-    )
-
-    class Meta:
-        db_table = "strt_core_consultazioni_vas"
-        verbose_name_plural = 'Consultazioni VAS'
-
-    def __str__(self):
-        return '{} - [{}]'.format(self.procedura_vas, self.uuid)
-
-
 class ParereVAS(models.Model):
 
     uuid = models.UUIDField(
@@ -645,7 +623,6 @@ class ParereVAS(models.Model):
     data_ricezione_parere = models.DateTimeField(null=True, blank=True)
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
-    consultazione_vas = models.ForeignKey(ConsultazioneVAS, on_delete=models.CASCADE)
 
     inviata = models.BooleanField(null=False, blank=False, default=False)
 
@@ -1096,7 +1073,7 @@ def chiudi_azione(azione: Azione, data=None, set_data=True):
     azione.save()
 
 
-def crea_azione(azione:Azione):
+def crea_azione(azione: Azione):
     log.warning('Creazione azione [{a}]:{qr} in piano [{p}]'.format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
     if azione.order is None:
         _order = Azione.count_by_piano(azione.piano)
@@ -1104,3 +1081,11 @@ def crea_azione(azione:Azione):
 
     azione.save()
 
+
+def get_scadenza(exp: TipoExpire, start_datetime: datetime):
+
+    delta_days = getattr(settings, exp.name, exp.value)
+    avvio_scadenza = start_datetime.date()
+    scadenza = avvio_scadenza + timedelta(days=delta_days)
+
+    return avvio_scadenza, scadenza

@@ -32,14 +32,14 @@ import {GET_ADOZIONE, UPDATE_ADOZIONE, GET_VAS,
 } from 'schema'
 
 
-const Link = ({title, url}) => (<React.Fragment>
-                <ActionSubParagraphTitle>{title}</ActionSubParagraphTitle>
-                <div className="mt-3 row d-flex align-items-center">
-                    <div className="col-12 d-flex align-items-center">
-                        <i className="material-icons icon-15 text-serapide">link</i><a href={url} target="_blank" rel="noopener noreferrer" className="pl-1 size-12 text-secondary">{url}</a>
-                    </div>
-                </div>
-                    </React.Fragment>)
+// const Link = ({title, url}) => (<React.Fragment>
+//                 <ActionSubParagraphTitle>{title}</ActionSubParagraphTitle>
+//                 <div className="mt-3 row d-flex align-items-center">
+//                     <div className="col-12 d-flex align-items-center">
+//                         <i className="material-icons icon-15 text-serapide">link</i><a href={url} target="_blank" rel="noopener noreferrer" className="pl-1 size-12 text-secondary">{url}</a>
+//                     </div>
+//                 </div>
+//                     </React.Fragment>)
  
 
 const getInput = getInputFactory("proceduraAdozione")

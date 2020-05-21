@@ -1,0 +1,66 @@
+{
+   "operationName" : "AvvioUploadFile",
+
+   "variables" : {
+      "codice" : "{codice}",
+      "tipo" : "{tipo_risorsa}",
+      "file" : null
+   },
+
+   "query" : "mutation AvvioUploadFile($file: Upload!, $codice: String!, $tipo: String!) {
+  upload: uploadRisorsaAvvio(file: $file, codice: $codice, tipoFile: $tipo) {
+    success
+    fileName
+    proceduraAvvioAggiornata {
+      ...AVVIO
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment AVVIO on ProceduraAvvioNode {
+  uuid
+  conferenzaCopianificazione
+  dataCreazione
+  dataScadenzaRisposta
+  garanteNominativo
+  garantePec
+  richiestaIntegrazioni
+  messaggioIntegrazione
+  risorse(archiviata: false) {
+    ...Risorse
+    __typename
+  }
+  __typename
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+      __typename
+    }
+    __typename
+  }
+  __typename
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+    __typename
+  }
+  label
+  tooltip
+  __typename
+}"
+}

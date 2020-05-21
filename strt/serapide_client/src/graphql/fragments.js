@@ -87,12 +87,14 @@ fragment Azioni on AzioneNode {
       tipologia
       stato
       qualificaRichiesta
-      data
+      data #data di chiusura azione
       uuid
       label
       tooltip
       fase
       eseguibile
+      avvioScadenza # data di avvio scadenza
+      scadenza #data entro la quale eseguire azione
 }
 `
 export const RISORSE = gql`
@@ -129,6 +131,9 @@ fragment VAS on ProceduraVASNode {
         procedimentoEffettuato
         assoggettamento
         nonNecessaria
+        conclusa
+        pubblicazioneProvvedimentoVerificaAc
+        pubblicazioneProvvedimentoVerificaAp
         piano {
           codice
             soggettoProponente {
@@ -161,12 +166,6 @@ fragment VAS on ProceduraVASNode {
         risorse(archiviata: false){
             ...Risorse
         }
-        documentoPreliminareVerifica{
-          ...Risorsa 
-        }
-        relazioneMotivataVasSemplificata{
-          ...Risorsa 
-        }
 }
 ${RISORSE}
 `
@@ -183,7 +182,6 @@ fragment Piano on PianoNode {
     dataAvvio
     dataApprovazione
     alertsCount
-    numeroProtocolloGenioCivile
     dataProtocolloGenioCivile
     redazioneNormeTecnicheAttuazioneUrl
     compilazioneRapportoAmbientaleUrl
@@ -268,6 +266,7 @@ fragment AVVIO on ProceduraAvvioNode {
         garantePec
         richiestaIntegrazioni
         messaggioIntegrazione
+        notificaGenioCivile
         risorse(archiviata: false) {
             ...Risorse
         }

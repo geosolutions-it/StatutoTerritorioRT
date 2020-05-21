@@ -55,21 +55,6 @@ ${FR.ADOZIONE}
 `
 
 
-export const GET_CONSULTAZIONE_VAS = gql`
-query ConsultazioniVas($codice: String){
-  modello: consultazioneVas(proceduraVas_Piano_Codice: $codice){
-  edges{
-    node{
-      ...ConsultazioneVAS
-    }
-  }
-  }
-}
-${FR.CONSULTAZIONE_VAS}
-`
-
-
-
 export const CREA_PIANO_PAGE = gql`
 query CreaPianoPage{
     tipologiaPiano{

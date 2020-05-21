@@ -49,8 +49,9 @@ from serapide_core.modello.models import (
 from serapide_core.modello.enums import (
     Fase,
     STATO_AZIONE,
-    TIPOLOGIA_AZIONE,
+    TipologiaAzione,
     TipologiaCopianificazione,
+    TipoRisorsa,
 )
 
 from serapide_core.api.graphene import (types, inputs)
@@ -186,7 +187,7 @@ class AvvioPiano(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.ANAGRAFICA);
 
-        _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
+        _avvio_procedimento = piano.getFirstAction(TipologiaAzione.avvio_procedimento)
         if needsExecution(_avvio_procedimento):
             if not cls.autorita_ok(piano, [Qualifica.GC]):
                 raise GraphQLError("Genio Civile non trovato tra i soggetti operanti", code=400)
@@ -202,7 +203,7 @@ class AvvioPiano(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.contributi_tecnici,
+                    tipologia=TipologiaAzione.contributi_tecnici,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
                     data=procedura_avvio.data_scadenza_risposta
@@ -211,7 +212,7 @@ class AvvioPiano(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.richiesta_verifica_vas,
+                    tipologia=TipologiaAzione.selezione_tipologia_vas,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.attesa
                 ))
@@ -266,7 +267,7 @@ class FormazionePiano(graphene.Mutation):
 
         ensure_fase(fase, Fase.ANAGRAFICA);
 
-        _formazione_del_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.formazione_del_piano)
+        _formazione_del_piano = piano.getFirstAction(TipologiaAzione.formazione_del_piano)
         if needsExecution(_formazione_del_piano):
             chiudi_azione(_formazione_del_piano)
 
@@ -308,7 +309,7 @@ class ContributiTecnici(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.contributi_tecnici
+        return TipologiaAzione.contributi_tecnici
 
     @staticmethod
     def procedura(piano):
@@ -319,8 +320,8 @@ class ContributiTecnici(graphene.Mutation):
 
         ensure_fase(fase, Fase.ANAGRAFICA)
 
-        _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
-        _contributi_tecnici = piano.getFirstAction(TIPOLOGIA_AZIONE.contributi_tecnici)
+        _avvio_procedimento = piano.getFirstAction(TipologiaAzione.avvio_procedimento)
+        _contributi_tecnici = piano.getFirstAction(TipologiaAzione.contributi_tecnici)
 
         if isExecuted(_avvio_procedimento) and needsExecution(_contributi_tecnici):
 
@@ -329,7 +330,7 @@ class ContributiTecnici(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.formazione_del_piano,
+                    tipologia=TipologiaAzione.formazione_del_piano,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.necessaria
                 ))
@@ -347,7 +348,7 @@ class ContributiTecnici(graphene.Mutation):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
+                        tipologia=TipologiaAzione.richiesta_integrazioni,
                         qualifica_richiesta=QualificaRichiesta.REGIONE,
                         stato=STATO_AZIONE.attesa
                     ))
@@ -355,7 +356,7 @@ class ContributiTecnici(graphene.Mutation):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
+                        tipologia=TipologiaAzione.esito_conferenza_copianificazione,
                         qualifica_richiesta=QualificaRichiesta.REGIONE,
                         stato=STATO_AZIONE.attesa
                     ))
@@ -374,7 +375,7 @@ class ContributiTecnici(graphene.Mutation):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione,
+                        tipologia=TipologiaAzione.richiesta_conferenza_copianificazione,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
                         stato=STATO_AZIONE.attesa
                     ))
@@ -389,7 +390,7 @@ class ContributiTecnici(graphene.Mutation):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
+                        tipologia=TipologiaAzione.protocollo_genio_civile,
                         qualifica_richiesta=QualificaRichiesta.GC,
                         stato=STATO_AZIONE.necessaria
                     ))
@@ -438,7 +439,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.richiesta_integrazioni
+        return TipologiaAzione.richiesta_integrazioni
 
     @staticmethod
     def procedura(piano):
@@ -452,7 +453,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
 
         ensure_fase(fase, Fase.ANAGRAFICA)
 
-        _richiesta_integrazioni = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_integrazioni)
+        _richiesta_integrazioni = piano.getFirstAction(TipologiaAzione.richiesta_integrazioni)
         if needsExecution(_richiesta_integrazioni):
 
             chiudi_azione(_richiesta_integrazioni)
@@ -461,7 +462,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TIPOLOGIA_AZIONE.integrazioni_richieste,
+                        tipologia=TipologiaAzione.integrazioni_richieste,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
                         stato=STATO_AZIONE.attesa
                     ))
@@ -511,7 +512,7 @@ class IntegrazioniRichieste(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.integrazioni_richieste
+        return TipologiaAzione.integrazioni_richieste
 
     @staticmethod
     def procedura(piano):
@@ -523,7 +524,7 @@ class IntegrazioniRichieste(graphene.Mutation):
         # - Update Action state accordingly
         ensure_fase(fase, Fase.ANAGRAFICA)
 
-        _integrazioni_richieste = piano.getFirstAction(TIPOLOGIA_AZIONE.integrazioni_richieste)
+        _integrazioni_richieste = piano.getFirstAction(TipologiaAzione.integrazioni_richieste)
         if needsExecution(_integrazioni_richieste):
             chiudi_azione(_integrazioni_richieste)
 
@@ -570,31 +571,21 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
-    @staticmethod
-    def action():
-        return TIPOLOGIA_AZIONE.protocollo_genio_civile
-
-    @staticmethod
-    def procedura(piano):
-        return piano.procedura_avvio
-
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
-        # Update Azioni Piano
-        # - Update Action state accordingly
         ensure_fase(fase, Fase.ANAGRAFICA)
 
-        _protocollo_genio_civile = piano.getFirstAction(TIPOLOGIA_AZIONE.protocollo_genio_civile)
+        _protocollo_genio_civile = piano.getFirstAction(TipologiaAzione.protocollo_genio_civile)
         if needsExecution(_protocollo_genio_civile):
-            if piano.numero_protocollo_genio_civile:
-                now = datetime.datetime.now(timezone.get_current_timezone())
+            now = datetime.datetime.now(timezone.get_current_timezone())
+            chiudi_azione(_protocollo_genio_civile, data=now)
 
-                piano.data_protocollo_genio_civile = now
-                piano.save()
+            piano.data_protocollo_genio_civile = now
+            piano.save()
 
-                chiudi_azione(_protocollo_genio_civile, data=now)
+            return try_and_close_avvio(piano)
 
-                try_and_close_avvio(piano)
+        return False
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -607,10 +598,17 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
         if not auth.can_edit_piano(info.context.user, _piano, Qualifica.GC):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
-        try:
-            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+        # check risorsa
+        if not _piano.risorse\
+                .filter(tipo=TipoRisorsa.DOCUMENTO_GENIO_CIVILE.value, archiviata=False, user=info.context.user)\
+                .exists():
+            return GraphQLError("Risorsa mancante: {}".format(TipoRisorsa.DOCUMENTO_GENIO_CIVILE.value), code=409)
 
-            check_and_promote(_piano, info)
+        try:
+            closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+            if closed:
+                check_and_promote(_piano, info)
 
             return InvioProtocolloGenioCivile(
                 avvio_aggiornato=_procedura_avvio,
@@ -632,7 +630,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione
+        return TipologiaAzione.richiesta_conferenza_copianificazione
 
     @staticmethod
     def procedura(piano):
@@ -648,7 +646,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
         if procedura_avvio.conferenza_copianificazione != TipologiaCopianificazione.POSTICIPATA:
             return GraphQLError("Errore nello stato del piano - Tipologia copianificazione errata", code=400)
 
-        _richiesta_cc = piano.getFirstAction(TIPOLOGIA_AZIONE.richiesta_conferenza_copianificazione)
+        _richiesta_cc = piano.getFirstAction(TipologiaAzione.richiesta_conferenza_copianificazione)
         if needsExecution(_richiesta_cc):
             chiudi_azione(_richiesta_cc, set_data=False)
 
@@ -663,7 +661,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.richiesta_integrazioni,
+                    tipologia=TipologiaAzione.richiesta_integrazioni,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa
                 ))
@@ -671,7 +669,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
             crea_azione(
                 Azione(
                     piano=piano,
-                    tipologia=TIPOLOGIA_AZIONE.esito_conferenza_copianificazione,
+                    tipologia=TipologiaAzione.esito_conferenza_copianificazione,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
                     data=procedura_avvio.data_scadenza_risposta
@@ -718,7 +716,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.esito_conferenza_copianificazione
+        return TipologiaAzione.esito_conferenza_copianificazione
 
     @staticmethod
     def procedura(piano):
@@ -732,10 +730,10 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
 
         ensure_fase(fase, Fase.ANAGRAFICA)
 
-        _avvio_procedimento = piano.getFirstAction(TIPOLOGIA_AZIONE.avvio_procedimento)
+        _avvio_procedimento = piano.getFirstAction(TipologiaAzione.avvio_procedimento)
         if isExecuted(_avvio_procedimento):
 
-            _esito_cc = piano.getFirstAction(TIPOLOGIA_AZIONE.esito_conferenza_copianificazione)
+            _esito_cc = piano.getFirstAction(TipologiaAzione.esito_conferenza_copianificazione)
             if needsExecution(_esito_cc):
 
                 chiudi_azione(_esito_cc, set_data=False)
@@ -743,18 +741,21 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                 procedura_avvio.notifica_genio_civile = True
                 procedura_avvio.save()
 
+                now = datetime.datetime.now(timezone.get_current_timezone())
+
                 _cc = ConferenzaCopianificazione.objects.get(piano=piano)
-                _cc.data_chiusura_conferenza = datetime.datetime.now(timezone.get_current_timezone())
+                _cc.data_chiusura_conferenza = now
                 _cc.save()
 
                 crea_azione(
                     Azione(
                         piano=piano,
-                        tipologia=TIPOLOGIA_AZIONE.protocollo_genio_civile,
+                        tipologia=TipologiaAzione.protocollo_genio_civile,
                         qualifica_richiesta=QualificaRichiesta.GC,
                         stato=STATO_AZIONE.necessaria,
                         data=procedura_avvio.data_scadenza_risposta
-                    ))
+                    ) # .imposta_scadenza(now, procedura_avvio.data_scadenza_risposta)
+                )
 
     @classmethod
     def mutate(cls, root, info, **input):

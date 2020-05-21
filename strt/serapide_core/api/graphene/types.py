@@ -43,9 +43,8 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TIPOLOGIA_RISORSA,
     TipologiaVAS,
-    FASE_AZIONE,
-    TIPOLOGIA_AZIONE,
-    TOOLTIP_AZIONE
+    TipologiaAzione,
+    InfoAzioni,
 )
 
 from serapide_core.modello.models import (
@@ -56,7 +55,6 @@ from serapide_core.modello.models import (
     SoggettoOperante,
     Delega,
     ProceduraVAS,
-    ConsultazioneVAS,
     # PianoAuthTokens,
     FasePianoStorico,
     ProceduraAvvio,
@@ -142,13 +140,13 @@ class AzioneNode(DjangoObjectType):
     eseguibile = graphene.Boolean()
 
     def resolve_fase(self, info, **args):
-        return FASE_AZIONE[self.tipologia] if self.tipologia in FASE_AZIONE else None
+        return InfoAzioni[self.tipologia].fase.name if self.tipologia in InfoAzioni else None
 
     def resolve_label(self, info, **args):
-        return TIPOLOGIA_AZIONE[self.tipologia] if self.tipologia in TIPOLOGIA_AZIONE else None
+        return self.tipologia.value
 
     def resolve_tooltip(self, info, **args):
-        return TOOLTIP_AZIONE[self.tipologia] if self.tipologia in TOOLTIP_AZIONE else None
+        return InfoAzioni[self.tipologia].tooltip if self.tipologia in InfoAzioni else None
 
     def resolve_qualifica_richiesta(self, info, **args):
         return self.qualifica_richiesta.name
@@ -431,7 +429,7 @@ class ProceduraVASNode(DjangoObjectType):
         if self.verifica_effettuata and \
             self.tipologia in (TipologiaVAS.VERIFICA,
                                TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO,
-                               TipologiaVAS.SEMPLIFICATA):
+                               TipologiaVAS.VERIFICA_SEMPLIFICATA):
             _risorsa = self.risorse.filter(tipo='documento_preliminare_vas').first()
         return _risorsa
 
@@ -444,7 +442,7 @@ class ProceduraVASNode(DjangoObjectType):
 
     def resolve_relazione_motivata_vas_semplificata(self, info, **args):
         _risorsa = None
-        if self.tipologia == TipologiaVAS.SEMPLIFICATA:
+        if self.tipologia == TipologiaVAS.VERIFICA_SEMPLIFICATA:
             _risorsa = self.risorse.filter(tipo='vas_semplificata').first()
         return _risorsa
 
@@ -628,27 +626,6 @@ class SoggettoOperanteNode(DjangoObjectType):
 
         return has_qualifica(utente, piano.ente, Qualifica.OPCOM) or \
                Assegnatario.objects.filter(qualifica_ufficio=self.qualifica_ufficio, utente=utente).exists()
-
-
-class ConsultazioneVASNode(DjangoObjectType):
-
-    user = graphene.Field(UtenteNode)
-    referente = graphene.Field(SoggettoOperanteNode)
-    procedura_vas = graphene.Field(ProceduraVASNode)
-
-    # def resolve_contatto(self, info, **args):
-    #     _contatto = None
-    #     if self.user:
-    #         _contatto = Contatto.objects.filter(user=self.user).first()
-    #     return _contatto
-
-    class Meta:
-        model = ConsultazioneVAS
-        # Allow for some more advanced filtering here
-        filter_fields = {
-            'procedura_vas__piano__codice': ['exact'],
-        }
-        interfaces = (relay.Node, )
 
 
 class ConferenzaCopianificazioneNode(DjangoObjectType):

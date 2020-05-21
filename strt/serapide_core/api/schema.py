@@ -19,7 +19,6 @@ from serapide_core.modello.enums import (
     Fase,
     TipologiaVAS,
     TipologiaPiano,
-    # TIPOLOGIA_CONTATTO,
     TipologiaCopianificazione,
 )
 
@@ -85,8 +84,6 @@ class Query(object):
         types.ProceduraPubblicazioneNode,
         filterset_class=filters.ProceduraPubblicazioneMembershipFilter)
 
-    consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
-
     conferenza_copianificazione = DjangoFilterConnectionField(types.ConferenzaCopianificazioneNode)
 
     piano_controdedotto = DjangoFilterConnectionField(types.PianoControdedottoNode)
@@ -97,19 +94,10 @@ class Query(object):
 
     uffici = graphene.List(types.QualificaUfficioNode, qualifica=graphene.String(), ipa=graphene.String(), qualifiche=graphene.List(graphene.String))
 
-    # soggetti_operanti = DjangoFilterConnectionField(types.SoggettoOperanteNode,
-    #                                     filterset_class=types.SoggettoOperanteFilter)
-
-
-    # TODO
-    # contatti = DjangoFilterConnectionField(types.ContattoNode,
-    #                                        filterset_class=filters.EnteContattoMembershipFilter)
-
     # Enums
     # fase_piano = graphene.List(enums.FasePiano) # TODO
     tipologia_vas = graphene.List(enums.TipologiaVAS)
     tipologia_piano = graphene.List(enums.TipologiaPiano)
-    tipologia_contatto = graphene.List(enums.TipologiaContatto)
     tipologia_conferenza_copianificazione = graphene.List(enums.TipologiaConferenzaCopianificazione)
 
     def resolve_fase_piano(self, info):
@@ -121,7 +109,7 @@ class Query(object):
     def resolve_tipologia_vas(self, info):
         _l = []
         for _t in TipologiaVAS:
-            _l.append(enums.TipologiaVAS(_t[0], _t[1]))
+            _l.append(enums.TipologiaVAS(_t.name, _t.value))
         return _l
 
     def resolve_tipologia_piano(self, info):
@@ -133,7 +121,6 @@ class Query(object):
             return None
         else:
             return info.context.user
-
 
     def resolve_uffici(self, info, qualifica=None, ipa=None, qualifiche=None, **args):
         # Warning this is not currently paginated
@@ -167,13 +154,6 @@ class Query(object):
 # ############################################################################ #
 class Mutation(object):
 
-    # create_fase = core.CreateFase.Field()
-    # update_fase = core.UpdateFase.Field()
-
-    # TODO
-    # create_contatto = core.CreateContatto.Field()
-    # delete_contatto = core.DeleteContatto.Field()
-
     create_piano = piano.CreatePiano.Field()
     update_piano = piano.UpdatePiano.Field()
     delete_piano = piano.DeletePiano.Field()
@@ -185,13 +165,21 @@ class Mutation(object):
     # create_procedura_vas = vas.CreateProceduraVAS.Field()
     update_procedura_vas = vas.UpdateProceduraVAS.Field()
     invio_pareri_verifica_vas = vas.InvioPareriVerificaVAS.Field()
-    assoggettamento_vas = vas.AssoggettamentoVAS.Field()
-    create_consultazione_vas = vas.CreateConsultazioneVAS.Field()
-    update_consultazione_vas = vas.UpdateConsultazioneVAS.Field()
-    avvio_consultazioni_vas = vas.AvvioConsultazioniVAS.Field()
-    invio_pareri_vas = vas.InvioPareriVAS.Field()
-    avvio_esame_pareri_sca = vas.AvvioEsamePareriSCA.Field()
-    upload_elaborati_vas = vas.UploadElaboratiVAS.Field()
+
+    # assoggettamento_vas = vas.AssoggettamentoVAS.Field()
+
+    # invio_pareri_vas = vas.InvioPareriVAS.Field()
+    # avvio_esame_pareri_sca = vas.AvvioEsamePareriSCA.Field()
+    # upload_elaborati_vas = vas.UploadElaboratiVAS.Field()
+    invio_doc_preliminare = vas.InvioDocPreliminare.Field()
+    trasmissione_pareri_sca = vas.TrasmissionePareriSCA.Field()
+    trasmissione_pareri_ac = vas.TrasmissionePareriAC.Field()
+    redazione_documenti_vas = vas.RedazioneDocumentiVAS.Field()
+
+    trasmissione_dpv_vas = vas.TrasmissioneDPVVAS.Field()
+    emissione_provvedimento_verifica = vas.EmissioneProvvedimentoVerifica.Field()
+    pubblicazione_provvedimento_verifica_ac = vas.PubblicazioneProvvedimentoVerificaAc.Field()
+    pubblicazione_provvedimento_verifica_ap = vas.PubblicazioneProvvedimentoVerificaAp.Field()
 
     # create_procedura_avvio = avvio.CreateProceduraAvvio.Field()
     update_procedura_avvio = avvio.UpdateProceduraAvvio.Field()

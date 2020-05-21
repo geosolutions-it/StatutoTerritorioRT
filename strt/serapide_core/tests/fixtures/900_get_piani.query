@@ -10,11 +10,8 @@
     edges {
       node {
         ...Piano
-        __typename
       }
-      __typename
     }
-    __typename
   }
 }
 
@@ -29,7 +26,6 @@ fragment Piano on PianoNode {
   dataAvvio
   dataApprovazione
   alertsCount
-  numeroProtocolloGenioCivile
   dataProtocolloGenioCivile
   redazioneNormeTecnicheAttuazioneUrl
   compilazioneRapportoAmbientaleUrl
@@ -37,52 +33,40 @@ fragment Piano on PianoNode {
   monitoraggioUrbanisticoUrl
   azioni {
     ...Azioni
-    __typename
   }
   ente {
     ipa
     nome
     tipo
-    __typename
   }
   fase
   responsabile {
     ...User
-    __typename
   }
   risorse(archiviata: false) {
     ...Risorse
-    __typename
   }
   soggettoProponente {
         qualifica
         ufficio {uuid nome}
-        __typename
   }
   soggettiOperanti {
       qualificaUfficio {
         qualifica
         ufficio {uuid nome}
-        __typename
       }
-      __typename
   }
 
   proceduraVas {uuid}
   proceduraAvvio {uuid}
-
-  __typename
 }
 
 fragment Risorse on RisorsaNodeConnection {
   edges {
     node {
       ...Risorsa
-      __typename
     }
-    __typename
   }
-  __typename
 }
 
 fragment Risorsa on RisorsaNode {
@@ -96,11 +80,9 @@ fragment Risorsa on RisorsaNode {
     fiscalCode
     firstName
     lastName
-    __typename
   }
   label
   tooltip
-  __typename
 }
 
 fragment User on UtenteNode {
@@ -111,7 +93,6 @@ fragment User on UtenteNode {
   lastName
   dateJoined
   alertsCount
-  __typename
 }
 
 fragment Azioni on AzioneNode {
@@ -125,6 +106,7 @@ fragment Azioni on AzioneNode {
       label
       tooltip
       fase
-      __typename
+      avvioScadenza
+      scadenza
 }"
 }

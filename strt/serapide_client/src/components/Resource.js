@@ -46,7 +46,7 @@ export default ({
     fileSize = true,
     vertical = false,
     onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
-    const  { nome, uuid, lastUpdate, dimensione, downloadUrl} = resource;
+    const  { nome, uuid, lastUpdate, dimensione, downloadUrl} =  resource ?? {};
     let toastId
     const deleteResource = () => onDeleteResource({ variables: { id: uuid, codice}})
     const confirm = () => {

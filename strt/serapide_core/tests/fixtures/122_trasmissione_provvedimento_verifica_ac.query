@@ -1,0 +1,43 @@
+{
+   "operationName" : "PubblicazioneProvvedimentoVerificaAc",
+
+   "variables" : {
+      "uuid" : "{codice}"
+   },
+
+   "query" : "mutation PubblicazioneProvvedimentoVerificaAc($uuid: String!) {
+  pubblicazioneProvvedimentoVerificaAc(uuid: $uuid) {
+    vasAggiornata {
+      uuid
+      verificaEffettuata
+      dataAssoggettamento
+      piano {
+        ...AzioniPiano
+      }
+    }
+  }
+}
+
+fragment AzioniPiano on PianoNode {
+  codice
+  fase
+  azioni {
+    ...Azioni
+  }
+}
+
+fragment Azioni on AzioneNode {
+      order
+      tipologia
+      stato
+      qualificaRichiesta
+      data
+      uuid
+      label
+      tooltip
+      fase
+      avvioScadenza
+      scadenza
+}
+"
+}

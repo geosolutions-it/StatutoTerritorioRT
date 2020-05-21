@@ -30,7 +30,8 @@ import serapide_core.api.auth.vas as auth_vas
 import serapide_core.api.auth.user as auth
 
 from serapide_core.modello.enums import (
-    TipoRisorsa
+    TipoRisorsa,
+    TipologiaAzione,
 )
 
 from serapide_core.modello.models import (
@@ -55,6 +56,8 @@ from serapide_core.modello.models import (
     RisorseAdozioneVas,
     RisorseApprovazione,
     RisorsePubblicazione,
+
+    isExecuted,
 )
 
 from .. import types
@@ -176,9 +179,12 @@ class UploadRisorsaVAS(UploadBaseBase):
             if not auth.can_access_piano(info.context.user, _piano):
                 return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-            if _tipo_file == TipoRisorsa.PARERE_SCA.value and \
-                    not auth_vas.parere_sca_ok(info.context.user, _procedura_vas):
-                return GraphQLError('Precondition failed - Non si possono aggiungere ulteriori pareri SCA', code=412)
+            if _tipo_file == TipoRisorsa.PARERE_SCA.value:
+                # if _procedura_vas.risorse.filter(tipo=_tipo_file, archiviata=False, user=info.context.user).exists():
+                #     return GraphQLError('Precondition failed - Non si possono aggiungere ulteriori pareri SCA', code=412)
+
+                if isExecuted(_piano.getFirstAction(TipologiaAzione.trasmissione_pareri_sca)):
+                    return GraphQLError('Risorsa inviata e non modificabile', code=403)
 
             if _tipo_file == TipoRisorsa.PARERE_VERIFICA_VAS.value and \
                     not auth_vas.parere_verifica_vas_ok(info.context.user, _procedura_vas):
@@ -671,9 +677,11 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
 
             _risorsa = Risorsa.objects.get(uuid=_id)
 
-            if _risorsa.tipo == TipoRisorsa.PARERE_SCA and \
-                    not auth_vas.parere_sca_ok(info.context.user, _procedura_vas):
-                return GraphQLError("Risorsa non eliminabile", code=403)
+            if _risorsa.tipo == TipoRisorsa.PARERE_SCA.value:
+                # if not auth_vas.parere_sca_ok(info.context.user, _procedura_vas):
+                #     return GraphQLError("Risorsa non eliminabile", code=403)
+                if isExecuted(_piano.getFirstAction(TipologiaAzione.trasmissione_pareri_sca)):
+                    return GraphQLError('Risorsa inviata e non modificabile', code=403)
 
             if _risorsa.tipo == TipoRisorsa.PARERE_VERIFICA_VAS and \
                     not auth_vas.parere_verifica_vas_ok(info.context.user, _procedura_vas):

@@ -15,14 +15,14 @@ import classNames from 'classnames'
 
 const enhancer = toggleControllableState("isOpen", "toggleOpen", false)
 
-const ListItem = ({option: {value, label, tipologia} = {}, selected = false, onClick}) => (
+const ListItem = ({option: {value, label, tipologia, tipologiaLabel} = {}, selected = false, onClick}) => (
     <ListGroupItem  onClick={() => onClick(value, {uuid: value, tipologia})}>
         <span className="row d-flex pointer">
             <span className="col-1">
                 <i className={classNames('material-icons',{"text-serapide": selected})}>{selected ?  'radio_button_checked' : 'radio_button_unchecked'}</i>
             </span>         
             <span className="col-4">{label}</span>
-            <span className="col-4"><small>{tipologia}</small></span>
+            <span className="col-4"><small>{tipologiaLabel || tipologia}</small></span>
         </span>
     </ListGroupItem>)
 

@@ -7,24 +7,31 @@
  */
 import React from 'react'
 import {Query} from 'react-apollo'
-import {Input} from 'reactstrap'
-
+// import {Input} from 'reactstrap'
+import Input from 'components/EnhancedInput'
 import Resource from 'components/Resource'
 import ActionTitle from 'components/ActionTitle'
 import SalvaInvia from 'components/SalvaInvia'
 import Spinner from 'components/Spinner'
 
-import  {showError, getCodice} from 'utils'
+import  {showError, getCodice, getInputFactory, VAS_DOCS} from 'utils'
 import {withControllableState} from 'enhancers'
 
-import {GET_VAS, PUBBLICA_PROVV_VERIFICA} from 'schema'
+import {GET_VAS,UPDATE_VAS, PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA_AC, PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA_AP} from 'schema'
 
 const enhancers = withControllableState("url", "onUrlChange","")
+const getVasTypeInput = getInputFactory("proceduraVas")
 
-const UI = enhancers(({back, qualificaRichiesta, url, onUrlChange, vas: {node: {uuid, risorse : {edges: resources = []} = {}} = {}}, utente: {attore}}) => {
+const UI = enhancers(({back, qualificaRichiesta, onUrlChange, vas: {node: {
+    pubblicazioneProvvedimentoVerificaAc,
+    pubblicazioneProvvedimentoVerificaAp,
+    uuid, risorse : {edges: resources = []} = {}} = {}}}) => {
     
-    const provvedimentoVerificaVas  = resources.filter(({node: {tipo, user = {}}}) => tipo === "provvedimento_verifica_vas").map(({node}) => node).shift()
-    const pubblicazione_provvedimento_verifica = qualificaRichiesta === 'AC' ? "pubblicazioneProvvedimentoVerificaAc" : "pubblicazioneProvvedimentoVerificaAp"
+    const isAC = qualificaRichiesta === 'AC';
+    const provvedimentoVerificaVas  = resources.filter(({node: {tipo, user = {}}}) => tipo === VAS_DOCS.DOC_PRE_VER_VAS).map(({node}) => node).shift()
+    const pubblicazione_provvedimento_verifica = isAC ? "pubblicazioneProvvedimentoVerificaAc" : "pubblicazioneProvvedimentoVerificaAp"
+    const closeMutation = isAC ? PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA_AC : PUBBLICAZIONE_PROVVEDIMENTO_VERIFICA_AP
+    
     return (
         <React.Fragment>
             <ActionTitle>Pubblicazione Provvedimento di Verifica</ActionTitle>
@@ -32,11 +39,14 @@ const UI = enhancers(({back, qualificaRichiesta, url, onUrlChange, vas: {node: {
             
             <span  className="mt-5 d-flex align-items-center">
                 <i className="material-icons icon-15 text-serapide pr-2">link</i>
-                <Input className="rounded-pill size-10" placeholder="Inserire la URL della pagina dove è stato pubblicato il provvedimento di verifica" disabled={false} value={url} onChange={(e) => onUrlChange(e.target.value)} type="url" name="text" />                
+                <Input getInput={getVasTypeInput(uuid, pubblicazione_provvedimento_verifica)} mutation={UPDATE_VAS} disabled={false}
+                className="rounded-pill size-10"
+                placeholder="Inserire la URL della pagina dove è stato pubblicato il provvedimento di verifica" 
+                onChange={undefined} value={isAC ? pubblicazioneProvvedimentoVerificaAc : pubblicazioneProvvedimentoVerificaAp} type="text" />
             </span>
             
             <div className="align-self-center mt-7">
-                <SalvaInvia fontSize="size-8" onCompleted={back} mutation={PUBBLICA_PROVV_VERIFICA} variables={{input: {proceduraVas: {[pubblicazione_provvedimento_verifica]: url}, uuid}}} canCommit={url}></SalvaInvia>
+                <SalvaInvia fontSize="size-8" onCompleted={back} mutation={closeMutation} variables={{uuid}} canCommit={pubblicazioneProvvedimentoVerificaAc || pubblicazioneProvvedimentoVerificaAp}></SalvaInvia>
             </div>
         </React.Fragment>)
     })

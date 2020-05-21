@@ -12,83 +12,84 @@ import {EnhancedSwitch} from './Switch'
 import FileUpload from './UploadSingleFile'
 import Button from './IconButton'
 import {EnhancedListSelector} from './ListSelector'
-import Resource from 'components/Resource'
+
 // import AddContact from 'components/AddContact'
 import SalvaInvia from 'components/SalvaInvia'
 import TextWithTooltip from 'components/TextWithTooltip'
 
 import  {rebuildTooltip} from 'enhancers'
-import {map}  from 'lodash'
-import {formatDate, getNominativo, showError, getInputFactory, getContatti} from 'utils'
+
+import { showError, getInputFactory, getContatti, docByVASType, VAS_DOCS, VAS_TYPES} from 'utils'
 
 import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD,
     DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO,
-    PROMUOVI_PIANO, GET_CONSULTAZIONE_VAS} from 'schema'
+    PROMUOVI_PIANO} from 'schema'
 
 
 const getVasTypeInput = getInputFactory("proceduraVas")
 
 
+const checkDoc = (tipologia, resources) => {
+    if(tipologia === VAS_TYPES.NON_NECESSARIA  && tipologia === VAS_TYPES.PROCEDURA_ORDINARIA) {
+        return true;
+    }
+    const {node: doc} = resources.filter(({node: n}) => n.tipo === docByVASType[tipologia]).pop() || {};
+    return !!doc;
+}
 
-const checkAnagrafica =  (tipologia = "" , sP, auths, scas, semplificata, verifica, docProcSemp) => {
-    switch (tipologia.toLowerCase()) {
-        case "semplificata":
-        return semplificata && auths.length > 0 && !!sP
-        case "verifica":
-        return verifica && auths.length > 0 && scas.length > 0 && !!sP
-        case "procedimento":
-        return auths.length > 0 && scas.length > 0 && !!sP
-        case "non_necessaria":
-        return !!sP
-        case "procedimento_semplificato":
-        return docProcSemp && auths.length > 0 && scas.length > 0 && !!sP
+
+const checkSoggetti =  (tipologia = "" , sP, ac, scas) => {
+    if(!sP) {
+        return false;
+    }
+    switch (tipologia) {
+        case VAS_TYPES.VERIFICA_SEMPLIFICATA:
+        case VAS_TYPES.VERIFICA:
+        return ac.length > 0
+        case VAS_TYPES.PROCEDURA_ORDINARIA:
+        case VAS_TYPES.PROCEDIMENTO_SEMPLIFICATO:
+        return ac.length > 0 && scas.length > 0
         default:
         return false
     }
 }
+// Proprietà comuni upload files
 const fileProps = {className:"col-xl-12", iconSize: "icon-24", fontSize: "size-15",
                     mutation: VAS_FILE_UPLOAD, resourceMutation: DELETE_RISORSA_VAS}
 
 
-const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, canUpdate, isLocked, Vas = {}}) => {
+const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas = {}}) => {
     
-    const {node: {uuid, tipologia, dataAssoggettamento, assoggettamento, piano: { soggettoProponente, soggettiOperanti = [] } = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
+    const {node: {uuid, tipologia, piano: { soggettoProponente, soggettiOperanti = [] } = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
         
     const {ufficio: sP = {}} = soggettoProponente || {};
 
-    const {node: {avvioConsultazioniSca, dataAvvioConsultazioniSca} = {}} = consultazioneSCA
-    const {node: semplificata}= resources.filter(({node: n}) => n.tipo === "vas_semplificata").pop() || {};
-    const {node: verifica} = resources.filter(({node: n}) => n.tipo === "vas_verifica").pop() || {};
-    const {node: docProcSemp} = resources.filter(({node: n}) => n.tipo === "doc_proc_semplificato").pop() || {};
-
-
-    const disableSCA = tipologia === "SEMPLIFICATA" || tipologia === "NON_NECESSARIA"
+    
+    const {node: semplificata}= resources.filter(({node: n}) => n.tipo === VAS_DOCS.REL_MOT).pop() || {};
+    const {node: verifica} = resources.filter(({node: n}) => n.tipo === VAS_DOCS.DOC_PRE_VER_VAS).pop() || {};
+    const {node: docProcSemp} = resources.filter(({node: n}) => n.tipo === VAS_DOCS.DOC_PRE_VAS).pop() || {};
+    
+    const disableSCA = tipologia === VAS_TYPES.NON_NECESSARIA
+    
     const acs = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "AC").map(({qualificaUfficio} = {}) => (qualificaUfficio))
     const scas = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "SCA").map(({qualificaUfficio} = {}) => (qualificaUfficio))
-    const canCommit = !isLocked && canUpdate && checkAnagrafica(tipologia, sP, acs, scas, semplificata, verifica, docProcSemp)
+    
+    const canCommit = !isLocked && canUpdate && checkSoggetti(tipologia, sP, acs, scas) && checkDoc(tipologia, resources)
+
     const getInputTipologia = getVasTypeInput(uuid, "tipologia")
-    const pareriUser =  resources.filter(({node: {tipo}}) => tipo === "parere_sca").reduce((acc, {node}) => {
-        if (acc[node.user.fiscalCode]) {
-            acc[node.user.fiscalCode].push(node)
-        }
-        else {
-            acc[node.user.fiscalCode] = [node]
-        }
-        return acc
-    } , {})
 
 
     return(
     <React.Fragment>
         <span className="pt-4">PROCEDIMENTO VAS</span>
-        {!isLocked && (<span className="p-3 pb-5">NOTA : Le opzioni sono escludenti. Se viene selezionata la richiesta della VAS semplificata
+        <span className="p-3 pb-5">NOTA : Le opzioni sono escludenti. Se viene selezionata la richiesta della VAS semplificata
             è richiesto l’upload della Relazione Motivata; se viene selezionata la Richiesta di Verifica VAS è richiesto
-    l’upload del documento preliminare di verifica; se si seleziona il Procedimento Vas si decide di seguire il procedimento VAS esteso.</span>)}
+    l’upload del documento preliminare di verifica; se si seleziona il Procedimento Vas si decide di seguire il procedimento VAS esteso.</span>
         <EnhancedSwitch isLocked={isLocked}
                         getInput={getInputTipologia}
                         mutation={UPDATE_VAS}
-                        value="semplificata" checked={tipologia === "SEMPLIFICATA"}
-                        label={(<TextWithTooltip dataTip="art.5 co.3ter L.R. 10/2010" text="PROCEDIMENTO DI VERIFICA SEMPLIFICATA"/>)}
+                        value={VAS_TYPES.VERIFICA_SEMPLIFICATA} checked={tipologia === VAS_TYPES.VERIFICA_SEMPLIFICATA}
+                        label={(<TextWithTooltip dataTip="art.5 co.3ter L.R. 10/2010" text="PROCEDURA DI VERIFICA SEMPLIFICATA"/>)}
                         className="mt-5 mb-4">
             {(checked) =>
                 <div className="row">
@@ -96,51 +97,51 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                                 disabled={!checked}
                                 isLocked={!checked || isLocked}
                                 risorsa={semplificata}
-                                placeholder={(<TextWithTooltip dataTip="art.5 co.3ter L.R. 10/2010" text="Relazione motivata per VAS semplificata"/>)}
-                                variables={{codice: uuid, tipo: "vas_semplificata" }}/>
+                                placeholder={(<TextWithTooltip dataTip="art.5 co.3ter L.R. 10/2010" text="Relazione motivata per verifica VAS semplificata"/>)}
+                                variables={{codice: uuid, tipo: VAS_DOCS.REL_MOT}}/>
                 </div>
             }
         </EnhancedSwitch>
         <EnhancedSwitch  isLocked={isLocked}
             getInput={getInputTipologia}
             mutation={UPDATE_VAS}
-            value="verifica"
-            checked={tipologia === "VERIFICA"}
-            label={(<TextWithTooltip dataTip="art.22 L.R. 10/2010" text="RICHIESTA VERIFICA DI  ASSOGGETTABILITA'"/>)}
+            value={VAS_TYPES.VERIFICA}
+            checked={tipologia === VAS_TYPES.VERIFICA}
+            label={(<TextWithTooltip dataTip="art.22 L.R. 10/2010" text="PROCEDURA DI VERIFICA DI ASSOGGETTABILITA’ A VAS"/>)}
             className="mt-5 mb-4">
             {(checked) => <div className="row">
                 <FileUpload {...fileProps}
                             disabled={!checked} isLocked={!checked || isLocked}
                             risorsa={verifica}
-                            placeholder={(<TextWithTooltip dataTip="art.22 L.R. 10/2010" text="Documento preliminare"/>)}
-                            variables={{codice: uuid, tipo: "vas_verifica" }}/>
+                            placeholder={(<TextWithTooltip dataTip="art.22 L.R. 10/2010" text="Documento preliminare di verifica assoggettabilità"/>)}
+                            variables={{codice: uuid, tipo: VAS_DOCS.DOC_PRE_VER_VAS }}/>
                     </div>}
         </EnhancedSwitch>
         <EnhancedSwitch  isLocked={isLocked}
             getInput={getInputTipologia}
             mutation={UPDATE_VAS}
-            value="procedimento_semplificato"
+            value={VAS_TYPES.PROCEDIMENTO_SEMPLIFICATO}
             label={(<TextWithTooltip dataTip="art.8 co.5 L.R. 10/2010" text="PROCEDIMENTO SEMPLIFICATO"/>)}
-            checked={tipologia === "PROCEDIMENTO_SEMPLIFICATO"}
+            checked={tipologia === VAS_TYPES.PROCEDIMENTO_SEMPLIFICATO}
             className="mt-5 mb-4">
             {(checked) => <div className="row">
                 <FileUpload {...fileProps}
                             disabled={!checked} isLocked={!checked || isLocked}
                             risorsa={docProcSemp}
-                            placeholder={(<TextWithTooltip dataTip="art. 8, 22 e 23 L.R. 10/2010" text="Documento preliminare"/>)}
-                            variables={{codice: uuid, tipo: "doc_proc_semplificato" }}/>
+                            placeholder={(<TextWithTooltip dataTip="art. 8, 22 e 23 L.R. 10/2010" text="Documento preliminare VAS"/>)}
+                            variables={{codice: uuid, tipo: VAS_DOCS.DOC_PRE_VAS}}/>
                     </div>}
             </EnhancedSwitch>
         <EnhancedSwitch isLocked={isLocked}
             getInput={getInputTipologia}
             mutation={UPDATE_VAS}
-            value="procedimento"
-            checked={tipologia === "PROCEDIMENTO"}
-            label="PROCEDIMENTO VAS (AVVIO)"
+            value={VAS_TYPES.PROCEDURA_ORDINARIA}
+            checked={tipologia === VAS_TYPES.PROCEDURA_ORDINARIA}
+            label={(<TextWithTooltip dataTip="FASE PRELIMINARE DI VAS (art.23 LR 10/2010)" text="PROCEDURA ORDINARIA DI VAS"/>)}
             className="mt-5">
             {() => (
                 <div className="row">
-                <span className="p-3 col-xl-12">Scegliendo “Procedura VAS” verrà inviata una comunicazione all’autorità procedente e proponente (AP/P)
+                <span className="p-3 col-xl-12">Scegliendo “PROCEDURA ORDINARIA DI VAS” verrà inviata una comunicazione all’autorità procedente e proponente (AP/P)
             che avvierà le consultazioni degli Soggetti Competenti in Materia Ambientale (SCA)</span></div>
 
             )}
@@ -148,15 +149,15 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
         <EnhancedSwitch  isLocked={isLocked}
             getInput={getInputTipologia}
             mutation={UPDATE_VAS}
-            value="non_necessaria"
-            checked={tipologia === "NON_NECESSARIA"}
+            value={VAS_TYPES.NON_NECESSARIA}
+            checked={tipologia === VAS_TYPES.NON_NECESSARIA}
             label="VAS NON NECESSARIA"
             className="mt-5">
                 {() =>(<div className="row"><span className="p-3 mb-5 col-xl-12">In questo caso per il piano non è necessaria alcuna VAS </span></div>)}
         </EnhancedSwitch>
         <div className="d-flex mt-2 pt-2 justify-content-between mb-3">
             <div style={{minWidth: "33%"}}>
-                { !isLocked ? (<Mutation mutation={UPDATE_PIANO} onError={showError}>
+                <Mutation mutation={UPDATE_PIANO} onError={showError}>
                 {(onChange) => {
                         const changed = (val) => {
                             let soggettoProponenteUuid = val;
@@ -183,14 +184,10 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                         </EnhancedListSelector>
                         )}
                     }
-                </Mutation>) : (<span>SOGGETTO PROPONENTE</span>) }
-                    {sP && sP.nome && (<div className="d-flex pt-3" key={sP.uuid}>
-                            <i className="material-icons text-serapide">bookmark</i>
-                            {`${sP.ente && sP.ente.nome} ${sP.nome}`}
-                    </div>)}
+                </Mutation>
                 </div>
             <div style={{minWidth: "33%"}}>
-            { !isLocked ? (<Mutation mutation={UPDATE_PIANO} onError={showError}>
+                <Mutation mutation={UPDATE_PIANO} onError={showError}>
                 {(onChange) => {
                     const changed = (val, {tipologia: qualifica, uuid}) => {
                         let newAC = acs.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid}))
@@ -218,14 +215,10 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                             </EnhancedListSelector>
                             )}
                 }
-                </Mutation>) : (<span>AUTORITA’ COMPETENTE VAS</span>) }
-                {acs.map(({ufficio: {nome, uuid, ente: {nome: nomeEnte} = {}} = {}}) => (<div className="d-flex pt-3" key={uuid}>
-                            <i className="material-icons text-serapide">bookmark</i>
-                            {`${nomeEnte} ${nome}`}
-                </div>))}
+                </Mutation>
             </div>
             <div style={{minWidth: "33%"}}>
-            { !isLocked ? ( <Mutation mutation={UPDATE_PIANO} onError={showError}>
+                 <Mutation mutation={UPDATE_PIANO} onError={showError}>
             {(onChange) => {
                     const changed = (val, {tipologia: qualifica, uuid}) => {
                         let newSCA = scas.map(({qualifica, ufficio: {uuid: ufficioUuid} = {}} = {}) => ({qualifica, ufficioUuid}))
@@ -254,46 +247,12 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
                     </EnhancedListSelector>
                 )}
                 }
-                </Mutation>) : (<span>SOGGETTI COMPETENTI IN MATERIA AMBIENTALE</span>) }
-                {scas.map(({ufficio: {nome, uuid, ente: {nome: nomeEnte} = {}} = {}}) => (<div className="d-flex pt-3" key={uuid}>
-                            <i className="material-icons text-serapide">bookmark</i>
-                            {`${nomeEnte} ${nome}`}
-                </div>))}
+                </Mutation>
             </div>
         </div>
-        {!isLocked && (<div className="d-flex mt-5 pt-5  justify-content-end">
+        <div className="d-flex mt-5 pt-5  justify-content-end">
                 <SalvaInvia mutation={PROMUOVI_PIANO} variables={{codice}} canCommit={canCommit}></SalvaInvia>
-        </div>)}
-            {/* Mosrta il resto delle aprocedura vas quando simo in riassunot  i casi sono molteplici,
-                ho richiesta di verifica, ho richiesta verifica semplificata, richiesta procedimento richiesta procedimento semplificato, se la vas non è necessaia non aggiungo nulla
-            */}
-        { isLocked && !!dataAssoggettamento && (
-            <div className="row pt-5">
-                <div className="col-5 d-flex">
-                        <i className="material-icons text-serapide self-align-center">{assoggettamento ? "check_box" : "check_box_outline_blank"}</i>
-                        <span className="pl-1">ESITO: {assoggettamento ? "Assoggettamento VAS" : "Esclusione VAS"}</span>
-                </div>
-                <span className="col-4">{dataAssoggettamento && formatDate(dataAssoggettamento)}</span>
-            </div>)
-        }
-        { avvioConsultazioniSca && (
-            <div className="row pt-5">
-            <div className="col-5 d-flex">
-                    <i className="material-icons text-serapide self-align-center">check_box</i>
-                        <span className="pl-1">Avvio Consultazioni SCA</span>
-                </div>
-                <span className="col-4">{dataAvvioConsultazioniSca && formatDate(dataAvvioConsultazioniSca)}</span>
-            <div className="col-12 pt-2"></div>
-            {map(pareriUser, (u) => (
-                <div key={u[0].user.fiscalCode} className="col-12 pt-4">
-                    <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(u[0].user)}</span></div>
-                    {u.map(parere => (<Resource key={parere.uuid} className="border-0 mt-2" icon="attach_file" resource={parere}></Resource>))}
-                </div>
-                ))
-                }
-            </div>
-
-        )}
+        </div>
     </React.Fragment>)})
 
 
@@ -301,10 +260,8 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
 export default ({codice, canUpdate, isLocked}) => {
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
-            {({loading, data: {modello: {edges: [vas] = []} = {}} = {}}) => (
-                <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
-                {({loadingC, data: {modello: {edges: cons = []} = {}} = {}}) => {
-                if(loading || loadingC){
+            {({loading, data: {modello: {edges: [vas] = []} = {}} = {}}) => {
+                if(loading){
                     return (
                     <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
                         <div className="d-flex justify-content-center">
@@ -314,8 +271,6 @@ export default ({codice, canUpdate, isLocked}) => {
                     </div>
                     </div>)
                 }
-            return <UI codice={codice}  consultazioneSCA={cons[0]} canUpdate={canUpdate} isLocked={isLocked} Vas={vas}/>
+                return <UI codice={codice}  canUpdate={canUpdate} isLocked={isLocked} Vas={vas}/>
             }}
             </Query>)}
-        </Query>)
-    }

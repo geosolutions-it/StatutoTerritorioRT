@@ -38,7 +38,7 @@ from serapide_core.modello.models import (
 from serapide_core.modello.enums import (
     Fase,
     STATO_AZIONE,
-    TIPOLOGIA_AZIONE,
+    TipologiaAzione,
 )
 
 import serapide_core.api.auth.user as auth
@@ -133,7 +133,7 @@ class PubblicazionePiano(graphene.Mutation):
 
     @staticmethod
     def action():
-        return TIPOLOGIA_AZIONE.pubblicazione_piano
+        return TipologiaAzione.pubblicazione_piano
 
     @staticmethod
     def procedura(piano):
@@ -145,7 +145,7 @@ class PubblicazionePiano(graphene.Mutation):
         ensure_fase(fase, Fase.APPROVAZIONE)
 
         # - Update Action state accordingly
-        _pubblicazione_piano = piano.getFirstAction(TIPOLOGIA_AZIONE.pubblicazione_piano)
+        _pubblicazione_piano = piano.getFirstAction(TipologiaAzione.pubblicazione_piano)
 
         if needsExecution(_pubblicazione_piano):
             chiudi_azione(_pubblicazione_piano)

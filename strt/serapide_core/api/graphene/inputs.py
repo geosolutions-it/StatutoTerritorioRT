@@ -81,11 +81,11 @@ class PianoUpdateInput(InputObjectType):
 
     soggetti_operanti = graphene.List(SoggettoOperanteInput, required=False)
 
-    numero_protocollo_genio_civile = graphene.String(required=False)
     redazione_norme_tecniche_attuazione_url = graphene.String(required=False)
     compilazione_rapporto_ambientale_url = graphene.String(required=False)
     conformazione_pit_ppr_url = graphene.String(required=False)
     monitoraggio_urbanistico_url = graphene.String(required=False)
+
 
 class ProceduraVASCreateInput(InputObjectType):
     """
@@ -116,16 +116,6 @@ class ProceduraVASUpdateInput(InputObjectType):
     assoggettamento = graphene.Boolean(required=False)
     pubblicazione_provvedimento_verifica_ap = graphene.String(required=False)
     pubblicazione_provvedimento_verifica_ac = graphene.String(required=False)
-
-
-class ConsultazioneVASUpdateInput(InputObjectType):
-    """
-    Class created to accept input data
-    from the interactive graphql console.
-    """
-    data_scadenza = graphene.types.datetime.DateTime(required=False)
-    data_ricezione_pareri = graphene.types.datetime.DateTime(required=False)
-    avvio_consultazioni_sca = graphene.Boolean(required=False)
 
 
 class ProceduraAvvioCreateInput(InputObjectType):

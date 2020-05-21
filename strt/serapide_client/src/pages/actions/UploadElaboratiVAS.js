@@ -17,7 +17,7 @@ import  {showError, getCodice} from 'utils'
 
 import {GET_VAS,
     DELETE_RISORSA_VAS,
-    VAS_FILE_UPLOAD, UPLOAD_ELABORATI_VAS
+    VAS_FILE_UPLOAD, REDAZIONE_DOCUMENTI_VAS
 } from 'schema'
 
 const UI = ({
@@ -27,11 +27,12 @@ const UI = ({
     }) => {
         
         const rapporto = resources.filter(({node: {tipo, user = {}}}) => tipo === 'rapporto_ambientale').map(({node}) => node).shift()
+        const sintesi = resources.filter(({node: {tipo, user = {}}}) => tipo === 'sintesi_non_tecnica').map(({node}) => node).shift()
         return (
             <React.Fragment>
-                <ActionTitle>Upload Elaborati VAS</ActionTitle>
-                <div className="d-flex pt-2 mb-5 size-13 text-justify">Il comune esamina i pareri, forma il piano e redige il Rapporto Ambientale. Gli elaborati vengono caricati nella piattaforma</div>
-                <div className="action-uploader  py-1 align-self-start border-bottom   border-bottom border-top">
+                <ActionTitle>Redazione Elaborati VAS</ActionTitle>
+                <div className="d-flex pt-2 mb-5 size-13 text-justify">Il comune esamina i pareri, redige il Rapporto Ambientale e la Sintesi non tecnica. Gli elaborati vengono caricati nella piattaforma</div>
+                <div className="action-uploader  py-1 align-self-start border-bottom  border-top">
                 <FileUpload 
                     iconSize="icon-15" fontSize="size-11"
                     vertical useLabel
@@ -40,6 +41,16 @@ const UI = ({
                     mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={rapporto} variables={{codice: uuid, tipo: "rapporto_ambientale" }}/>
+                </div>
+                <div className="action-uploader  py-1 align-self-start border-bottom">
+                <FileUpload 
+                    iconSize="icon-15" fontSize="size-11"
+                    vertical useLabel
+                    className="border-0"
+                    placeholder="Documento di sintesi"
+                    mutation={VAS_FILE_UPLOAD} 
+                    resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
+                    isLocked={false} risorsa={sintesi} variables={{codice: uuid, tipo: "sintesi_non_tecnica" }}/>
                 </div>
                 {/* <h4 className="font-weight-light pl-4 pb-1">Elaborati</h4>
                 <Elaborati
@@ -50,7 +61,7 @@ const UI = ({
                         uuid={uuid}
                 /> */}
                 <div className="align-self-center mt-7">
-                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{uuid}} mutation={UPLOAD_ELABORATI_VAS} canCommit={rapporto}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{uuid}} mutation={REDAZIONE_DOCUMENTI_VAS} canCommit={rapporto && sintesi}></SalvaInvia>
                 </div>
             </React.Fragment>)
     }

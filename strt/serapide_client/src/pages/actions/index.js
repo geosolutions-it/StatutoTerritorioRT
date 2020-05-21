@@ -1,12 +1,13 @@
 import React from 'react'
-import AvvioConsultazioniSCA from "./AvvioConsultazioneSCA"
-import PareriSCA from "./PareriSCA"
+// import AvvioConsultazioniSCA from "./AvvioConsultazioneSCA"
+import PareriVAS from "./PareriVAS"
 import ProvvedimentoVerificaVAS from './ProvvedimentoVerificaVAS'
 import AvvioProcedimento from './AvvioProcedimento'
+import TrasmissioneDpVerVAS from './TrasmissioneDpVerVAS'
 
 import AvviaEsamePareri from './AvviaEsamePareri'
 import PubblicazioneProvv from './PubblicazioneProvvedimento'
-import UploadElaboratiVAS from './UploadElaboratiVAS'
+import RedazioneDocumnetiVAS from './UploadElaboratiVAS'
 import GenioCivile from './GenioCivile'
 import FormazionePiano from './FormazionePiano'
 import RichiestaConferenza from './RichiestaConferenza'
@@ -27,38 +28,63 @@ import UploadElaboratiAdozioneVAS from './UploadElaboratiVASAdozione'
 import Approvazione from './Approvazione'
 import UploadFile from "./UploadFile"
 import Pubblicazione from "./Pubblicazione"
+import InvioDocPreliminare from "./InvioDocPreliminare"
+import {VAS_DOCS} from "../../utils"
 
-import {INVIO_PARERI_VAS, CONTRODEDUZIONI,
+import {GET_AVVIO, DELETE_RISORSA_AVVIO, 
+        TRASMISSIONE_PRERI_SCA,TRASMISSIONE_PRERI_AC, CONTRODEDUZIONI,
         GET_APPROVAZIONE, APPROVAZIONE_FILE_UPLOAD, UPDATE_APPROVAZIONE,
         DELETE_RISORSA_APPROVAZIONE, ESITO_CONFERENZA_PAESAGGISTICA_AP,
         PUBBLICAZIONE_APPROVAZIONE, ATTRIBUZIONE_CONFORMITA_PIT,
         GET_PUBBLICAZIONE, UPDATE_PUBBLICAZIONE, PUBBLICAZIONE_PIANO,
         AVVIO_FILE_UPLOAD, CONTRIBUTI_TECNICI
 } from 'schema'
-import { GET_AVVIO, DELETE_RISORSA_AVVIO } from '../../graphql/index';
+
 
 
 // parametri passati di default piano, back, utente, scadenza
 
 export default {
-        avvioConsultazioniSca: (props) => (<AvvioConsultazioniSCA {...props}/>),
-        pareriVerificaVas: (props) => (<PareriSCA  {...props}/>),
-        pareriSca: (props) => (<PareriSCA tipo="parere_sca"
-                                      saveMutation={INVIO_PARERI_VAS}
+/************************ FASE AVVVIO **********************************/
+        avvioProcedimento: (props) => (<AvvioProcedimento {...props}/>),
+        
+        /********   PROCEDURA ORDINARIA VAS *****************/
+        invioDocPreliminare: (props) => (<InvioDocPreliminare  {...props}/>),
+        trasmissionePareriSca: (props) => (<PareriVAS tipo={VAS_DOCS.PAR_SCA}
+                                      saveMutation={TRASMISSIONE_PRERI_SCA}
                                       tipoVas="documento_preliminare_vas"
                                       label="Pareri SCA"
                                       {...props}/>),
+        trasmissionePareriAc: (props) => (<PareriVAS 
+                                        title="Pareri Autorità Competente (AC)"
+                                        tipo={VAS_DOCS.PAR_AC}
+                                        saveMutation={TRASMISSIONE_PRERI_AC}
+                                        tipoVas="documento_preliminare_vas"
+                                        label="Pareri AC"
+                                      {...props}/>),
+        redazioneDocumentiVas: (props) => (<RedazioneDocumnetiVAS {...props}/>),
+        // ********** VERIFICA DI ASSOGGETTABILITA' VAS ***************
+        
+        trasmissioneDpvVas: (props) => (<TrasmissioneDpVerVAS {...props}/>),
+        pareriVerificaSca: (props) => (<PareriVAS  {...props}/>),
         emissioneProvvedimentoVerifica: (props) => (<ProvvedimentoVerificaVAS {...props}/>),
-        pubblicazioneProvvedimentoVerifica: (props) => (<PubblicazioneProvv {...props}/>),
-        avvioProcedimento: (props) => (<AvvioProcedimento {...props}/>),
+        pubblicazioneProvvedimentoVerificaAc : (props) => (<PubblicazioneProvv {...props}/>),
+        pubblicazioneProvvedimentoVerificaAp: (props) => (<PubblicazioneProvv {...props}/>),
+        
+        //************* ********************/
+        
         avvioEsamePareriSca: (props) => (<AvviaEsamePareri {...props}/>),
-        uploadElaboratiVas: (props) => (<UploadElaboratiVAS {...props}/>),
+        
+
+        // *********** CONFERENZA PAESAGGISTICA ***********************
         protocolloGenioCivile: (props) => (<GenioCivile {...props}/>),
         formazioneDelPiano: (props) => (<FormazionePiano {...props}/>),
         richiestaConferenzaCopianificazione: (props) => (<RichiestaConferenza {...props}/>),
         esitoConferenzaCopianificazione: (props) => (<SvolgimentoConferenza {...props}/>),
         richiestaIntegrazioni: (props) => (<RichiestaIntegrazioni  {...props}/>),
         integrazioniRichieste: (props) => (<IntegrazioniRichieste  {...props}/>),
+
+/**********FASE ADOZIONE ******************/
         trasmissioneAdozione: (props) => (<Adozione  {...props}/>),
         uploadOsservazioniPrivati: (props) => (<Osservazioni  {...props}/>),
         osservazioniEnti: (props) => (<Osservazioni hideSave={true} disableSave={true} label="OSSERVAZIONI" titolo="Osservazioni Ente"  filterByUser={false} tipo="osservazioni_enti" {...props}/>),
@@ -106,6 +132,7 @@ export default {
                                                 uploadRes={AVVIO_FILE_UPLOAD}
                                                 closeAction={CONTRIBUTI_TECNICI}
                                                 {...props}/>),
+        
                                 
 }
 

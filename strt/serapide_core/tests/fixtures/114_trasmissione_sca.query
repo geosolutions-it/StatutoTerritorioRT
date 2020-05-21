@@ -1,0 +1,90 @@
+{
+  "operationName": "TrasmissionePareriSca",
+  "variables": {
+    "codice": "{codice}"
+  },
+  "query": "mutation TrasmissionePareriSca($codice: String!) {
+  trasmissionePareriSca(uuid: $codice) {
+    vasAggiornata {
+      ...VAS
+      piano {
+        ...AzioniPiano
+      }
+    }
+  }
+}
+
+fragment AzioniPiano on PianoNode {
+  codice
+  fase
+  azioni {
+    ...Azioni
+  }
+}
+
+fragment Azioni on AzioneNode {
+      order
+      tipologia
+      stato
+      qualificaRichiesta
+      data
+      uuid
+      label
+      tooltip
+      fase
+      avvioScadenza
+      scadenza
+}
+
+fragment VAS on ProceduraVASNode {
+  uuid
+  tipologia
+  dataVerifica
+  dataCreazione
+  dataProcedimento
+  dataApprovazione
+  dataAssoggettamento
+  verificaEffettuata
+  procedimentoEffettuato
+  assoggettamento
+  nonNecessaria
+  piano {
+    codice
+  }
+  risorse(archiviata: false) {
+    ...Risorse
+  }
+  documentoPreliminareVerifica {
+    ...Risorsa
+  }
+  relazioneMotivataVasSemplificata {
+    ...Risorsa
+  }
+}
+
+fragment Risorse on RisorsaNodeConnection {
+  edges {
+    node {
+      ...Risorsa
+    }
+  }
+}
+
+fragment Risorsa on RisorsaNode {
+  nome
+  uuid
+  tipo
+  dimensione
+  downloadUrl
+  lastUpdate
+  user {
+    fiscalCode
+    firstName
+    lastName
+  }
+  label
+  tooltip
+}
+
+"
+}
