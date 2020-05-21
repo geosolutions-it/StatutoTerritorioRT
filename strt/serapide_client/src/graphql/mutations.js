@@ -259,7 +259,6 @@ mutation InvioProtocolloGenioCivile($codice: String!) {
         avvioAggiornato {
               piano{
                 codice
-                numeroProtocolloGenioCivile,
                 dataProtocolloGenioCivile
                 ...AzioniPiano
               }

@@ -37,7 +37,7 @@ import {GET_AVVIO, DELETE_RISORSA_AVVIO,
         DELETE_RISORSA_APPROVAZIONE, ESITO_CONFERENZA_PAESAGGISTICA_AP,
         PUBBLICAZIONE_APPROVAZIONE, ATTRIBUZIONE_CONFORMITA_PIT,
         GET_PUBBLICAZIONE, UPDATE_PUBBLICAZIONE, PUBBLICAZIONE_PIANO,
-        AVVIO_FILE_UPLOAD, CONTRIBUTI_TECNICI, INVIO_DOC_PRELIMINARE
+        AVVIO_FILE_UPLOAD, CONTRIBUTI_TECNICI
 } from 'schema'
 
 
@@ -83,6 +83,7 @@ export default {
         esitoConferenzaCopianificazione: (props) => (<SvolgimentoConferenza {...props}/>),
         richiestaIntegrazioni: (props) => (<RichiestaIntegrazioni  {...props}/>),
         integrazioniRichieste: (props) => (<IntegrazioniRichieste  {...props}/>),
+
 /**********FASE ADOZIONE ******************/
         trasmissioneAdozione: (props) => (<Adozione  {...props}/>),
         uploadOsservazioniPrivati: (props) => (<Osservazioni  {...props}/>),

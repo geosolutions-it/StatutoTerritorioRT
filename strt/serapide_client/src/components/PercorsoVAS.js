@@ -13,14 +13,12 @@ import {formatDate, getNominativo, VAS_TYPES} from 'utils'
 
 export default ({tipologia, docInizialeVAS = {}, pareriVerificaVAS = {}, provvedimentoVerifica = {}, assoggettamento, dataAssoggettamento }) => (
     <React.Fragment>
-        <span className="pt-4">PERCORSO VAS SELEZIONATO:
-            <span className="ml-3">
-                {tipologia === VAS_TYPES.VERIFICA_SEMPLIFICATA && <TextWithTooltip className="font-weight-bold" dataTip="art.5 co.3ter L.R. 10/2010" text="PROCEDURA DI VERIFICA SEMPLIFICATA"/>}
-                {tipologia === VAS_TYPES.VERIFICA && <TextWithTooltip className="font-weight-bold" dataTip="art.22 L.R. 10/2010" text="PROCEDURA DI VERIFICA DI ASSOGGETTABILITA’ A VAS"/>}
-                {tipologia === VAS_TYPES.PROCEDIMENTO_SEMPLIFICATO && <TextWithTooltip className="font-weight-bold" dataTip="art.8 co.5 L.R. 10/2010" text="PROCEDIMENTO SEMPLIFICATO"/>}
-                {tipologia === VAS_TYPES.PROCEDURA_ORDINARIA && <TextWithTooltip className="font-weight-bold" dataTip="FASE PRELIMINARE DI VAS (art.23 LR 10/2010)" text="PROCEDURA ORDINARIA DI VAS"/>}
-                {tipologia === VAS_TYPES.NON_NECESSARIA && <span className="font-weight-bold">VAS NON NECESSARIA</span>}
-            </span>
+        <span className="pt-4">
+            {tipologia === VAS_TYPES.VERIFICA_SEMPLIFICATA && <TextWithTooltip className="font-weight-bold" dataTip="art.5 co.3ter L.R. 10/2010" text="PROCEDURA DI VERIFICA SEMPLIFICATA"/>}
+            {tipologia === VAS_TYPES.VERIFICA && <TextWithTooltip className="font-weight-bold" dataTip="art.22 L.R. 10/2010" text="PROCEDURA DI VERIFICA DI ASSOGGETTABILITA’ A VAS"/>}
+            {tipologia === VAS_TYPES.PROCEDIMENTO_SEMPLIFICATO && <TextWithTooltip className="font-weight-bold" dataTip="art.8 co.5 L.R. 10/2010" text="PROCEDIMENTO SEMPLIFICATO"/>}
+            {tipologia === VAS_TYPES.PROCEDURA_ORDINARIA && <TextWithTooltip className="font-weight-bold" dataTip="FASE PRELIMINARE DI VAS (art.23 LR 10/2010)" text="PROCEDURA ORDINARIA DI VAS"/>}
+            {tipologia === VAS_TYPES.NON_NECESSARIA && <span className="font-weight-bold">VAS NON NECESSARIA</span>}
         </span>
         <div className="pl-2 pr-2">
             <div className="mt-4 mb-4">

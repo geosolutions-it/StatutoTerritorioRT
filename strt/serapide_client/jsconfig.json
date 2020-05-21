@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "target": "es2015",
+      "allowSyntheticDefaultImports": false,
+      "baseUrl": "./",
+      "paths": {
+        "schema": ["src/graphql/index"],
+        "components":  ["src/components/*"],
+        "enhancers": ["src/enhancers/utils"],
+        "utils": ["src/utils"]
+      }
+    },
+    "exclude": ["node_modules", "dist", "build"]
+  }

@@ -13,13 +13,13 @@ import {Query} from "react-apollo"
 import {getEnteLabelID} from "utils"
 import {GET_PIANI, GET_VAS} from "schema"
 
-import {formatDate, docByVASType} from "utils"
+import {formatDate, docByVASType, PIANO_DOCS, getResourceByType, getResourcesByType} from "utils"
 
 import Risorsa from 'components/Resource'
 import PercorsoVAS from 'components/PercorsoVAS'
 import PianoPageContainer from 'components/PianoPageContainer';
 import PianoSubPageTitle from '../components/PianoSubPageTitle';
-
+import Spinner from 'components/Spinner';
 
 
 export default ({match: {params: {code} = {}} = {}, ...props}) => {
@@ -29,34 +29,32 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                 <Query query={GET_VAS} variables={{codice: code}}>
                     {({loading: loadingVAS, data: {modello: {edges: [vas] = []} = {}} = {}}) => {
                     if(loading || loadingVAS) {
-                        return (
-                                <div className="d-flex justify-content-center">
-                                    <div className="spinner-grow " role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>)
+                        return (<Spinner/>)
                     } else if(!piano) {
-                        toast.error(`Impossobile trovare il piano: ${code}`,  {autoClose: true})
+                        toast.error(`Impossibile trovare il piano: ${code}`,  {autoClose: true})
                         return <div></div>
                     }
                 const {node: {ente, fase: {nome: faseNome}, risorse : {edges: resources = []} = {}, dataDelibera, numeroDelibera} = {}} = piano
                 const locked = faseNome !== "DRAFT"
-                const {node: delibera} = resources.filter(({node: n}) => n.tipo === "delibera").pop() || {};
-                let optionals = resources.filter(({node: n}) => n.tipo === "delibera_opts").map(({node}) => (node) ) || [];
+                const delibera = getResourceByType(resources, PIANO_DOCS.DELIBERA)
+                let optionals = getResourcesByType(resources, PIANO_DOCS.ALTRI_ALLEGATI);
                 if(!locked) {
                     window.location.href=`#/crea_anagrafica/${code}`
                 }
+                
                 const {node: {tipologia, piano: { soggettoProponente, soggettiOperanti = [] } = {}, risorse: {edges: resourcesVAS = []} = {}} = {}} = vas
-                const {node: docInizialeVAS} = resourcesVAS.filter(({node: n}) => n.tipo === docByVASType[tipologia]).pop() || {};
+                const docInizialeVAS = getResourceByType(resourcesVAS, docByVASType[tipologia])
+                
                 const acs = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "AC").map(({qualificaUfficio} = {}) => (qualificaUfficio))
                 const scas = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "SCA").map(({qualificaUfficio} = {}) => (qualificaUfficio))
+                
                 const {ufficio: sP = {}} = soggettoProponente || {};
             return(
                     <PianoPageContainer>
                         <PianoSubPageTitle icon="assignment" title="ANAGRAFICA"/>
                             <div className="d-flex flex-column flex-fill">
                                 <div className="pt-5 row">
-                                    <div className="col-12 py-2">ID {getEnteLabelID(ente)}</div>
+                                    <div className="col-12 py-2">{getEnteLabelID(ente)}</div>
                                     <div className="col-12 py-2 pt-4">DELIBERA DEL {formatDate(dataDelibera)}  &nbsp; N° {numeroDelibera ?? "N° delibera non selezionato"}</div>
                                     <div className="col-12 py-2">
                                     <Risorsa fileSize={false} useLabel resource={delibera} isLocked/> </div>

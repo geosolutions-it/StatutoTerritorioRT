@@ -182,7 +182,6 @@ fragment Piano on PianoNode {
     dataAvvio
     dataApprovazione
     alertsCount
-    numeroProtocolloGenioCivile
     dataProtocolloGenioCivile
     redazioneNormeTecnicheAttuazioneUrl
     compilazioneRapportoAmbientaleUrl
@@ -267,6 +266,7 @@ fragment AVVIO on ProceduraAvvioNode {
         garantePec
         richiestaIntegrazioni
         messaggioIntegrazione
+        notificaGenioCivile
         risorse(archiviata: false) {
             ...Risorse
         }

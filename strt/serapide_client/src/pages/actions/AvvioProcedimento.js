@@ -24,7 +24,9 @@ import Input from 'components/EnhancedInput'
 import Spinner from 'components/Spinner'
 
 import {rebuildTooltip} from 'enhancers'
-import  {showError, getInputFactory, getCodice, getContatti, getSoggettiIsti, SOGGETTI_ISTITUZIONALI} from 'utils'
+import  {showError, getInputFactory, getCodice, getContatti, getSoggettiIsti,
+    SOGGETTI_ISTITUZIONALI,
+getResourceByType, getResourcesByType, PIANO_DOCS, AVVIO_DOCS} from 'utils'
 
 import {GET_AVVIO, UPDATE_AVVIO,
     DELETE_RISORSA_AVVIO,
@@ -51,20 +53,17 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
             } = {}} = {},
         piano: {
             soggettiOperanti,
-            // altriDestinatari: {edges: dest = []} = {},
             codice,
             risorse: {edges: resPiano = []}} = {},
         back}) => {
             
-            const {node: delibera} = resPiano.filter(({node: n}) => n.tipo === "delibera").pop() || {};
-            const obiettivi = edges.filter(({node: {tipo}}) => tipo === "obiettivi_piano").map(({node}) => node).shift()
-            const allegati = edges.filter(({node: {tipo}}) => tipo === "altri_allegati_avvio").map(({node}) => node)
-            const quadro = edges.filter(({node: {tipo}}) => tipo === "quadro_conoscitivo").map(({node}) => node).shift()
-            const programma = edges.filter(({node: {tipo}}) => tipo === "programma_attivita").map(({node}) => node).shift()
-            const garante = edges.filter(({node: {tipo}}) => tipo === "individuazione_garante_informazione").map(({node}) => node).shift()
+            const delibera = getResourceByType(resPiano, PIANO_DOCS.DELIBERA)
+            const obiettivi = getResourceByType(edges, AVVIO_DOCS.OBIETTIVI_PIANO)
+            const allegati = getResourcesByType(edges, AVVIO_DOCS.ALLEGATI_AVVIO)
+            const quadro = getResourceByType(edges, AVVIO_DOCS.QUADRO_CONOSCITIVO)
+            const programma = getResourceByType(edges, AVVIO_DOCS.PROGRAMMA_ATTIVITA)
+            const garante = getResourceByType(edges, AVVIO_DOCS.INDIVIDUAZIONE_GARANTE_INFORMAZIONE)
             const si = getSoggettiIsti(soggettiOperanti).map(({qualificaUfficio} = {}) => (qualificaUfficio))
-            // const auths = aut.map(({node: {uuid} = {}} = {}) => uuid)
-            // const dests = dest.map(({node: {uuid} = {}} = {}) => uuid)
 
 
             return (<React.Fragment>
@@ -155,46 +154,6 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                         }
                         </Mutation>
                         </div>
-                        {/* <h5 className="font-weight-light pb-1 mt-5">ALTRI DESTINATARI<TextWithTooltip dataTip="art.8 co.1 L.R. 65/2014"/></h5>
-                        <div className="row">
-                            {dest.map(({node: {nome, uuid} = {}}) => (<div className="col-sm-12 col-md-5 col-lg-4 col-xl-3 d-flex my-1" key={uuid}>
-                                    <i className="material-icons text-serapide">bookmark</i>
-                                    {nome}
-                            </div>))}
-                        </div>
-                        <div className="mt-3 pl-4 border-bottom-2 pb-4 mb-5">
-                        <Mutation mutation={UPDATE_PIANO} onError={showError}>
-                    {(onChange) => {
-                            const changed = (val) => {
-                                let altriDestinatari = []
-                                if(dests.indexOf(val)!== -1){
-                                    altriDestinatari = dests.filter( uuid => uuid !== val)
-                                }else {
-                                    altriDestinatari = dests.concat(val)
-                                }
-                                onChange({variables:{ input:{
-                                            pianoOperativo: { altriDestinatari}, codice}
-                                    }})
-                            }
-                            return (
-                        <EnhancedListSelector
-                                selected={dests}
-                                query={GET_CONTATTI}
-                                getList={getContatti}
-                                variables={{}}
-                                label="SOGGETTI NON ISTITUZIONALI"
-                                size="lg"
-                                onChange={changed}
-                                btn={(toggleOpen) => (
-                                    <div className="row">
-                                        <Button fontSize="60%"  classNameLabel="py-0" onClick={toggleOpen} className="rounded-pill" color="serapide" icon="add_circle" label="Aggiungi soggetti non istituzionali"/>
-                                    </div>)}
-                            >
-                            <AddContact className="mt-2"></AddContact>
-                            </EnhancedListSelector>)}
-                        }
-                        </Mutation>
-                        </div> */}
                         <hr className="w-100 m-0 mt-3"></hr>
                         <ActionParagraphTitle><TextWithTooltip text="RICHIESTA CONFERENZA DI COPIANIFICAZIONE" dataTip="art. 25 L.R. 65/2014"/></ActionParagraphTitle>
                         <div className="row pl-2">

@@ -109,6 +109,8 @@ export const isAdminEnte = (profiles = []) => getAdminEnti(profiles).length > 0;
 
 
 
+export const getResourcesByType = (resources, type) => resources.filter(({node: {tipo} ={}}) => tipo === type).map(({node}) => node) 
+export const getResourceByType = (resources, type) => getResourcesByType(resources, type).shift()
 // Lista delle qualifiche per soggetti istituzionali
 export const SOGGETTI_ISTITUZIONALI = ["GC", "PIAN"]
 // Restituisce i soggetti istituzionali
@@ -123,7 +125,23 @@ export const VAS_TYPES = {
     "NON_NECESSARIA": "NON_NECESSARIA"
 }
 
+export const PIANO_DOCS = {
+    DELIBERA: "delibera",
+    GENIO: "documento_genio_civile",
+    ALTRI_ALLEGATI: "delibera_opts",
+}
 
+export const AVVIO_DOCS = {
+    OBIETTIVI_PIANO: "obiettivi_piano",
+    QUADRO_CONOSCITIVO: "quadro_conoscitivo",
+    PROGRAMMA_ATTIVITA: "programma_attivita",
+    INDIVIDUAZIONE_GARANTE_INFORMAZIONE: "individuazione_garante_informazione",
+    CONTRIBUTI_TECNICI: "contributi_tecnici",
+    ELABORATI_CONFERENZA: "elaborati_conferenza",
+    INTEGRAZIONI: "integrazioni",
+    NORME_TECNICHE_ATTUAZIONE: "norme_tecniche_attuazione",
+    ALLEGATI_AVVIO: "altri_allegati_avvio",
+}
 export const VAS_DOCS = {
     REL_MOT: 'relazione_motivata',
     DOC_PRE_VER_VAS: 'documento_preliminare_verifica_vas',

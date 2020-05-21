@@ -10,12 +10,13 @@ import { Query} from 'react-apollo';
 import Resource from 'components/Resource'
 import TextWithTooltip from 'components/TextWithTooltip'
 import PercorsoVAS from 'components/PercorsoVAS'
+import Spinner from 'components/Spinner'
 
 import  {rebuildTooltip} from 'enhancers'
 import {map, isEmpty}  from 'lodash'
 import {getNominativo, showError, VAS_DOCS, docByVASType, filterAndGroupResourcesByUser, VAS_TYPES} from 'utils'
 
-import { GET_VAS,GET_CONSULTAZIONE_VAS} from 'schema'
+import { GET_VAS} from 'schema'
 
 
 
@@ -23,7 +24,7 @@ import { GET_VAS,GET_CONSULTAZIONE_VAS} from 'schema'
 const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, canUpdate, isLocked, Vas = {}}) => {
     
     const {node: {tipologia, dataAssoggettamento, assoggettamento, piano: {soggettiOperanti = [] } = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
-    const {node: {avvioConsultazioniSca, dataAvvioConsultazioniSca} = {}} = consultazioneSCA    
+    
     
     const {node: docInizialeVAS} = resources.filter(({node: n}) => n.tipo === docByVASType[tipologia]).pop() || {};
 
@@ -126,21 +127,10 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
 export default ({codice, canUpdate, isLocked}) => {
     return (
         <Query query={GET_VAS} variables={{codice}} onError={showError}>
-            {({loading, data: {modello: {edges: [vas] = []} = {}} = {}}) => (
-                <Query query={GET_CONSULTAZIONE_VAS} variables={{codice}} onError={showError}>
-                {({loadingC, data: {modello: {edges: cons = []} = {}} = {}}) => {
-                if(loading || loadingC){
-                    return (
-                    <div className="serapide-content pt-5 pb-5 pX-md px-1 serapide-top-offset position-relative overflow-x-scroll">
-                        <div className="d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    </div>)
+            {({loading, data: {modello: {edges: [vas] = []} = {}} = {}}) => {
+                return loading? <Spinner/> : <UI codice={codice} canUpdate={canUpdate} isLocked={isLocked} Vas={vas}/>
                 }
-            return <UI codice={codice}  consultazioneSCA={cons[0]} canUpdate={canUpdate} isLocked={isLocked} Vas={vas}/>
-            }}
-            </Query>)}
-        </Query>)
-    }
+            }
+        </Query>
+        )}    
+    
