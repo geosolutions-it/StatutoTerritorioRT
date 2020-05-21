@@ -178,7 +178,7 @@ class AbstractSerapideDeleteTest(AbstractSerapideProcsTest):
         if tipo == TipologiaCopianificazione.POSTICIPATA:
             self.sendCNV('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
 
-        nome,response =  self.upload('803_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
+        nome, response = self.upload('803_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
         content = json.loads(response.content)
         risorse = content['data']['upload']['conferenzaCopianificazioneAggiornata']['risorse']['edges']
         logger.warning("LOOK FOR FILE %s"%nome)
@@ -207,8 +207,7 @@ class AbstractSerapideDeleteTest(AbstractSerapideProcsTest):
             self.sendCNV('025_integrazioni_richieste.query', 'INTEGRAZIONI RICH', self.codice_avvio)
 
     def genio_civile(self):
-        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', expected_code=403)
-        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', client=self.client_gc)
+        self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DOCUMENTO_GENIO_CIVILE, client=self.client_gc)
         self.sendCNV('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, expected_code=403)
         self.sendCNV('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, client=self.client_gc)
 

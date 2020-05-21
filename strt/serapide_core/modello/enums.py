@@ -65,6 +65,7 @@ class TipoRisorsa(SerapideEnum):
     ELABORATI_CONFERENZA = 'elaborati_conferenza'
     INTEGRAZIONI = 'integrazioni'
     NORME_TECNICHE_ATTUAZIONE = 'norme_tecniche_attuazione'
+    DOCUMENTO_GENIO_CIVILE = 'documento_genio_civile'
 
     # adozione
     PARERE_ADOZIONE_SCA = 'parere_adozione_sca'

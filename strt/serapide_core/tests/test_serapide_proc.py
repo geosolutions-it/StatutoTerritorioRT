@@ -130,8 +130,6 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         ]:
             self.upload('802_avvio_upload_file.query', self.codice_avvio, tipo)
 
-        # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", expected_code=403)
-        # self.update_piano(codice_piano, "numeroProtocolloGenioCivile", "1234567890", client=client_gc)
         self.sendCNV('012_avvio_piano.query', 'AVVIO PIANO', self.codice_avvio)
 
     def vas_verifica_no_assoggettamento(self):
@@ -251,8 +249,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
             self.sendCNV('025_integrazioni_richieste.query', 'INTEGRAZIONI RICH', self.codice_avvio)
 
     def genio_civile(self):
-        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', expected_code=403)
-        self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, 'numeroProtocolloGenioCivile', 'prot_g_c', client=self.client_gc)
+        self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DOCUMENTO_GENIO_CIVILE, client=self.client_gc)
         self.sendCNV('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, expected_code=403)
         self.sendCNV('030_invio_protocollo_genio_civile.query', 'INVIO PROT GC', self.codice_avvio, client=self.client_gc)
 

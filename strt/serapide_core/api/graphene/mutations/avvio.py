@@ -51,6 +51,7 @@ from serapide_core.modello.enums import (
     STATO_AZIONE,
     TipologiaAzione,
     TipologiaCopianificazione,
+    TipoRisorsa,
 )
 
 from serapide_core.api.graphene import (types, inputs)
@@ -570,31 +571,21 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
     errors = graphene.List(graphene.String)
     avvio_aggiornato = graphene.Field(types.ProceduraAvvioNode)
 
-    @staticmethod
-    def action():
-        return TipologiaAzione.protocollo_genio_civile
-
-    @staticmethod
-    def procedura(piano):
-        return piano.procedura_avvio
-
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_avvio, user):
-        # Update Azioni Piano
-        # - Update Action state accordingly
         ensure_fase(fase, Fase.ANAGRAFICA)
 
         _protocollo_genio_civile = piano.getFirstAction(TipologiaAzione.protocollo_genio_civile)
         if needsExecution(_protocollo_genio_civile):
-            if piano.numero_protocollo_genio_civile:
-                now = datetime.datetime.now(timezone.get_current_timezone())
+            now = datetime.datetime.now(timezone.get_current_timezone())
+            chiudi_azione(_protocollo_genio_civile, data=now)
 
-                piano.data_protocollo_genio_civile = now
-                piano.save()
+            piano.data_protocollo_genio_civile = now
+            piano.save()
 
-                chiudi_azione(_protocollo_genio_civile, data=now)
+            return try_and_close_avvio(piano)
 
-                try_and_close_avvio(piano)
+        return False
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -607,10 +598,17 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
         if not auth.can_edit_piano(info.context.user, _piano, Qualifica.GC):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
-        try:
-            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+        # check risorsa
+        if not _piano.risorse\
+                .filter(tipo=TipoRisorsa.DOCUMENTO_GENIO_CIVILE.value, archiviata=False, user=info.context.user)\
+                .exists():
+            return GraphQLError("Risorsa mancante: {}".format(TipoRisorsa.DOCUMENTO_GENIO_CIVILE.value), code=409)
 
-            check_and_promote(_piano, info)
+        try:
+            closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_avvio, info.context.user)
+
+            if closed:
+                check_and_promote(_piano, info)
 
             return InvioProtocolloGenioCivile(
                 avvio_aggiornato=_procedura_avvio,
@@ -743,8 +741,10 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                 procedura_avvio.notifica_genio_civile = True
                 procedura_avvio.save()
 
+                now = datetime.datetime.now(timezone.get_current_timezone())
+
                 _cc = ConferenzaCopianificazione.objects.get(piano=piano)
-                _cc.data_chiusura_conferenza = datetime.datetime.now(timezone.get_current_timezone())
+                _cc.data_chiusura_conferenza = now
                 _cc.save()
 
                 crea_azione(
@@ -754,7 +754,8 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                         qualifica_richiesta=QualificaRichiesta.GC,
                         stato=STATO_AZIONE.necessaria,
                         data=procedura_avvio.data_scadenza_risposta
-                    ))
+                    ) # .imposta_scadenza(now, procedura_avvio.data_scadenza_risposta)
+                )
 
     @classmethod
     def mutate(cls, root, info, **input):

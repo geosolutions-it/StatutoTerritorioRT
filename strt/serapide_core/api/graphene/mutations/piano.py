@@ -429,11 +429,6 @@ class UpdatePiano(relay.ClientIDMutation):
                 for so in add_so:
                     so.save()
 
-            if 'numero_protocollo_genio_civile' in _piano_input:
-                if not auth.can_edit_piano(info.context.user, _piano, Qualifica.GC):
-                    return GraphQLError("Forbidden - Campo modificabile solo dal GC", code=403)
-                    # This can be changed only by Genio Civile
-
             piano_aggiornato = update_create_instance(_piano, _piano_input)
             return cls(piano_aggiornato=piano_aggiornato)
 

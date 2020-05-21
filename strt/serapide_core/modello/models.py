@@ -163,9 +163,7 @@ class Piano(models.Model):
     last_update = models.DateTimeField(auto_now=True, blank=True)
 
     data_protocollo_genio_civile = models.DateTimeField(null=True, blank=True)
-    numero_protocollo_genio_civile = models.TextField(null=True, blank=True)
 
-    # fase = models.ForeignKey(Fase, related_name='piani_operativi', on_delete=models.CASCADE)
     fase = models.CharField(
         choices=Fase.create_choices(),
         default=Fase.UNKNOWN,
@@ -396,8 +394,13 @@ class Azione(models.Model):
         instance.tipologia = TipologiaAzione.fix_enum(instance.tipologia)
         return instance
 
-    def imposta_scadenza(self, start_datetime: datetime, exp: TipoExpire):
-        start, end = get_scadenza(exp, start_datetime)
+    def imposta_scadenza(self, start_datetime: datetime, exp: TipoExpire = None, end_datetime: datetime = None):
+        if exp:
+            start, end = get_scadenza(exp, start_datetime)
+        else:
+            start = start_datetime.date()
+            end = end_datetime
+
         self.avvio_scadenza = start
         self.scadenza = end
         return self

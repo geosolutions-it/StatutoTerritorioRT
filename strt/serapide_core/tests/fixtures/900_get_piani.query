@@ -26,7 +26,6 @@ fragment Piano on PianoNode {
   dataAvvio
   dataApprovazione
   alertsCount
-  numeroProtocolloGenioCivile
   dataProtocolloGenioCivile
   redazioneNormeTecnicheAttuazioneUrl
   compilazioneRapportoAmbientaleUrl
