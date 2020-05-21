@@ -67,7 +67,7 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 `python manage.py createsuperuser`
 
 - Load default data:\
-  `cd StatutoTerritorioRT/strt`
+  `cd StatutoTerritorioRT/strt/fixtures`
   ```
   ./load_dump.sh
   ```
