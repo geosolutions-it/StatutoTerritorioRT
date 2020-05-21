@@ -26,7 +26,6 @@ from .models import (
     ProceduraApprovazione, RisorseApprovazione,
     ProceduraPubblicazione, RisorsePubblicazione,
     ParereVAS,
-    ConsultazioneVAS,
     ParereAdozioneVAS,
     ConferenzaCopianificazione,
     RisorseCopianificazione,
@@ -128,10 +127,6 @@ class ProceduraPubblicazioneAdmin(admin.ModelAdmin):
     inlines = [RisorsePubblicazioneInline, ]
 
 
-class ConsultazioneVASAdmin(admin.ModelAdmin):
-    inlines = [ParereVASInline, ]
-
-
 class ConferenzaCopianificazioneAdmin(admin.ModelAdmin):
     inlines = [RisorseCopianificazioneInline, ]
 
@@ -155,7 +150,6 @@ admin.site.register(ProceduraAvvio, ProceduraAvvioAdmin)
 admin.site.register(ProceduraAdozione, ProceduraAdozioneAdmin)
 admin.site.register(ProceduraApprovazione, ProceduraApprovazioneAdmin)
 admin.site.register(ProceduraPubblicazione, ProceduraPubblicazioneAdmin)
-admin.site.register(ConsultazioneVAS, ConsultazioneVASAdmin)
 admin.site.register(ConferenzaCopianificazione, ConferenzaCopianificazioneAdmin)
 admin.site.register(PianoControdedotto, PianoControdedottoAdmin)
 admin.site.register(PianoRevPostCP, PianoRevPostCPAdmin)

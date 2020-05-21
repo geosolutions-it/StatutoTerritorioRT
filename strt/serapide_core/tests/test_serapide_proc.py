@@ -178,15 +178,8 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         self.assertTrue(vas_conclusa, 'VAS non conclusa')
 
     def vas_procedimento(self):
-        # AC
-        # response = self.sendCNV('110_consultazioni_vas.query', 'GET CONSULTAZIONI VAS', self.codice_piano, client=self.client_ac)
-        # response = self.sendCNV('111_crea_consultazione.query', 'CREA CONSULTAZIONE VAS', self.codice_piano, client=self.client_ac)
-        # content = json.loads(response.content)
-        # codice_consultazione = content['data']['createConsultazioneVas']['nuovaConsultazioneVas']['uuid']
 
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS)
-
-        # self.sendCNV('112_update_consultazione_vas.query', 'UPDATE CONSULTAZIONE VAS', codice_consultazione, 'avvioConsultazioniSca', True, client=self.client_ac)
 
         # OPCOM: invio_doc_preliminare
         self.sendCNV('113_invio_doc_preliminare.query', 'INVIO DOC PRELIMINARE', self.codice_vas, client=self.client_ac, expected_code=403)

@@ -607,40 +607,6 @@ class ParereVerificaVAS(models.Model):
         return '{} - [{}]'.format(self.procedura_vas, self.uuid)
 
 
-class ConsultazioneVAS(models.Model):
-
-    uuid = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False,
-        null=True
-    )
-
-    data_creazione = models.DateTimeField(auto_now_add=True, blank=True)
-    data_scadenza = models.DateTimeField(null=True, blank=True)
-    data_ricezione_pareri = models.DateTimeField(null=True, blank=True)
-
-    data_avvio_consultazioni_sca = models.DateTimeField(null=True, blank=True)
-    avvio_consultazioni_sca = models.BooleanField(null=False, blank=False, default=False)
-
-    procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
-
-    user = models.ForeignKey(
-        to=Utente,
-        on_delete=models.CASCADE,
-        verbose_name=_('user'),
-        default=None,
-        blank=True,
-        null=True
-    )
-
-    class Meta:
-        db_table = "strt_core_consultazioni_vas"
-        verbose_name_plural = 'Consultazioni VAS'
-
-    def __str__(self):
-        return '{} - [{}]'.format(self.procedura_vas, self.uuid)
-
-
 class ParereVAS(models.Model):
 
     uuid = models.UUIDField(
@@ -654,7 +620,6 @@ class ParereVAS(models.Model):
     data_ricezione_parere = models.DateTimeField(null=True, blank=True)
 
     procedura_vas = models.ForeignKey(ProceduraVAS, on_delete=models.CASCADE)
-    consultazione_vas = models.ForeignKey(ConsultazioneVAS, on_delete=models.CASCADE, null=True)
 
     inviata = models.BooleanField(null=False, blank=False, default=False)
 

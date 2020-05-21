@@ -84,8 +84,6 @@ class Query(object):
         types.ProceduraPubblicazioneNode,
         filterset_class=filters.ProceduraPubblicazioneMembershipFilter)
 
-    consultazione_vas = DjangoFilterConnectionField(types.ConsultazioneVASNode)
-
     conferenza_copianificazione = DjangoFilterConnectionField(types.ConferenzaCopianificazioneNode)
 
     piano_controdedotto = DjangoFilterConnectionField(types.PianoControdedottoNode)
@@ -170,9 +168,6 @@ class Mutation(object):
 
     # assoggettamento_vas = vas.AssoggettamentoVAS.Field()
 
-    create_consultazione_vas = vas.CreateConsultazioneVAS.Field()
-    update_consultazione_vas = vas.UpdateConsultazioneVAS.Field()
-    # avvio_consultazioni_vas = vas.AvvioConsultazioniVAS.Field()
     # invio_pareri_vas = vas.InvioPareriVAS.Field()
     # avvio_esame_pareri_sca = vas.AvvioEsamePareriSCA.Field()
     # upload_elaborati_vas = vas.UploadElaboratiVAS.Field()

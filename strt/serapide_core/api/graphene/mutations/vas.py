@@ -40,7 +40,6 @@ from serapide_core.modello.models import (
     ParereVAS,
     ProceduraVAS,
     ProceduraAvvio,
-    ConsultazioneVAS,
     ParereVerificaVAS,
     SoggettoOperante,
     Delega,
@@ -712,71 +711,6 @@ class PubblicazioneProvvedimentoVerificaAc(graphene.Mutation):
 #             return GraphQLError(e, code=500)
 
 
-class CreateConsultazioneVAS(relay.ClientIDMutation):
-
-    class Input:
-        codice_piano = graphene.String(required=True)
-
-    nuova_consultazione_vas = graphene.Field(types.ConsultazioneVASNode)
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, **input):
-        _piano = Piano.objects.get(codice=input['codice_piano'])
-
-        if not auth.can_access_piano(info.context.user, _piano):
-            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
-
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
-            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
-                return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
-
-        try:
-            _consultazioni_vas_expire_days = getattr(settings, 'CONSULTAZIONI_SCA_EXPIRE_DAYS', 90)
-
-            nuova_consultazione_vas = ConsultazioneVAS()
-            nuova_consultazione_vas.user = info.context.user
-            nuova_consultazione_vas.procedura_vas = ProceduraVAS.objects.get(piano=_piano)
-            nuova_consultazione_vas.data_scadenza = datetime.datetime.now(timezone.get_current_timezone()) + \
-                                                    datetime.timedelta(days=_consultazioni_vas_expire_days)
-            nuova_consultazione_vas.save()
-            return cls(nuova_consultazione_vas=nuova_consultazione_vas)
-        except BaseException as e:
-            tb = traceback.format_exc()
-            logger.error(tb)
-            return GraphQLError(e, code=500)
-
-
-class UpdateConsultazioneVAS(relay.ClientIDMutation):
-
-    class Input:
-        consultazione_vas = graphene.Argument(inputs.ConsultazioneVASUpdateInput)
-        uuid = graphene.String(required=True)
-
-    errors = graphene.List(graphene.String)
-    consultazione_vas_aggiornata = graphene.Field(types.ConsultazioneVASNode)
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, **input):
-        _consultazione_vas = ConsultazioneVAS.objects.get(uuid=input['uuid'])
-        _consultazione_vas_data = input.get('consultazione_vas')
-        _piano = _consultazione_vas.procedura_vas.piano
-
-        if not auth.can_access_piano(info.context.user, _piano):
-            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
-
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.AC):
-            if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
-                return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
-
-        try:
-            consultazione_vas_aggiornata = update_create_instance(_consultazione_vas, _consultazione_vas_data)
-            return cls(consultazione_vas_aggiornata=consultazione_vas_aggiornata)
-        except BaseException as e:
-            tb = traceback.format_exc()
-            logger.error(tb)
-            return GraphQLError(e, code=500)
-
-
 class InvioDocPreliminare(graphene.Mutation):
 
     class Arguments:
@@ -927,8 +861,7 @@ class TrasmissionePareriSCA(graphene.Mutation):
             # puo caricare il proprio parere.
             _esiste_parere = ParereVAS.objects.filter(
                 user=info.context.user,
-                procedura_vas=_procedura_vas,
-                consultazione_vas__isnull=True).exists()
+                procedura_vas=_procedura_vas).exists()
 
             if not _esiste_parere:
                 _parere_vas = ParereVAS(
@@ -951,7 +884,6 @@ class TrasmissionePareriSCA(graphene.Mutation):
                 _esiste_parere_sca = ParereVAS.objects\
                     .filter(
                         procedura_vas=_procedura_vas,
-                        consultazione_vas__isnull=True,
                         user__in=utenti_sca)\
                     .exists()
 

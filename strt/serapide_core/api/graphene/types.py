@@ -55,7 +55,6 @@ from serapide_core.modello.models import (
     SoggettoOperante,
     Delega,
     ProceduraVAS,
-    ConsultazioneVAS,
     # PianoAuthTokens,
     FasePianoStorico,
     ProceduraAvvio,
@@ -627,27 +626,6 @@ class SoggettoOperanteNode(DjangoObjectType):
 
         return has_qualifica(utente, piano.ente, Qualifica.OPCOM) or \
                Assegnatario.objects.filter(qualifica_ufficio=self.qualifica_ufficio, utente=utente).exists()
-
-
-class ConsultazioneVASNode(DjangoObjectType):
-
-    user = graphene.Field(UtenteNode)
-    referente = graphene.Field(SoggettoOperanteNode)
-    procedura_vas = graphene.Field(ProceduraVASNode)
-
-    # def resolve_contatto(self, info, **args):
-    #     _contatto = None
-    #     if self.user:
-    #         _contatto = Contatto.objects.filter(user=self.user).first()
-    #     return _contatto
-
-    class Meta:
-        model = ConsultazioneVAS
-        # Allow for some more advanced filtering here
-        filter_fields = {
-            'procedura_vas__piano__codice': ['exact'],
-        }
-        interfaces = (relay.Node, )
 
 
 class ConferenzaCopianificazioneNode(DjangoObjectType):
