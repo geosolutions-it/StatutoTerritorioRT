@@ -66,20 +66,24 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 - Create a super user:\
 `python manage.py createsuperuser`
 
-- Load default data:
+- Load default data:\
+  `cd StatutoTerritorioRT/strt/fixtures`
   ```
-  python manage.py loaddata fixtures/utente.json
-  python manage.py loaddata fixtures/ente.json
-  python manage.py loaddata fixtures/ufficio.json
-  python manage.py loaddata fixtures/qualificaufficio.json.json
-  python manage.py loaddata fixtures/assegnatario.json
-  python manage.py loaddata fixtures/profiloutente.json
+  ./load_dump.sh
   ```
 
 - Run the Django development server:\
+`cd StatutoTerritorioRT/strt`\
 `python manage.py runserver`
 
-- Visit http://127.0.0.1:8000/ with your web browser
+- Visit http://localhost:8000/admin/strt_users/utente/
+
+- Set the passwords for the predefined users\
+The default password is `42`
+
+- Visit http://localhost:8000/ with your web browser
+
+- Login with one of the roles defined above
 
 
 ### Prepare the client and theme:
@@ -98,4 +102,3 @@ Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
   npm install
   npm run build-with-theme
   ```
-
