@@ -1,8 +1,6 @@
 const path = require("path");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const themeEntries = require('./MapStore2/build/themes.js').themeEntries;
 const extractThemesPlugin = require('./MapStore2/build/themes.js').extractThemesPlugin;
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const paths = {
     base: __dirname,
@@ -15,7 +13,7 @@ module.exports = require('./MapStore2/build/buildConfig')(
     {
         'Geoportale': path.join(__dirname, "js", "app")
     },
-    {'themes/default': themeEntries['themes/default']},
+    {'themes/default': path.join(__dirname, "themes", "default", "theme.less")},
     paths,
     extractThemesPlugin,
     true,
@@ -23,8 +21,9 @@ module.exports = require('./MapStore2/build/buildConfig')(
     '.Geoportale',
     [
         new CopyWebpackPlugin([
-            { from: path.join(paths.framework, 'translations'), to: path.join(paths.dist, "translations") }
-        ]),
+            { from: path.join(paths.framework, 'translations'), to: path.join(paths.dist, "MapStore2", "web", "client", "translations") },
+            { from: path.join(paths.base, 'translations'), to: path.join(paths.dist, "translations") }
+        ])
     ],
     {
         "@mapstore": path.resolve(__dirname, "MapStore2", "web", "client"),

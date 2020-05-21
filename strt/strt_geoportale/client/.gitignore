@@ -4,5 +4,4 @@ target/
 *.sublime-*
 npm-debug.log
 coverage/
-
-
+package-lock.json

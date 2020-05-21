@@ -25,16 +25,16 @@ axios.interceptors.request.use(
 );
 
 
-// Fix mapLayout 
+// Fix mapLayout
 
-ConfigUtils.setConfigProp('mapLayout', {left: {sm: 300, md: 500, lg: 600}, right: {md: 658}, bottom: {sm: 0}});
+ConfigUtils.setConfigProp('mapLayout', { left: { sm: 300, md: 500, lg: 600 }, right: { md: 658 }, bottom: { sm: 30 } });
 
 /**
  * Add custom (overriding) translations with:
  *
  * ConfigUtils.setConfigProp('translationsPath', ['./MapStore2/web/client/translations', './translations']);
  */
-ConfigUtils.setConfigProp('translationsPath', ['/static/mapstore/translations', '/MapStore2/web/client/translations']);
+ConfigUtils.setConfigProp('translationsPath', ['/static/mapstore/MapStore2/web/client/translations', '/static/mapstore/translations']);
 ConfigUtils.setConfigProp('themePrefix', 'Geoportale');
 
 /**
@@ -61,7 +61,6 @@ ConfigUtils.setLocalConfigurationFile('/static/mapstore/localConfig.json');
  */
 import appConfig from '@mapstore/product/appConfig';
 
-
 /**
  * Define a custom list of plugins with:
  *
@@ -69,11 +68,11 @@ import appConfig from '@mapstore/product/appConfig';
  */
 import plugins from './plugins';
 
-
-
 import main from '@mapstore/product/main';
+const appEpics = {};
 
-main({...appConfig, pages: [{
+main({
+    ...appConfig, pages: [{
         name: "home",
         path: "/",
         component: require('@mapstore/product/pages/Maps')
@@ -89,4 +88,6 @@ main({...appConfig, pages: [{
         name: "mapviewer",
         path: "/viewer/:mapId",
         component: require('@mapstore/product/pages/MapViewer')
-    }], themeCfg: {path: '/static/mapstore/themes', prefixContainer: '#geoportale'}}, plugins);
+    }], themeCfg: { path: '/static/mapstore/themes', prefixContainer: '#geoportale' },
+    appEpics
+}, plugins);

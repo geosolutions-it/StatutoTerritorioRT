@@ -78,18 +78,21 @@
         "webpack-dev-server": "3.7.2"
     },
     "dependencies": {
-        "mapstore2": "file:MapStore2"
+        "mapstore2": "file:MapStore2",
+        "react-highlight-words": "0.16.0",
+        "react-tooltip": "4.2.6"
     },
     "scripts": {
         "clean": "rimraf dist",
         "compile": "npm run clean && mkdirp ./dist && webpack --config prod-webpack.config.js --env.production",
-        "start": "webpack-dev-server --progress --colors --port 8081 --hot --inline --content-base .",
-        "test": "karma start ./karma.conf.single-run.js",
-        "continuoustest": "karma start ./karma.conf.continuous-test.js",
+        "start": "webpack-dev-server --progress --colors --hot --inline --content-base .",
         "mvntest": "karma start ./karma.conf.single-run.js --reporters junit,dots,coverage",
         "lint": "eslint js --ext .jsx,.js",
-        "travis": "eslint js --ext .jsx,.js && karma start ./karma.conf.single-run.js --browsers Firefox --reporters dots,junit,coverage,coveralls",
-        "updateDevDeps": "node updateDevDependencies.js"
+        "travis": "npm run lint && karma start ./karma.conf.single-run.js --browsers FirefoxHeadless --reporters dots,junit,coverage,coveralls",
+        "updateDevDeps": "node updateDevDependencies.js",
+        "postinstall": "rimraf node_modules/leaflet-simple-graticule/node_modules && rimraf node_modules/react-sortable-items/node_modules/react-dom && rimraf node_modules/mocha && ncp node_modules/@geosolutions/mocha node_modules/mocha",
+        "test": "karma start ./karma.conf.single-run.js --colors",
+        "watch:test": "karma start ./karma.conf.continuous-test.js --colors"
     },
     "author": "GeoSolutions",
     "license": "BSD-2-Clause"
