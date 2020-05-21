@@ -94,14 +94,14 @@ const UI = enhancers(({
                 </div>))}
                 </div>)}
                 <div className="col-12 pt-4 pb-2">CONTRIBUTI TECNICI</div>
-                {contributiTecnici && (<div className="col-12 py-2">
+                {contributiTecnici ? (<div className="col-12 py-2">
                     <Risorsa fileSize={false} useLabel resource={contributiTecnici} isLocked={true}/> 
-                </div>)}
-                <div className="col-12 pt-4">GARANTE DELL'INFORMAZIONE E DELLA PARTECIAPZIONE
+                </div>) : (<div className="col-12 py-2">Contributi tecnici non presenti</div>)}
+                {!!garanteNominativo && !!garantePec && (<div className="col-12 pt-4">GARANTE DELL'INFORMAZIONE E DELLA PARTECIAPZIONE
                 <div className="col-12 pt-2 pb-1">{garanteNominativo}</div>
                 <div className="col-12">{garantePec}</div>
-                </div>
-                <div className="col-12 d-flex align-items-center pt-4">TERMINI SCADENZA PER LA PROPOSTA{dataScadenzaRisposta && (<span className="p-2 ml-4 border bg-serapide"><i className="material-icons pr-1">date_range</i><span style={{verticalAlign: 'super'}}>{formatDate(dataScadenzaRisposta)}</span></span>)}</div>
+                </div>)}
+                {!!dataScadenzaRisposta && <div className="col-12 d-flex align-items-center pt-4">TERMINI SCADENZA PER LA PROPOSTA{!!dataScadenzaRisposta && (<span className="p-2 ml-4 border bg-serapide"><i className="material-icons pr-1">date_range</i><span style={{verticalAlign: 'super'}}>{formatDate(dataScadenzaRisposta)}</span></span>)}</div>}
                 <Si soggettiOperanti={soggettiOperanti}/>
             </div>    
             <div className="border-serapide border-top w-100 my-4"></div>   

@@ -11,16 +11,17 @@ import  {getSoggettiIsti} from 'utils'
 import Li from './ListaContatti'; 
 
 export const View = ({soggettiOperanti = [], containerClass="col-6 pt-3 mb-3", titleClass="mb-3", elementClass="col-12 px-0 py-1"}) => {
+    const soggetti = getSoggettiIsti(soggettiOperanti);
     return (
         <div className={containerClass}><div className={titleClass}>SOGGETTI ISTITUZIONALI</div>
-                {getSoggettiIsti(soggettiOperanti).map(({qualificaUfficio: {ufficio: {nome, uuid, ente: {nome: nomeEnte}} = {}} = {}}) => (
+                {soggetti.length > 0 ? soggetti.map(({qualificaUfficio: {ufficio: {nome, uuid, ente: {nome: nomeEnte}} = {}} = {}}) => (
                         <div className={elementClass} key={uuid}>
                                  {`${nomeEnte} ${nome}`}
-                        </div>))}
+                        </div>)) : <div className={elementClass}>Nessun soggetto selezionato</div>}
         </div>);
     }
 
-    export const List = ({soggettiOperanti = [], title="SOGGETTI ISTITUZIONALI"})  => {
+export const List = ({soggettiOperanti = [], title="SOGGETTI ISTITUZIONALI"})  => {
         return (
             <Li 
                 title={title}
