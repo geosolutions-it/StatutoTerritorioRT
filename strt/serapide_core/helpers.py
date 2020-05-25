@@ -25,19 +25,6 @@ INFLECTOR = Inflector(English)
 
 logger = logging.getLogger(__name__)
 
-def is_RUP(user):
-    # TODO: cleanup
-    logger.warning("TODO: refact isRUP")
-    return ProfiloUtente.objects.filter(utente=user, profilo=Profilo.ADMIN_ENTE).exists()
-
-    # if user and user.is_authenticated:
-    #     _memberships = user.memberships
-    #     if _memberships:
-    #         for _m in _memberships.all():
-    #             if _m.type.code == settings.RUP_CODE:
-    #                 return True
-    # return False
-
 
 def get_object(object_name, relayId, otherwise=None):
     try:

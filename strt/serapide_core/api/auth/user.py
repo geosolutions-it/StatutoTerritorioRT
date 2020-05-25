@@ -44,7 +44,7 @@ def is_recognizable(user):
            and user.is_authenticated
 
 
-def can_create_piano(utente, ente):
+def can_create_piano(utente, ente: Ente):
     if not isinstance(utente, Utente):
         logger.error('Utente di tipo errato <{tipo}>[{utente}]'.format(tipo=type(utente), utente=utente))
         return False
@@ -60,7 +60,7 @@ def can_create_piano(utente, ente):
     return False
 
 
-def has_profile(utente, p:Profilo=None):
+def has_profile(utente, p: Profilo = None):
     qs = ProfiloUtente.objects.filter(utente=utente)
     if p:
         qs = qs.filter(profilo=p)
@@ -83,7 +83,7 @@ def has_profile(utente, p:Profilo=None):
 #     return False
 
 
-def get_assegnamenti(utente, ente:Ente, qualifica:Qualifica):
+def get_assegnamenti(utente, ente: Ente, qualifica: Qualifica):
 
     return Assegnatario.objects. \
         filter(utente=utente). \
@@ -91,13 +91,15 @@ def get_assegnamenti(utente, ente:Ente, qualifica:Qualifica):
         filter(qualifica_ufficio__ufficio__ente=ente)
 
 
-def has_qualifica(utente, ente:Ente, qualifica:Qualifica):
+def has_qualifica(utente, ente: Ente, qualifica: Qualifica):
     # TODO aggiungere check token
 
     return get_assegnamenti(utente, ente, qualifica).exists()
 
 
-def get_so(utente, piano: Piano, qualifica: Qualifica = None):
+def get_so(utente: Utente, piano: Piano,
+           qualifica: Qualifica = None):
+
     assegnatario = Assegnatario.objects.filter(utente=utente)
     if qualifica:
         assegnatario = assegnatario.filter(qualifica_ufficio__qualifica=qualifica)
@@ -113,7 +115,8 @@ def get_so(utente, piano: Piano, qualifica: Qualifica = None):
     return qs
 
 
-def is_soggetto_operante(utente, piano: Piano, qualifica: Qualifica=None, qualifica_richiesta: QualificaRichiesta=None):
+def is_soggetto_operante(utente: Utente, piano: Piano,
+                         qualifica: Qualifica = None, qualifica_richiesta: QualificaRichiesta = None):
 
     qs = get_so(utente, piano, qualifica)
 
@@ -123,7 +126,7 @@ def is_soggetto_operante(utente, piano: Piano, qualifica: Qualifica=None, qualif
     return qs.exists()
 
 
-def is_soggetto_proponente(utente, piano:Piano):
+def is_soggetto_proponente(utente: Utente, piano: Piano):
 
     return Assegnatario.objects. \
         filter(utente=utente). \
@@ -213,6 +216,21 @@ def get_piani_visibili_id(utente: Utente):
 def can_admin_delega(utente: Utente, delega: Delega):
     piano = delega.delegante.piano
     return has_qualifica(utente, piano.ente, Qualifica.OPCOM) or \
-           Assegnatario.objects\
+        Assegnatario.objects \
         .filter(qualifica_ufficio=delega.delegante.qualifica_ufficio, utente=utente)\
         .exists()
+
+
+def get_UffAssTok(piano: Piano, qr: QualificaRichiesta):
+    so_list = SoggettoOperante.objects.filter(piano=piano, qualifica_ufficio__qualifica__in=qr.qualifiche())
+    uffici = [so.qualifica_ufficio.ufficio for so in so_list]
+
+    qu_list = [so.qualifica_ufficio for so in so_list]
+    ass_list = Assegnatario.objects.filter(qualifica_ufficio__in=qu_list)
+    utenti_assegnatari = [ass.utente for ass in ass_list]
+
+    deleghe = Delega.objects.filter(qualifica__in=qr.qualifiche(), delegante__in=so_list)
+    token_validi = [d.token for d in deleghe if d.token.user and not d.token.is_expired()]
+    # utenti_delegati = [t.user for t in token_validi]
+
+    return uffici, utenti_assegnatari, token_validi

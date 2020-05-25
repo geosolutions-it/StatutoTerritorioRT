@@ -10,7 +10,6 @@
 #########################################################################
 
 import logging
-from builtins import getattr
 
 import graphene
 
@@ -26,6 +25,7 @@ from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
 from serapide_core.api.auth.user import is_soggetto_operante, has_qualifica, get_so, can_edit_piano, can_admin_delega
+from serapide_core.api.piano_utils import get_scadenza
 from strt_users.enums import (
     Qualifica,
     Profilo,
@@ -45,6 +45,7 @@ from serapide_core.modello.enums import (
     TipologiaVAS,
     TipologiaAzione,
     InfoAzioni,
+    TipoExpire,
 )
 
 from serapide_core.modello.models import (
@@ -55,7 +56,6 @@ from serapide_core.modello.models import (
     SoggettoOperante,
     Delega,
     ProceduraVAS,
-    # PianoAuthTokens,
     FasePianoStorico,
     ProceduraAvvio,
     ProceduraAdozione,
@@ -505,6 +505,8 @@ class ProceduraAdozioneNode(DjangoObjectType):
     # ente = graphene.Field(EnteNode)
     risorsa = DjangoFilterConnectionField(RisorseAdozioneType)
 
+    scadenza_pareri_adozione_sca = graphene.Date()
+
     class Meta:
         model = ProceduraAdozione
         # Allow for some more advanced filtering here
@@ -513,6 +515,11 @@ class ProceduraAdozioneNode(DjangoObjectType):
             'piano__codice': ['exact'],
         }
         interfaces = (relay.Node, )
+
+    def resolve_scadenza_pareri_adozione_sca(self, info, **args):
+        if self.pubblicazione_burt_data:
+            start,end = get_scadenza(self.pubblicazione_burt_data, TipoExpire.ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS)
+            return end
 
 
 class ProceduraApprovazioneNode(DjangoObjectType):
@@ -584,9 +591,8 @@ class DelegaNode(DjangoObjectType):
     def resolve_url(self, info, **args):
         if not can_admin_delega(info.context.user, self):
             return None
-
-        baseurl = getattr(settings, 'SITE_URL')
-        return '{baseurl}?token={key}'.format(key=self.token.key, baseurl=baseurl)
+        
+        return self.token.get_url()
 
 
 class SoggettoOperanteNode(DjangoObjectType):

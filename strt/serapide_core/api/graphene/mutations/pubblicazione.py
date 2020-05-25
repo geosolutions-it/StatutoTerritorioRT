@@ -30,9 +30,15 @@ from serapide_core.signals import (
 from serapide_core.modello.models import (
     Piano,
     ProceduraPubblicazione,
-    needsExecution,
-    chiudi_azione,
+)
+
+from serapide_core.api.piano_utils import (
+    needs_execution,
+    is_executed,
     ensure_fase,
+    chiudi_azione,
+    crea_azione,
+    chiudi_pendenti,
 )
 
 from serapide_core.modello.enums import (
@@ -147,11 +153,11 @@ class PubblicazionePiano(graphene.Mutation):
         # - Update Action state accordingly
         _pubblicazione_piano = piano.getFirstAction(TipologiaAzione.pubblicazione_piano)
 
-        if needsExecution(_pubblicazione_piano):
+        if needs_execution(_pubblicazione_piano):
             chiudi_azione(_pubblicazione_piano)
 
         if not procedura_pubblicazione.conclusa:
-            piano.chiudi_pendenti(attesa=True, necessaria=True)
+            chiudi_pendenti(piano, attesa=True, necessaria=True)
             procedura_pubblicazione.data_pubblicazione = _pubblicazione_piano.data
             procedura_pubblicazione.conclusa = True
             procedura_pubblicazione.save()

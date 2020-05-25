@@ -21,6 +21,14 @@ from graphene import relay
 from graphql_extensions.exceptions import GraphQLError
 
 from serapide_core.api.graphene.mutations.piano import check_and_promote
+from serapide_core.api.piano_utils import (
+    needs_execution,
+    is_executed,
+    ensure_fase,
+    chiudi_azione,
+    crea_azione,
+    chiudi_pendenti,
+)
 from serapide_core.helpers import update_create_instance
 
 from serapide_core.signals import (
@@ -34,11 +42,6 @@ from serapide_core.modello.models import (
     ProceduraApprovazione,
     ProceduraPubblicazione,
 
-    ensure_fase,
-    crea_azione,
-    chiudi_azione,
-    isExecuted,
-    needsExecution,
 )
 
 from serapide_core.modello.enums import (
@@ -157,7 +160,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
         ensure_fase(fase, Fase.ADOZIONE)
 
         _trasmissione_approvazione = piano.getFirstAction(TipologiaAzione.trasmissione_approvazione)
-        if needsExecution(_trasmissione_approvazione):
+        if needs_execution(_trasmissione_approvazione):
             chiudi_azione(_trasmissione_approvazione)
 
             if not piano.procedura_adozione.richiesta_conferenza_paesaggistica:
@@ -240,7 +243,7 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
 
         _esito_cp = piano.getFirstAction(TipologiaAzione.esito_conferenza_paesaggistica_ap)
 
-        if needsExecution(_esito_cp):
+        if needs_execution(_esito_cp):
             chiudi_azione(_esito_cp)
 
             crea_azione(
@@ -309,7 +312,7 @@ class PubblicazioneApprovazione(graphene.Mutation):
 
         _pubblicazione_approvazione = piano.getFirstAction(TipologiaAzione.pubblicazione_approvazione)
 
-        if needsExecution(_pubblicazione_approvazione):
+        if needs_execution(_pubblicazione_approvazione):
             chiudi_azione(_pubblicazione_approvazione)
 
             _trasmissione_approvazione = piano.getFirstAction(TipologiaAzione.trasmissione_approvazione)
@@ -379,11 +382,11 @@ class AttribuzioneConformitaPIT(graphene.Mutation):
 
         _attribuzione_conformita_pit = piano.getFirstAction(TipologiaAzione.attribuzione_conformita_pit)
 
-        if needsExecution(_attribuzione_conformita_pit):
+        if needs_execution(_attribuzione_conformita_pit):
             chiudi_azione(_attribuzione_conformita_pit)
 
         if not procedura_approvazione.conclusa:
-            piano.chiudi_pendenti(attesa=True, necessaria=False)
+            chiudi_pendenti(piano, attesa=True, necessaria=False)
             procedura_approvazione.conclusa = True
             procedura_approvazione.save()
 

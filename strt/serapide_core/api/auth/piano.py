@@ -30,8 +30,8 @@ from serapide_core.modello.models import (
     ProceduraAdozioneVAS,
     ProceduraApprovazione,
 
-    isExecuted,
 )
+from serapide_core.api.piano_utils import is_executed
 
 logger = logging.getLogger(__name__)
 
@@ -251,7 +251,7 @@ def is_eligible_for_promotion(piano:Piano):
         # if has_pending_alerts(piano):
         #     msg.append("Ci sono azioni non ancora completate")
 
-        if not isExecuted(piano.getFirstAction(TipologiaAzione.protocollo_genio_civile)):
+        if not is_executed(piano.getFirstAction(TipologiaAzione.protocollo_genio_civile)):
             msg.append("Protocollo Genio Civile mancante")
 
         if not formazione_piano_conclusa(piano):

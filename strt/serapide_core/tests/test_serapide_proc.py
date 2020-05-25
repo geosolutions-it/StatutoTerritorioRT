@@ -293,6 +293,16 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
         self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
 
+        for nome, val in [
+                ("pubblicazioneBurtUrl", 'http://pubblicazioneBurtUrl'),
+                ("pubblicazioneSitoUrl", 'http://pubblicazioneSitoUrl'),
+                ("pubblicazioneBurtBollettino", 'test di numero bollettino burt'),
+        ]:
+            self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, nome, val)
+
+        self.sendCNV('201_pubblicazione_burt.query', 'PUBBLICAZIONE BURT', self.codice_adozione)
+
+
     def adozione_osservazione(self, richiesta_cp: bool = True):
         self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_PRIVATI)
         self.sendCNV('053_trasmissione_osservazioni.query', 'TRASMISSIONE OSSERVAZIONI', self.codice_adozione)

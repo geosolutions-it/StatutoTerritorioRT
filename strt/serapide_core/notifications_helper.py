@@ -91,18 +91,3 @@ def send_notification(*args, **kwargs):
 def queue_notification(*args, **kwargs):
     if has_notifications:
         return notifications.models.queue(*args, **kwargs)
-
-
-def get_notification_recipients(notice_type_label, exclude_user=None):
-    """ Get notification recipients
-    """
-    if not has_notifications:
-        return []
-    recipients_ids = notifications.models.NoticeSetting.objects \
-        .filter(notice_type__label=notice_type_label) \
-        .values('user')
-    from geonode.people.models import Profile
-    profiles = Profile.objects.filter(id__in=recipients_ids)
-    if exclude_user:
-        profiles.exclude(username=exclude_user.username)
-    return profiles

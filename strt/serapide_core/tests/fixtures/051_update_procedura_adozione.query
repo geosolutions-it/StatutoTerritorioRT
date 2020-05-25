@@ -14,9 +14,7 @@
   updateProceduraAdozione(input: $input) {
     proceduraAdozioneAggiornata {
       ...ADOZIONE
-      __typename
     }
-    __typename
   }
 }
 
@@ -28,28 +26,23 @@ fragment ADOZIONE on ProceduraAdozioneNode {
   dataRicezionePareri
   pubblicazioneBurtUrl
   pubblicazioneBurtData
+  pubblicazioneBurtBollettino
   pubblicazioneSitoUrl
-  pubblicazioneSitoData
   osservazioniConcluse
   conclusa
   richiestaConferenzaPaesaggistica
   urlPianoControdedotto
   risorse(archiviata: false) {
     ...Risorse
-    __typename
   }
-  __typename
 }
 
 fragment Risorse on RisorsaNodeConnection {
   edges {
     node {
       ...Risorsa
-      __typename
     }
-    __typename
   }
-  __typename
 }
 
 fragment Risorsa on RisorsaNode {
@@ -63,10 +56,8 @@ fragment Risorsa on RisorsaNode {
     fiscalCode
     firstName
     lastName
-    __typename
   }
   label
   tooltip
-  __typename
 }"
 }

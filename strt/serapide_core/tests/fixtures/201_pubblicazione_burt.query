@@ -1,20 +1,12 @@
 {
-   "operationName" : "TrasmissioneAdozione",
+   "operationName" : "PubblicazioneBurt",
    "variables" : {
       "codice" : "{codice}"
    },
-   "query" : "mutation TrasmissioneAdozione($codice: String!) {
-  trasmissioneAdozione(uuid: $codice) {
+   "query" : "mutation PubblicazioneBurt($codice: String!) {
+  pubblicazioneBurt(uuid: $codice) {
     errors
     adozioneAggiornata {
-
-        pubblicazioneBurtUrl
-        pubblicazioneBurtData
-        pubblicazioneBurtBollettino
-        pubblicazioneSitoUrl
-
-        scadenzaPareriAdozioneSca
-
       piano {
         ...AzioniPiano
       }

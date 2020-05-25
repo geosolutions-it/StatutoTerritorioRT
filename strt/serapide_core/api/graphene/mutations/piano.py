@@ -11,20 +11,27 @@
 
 import logging
 import datetime
-import graphene
+
 import traceback
 
-from django.db.models import Max
-from django.conf import settings
+import graphene
+from graphene import relay
+from graphql_extensions.exceptions import GraphQLError
 
+from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from graphene import relay
-
-from graphql_extensions.exceptions import GraphQLError
-
 from serapide_core.api.auth.user import get_assegnamenti, can_admin_delega
+from serapide_core.api.piano_utils import (
+    needs_execution,
+    is_executed,
+    ensure_fase,
+    chiudi_azione,
+    crea_azione,
+    chiudi_pendenti,
+)
+
 from strt_users.enums import Profilo
 from strt_users.models import (
     Ente, Ufficio,
@@ -40,7 +47,6 @@ from serapide_core.signals import (
 )
 
 from serapide_core.modello.models import (
-    Fase,
     Piano,
     Azione,
     SoggettoOperante,
@@ -51,10 +57,6 @@ from serapide_core.modello.models import (
     PianoControdedotto,
     PianoRevPostCP,
 
-    needsExecution,
-    isExecuted,
-    crea_azione,
-    chiudi_azione,
 )
 
 from serapide_core.modello.enums import (
@@ -67,7 +69,8 @@ from serapide_core.modello.enums import (
 )
 
 from serapide_core.api.graphene import (
-    types, inputs)
+    types, inputs
+)
 
 import serapide_core.api.auth.user as auth
 import serapide_core.api.auth.piano as auth_piano
@@ -175,11 +178,11 @@ def promuovi_piano(fase:Fase, piano):
     elif fase == Fase.AVVIO:
         ## WTF?????
         _richiesta_integrazioni = piano.getFirstAction(TipologiaAzione.richiesta_integrazioni)
-        if needsExecution(_richiesta_integrazioni):
+        if needs_execution(_richiesta_integrazioni):
             chiudi_azione(_richiesta_integrazioni)
 
         _integrazioni_richieste = piano.getFirstAction(TipologiaAzione.integrazioni_richieste)
-        if needsExecution(_integrazioni_richieste):
+        if needs_execution(_integrazioni_richieste):
             chiudi_azione(_integrazioni_richieste)
 
 
@@ -639,8 +642,8 @@ def try_and_close_avvio(piano:Piano):
     procedura_vas: ProceduraVAS = piano.procedura_vas
 
     _conferenza_copianificazione_attiva = \
-        needsExecution(piano.getFirstAction(TipologiaAzione.richiesta_conferenza_copianificazione)) or \
-        needsExecution(piano.getFirstAction(TipologiaAzione.esito_conferenza_copianificazione))
+        needs_execution(piano.getFirstAction(TipologiaAzione.richiesta_conferenza_copianificazione)) or \
+        needs_execution(piano.getFirstAction(TipologiaAzione.esito_conferenza_copianificazione))
 
     _richiesta_integrazioni = piano.getFirstAction(TipologiaAzione.richiesta_integrazioni)
     _integrazioni_richieste = piano.getFirstAction(TipologiaAzione.integrazioni_richieste)
@@ -650,13 +653,13 @@ def try_and_close_avvio(piano:Piano):
     _formazione_del_piano = piano.getFirstAction(TipologiaAzione.formazione_del_piano)
 
     if not _conferenza_copianificazione_attiva and \
-            isExecuted(_protocollo_genio_civile) and \
-            isExecuted(_formazione_del_piano) and \
-            (not procedura_avvio.richiesta_integrazioni or (isExecuted(_integrazioni_richieste))) and \
+            is_executed(_protocollo_genio_civile) and \
+            is_executed(_formazione_del_piano) and \
+            (not procedura_avvio.richiesta_integrazioni or (is_executed(_integrazioni_richieste))) and \
             (not procedura_vas or procedura_vas.conclusa or procedura_vas.tipologia == TipologiaVAS.NON_NECESSARIA):
 
         if procedura_vas and procedura_vas.conclusa:
-            piano.chiudi_pendenti(attesa=True, necessaria=False)
+            chiudi_pendenti(piano, attesa=True, necessaria=False)
 
         procedura_avvio.conclusa = True
         procedura_avvio.save()

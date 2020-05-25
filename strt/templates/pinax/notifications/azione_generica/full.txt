@@ -1,0 +1,45 @@
+{% load i18n %}
+{% autoescape off %}
+
+{% if recipient.ufficio %}
+    <p>All'attenzione dell'Ufficio <strong>{{ recipient.ufficio.nome }}</strong>,
+       Ente <i><strong>{{ recipient.ufficio.ente.nome }}</strong></i>,</p>
+{% else %}
+    <p>Gentile <i>{{ recipient }}</i>,</p>
+{% endif %}
+
+
+<p>Con riferimento al piano <strong>{{ piano.tipologia }}</strong>
+Codice: <strong>{{ piano.codice }}</strong> - <i>"{{ piano.descrizione }}"</i></p>
+
+{% if recipient.ufficio %}
+    <p>notifichiamo a codesto ufficio "{{ recipient.ufficio.nome }}" che è stata creata l'azione "{{ azione_tipo_label }}"
+    che richiede un intervento da parte di un operatore dell'ufficio o di un suo delegato.</p>
+
+    <p>Si fa presente che, contestualmente a questo messaggio, sono state inviate notifiche anche a
+    tutti gli operatori dell'ufficio e ad eventuali delegati, se presenti.</p>
+{% else %}
+    <p>Le notifichiamo che è stata creata l'azione "{{ azione_tipo_label }}" che richiede l'intervento sul piano in oggetto.</p>
+{% endif %}
+
+{% if azione.scadenza %}
+    <p>
+        <strong>ATTENZIONE: l'azione creata deve essere evasa entro il {{ azione.scadenza }}</strong>
+    </p>
+{% endif %}
+
+<p />
+
+{% if recipient.token %}
+<p>
+   Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:<br/>
+   <a href="{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ recipient.token.key }}">{{ recipient.token.key }}</a>
+</p>
+<p>
+<strong>ATTENZIONE:</strong> Il token di accesso <strong>{{ recipient.token.key }}</strong> a lei assegnato,
+è personalizzato e ha validità fino a data: {{ recipient.token.expires }}.<br/>
+Conservare il token di accesso segreto e non condividere il link generato con alcuno.
+</p>
+{% endif %}
+
+{% endautoescape %}

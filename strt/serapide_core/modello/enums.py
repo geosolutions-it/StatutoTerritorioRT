@@ -9,7 +9,10 @@
 #
 #########################################################################
 
+from enum import Enum
+
 from model_utils import Choices
+
 from django.utils.translation import gettext as _
 
 from strt_users.enums import (
@@ -202,6 +205,7 @@ class TipologiaAzione(SerapideEnum):
     esito_conferenza_copianificazione = 'Esito conferenza di copianificazione'  # Regione
     # Adozione
     trasmissione_adozione = 'Trasmissione Adozione'  # Comune
+    pubblicazione_burt = 'Pubblicazione BURT'  # Comune
     osservazioni_enti = 'Osservazioni Enti'  # Enti
     osservazioni_regione = 'Osservazioni Regione'  # Regione
     upload_osservazioni_privati = 'Upload Osservazioni Privati'  # Comune
@@ -266,6 +270,7 @@ InfoAzioni = {
         TipologiaAzione.esito_conferenza_copianificazione: AzioneInfo(Fase.ANAGRAFICA, ART25),
         # Adozione
         TipologiaAzione.trasmissione_adozione: AzioneInfo(Fase.AVVIO, ART19),
+        TipologiaAzione.pubblicazione_burt: AzioneInfo(Fase.AVVIO, ART19),
         TipologiaAzione.osservazioni_enti: AzioneInfo(Fase.AVVIO, ART19),
         TipologiaAzione.osservazioni_regione: AzioneInfo(Fase.AVVIO, ART19),
         TipologiaAzione.upload_osservazioni_privati: AzioneInfo(Fase.AVVIO, ART19),
@@ -335,8 +340,7 @@ AZIONI_BASE = {
 }
 
 
-class TipoExpire(SerapideEnum):
-
+class TipoExpire(Enum):
     TRASMISSIONE_DPV_VAS = 90
     PARERI_VERIFICA_SCA = 30
     PARERI_VERIFICA_SCA_PROCEDIMENTOSEMPLIFICATO = 30
@@ -345,3 +349,25 @@ class TipoExpire(SerapideEnum):
     EMISSIONE_PV_PROCEDIMENTOSEMPLIFICATO = 90
 
     TRASMISSIONE_PARERI_SCA = 90
+    ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS = 90
+
+
+class TipoMail(Enum):
+    conferenza_copianificazione = ''
+    contributi_tecnici = ''
+    esito_conferenza_paesaggistica = ''
+    integrazioni_richieste = ''
+    message_sent = ''
+    parere_motivato_ac = ''
+    piano_controdedotto = ''
+    piano_phase_changed = ''
+    piano_verifica_vas_updated = ''
+    protocollo_genio_civile = ''
+    pubblicazione_piano = ''
+    rev_piano_post_cp = ''
+    richiesta_integrazioni = ''
+    trasmissione_adozione = ''
+    trasmissione_approvazione = ''
+    tutti_pareri_inviati = ''
+    upload_elaborati_adozione_vas = ''
+    azione_generica = ''

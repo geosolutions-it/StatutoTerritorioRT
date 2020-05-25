@@ -39,11 +39,6 @@ from serapide_core.modello.models import (
     ProceduraAvvio,
     ConferenzaCopianificazione,
 
-    isExecuted,
-    needsExecution,
-    ensure_fase,
-    chiudi_azione,
-    crea_azione,
 )
 
 from serapide_core.modello.enums import (
@@ -57,10 +52,15 @@ from serapide_core.modello.enums import (
 from serapide_core.api.graphene import (types, inputs)
 from serapide_core.api.graphene.mutations.vas import init_vas_procedure
 from serapide_core.api.graphene.mutations.piano import check_and_promote, try_and_close_avvio
+from serapide_core.api.piano_utils import (
+    needs_execution,
+    is_executed,
+    ensure_fase,
+    chiudi_azione,
+    crea_azione,
+)
 import serapide_core.api.auth.user as auth
 from strt_users.enums import Qualifica
-
-from .piano import (promuovi_piano)
 
 logger = logging.getLogger(__name__)
 
@@ -188,7 +188,7 @@ class AvvioPiano(graphene.Mutation):
         ensure_fase(fase, Fase.ANAGRAFICA);
 
         _avvio_procedimento = piano.getFirstAction(TipologiaAzione.avvio_procedimento)
-        if needsExecution(_avvio_procedimento):
+        if needs_execution(_avvio_procedimento):
             if not cls.autorita_ok(piano, [Qualifica.GC]):
                 raise GraphQLError("Genio Civile non trovato tra i soggetti operanti", code=400)
 
@@ -268,7 +268,7 @@ class FormazionePiano(graphene.Mutation):
         ensure_fase(fase, Fase.ANAGRAFICA);
 
         _formazione_del_piano = piano.getFirstAction(TipologiaAzione.formazione_del_piano)
-        if needsExecution(_formazione_del_piano):
+        if needs_execution(_formazione_del_piano):
             chiudi_azione(_formazione_del_piano)
 
             try_and_close_avvio(piano)
@@ -323,7 +323,7 @@ class ContributiTecnici(graphene.Mutation):
         _avvio_procedimento = piano.getFirstAction(TipologiaAzione.avvio_procedimento)
         _contributi_tecnici = piano.getFirstAction(TipologiaAzione.contributi_tecnici)
 
-        if isExecuted(_avvio_procedimento) and needsExecution(_contributi_tecnici):
+        if is_executed(_avvio_procedimento) and needs_execution(_contributi_tecnici):
 
             chiudi_azione(_contributi_tecnici)
 
@@ -454,7 +454,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
         ensure_fase(fase, Fase.ANAGRAFICA)
 
         _richiesta_integrazioni = piano.getFirstAction(TipologiaAzione.richiesta_integrazioni)
-        if needsExecution(_richiesta_integrazioni):
+        if needs_execution(_richiesta_integrazioni):
 
             chiudi_azione(_richiesta_integrazioni)
 
@@ -525,7 +525,7 @@ class IntegrazioniRichieste(graphene.Mutation):
         ensure_fase(fase, Fase.ANAGRAFICA)
 
         _integrazioni_richieste = piano.getFirstAction(TipologiaAzione.integrazioni_richieste)
-        if needsExecution(_integrazioni_richieste):
+        if needs_execution(_integrazioni_richieste):
             chiudi_azione(_integrazioni_richieste)
 
             try_and_close_avvio(piano)
@@ -576,7 +576,7 @@ class InvioProtocolloGenioCivile(graphene.Mutation):
         ensure_fase(fase, Fase.ANAGRAFICA)
 
         _protocollo_genio_civile = piano.getFirstAction(TipologiaAzione.protocollo_genio_civile)
-        if needsExecution(_protocollo_genio_civile):
+        if needs_execution(_protocollo_genio_civile):
             now = datetime.datetime.now(timezone.get_current_timezone())
             chiudi_azione(_protocollo_genio_civile, data=now)
 
@@ -647,7 +647,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
             return GraphQLError("Errore nello stato del piano - Tipologia copianificazione errata", code=400)
 
         _richiesta_cc = piano.getFirstAction(TipologiaAzione.richiesta_conferenza_copianificazione)
-        if needsExecution(_richiesta_cc):
+        if needs_execution(_richiesta_cc):
             chiudi_azione(_richiesta_cc, set_data=False)
 
             procedura_avvio.notifica_genio_civile = False
@@ -731,10 +731,10 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
         ensure_fase(fase, Fase.ANAGRAFICA)
 
         _avvio_procedimento = piano.getFirstAction(TipologiaAzione.avvio_procedimento)
-        if isExecuted(_avvio_procedimento):
+        if is_executed(_avvio_procedimento):
 
             _esito_cc = piano.getFirstAction(TipologiaAzione.esito_conferenza_copianificazione)
-            if needsExecution(_esito_cc):
+            if needs_execution(_esito_cc):
 
                 chiudi_azione(_esito_cc, set_data=False)
 

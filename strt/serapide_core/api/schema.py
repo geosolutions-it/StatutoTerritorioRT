@@ -195,6 +195,7 @@ class Mutation(object):
     # create_procedura_adozione = adozione.CreateProceduraAdozione.Field()
     update_procedura_adozione = adozione.UpdateProceduraAdozione.Field()
     trasmissione_adozione = adozione.TrasmissioneAdozione.Field()
+    pubblicazione_burt = adozione.PubblicazioneBurt.Field()
     trasmissione_osservazioni = adozione.TrasmissioneOsservazioni.Field()
     controdeduzioni = adozione.Controdeduzioni.Field()
     piano_controdedotto = adozione.PianoControdedotto.Field()

@@ -9,48 +9,40 @@
 #
 #########################################################################
 
-import os
 import pytz
 import uuid
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from django.core.exceptions import ValidationError
-from django.conf import settings
-
 from django.db import models
 from django.db.models.signals import pre_delete  # , post_delete
-from django.db.models import Q
-from django.core import checks
-from django.utils import timezone
 from django.dispatch import receiver
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from model_utils import Choices
 
 from strt_users.models import (
     Ente,
-    Ufficio,
     QualificaUfficio,
     Utente,
-    Token,
-    Assegnatario
+    Token
 )
 
 from strt_users.enums import (
     Qualifica,
-    Profilo,
     QualificaRichiesta,
     TipoEnte,
 )
 
-from .enums import (Fase,
-                    STATO_AZIONE,
-                    TipologiaVAS,
-                    TipologiaPiano,
-                    TipologiaAzione,
-                    TipologiaCopianificazione,
-                    TipoExpire,
-                    )
+from .enums import (
+    Fase,
+    STATO_AZIONE,
+    TipologiaVAS,
+    TipologiaPiano,
+    TipologiaAzione,
+    TipologiaCopianificazione,
+    TipoExpire,
+)
 
 
 log = logging.getLogger(__name__)
@@ -240,19 +232,6 @@ class Piano(models.Model):
         null=True
     )
 
-    def chiudi_pendenti(self, attesa=True, necessaria=True):
-        # - Complete Current Actions
-        _now = datetime.now(timezone.get_current_timezone())
-        stati = []
-        if attesa:
-            stati.append(STATO_AZIONE.attesa)
-        if necessaria:
-            stati.append(STATO_AZIONE.necessaria)
-
-        for azione in Azione.objects.filter(piano=self, stato__in=stati):
-            log.warning('Chiusura forzata azione pendente {n}:{q}[{s}]'.format(n=azione.tipologia, q=azione.qualifica_richiesta.name, s=azione.stato))
-            chiudi_azione(azione, data=_now)
-
     # @property
     # def next_phase(self):
     #     # return FASE_NEXT[self.fase.nome]
@@ -394,15 +373,11 @@ class Azione(models.Model):
         instance.tipologia = TipologiaAzione.fix_enum(instance.tipologia)
         return instance
 
-    def imposta_scadenza(self, start_datetime: datetime, exp: TipoExpire = None, end_datetime: datetime = None):
-        if exp:
-            start, end = get_scadenza(exp, start_datetime)
-        else:
-            start = start_datetime.date()
-            end = end_datetime
+    def imposta_scadenza(self, interval: tuple):
+        start_date, end_date = interval
 
-        self.avvio_scadenza = start
-        self.scadenza = end
+        self.avvio_scadenza = start_date
+        self.scadenza = end_date
         return self
 
 
@@ -749,8 +724,8 @@ class ProceduraAdozione(models.Model):
 
     pubblicazione_burt_url = models.URLField(null=True, blank=True, default='')
     pubblicazione_burt_data = models.DateTimeField(null=True, blank=True)
+    pubblicazione_burt_bollettino = models.TextField(null=True, blank=True)
     pubblicazione_sito_url = models.URLField(null=True, blank=True, default='')
-    pubblicazione_sito_data = models.DateTimeField(null=True, blank=True)
 
     osservazioni_concluse = models.BooleanField(null=False, blank=False, default=False)
 
@@ -1051,41 +1026,3 @@ def delete_piano_associations(sender, instance, **kwargs):
     SoggettoOperante.objects.filter(piano=instance).delete()
 
 
-def needsExecution(action:Azione):
-    return action and action.stato != STATO_AZIONE.nessuna
-
-
-def isExecuted(action:Azione):
-    return action and action.stato == STATO_AZIONE.nessuna
-
-
-def ensure_fase(check: Fase, expected: Fase):
-    if check != expected:
-        raise Exception(_("Fase Piano incongruente con l'azione richiesta") + " -- " + _(check.name))
-
-
-def chiudi_azione(azione: Azione, data=None, set_data=True):
-    log.warning('Chiusura azione [{a}]:{qr} in piano [{p}]'
-                .format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
-    azione.stato = STATO_AZIONE.nessuna
-    if set_data:
-        azione.data = data if data else datetime.now(timezone.get_current_timezone())
-    azione.save()
-
-
-def crea_azione(azione: Azione):
-    log.warning('Creazione azione [{a}]:{qr} in piano [{p}]'.format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
-    if azione.order is None:
-        _order = Azione.count_by_piano(azione.piano)
-        azione.order = _order
-
-    azione.save()
-
-
-def get_scadenza(exp: TipoExpire, start_datetime: datetime):
-
-    delta_days = getattr(settings, exp.name, exp.value)
-    avvio_scadenza = start_datetime.date()
-    scadenza = avvio_scadenza + timedelta(days=delta_days)
-
-    return avvio_scadenza, scadenza

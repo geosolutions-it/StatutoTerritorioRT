@@ -20,8 +20,6 @@ from strt_users.models import (
     Ente,
     ProfiloUtente, QualificaUfficio)
 
-from serapide_core.helpers import is_RUP
-
 from serapide_core.modello.models import (
     Piano,
     SoggettoOperante,

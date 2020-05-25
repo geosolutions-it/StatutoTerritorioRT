@@ -57,8 +57,8 @@ from serapide_core.modello.models import (
     RisorseApprovazione,
     RisorsePubblicazione,
 
-    isExecuted,
 )
+from ...piano_utils import is_executed
 
 from .. import types
 
@@ -183,7 +183,7 @@ class UploadRisorsaVAS(UploadBaseBase):
                 # if _procedura_vas.risorse.filter(tipo=_tipo_file, archiviata=False, user=info.context.user).exists():
                 #     return GraphQLError('Precondition failed - Non si possono aggiungere ulteriori pareri SCA', code=412)
 
-                if isExecuted(_piano.getFirstAction(TipologiaAzione.trasmissione_pareri_sca)):
+                if is_executed(_piano.getFirstAction(TipologiaAzione.trasmissione_pareri_sca)):
                     return GraphQLError('Risorsa inviata e non modificabile', code=403)
 
             if _tipo_file == TipoRisorsa.PARERE_VERIFICA_VAS.value and \
@@ -680,7 +680,7 @@ class DeleteRisorsaVAS(DeleteRisorsaBase):
             if _risorsa.tipo == TipoRisorsa.PARERE_SCA.value:
                 # if not auth_vas.parere_sca_ok(info.context.user, _procedura_vas):
                 #     return GraphQLError("Risorsa non eliminabile", code=403)
-                if isExecuted(_piano.getFirstAction(TipologiaAzione.trasmissione_pareri_sca)):
+                if is_executed(_piano.getFirstAction(TipologiaAzione.trasmissione_pareri_sca)):
                     return GraphQLError('Risorsa inviata e non modificabile', code=403)
 
             if _risorsa.tipo == TipoRisorsa.PARERE_VERIFICA_VAS and \

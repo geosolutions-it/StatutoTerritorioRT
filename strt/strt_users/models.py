@@ -18,6 +18,9 @@ import uuid
 from django.dispatch import receiver
 from django.db.models.signals import post_init
 
+# from builtins import getattr
+from django.conf import settings
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
@@ -371,6 +374,10 @@ class Token(models.Model):
             return True
 
         return timezone.now() >= self.expires
+
+    def get_url(self, base_url=None):
+        baseurl = base_url or getattr(settings, 'SITE_URL')
+        return '{baseurl}?token={key}'.format(key=self.key, baseurl=baseurl)
 
     def __unicode__(self):
         return self.key

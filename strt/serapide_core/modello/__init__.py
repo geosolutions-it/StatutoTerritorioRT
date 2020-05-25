@@ -57,6 +57,8 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
         ("trasmissione_approvazione", _("Trasmissione Approvazione"), _("Trasmissione Approvazione"),),
         ("attribuzione_conformita_pit", _("Attribuzione Conformità PIT"), _("Attribuzione Conformità PIT"),),
         ("pubblicazione_piano", _("Pubblicazione Piano"), _("Pubblicazione Piano"),),
+
+        ("azione_generica", _("Nuova azione"), _("Nuova azione"),),
     )
 
     name = 'serapide_core.modello'

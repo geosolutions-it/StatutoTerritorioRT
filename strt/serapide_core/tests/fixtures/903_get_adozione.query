@@ -26,8 +26,8 @@ fragment ADOZIONE on ProceduraAdozioneNode {
   dataRicezionePareri
   pubblicazioneBurtUrl
   pubblicazioneBurtData
+  pubblicazioneBurtBollettino
   pubblicazioneSitoUrl
-  pubblicazioneSitoData
   osservazioniConcluse
   conclusa
   richiestaConferenzaPaesaggistica
