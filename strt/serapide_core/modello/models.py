@@ -374,6 +374,20 @@ class Azione(models.Model):
         return instance
 
     def imposta_scadenza(self, interval: tuple):
+        # prende una tuple perchè cosi' possiamo dargli in pasto direttmante l'output di get_scadenza()
+        # definendo la data di inizio una sola volta:
+        # es
+        #             crea_azione(
+        #                 Azione(
+        #                     piano=piano,
+        #                     tipologia=TipologiaAzione.pareri_verifica_sca,
+        #                     qualifica_richiesta=QualificaRichiesta.SCA,
+        #                     stato=STATO_AZIONE.attesa,
+        #                 ).imposta_scadenza(
+        #                     get_scadenza(now, TipoExpire.PARERI_VERIFICA_SCA)
+        #                 )
+        #             )
+
         start_date, end_date = interval
 
         self.avvio_scadenza = start_date

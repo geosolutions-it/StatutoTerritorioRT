@@ -10,12 +10,8 @@
 #########################################################################
 
 import logging
-import datetime
 import graphene
 import traceback
-
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 
 from graphene import relay
 
@@ -52,47 +48,6 @@ from serapide_core.api.graphene import (types, inputs)
 from strt_users.enums import Qualifica
 
 logger = logging.getLogger(__name__)
-
-
-# class CreateProceduraPubblicazione(relay.ClientIDMutation):
-#
-#     class Input:
-#         procedura_pubblicazione = graphene.Argument(inputs.ProceduraPubblicazioneCreateInput)
-#         codice_piano = graphene.String(required=True)
-#
-#     nuova_procedura_pubblicazione = graphene.Field(types.ProceduraPubblicazioneNode)
-#
-#     @classmethod
-#     def mutate_and_get_payload(cls, root, info, **input):
-#         _piano = Piano.objects.get(codice=input['codice_piano'])
-#         _procedura_pubblicazione_data = input.get('procedura_pubblicazione')
-#         if info.context.user and \
-#         rules.test_rule('strt_core.api.can_edit_piano', info.context.user, _piano) and \
-#         rules.test_rule('strt_core.api.can_update_piano', info.context.user, _piano):
-#             try:
-#                 # ProceduraPubblicazione (M)
-#                 _procedura_pubblicazione_data['piano'] = _piano
-#                 # Ente (M)
-#                 _procedura_pubblicazione_data['ente'] = _piano.ente
-#
-#                 _procedura_pubblicazione = ProceduraPubblicazione()
-#                 _procedura_pubblicazione.piano = _piano
-#                 _procedura_pubblicazione.ente = _piano.ente
-#                 _procedura_pubblicazione_data['id'] = _procedura_pubblicazione.id
-#                 _procedura_pubblicazione_data['uuid'] = _procedura_pubblicazione.uuid
-#                 nuova_procedura_pubblicazione = update_create_instance(
-#                     _procedura_pubblicazione, _procedura_pubblicazione_data)
-#
-#                 _piano.procedura_pubblicazione = nuova_procedura_pubblicazione
-#                 _piano.save()
-#
-#                 return cls(nuova_procedura_pubblicazione=nuova_procedura_pubblicazione)
-#             except BaseException as e:
-#                 tb = traceback.format_exc()
-#                 logger.error(tb)
-#                 return GraphQLError(e, code=500)
-#         else:
-#             return GraphQLError(_("Forbidden"), code=403)
 
 
 class UpdateProceduraPubblicazione(relay.ClientIDMutation):

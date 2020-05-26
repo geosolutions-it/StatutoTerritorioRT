@@ -29,7 +29,7 @@ from serapide_core.api.piano_utils import (
     chiudi_azione,
     crea_azione,
     chiudi_pendenti,
-    get_scadenza,
+    get_scadenza, get_now,
 )
 from serapide_core.helpers import update_create_instance
 
@@ -220,14 +220,19 @@ class PubblicazioneBurt(graphene.Mutation):
         if needs_execution(pubblicazione_burt):
             chiudi_azione(pubblicazione_burt)
 
+            now = get_now()
+
             crea_azione(
                 Azione(
                     piano=piano,
                     tipologia=TipologiaAzione.osservazioni_enti,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
-                    data=procedura_adozione.data_ricezione_osservazioni
+                ).imposta_scadenza((
+                    now,  # ???
+                    procedura_adozione.data_ricezione_osservazioni
                 ))
+            )
 
             crea_azione(
                 Azione(
@@ -235,8 +240,11 @@ class PubblicazioneBurt(graphene.Mutation):
                     tipologia=TipologiaAzione.osservazioni_regione,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
-                    data=procedura_adozione.data_ricezione_osservazioni
+                ).imposta_scadenza((
+                    now,  # ???
+                    procedura_adozione.data_ricezione_osservazioni
                 ))
+            )
 
             crea_azione(
                 Azione(
@@ -244,8 +252,11 @@ class PubblicazioneBurt(graphene.Mutation):
                     tipologia=TipologiaAzione.upload_osservazioni_privati,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
                     stato=STATO_AZIONE.attesa,
-                    data=procedura_adozione.data_ricezione_osservazioni
+                ).imposta_scadenza((
+                    now,  # ???
+                    procedura_adozione.data_ricezione_osservazioni
                 ))
+            )
 
             if procedura_adozione.pubblicazione_burt_data and \
                     piano.procedura_vas.tipologia != TipologiaVAS.NON_NECESSARIA:
@@ -261,7 +272,7 @@ class PubblicazioneBurt(graphene.Mutation):
                     ).imposta_scadenza(
                         get_scadenza(
                             procedura_adozione.pubblicazione_burt_data,
-                            TipoExpire.ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS)
+                            TipoExpire.ADOZIONE_VAS_PARERI_SCA)
                     ))
 
     @classmethod
@@ -636,14 +647,6 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
     errors = graphene.List(graphene.String)
     vas_aggiornata = graphene.Field(types.ProceduraAdozioneVASNode)
 
-    @staticmethod
-    def action():
-        return TipologiaAzione.pareri_adozione_sca
-
-    @staticmethod
-    def procedura(piano):
-        return piano.procedura_adozione
-
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
@@ -662,18 +665,17 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
         if _pareri_sca:
             chiudi_azione(_pareri_sca)
 
-            _expire_days = getattr(settings, 'ADOZIONE_VAS_PARERE_MOTIVATO_AC_EXPIRE_DAYS', 30)
-            _alert_delta = datetime.timedelta(days=_expire_days)
-            _parere_motivato_ac_expire = procedura_adozione.pubblicazione_burt_data + _alert_delta
-
             crea_azione(
                 Azione(
                     piano=piano,
                     tipologia=TipologiaAzione.parere_motivato_ac,
                     qualifica_richiesta=QualificaRichiesta.AC,
                     stato=STATO_AZIONE.attesa,
-                    data=_parere_motivato_ac_expire
-                ))
+                ).imposta_scadenza(
+                    get_scadenza(
+                        procedura_adozione.pubblicazione_burt_data,
+                        TipoExpire.ADOZIONE_VAS_PARERE_MOTIVATO_AC))
+            )
 
     @classmethod
     def mutate(cls, root, info, **input):

@@ -15,7 +15,6 @@ import graphene
 import traceback
 
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 
 from graphene import relay
 
@@ -24,7 +23,8 @@ from graphql_extensions.exceptions import GraphQLError
 from serapide_core.api.graphene.mutations import log_enter_mutate
 
 from serapide_core.helpers import (
-    update_create_instance)
+    update_create_instance
+)
 
 from serapide_core.signals import (
     piano_phase_changed,
@@ -38,7 +38,6 @@ from serapide_core.modello.models import (
     ProceduraVAS,
     ProceduraAvvio,
     ConferenzaCopianificazione,
-
 )
 
 from serapide_core.modello.enums import (
@@ -57,51 +56,12 @@ from serapide_core.api.piano_utils import (
     is_executed,
     ensure_fase,
     chiudi_azione,
-    crea_azione,
+    crea_azione, get_now,
 )
 import serapide_core.api.auth.user as auth
 from strt_users.enums import Qualifica
 
 logger = logging.getLogger(__name__)
-
-
-# class CreateProceduraAvvio(relay.ClientIDMutation):
-#
-#     class Input:
-#         procedura_avvio = graphene.Argument(inputs.ProceduraAvvioCreateInput)
-#         codice_piano = graphene.String(required=True)
-#
-#     nuova_procedura_avvio = graphene.Field(types.ProceduraAvvioNode)
-#
-#     @classmethod
-#     def mutate_and_get_payload(cls, root, info, **input):
-#         _piano = Piano.objects.get(codice=input['codice_piano'])
-#         _procedura_avvio_data = input.get('procedura_avvio')
-#
-#         if not is_soggetto(info.context.user, _piano):
-#             return GraphQLError("Forbidden - Pre-check: L'utente non può editare piani in questo Ente", code=403)
-#
-#         try:
-#             # ProceduraAvvio (M)
-#             _procedura_avvio_data['piano'] = _piano
-#             # Ente (M)
-#             _procedura_avvio_data['ente'] = _piano.ente
-#
-#             _procedura_avvio, created = ProceduraAvvio.objects.get_or_create(
-#                 piano=_piano, ente=_piano.ente)
-#
-#             _procedura_avvio_data['id'] = _procedura_avvio.id
-#             _procedura_avvio_data['uuid'] = _procedura_avvio.uuid
-#             nuova_procedura_avvio = update_create_instance(_procedura_avvio, _procedura_avvio_data)
-#
-#             _piano.procedura_avvio = nuova_procedura_avvio
-#             _piano.save()
-#
-#             return cls(nuova_procedura_avvio=nuova_procedura_avvio)
-#         except BaseException as e:
-#             tb = traceback.format_exc()
-#             logger.error(tb)
-#             return GraphQLError(e, code=500)
 
 
 class UpdateProceduraAvvio(relay.ClientIDMutation):
@@ -160,17 +120,8 @@ class AvvioPiano(graphene.Mutation):
 
     @classmethod
     def autorita_ok(cls, piano, qualifiche):
-        # _res = False
-        # _has_tipologia = False
-
-        # TODO: check autorita_competente_vas, autorita_istituzionali, altri_destinatari
         if not piano.soggetto_proponente:
             return False
-            # and \
-            # piano.autorita_competente_vas.all().count() > 0 and \
-            # piano.autorita_istituzionali.all().count() >= 0 and \
-            # piano.altri_destinatari.all().count() >= 0 and \
-            # piano.soggetti_sca.all().count() >= 0:
 
         for qualifica in qualifiche:
             c = SoggettoOperante.get_by_qualifica(piano, qualifica=qualifica).count()
@@ -207,7 +158,11 @@ class AvvioPiano(graphene.Mutation):
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
                     data=procedura_avvio.data_scadenza_risposta
+                ).imposta_scadenza((
+                    get_now(),  # ??
+                    procedura_avvio.data_scadenza_risposta
                 ))
+            )
 
             crea_azione(
                 Azione(
@@ -654,7 +609,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
             procedura_avvio.save()
 
             _cc = ConferenzaCopianificazione.objects.get(piano=piano)
-            _cc.data_richiesta_conferenza = datetime.datetime.now(timezone.get_current_timezone())
+            _cc.data_richiesta_conferenza = get_now()
             _cc.data_scadenza_risposta = procedura_avvio.data_scadenza_risposta
             _cc.save()
 
@@ -672,8 +627,11 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                     tipologia=TipologiaAzione.esito_conferenza_copianificazione,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
-                    data=procedura_avvio.data_scadenza_risposta
+                ).imposta_scadenza((
+                    get_now(),
+                    procedura_avvio.data_scadenza_risposta
                 ))
+            )
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -741,7 +699,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                 procedura_avvio.notifica_genio_civile = True
                 procedura_avvio.save()
 
-                now = datetime.datetime.now(timezone.get_current_timezone())
+                now = get_now()
 
                 _cc = ConferenzaCopianificazione.objects.get(piano=piano)
                 _cc.data_chiusura_conferenza = now
@@ -753,8 +711,10 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                         tipologia=TipologiaAzione.protocollo_genio_civile,
                         qualifica_richiesta=QualificaRichiesta.GC,
                         stato=STATO_AZIONE.necessaria,
-                        data=procedura_avvio.data_scadenza_risposta
-                    ) # .imposta_scadenza(now, procedura_avvio.data_scadenza_risposta)
+                    ).imposta_scadenza((
+                        now,  # ??
+                        procedura_avvio.data_scadenza_risposta
+                    ))
                 )
 
     @classmethod

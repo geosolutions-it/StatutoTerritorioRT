@@ -30,11 +30,12 @@ from serapide_core.api.piano_utils import (
     is_executed,
     ensure_fase,
     chiudi_azione,
-    crea_azione, get_scadenza,
+    crea_azione, get_scadenza, get_now,
 )
 
 from serapide_core.helpers import (
-    update_create_instance)
+    update_create_instance
+)
 
 from serapide_core.signals import (
     piano_phase_changed,
@@ -78,7 +79,7 @@ def init_vas_procedure(piano:Piano):
     procedura_vas = piano.procedura_vas
     _selezione_tipologia_vas = piano.getFirstAction(TipologiaAzione.selezione_tipologia_vas)
 
-    now = datetime.datetime.now(timezone.get_current_timezone())
+    now = get_now()
 
     if needs_execution(_selezione_tipologia_vas):
         chiudi_azione(_selezione_tipologia_vas, now)
@@ -268,7 +269,7 @@ class TrasmissioneDPVVAS(graphene.Mutation):
 
         _pareri_verifica_vas = piano.getFirstAction(TipologiaAzione.trasmissione_dpv_vas)
         if needs_execution(_pareri_verifica_vas):
-            now = datetime.datetime.now(timezone.get_current_timezone())
+            now = get_now()
             chiudi_azione(_pareri_verifica_vas, now)
 
             crea_azione(
@@ -453,7 +454,7 @@ class EmissioneProvvedimentoVerifica(graphene.Mutation):
 
         _epv = piano.getFirstAction(TipologiaAzione.emissione_provvedimento_verifica)
         if needs_execution(_epv):
-            now = datetime.datetime.now(timezone.get_current_timezone())
+            now = get_now()
             chiudi_azione(_epv, now)
 
             procedura_vas.data_assoggettamento = now
@@ -652,7 +653,7 @@ class InvioDocPreliminare(graphene.Mutation):
 
         _invio_doc_preliminare = piano.getFirstAction(TipologiaAzione.invio_doc_preliminare)
         if needs_execution(_invio_doc_preliminare):
-            now = datetime.datetime.now(timezone.get_current_timezone())
+            now = get_now()
             chiudi_azione(_invio_doc_preliminare, now)
 
             crea_azione(

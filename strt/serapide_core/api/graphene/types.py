@@ -518,7 +518,7 @@ class ProceduraAdozioneNode(DjangoObjectType):
 
     def resolve_scadenza_pareri_adozione_sca(self, info, **args):
         if self.pubblicazione_burt_data:
-            start,end = get_scadenza(self.pubblicazione_burt_data, TipoExpire.ADOZIONE_VAS_PARERI_SCA_EXPIRE_DAYS)
+            start,end = get_scadenza(self.pubblicazione_burt_data, TipoExpire.ADOZIONE_VAS_PARERI_SCA)
             return end
 
 

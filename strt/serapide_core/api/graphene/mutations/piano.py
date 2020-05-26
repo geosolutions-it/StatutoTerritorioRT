@@ -19,7 +19,6 @@ from graphene import relay
 from graphql_extensions.exceptions import GraphQLError
 
 from django.conf import settings
-from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from serapide_core.api.auth.user import get_assegnamenti, can_admin_delega
@@ -29,7 +28,7 @@ from serapide_core.api.piano_utils import (
     ensure_fase,
     chiudi_azione,
     crea_azione,
-    chiudi_pendenti,
+    chiudi_pendenti, get_now,
 )
 
 from strt_users.enums import Profilo
@@ -293,24 +292,6 @@ class CreatePiano(relay.ClientIDMutation):
             return GraphQLError(e, code=500)
 
 
-def update_referenti(piano, tipo):
-
-    # TODO
-    pass
-    # referenti = Referente.objects.filter(piano=piano, tipo=tipo)
-    # referenti.delete();
-    #
-    # if _piano.soggetto_proponente:
-    #     UpdatePiano.delete_token(_piano.soggetto_proponente.user, _piano)
-    #     _piano.soggetto_proponente = None
-    #
-    # if _soggetto_proponente_uuid and len(_soggetto_proponente_uuid) > 0:
-    #     _soggetto_proponente = Contatto.objects.get(uuid=_soggetto_proponente_uuid)
-    #     _new_role = UpdatePiano.get_role(_soggetto_proponente, TIPOLOGIA_ATTORE.unknown)
-    #     UpdatePiano.get_or_create_token(_soggetto_proponente.user, _piano, _new_role)
-    #     _piano.soggetto_proponente = _soggetto_proponente
-
-
 class UpdatePiano(relay.ClientIDMutation):
 
     class Input:
@@ -323,7 +304,7 @@ class UpdatePiano(relay.ClientIDMutation):
     @staticmethod
     def make_token_expiration(days=365):
         _expire_days = getattr(settings, 'TOKEN_EXPIRE_DAYS', days)
-        _expire_time = datetime.datetime.now(timezone.get_current_timezone())
+        _expire_time = get_now()
         _expire_delta = datetime.timedelta(days=_expire_days)
         return _expire_time + _expire_delta
 

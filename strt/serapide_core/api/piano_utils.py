@@ -10,7 +10,6 @@
 #########################################################################
 
 import datetime
-from datetime import datetime, timedelta
 import logging
 
 from django.conf import settings
@@ -49,7 +48,7 @@ def chiudi_azione(azione: Azione, data=None, set_data=True):
                 .format(a=azione.tipologia, qr=azione.qualifica_richiesta, p=azione.piano))
     azione.stato = STATO_AZIONE.nessuna
     if set_data:
-        azione.data = data if data else datetime.now(timezone.get_current_timezone())
+        azione.data = data if data else get_now()
     azione.save()
 
 
@@ -70,18 +69,18 @@ def crea_azione(azione: Azione, send_mail: bool = True):
             azione=azione,)
 
 
-def get_scadenza(start_datetime: datetime, exp: TipoExpire):
+def get_scadenza(start_datetime: datetime.datetime, exp: TipoExpire):
 
-    delta_days = getattr(settings, exp.name, exp.value)
+    delta_days = getattr(settings, exp.name + '_EXPIRE_DAYS', exp.value)
     avvio_scadenza = start_datetime.date()
-    scadenza = avvio_scadenza + timedelta(days=delta_days)
+    scadenza = avvio_scadenza + datetime.timedelta(days=delta_days)
 
     return avvio_scadenza, scadenza
 
 
 def chiudi_pendenti(piano: Piano, attesa=True, necessaria=True):
     # - Complete Current Actions
-    _now = datetime.now(timezone.get_current_timezone())
+    _now = get_now()
     stati = []
     if attesa:
         stati.append(STATO_AZIONE.attesa)
@@ -89,5 +88,10 @@ def chiudi_pendenti(piano: Piano, attesa=True, necessaria=True):
         stati.append(STATO_AZIONE.necessaria)
 
     for azione in Azione.objects.filter(piano=piano, stato__in=stati):
-        log.warning('Chiusura forzata azione pendente {n}:{q}[{s}]'.format(n=azione.tipologia, q=azione.qualifica_richiesta.name, s=azione.stato))
+        log.warning('Chiusura forzata azione pendente {n}:{q}[{s}]'.format(
+            n=azione.tipologia, q=azione.qualifica_richiesta.name, s=azione.stato))
         chiudi_azione(azione, data=_now)
+
+
+def get_now():
+    return datetime.datetime.now(timezone.get_current_timezone())
