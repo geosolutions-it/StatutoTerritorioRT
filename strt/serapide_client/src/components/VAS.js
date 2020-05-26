@@ -44,12 +44,14 @@ const checkSoggetti =  (tipologia = "" , sP, ac, scas) => {
     switch (tipologia) {
         case VAS_TYPES.VERIFICA_SEMPLIFICATA:
         case VAS_TYPES.VERIFICA:
-        return ac.length > 0
+            return ac.length > 0
         case VAS_TYPES.PROCEDURA_ORDINARIA:
         case VAS_TYPES.PROCEDIMENTO_SEMPLIFICATO:
-        return ac.length > 0 && scas.length > 0
+            return ac.length > 0 && scas.length > 0
+        case VAS_TYPES.NON_NECESSARIA:
+            return true
         default:
-        return false
+            return false
     }
 }
 // Proprietà comuni upload files
@@ -74,7 +76,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
     const scas = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "SCA").map(({qualificaUfficio} = {}) => (qualificaUfficio))
     
     const canCommit = !isLocked && canUpdate && checkSoggetti(tipologia, sP, acs, scas) && checkDoc(tipologia, resources)
-    console.log(canCommit)
+    
     const getInputTipologia = getVasTypeInput(uuid, "tipologia")
 
 
