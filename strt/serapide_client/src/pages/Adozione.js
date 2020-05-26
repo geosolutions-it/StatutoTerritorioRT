@@ -31,7 +31,7 @@ const UI = enhancers(({
     proceduraAdozione: {node: {
         dataDeliberaAdozione, pubblicazioneBurtUrl,
         pubblicazioneBurtData, pubblicazioneSitoUrl,
-        pubblicazioneSitoData,
+        pubblicazioneBurtBollettino,
         richiestaConferenzaPaesaggistica,
         risorse: {edges: risorseAdozione=[]} = {}
         } = {}} = {}, 
@@ -81,7 +81,7 @@ const UI = enhancers(({
                     <i className="material-icons text-serapide">link</i>
                     <a href={pubblicazioneSitoUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{pubblicazioneSitoUrl}</a>
                 </div>
-                <div className="col-2">{formatDate(pubblicazioneSitoData)}</div>
+                {/* <div className="col-2">{formatDate(pubblicazioneSitoData)}</div> */}
                 <div className="border-serapide border-top w-100 my-4"></div>
             </div>
             <Nav tabs>

@@ -49,9 +49,19 @@ query GetAdozione($codice: String!) {
             }
             
         }
+    },
+    modelloVas :
+    procedureVas(piano_Codice: $codice) {
+        edges{
+          node{
+            ...VAS 
+            }
+            
+        }
     }
 }
 ${FR.ADOZIONE}
+${FR.VAS}
 `
 
 

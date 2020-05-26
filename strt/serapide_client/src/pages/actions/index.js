@@ -29,6 +29,7 @@ import Approvazione from './Approvazione'
 import UploadFile from "./UploadFile"
 import Pubblicazione from "./Pubblicazione"
 import InvioDocPreliminare from "./InvioDocPreliminare"
+import PubblicazioneBURT from './PubblicazioneBurt';
 import {VAS_DOCS} from "../../utils"
 
 import {GET_AVVIO, DELETE_RISORSA_AVVIO, 
@@ -86,6 +87,8 @@ export default {
 
 /**********FASE ADOZIONE ******************/
         trasmissioneAdozione: (props) => (<Adozione  {...props}/>),
+        pubblicazioneBurt: (props) => (<PubblicazioneBURT  {...props}/>),
+        
         uploadOsservazioniPrivati: (props) => (<Osservazioni  {...props}/>),
         osservazioniEnti: (props) => (<Osservazioni hideSave={true} disableSave={true} label="OSSERVAZIONI" titolo="Osservazioni Ente"  filterByUser={false} tipo="osservazioni_enti" {...props}/>),
         controdeduzioni: (props) => (<Controdeduzioni filterByUser={false} saveMutation={CONTRODEDUZIONI} showData={false} label="Carica Files" titolo="CONTRODEDUZIONI"   tipo="controdeduzioni" {...props}/>),
@@ -93,7 +96,9 @@ export default {
         pianoControdedotto: (props) => (<PianoControdedotto {...props}/>),
         esitoConferenzaPaesaggistica: (props) => (<EsitoPae {...props}/>),
         revPianoPostCp: (props) => (<RevisionePianoCP {...props}/>),
+        
         pareriAdozioneSca: (props) =>(<PareriAdozioneSCA {...props}/>),
+        
         parereMotivatoAc: (props) =>(<ParereMotivatoAc {...props}/>),
         uploadElaboratiAdozioneVas: (props) => (<UploadElaboratiAdozioneVAS {...props}/>),
         trasmissioneApprovazione: (props) => (<Approvazione {...props}/>),

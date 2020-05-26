@@ -295,6 +295,20 @@ mutation TrasmissioneAdozione($codice: String!){
 ${FR.AZIONI_PIANO}
 `
 
+export const PUBBLICAZIONE_BURT = gql`
+mutation PubblicazioneBURT($codice: String!){
+  pubblicazioneBurt(uuid: $codice){
+      errors
+        adozioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
 export const TRASMISSIONE_OSSERVAZIONI = gql`
 mutation TrasmissioneOsservazioni($codice: String!){
   trasmissioneOsservazioni(uuid: $codice){

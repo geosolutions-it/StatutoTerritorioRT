@@ -49,23 +49,6 @@ export const getActionIconColor = (stato) => {
             return ""
     }
 }
-export const actionHasBtn = (actor = "") => {
-    switch (actor) {
-        case "AC":
-            return true
-        default:
-            return false
-    }
-}
-export const getAction = (stato) => {
-    switch (stato) {
-        case "NECESSARIA":
-        case "ATTESA":
-            return true
-        default:
-            return false
-    }
-}
 
 export const showError = ({graphQLErrors, message, networkError: {result:{errors = []} = {}} = {}}) => {
     let  er = [...graphQLErrors, ...errors]
@@ -107,7 +90,6 @@ export const groupResourcesByUser = (resources = []) => resources.reduce((acc, {
 } , {})
 
 export const filterAndGroupResourcesByUser = ( resources, type = "") => groupResourcesByUser(resources.filter(({node: {tipo}}) => tipo === type))
-
 
 export const getContatti = ({ uffici = []} = {}) => {
     return uffici.map(({qualifica: tipologia, qualificaLabel: tipologiaLabel, ufficio: {uuid,

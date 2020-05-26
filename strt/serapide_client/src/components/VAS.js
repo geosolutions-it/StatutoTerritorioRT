@@ -19,7 +19,7 @@ import TextWithTooltip from 'components/TextWithTooltip'
 
 import  {rebuildTooltip} from 'enhancers'
 
-import { showError, getInputFactory, getContatti, docByVASType, VAS_DOCS, VAS_TYPES} from 'utils'
+import { showError, getInputFactory, getContatti, docByVASType, VAS_DOCS, VAS_TYPES, getResourceByType} from 'utils'
 
 import {GET_CONTATTI, GET_VAS, VAS_FILE_UPLOAD,
     DELETE_RISORSA_VAS, UPDATE_VAS, UPDATE_PIANO,
@@ -30,11 +30,10 @@ const getVasTypeInput = getInputFactory("proceduraVas")
 
 
 const checkDoc = (tipologia, resources) => {
-    if(tipologia === VAS_TYPES.NON_NECESSARIA  && tipologia === VAS_TYPES.PROCEDURA_ORDINARIA) {
+    if(tipologia === VAS_TYPES.NON_NECESSARIA  || tipologia === VAS_TYPES.PROCEDURA_ORDINARIA) {
         return true;
     }
-    const {node: doc} = resources.filter(({node: n}) => n.tipo === docByVASType[tipologia]).pop() || {};
-    return !!doc;
+    return !!getResourceByType(resources, docByVASType[tipologia]);
 }
 
 
@@ -75,7 +74,7 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, canUpdate, isLocked, Vas 
     const scas = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "SCA").map(({qualificaUfficio} = {}) => (qualificaUfficio))
     
     const canCommit = !isLocked && canUpdate && checkSoggetti(tipologia, sP, acs, scas) && checkDoc(tipologia, resources)
-
+    console.log(canCommit)
     const getInputTipologia = getVasTypeInput(uuid, "tipologia")
 
 

@@ -280,12 +280,11 @@ fragment ADOZIONE on ProceduraAdozioneNode {
         uuid
         dataCreazione
         dataDeliberaAdozione
-        dataRicezioneOsservazioni
-        dataRicezionePareri
+        scadenzaPareriAdozioneSca
         pubblicazioneBurtUrl
         pubblicazioneBurtData
         pubblicazioneSitoUrl
-        pubblicazioneSitoData
+        pubblicazioneBurtBollettino
         osservazioniConcluse
         conclusa
         richiestaConferenzaPaesaggistica
