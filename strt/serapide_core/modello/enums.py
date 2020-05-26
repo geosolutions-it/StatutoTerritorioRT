@@ -206,7 +206,7 @@ class TipologiaAzione(SerapideEnum):
     # Adozione
     trasmissione_adozione = 'Trasmissione Adozione'  # Comune
     pubblicazione_burt = 'Pubblicazione BURT'  # Comune
-    osservazioni_enti = 'Osservazioni Enti'  # Enti
+    osservazioni_enti = 'Osservazioni Soggetti Istituzionali'  # Enti
     osservazioni_regione = 'Osservazioni Regione'  # Regione
     upload_osservazioni_privati = 'Upload Osservazioni Privati'  # Comune
     controdeduzioni = 'Controdeduzioni'  # Comune
