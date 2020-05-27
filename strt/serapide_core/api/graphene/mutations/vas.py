@@ -204,51 +204,8 @@ class UpdateProceduraVAS(relay.ClientIDMutation):
             # update!
             procedura_vas_aggiornata = update_create_instance(_procedura_vas, _procedura_vas_data)
 
-            # CHIUSURA AZIONI VAS
-            # if _procedura_vas_data.pubblicazione_provvedimento_verifica_ap:
-            #     _pubblicazione_provvedimento_verifica_ap = _piano.getFirstAction(
-            #             TipologiaAzione.pubblicazione_provvedimento_verifica,
-            #             QualificaRichiesta.COMUNE)
-            #
-            #     if needsExecution(_pubblicazione_provvedimento_verifica_ap):
-            #         chiudi_azione(_pubblicazione_provvedimento_verifica_ap, set_data=False)
-            #
-            #         # Notify Users
-            #         piano_phase_changed.send(
-            #             sender=Piano,
-            #             user=info.context.user,
-            #             piano=_piano,
-            #             message_type="piano_verifica_vas_updated")
-
-            # if _procedura_vas_data.pubblicazione_provvedimento_verifica_ac:
-            #     _pubblicazione_provvedimento_verifica_ac = _piano.getFirstAction(
-            #             TipologiaAzione.pubblicazione_provvedimento_verifica,
-            #             qualifica_richiesta=QualificaRichiesta.AC)
-            #
-            #     if needsExecution(_pubblicazione_provvedimento_verifica_ac):
-            #         chiudi_azione(_pubblicazione_provvedimento_verifica_ac, set_data=False)
-            #
-            #         # Notify Users
-            #         piano_phase_changed.send(
-            #             sender=Piano,
-            #             user=info.context.user,
-            #             piano=_piano,
-            #             message_type="piano_verifica_vas_updated")
-
-            # if isExecuted(_piano.getFirstAction(
-            #             TipologiaAzione.pubblicazione_provvedimento_verifica,
-            #             qualifica_richiesta=QualificaRichiesta.AC)) and \
-            #     isExecuted(_piano.getFirstAction(
-            #         TipologiaAzione.pubblicazione_provvedimento_verifica,
-            #         qualifica_richiesta=QualificaRichiesta.COMUNE)):
-            #
-            #     procedura_vas_aggiornata.conclusa = True
-            #     procedura_vas_aggiornata.save()
-            #
-            #     if try_and_close_avvio(_piano):
-            #         check_and_promote(_piano, info)
-
             return cls(procedura_vas_aggiornata=procedura_vas_aggiornata)
+
         except BaseException as e:
             tb = traceback.format_exc()
             logger.error(tb)
@@ -420,14 +377,6 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                     break
 
             if _tutti_pareri_inviati:
-
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=info.context.user,
-                    piano=_piano,
-                    message_type="tutti_pareri_inviati")
-
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
             return InvioPareriVerificaVAS(
@@ -512,13 +461,6 @@ def check_join_pubblicazione_provvedimento(info, piano: Piano):
     pp_ac = piano.getFirstAction(TipologiaAzione.pubblicazione_provvedimento_verifica_ac)
 
     if is_executed(pp_ap) and is_executed(pp_ac):
-
-        # Notify Users
-        piano_phase_changed.send(
-            sender=Piano,
-            user=info.context.user,
-            piano=piano,
-            message_type="piano_verifica_vas_updated")
 
         _vas: ProceduraVAS = piano.procedura_vas
 
@@ -697,13 +639,6 @@ class InvioDocPreliminare(graphene.Mutation):
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
-            # Notify Users
-            piano_phase_changed.send(
-                sender=Piano,
-                user=info.context.user,
-                piano=_piano,
-                message_type="piano_verifica_vas_updated")
-
             return InvioDocPreliminare(
                 procedura_vas_aggiornata=_procedura_vas,
                 errors=[]
@@ -727,13 +662,6 @@ def check_join_redazione_documenti_vas(user, piano: Piano):
                 qualifica_richiesta=QualificaRichiesta.COMUNE,
                 stato=STATO_AZIONE.necessaria
             ))
-
-        # Notify Users
-        piano_phase_changed.send(
-            sender=Piano,
-            user=user,
-            piano=piano,
-            message_type="tutti_pareri_inviati")
 
         return True
 
@@ -822,14 +750,6 @@ class TrasmissionePareriSCA(graphene.Mutation):
                     # non si effettua il break, così avremo la lista di tutti gli SCA mancanti
 
             if _tutti_pareri_inviati:
-
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=info.context.user,
-                    piano=_piano,
-                    message_type="tutti_pareri_inviati")
-
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_vas, info.context.user)
 
             return TrasmissionePareriSCA(

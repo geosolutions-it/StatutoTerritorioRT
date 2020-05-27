@@ -175,7 +175,7 @@ def promuovi_piano(fase:Fase, piano):
         chiudi_azione(_creato)
 
     elif fase == Fase.AVVIO:
-        ## WTF?????
+        ## TODO check -- WTF?????
         _richiesta_integrazioni = piano.getFirstAction(TipologiaAzione.richiesta_integrazioni)
         if needs_execution(_richiesta_integrazioni):
             chiudi_azione(_richiesta_integrazioni)
@@ -267,7 +267,7 @@ class CreatePiano(relay.ClientIDMutation):
                         piano=nuovo_piano,
                         tipologia=_a["tipologia"],
                         qualifica_richiesta=_a["qualifica"],
-                        stato = _a.get('stato', None),
+                        stato=_a.get('stato', None),
                         order=_order
                     ))
                 _order += 1

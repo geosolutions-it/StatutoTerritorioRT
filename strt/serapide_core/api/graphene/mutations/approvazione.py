@@ -158,13 +158,6 @@ class TrasmissioneApprovazione(graphene.Mutation):
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
 
-            # Notify Users
-            piano_phase_changed.send(
-                sender=Piano,
-                user=info.context.user,
-                piano=_piano,
-                message_type="trasmissione_approvazione")
-
             return TrasmissioneApprovazione(
                 approvazione_aggiornata=_procedura_approvazione,
                 errors=[]
@@ -226,13 +219,6 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
-
-            # Notify Users
-            piano_phase_changed.send(
-                sender=Piano,
-                user=info.context.user,
-                piano=_piano,
-                message_type="esito_conferenza_paesaggistica")
 
             return EsitoConferenzaPaesaggisticaAP(
                 approvazione_aggiornata=_procedura_approvazione,
@@ -303,13 +289,6 @@ class PubblicazioneApprovazione(graphene.Mutation):
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_approvazione, info.context.user)
-
-            # Notify Users
-            piano_phase_changed.send(
-                sender=Piano,
-                user=info.context.user,
-                piano=_piano,
-                message_type="rev_piano_post_cp")
 
             return PubblicazioneApprovazione(
                 approvazione_aggiornata=_procedura_approvazione,

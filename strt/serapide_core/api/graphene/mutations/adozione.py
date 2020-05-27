@@ -485,13 +485,6 @@ class PianoControdedotto(graphene.Mutation):
         try:
             closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
-            # Notify Users
-            piano_phase_changed.send(
-                sender=Piano,
-                user=info.context.user,
-                piano=_piano,
-                message_type="piano_controdedotto")
-
             if closed:
                 check_and_promote(_piano, info)
 
@@ -556,13 +549,6 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
-            # Notify Users
-            piano_phase_changed.send(
-                sender=Piano,
-                user=info.context.user,
-                piano=_piano,
-                message_type="esito_conferenza_paesaggistica")
-
             return EsitoConferenzaPaesaggistica(
                 adozione_aggiornata=_procedura_adozione,
                 errors=[]
@@ -618,13 +604,6 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
 
         try:
             closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
-
-            # Notify Users
-            piano_phase_changed.send(
-                sender=Piano,
-                user=info.context.user,
-                piano=_piano,
-                message_type="rev_piano_post_cp")
 
             if closed:
                 check_and_promote(_piano, info)
@@ -743,13 +722,6 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
                     break
 
             if _tutti_pareri_inviati:
-                # Notify Users
-                piano_phase_changed.send(
-                    sender=Piano,
-                    user=info.context.user,
-                    piano=_piano,
-                    message_type="tutti_pareri_inviati")
-
                 cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
             return InvioPareriAdozioneVAS(
@@ -832,13 +804,6 @@ class InvioParereMotivatoAC(graphene.Mutation):
             # if _tutti_pareri_inviati:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
-            # Notify Users
-            piano_phase_changed.send(
-                sender=Piano,
-                user=info.context.user,
-                piano=_piano,
-                message_type="parere_motivato_ac")
-
             return InvioParereMotivatoAC(
                 vas_aggiornata=_procedura_vas,
                 errors=[]
@@ -903,14 +868,6 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
 
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
-
-            # Notify Users
-            piano_phase_changed.send(
-                sender=Piano,
-                user=info.context.user,
-                piano=_piano,
-                message_type="upload_elaborati_adozione_vas")
-
             check_and_promote(_piano, info)
 
             return UploadElaboratiAdozioneVAS(
