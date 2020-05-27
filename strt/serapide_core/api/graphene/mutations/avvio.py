@@ -157,7 +157,6 @@ class AvvioPiano(graphene.Mutation):
                     tipologia=TipologiaAzione.contributi_tecnici,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
-                    data=procedura_avvio.data_scadenza_risposta
                 ).imposta_scadenza((
                     get_now(),  # ??
                     procedura_avvio.data_scadenza_risposta
