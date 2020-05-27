@@ -590,11 +590,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                     tipologia=TipologiaAzione.esito_conferenza_copianificazione,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
                     stato=STATO_AZIONE.attesa,
-                ).imposta_scadenza((
-                    get_now(),
-                    procedura_avvio.data_scadenza_risposta
                 ))
-            )
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -663,11 +659,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                     tipologia=TipologiaAzione.protocollo_genio_civile,
                     qualifica_richiesta=QualificaRichiesta.GC,
                     stato=STATO_AZIONE.necessaria,
-                ).imposta_scadenza((
-                    now,  # ??
-                    procedura_avvio.data_scadenza_risposta
                 ))
-            )
 
     @classmethod
     def mutate(cls, root, info, **input):
