@@ -305,7 +305,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
     def adozione_osservazione(self, richiesta_cp: bool = True):
         self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_PRIVATI)
-        self.sendCNV('053_trasmissione_osservazioni.query', 'TRASMISSIONE OSSERVAZIONI', self.codice_adozione)
+        self.sendCNV('053_osservazioni_privati.query', 'OSSERVAZIONI PRIVATI', self.codice_adozione)
 
         self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_ENTI)
 

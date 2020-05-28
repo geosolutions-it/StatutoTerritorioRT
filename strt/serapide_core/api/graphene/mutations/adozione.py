@@ -305,7 +305,7 @@ class PubblicazioneBurt(graphene.Mutation):
             return GraphQLError(e, code=500)
 
 
-class TrasmissioneOsservazioni(graphene.Mutation):
+class OsservazioniRegione(graphene.Mutation):
 
     class Arguments:
         uuid = graphene.String(required=True)
@@ -316,24 +316,13 @@ class TrasmissioneOsservazioni(graphene.Mutation):
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
-        # Update Azioni Piano
-        # - Complete Current Actions
-        # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
         _osservazioni_regione = piano.getFirstAction(TipologiaAzione.osservazioni_regione)
-        _upload_osservazioni_privati = piano.getFirstAction(TipologiaAzione.upload_osservazioni_privati)
-        _controdeduzioni = piano.getFirstAction(TipologiaAzione.controdeduzioni)
+        if needs_execution(_osservazioni_regione):
+            chiudi_azione(_osservazioni_regione)
 
-        if auth.is_soggetto_operante(user, piano, qualifica_richiesta=QualificaRichiesta.REGIONE):
-            if needs_execution(_osservazioni_regione):
-                chiudi_azione(_osservazioni_regione)
-
-        if auth.has_qualifica(user, piano.ente, Qualifica.OPCOM):
-            if needs_execution(_upload_osservazioni_privati):
-                chiudi_azione(_upload_osservazioni_privati)
-
-        if not _controdeduzioni:
+        if not piano.getFirstAction(TipologiaAzione.controdeduzioni):
             crea_azione(
                 Azione(
                     piano=piano,
@@ -350,10 +339,63 @@ class TrasmissioneOsservazioni(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
+        if not auth.can_edit_piano(info.context.user, _piano, QualificaRichiesta.REGIONE):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
         try:
             cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
-            return TrasmissioneOsservazioni(
+            return OsservazioniRegione(
+                adozione_aggiornata=_procedura_adozione,
+                errors=[]
+            )
+        except BaseException as e:
+            tb = traceback.format_exc()
+            logger.error(tb)
+            return GraphQLError(e, code=500)
+
+
+class OsservazioniPrivati(graphene.Mutation):
+
+    class Arguments:
+        uuid = graphene.String(required=True)
+
+    errors = graphene.List(graphene.String)
+    adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
+
+    @classmethod
+    def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
+
+        ensure_fase(fase, Fase.AVVIO)
+
+        _upload_osservazioni_privati = piano.getFirstAction(TipologiaAzione.upload_osservazioni_privati)
+        if needs_execution(_upload_osservazioni_privati):
+            chiudi_azione(_upload_osservazioni_privati)
+
+        if not piano.getFirstAction(TipologiaAzione.controdeduzioni):
+            crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TipologiaAzione.controdeduzioni,
+                    qualifica_richiesta=QualificaRichiesta.COMUNE,
+                    stato=STATO_AZIONE.attesa
+                ))
+
+    @classmethod
+    def mutate(cls, root, info, **input):
+        _procedura_adozione = ProceduraAdozione.objects.get(uuid=input['uuid'])
+        _piano = _procedura_adozione.piano
+
+        if not auth.can_access_piano(info.context.user, _piano):
+            return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPCOM):
+            return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
+
+        try:
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
+
+            return OsservazioniPrivati(
                 adozione_aggiornata=_procedura_adozione,
                 errors=[]
             )

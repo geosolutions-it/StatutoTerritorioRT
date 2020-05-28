@@ -1,21 +1,18 @@
 {
-   "operationName" : "TrasmissioneOsservazioni",
+   "operationName" : "OsservazioniPrivati",
 
   "variables" : {
       "codice" : "{codice}"
    },
 
-   "query" : "mutation TrasmissioneOsservazioni($codice: String!) {
-  trasmissioneOsservazioni(uuid: $codice) {
+   "query" : "mutation OsservazioniPrivati($codice: String!) {
+  osservazioniPrivati(uuid: $codice) {
     errors
     adozioneAggiornata {
       piano {
         ...AzioniPiano
-        __typename
       }
-      __typename
     }
-    __typename
   }
 }
 
@@ -24,13 +21,10 @@ fragment AzioniPiano on PianoNode {
   fase
   azioni {
     ...Azioni
-    __typename
   }
-  __typename
 }
 
 fragment Azioni on AzioneNode {
-
       order
       tipologia
       stato
@@ -40,7 +34,5 @@ fragment Azioni on AzioneNode {
       label
       tooltip
       fase
-      __typename
-
 }"
 }
