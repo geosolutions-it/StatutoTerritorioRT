@@ -60,6 +60,7 @@ from serapide_core.modello.enums import (
     TipologiaAzione,
     TipoRisorsa,
     TipoExpire,
+    TipoMail,
 )
 
 from strt_users.enums import QualificaRichiesta, Qualifica
@@ -69,12 +70,13 @@ import serapide_core.api.auth.user as auth
 
 from strt_users.models import (
     Assegnatario,
+    Utente,
 )
 
 logger = logging.getLogger(__name__)
 
 
-def init_vas_procedure(piano:Piano):
+def init_vas_procedure(piano: Piano, utente: Utente):
 
     procedura_vas = piano.procedura_vas
     _selezione_tipologia_vas = piano.getFirstAction(TipologiaAzione.selezione_tipologia_vas)
@@ -138,6 +140,13 @@ def init_vas_procedure(piano:Piano):
             )
         )
 
+        # AC deve essere notificato
+        piano_phase_changed.send(
+            message_type=TipoMail.trasmissione_dp_vas,
+            sender=Piano,
+            piano=piano,
+            user=utente,
+        )
 
 class UpdateProceduraVAS(relay.ClientIDMutation):
 

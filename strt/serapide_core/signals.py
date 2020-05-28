@@ -13,14 +13,14 @@ import logging
 
 from django.dispatch import Signal
 
+from strt_users.enums import Qualifica
+from strt_users.models import Assegnatario, Ufficio, Utente
 from serapide_core.modello.enums import TipoMail, TipologiaAzione
 from serapide_core.modello.models import SoggettoOperante, Piano, Azione
-from strt_users.models import Assegnatario, Ufficio, Utente
+
 from .api.auth.user import get_UffAssTok
 
 from .notifications_helper import send_now_notification
-
-# from serapide_core.modello.models import PianoAuthTokens
 
 logger = logging.getLogger(__name__)
 
@@ -108,84 +108,104 @@ def token2dest(tokenlist):
     return ret
 
 
-def get_destinatari_da_azione(azione: Azione, piano: Piano):
-    qr = azione.qualifica_richiesta
-    q = qr.qualifiche()
-
-    uffici, utenti_assegnatari, token = get_UffAssTok(piano, azione.qualifica_richiesta)
+def get_destinatari_da_qualifiche(piano: Piano, qualifiche):
+    uffici, utenti_assegnatari, token = get_UffAssTok(piano, qualifiche)
 
     return uff2dest(uffici) + \
            utenti2dest(utenti_assegnatari) + \
            token2dest(token)
 
 
-def get_destinatari_da_tipomail(notification_type, piano):
-    return []  # TODO
+def get_destinatari_da_azione(piano: Piano, azione: Azione):
+    return get_destinatari_da_qualifiche(piano, azione.qualifica_richiesta.qualifiche())
+
+
+def get_destinatari_da_tipomail(piano: Piano, tipo: TipoMail):
+    if tipo == TipoMail.trasmissione_dp_vas:
+        return get_destinatari_da_qualifiche(piano, [Qualifica.AC])
+
+    elif tipo == TipoMail.piano_phase_changed:
+        return get_destinatari_da_qualifiche(piano, [Qualifica.AC, Qualifica.SCA, Qualifica.OPCOM, Qualifica.URB,
+                                                     Qualifica.PIAN, Qualifica.GC])
+
+    elif tipo == TipoMail.pubblicazione_piano:
+        return get_destinatari_da_qualifiche(piano, [Qualifica.AC, Qualifica.SCA, Qualifica.OPCOM, Qualifica.URB,
+                                                     Qualifica.PIAN, Qualifica.GC])
+    else:
+        logger.warning('*** TipoMail non gestito [{}]'.format(tipo))
+        return []
 
 
 def get_destinatari_da_piano(piano):
-    return []  # TODO
+    return get_destinatari_da_qualifiche(piano, [Qualifica.AC, Qualifica.SCA, Qualifica.OPCOM, Qualifica.URB,
+                                                 Qualifica.PIAN, Qualifica.GC])
 
 
+# TODO: questo nome di funzione va cambiato dato che gestisce tutte le mail
 def piano_phase_changed_notification(sender, **kwargs):
 
-    logger.info("========== piano_phase_changed_notification")
-    #logger.warning(kwargs, stack_info=True)
+    # logger.info("========== piano_phase_changed_notification")
+    # logger.warning(kwargs, stack_info=True)
 
-    if 'piano' in kwargs:
-        notification_type = kwargs.get('message_type', None)
-        azione = kwargs.get('azione', None)
-        from_user = kwargs.get('user', None)
-        piano = kwargs['piano']
+    notification_type = kwargs.get('message_type', None)
+    azione = kwargs.get('azione', None)
+    from_user = kwargs.get('user', None)
+    piano = kwargs.get('piano', None)
 
-        mail_args = {
-            "user": from_user,
-            "piano": piano,
-        }
+    logger.info("========== GESTIONE INVIO MAIL piano:{} tipo:{}".format(
+        piano.codice, azione.tipologia.name if azione else notification_type))
 
-        if azione and isinstance(azione, Azione):
-            utenti = get_destinatari_da_azione(azione, piano)
+    if not piano:
+        logger.warning("Piano non definito, nessuna mail inviata")
+        return
 
-            mail_args['azione'] = azione
-            mail_args['azione_tipo_name'] = azione.tipologia.name
-            mail_args['azione_tipo_label'] = azione.tipologia.value
-            mail_args['azione_scadenza'] = azione.scadenza
-            notification_type = 'azione_generica'  # il nome del template
+    mail_args = {
+        "user": from_user,
+        "piano": piano,
+    }
 
-        elif notification_type and isinstance(notification_type, TipoMail):
-            utenti = get_destinatari_da_tipomail(notification_type, piano)
-            notification_type = notification_type.name
+    if azione and isinstance(azione, Azione):
+        destinatari = get_destinatari_da_azione(piano, azione)
 
+        mail_args['azione'] = azione
+        mail_args['azione_tipo_name'] = azione.tipologia.name
+        mail_args['azione_tipo_label'] = azione.tipologia.value
+        mail_args['azione_scadenza'] = azione.scadenza
+        notification_type = 'azione_generica'  # il nome del template
+
+    elif notification_type and isinstance(notification_type, TipoMail):
+        destinatari = get_destinatari_da_tipomail(piano, notification_type)
+        notification_type = notification_type.name
+
+    else:
+        logger.warning('message_type non tipizzato [{}]'.format(notification_type))
+        # non sappiamo cosa sia, inviamo a tutti
+        destinatari = get_destinatari_da_piano(piano)
+
+    for u in destinatari:
+        if isinstance(u, Utente):
+            dest = '"{}" <{}>'.format(u.get_full_name(), u.email)
+            tok = 'TOKEN {}'.format(u.token.key) if u.token else ''
         else:
-            logger.warning('Mail non tipizzata [{}]'.format(notification_type))
-            # non sappiamo cosa sia, inviamo a tutti
-            utenti = get_destinatari_da_piano(piano)
+            dest = u
+            tok = ''
 
-        for u in utenti:
-            if isinstance(u, Utente):
-                dest = '"{}" <{}>'.format(u.get_full_name(), u.email)
-                tok = 'TOKEN {}'.format(u.token.key) if u.token else ''
-            else:
-                dest = u
-                tok = ''
+        logger.info("SENDING MAIL TO {to} - Piano {piano} - TEMPLATE {temp}{azione}{token}".format(
+            to=dest,
+            piano=piano.codice,
+            temp=notification_type,
+            azione=(' - AZIONE ' + azione.tipologia.name) if azione else '',
+            token=tok
+        ))
 
-            logger.info("SENDING MAIL TO {to} - Piano {piano} - TEMPLATE {temp}{azione}{token}".format(
-                to=dest,
-                piano=piano.codice,
-                temp=notification_type,
-                azione=(' - AZIONE ' + azione.tipologia.name) if azione else '',
-                token=tok
-            ))
-
-        # todo : check for uffici
-        send_now_notification(
-            utenti,
-            # [ass.utente for ass in ass_list],
-            notification_type,
-            mail_args
-            # {
-            #   "user": from_user,
-            #   "piano": piano,
-            #   "tokens": tokens
-            # }
-        )
+    # todo : check for uffici
+    send_now_notification(
+        destinatari,
+        notification_type,
+        mail_args
+        # {
+        #   "user": from_user,
+        #   "piano": piano,
+        #   "tokens": tokens
+        # }
+    )

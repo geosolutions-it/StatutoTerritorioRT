@@ -41,6 +41,7 @@ from serapide_core.modello.enums import (
     Fase,
     STATO_AZIONE,
     TipologiaAzione,
+    TipoMail,
 )
 
 import serapide_core.api.auth.user as auth
@@ -137,7 +138,7 @@ class PubblicazionePiano(graphene.Mutation):
                 sender=Piano,
                 user=info.context.user,
                 piano=_piano,
-                message_type="pubblicazione_piano")
+                message_type=TipoMail.pubblicazione_piano)
 
             return PubblicazionePiano(
                 pubblicazione_aggiornata=_procedura_pubblicazione,

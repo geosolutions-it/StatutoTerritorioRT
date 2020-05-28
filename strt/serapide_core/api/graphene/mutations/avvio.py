@@ -170,7 +170,7 @@ class AvvioPiano(graphene.Mutation):
                 send_mail=False
             )
 
-            init_vas_procedure(piano)
+            init_vas_procedure(piano, user)
 
     @classmethod
     def mutate(cls, root, info, **input):

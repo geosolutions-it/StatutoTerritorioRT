@@ -221,15 +221,15 @@ def can_admin_delega(utente: Utente, delega: Delega):
         .exists()
 
 
-def get_UffAssTok(piano: Piano, qr: QualificaRichiesta):
-    so_list = SoggettoOperante.objects.filter(piano=piano, qualifica_ufficio__qualifica__in=qr.qualifiche())
+def get_UffAssTok(piano: Piano, qualifiche):
+    so_list = SoggettoOperante.objects.filter(piano=piano, qualifica_ufficio__qualifica__in=qualifiche)
     uffici = [so.qualifica_ufficio.ufficio for so in so_list]
 
     qu_list = [so.qualifica_ufficio for so in so_list]
     ass_list = Assegnatario.objects.filter(qualifica_ufficio__in=qu_list)
     utenti_assegnatari = [ass.utente for ass in ass_list]
 
-    deleghe = Delega.objects.filter(qualifica__in=qr.qualifiche(), delegante__in=so_list)
+    deleghe = Delega.objects.filter(qualifica__in=qualifiche, delegante__in=so_list)
     token_validi = [d.token for d in deleghe if d.token.user and not d.token.is_expired()]
     # utenti_delegati = [t.user for t in token_validi]
 

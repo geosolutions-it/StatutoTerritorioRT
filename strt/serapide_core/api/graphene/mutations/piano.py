@@ -28,7 +28,8 @@ from serapide_core.api.piano_utils import (
     ensure_fase,
     chiudi_azione,
     crea_azione,
-    chiudi_pendenti, get_now,
+    chiudi_pendenti,
+    get_now,
 )
 
 from strt_users.enums import Profilo
@@ -65,6 +66,7 @@ from serapide_core.modello.enums import (
     TipologiaVAS,
     TipologiaAzione,
     TipologiaPiano,
+    TipoMail,
 )
 
 from serapide_core.api.graphene import (
@@ -135,7 +137,7 @@ def check_and_promote(piano:Piano, info):
             sender=Piano,
             user=info.context.user,
             piano=piano,
-            message_type="piano_phase_changed")
+            message_type=TipoMail.piano_phase_changed)
 
         promuovi_piano(_fase, piano)
         return True, []
