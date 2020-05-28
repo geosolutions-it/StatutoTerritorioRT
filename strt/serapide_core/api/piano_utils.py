@@ -78,6 +78,10 @@ def get_scadenza(start_datetime: datetime.datetime, exp: TipoExpire):
     return avvio_scadenza, scadenza
 
 
+def is_scaduta(azione: Azione):
+    return azione.scadenza and azione.scadenza < get_now().date()
+
+
 def chiudi_pendenti(piano: Piano, attesa=True, necessaria=True):
     # - Complete Current Actions
     _now = get_now()

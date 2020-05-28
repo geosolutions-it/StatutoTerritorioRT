@@ -58,7 +58,7 @@ from serapide_core.modello.models import (
     RisorsePubblicazione,
 
 )
-from ...piano_utils import is_executed
+from ...piano_utils import is_executed, is_scaduta
 
 from .. import types
 
@@ -331,6 +331,13 @@ class UploadRisorsaAdozione(UploadBaseBase):
 
             if not auth.can_access_piano(info.context.user, _piano):
                 return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
+
+            if _tipo_file == TipoRisorsa.OSSERVAZIONI_ENTI.value:
+                _az = _piano.getFirstAction(TipologiaAzione.osservazioni_enti)
+                if _az is None:
+                    return GraphQLError('Risorsa inaspettata', code=403)
+                if is_scaduta(_az) or is_executed(_az):
+                    return GraphQLError('Risorsa non più accettabile', code=403)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
