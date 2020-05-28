@@ -24,7 +24,7 @@
                         "name": "ProceduraVASNode"
                     },
                     {
-                        "name": "EnteNode"
+                        "name": "RisorseVASType"
                     },
                     {
                         "name": "ProceduraAvvioNode"
@@ -39,12 +39,6 @@
                         "name": "RisorseAdozioneType"
                     },
                     {
-                        "name": "ProceduraAdozioneVASNode"
-                    },
-                    {
-                        "name": "RisorseAdozioneVASType"
-                    },
-                    {
                         "name": "ProceduraApprovazioneNode"
                     },
                     {
@@ -57,13 +51,7 @@
                         "name": "RisorsePubblicazioneType"
                     },
                     {
-                        "name": "RisorseVASType"
-                    },
-                    {
-                        "name": "ConsultazioneVASNode"
-                    },
-                    {
-                        "name": "SoggettoOperanteNode"
+                        "name": "EnteNode"
                     },
                     {
                         "name": "AzioneNode"
@@ -91,6 +79,15 @@
                     },
                     {
                         "name": "RisorsePianoRevPostCPType"
+                    },
+                    {
+                        "name": "ProceduraAdozioneVASNode"
+                    },
+                    {
+                        "name": "RisorseAdozioneVASType"
+                    },
+                    {
+                        "name": "SoggettoOperanteNode"
                     }
                 ]
             }

@@ -20,7 +20,7 @@ import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE,
     DELETE_RISORSA_ADOZIONE,
-    ADOZIONE_FILE_UPLOAD, TRASMISSIONE_OSSERVAZIONI
+    ADOZIONE_FILE_UPLOAD, CONTRODEDUZIONI
 } from 'schema'
 
 
@@ -35,7 +35,7 @@ const UI = rebuildTooltip()(({
     tipo: tipoDoc = "osservazioni_privati",
     label = "CARICA I FILES DELLE OSSERVAZIONI DEI PRIVATI",
     filterByUser = true,
-    saveMutation = TRASMISSIONE_OSSERVAZIONI}) => {
+    saveMutation = CONTRODEDUZIONI}) => {
         
         const osservazioni =  resources.filter(({node: {tipo, user = {}}}) => tipo === tipoDoc && (!filterByUser || fiscalCode === user.fiscalCode)).map(({node}) => node)
 
@@ -61,14 +61,6 @@ const UI = rebuildTooltip()(({
                         resourceMutation={DELETE_RISORSA_ADOZIONE}
                         variables={{codice: uuid, tipo: tipoDoc }}
                         isLocked={false}/>
-                {/* <h6 className="font-weight-light pt-5 pl-2 pb-1">ELABORATI DEL PIANO</h6>
-                <Elaborati 
-                    tipoPiano={tipoPiano.toLowerCase()} 
-                    resources={resources}
-                    mutation={ADOZIONE_FILE_UPLOAD}
-                    resourceMutation={DELETE_RISORSA_ADOZIONE}
-                    uuid={uuid}
-                           />         */}
                 <div className="align-self-center mt-7">
                     <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={saveMutation} canCommit={osservazioni.length> 0 && !disableSave}></SalvaInvia>
                 </div>

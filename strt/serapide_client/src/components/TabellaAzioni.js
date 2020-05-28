@@ -11,8 +11,9 @@ import { Table } from 'reactstrap'
 import TextWithTooltip from './TextWithTooltip'
 import CampoData from './CampoData'
 
-import {getActionIcon, getActionIconColor} from 'utils'
+import {getActionIcon, getActionIconColor, getDate} from 'utils'
 import {rebuildTooltip} from 'enhancers'
+
 
 const adjustStato = (stato = "", eseguibile) => {
     if(stato.toLowerCase() === "nessuna") {
@@ -36,13 +37,17 @@ export default rebuildTooltip()(({azioni = [], filtroFase = "anagrafica", classN
         </thead>
         <tbody>
             {azioni.filter(({fase = "" }) => (fase ?? "").toLowerCase() === filtroFase).sort(reverseOrder).map(({stato = "", qualificaRichiesta= "", tipologia = "",label = "", eseguibile = false, tooltip = "", data: dataChiusura, scadenza, uuid} = {}) => {
+                let disabled = false;
+                if(tipologia === "osservazioni_enti" && (getDate(scadenza) < getDate(new Date()))) {
+                    disabled = true
+                }
                 let adjustedStato = adjustStato(stato, eseguibile)
                 return (<tr key={uuid}>
-                            <td><i className={`icon-18 material-icons ${getActionIconColor(adjustedStato)}`}>{getActionIcon(adjustedStato)}</i></td>
+                            <td><i className={`icon-18 material-icons ${getActionIconColor(adjustedStato.toUpperCase())}`}>{getActionIcon(adjustedStato.toUpperCase())}</i></td>
                 <td>{tooltip ? (<TextWithTooltip className="size-11" dataTip={tooltip} dataTipDisable={!tooltip} text={label}/>) :<span className="size-11">{label}</span>}</td>
                             <td><span className="size-11">{qualificaRichiesta}</span></td>
                             <CampoData chiusura={dataChiusura} scadenza={scadenza}></CampoData>
-                            <td className={`${adjustedStato !== "nessuna" && eseguibile ? "pointer": ""}`}>{adjustedStato !== "nessuna" && eseguibile && <i className="material-icons text-serapide" onClick={() => onExecute(tipologia, uuid)}>play_circle_filled</i>}</td>
+                            <td className={`${adjustedStato !== "nessuna" && eseguibile && !disabled ? "pointer": ""}`}>{adjustedStato !== "nessuna" && eseguibile && !disabled && <i className="material-icons text-serapide" onClick={() => onExecute(tipologia, uuid)}>play_circle_filled</i>}</td>
                         </tr>)}
                 )}
         </tbody>

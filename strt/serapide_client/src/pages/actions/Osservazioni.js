@@ -14,15 +14,16 @@ import ActionTitle from 'components/ActionTitle'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import Spinner from 'components/Spinner'
 
-import  {showError, formatDate, getCodice} from 'utils'
+import  {showError, formatDate, getCodice, getResourcesByType, ADOZIONE_DOCS} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE,
     DELETE_RISORSA_ADOZIONE,
-    ADOZIONE_FILE_UPLOAD, TRASMISSIONE_OSSERVAZIONI
+    ADOZIONE_FILE_UPLOAD, OSSERVAZIONI_PRIVATI
 } from 'schema'
 
 const UI = rebuildTooltip()(({
+    azione: {scadenza} = {},
     disableSave = false,
     hideSave = false,
     showData = true,
@@ -31,11 +32,11 @@ const UI = rebuildTooltip()(({
     proceduraAdozione: { node: {uuid, dataRicezionePareri, risorse : {edges: resources = []} = {}} = {}},
     utente: {fiscalCode} = {},
     titolo = "Osservazioni Privati",
-    tipo: tipoDoc  = "osservazioni_privati",
+    tipo: tipoDoc  = ADOZIONE_DOCS.OSSERVAZIONI_PRIVATI,
     label = "CARICA I FILES DELLE OSSERVAZIONI DEI PRIVATI",
-    saveMutation = TRASMISSIONE_OSSERVAZIONI}) => {
+    saveMutation = OSSERVAZIONI_PRIVATI}) => {
         
-        const osservazioni =  resources.filter(({node: {tipo, user = {}}}) => tipo === tipoDoc && (!filterByUser || fiscalCode === user.fiscalCode)).map(({node}) => node)
+        const osservazioni =  getResourcesByType(resources,tipoDoc).filter(({user = {}}) => (!filterByUser || fiscalCode === user.fiscalCode))
 
         
         return (
@@ -44,7 +45,7 @@ const UI = rebuildTooltip()(({
                 {showData && (<div className="mt-4 border-bottom-2 pb-2 d-flex">
                         <i className="material-icons text-serapide icon-18 pr-3">event_busy</i> 
                         <div className="d-flex flex-column size-14">
-                            <span>{dataRicezionePareri && formatDate(dataRicezionePareri, "dd MMMM yyyy")}</span>
+                            <span>{scadenza && formatDate(scadenza, "dd MMMM yyyy")}</span>
                             <span>Data entro la quale inviare le osservazioni</span>
                         </div>
                 </div>)}

@@ -48,13 +48,13 @@ export default enhancers( ({risorseAdozione=[], risorseControdeduzioni=[], risor
             </Nav>
             <TabContent activeTab={section}>
                 <TabPane tabId="adozione">
-                    <Elaborati upload={false} resources={risorseAdozione}></Elaborati>
+                    {risorseAdozione.length > 0 ? <Elaborati upload={false} resources={risorseAdozione}></Elaborati> : (<div className="mt-2 py-2">Nessun elaborato presente</div>) }
                 </TabPane>
                 <TabPane tabId="controdedotto">
-                    <Elaborati upload={false} resources={risorseControdeduzioni}></Elaborati>
+                {risorseControdeduzioni.length>0 ? <Elaborati upload={false} resources={risorseControdeduzioni}></Elaborati>  : (<div className="mt-2 py-2">Nessun elaborato presente</div>) }
                 </TabPane>
                 <TabPane tabId="revisionePostCp">
-                    <Elaborati upload={false} resources={risorsePostCP}></Elaborati>
+                    {risorsePostCP.length > 0 ? <Elaborati upload={false} resources={risorsePostCP}></Elaborati> : (<div className="mt-2 py-2">Nessun elaborato presente</div>) }
                 </TabPane>
             </TabContent>
             </React.Fragment>

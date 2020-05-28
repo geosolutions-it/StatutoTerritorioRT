@@ -102,7 +102,7 @@ const UI = enhancers(({
                 <div className="col-12">{garantePec}</div>
                 </div>)}
                 {!!dataScadenzaRisposta && <div className="col-12 d-flex align-items-center pt-4">TERMINI SCADENZA PER LA PROPOSTA{!!dataScadenzaRisposta && (<span className="p-2 ml-4 border bg-serapide"><i className="material-icons pr-1">date_range</i><span style={{verticalAlign: 'super'}}>{formatDate(dataScadenzaRisposta)}</span></span>)}</div>}
-                <Si soggettiOperanti={soggettiOperanti}/>
+                <Si useIcon soggettiOperanti={soggettiOperanti}/>
             </div>    
             <div className="border-serapide border-top w-100 my-4"></div>   
             
@@ -200,7 +200,7 @@ const UI = enhancers(({
 
 
 export default ({back, piano}) => (
-    <Query query={GET_AVVIO_PAGE} variables={{codice: piano.codice}} onError={showError}>
+    <Query query={GET_AVVIO_PAGE} variables={{codice: piano.codice}} onError={showError} fetchPolicy='network-only'>
         {({loading, data: {procedureAvvio: {edges: [avvio] = []} = {}, procedureVas: {edges: [vas] = []} = {}} = {}}) => {
             return loading ? <Spinner/> : <UI procedureAvvio={avvio} vas={vas} piano={piano}/>
             }

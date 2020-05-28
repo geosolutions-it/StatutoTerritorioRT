@@ -10,18 +10,20 @@ import {Query} from 'react-apollo'
 import {Nav, NavItem,NavLink, TabContent,TabPane} from 'reactstrap'
 
 import Risorsa from 'components/Resource'
-
+import PianoSubPageTitle from 'components/PianoSubPageTitle';
+import PianoPageContainer from 'components/PianoPageContainer';
+import {View as Si} from 'components/SoggettiIstituzionali';
+import Spinner from 'components/Spinner'
 import Elaborati from 'components/ElaboratiAdozione'
 
 import classnames from 'classnames'
 import {withControllableState} from 'enhancers'
-import {formatDate, showError, getNominativo, filterAndGroupResourcesByUser, map, isEmpty} from 'utils'
+import {formatDate, showError, getNominativo,
+    filterAndGroupResourcesByUser, map, isEmpty,
+    getResourceByType, getResourcesByType, VAS_DOCS,
+    ADOZIONE_DOCS} from 'utils'
 
 import {GET_ADOZIONE_PAGE} from 'schema'
-import PianoSubPageTitle from '../components/PianoSubPageTitle';
-import PianoPageContainer from '../components/PianoPageContainer';
-import {View as Si} from '../components/SoggettiIstituzionali';
-
 
 
 
@@ -38,20 +40,27 @@ const UI = enhancers(({
     pianoContro: {node: {
             risorse: {edges: risorseControdeduzioni= []} ={} } = {}} = {},
     pianoRev: { node: {risorse : {edges: risorsePostCP = []} = {}} = {}} = {},
+    vasAdozione: { node: { risorse : {edges: risorseVasAdozione = []} = {}} = {}} = {},
     vas: { node: { risorse : {edges: risorseVas = []} = {}} = {}} = {},
     piano: {
         soggettiOperanti = []
     } = {}
     , toggleSection, section} = {}) => {
+    
         
-    const controdeduzioni =  risorseAdozione.filter(({node: {tipo, user = {}}}) => tipo === "controdeduzioni").map(({node}) => node)    
-    const [{node: deliberaAdozione} = {}]= risorseAdozione.filter(({node: {tipo}}) => tipo === "delibera_adozione")
-    const osservazioniEnti =  filterAndGroupResourcesByUser(risorseAdozione, "osservazioni_enti")
-    const pareriSca = filterAndGroupResourcesByUser(risorseVas, "parere_sca")
-    const [{node: parereMotivato} = {}] = risorseVas.filter(({node: {tipo}}) => tipo === "parere_motivato")
-    const [{node: sintesi} = {}] = risorseVas.filter(({node: {tipo}}) => tipo === 'documento_sintesi')
-    const [{node: rapporto} = {}] = risorseVas.filter(({node: {tipo}}) => tipo === 'rapporto_ambientale')
-    const elaboratiConferenza =  risorseAdozione.filter(({node: {tipo}}) => tipo === 'elaborati_conferenza_paesaggistica').map(({node}) => node)
+    const deliberaAdozione = getResourceByType(risorseAdozione, ADOZIONE_DOCS.DELIBERA)
+    const osservazioniEnti =  filterAndGroupResourcesByUser(risorseAdozione, ADOZIONE_DOCS.OSSERVAZIONI_ENTI)
+    const osservazioniPrivati = getResourcesByType(risorseAdozione, ADOZIONE_DOCS.OSSERVAZIONI_PRIVATI)
+    const controdeduzioni = getResourcesByType(risorseAdozione,ADOZIONE_DOCS.CONTRODEDUZIONI)
+    
+    const pareriSca = filterAndGroupResourcesByUser(risorseVasAdozione, VAS_DOCS.PAR_SCA_ADOZIONE)
+   
+    const parereMotivato = getResourceByType(risorseVasAdozione, VAS_DOCS.PARERE_MOTIVATO)
+    const sintesi = getResourceByType(risorseVasAdozione, VAS_DOCS.DOCUMENTO_DI_SINTESI)
+    const rapporto = getResourceByType(risorseVas, VAS_DOCS.RAPPORTO_AMBIENTALE) 
+    const sintesiNon = getResourceByType(risorseVas, VAS_DOCS.SINTESI_NON_TECNICA)
+    
+    const elaboratiConferenza =  getResourcesByType(risorseAdozione, 'elaborati_conferenza_paesaggistica')
     
     return (
         <PianoPageContainer>
@@ -59,29 +68,37 @@ const UI = enhancers(({
                 
             
             <div className="row pt-5">
-                <div className="col-12 py-2">DELIBERA DEL {formatDate(dataDeliberaAdozione)}</div>
-                <div className="col-12 py-2">
+                {dataDeliberaAdozione ? (
+                <React.Fragment>
+                    <div className="col-12 py-2">DELIBERA DEL {formatDate(dataDeliberaAdozione)}</div>
+                    <div className="col-12 py-2">
                         <Risorsa fileSize={false} useLabel resource={deliberaAdozione} isLocked={true}/> 
-                        </div>
+                    </div>
+                </React.Fragment>): (
+                    <div className="col-12 py-2">DELIBERA ADOZIONE NON CARICATA NEL SISTEMA</div>)}
                 <div className="col-12 pt-4">
                     <Elaborati upload={false} risorseAdozione={risorseAdozione} risorseControdeduzioni={risorseControdeduzioni} risorsePostCP={risorsePostCP}></Elaborati>
                 </div>
                 <div className="border-top w-100 my-5"></div>  
-                <div className="col-12 pt-3">DESTINATARI</div>
-                <Si soggettiOperanti={soggettiOperanti}/>
-                <div className="border-top w-100 my-4"></div>
-                <div className="col-4 pb-2">PUBBLICAZIONE B.U.R.T.</div>
-                <div className="col-5 d-flex">
-                    <i className="material-icons text-serapide">link</i>
-                    <a href={pubblicazioneBurtUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{pubblicazioneBurtUrl}</a>    
-                </div>
-                <div className="col-2">{formatDate(pubblicazioneBurtData)}</div>
+                <Si useIcon soggettiOperanti={soggettiOperanti}/>
+                <div className="border-top w-100 my-5"></div>
+                {pubblicazioneBurtUrl && pubblicazioneBurtData ? (
+                <React.Fragment>
+                    <div className="col-4 pb-2">PUBBLICAZIONE B.U.R.T. N°{pubblicazioneBurtBollettino}</div>
+                    <div className="col-5 d-flex">
+                        <i className="material-icons text-serapide">link</i>
+                        <a href={pubblicazioneBurtUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{pubblicazioneBurtUrl}</a>    
+                    </div>
+                    <div className="col-2">{formatDate(pubblicazioneBurtData)}</div>
+                </React.Fragment>) : (<div className="col-12 py-2">ADOZIONE NON ANCORA PUBBLICATA SUL B.U.R.T</div>)}
+                {pubblicazioneSitoUrl ? (<React.Fragment>
                 <div className="col-4">PUBBLICAZIONE SITO WEB</div>
                 <div className="col-5 d-flex">
                     <i className="material-icons text-serapide">link</i>
                     <a href={pubblicazioneSitoUrl} target="_blank" rel="noopener noreferrer" className="pl-1 text-secondary">{pubblicazioneSitoUrl}</a>
                 </div>
-                {/* <div className="col-2">{formatDate(pubblicazioneSitoData)}</div> */}
+                </React.Fragment>): (<div className="col-12 py-2">ADOZIONE NON ANCORA PUBBLICATA SUL SITO</div>)}
+                
                 <div className="border-serapide border-top w-100 my-4"></div>
             </div>
             <Nav tabs>
@@ -114,23 +131,25 @@ const UI = enhancers(({
                         <div className="col-auto pt-4">OSSERVAZIONI ENTI</div>
                         <div className="col-12 pt-1">
                         {!isEmpty(osservazioniEnti) ? map(osservazioniEnti, (u) => (
-                            <div key={u[0].user.fiscalCode} className="mb-4">
+                            <div key={u[0].user.fiscalCode} className="col-12 mb-4">
                                 <div className="d-flex text-serapide"><i className="material-icons">perm_identity</i><span className="pl-2">{getNominativo(u[0].user)}</span></div>
                                 {u.map(parere => (<Risorsa key={parere.uuid} className="border-0 mt-2" icon="attach_file" resource={parere}></Risorsa>))}
                             </div>)) : ( <div className="col-12 samll">Nessuna Osservazione </div>)}
                         </div>
-                        <div className="col-auto pt-4">OSSERVAZIONI PRIVATI</div>
-                        {risorseAdozione.filter(({node: {tipo}}) => tipo === "osservazioni_privati").map(({node: r}) => (
+                        <div className="col-12 pt-4">OSSERVAZIONI PRIVATI
+                        {osservazioniPrivati.length > 0 ? osservazioniPrivati.map((r) => (
                             <div  key={r.uuid} className="col-12">
                             <Risorsa className="border-0 mt-2" resource={r}/>
                             </div>
-                        ) )}
-                        <div className="col-auto pt-4">CONTRODEDUZIONI</div>
+                        ) ) : ( <div className="col-12 samll">Nessuna Osservazione </div>)}
+                        </div>
+                        <div className="col-12 p-4">CONTRODEDUZIONI
                         {controdeduzioni.map((r) => (
                             <div  key={r.uuid} className="col-12">
                             <Risorsa className="border-0 mt-2" resource={r}/>
                             </div>
                         ))}
+                        </div>
                     </div>)}
                 </TabPane>
                 <TabPane tabId="vas">
@@ -155,6 +174,10 @@ const UI = enhancers(({
                         <div className="col-auto pt-4">RAPPORTO AMBIENTALE</div>
                         <div className="col-12 pt-1">
                         {rapporto ? <Risorsa className="border-0 mt-2" fileSize={false} useLabel resource={rapporto} isLocked={true}/> : ( <div className="col-12 samll">Nessun rapporto </div>)}
+                        </div>
+                        <div className="col-auto pt-4">SINTESI NON TECNICA</div>
+                        <div className="col-12 pt-1">
+                        {rapporto ? <Risorsa className="border-0 mt-2" fileSize={false} useLabel resource={sintesiNon} isLocked={true}/> : ( <div className="col-12 samll">Nessun sintesi </div>)}
                         </div>
                     </div>
 
@@ -185,20 +208,14 @@ const UI = enhancers(({
 export default ({piano}) => (
     <Query query={GET_ADOZIONE_PAGE} variables={{codice: piano.codice}} onError={showError}>
         {({loading, data: {
-            pianoControdedotto: {edges: [pianoContro] = []} = {},
-            pianoRevPostCp: {edges: [pianoRev] = []} = {},
-            procedureAdozione: {edges: [adozione]= []} = {},
-            procedureAdozioneVas: {edges: [adozioneVas] = []} = {}}
+            pianoControdedotto: {edges: [pianoContro = {}] = []} = {},
+            pianoRevPostCp: {edges: [pianoRev = {}] = []} = {},
+            procedureAdozione: {edges: [adozione = {}]= []} = {},
+            procedureAdozioneVas: {edges: [adozioneVas = {}] = []} = {},
+            procedureVas: {edges: [vas = {}] = []} = {}} = {}
             }) => {
-            if(loading) {
-                return (
-                    <div className="flex-fill d-flex justify-content-center">
-                        <div className="spinner-grow " role="status">
-                            <span className="sr-only">Loading...</span>
-                        </div>
-                    </div>)
+                return loading ? (<Spinner/>) : (
+                <UI vas={vas} vasAdozione={adozioneVas} proceduraAdozione={adozione} pianoRev={pianoRev} pianoContro={pianoContro} piano={piano}/>)
             }
-            return (
-                <UI vas={adozioneVas} proceduraAdozione={adozione} pianoRev={pianoRev} pianoContro={pianoContro} piano={piano}/>)}
         }
     </Query>)

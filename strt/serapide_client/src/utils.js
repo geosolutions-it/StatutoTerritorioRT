@@ -151,8 +151,19 @@ export const VAS_DOCS = {
     DOC_PRE_VAS: 'documento_preliminare_vas',
     RAPPORTO_AMBIENTALE: 'rapporto_ambientale',
     SINTESI_NON_TECNICA: 'sintesi_non_tecnica',
+    PAR_SCA_ADOZIONE: 'parere_adozione_sca',
+    PARERE_MOTIVATO: 'parere_mtivato',
+    DOCUMENTO_DI_SINTESI: 'documento_sintesi',
+
 }
 
+export const ADOZIONE_DOCS = {
+    DELIBERA: 'delibera_adozione',
+    CONTRODEDUZIONI: 'controdeduzioni',
+    OSSERVAZIONI_ENTI: 'osservazioni_enti',
+    OSSERVAZIONI_PRIVATI: 'osservazioni_privati'
+
+}
 
 export const docByVASType = {
     [VAS_TYPES.VERIFICA]: VAS_DOCS.DOC_PRE_VER_VAS,

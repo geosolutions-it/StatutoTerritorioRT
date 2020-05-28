@@ -94,14 +94,6 @@ render () {
                                     {eseguibile ? (<El startPolling={startPolling} stopPolling={stopPolling} piano={piano} back={goBack}  qualificaRichiesta={qualificaRichiesta} utente={utente} azione={azione}/>) : (<Redirect to={url} />)}
                                 </Route>)
                     })}
-                    {/* {map(components, (El, key) => {
-                        const tipo = snakeCase(key)
-                        
-                        return El && (
-                                <Route key={key} path={`${path}/${tipo}`} >
-                                    <El piano={piano} back={goBack} utente={utente} scadenza={scadenza}/>
-                                </Route>)
-                    })} */}
                     { action && (
                     <Route path={path}>
                         <NotAvailable/>

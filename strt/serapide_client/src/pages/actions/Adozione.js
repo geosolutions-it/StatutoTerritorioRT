@@ -21,7 +21,7 @@ import Input from 'components/EnhancedInput'
 import Elaborati from 'components/ElaboratiPiano'
 import {List as Si} from 'components/SoggettiIstituzionali'
 
-import  {showError, getResourceByType, getInputFactory, getCodice} from 'utils'
+import  {showError, getResourceByType, getInputFactory, getCodice, VAS_DOCS, ADOZIONE_DOCS, AVVIO_DOCS} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE, UPDATE_ADOZIONE,
@@ -68,9 +68,9 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
         back}) => {
 
             
-            const deliberaAdozione = getResourceByType(edges, "delibera_adozione")
-            const norme = getResourceByType(resources, "norme_tecniche_attuazione")
-            
+            const deliberaAdozione = getResourceByType(edges, ADOZIONE_DOCS.DELIBERA)
+            const norme = getResourceByType(resources, AVVIO_DOCS.NORME_TECNICHE_ATTUAZIONE)
+            const rapportoA = getResourceByType(resVas, VAS_DOCS.RAPPORTO_AMBIENTALE)
             return (<React.Fragment>
                 <ActionTitle>
                    Trasmissione Adozione
@@ -78,13 +78,8 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                 <ActionParagraphTitle>RIFERIMENTI DOCUMENTALI</ActionParagraphTitle>
                 <ActionSubParagraphTitle>NORME TECNICHE DI ATTUAZIONE</ActionSubParagraphTitle>
                 <Resource iconSize="icon-15" fontSize="size-11" useLabel fileSize={false} className="border-0 my-3" icon="attach_file" resource={norme}/>
-                <ActionSubParagraphTitle>COMPILAZIONE RAPPORTO AMBIENTALE</ActionSubParagraphTitle>
-                <div className="my-3 row d-flex align-items-center">
-                    <div className="col-1 size-12">URL </div>
-                    <div className="col-11 ">
-                        <Input className="size-10"  placeholder="copiare la URL in questo campo" getInput={getInputPiano(codice, "compilazioneRapportoAmbientaleUrl")} mutation={UPDATE_PIANO} disabled={false}  onChange={undefined} value={compilazioneRapportoAmbientaleUrl} type="text" />
-                    </div>
-                </div>
+                <ActionSubParagraphTitle>RAPPORTO AMBIENTALE</ActionSubParagraphTitle>
+                <Resource iconSize="icon-15" fontSize="size-11" useLabel fileSize={false} className="border-0 my-3" icon="attach_file" resource={rapportoA}/>
                 <ActionSubParagraphTitle>CONFORMAZIONE AL PIT-PPR</ActionSubParagraphTitle>
                 <div className="my-3 row d-flex align-items-center">
                     <div className="col-1 size-12">URL </div>
@@ -130,7 +125,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                 <div className="w-100 border-top mt-3"></div>                
                 <div className="align-self-center mt-7">
                     <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_ADOZIONE} 
-                        canCommit={ deliberaAdozione && dataDeliberaAdozione && compilazioneRapportoAmbientaleUrl && conformazionePitPprUrl && monitoraggioUrbanisticoUrl}></SalvaInvia>
+                        canCommit={ deliberaAdozione && dataDeliberaAdozione && conformazionePitPprUrl && monitoraggioUrbanisticoUrl}></SalvaInvia>
                 </div>
             </React.Fragment>)})
 

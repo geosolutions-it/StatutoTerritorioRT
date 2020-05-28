@@ -41,7 +41,7 @@ const UI = ({
         return (
             <React.Fragment>
                 <ActionTitle>{title}</ActionTitle>
-                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={avvioScadenza}/>
+                {avvioScadenza ? <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={avvioScadenza}/> : <span className="pb-3"></span>}
                 <Resource 
                 iconSize="icon-15" fontSize="size-11" vertical useLabel
                 className="border-0 mt-2" icon="attach_file" resource={documento}></Resource>
@@ -49,7 +49,7 @@ const UI = ({
                         <i className="material-icons text-serapide pr-3 icon-15">event_busy</i> 
                         <div className="d-flex flex-column size-11">
                             <span>{scadenza && formatDate(scadenza, "dd MMMM yyyy")}</span>
-                            <span>Data entro la quale inviare i pareri</span>
+                            <span>{scadenza ? "Data entro la quale inviare i pareri" : "Nessuna data entro la quale inviare i pareri"}</span>
                         </div>
                 </div>
                 <ActionParagraphTitle fontWeight="font-weight-light">{label}</ActionParagraphTitle>

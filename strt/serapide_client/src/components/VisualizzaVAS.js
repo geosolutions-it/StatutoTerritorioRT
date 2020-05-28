@@ -14,7 +14,7 @@ import Spinner from 'components/Spinner'
 
 import  {rebuildTooltip} from 'enhancers'
 import {map, isEmpty}  from 'lodash'
-import {getNominativo, showError, VAS_DOCS, docByVASType, filterAndGroupResourcesByUser, VAS_TYPES} from 'utils'
+import {getNominativo, showError, VAS_DOCS, docByVASType, filterAndGroupResourcesByUser, VAS_TYPES, getResourceByType, getResourcesByType} from 'utils'
 
 import { GET_VAS} from 'schema'
 
@@ -26,23 +26,21 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
     const {node: {tipologia, dataAssoggettamento, assoggettamento, piano: {soggettiOperanti = [] } = {}, risorse : {edges: resources = []} = {}} = {}} = Vas
     
     
-    const {node: docInizialeVAS} = resources.filter(({node: n}) => n.tipo === docByVASType[tipologia]).pop() || {};
-
-    
-    const {node: docProceduraVAS} = resources.filter(({node: n}) => n.tipo === VAS_DOCS.DOC_PRE_VAS).pop() || {};
+    const docInizialeVAS = getResourceByType(resources, docByVASType[tipologia])
+    const docProceduraVAS = getResourceByType(resources, VAS_DOCS.DOC_PRE_VAS)
 
     
     const acs = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "AC").map(({qualificaUfficio} = {}) => (qualificaUfficio))
     const scas = soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => qualifica === "SCA").map(({qualificaUfficio} = {}) => (qualificaUfficio))
     
     const pareriVerificaVAS =  filterAndGroupResourcesByUser( resources, VAS_DOCS.PAR_VER_VAS);
-    const provvedimentoVerifica =  resources.filter(({node: {tipo}}) => tipo === VAS_DOCS.PROV_VER_VAS).map(({node}) => node).shift()
+    const provvedimentoVerifica =  getResourceByType(resources, VAS_DOCS.PROV_VER_VAS)
     
     const pareriSCA = filterAndGroupResourcesByUser( resources, VAS_DOCS.PAR_SCA)
-    const pareriAC = resources.filter(({node: {tipo}}) => tipo === VAS_DOCS.PAR_AC).map(({node}) => node)
+    const pareriAC = getResourcesByType(resources, VAS_DOCS.PAR_AC)
     
-    const rapporto = resources.filter(({node: {tipo}}) => tipo === VAS_DOCS.RAPPORTO_AMBIENTALE).map(({node}) => node).shift()
-    const sintesi = resources.filter(({node: {tipo}}) => tipo === VAS_DOCS.SINTESI_NON_TECNICA).map(({node}) => node).shift()
+    const rapporto = getResourceByType(resources, VAS_DOCS.RAPPORTO_AMBIENTALE)
+    const sintesi = getResourceByType(resources, VAS_DOCS.SINTESI_NON_TECNICA)
 
     return(
     <React.Fragment>
@@ -59,8 +57,11 @@ const UI = rebuildTooltip({onUpdate: false})(({codice, consultazioneSCA = {}, ca
             <span >PROCEDURA VAS FASE PRELIMINARE art. 23</span>
                 <div className="pl-2 pr-2">
                     <div className="mt-4 mb-4">
-                        <TextWithTooltip className="mb-2 text-uppercase" dataTip={docProceduraVAS.tooltip} text={docProceduraVAS.label}></TextWithTooltip>  
-                        <Resource isLocked className="mt-2" icon="attach_file" resource={docProceduraVAS}/>
+                        {docProceduraVAS ? (
+                            <React.Fragment>
+                                <TextWithTooltip className="mb-2 text-uppercase" dataTip={docProceduraVAS.tooltip} text={docProceduraVAS.label}></TextWithTooltip>  
+                                <Resource isLocked className="mt-2" icon="attach_file" resource={docProceduraVAS}/>
+                            </React.Fragment>) : <span className="mb-2 text-uppercase">Nessun documento presente</span>  }
                         {!isEmpty(pareriSCA) && (
                             <div className="mt-4">
                                 <div className="mb-2">PARERI VAS SCA</div>

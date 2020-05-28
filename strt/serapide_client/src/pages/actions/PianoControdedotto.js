@@ -57,18 +57,12 @@ const UI = ({
                 <div className="w-100 border-top mt-3"></div> 
 
                 <div className="row d-flex align-items-center pt-5">
-                        <EnhancedSwitch className="switch-small col-2 offset-1" value={true} mutation={UPDATE_ADOZIONE} getInput={getInput(uuid, "richiestaConferenzaPaesaggistica")} checked={richiestaConferenzaPaesaggistica}/>
+                        <EnhancedSwitch ignoreChecked value={!richiestaConferenzaPaesaggistica} className="switch-small col-2 offset-1" mutation={UPDATE_ADOZIONE} getInput={getInput(uuid, "richiestaConferenzaPaesaggistica")} checked={richiestaConferenzaPaesaggistica}/>
                     <div className="col-9 bg-serapide mb-2"><div className="px-1 py-1 size-14 ">Richiesta Conferenza Paseaggistica</div></div>
                     
                     <div className="col-11 offset-1 text-justify size-13">In base all'ART. 21 - Accordo Regione Toscana-MIBACT
                     il Comune richiede a Regione Toscana di convocare la Conferenza Paesaggistica prima dell'Approvazione del Piano.
-                    della data di pubblicazione su B.U.R.T. e sul sito web</div>
-                </div>
-                <div className="row d-flex align-items-center pt-4">
-                    <EnhancedSwitch className="switch-small col-2 offset-1" value={false} mutation={UPDATE_ADOZIONE} getInput={getInput(uuid, "richiestaConferenzaPaesaggistica")} checked={!richiestaConferenzaPaesaggistica}/>
-                    <div className="col-9 bg-serapide mb-2 "><div className="pl-1 py-1 size-14">Approvazione</div></div>
-                    
-                    <div className="col-11 offset-1 text-justify size-13">Il Comune richiede direttamente l'Approvazione del Piano.</div>
+                    Dalla data di pubblicazione su B.U.R.T. e sul sito web</div>
                 </div>
                 
                 <div className="w-100 border-top mt-3"></div> 

@@ -6,19 +6,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import {Query} from 'react-apollo'
 
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
-import Spinner from 'components/Spinner'
+
 import FileUpload from 'components/UploadSingleFile'
 
 import {rebuildTooltip} from 'enhancers'
-import {showError, getCodice} from 'utils'
+import {AVVIO_DOCS, getResourceByType} from 'utils'
 
 import {
-    GET_VAS,
+    
     FILE_UPLOAD,
     DELETE_RISORSA,
     FORMAZIONE_PIANO
@@ -27,13 +26,12 @@ import {
 
 
 const UI = rebuildTooltip()(({ back, 
-            piano: {codice, redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl, risorse : {edges: resources = []}} = {}
+            piano: {codice, risorse : {edges: resources = []}} = {}
             }) => {
-            const norme = resources.filter(({node: {tipo, user = {}}}) => tipo === 'norme_tecniche_attuazione').map(({node}) => node).shift()
+            const norme = getResourceByType(resources, AVVIO_DOCS.NORME_TECNICHE_ATTUAZIONE)
         return (
             <React.Fragment>
-                <ActionTitle>Formazione del Piano</ActionTitle>                
-                {/* <ActionParagraphTitle>Per la redazione della Disciplina del Piano è suggerito l'utilizzo del software "Redazione Norme"</ActionParagraphTitle> */}
+                <ActionTitle>Formazione del Piano</ActionTitle>
                 <ActionSubParagraphTitle>Per la redazione della Disciplina del Piano è suggerito l'utilizzo del software "Redazione Norme"</ActionSubParagraphTitle>
                 <div className="action-uploader py-1 mt-3 align-self-start border-bottom">
                 <FileUpload 
@@ -51,13 +49,4 @@ const UI = rebuildTooltip()(({ back,
             </React.Fragment>)
     })
 
-export default (props) => (
-        <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {modello: {edges: [vas]= []} = {}}}) => {
-                if(loading) {
-                    return <Spinner/>
-                }
-                return (
-                    <UI {...props} vas={vas} />)}
-            }
-        </Query>)
+export default (props) => (<UI {...props}/>)

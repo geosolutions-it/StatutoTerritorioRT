@@ -12,6 +12,7 @@ import {EnhancedSwitch} from 'components/Switch'
 import SalvaInvia from 'components/SalvaInvia'
 import ActionTitle from 'components/ActionTitle'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
+import ActionSubParagraphTitle from 'components/ActionSubParagraphTitle'
 import Spinner from 'components/Spinner'
 
 import  {showError, getInputFactory, getCodice} from 'utils'
@@ -19,7 +20,7 @@ import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE,
     UPDATE_ADOZIONE,
-    TRASMISSIONE_OSSERVAZIONI
+    OSSERVAZIONI_REGIONE
 } from 'schema'
 
 const getInput = getInputFactory("proceduraAdozione")
@@ -42,7 +43,8 @@ const UI = rebuildTooltip()(({
                         Nulla a nisl metus. In vel sapien vel lacus finibus malesuada eget et mi.
                         Praesent scelerisque dapibus tortor, a iaculis diam eleifend ac.  `}
                 </div>
-                <div className="mt-3 row d-flex border-bottom">
+                <ActionSubParagraphTitle>CONFORMAZIONE AL PIT</ActionSubParagraphTitle>
+                <div className="mt-2 pb-2 row d-flex border-bottom">
                     <div className="col-12 align-items-center d-flex">
                         <i className="material-icons icon-15 text-serapide">link</i><a href={conformazionePitPprUrl} target="_balnk" className="pl-1 text-serapide size-12  pointer">{conformazionePitPprUrl}</a>
                     </div>
@@ -64,7 +66,7 @@ const UI = rebuildTooltip()(({
                 mutation={UPDATE_ADOZIONE} getInput={getInput(uuid, "osservazioniConcluse")}></EnhancedSwitch>
                 
                 <div className="align-self-center mt-7">
-                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={TRASMISSIONE_OSSERVAZIONI} canCommit={osservazioniConcluse}></SalvaInvia>
+                    <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={OSSERVAZIONI_REGIONE} canCommit={osservazioniConcluse}></SalvaInvia>
                 </div>
             </React.Fragment>)
     })

@@ -30,7 +30,7 @@ import {GET_VAS,
 const UI = ({
     back, 
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
-    scadenza,
+    azione: {scadenza, avvioScadenza},
     piano: {soggettiOperanti = [], codice} = {},
     saveMutation = TRASMISSIONE_DPV_VAS}) => {
         
@@ -40,7 +40,7 @@ const UI = ({
         return (
             <React.Fragment>
                 <ActionTitle>Trasmissione Documento Preliminare Verifica VAS</ActionTitle>
-                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={scadenza && daysSub(scadenza, 30)}/>
+                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={avvioScadenza}/>
                 <Resource 
                 iconSize="icon-15" fontSize="size-11" vertical useLabel
                 className="border-0 mt-2" icon="attach_file" resource={dpvevass}></Resource>

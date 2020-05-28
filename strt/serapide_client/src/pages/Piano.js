@@ -20,6 +20,7 @@ import Pubblicazione from './Pubblicazione'
 import Injector from 'components/Injector'
 import SideBar from 'components/SideBarMenu'
 import StatoProgress from 'components/StatoProgress'
+import Spinner from 'components/Spinner'
 
 import {getEnteLabel, getPianoLabel, pollingInterval} from "utils"
 import {GET_PIANI} from "schema"
@@ -103,13 +104,7 @@ export default ({match: {url, path, params: {code} = {}} = {}, history, ...props
     <Query query={GET_PIANI} pollInterval={pollingInterval} variables={{codice: code}}>
         {({loading, data: {piani: {edges: [{node: piano} = {}] = []} = {}} = {}, error, networkStatus, ...queryProps}) => {
             if(loading && networkStatus !== 6){
-                return (
-                        <div className="d-flex justify-content-center">
-                            <div className="spinner-grow " role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>
-                    )
+                return <Spinner/>
             } else if(!piano) {
                 toast.error(`Impossibile trovare il piano: ${code}`,  {autoClose: true, onClose: () => (history.back())})
                 return <div></div>

@@ -188,7 +188,16 @@ query AdozioneVas($codice: String!){
           risorse(archiviata: false) {...Risorse}
     }
   }
-}}
+},
+ modelloVas: procedureVas(piano_Codice: $codice) {
+        edges{
+          node{
+            risorse(archiviata: false) {...Risorse}
+            }
+            
+        }
+    }
+}
 ${FR.RISORSE}
 `
 
@@ -259,6 +268,15 @@ query RisorsePaginaAdozione($codice: String!){
             risorse(archiviata: false) {...Risorse}
         }
       }
+    },
+  procedureVas(piano_Codice: $codice) {
+        edges{
+          node{
+            uuid
+            risorse(archiviata: false) {...Risorse}
+            }
+            
+        }
     }
 }
 ${FR.ADOZIONE}

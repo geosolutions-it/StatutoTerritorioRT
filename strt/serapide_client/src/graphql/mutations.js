@@ -113,7 +113,7 @@ ${FR.VAS}
 /*
   In procedimento ordinario VAS
 */
-export const TRASMISSIONE_PRERI_SCA = gql`
+export const TRASMISSIONE_PARERI_SCA = gql`
 mutation TrasmissionePareriSCA($codice: String!) {
   trasmissionePareriSca(uuid: $codice) {
         vasAggiornata {
@@ -127,7 +127,7 @@ mutation TrasmissionePareriSCA($codice: String!) {
 ${FR.AZIONI_PIANO}
 ${FR.VAS}
 `
-export const TRASMISSIONE_PRERI_AC = gql`
+export const TRASMISSIONE_PARERI_AC = gql`
 mutation TrasmissionePareriAC($codice: String!) {
   trasmissionePareriAc(uuid: $codice) {
         vasAggiornata {
@@ -208,34 +208,6 @@ mutation TrasmissioneDpvVAS($uuid: String!) {
 ${FR.AZIONI_PIANO}
 `
 
-
-// export const CREA_CONSULTAZIONE_VAS = gql`
-// mutation CreaConsultazione($input: CreateConsultazioneVASInput!){
-//     createConsultazioneVas(input: $input){
-//         nuovaConsultazioneVas{     
-//             ...ConsultazioneVAS
-//         }
-//     }
-// }
-// ${FR.CONSULTAZIONE_VAS}
-// `
-
-// export const AVVIO_CONSULTAZIONE_VAS = gql`
-// mutation AvvioConsultazioniVAS($codice: String!) {
-//     avvioConsultazioniVas(uuid: $codice) {
-//         errors
-//         consultazioneVasAggiornata {
-//             proceduraVas{
-//               piano{
-//                 ...AzioniPiano
-//               }
-//             }
-//         }
-//     }
-// }
-// ${FR.AZIONI_PIANO}
-// `
-
 export const INVIO_DOC_PRELIMINARE = gql`
 mutation InvioDocPreliminare($codice: String!) {
     invioDocPreliminare(uuid: $codice) {
@@ -309,9 +281,9 @@ mutation PubblicazioneBURT($codice: String!){
 ${FR.AZIONI_PIANO}
 `
 
-export const TRASMISSIONE_OSSERVAZIONI = gql`
-mutation TrasmissioneOsservazioni($codice: String!){
-  trasmissioneOsservazioni(uuid: $codice){
+export const OSSERVAZIONI_PRIVATI = gql`
+mutation OsservazioniPrivati($codice: String!){
+  osservazioniPrivati(uuid: $codice){
       errors
         adozioneAggiornata {
               piano{
@@ -322,6 +294,21 @@ mutation TrasmissioneOsservazioni($codice: String!){
 }
 ${FR.AZIONI_PIANO}
 `
+export const OSSERVAZIONI_REGIONE = gql`
+mutation OsservazioniRegione($codice: String!){
+  osservazioniRegione(uuid: $codice){
+      errors
+        adozioneAggiornata {
+              piano{
+                ...AzioniPiano
+              }
+        }
+  }
+}
+${FR.AZIONI_PIANO}
+`
+
+
 
 export const ESITO_CONFERENZA_PAESAGGISTICA = gql`
 mutation EsitoConferenzaPaesaggistica($codice: String!){

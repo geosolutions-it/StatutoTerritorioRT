@@ -15,7 +15,7 @@ import RichiestaComune from 'components/RichiestaComune'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import Spinner from 'components/Spinner'
 
-import  {showError, formatDate, daysSub, getCodice} from 'utils'
+import  {showError, formatDate, getCodice, getResourcesByType, VAS_DOCS} from 'utils'
 
 import {GET_ADOZIONE_VAS,
     DELETE_RISORSA_ADOZIONE_VAS,
@@ -25,20 +25,19 @@ import {GET_ADOZIONE_VAS,
 
 const UI = ({
     back, 
-    vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
+    vas: { node: {uuid, risorse: {edges: resources = []} = {}} = {}} = {},
     utente: {fiscalCode} = {},
-    scadenza,
-    tipo: tipoDoc = "parere_adozione_sca",
+    azione: {scadenza, avvioScadenza} = {},
+    tipo: tipoDoc = VAS_DOCS.PAR_SCA_ADOZIONE,
     label = "Pareri",
     saveMutation = INVIO_PARERI_ADOZIONE}) => {
         
-        const docsPareri =  resources.filter(({node: {tipo, user = {}}}) => tipo === tipoDoc && fiscalCode === user.fiscalCode).map(({node}) => node)
-        
+        const docsPareri =  getResourcesByType(resources, tipoDoc).filter(({user = {}}) => fiscalCode === user.fiscalCode)
         
         return (
             <React.Fragment>
                 <ActionTitle>Pareri SCA</ActionTitle>
-                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={scadenza && daysSub(scadenza, 30)}/>
+                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={avvioScadenza}/>
                 <div className="mt-4 border-bottom-2 pb-3 d-flex">
                         <i className="material-icons text-serapide pr-3 icon-15">event_busy</i> 
                         <div className="d-flex flex-column size-11">
@@ -62,12 +61,9 @@ const UI = ({
 
     export default (props) => (
         <Query query={GET_ADOZIONE_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {modello: {edges: [adozioneVas] = []} = {}}, error}) => {
-                if(loading) {
-                    return <Spinner/>
+            {({loading, data: {modello: {edges: [adozioneVas = {}] = []} = {}} = {}, error}) => {
+                return loading ? <Spinner/> : (<UI {...props} vas={adozioneVas}  />)
                 }
-                return (
-                    <UI {...props} vas={adozioneVas}  />)}
             }
         </Query>)
         

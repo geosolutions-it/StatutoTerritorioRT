@@ -16,7 +16,7 @@ import RichiestaComune from 'components/RichiestaComune'
 import ActionParagraphTitle from 'components/ActionParagraphTitle'
 import Spinner from 'components/Spinner'
 
-import  {showError, formatDate, daysSub, getCodice} from 'utils'
+import  {showError, formatDate, getCodice, getResourceByType, VAS_DOCS} from 'utils'
 import {rebuildTooltip} from 'enhancers'
 
 import {GET_ADOZIONE_VAS,
@@ -28,18 +28,17 @@ import {GET_ADOZIONE_VAS,
 const UI = rebuildTooltip()(({
     back, 
     vas: { node: {uuid, risorse : {edges: resources = []} = {}} = {}} = {},
-    utente: {fiscalCode} = {},
-    scadenza,
-    tipo: tipoDoc = "parere_motivato",
+    azione: {scadenza, avvioScadenza} = {},
+    tipo: tipoDoc = VAS_DOCS.PARERE_MOTIVATO,
     label = "PARERE MOTIVATO AC",
     saveMutation = INVIO_PARERE_MOTIVATO_AC}) => {
         
-        const [{node: parere} = {}] = resources.filter(({node: {tipo, user = {}}}) => tipo === tipoDoc)
+        const parere= getResourceByType(resources, tipoDoc)
         
         return (
             <React.Fragment>
                 <ActionTitle>Pareri Motivato AC</ActionTitle>
-                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={scadenza && daysSub(scadenza, 30)}/>
+                <RichiestaComune fontSize="size-11" iconSize="icon-15" scadenza={avvioScadenza}/>
                 <div className="mt-4 border-bottom-2 pb-3 d-flex">
                         <i className="material-icons text-serapide pr-3 icon-15">event_busy</i> 
                         <div className="d-flex flex-column size-11">
@@ -66,7 +65,7 @@ const UI = rebuildTooltip()(({
 
     export default (props) => (
         <Query query={GET_ADOZIONE_VAS} variables={{codice: getCodice(props)}} onError={showError}>
-            {({loading, data: {modello: {edges: [adozioneVas] = []} = []}, error}) => {
+            {({loading, data: {modello: {edges: [adozioneVas] = []} = []}}) => {
                 if(loading) {
                     return <Spinner/>
                 }

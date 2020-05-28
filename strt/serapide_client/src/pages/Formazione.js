@@ -7,19 +7,31 @@
  */
 import React from 'react'
 import {Button} from 'reactstrap'
-import PianoPageContainer from '../components/PianoPageContainer';
-import PianoSubPageTitle from '../components/PianoSubPageTitle';
+import {Query} from "react-apollo"; 
 
+import {GET_VAS} from 'schema'
+import PianoPageContainer from 'components/PianoPageContainer';
+import PianoSubPageTitle from 'components/PianoSubPageTitle';
+import Spinner from 'components/Spinner'
+
+import {AVVIO_DOCS, getResourceByType, VAS_DOCS, getCodice, showError} from 'utils'
 
 const goTo = (url) => {
     window.open(url , '_blank');
 }
 
-export default ({utente: {attore} = {},
-    piano: {redazioneNormeTecnicheAttuazioneUrl, compilazioneRapportoAmbientaleUrl, conformazionePitPprUrl, monitoraggioUrbanisticoUrl, risorse : {edges: resources = []}} = {}
+export const UI = ({
+    piano: {
+        compilazioneRapportoAmbientaleUrl,
+        conformazionePitPprUrl,
+        monitoraggioUrbanisticoUrl,
+        risorse: {edges: resources = []}} = {},
+    vas: {risorse: {edges: resourcesVAS = []} = {}} = {}
     } = {}) => { 
-        const norme = resources.filter(({node: {tipo}}) => tipo === 'norme_tecniche_attuazione').map(({node}) => node).shift()
-        const urlNorme = norme && norme.downloadUrl
+        const norme = getResourceByType(resources, AVVIO_DOCS.NORME_TECNICHE_ATTUAZIONE)
+        const urlNorme = norme?.downloadUrl
+        const ra = getResourceByType(resourcesVAS, VAS_DOCS.RAPPORTO_AMBIENTALE)
+        const urlRa = ra?.downloadUrl
     return (
        <PianoPageContainer>
            <PianoSubPageTitle icon="build" title="STRUMENTI PER LA FORMAZIONE DEL PIANO"/>
@@ -33,7 +45,7 @@ export default ({utente: {attore} = {},
                     <Button disabled={!urlNorme} onClick={() => goTo(urlNorme)}
                             className="margin-auto align-self-center" style={{minWidth: "20rem", maxWidth:"20rem"}} size="lg" color="serapide">
                         <div  className="d-flex flex-column size-16">
-                            <span>REDAZIONE DISCIPINA</span>
+                            <span>REDAZIONE DISCIPLINA</span>
                             <span>DEL PIANO</span>
                             <span>[Minerva]</span>
                         </div>
@@ -43,7 +55,7 @@ export default ({utente: {attore} = {},
                     </div>
                 </div>
                 <div className="col-auto d-flex flex-column m-auto">
-                    <Button disabled={!compilazioneRapportoAmbientaleUrl} onClick={() => goTo( compilazioneRapportoAmbientaleUrl)} 
+                    <Button disabled={!urlRa} onClick={() => goTo(urlRa)} 
                             className="margin-auto align-self-center" style={{minWidth: "20rem", maxWidth:"20rem"}}  size="lg" color="serapide">
                         <div className="d-flex flex-column size-16">
                             <span>VALUTAZIONE E MONITORAGGIO</span>
@@ -52,7 +64,7 @@ export default ({utente: {attore} = {},
                         </div>
                     </Button>
                     <div className="mt-3 mb-4">
-                     <span>URL</span><div className="border p-2 overflow-hidden size-12" style={{width: "25rem", textOverflow: "ellipsis"}}>{compilazioneRapportoAmbientaleUrl}</div>
+                     <span>URL</span><div className="border p-2 overflow-hidden size-12" style={{width: "25rem", textOverflow: "ellipsis"}}>{urlRa}</div>
                     </div>
                 </div>
         </div>
@@ -87,3 +99,12 @@ export default ({utente: {attore} = {},
         </div>
     </PianoPageContainer> 
 )}
+
+
+
+export default (props) => (
+    <Query query={GET_VAS} variables={{codice: getCodice(props)}} onError={showError}>
+            {({loading, data: {modello: {edges: [{node: vas} = {}]= []} = {}} = {}}) => {
+                return loading ? <Spinner/> : <UI {...props} vas={vas} />
+            }}
+        </Query>)
