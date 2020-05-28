@@ -413,30 +413,21 @@ class Controdeduzioni(graphene.Mutation):
     errors = graphene.List(graphene.String)
     adozione_aggiornata = graphene.Field(types.ProceduraAdozioneNode)
 
-    @staticmethod
-    def action():
-        return TipologiaAzione.controdeduzioni
-
-    @staticmethod
-    def procedura(piano):
-        return piano.procedura_adozione
-
     @classmethod
     def update_actions_for_phase(cls, fase, piano, procedura_adozione, user):
 
-        # Update Azioni Piano
-        # - Complete Current Actions
-        # - Update Action state accordingly
         ensure_fase(fase, Fase.AVVIO)
 
         _controdeduzioni = piano.getFirstAction(TipologiaAzione.controdeduzioni)
-        _osservazioni_enti = piano.getFirstAction(TipologiaAzione.osservazioni_enti)
-
         if needs_execution(_controdeduzioni):
             chiudi_azione(_controdeduzioni)
 
-            if needs_execution(_osservazioni_enti):
-                chiudi_azione(_osservazioni_enti)
+            for tipo in [TipologiaAzione.osservazioni_enti,
+                         TipologiaAzione.osservazioni_regione,
+                         TipologiaAzione.upload_osservazioni_privati]:
+                oss = piano.getFirstAction(tipo)
+                if needs_execution(oss):
+                    chiudi_azione(oss)
 
             crea_azione(
                 Azione(
