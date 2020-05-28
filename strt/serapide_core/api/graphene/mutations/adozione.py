@@ -420,14 +420,15 @@ class Controdeduzioni(graphene.Mutation):
 
         _controdeduzioni = piano.getFirstAction(TipologiaAzione.controdeduzioni)
         if needs_execution(_controdeduzioni):
-            chiudi_azione(_controdeduzioni)
+            now = get_now()
+            chiudi_azione(_controdeduzioni, now)
 
             for tipo in [TipologiaAzione.osservazioni_enti,
                          TipologiaAzione.osservazioni_regione,
                          TipologiaAzione.upload_osservazioni_privati]:
                 oss = piano.getFirstAction(tipo)
                 if needs_execution(oss):
-                    chiudi_azione(oss)
+                    chiudi_azione(oss, now)
 
             crea_azione(
                 Azione(
