@@ -19,6 +19,7 @@ from strt_users.models import (
     Utente,
     ProfiloUtente,
     Assegnatario,
+    Ufficio,
     QualificaUfficio,
     Ente)
 
@@ -226,6 +227,12 @@ def get_UffAssTok(piano: Piano, qualifiche):
     uffici = [so.qualifica_ufficio.ufficio for so in so_list]
 
     qu_list = [so.qualifica_ufficio for so in so_list]
+
+    if Qualifica.OPCOM in qualifiche:
+        qu_opcom = QualificaUfficio.objects.filter(qualifica=Qualifica.OPCOM, ufficio__ente=piano.ente)
+        qu_list += qu_opcom
+        uffici += [qu.ufficio for qu in qu_opcom]
+
     ass_list = Assegnatario.objects.filter(qualifica_ufficio__in=qu_list)
     utenti_assegnatari = [ass.utente for ass in ass_list]
 
