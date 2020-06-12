@@ -62,11 +62,14 @@ def crea_azione(azione: Azione, send_mail: bool = True):
     azione.save()
 
     if send_mail:
-        piano_phase_changed.send(
-            message_type=TipoMail.azione_generica.name,
+        responses = piano_phase_changed.send_robust(
             sender=Piano,
             piano=azione.piano,
             azione=azione,)
+
+        for r, resp in responses:
+            if isinstance(resp, Exception):
+                log.warning('Errore invio mail {}:{}'.format(r, resp))
 
 
 def get_scadenza(start_datetime: datetime.datetime, exp: TipoExpire):
