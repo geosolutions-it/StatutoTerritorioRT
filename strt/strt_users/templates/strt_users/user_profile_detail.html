@@ -11,30 +11,30 @@
 
 {% block content %}
 
-    <div class="bg-light h-100 py-5 m-0 px-6">
+    <div class="bg-light w-100 h-100 py-5 m-0 px-6">
 
         <h2>{% trans 'dati utente'|capfirst %}</h2>
         <hr class="border-warning border-bottom"></hr>
-        <div class="pb-2">
+        <div class="pb-2 ">
             <div class="row">
-                <div class="col-1 text-secondary">{% trans 'nome'|capfirst %}:</div>
-                <div class="col-11">{% if current_user.first_name %}{{ current_user.first_name|capfirst }}{% else %}nd{% endif %}</div>
+                <div class="col-2 text-secondary">{% trans 'nome'|capfirst %}:</div>
+                <div class="col-10">{% if current_user.first_name %}{{ current_user.first_name|capfirst }}{% else %}n.d.{% endif %}</div>
             </div>
             <div class="row">
-                <div class="col-1 text-secondary">{% trans 'cognome'|capfirst %}:</div>
-                <div class="col-11">{% if current_user.last_name %}{{ current_user.last_name|capfirst }}{% else %}nd{% endif %}</div>
+                <div class="col-2 text-secondary">{% trans 'cognome'|capfirst %}:</div>
+                <div class="col-10">{% if current_user.last_name %}{{ current_user.last_name|capfirst }}{% else %}n.d.{% endif %}</div>
             </div>
             <div class="row">
-                <div class="col-1 text-secondary">{% trans 'codice fiscale'|capfirst %}:</div>
-                <div class="col-11">{{ current_user.fiscal_code|upper }}</div>
+                <div class="col-2 text-secondary">{% trans 'codice fiscale'|capfirst %}:</div>
+                <div class="col-10">{{ current_user.fiscal_code|upper }}</div>
             </div>
             <div class="row">
-                <div class="col-1 text-secondary">{% trans 'email'|capfirst %}:</div>
-                <div class="col-11">{% if current_user.email %}{{ current_user.email }}{% else %}nd{% endif %}</div>
+                <div class="col-2 text-secondary">{% trans 'email'|capfirst %}:</div>
+                <div class="col-10">{% if current_user.email %}{{ current_user.email }}{% else %}n.d.{% endif %}</div>
             </div>
             <div class="row">
-                <div class="col-1 text-secondary">{% trans 'ruolo'|capfirst %}:</div>
-                <div class="col-11">
+                <div class="col-2 text-secondary">{% trans 'ruolo'|capfirst %}:</div>
+                <div class="col-10">
                     {% for cum in current_user_memberships %}
                         <div class="row">
                             <div class="col">{{ cum.name }}</div>
@@ -45,66 +45,23 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-1 text-secondary">{% trans 'creato da'|capfirst %}:</div>
-                <div class="col-11">{% if current_user.created_by %}{{ current_user.created_by }}{% else %}nd{% endif %}</div>
+                <div class="col-2 text-secondary">{% trans 'creato da'|capfirst %}:</div>
+                <div class="col-10">{% if current_user.created_by %}{{ current_user.created_by }}{% else %}n.d.{% endif %}</div>
             </div>
             <div class="row">
-                <div class="col-1 text-secondary">{% trans 'modificato da'|capfirst %}:</div>
-                <div class="col-11">{% if current_user.updated_by %}{{ current_user.updated_by }}{% else %}nd{% endif %}</div>
+                <div class="col-2 text-secondary">{% trans 'modificato da'|capfirst %}:</div>
+                <div class="col-10">{% if current_user.updated_by %}{{ current_user.updated_by }}{% else %}n.d.{% endif %}</div>
             </div>
             <div class="row">
-                <div class="col-1 text-secondary">{% trans 'data creazione'|capfirst %}:</div>
-                <div class="col-11">{{ current_user.date_joined|date:'d-m-y H:i:s' }}</div>
+                <div class="col-2 text-secondary">{% trans 'data creazione'|capfirst %}:</div>
+                <div class="col-10">{{ current_user.date_joined|date:'d-m-y H:i:s' }}</div>
             </div>
             <div class="row">
-                <div class="col-1 text-secondary">{% trans 'ultima modifica'|capfirst %}:</div>
-                <div class="col-11">{{ current_user.date_updated|date:'d-m-y H:i:s' }}</div>
+                <div class="col-2 text-secondary">{% trans 'ultima modifica'|capfirst %}:</div>
+                <div class="col-10">{{ current_user.date_updated|date:'d-m-y H:i:s' }}</div>
             </div>
         </div>
 
-        <h2 class="pt-4">{% trans 'utenti gestiti'|capfirst %}</h2>
-        <hr class="border-warning border-bottom"></hr>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="row">{% trans 'nome'|upper %}</th>
-                    <th scope="col">{% trans 'cognome'|upper %}</th>
-                    <th scope="col">{% trans 'codice fiscale'|upper %}</th>
-                    <th scope="col">{% trans 'email'|upper %}</th>
-                    <th scope="col">{% trans 'data creazione'|upper %}</th>
-                    <th scope="col">{% trans 'ultima modifica'|upper %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for mu in managed_users %}
-                    <tr data-toggle="collapse" href="#collapse{{ forloop.counter }}" role="button"
-                        aria-expanded="false" aria-controls="collapse{{ forloop.counter }}" class="user-row">
-                        <td scope="row">{{ mu.first_name|capfirst }}</td>
-                        <td scope="col">{{ mu.last_name|capfirst }}</td>
-                        <td scope="col">{{ mu.fiscal_code|upper }}</td>
-                        <td scope="col">{{ mu.email }}</td>
-                        <td scope="col">{{ mu.date_joined|date:'d-m-y H:i:s' }}</td>
-                        <td scope="col">{{ mu.date_updated|date:'d-m-y H:i:s' }}</td>
-                    </tr>
-                    {% for mum in managed_users_memberships %}
-                        {% if mum.member == mu %}
-                            <tr class="collapse text-secondary"
-                                id="collapse{{ forloop.parentloop.counter }}">
-                                <td scope="col" colspan="6">
-                                    {{ mum.name }}
-                                </td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                    {% empty %}
-                    <tr>
-                        <td colspan="6">
-                            {% trans 'Nessun utente gestito' %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
 
     </div>
     <div id="only-nav-bar"></div>
