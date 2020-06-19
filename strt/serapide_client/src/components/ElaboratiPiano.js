@@ -36,7 +36,7 @@ export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMuta
         <React.Fragment>
         <ActionSubParagraphTitle className="size-13 mb-3">Elaborati Testuali</ActionSubParagraphTitle>
         <div className="container border" style={{maxHeight: 200, minHeight: 50, overflowY: "scroll"}}>
-            {map(testuali, ((value, tipo) => ({...value, tipo}))).sort(order).map(({label, tooltip, tipo}) => {
+            {map(testuali, ((value, tipo) => ({...value, tipo}))).sort(order).map(({label, tooltip, tipo, fileType = "application/pdf"}) => {
                 const el = getElaborato(tipo, resources)
                 return upload ? (<FileUpload key={tipo}
                     fontSize={fontSize}
@@ -44,6 +44,7 @@ export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMuta
                     vertical={vertical}
                     useLabel={useLabel}
                     mutation={mutation}
+                    fileType={fileType}
                     resourceMutation={resourceMutation}
                     placeholder={(<TextTooltip text={label} dataTip={tooltip}/>)}
                     risorsa={el}
