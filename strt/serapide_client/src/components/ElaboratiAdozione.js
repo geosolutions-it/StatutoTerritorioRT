@@ -26,21 +26,21 @@ export default enhancers( ({risorseAdozione=[], risorseControdeduzioni=[], risor
         <Nav tabs>
                 <NavItem>
                     <NavLink
-                        className={classnames({ active: section === 'adozione' })}
+                        className={classnames(["pointer", { active: section === 'adozione' }])}
                         onClick={() => { toggleSection('adozione'); }}>
                         TRASMISSIONE
                     </NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink
-                        className={classnames({ active: section === 'controdedotto' })}
+                        className={classnames(["pointer", { active: section === 'controdedotto' }])}
                         onClick={() => { toggleSection('controdedotto'); }}>
                         CONTRODEDOTTO
                     </NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink
-                        className={classnames({ active: section === 'revisionePostCp' })}
+                        className={classnames(["pointer", { active: section === 'revisionePostCp' }])}
                         onClick={() => { toggleSection('revisionePostCp'); }}>
                         POST C.P.
                     </NavLink>
