@@ -32,12 +32,12 @@ LICENSE file in the root directory of this source tree.
 
                 <h5>
                     {% if request.user %}
-                        <span class="d-block role role-item text-white pb-1 size-11">{{ request.user.fiscal_code }}</span>
+                        <span class="d-block role role-item text-white pb-1 size-14"><em>{{ request.user.first_name }} {{request.user.last_name  }}</em></span>
                           
-                        <span class="d-block role role-item text-white" style="font-size: 12px"><em>{{ request.user.first_name }} {{request.user.last_name  }}</em></span>
+                        <span class="d-block role role-item text-white" style="font-size: 10px">{{ request.user.fiscal_code }}</span>
                         
                         {% endif %}
-                    
+                        
                 </h5>
                 <ul class="ml-auto text-center align-items-center navbar-nav" id="user-navbar-list">
 

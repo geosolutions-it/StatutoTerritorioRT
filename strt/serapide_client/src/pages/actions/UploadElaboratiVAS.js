@@ -47,7 +47,7 @@ const UI = ({
                     iconSize="icon-15" fontSize="size-11"
                     vertical useLabel
                     className="border-0"
-                    placeholder="Documento di sintesi"
+                    placeholder="Documento di sintesi non tecnica"
                     mutation={VAS_FILE_UPLOAD} 
                     resourceMutation={DELETE_RISORSA_VAS} disabled={false} 
                     isLocked={false} risorsa={sintesi} variables={{codice: uuid, tipo: "sintesi_non_tecnica" }}/>

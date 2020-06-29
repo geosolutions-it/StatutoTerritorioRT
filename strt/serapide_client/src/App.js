@@ -66,7 +66,7 @@ return (
                                     <Route  path="/nuovo_piano/" >
                                     {canCreatePiano && <NuovoPiano enti={enti}></NuovoPiano>}
                                     </Route>             
-                                    <Route  path="/" render={(props) => <Dashboard canCreatePiano utente={utente} {...props}/>}/>
+                                    <Route  path="/" render={(props) => <Dashboard canCreatePiano={canCreatePiano} utente={utente} {...props}/>}/>
                                 </Switch>
                             </Router>
                     </div>

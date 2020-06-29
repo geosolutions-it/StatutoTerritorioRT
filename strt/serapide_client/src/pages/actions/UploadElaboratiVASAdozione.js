@@ -46,11 +46,11 @@ const UI = ({
                 <ActionSubParagraphTitle>SINTESI NON TECNICA</ActionSubParagraphTitle>
                 <Resource iconSize="icon-15" fontSize="size-11" useLabel fileSize={false} className="border-0 my-3" icon="attach_file" resource={sintesiNon}/>
                 <ActionParagraphTitle>UPLOAD DOCUMENTI</ActionParagraphTitle>
-                <ActionSubParagraphTitle>DOCUMENTO DI SINTESI</ActionSubParagraphTitle>
+                <ActionSubParagraphTitle>DICHIARAZIONE DI SINTESI</ActionSubParagraphTitle>
                 <div className="action-uploader mt-4 py-1 align-self-start border-bottom">
                 <FileUpload 
                     {...fileProps}
-                    placeholder="Documento di sintesi"
+                    placeholder="Dichiarazione di sintesi"
                     risorsa={sintesi} variables={{codice: uuid, tipo: "documento_sintesi" }}/>
                 </div>
                 <div className="align-self-center mt-7">
