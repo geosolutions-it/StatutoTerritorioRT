@@ -14,13 +14,12 @@ import logging
 from django.dispatch import Signal
 
 from strt_users.enums import Qualifica
-from strt_users.models import Assegnatario, Ufficio, Utente
-from serapide_core.modello.enums import TipoMail, TipologiaAzione
-from serapide_core.modello.models import SoggettoOperante, Piano, Azione
+from serapide_core.modello.enums import TipoMail
+from serapide_core.modello.models import Piano, Azione
 
-from .api.auth.user import get_UffAssTok
+import serapide_core.api.auth.user as auth_user
 
-from .notifications_helper import send_now_notification
+import serapide_core.notifications_helper as notifications_helper
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +46,7 @@ def message_sent_notification(sender, **kwargs):
         reply = kwargs['reply']
         users = [u for u in thread.users.all() if u != message.sender]
 
-        send_now_notification(users,
+        notifications_helper.send_now_notification(users,
                               "message_sent",
                               {
                                 "from_user": message.sender,
@@ -109,7 +108,7 @@ def token2dest(tokenlist):
 
 
 def get_destinatari_da_qualifiche(piano: Piano, qualifiche):
-    uffici, utenti_assegnatari, token = get_UffAssTok(piano, qualifiche)
+    uffici, utenti_assegnatari, token = auth_user.get_UffAssTok(piano, qualifiche)
 
     return uff2dest(uffici) + \
            utenti2dest(utenti_assegnatari) + \
@@ -152,8 +151,8 @@ def piano_phase_changed_notification(sender, **kwargs):
     from_user = kwargs.get('user', None)
     piano = kwargs.get('piano', None)
 
-    logger.info("========== GESTIONE INVIO MAIL piano:{} tipo:{}".format(
-        piano.codice, azione.tipologia.name if azione else notification_type))
+    mail_info = 'azione:{}'.format(azione.tipologia.name) if azione else 'tipo:{}'.format(notification_type)
+    logger.info("========== GESTIONE INVIO MAIL piano:{} {}".format(piano.codice, mail_info))
 
     if not piano:
         logger.warning("Piano non definito, nessuna mail inviata")
@@ -182,6 +181,7 @@ def piano_phase_changed_notification(sender, **kwargs):
         # non sappiamo cosa sia, inviamo a tutti
         destinatari = get_destinatari_da_piano(piano)
 
+    from strt_users.models import Utente
     for u in destinatari:
         if isinstance(u, Utente):
             dest = '"{}" <{}>'.format(u.get_full_name(), u.email)
@@ -199,7 +199,7 @@ def piano_phase_changed_notification(sender, **kwargs):
         ))
 
     # todo : check for uffici
-    send_now_notification(
+    notifications_helper.send_now_notification(
         destinatari,
         notification_type,
         mail_args

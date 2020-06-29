@@ -39,7 +39,7 @@ from serapide_core.api.piano_utils import (
 
 from serapide_core.modello.enums import (
     Fase,
-    STATO_AZIONE,
+    StatoAzione,
     TipologiaAzione,
     TipoMail,
 )

@@ -62,7 +62,7 @@ from serapide_core.modello.models import (
 from serapide_core.modello.enums import (
     Fase,
     AZIONI_BASE,
-    STATO_AZIONE,
+    StatoAzione,
     TipologiaVAS,
     TipologiaAzione,
     TipologiaPiano,
@@ -164,14 +164,14 @@ def promuovi_piano(fase:Fase, piano):
                 tipologia=_a["tipologia"],
                 qualifica_richiesta=_a["qualifica"],
                 order=_order,
-                stato=STATO_AZIONE.necessaria
+                stato=StatoAzione.NECESSARIA
             ))
         _order += 1
 
     # - Update Action state accordingly
     if fase == Fase.ANAGRAFICA:
         _creato = piano.getFirstAction(TipologiaAzione.creato_piano)
-        if _creato.stato != STATO_AZIONE.necessaria:
+        if _creato.stato != StatoAzione.NECESSARIA:
             raise Exception("Stato Inconsistente!")
 
         chiudi_azione(_creato)

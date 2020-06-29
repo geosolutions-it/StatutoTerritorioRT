@@ -131,7 +131,7 @@ class DataLoader:
             'fiscal_code': FC_ACTIVE2
         },
         {
-            'first_name': 'Genio',
+            'first_name': 'Eugenio',
             'last_name': 'Geniale',
             'fiscal_code': FC_GC1
         },
@@ -210,6 +210,8 @@ class DataLoader:
             for uff in cls.uffici[ipa]:
                 uff_dict = uff if isinstance(uff, dict) else {'nome':uff}
                 uff_dict['ente'] = ente_db
+                uff_dict['email'] = 'ufficio.test@test.xxx'
+                uff_dict['email'] = 'obtortocollo@gmail.com'
                 # logger.warning("CREATING UFFICIO {}".format(ufficio))
                 uff_db,created = Ufficio._default_manager.get_or_create(**uff_dict)
                 if not created:
@@ -222,6 +224,8 @@ class DataLoader:
         for user in cls.utenti:
             logger.warning("CREATING USER {}".format(user))
             user['password'] = '42'
+            user['email'] = 'utente.test@test.xxx'
+            user['email'] = 'obtortocollo@gmail.com'
             utente_db = Utente.objects.create_user(**user)
             # utente_db = Utente.objects.get_or_create(**user)
             cls.utenti_stored[user['fiscal_code']] = utente_db

@@ -117,3 +117,5 @@ local.env
 startUp.sh
 .vscode
 /strt/jsconfig.json
+/strt/storage
+

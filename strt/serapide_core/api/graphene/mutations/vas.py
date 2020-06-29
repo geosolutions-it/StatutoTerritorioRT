@@ -55,7 +55,7 @@ from serapide_core.modello.models import (
 )
 from serapide_core.modello.enums import (
     Fase,
-    STATO_AZIONE,
+    StatoAzione,
     TipologiaVAS,
     TipologiaAzione,
     TipoRisorsa,
@@ -98,7 +98,7 @@ def init_vas_procedure(piano: Piano, utente: Utente):
                 piano=piano,
                 tipologia=TipologiaAzione.invio_doc_preliminare,
                 qualifica_richiesta=QualificaRichiesta.COMUNE,
-                stato=STATO_AZIONE.attesa,
+                stato=StatoAzione.ATTESA,
             ))
 
     elif procedura_vas.tipologia == TipologiaVAS.VERIFICA:
@@ -108,7 +108,7 @@ def init_vas_procedure(piano: Piano, utente: Utente):
                 piano=piano,
                 tipologia=TipologiaAzione.trasmissione_dpv_vas,
                 qualifica_richiesta=QualificaRichiesta.AC,
-                stato=STATO_AZIONE.attesa,
+                stato=StatoAzione.ATTESA,
             ).imposta_scadenza(
                 get_scadenza(now, TipoExpire.TRASMISSIONE_DPV_VAS)
             )
@@ -121,7 +121,7 @@ def init_vas_procedure(piano: Piano, utente: Utente):
                 piano=piano,
                 tipologia=TipologiaAzione.emissione_provvedimento_verifica,
                 qualifica_richiesta=QualificaRichiesta.AC,
-                stato=STATO_AZIONE.attesa,
+                stato=StatoAzione.ATTESA,
             ).imposta_scadenza(
                 get_scadenza(now, TipoExpire.EMISSIONE_PV_VERIFICASEMPLIFICATA)
             )
@@ -134,7 +134,7 @@ def init_vas_procedure(piano: Piano, utente: Utente):
                 piano=piano,
                 tipologia=TipologiaAzione.pareri_verifica_sca,
                 qualifica_richiesta=QualificaRichiesta.SCA,
-                stato=STATO_AZIONE.attesa,
+                stato=StatoAzione.ATTESA,
             ).imposta_scadenza(
                 get_scadenza(now, TipoExpire.PARERI_VERIFICA_SCA_PROCEDIMENTOSEMPLIFICATO)
             )
@@ -243,7 +243,7 @@ class TrasmissioneDPVVAS(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.pareri_verifica_sca,
                     qualifica_richiesta=QualificaRichiesta.SCA,
-                    stato=STATO_AZIONE.attesa,
+                    stato=StatoAzione.ATTESA,
                 ).imposta_scadenza(
                     get_scadenza(now, TipoExpire.PARERI_VERIFICA_SCA)
                 )
@@ -321,7 +321,7 @@ class InvioPareriVerificaVAS(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.emissione_provvedimento_verifica,
                     qualifica_richiesta=QualificaRichiesta.AC,
-                    stato=STATO_AZIONE.attesa,
+                    stato=StatoAzione.ATTESA,
                 ).imposta_scadenza(
                     get_scadenza(_data_start_vas, exp)
                 )
@@ -424,7 +424,7 @@ class EmissioneProvvedimentoVerifica(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica_ac,
                     qualifica_richiesta=QualificaRichiesta.AC,
-                    stato=STATO_AZIONE.necessaria,
+                    stato=StatoAzione.NECESSARIA,
                 ))
 
             crea_azione(
@@ -432,7 +432,7 @@ class EmissioneProvvedimentoVerifica(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.pubblicazione_provvedimento_verifica_ap,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.necessaria,
+                    stato=StatoAzione.NECESSARIA,
                 ))
 
     @classmethod
@@ -487,7 +487,7 @@ def check_join_pubblicazione_provvedimento(info, piano: Piano):
                         piano=piano,
                         tipologia=TipologiaAzione.redazione_documenti_vas,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
-                        stato=STATO_AZIONE.necessaria
+                        stato=StatoAzione.NECESSARIA
                     ))
             else:
                 crea_azione(
@@ -495,7 +495,7 @@ def check_join_pubblicazione_provvedimento(info, piano: Piano):
                         piano=piano,
                         tipologia=TipologiaAzione.invio_doc_preliminare,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
-                        stato=STATO_AZIONE.necessaria
+                        stato=StatoAzione.NECESSARIA
                     ))
 
 
@@ -612,7 +612,7 @@ class InvioDocPreliminare(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.trasmissione_pareri_sca,
                         qualifica_richiesta=QualificaRichiesta.SCA,
-                        stato=STATO_AZIONE.attesa,
+                        stato=StatoAzione.ATTESA,
                     ).imposta_scadenza(
                         get_scadenza(now, TipoExpire.TRASMISSIONE_PARERI_SCA)
                     )
@@ -623,7 +623,7 @@ class InvioDocPreliminare(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.trasmissione_pareri_ac,
                         qualifica_richiesta=QualificaRichiesta.AC,
-                        stato=STATO_AZIONE.attesa
+                        stato=StatoAzione.ATTESA
                     ))
 
     @classmethod
@@ -669,7 +669,7 @@ def check_join_redazione_documenti_vas(user, piano: Piano):
                 piano=piano,
                 tipologia=TipologiaAzione.redazione_documenti_vas,
                 qualifica_richiesta=QualificaRichiesta.COMUNE,
-                stato=STATO_AZIONE.necessaria
+                stato=StatoAzione.NECESSARIA
             ))
 
         return True

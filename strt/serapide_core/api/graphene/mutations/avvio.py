@@ -20,14 +20,8 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
-from serapide_core.api.graphene.mutations import log_enter_mutate
-
 from serapide_core.helpers import (
     update_create_instance
-)
-
-from serapide_core.signals import (
-    piano_phase_changed,
 )
 
 from serapide_core.modello.models import (
@@ -42,7 +36,7 @@ from serapide_core.modello.models import (
 
 from serapide_core.modello.enums import (
     Fase,
-    STATO_AZIONE,
+    StatoAzione,
     TipologiaAzione,
     TipologiaCopianificazione,
     TipoRisorsa,
@@ -153,7 +147,7 @@ class AvvioPiano(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.contributi_tecnici,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
-                    stato=STATO_AZIONE.attesa,
+                    stato=StatoAzione.ATTESA,
                 ).imposta_scadenza((
                     get_now(),  # ??
                     procedura_avvio.data_scadenza_risposta
@@ -165,7 +159,7 @@ class AvvioPiano(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.selezione_tipologia_vas,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.attesa
+                    stato=StatoAzione.ATTESA,
                 ),
                 send_mail=False
             )
@@ -278,7 +272,7 @@ class ContributiTecnici(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.formazione_del_piano,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.necessaria
+                    stato=StatoAzione.NECESSARIA
                 ))
 
             if procedura_avvio.conferenza_copianificazione == TipologiaCopianificazione.NECESSARIA:
@@ -296,7 +290,7 @@ class ContributiTecnici(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.richiesta_integrazioni,
                         qualifica_richiesta=QualificaRichiesta.REGIONE,
-                        stato=STATO_AZIONE.attesa
+                        stato=StatoAzione.ATTESA
                     ))
 
                 crea_azione(
@@ -304,7 +298,7 @@ class ContributiTecnici(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.esito_conferenza_copianificazione,
                         qualifica_richiesta=QualificaRichiesta.REGIONE,
-                        stato=STATO_AZIONE.attesa
+                        stato=StatoAzione.ATTESA
                     ))
 
             elif procedura_avvio.conferenza_copianificazione == TipologiaCopianificazione.POSTICIPATA:
@@ -321,7 +315,7 @@ class ContributiTecnici(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.richiesta_conferenza_copianificazione,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
-                        stato=STATO_AZIONE.attesa
+                        stato=StatoAzione.ATTESA
                     ))
 
             elif procedura_avvio.conferenza_copianificazione == TipologiaCopianificazione.NON_NECESSARIA:
@@ -334,7 +328,7 @@ class ContributiTecnici(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.protocollo_genio_civile,
                         qualifica_richiesta=QualificaRichiesta.GC,
-                        stato=STATO_AZIONE.necessaria
+                        stato=StatoAzione.NECESSARIA
                     ))
 
     @classmethod
@@ -396,7 +390,7 @@ class RichiestaIntegrazioni(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.integrazioni_richieste,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
-                        stato=STATO_AZIONE.attesa
+                        stato=StatoAzione.ATTESA
                     ))
             else:
                 try_and_close_avvio(piano)
@@ -581,7 +575,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.richiesta_integrazioni,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
-                    stato=STATO_AZIONE.attesa
+                    stato=StatoAzione.ATTESA
                 ))
 
             crea_azione(
@@ -589,7 +583,7 @@ class RichiestaConferenzaCopianificazione(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.esito_conferenza_copianificazione,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
-                    stato=STATO_AZIONE.attesa,
+                    stato=StatoAzione.ATTESA,
                 ))
 
     @classmethod
@@ -658,7 +652,7 @@ class ChiusuraConferenzaCopianificazione(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.protocollo_genio_civile,
                     qualifica_richiesta=QualificaRichiesta.GC,
-                    stato=STATO_AZIONE.necessaria,
+                    stato=StatoAzione.NECESSARIA,
                 ))
 
     @classmethod

@@ -9,4 +9,9 @@
 #
 #########################################################################
 
+from __future__ import absolute_import, unicode_literals
+from .celery_app import app as celery_app
+
 default_app_config = "base.apps.BaseConfig"
+
+__all__ = ('celery_app',)

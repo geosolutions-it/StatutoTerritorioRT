@@ -17,7 +17,7 @@ import serapide_core.api.auth.vas as auth_vas
 
 from serapide_core.modello.enums import (
     Fase,
-    STATO_AZIONE,
+    StatoAzione,
     TipologiaVAS,
     TipologiaAzione,)
 
@@ -138,7 +138,7 @@ def has_delibera_comunale(piano):
 # @rules.predicate
 def formazione_piano_conclusa(piano):
     az = piano.getFirstAction(TipologiaAzione.formazione_del_piano)
-    return az and az.stato == STATO_AZIONE.nessuna
+    return az and is_executed(az)
 
 
 # @rules.predicate
@@ -176,11 +176,11 @@ def avvio_piano_conclusa(piano):
 
 # @rulesC.predicate
 def has_pending_alerts(piano):
-    _alert_states = [STATO_AZIONE.necessaria]
+    _alert_states = [StatoAzione.NECESSARIA]
     return Azione.objects.filter(piano=piano, stato__in=_alert_states).exists()
 
 def get_pending_alerts(piano):
-    _alert_states = [STATO_AZIONE.necessaria]
+    _alert_states = [StatoAzione.NECESSARIA]
     return Azione.objects.filter(piano=piano, stato__in=_alert_states)
 
 

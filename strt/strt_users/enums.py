@@ -133,6 +133,7 @@ class QualificaRichiesta(SerapideEnum):
     PIAN = 'Responsabile Pianificazione'
     URB = 'Responsabile Urbanistica'
     REGIONE = 'Responsabile Regionale'
+    AUTO = 'Sistema'
 
     def is_ok(self, qual:Qualifica):
         return qual in ALLOWED_QUALIFICA_BY_RICHIESTA[self]
@@ -149,6 +150,7 @@ ALLOWED_QUALIFICA_BY_RICHIESTA = {
     QualificaRichiesta.PIAN: [Qualifica.PIAN],
     QualificaRichiesta.URB: [Qualifica.URB],
     QualificaRichiesta.REGIONE: [Qualifica.PIAN, Qualifica.PIAN],
+    QualificaRichiesta.AUTO: [],
 }
 
 

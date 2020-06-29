@@ -11,7 +11,9 @@
 
 from django.utils.translation import ugettext_lazy as _
 
-from .notifications_helper import NotificationsAppConfigBase
+# import serapide_core.notifications_app
+# import serapide_core.notifications_helper as notifications_helper
+from serapide_core.notifications_helper import  NotificationsAppConfigBase
 
 
 def run_setup_hooks(*args, **kwargs):

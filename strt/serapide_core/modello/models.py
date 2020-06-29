@@ -36,12 +36,13 @@ from strt_users.enums import (
 
 from .enums import (
     Fase,
-    STATO_AZIONE,
+    StatoAzione,
     TipologiaVAS,
     TipologiaPiano,
     TipologiaAzione,
     TipologiaCopianificazione,
     TipoExpire,
+    TipoReportAzione,
 )
 
 
@@ -340,9 +341,9 @@ class Azione(models.Model):
     )
 
     stato = models.CharField(
-        choices=STATO_AZIONE,
-        default=STATO_AZIONE.unknown,
-        max_length=20
+        choices=StatoAzione.create_choices(),
+        null=False,
+        max_length=StatoAzione.get_max_len()
     )
 
     data = models.DateTimeField(null=True, blank=True)  # Data chiusura azione
@@ -371,6 +372,7 @@ class Azione(models.Model):
         instance = super(Azione, cls).from_db(db, field_names, values)
         instance.qualifica_richiesta = QualificaRichiesta.fix_enum(instance.qualifica_richiesta)
         instance.tipologia = TipologiaAzione.fix_enum(instance.tipologia)
+        instance.stato = StatoAzione.fix_enum(instance.stato)
         return instance
 
     def imposta_scadenza(self, interval: tuple):
@@ -393,6 +395,26 @@ class Azione(models.Model):
         self.avvio_scadenza = start_date
         self.scadenza = end_date
         return self
+
+
+class AzioneReport(models.Model):
+    azione = models.ForeignKey(Azione, on_delete=models.CASCADE)
+    tipo = models.CharField(
+        choices=TipoReportAzione.create_choices(),
+        default=TipoReportAzione.INFO,
+        max_length=TipoReportAzione.get_max_len()
+    )
+    messaggio = models.TextField(null=False, blank=False)
+    data = models.DateTimeField()
+
+    class Meta:
+        db_table = "strt_azione_report"
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super(AzioneReport, cls).from_db(db, field_names, values)
+        instance.tipo = TipoReportAzione.fix_enum(instance.tipo)
+        return instance
 
 
 class FasePianoStorico(models.Model):
@@ -974,6 +996,36 @@ class RisorsePubblicazione(models.Model):
 
     class Meta:
         db_table = "strt_core_pubblicazione_risorse"
+
+
+# ############################################################################ #
+
+class LottoCartografico(models.Model):
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
+    azione = models.ForeignKey(Azione, on_delete=models.CASCADE)
+    azione_parent = models.ForeignKey(Azione, on_delete=models.CASCADE, related_name='lotto_generato')
+
+    class Meta:
+        db_table = "strt_cartografia_lotto"
+
+
+class ElaboratoCartografico(models.Model):
+    lotto = models.ForeignKey(LottoCartografico, on_delete=models.CASCADE)
+    nome = models.TextField(null=False, blank=False)
+
+    # EPSG 3003 Projected bounds: 1290650.93 4192956.42, 2226749.10 5261004.57
+    # EPSG 6707 Projected bounds: 218994.50166281 3850723.16246129, 1257783.02862271 5264909.35712538
+
+    minx = models.FloatField(null=False)
+    maxx = models.FloatField(null=False)
+    miny = models.FloatField(null=False)
+    maxy = models.FloatField(null=False)
+    crs = models.CharField(max_length=12, null=False, blank=False)
+
+    ingerito = models.BooleanField(null=False, default=False)
+
+    class Meta:
+        db_table = "strt_cartografia_elaborato"
 
 
 # ############################################################################ #

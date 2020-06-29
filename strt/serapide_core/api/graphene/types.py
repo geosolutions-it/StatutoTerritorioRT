@@ -40,7 +40,7 @@ from strt_users.models import (
 )
 
 from serapide_core.modello.enums import (
-    STATO_AZIONE,
+    StatoAzione,
     TIPOLOGIA_RISORSA,
     TipologiaVAS,
     TipologiaAzione,
@@ -52,6 +52,7 @@ from serapide_core.modello.models import (
     Fase,
     Piano,
     Azione,
+    AzioneReport,
     Risorsa,
     SoggettoOperante,
     Delega,
@@ -132,12 +133,22 @@ class UserMessageType(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class AzioneReportNode(DjangoObjectType):
+
+    class Meta:
+        model = AzioneReport
+        filter_fields = ['tipo', 'data']
+        # interfaces = (relay.Node, )
+        convert_choices_to_enum = False
+
 class AzioneNode(DjangoObjectType):
 
     fase = graphene.String()
     label = graphene.String()
     tooltip = graphene.String()
     eseguibile = graphene.Boolean()
+
+    report = graphene.List(AzioneReportNode)
 
     def resolve_fase(self, info, **args):
         return InfoAzioni[self.tipologia].fase.name if self.tipologia in InfoAzioni else None
@@ -157,6 +168,9 @@ class AzioneNode(DjangoObjectType):
         piano = self.piano
 
         return can_edit_piano(user, piano, qreq)
+
+    def resolve_report(self, info, **args):
+        return AzioneReport.objects.filter(azione=self)
 
     class Meta:
         model = Azione
@@ -716,7 +730,7 @@ class PianoNode(DjangoObjectType):
         return Azione.objects.filter(piano=self)
 
     def resolve_alerts_count(self, info, **args):
-        _alert_states = [STATO_AZIONE.attesa, STATO_AZIONE.necessaria]
+        _alert_states = [StatoAzione.NECESSARIA, StatoAzione.NECESSARIA]
         # return self.azioni.filter(stato__in=_alert_states).count()
         return Azione.objects \
             .filter(piano=self)\

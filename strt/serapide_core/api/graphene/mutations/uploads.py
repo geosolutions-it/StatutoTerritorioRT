@@ -309,6 +309,15 @@ class UploadRisorsaAvvio(UploadBaseBase):
             return GraphQLError(e, code=500)
 
 
+def require_action(piano: Piano, tipo_file, tipo_risorsa: TipoRisorsa, tipo_azione: TipologiaAzione):
+    if tipo_file == tipo_risorsa.value:
+        _az = piano.getFirstAction(tipo_azione)
+        if _az is None:
+            raise GraphQLError('Risorsa inaspettata: azione richiesta "{}"'.format(tipo_azione.value), code=403)
+        if is_scaduta(_az) or is_executed(_az):
+            raise GraphQLError('Risorsa non più accettabile', code=403)
+
+
 class UploadRisorsaAdozione(UploadBaseBase):
 
     success = graphene.Boolean()
@@ -332,12 +341,10 @@ class UploadRisorsaAdozione(UploadBaseBase):
             if not auth.can_access_piano(info.context.user, _piano):
                 return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-            if _tipo_file == TipoRisorsa.OSSERVAZIONI_ENTI.value:
-                _az = _piano.getFirstAction(TipologiaAzione.osservazioni_enti)
-                if _az is None:
-                    return GraphQLError('Risorsa inaspettata', code=403)
-                if is_scaduta(_az) or is_executed(_az):
-                    return GraphQLError('Risorsa non più accettabile', code=403)
+            require_action(_piano, _tipo_file,
+                           TipoRisorsa.OSSERVAZIONI_ENTI, TipologiaAzione.osservazioni_enti)
+            require_action(_piano, _tipo_file,
+                           TipoRisorsa.OSSERVAZIONI_PRIVATI, TipologiaAzione.upload_osservazioni_privati)
 
             _resources = UploadBaseBase.handle_uploaded_data(
                 file,
@@ -355,6 +362,9 @@ class UploadRisorsaAdozione(UploadBaseBase):
                 procedura_adozione_aggiornata=_procedura_adozione,
                 success=_success,
                 file_name=_resources[0].nome)
+
+        except GraphQLError as ge:
+            return ge
 
         except BaseException as e:
             tb = traceback.format_exc()

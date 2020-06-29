@@ -21,7 +21,10 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
+from serapide_core.api.graphene.mutations.cartografica import inizializza_procedura_cartografica
 from serapide_core.api.graphene.mutations.piano import check_and_promote
+from serapide_core.helpers import update_create_instance
+
 from serapide_core.api.piano_utils import (
     needs_execution,
     is_executed,
@@ -31,7 +34,6 @@ from serapide_core.api.piano_utils import (
     chiudi_pendenti,
     get_scadenza, get_now,
 )
-from serapide_core.helpers import update_create_instance
 
 from serapide_core.signals import (
     piano_phase_changed,
@@ -52,7 +54,7 @@ from serapide_core.modello.models import (
 )
 
 from serapide_core.modello.enums import (
-    STATO_AZIONE,
+    StatoAzione,
     TipologiaVAS,
     TipologiaAzione,
     TipoRisorsa,
@@ -170,13 +172,19 @@ class TrasmissioneAdozione(graphene.Mutation):
         if needs_execution(_trasmissione_adozione):
             chiudi_azione(_trasmissione_adozione)
 
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.pubblicazione_burt,
-                    qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.necessaria,
-                ))
+            inizializza_procedura_cartografica(
+                piano,
+                TipologiaAzione.validazione_cartografia_adozione,
+                _trasmissione_adozione)
+
+
+            # crea_azione(
+            #     Azione(
+            #         piano=piano,
+            #         tipologia=TipologiaAzione.pubblicazione_burt,
+            #         qualifica_richiesta=QualificaRichiesta.COMUNE,
+            #         stato=STATO_AZIONE.necessaria,
+            #     ))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -227,7 +235,7 @@ class PubblicazioneBurt(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.osservazioni_enti,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
-                    stato=STATO_AZIONE.attesa,
+                    stato=StatoAzione.ATTESA,
                 ).imposta_scadenza((
                     now,  # ???
                     procedura_adozione.data_ricezione_osservazioni
@@ -239,7 +247,7 @@ class PubblicazioneBurt(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.osservazioni_regione,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
-                    stato=STATO_AZIONE.attesa,
+                    stato=StatoAzione.ATTESA,
                 ).imposta_scadenza((
                     now,  # ???
                     procedura_adozione.data_ricezione_osservazioni
@@ -251,7 +259,7 @@ class PubblicazioneBurt(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.upload_osservazioni_privati,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.attesa,
+                    stato=StatoAzione.ATTESA,
                 ).imposta_scadenza((
                     now,  # ???
                     procedura_adozione.data_ricezione_osservazioni
@@ -268,7 +276,7 @@ class PubblicazioneBurt(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.pareri_adozione_sca,
                         qualifica_richiesta=QualificaRichiesta.SCA,
-                        stato=STATO_AZIONE.attesa,
+                        stato=StatoAzione.ATTESA,
                     ).imposta_scadenza(
                         get_scadenza(
                             procedura_adozione.pubblicazione_burt_data,
@@ -322,14 +330,14 @@ class OsservazioniRegione(graphene.Mutation):
         if needs_execution(_osservazioni_regione):
             chiudi_azione(_osservazioni_regione)
 
-        if not piano.getFirstAction(TipologiaAzione.controdeduzioni):
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.controdeduzioni,
-                    qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.attesa
-                ))
+            if not piano.getFirstAction(TipologiaAzione.controdeduzioni):
+                crea_azione(
+                    Azione(
+                        piano=piano,
+                        tipologia=TipologiaAzione.controdeduzioni,
+                        qualifica_richiesta=QualificaRichiesta.COMUNE,
+                        stato=StatoAzione.ATTESA
+                    ))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -372,14 +380,14 @@ class OsservazioniPrivati(graphene.Mutation):
         if needs_execution(_upload_osservazioni_privati):
             chiudi_azione(_upload_osservazioni_privati)
 
-        if not piano.getFirstAction(TipologiaAzione.controdeduzioni):
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.controdeduzioni,
-                    qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.attesa
-                ))
+            if not piano.getFirstAction(TipologiaAzione.controdeduzioni):
+                crea_azione(
+                    Azione(
+                        piano=piano,
+                        tipologia=TipologiaAzione.controdeduzioni,
+                        qualifica_richiesta=QualificaRichiesta.COMUNE,
+                        stato=StatoAzione.ATTESA
+                    ))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -435,7 +443,7 @@ class Controdeduzioni(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.piano_controdedotto,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.attesa
+                    stato=StatoAzione.ATTESA
                 ))
 
     @classmethod
@@ -497,7 +505,7 @@ class PianoControdedotto(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.esito_conferenza_paesaggistica,
                         qualifica_richiesta=QualificaRichiesta.REGIONE,
-                        stato=STATO_AZIONE.attesa
+                        stato=StatoAzione.ATTESA
                     ))
 
             else:
@@ -566,7 +574,7 @@ class EsitoConferenzaPaesaggistica(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.rev_piano_post_cp,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.necessaria
+                    stato=StatoAzione.NECESSARIA
                 ))
 
     @classmethod
@@ -683,7 +691,7 @@ class InvioPareriAdozioneVAS(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.parere_motivato_ac,
                     qualifica_richiesta=QualificaRichiesta.AC,
-                    stato=STATO_AZIONE.attesa,
+                    stato=StatoAzione.ATTESA,
                 ).imposta_scadenza(
                     get_scadenza(
                         procedura_adozione.pubblicazione_burt_data,
@@ -805,7 +813,7 @@ class InvioParereMotivatoAC(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.upload_elaborati_adozione_vas,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.attesa
+                    stato=StatoAzione.ATTESA
                 ))
 
     @classmethod

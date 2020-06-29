@@ -87,20 +87,32 @@ class AbstractSerapideTest(GraphQLTestCase):
         print("{title} ({code}) ^^^^^^^^^^^^^^^^^^^^".format(title=title, code=response.status_code))
         return response
 
-    def upload(self, file:str, codice:str, tipo:TipoRisorsa, extra_title='', expected_code=200, client=None, suffix='.pdf'):
+    def upload(self, file:str, codice:str, tipo:TipoRisorsa, extra_title='', expected_code=200, client=None,
+               datafile=None,
+               suffix='.pdf'):
         _client = client if client else self._client
-        print("UPLOAD {tipo} ================================================== {extra_title}".format(tipo=tipo.name, extra_title=extra_title))
+        print("UPLOAD {tipo} {data} ============================================= {extra_title}".format(
+                    tipo=tipo.name,
+                    extra_title=extra_title,
+                    data=os.path.basename(datafile) if datafile else suffix))
         with open(os.path.join(this_path, 'fixtures', file), 'r') as file:
             query = file.read().replace('\n', '').replace('__typename', '')
 
         query = query.replace('{codice}', codice)
         query = query.replace('{tipo_risorsa}', tipo.value)
 
-        with tempfile.NamedTemporaryFile(mode='w+', prefix=tipo.name, suffix=suffix, delete=False) as f:
-            f.write("this is a fake PDF file\n")
-            tmp_filename = f.name
+        file_to_delete = None
 
-        with open(tmp_filename) as f:
+        if datafile:
+            file_to_read = os.path.join(this_path, 'files', datafile)
+        else:
+            # datafile does not exist: create one with the given suffix
+            with tempfile.NamedTemporaryFile(mode='w+', prefix=tipo.name, suffix=suffix, delete=False) as f:
+                f.write("this is a fake PDF file\n")
+                file_to_read = f.name
+                file_to_delete = f.name
+
+        with open(file_to_read, mode='rb') as f:
             form = {
                 "operations": query,
                 "map": '{"1":["variables.file"]}',
@@ -108,14 +120,38 @@ class AbstractSerapideTest(GraphQLTestCase):
             }
 
             response = _client.post(self.GRAPHQL_URL,
-                                         content_type=MULTIPART_CONTENT,
-                                         data=form)
-        os.unlink(tmp_filename)
+                                    content_type=MULTIPART_CONTENT,
+                                    data=form)
+        if file_to_delete:
+            os.unlink(file_to_delete)
 
         dump_result('UPLOAD FILE', response)
         self.assertEqual(expected_code, response.status_code, "upload " + tipo.name  + ' failed')
         print("UPLOAD {tipo}: ({code}) ^^^^^^^^^^^^^^^^^^^^".format(tipo=tipo.name, code=response.status_code))
-        return os.path.basename(tmp_filename),response
+
+        basename = os.path.basename(file_to_read)
+        resource_uuid = self.get_resource_uuid(response, basename)
+
+        return resource_uuid,basename,response
+
+    def get_resource_uuid(self, response, basename):
+        content = json.loads(response.content)
+        uploaded = content['data']['upload'] # ['oggettoAggiornato']['risorse']['edges']
+
+        chiave_aggiornata = None
+        for key in uploaded.keys():
+            if 'Aggiornat' in key:
+                chiave_aggiornata = key
+                break
+
+        if chiave_aggiornata:
+            risorse = uploaded[chiave_aggiornata]['risorse']['edges']
+            uuid = [edge['node']['uuid'] for edge in risorse if edge['node']['nome'] == basename][0]
+        else:
+            print("OGGETTO AGGIORNATO NON TROVATO")
+            uuid = None
+
+        return uuid
 
     def create_piano(self, ipa, expected_code=200, extra_title=''):
         return self.send('001_create_piano.query', 'CREATE PIANO', extra_title, expected_code, {'IPA': ipa})
@@ -128,34 +164,34 @@ class AbstractSerapideTest(GraphQLTestCase):
                           'valore_campo': valore_campo
                           }, client=_client)
 
-    def upload_file(self, codice_piano, file_name):
-        print("UPLOAD FILE ==================================================")
-        with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
-            query_upload = file.read().replace('\n', '')
-        query_bound = query_upload.replace('{codice_piano}', codice_piano)
-
-
-        with tempfile.NamedTemporaryFile(mode='w+', suffix=".pdf", delete=False) as f:
-            f.write("this is a fake PDF file\n")
-            tmp_filename = f.name
-
-        with open(tmp_filename) as f:
-            form = {
-                "operations": query_bound,
-                "map": '{"1":["variables.file"]}',
-                "1": f,
-            }
-
-            response = self._client.post(self.GRAPHQL_URL,
-                                         content_type=MULTIPART_CONTENT,
-                                         data=form)
-            os.unlink(tmp_filename)
-
-            self.assertEqual(response.status_code, 200)
-
-        dump_result('UPLOAD FILE', response)
-        print("UPLOAD FILE OK ^^^^^^^^^^^^^^^^^^^^ 1")
-        return response
+    # def upload_file(self, codice_piano, file_name):
+    #     print("UPLOAD FILE ==================================================")
+    #     with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
+    #         query_upload = file.read().replace('\n', '')
+    #     query_bound = query_upload.replace('{codice_piano}', codice_piano)
+    #
+    #
+    #     with tempfile.NamedTemporaryFile(mode='w+', suffix=".pdf", delete=False) as f:
+    #         f.write("this is a fake PDF file\n")
+    #         tmp_filename = f.name
+    #
+    #     with open(tmp_filename) as f:
+    #         form = {
+    #             "operations": query_bound,
+    #             "map": '{"1":["variables.file"]}',
+    #             "1": f,
+    #         }
+    #
+    #         response = self._client.post(self.GRAPHQL_URL,
+    #                                      content_type=MULTIPART_CONTENT,
+    #                                      data=form)
+    #         os.unlink(tmp_filename)
+    #
+    #         self.assertEqual(response.status_code, 200)
+    #
+    #     dump_result('UPLOAD FILE', response)
+    #     print("UPLOAD FILE OK ^^^^^^^^^^^^^^^^^^^^ 1")
+    #     return response
 
 
     def update_vas(self, codice_vas, tipologia, file_name, expected_code=200):
@@ -164,34 +200,34 @@ class AbstractSerapideTest(GraphQLTestCase):
                           'tipologia_vas': tipologia,
                           })
 
-    def vas_upload_file(self, codice_vas, tipo:TipoRisorsa, file_name):
-        print("VAS UPLOAD FILE ==================================================")
-        with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
-            query = file.read().replace('\n', '')
-        query = query.replace('{codice_vas}', codice_vas)
-        query = query.replace('{tipo_risorsa}', tipo.value)
-
-        with tempfile.NamedTemporaryFile(mode='w+', prefix=tipo.name, suffix=".pdf", delete=False) as f:
-            f.write("this is a fake PDF file\n")
-            tmp_filename = f.name
-
-        with open(tmp_filename) as f:
-            form = {
-                "operations": query,
-                "map": '{"1":["variables.file"]}',
-                "1": f,
-            }
-
-            response = self._client.post(self.GRAPHQL_URL,
-                                         content_type=MULTIPART_CONTENT,
-                                         data=form)
-        os.unlink(tmp_filename)
-
-        self.assertEqual(response.status_code, 200)
-
-        dump_result('VAS UPLOAD FILE', response)
-        print("VAS UPLOAD FILE OK ^^^^^^^^^^^^^^^^^^^^ 1")
-        return response
+    # def vas_upload_file(self, codice_vas, tipo:TipoRisorsa, file_name):
+    #     print("VAS UPLOAD FILE ==================================================")
+    #     with open(os.path.join(this_path, 'fixtures', file_name), 'r') as file:
+    #         query = file.read().replace('\n', '')
+    #     query = query.replace('{codice_vas}', codice_vas)
+    #     query = query.replace('{tipo_risorsa}', tipo.value)
+    #
+    #     with tempfile.NamedTemporaryFile(mode='w+', prefix=tipo.name, suffix=".pdf", delete=False) as f:
+    #         f.write("this is a fake PDF file\n")
+    #         tmp_filename = f.name
+    #
+    #     with open(tmp_filename) as f:
+    #         form = {
+    #             "operations": query,
+    #             "map": '{"1":["variables.file"]}',
+    #             "1": f,
+    #         }
+    #
+    #         response = self._client.post(self.GRAPHQL_URL,
+    #                                      content_type=MULTIPART_CONTENT,
+    #                                      data=form)
+    #     os.unlink(tmp_filename)
+    #
+    #     self.assertEqual(response.status_code, 200)
+    #
+    #     dump_result('VAS UPLOAD FILE', response)
+    #     print("VAS UPLOAD FILE OK ^^^^^^^^^^^^^^^^^^^^ 1")
+    #     return response
 
     def promuovi_piano(self, codice_piano, file_name, expected_code=200):
         return self.send(file_name, 'PROMOZIONE PIANO', '', expected_code, {'codice': codice_piano,})
@@ -207,6 +243,9 @@ class AbstractSerapideTest(GraphQLTestCase):
 
 
 def dump_result(title, result):
+    if 'skip_payload' in os.environ:
+        return
+
     print(title + " result --------------------------------------------------")
 
     print(result)

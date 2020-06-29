@@ -11,7 +11,7 @@
   upload: uploadRisorsaAdozione(file: $file, codice: $codice, tipoFile: $tipo) {
     success
     fileName
-    proceduraAdozioneAggiornata {
+    oggettoAggiornato: proceduraAdozioneAggiornata {
       ...ADOZIONE
     }
   }

@@ -13,8 +13,6 @@ from enum import Enum
 
 from model_utils import Choices
 
-from django.utils.translation import gettext as _
-
 from strt_users.enums import (
     QualificaRichiesta,
     SerapideEnum)
@@ -168,12 +166,11 @@ class TipologiaCopianificazione(SerapideEnum):
     NON_NECESSARIA = 'Non necessaria'
 
 
-STATO_AZIONE = Choices(
-        ('unknown', _('UNKNOWN')),
-        ('nessuna', _('NESSUNA')),
-        ('attesa', _('ATTESA')),
-        ('necessaria', _('NECESSARIA')),
-    )
+class StatoAzione(SerapideEnum):
+    ATTESA = 'attesa'
+    NECESSARIA = 'necessaria'
+    ESEGUITA = 'eseguita'
+    FALLITA = 'fallita'
 
 
 class TipologiaAzione(SerapideEnum):
@@ -226,7 +223,17 @@ class TipologiaAzione(SerapideEnum):
     convocazione_commissione_paritetica = 'Convocazione Commissione Paritetica'  # Comune
     compilazione_finale_monitoraggio_urbanistico = 'Compilazione Finale Monitoraggio Urbanistico'  # Comune
     pubblicazione_piano = 'Pubblicazione Piano'  # Comune
-
+    # azioni AUTO per procedure cartografiche
+    validazione_cartografia_adozione = "Validazione elaborati cartografici - Adozione"
+    ingestione_cartografia_adozione = "Processamento elaborati cartografici - Adozione"
+    validazione_cartografia_controdedotta = "Validazione elaborati cartografici - PCD Adozione"
+    ingestione_cartografia_controdedotta = "Processamento elaborati cartografici - PCD Adozione"
+    validazione_cartografia_cp_adozione = "Validazione elaborati cartografici - CP Adozione"
+    ingestione_cartografia_cp_adozione = "Processamento elaborati cartografici - CP Adozione"
+    validazione_cartografia_approvazione = "Validazione elaborati cartografici - Approvazione"
+    ingestione_cartografia_approvazione = "Processamento elaborati cartografici - Approvazione"
+    validazione_cartografia_cp_approvazione = "Validazione elaborati cartografici - CP Approvazione"
+    ingestione_cartografia_cp_approvazione = "Processamento elaborati cartografici - CP Approvazione"
 
 class AzioneInfo:
     def __init__(self, fase: Fase, tooltip=None):
@@ -240,6 +247,7 @@ ART22 = 'art.22 L.R. 10/2010'
 ART23 = 'art.23 L.R. 10/2010'
 ART25 = 'art.25 L.R. 65/2014'
 ART65 = 'art.65/104 RR'
+AUTO_LABEL = 'Processamento automatico'
 
 InfoAzioni = {
         TipologiaAzione.unknown: AzioneInfo(Fase.UNKNOWN, 'Unknown'),
@@ -270,6 +278,12 @@ InfoAzioni = {
         TipologiaAzione.esito_conferenza_copianificazione: AzioneInfo(Fase.ANAGRAFICA, ART25),
         # Adozione
         TipologiaAzione.trasmissione_adozione: AzioneInfo(Fase.AVVIO, ART19),
+        TipologiaAzione.validazione_cartografia_adozione: AzioneInfo(Fase.AVVIO, AUTO_LABEL),
+        TipologiaAzione.ingestione_cartografia_adozione: AzioneInfo(Fase.AVVIO, AUTO_LABEL),
+        TipologiaAzione.validazione_cartografia_controdedotta: AzioneInfo(Fase.AVVIO, AUTO_LABEL),
+        TipologiaAzione.ingestione_cartografia_controdedotta: AzioneInfo(Fase.AVVIO, AUTO_LABEL),
+        TipologiaAzione.validazione_cartografia_cp_adozione: AzioneInfo(Fase.AVVIO, AUTO_LABEL),
+        TipologiaAzione.ingestione_cartografia_cp_adozione: AzioneInfo(Fase.AVVIO, AUTO_LABEL),
         TipologiaAzione.pubblicazione_burt: AzioneInfo(Fase.AVVIO, ART19),
         TipologiaAzione.osservazioni_enti: AzioneInfo(Fase.AVVIO, ART19),
         TipologiaAzione.osservazioni_regione: AzioneInfo(Fase.AVVIO, ART19),
@@ -287,6 +301,12 @@ InfoAzioni = {
         TipologiaAzione.attribuzione_conformita_pit: AzioneInfo(Fase.ADOZIONE),
         TipologiaAzione.esito_conferenza_paesaggistica_ap: AzioneInfo(Fase.ADOZIONE),
         TipologiaAzione.pubblicazione_approvazione: AzioneInfo(Fase.ADOZIONE),
+
+        TipologiaAzione.validazione_cartografia_approvazione: AzioneInfo(Fase.ADOZIONE, AUTO_LABEL),
+        TipologiaAzione.ingestione_cartografia_approvazione: AzioneInfo(Fase.ADOZIONE, AUTO_LABEL),
+        TipologiaAzione.validazione_cartografia_cp_approvazione: AzioneInfo(Fase.ADOZIONE, AUTO_LABEL),
+        TipologiaAzione.ingestione_cartografia_cp_approvazione: AzioneInfo(Fase.ADOZIONE, AUTO_LABEL),
+
         # Pubblicazione
         TipologiaAzione.convocazione_commissione_paritetica: AzioneInfo(Fase.APPROVAZIONE),
         TipologiaAzione.compilazione_finale_monitoraggio_urbanistico: AzioneInfo(Fase.APPROVAZIONE),
@@ -302,7 +322,7 @@ AZIONI_BASE = {
         {
             "tipologia": TipologiaAzione.creato_piano,
             "qualifica": QualificaRichiesta.COMUNE,
-            "stato": STATO_AZIONE.necessaria,
+            "stato": StatoAzione.NECESSARIA,
         }
     ],
     Fase.ANAGRAFICA: [
@@ -375,3 +395,49 @@ class TipoMail(Enum):
     # upload_elaborati_adozione_vas = ''
     azione_generica = ''
     trasmissione_dp_vas = ''
+
+
+class TipoReportAzione(SerapideEnum):
+    INFO = 'info'
+    WARN = 'warn'
+    ERR = 'err'
+
+
+class CartografiaSupportoPrevisioniEnum(Enum):
+    FEN_GEO_PO = 'Aree ed elementi esposti a fenomeni geologici'
+    FEN_ALL_PO = 'Aree ed elementi esposti a fenomeni alluvionali'
+    R_SISM_PO = 'Vulnerabilità sismica, esposizione sismica e aree a rischio sismico'
+    STRAT_PO = 'Edifici ed infrastrutture strategiche ai fini dell’emergenza'
+    RILEV_PO = 'Edifici rilevanti'
+    S_PEE_PO = 'Patrimonio Edilizio Esistente e relativa schedatura'
+
+
+class CartografiaDisciplinaInsediamentiEnum(Enum):
+    CEN_PO = 'Centri o manufatti di valore storico, architettonico o testimoniale'
+    NUC_PO = 'Nuclei storici o manufatti di valore storico, architettonico o testimoniale'
+    EDI_VAL_PO = 'Edifici o manufatti di valore storico, architettonico o testimoniale'
+    I_PEE_PO = 'Interventi sul patrimonio edilizio esistente realizzabili nel territorio urbanizzato'
+    ARU_PO = 'Aree Rurali'
+    NUR_PO = 'Nuclei rurali'
+    NAT_PO = 'Aree ad elevato grado di naturalità'
+    AUF_PO = 'Ulteriori aree'
+    APT_PO = 'Ambiti di pertinenza dei centri e dei nuclei storici'
+    APU_PO = 'Ambiti periurbani'
+    PAI_PO = 'Paesaggi agrari e pastorali di interesse storico'
+    ATD_PO = 'Ambiti territoriali differenziati del Territorio Rurale'
+    DL_FUN = 'Distribuzione e localizzazione delle funzioni'
+    POR_PO = 'Ambiti portuali del territorio comunale, entro i quali le previsioni si attuano tramite il piano regolatore portuale'
+    DEG_PO = 'Zone connotate da condizioni di degrado'
+
+
+class CartografiaAssettiInsediativiEnum(Enum):
+    PAT_PO = 'Aree interessate da piani attuativi'
+    RIG_PO = 'Aree interessate da interventi di rigenerazione urbana'
+    PUC_PO = 'Aree interessate da progetti unitari convenzionati'
+    NED_PO = 'Ulteriori aree interessate da nuova edificazione consentiti all’interno del perimetro del territorio urbanizzato'
+    INT_COP_PO = 'Nuovi impegni di suolo esterni al perimetro del territorio urbanizzato copianificati'
+    OUP_PO = 'Aree destinate ad opere di urbanizzazione primaria'
+    OUS_PO = 'Aree destinate ad opere di urbanizzazione secondaria'
+    ESP_PO = 'Beni sottoposti a vincolo ai fini espropriativi'
+    PCP_PO = 'Aree interessate da perequazione urbanistica, la compensazione urbanistica, perequazione territoriale'
+    E_INC = 'Edifici esistenti non più compatibili con gli indirizzi della pianificazione'

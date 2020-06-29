@@ -23,16 +23,17 @@ def run_setup_hooks(*args, **kwargs):
     # 0. Model Signals
     from django.db.models import signals
     from .models import Piano
+    import serapide_core.signals as core_signals
+
     signals.post_save.connect(model_object_post_save, sender=Piano)
 
     # 1. message_sent
     from pinax.messages.signals import message_sent
-    from ..signals import message_sent_notification
-    message_sent.connect(message_sent_notification)
+    message_sent.connect(core_signals.message_sent_notification)
 
     # 2. piano_phase_changed
-    from ..signals import piano_phase_changed, piano_phase_changed_notification
-    piano_phase_changed.connect(piano_phase_changed_notification)
+    core_signals.piano_phase_changed.connect(
+        core_signals.piano_phase_changed_notification)
 
 
 class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):

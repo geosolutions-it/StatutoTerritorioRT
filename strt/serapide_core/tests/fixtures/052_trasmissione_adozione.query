@@ -41,7 +41,7 @@ fragment Azioni on AzioneNode {
       label
       tooltip
       fase
-
+      report {data tipo messaggio}
 }
 "
 }

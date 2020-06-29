@@ -44,7 +44,7 @@ from serapide_core.modello.models import (
 )
 
 from serapide_core.modello.enums import (
-    STATO_AZIONE,
+    StatoAzione,
     TipologiaAzione,
     QualificaRichiesta,
     TipoExpire,
@@ -129,7 +129,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.esito_conferenza_paesaggistica_ap,
                         qualifica_richiesta=QualificaRichiesta.REGIONE,
-                        stato=STATO_AZIONE.attesa
+                        stato=StatoAzione.ATTESA
                     ))
 
                 procedura_approvazione.richiesta_conferenza_paesaggistica = True
@@ -141,7 +141,7 @@ class TrasmissioneApprovazione(graphene.Mutation):
                         piano=piano,
                         tipologia=TipologiaAzione.pubblicazione_approvazione,
                         qualifica_richiesta=QualificaRichiesta.COMUNE,
-                        stato=STATO_AZIONE.necessaria
+                        stato=StatoAzione.NECESSARIA
                     ))
 
     @classmethod
@@ -203,7 +203,7 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.pubblicazione_approvazione,
                     qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=STATO_AZIONE.necessaria
+                    stato=StatoAzione.NECESSARIA
                 ))
 
     @classmethod
@@ -267,7 +267,7 @@ class PubblicazioneApprovazione(graphene.Mutation):
                     piano=piano,
                     tipologia=TipologiaAzione.attribuzione_conformita_pit,
                     qualifica_richiesta=QualificaRichiesta.REGIONE,
-                    stato=STATO_AZIONE.attesa,
+                    stato=StatoAzione.ATTESA,
                 ).imposta_scadenza(
                     get_scadenza(
                         _trasmissione_approvazione.data,

@@ -22,6 +22,7 @@ from django.utils.translation import gettext_lazy as _
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
 REACT_APP_DIR = os.path.join(BASE_DIR, 'serapide_client') # serapide-client
 GEOPORTALE_REACT_APP_DIR = os.path.join(BASE_DIR, 'strt_geoportale', 'client') # serapide-client
+STORAGE_ROOT_DIR =  EnvUtil.get_env_var('STORAGE_ROOT_DIR', default=os.path.join(BASE_DIR, 'storage'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -332,11 +333,11 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d '
+            'format': '%(asctime)s %(levelname)-7s %(module)s %(process)d '
                       '%(thread)d %(message)s'
         },
-         'avg0': {
-            'format': '%(levelname)s %(asctime)s %(message)s'
+        'avg0': {
+            'format': '%(asctime)s %(levelname)-7s %(message)s'
         },
         'simple': {
             'format': '%(message)s',
@@ -354,7 +355,7 @@ LOGGING = {
             'formatter': 'avg0'
         },
         'mail_admins': {
-            'level': 'ERROR',
+            'level': 'INFO',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
         }
@@ -373,6 +374,8 @@ LOGGING = {
         "strt_users": {
             "handlers": ["console"], "level": "INFO", },
         "serapide_core": {
+            "handlers": ["console"], "level": "INFO", },
+        "pinax": {
             "handlers": ["console"], "level": "INFO", },
     },
 }

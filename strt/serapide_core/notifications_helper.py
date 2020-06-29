@@ -12,11 +12,9 @@
 import logging
 from importlib import import_module
 
-from django.apps import AppConfig
 from django.conf import settings
+from django.apps import AppConfig
 from django.db.models import signals
-
-from .tasks import send_queued_notifications
 
 E = getattr(settings, 'NOTIFICATIONS_ENABLED', False)
 M = getattr(settings, 'NOTIFICATIONS_MODULE', None)
@@ -57,7 +55,8 @@ def call_celery(func):
     def wrap(*args, **kwargs):
         ret = func(*args, **kwargs)
         if settings.PINAX_NOTIFICATIONS_QUEUE_ALL:
-            send_queued_notifications.delay()
+            import serapide_core.tasks as tasks
+            tasks.send_queued_notifications.delay()
         return ret
     return wrap
 
