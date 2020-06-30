@@ -13,9 +13,10 @@ from django.conf.urls import url
 
 from ..schema import schema
 # from graphene_django.views import GraphQLView
-from .views import PrivateGraphQLView
-
+from .views import PrivateGraphQLView, geo_search, geo_get
 
 urlpatterns = [
     url(r'^graphql', PrivateGraphQLView.as_view(graphiql=True, schema=schema)),
+    url(r'^geo/map/search$', geo_search),
+    url(r'^geo/map/(?P<pk>.+)$', geo_get),
 ]

@@ -310,10 +310,24 @@ class MiscTest(AbstractSerapideProcsTest):
         self.assertEqual(2, len(elaborati))
 
         response = self._client.get(
+                                    "/serapide/geo/map/search?q={}".format(self.codice_piano[0:3]),
+                                    content_type = "application/json"
+                                    )
+        logger.warning('GEO SEARCH {} {}'.format(response, response.content))
+
+        content = json.dumps(json.loads(response.content), indent=4)
+        print(content)
+
+
+        response = self._client.get(
                                     "/serapide/geo/map/{}".format(self.codice_piano),
                                     content_type = "application/json"
                                     )
-        logger.warning('GEO {} {}'.format(response, response.content))
+        logger.warning('GEO GET {} {}'.format(response, response.content))
+
+        content = json.dumps(json.loads(response.content), indent=4)
+        print(content)
+
 
         #
         # response = self.client.post(

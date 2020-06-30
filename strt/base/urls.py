@@ -15,7 +15,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 # APIs imports
 from strt_geoportale import urls as geoportale_urls
-from serapide_core import urls as serapide_code_urls
+from serapide_core import urls as serapide_core_urls
 
 # Dajngo admin
 urlpatterns = [
@@ -30,7 +30,7 @@ urlpatterns += [
 
 # APIs urls
 urlpatterns += [
-    path('', include(serapide_code_urls)),
+    path('', include(serapide_core_urls)),
 ]
 
 # Geoportale urls

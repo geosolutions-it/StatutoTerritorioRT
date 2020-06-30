@@ -10,13 +10,33 @@
 #########################################################################
 
 import json
+from collections import OrderedDict
 
-from django.http import HttpResponse
+from django.core.paginator import QuerySetPaginator, Paginator
+from rest_framework import status
+from rest_framework.generics import get_object_or_404
+from rest_framework.renderers import JSONRenderer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from graphene_django.views import HttpError
 from graphene_file_upload.django import FileUploadGraphQLView
 
 from graphql_extensions.views import GraphQLView
+
+from serapide_core.modello.enums import (
+    CartografiaSupportoPrevisioniEnum,
+    CartografiaAssettiInsediativiEnum,
+    CartografiaDisciplinaInsediamentiEnum,
+)
+
+from serapide_core.modello.models import (
+    Piano,
+    LottoCartografico,
+    ElaboratoCartografico,
+)
 
 
 class HTTPErrorAwareMixin:
@@ -59,3 +79,87 @@ class PrivateGraphQLView(HTTPErrorAwareMixin,
 
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
+
+
+def geo_search(request, **kwargs):
+    q = kwargs.get('q', None)
+    qs = Piano.objects
+    if q:
+        qs = qs.filter(descrizione__icontains=q)
+
+    qs = qs.order_by('codice')
+
+    page = kwargs.get('page', 1)
+    limit = kwargs.get('limit', 10)
+
+    paginator = Paginator(qs.all(), limit)
+    page_obj = paginator.get_page(page)
+
+    results = [ {
+                'id': piano.codice,
+                'type': piano.tipologia.value,
+                'name': piano.descrizione,
+                'comune': piano.ente.nome,
+                'lastUpdate': piano.last_update,
+            } for piano in page_obj ]
+
+    response = {
+        "page": page,
+        "totalCount": paginator.count,
+        'results': results
+    }
+
+    return JsonResponse(response, status=200)
+
+
+def geo_get(request, pk=None):
+    # piano: Piano = get_object_or_404(Piano, pk=pk)
+    piano: Piano = Piano.objects.filter(codice=pk).first()
+    lotti = LottoCartografico.objects.filter(piano=piano)
+
+    obj = OrderedDict()
+    obj['id'] = piano.id
+    obj['type'] = piano.tipologia.name
+    obj['name'] = piano.descrizione
+    obj['comune'] = piano.ente.nome
+
+    map = OrderedDict()
+    layers = []
+    map['layers'] = layers
+    obj['map'] = map
+
+    for lotto in lotti:
+        for elaborato in ElaboratoCartografico.objects.filter(lotto=lotto):
+            layer = OrderedDict()
+            layers.append(layer)
+
+            layer['id'] = elaborato.id
+            layer['group'] = 'piano.{}'.format(lotto.azione.tipologia.name)  # todo
+            layer['search'] = 'TODO'
+            layer['name'] = elaborato.nome
+            layer['description'] = find_layer_desc(elaborato.nome)
+            layer['title'] = elaborato.nome
+            layer['type'] = 'wms'
+            layer['url'] = 'to be defined by settings'
+
+            bbox = OrderedDict()
+            bbox['crs'] = elaborato.crs
+            bounds = OrderedDict()
+            bounds['minx'] = elaborato.minx
+            bounds['maxx'] = elaborato.maxx
+            bounds['miny'] = elaborato.miny
+            bounds['maxy'] = elaborato.maxy
+            bbox['bounds'] = bounds
+            layer['bbox'] = bbox
+
+            layer['visibility'] = True
+            layer['singleTile'] = False
+
+    return JsonResponse(obj, status=200)
+
+
+def find_layer_desc(nome_ec):
+    e = CartografiaSupportoPrevisioniEnum.fix_enum(nome_ec, none_on_error=True) or \
+           CartografiaDisciplinaInsediamentiEnum.fix_enum(nome_ec, none_on_error=True) or \
+           CartografiaAssettiInsediativiEnum.fix_enum(nome_ec, none_on_error=True)
+    return e.value if e else 'Sconosciuto'
