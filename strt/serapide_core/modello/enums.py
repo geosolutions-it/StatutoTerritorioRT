@@ -403,7 +403,7 @@ class TipoReportAzione(SerapideEnum):
     ERR = 'err'
 
 
-class CartografiaSupportoPrevisioniEnum(Enum):
+class CartografiaSupportoPrevisioniEnum(SerapideEnum):
     FEN_GEO_PO = 'Aree ed elementi esposti a fenomeni geologici'
     FEN_ALL_PO = 'Aree ed elementi esposti a fenomeni alluvionali'
     R_SISM_PO = 'Vulnerabilità sismica, esposizione sismica e aree a rischio sismico'
@@ -412,7 +412,7 @@ class CartografiaSupportoPrevisioniEnum(Enum):
     S_PEE_PO = 'Patrimonio Edilizio Esistente e relativa schedatura'
 
 
-class CartografiaDisciplinaInsediamentiEnum(Enum):
+class CartografiaDisciplinaInsediamentiEnum(SerapideEnum):
     CEN_PO = 'Centri o manufatti di valore storico, architettonico o testimoniale'
     NUC_PO = 'Nuclei storici o manufatti di valore storico, architettonico o testimoniale'
     EDI_VAL_PO = 'Edifici o manufatti di valore storico, architettonico o testimoniale'
@@ -430,7 +430,7 @@ class CartografiaDisciplinaInsediamentiEnum(Enum):
     DEG_PO = 'Zone connotate da condizioni di degrado'
 
 
-class CartografiaAssettiInsediativiEnum(Enum):
+class CartografiaAssettiInsediativiEnum(SerapideEnum):
     PAT_PO = 'Aree interessate da piani attuativi'
     RIG_PO = 'Aree interessate da interventi di rigenerazione urbana'
     PUC_PO = 'Aree interessate da progetti unitari convenzionati'

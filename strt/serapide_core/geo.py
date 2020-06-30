@@ -105,8 +105,11 @@ def process_carto(piano: Piano, risorse, lotto: LottoCartografico, tipo: TipoRis
     if not continue_processing:
         return
 
+    rezip_dir = os.path.join(resource_dir, 'rezip')
+    os.makedirs(rezip_dir)
+
     for shp in shp_list:
-            insert_shp(shp, )
+        rezip_shp(shp, rezip_dir)
 
 
 def search_shp(dir):
@@ -153,6 +156,16 @@ def validate_shp(lotto, shp_file):
     return None
 
 
-def insert_shp(resource_dir):
-    pass
+def rezip_shp(shp_file, destination_dir):
 
+    src_basename = os.path.basename(shp_file)
+    src_barename, _ = os.path.splitext(src_basename)
+    dest_zip = os.path.join(destination_dir, '{}.zip'.format(src_barename))
+
+    shp_source_dir = os.path.dirname(shp_file)
+
+    with zipfile.ZipFile(dest_zip, 'w') as zip_file:
+        for file in os.listdir(shp_source_dir):
+            basename = os.path.basename(file)
+            if basename.startswith(src_barename):
+                zip_file.write(os.path.join(shp_source_dir, file), basename)
