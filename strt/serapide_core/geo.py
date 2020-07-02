@@ -34,7 +34,7 @@ def handle_message(lotto: LottoCartografico, tipo: TipoReportAzione, msg_dict, m
     report = AzioneReport(
         azione = lotto.azione,
         tipo = tipo,
-        messaggio = '{}: {}'.format(tipo.name, message),
+        messaggio = message,
         data = datetime.datetime.now(timezone.get_current_timezone())
     )
     report.save()
@@ -87,10 +87,19 @@ def process_carto(piano: Piano, risorse, lotto: LottoCartografico, tipo: TipoRis
         handle_message(lotto, TipoReportAzione.ERR, msg, "Errore nell'estrazione file {file}: {err}".format(
             file=os.path.basename(risorsa.file.name),
             err=e))
+        risorsa.valida = False
+        risorsa.save()
         return
 
     # Search for SHP files
     shp_list = search_shp(unzip_dir)
+
+    if len(shp_list) == 0:
+        handle_message(lotto, TipoReportAzione.ERR, msg, "Nessuno shapefile valido trovato. Tipo: {tipo}"
+                       .format(tipo=tipo.value))
+        risorsa.valida = False
+        risorsa.save()
+        return
 
     continue_processing = True
 
@@ -103,6 +112,8 @@ def process_carto(piano: Piano, risorse, lotto: LottoCartografico, tipo: TipoRis
             continue
 
     if not continue_processing:
+        risorsa.valida = False
+        risorsa.save()
         return
 
     rezip_dir = os.path.join(resource_dir, 'rezip')
@@ -110,6 +121,9 @@ def process_carto(piano: Piano, risorse, lotto: LottoCartografico, tipo: TipoRis
 
     for shp in shp_list:
         rezip_shp(shp, rezip_dir)
+
+    risorsa.valida = True
+    risorsa.save()
 
 
 def search_shp(dir):

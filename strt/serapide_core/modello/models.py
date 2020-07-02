@@ -96,6 +96,7 @@ class Risorsa(models.Model):
     )
 
     archiviata = models.BooleanField(null=False, blank=False, default=False)
+    valida = models.NullBooleanField(default=None)
 
     @classmethod
     def create(cls, nome, file, tipo, dimensione, fase):
