@@ -10,26 +10,9 @@
 #########################################################################
 
 import logging
-import datetime
-from enum import Enum
-
-import graphene
-import traceback
-
-from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
-
-
-from graphql_extensions.exceptions import GraphQLError
 
 from serapide_core.api.piano_utils import (
-    needs_execution,
-    is_executed,
-    ensure_fase,
-    chiudi_azione,
     crea_azione,
-    chiudi_pendenti,
-    get_scadenza, get_now,
     riapri_azione,
 )
 
@@ -43,11 +26,10 @@ from serapide_core.modello.models import (
 from serapide_core.modello.enums import (
     StatoAzione,
     TipologiaAzione,
-    TipoRisorsa,
 )
 from serapide_core.tasks import esegui_procedura_cartografica
 
-from strt_users.enums import QualificaRichiesta, Qualifica
+from strt_users.enums import QualificaRichiesta
 
 logger = logging.getLogger(__name__)
 
@@ -74,18 +56,12 @@ def inizializza_procedura_cartografica(piano: Piano, tipo: TipologiaAzione, pare
     lotto = LottoCartografico.objects.filter(azione=azione_carto).first()
     if lotto:
         ElaboratoCartografico.objects.filter(lotto=lotto).delete()
-
-    assert azione_carto
-
-    lotto = LottoCartografico(
-        piano=piano,
-        azione=azione_carto,
-        azione_parent=parent
-    )
-    lotto.save()
+    else:
+        lotto = LottoCartografico(
+            piano=piano,
+            azione=azione_carto,
+            azione_parent=parent
+        )
+        lotto.save()
 
     esegui_procedura_cartografica.delay(lotto.id)
-
-# def cerca_procedura_cartografica_aperta() -> LottoCartografico:
-#     return LottoCartografico.objects.filter(azione__data__isnull=True).first()
-
