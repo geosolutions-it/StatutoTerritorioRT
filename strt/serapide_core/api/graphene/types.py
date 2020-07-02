@@ -24,8 +24,17 @@ from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
-from serapide_core.api.auth.user import is_soggetto_operante, has_qualifica, get_so, can_edit_piano, can_admin_delega
-from serapide_core.api.piano_utils import get_scadenza
+from serapide_core.api.auth.user import (
+    is_soggetto_operante,
+    has_qualifica,
+    get_so,
+    can_edit_piano,
+    can_admin_delega,
+    get_piani_visibili_id,
+)
+
+from serapide_core.api.piano_utils import get_scadenza, needs_execution
+
 from strt_users.enums import (
     Qualifica,
     Profilo,
@@ -76,6 +85,7 @@ from serapide_core.modello.models import (
     RisorseAdozioneVas,
     RisorseApprovazione,
     RisorsePubblicazione,
+    LottoCartografico,
 )
 
 logger = logging.getLogger(__name__)
@@ -149,6 +159,7 @@ class AzioneNode(DjangoObjectType):
     eseguibile = graphene.Boolean()
 
     report = graphene.List(AzioneReportNode)
+    lotto_errato = graphene.Field('serapide_core.api.graphene.types.LottoCartograficoNode')
 
     def resolve_fase(self, info, **args):
         return InfoAzioni[self.tipologia].fase.name if self.tipologia in InfoAzioni else None
@@ -167,10 +178,13 @@ class AzioneNode(DjangoObjectType):
         user = info.context.user
         piano = self.piano
 
-        return can_edit_piano(user, piano, qreq)
+        return needs_execution(self) and can_edit_piano(user, piano, qreq)
 
     def resolve_report(self, info, **args):
         return AzioneReport.objects.filter(azione=self)
+
+    def resolve_lotto_errato(self, info):
+        return LottoCartografico.objects.filter(azione_parent=self, azione__stato=StatoAzione.FALLITA).first()
 
     class Meta:
         model = Azione
@@ -780,6 +794,25 @@ class PianoNode(DjangoObjectType):
         }
         interfaces = (relay.Node, )
         convert_choices_to_enum = False
+
+
+class LottoCartograficoNode(DjangoObjectType):
+
+    class Meta:
+        model = LottoCartografico
+        filter_fields = {
+            'piano': ['exact'],
+            'azione_parent': ['exact'],
+            'azione': ['exact'],
+        }
+
+    @classmethod
+    def get_queryset(cls, queryset, info):
+        if info.context.user.is_anonymous:
+            return queryset.filter(piano__fase=Fase.PUBBLICAZIONE)
+        else:
+            piani = get_piani_visibili_id(info.context.user)
+            return queryset.filter(piano__id__in=piani)
 
 
 class QualificaChoiceNode(DjangoObjectType):

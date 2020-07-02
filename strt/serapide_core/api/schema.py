@@ -38,6 +38,7 @@ from serapide_core.api.graphene.mutations import (
     approvazione,
     pubblicazione,
 )
+from serapide_core.modello.models import LottoCartografico
 
 from strt_users.models import (
     Utente,
@@ -92,13 +93,21 @@ class Query(object):
 
     user_choices = graphene.Field(types.UtenteChoiceNode)
 
-    uffici = graphene.List(types.QualificaUfficioNode, qualifica=graphene.String(), ipa=graphene.String(), qualifiche=graphene.List(graphene.String))
+    uffici = graphene.List(types.QualificaUfficioNode,
+                           qualifica=graphene.String(),
+                           ipa=graphene.String(),
+                           qualifiche=graphene.List(graphene.String))
 
     # Enums
     # fase_piano = graphene.List(enums.FasePiano) # TODO
     tipologia_vas = graphene.List(enums.TipologiaVAS)
     tipologia_piano = graphene.List(enums.TipologiaPiano)
     tipologia_conferenza_copianificazione = graphene.List(enums.TipologiaConferenzaCopianificazione)
+
+    lotto_cartografico = graphene.List(types.LottoCartograficoNode,
+                                       codice_piano=graphene.String(),
+                                       azione_parent_uuid=graphene.String(),
+                                       azione_uuid=graphene.String())
 
     def resolve_fase_piano(self, info):
         _l = []
@@ -144,6 +153,20 @@ class Query(object):
     def resolve_tipologia_conferenza_copianificazione(self, info):
         return [enums.TipologiaConferenzaCopianificazione(value=t.name, label=t.value)
                     for t in TipologiaCopianificazione]
+
+    def resolve_lotto_cartografico(self, info,
+                                    codice_piano=None,
+                                    azione_parent_uuid=None,
+                                    azione_uuid=None):
+        qs = LottoCartografico.objects
+
+        if codice_piano:
+            qs = qs.filter(piano__codice=codice_piano)
+        if azione_uuid:
+            qs = qs.filter(azione__uuid=azione_uuid)
+        if azione_parent_uuid:
+            qs = qs.filter(azione_parent__uuid=azione_parent_uuid)
+        return qs.all()
 
     # Debug
     debug = graphene.Field(DjangoDebug, name='__debug')
