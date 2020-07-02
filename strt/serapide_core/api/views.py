@@ -26,10 +26,13 @@ from graphene_file_upload.django import FileUploadGraphQLView
 
 from graphql_extensions.views import GraphQLView
 
-from serapide_core.modello.enums import (
-    CartografiaSupportoPrevisioniEnum,
-    CartografiaAssettiInsediativiEnum,
-    CartografiaDisciplinaInsediamentiEnum,
+from serapide_core.modello.enums_geo import (
+    PO_CartografiaSupportoPrevisioniEnum,
+    PO_CartografiaAssettiInsediativiEnum,
+    PO_CartografiaDisciplinaInsediamentiEnum,
+    PS_StrategiaEnum,
+    PS_StatutoDelTerritorioEnum,
+    PS_QuadroConoscitivoEnum,
 )
 
 from serapide_core.modello.models import (
@@ -159,7 +162,14 @@ def geo_get(request, pk=None):
 
 
 def find_layer_desc(nome_ec):
-    e = CartografiaSupportoPrevisioniEnum.fix_enum(nome_ec, none_on_error=True) or \
-           CartografiaDisciplinaInsediamentiEnum.fix_enum(nome_ec, none_on_error=True) or \
-           CartografiaAssettiInsediativiEnum.fix_enum(nome_ec, none_on_error=True)
-    return e.value if e else 'Sconosciuto'
+    for e in (PO_CartografiaSupportoPrevisioniEnum,
+              PO_CartografiaAssettiInsediativiEnum,
+              PO_CartografiaDisciplinaInsediamentiEnum,
+              PS_StrategiaEnum,
+              PS_StatutoDelTerritorioEnum,
+              PS_QuadroConoscitivoEnum,):
+        fixed = e.fix_enum(nome_ec, none_on_error=True)
+        if fixed:
+            return fixed.value
+
+    return 'Sconosciuto'

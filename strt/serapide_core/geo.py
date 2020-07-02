@@ -9,6 +9,7 @@ import zipfile
 from django.conf import settings
 from django.utils import timezone
 
+from serapide_core.modello.enums_geo import MAPPING_RISORSA_ENUM
 from serapide_core.modello.models import (
     LottoCartografico,
     ElaboratoCartografico,
@@ -56,6 +57,14 @@ def process_carto(piano: Piano, risorse, lotto: LottoCartografico, tipo: TipoRis
     :return:
     '''
 
+    expected_shapefiles = MAPPING_RISORSA_ENUM.get(tipo, None)
+    if expected_shapefiles is None:
+        # Non dovrebbe accadere: è un errore nella definizione delle liste
+        handle_message(lotto, TipoReportAzione.ERR, msg, "*** Lista di shapefile accettabili vuota. Tipo: {tipo}"
+                       .format(tipo=tipo.value))
+        return
+    exp_names = [item.name for item in expected_shapefiles]
+
     risorse_filtrate: Risorsa = risorse.filter(tipo=tipo.value, archiviata=False)
     risorse_cnt = risorse_filtrate.all().count()
 
@@ -92,16 +101,28 @@ def process_carto(piano: Piano, risorse, lotto: LottoCartografico, tipo: TipoRis
         return
 
     # Search for SHP files
-    shp_list = search_shp(unzip_dir)
+    shp_list = search_shp(unzip_dir)  # shapefile with full path
+
+    continue_processing = True
 
     if len(shp_list) == 0:
-        handle_message(lotto, TipoReportAzione.ERR, msg, "Nessuno shapefile valido trovato. Tipo: {tipo}"
+        handle_message(lotto, TipoReportAzione.ERR, msg, "Nessuno shapefile trovato. Tipo: {tipo}"
                        .format(tipo=tipo.value))
+        continue_processing = False
+    else:
+        for fullpathshape in shp_list:
+            base = os.path.basename(fullpathshape)
+            base, _ = os.path.splitext(base)
+            if base not in exp_names:
+                handle_message(lotto, TipoReportAzione.ERR, msg, 'Shapefile inaspettato {file}. Tipo: {tipo}'
+                               .format(file=base, tipo=tipo))
+                continue_processing = False
+                continue
+
+    if not continue_processing:
         risorsa.valida = False
         risorsa.save()
         return
-
-    continue_processing = True
 
     for shp in shp_list:
         shp_err = validate_shp(lotto, shp)

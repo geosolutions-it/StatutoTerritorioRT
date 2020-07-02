@@ -16,6 +16,7 @@ from celery.utils.log import get_task_logger
 
 # from serapide_core.signals import log
 from serapide_core.geo import process_carto
+from serapide_core.modello.enums_geo import MAPPING_PIANO_RISORSE
 
 from serapide_core.modello.models import (
     LottoCartografico,
@@ -58,23 +59,10 @@ def esegui_procedura_cartografica(lotto_id):
         TipoReportAzione.ERR : [],
     }
 
-    # esegui roba
-    if tipologia == TipologiaAzione.validazione_cartografia_adozione:
-        for tipo in [TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
-                     TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
-                     TipoRisorsa.ASSETTI_INSEDIATIVI]:
-            process_carto(piano, piano.procedura_adozione.risorse, lotto, tipo, msgs)
-
-    elif tipologia == TipologiaAzione.cartografia_controdedotta:
-        pass
-    elif tipologia == TipologiaAzione.cartografia_cp_adozione:
-        pass
-    elif tipologia == TipologiaAzione.cartografia_approvazione:
-        pass
-    elif tipologia == TipologiaAzione.cartografia_cp_approvazione:
-        pass
-    else:
-        raise Exception('Tipologia azione cartografica inaspettata [{}]'.format(tipologia))
+    # ci sono lotti diversi a seconda della tipologia di piano
+    tipi_risorsa = MAPPING_PIANO_RISORSE.get(piano.tipologia, ())
+    for tipo in tipi_risorsa:
+        process_carto(piano, piano.procedura_adozione.risorse, lotto, tipo, msgs)
 
     error = len(msgs[TipoReportAzione.ERR]) > 0
 
