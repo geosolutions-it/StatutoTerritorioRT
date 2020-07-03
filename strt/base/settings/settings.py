@@ -115,8 +115,8 @@ INSTALLED_APPS = [
     'pinax.messages',
     'pinax.templates',
     'pinax.notifications',
-    'modelcluster',
-    'taggit',
+    # 'modelcluster',
+    # 'taggit',
     # Crispy forms
     'crispy_forms',
     # Rules

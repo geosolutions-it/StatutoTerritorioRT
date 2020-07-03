@@ -37,3 +37,4 @@ pytz==2018.5
 flake8==3.5.0
 python-codicefiscale==0.3.4
 django-bootstrap-form
+Fiona==1.8.13.post1
