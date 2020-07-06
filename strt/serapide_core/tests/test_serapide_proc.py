@@ -286,10 +286,10 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
             self.upload('804_adozione_upload_file.query', self.codice_adozione, tipo)
 
         for tipo in [
-                TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
-                TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
+                # TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
+                # TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
                 TipoRisorsa.ASSETTI_INSEDIATIVI,]:
-            self.upload('804_adozione_upload_file.query', self.codice_adozione, tipo, suffix='.zip')
+            self.upload('804_adozione_upload_file.query', self.codice_adozione, tipo, datafile='assetti_3003.zip')
 
         self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
 
@@ -301,7 +301,6 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
             self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, nome, val)
 
         self.sendCNV('201_pubblicazione_burt.query', 'PUBBLICAZIONE BURT', self.codice_adozione)
-
 
     def adozione_osservazione(self, richiesta_cp: bool = True):
         self.upload('804_adozione_upload_file.query', self.codice_adozione, TipoRisorsa.OSSERVAZIONI_PRIVATI)
@@ -329,7 +328,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
                 # TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
                 # TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
                 TipoRisorsa.ASSETTI_INSEDIATIVI, ]:
-            self.upload('056_controdedotto_upload_file.query', self.codice_pcd, tipo, suffix='.zip')
+            self.upload('056_controdedotto_upload_file.query', self.codice_pcd, tipo, datafile='assetti_3003.zip')
 
         self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, 'richiestaConferenzaPaesaggistica', richiesta_cp)
         self.sendCNV('057_piano_controdedotto.query', 'PIANO CONTRODEDOTTO', self.codice_adozione)
@@ -354,10 +353,10 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
                 self.upload('060_prcp_upload_file.query', self.codice_rpcp, tipo)
 
             for tipo in [
-                    TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
+                    # TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
                     # TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
                     TipoRisorsa.ASSETTI_INSEDIATIVI, ]:
-                self.upload('060_prcp_upload_file.query', self.codice_rpcp, tipo, suffix='.zip')
+                self.upload('060_prcp_upload_file.query', self.codice_rpcp, tipo, datafile='assetti_3003.zip')
 
         self.sendCNV('061_revisione_cp.query', 'REVISIONE CONF PAESGG', self.codice_adozione)
 

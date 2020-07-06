@@ -22,6 +22,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from serapide_core.api.auth.user import get_assegnamenti, can_admin_delega
+
 from serapide_core.api.piano_utils import (
     needs_execution,
     is_executed,
@@ -55,7 +56,7 @@ from serapide_core.modello.models import (
     ProceduraAvvio,
     ProceduraAdozione,
     PianoControdedotto,
-    PianoRevPostCP,
+    PianoRevPostCP, ProceduraAdozioneVAS, ProceduraApprovazione,
 
 )
 
@@ -117,7 +118,7 @@ logger = logging.getLogger(__name__)
 #     piano.save()
 
 
-def check_and_promote(piano:Piano, info):
+def check_and_promote(piano:Piano, info_to_be_removed=None):
     logger.warning('Check promozione per piano [{c}]:"{d}"  '.format(c=piano.codice,d=piano.descrizione))
 
     eligible, errs = auth_piano.is_eligible_for_promotion(piano)
@@ -133,9 +134,8 @@ def check_and_promote(piano:Piano, info):
         logger.warning("PIANO PROMOSSO {}".format(piano))
 
         # Notify Users
-        piano_phase_changed.send(
+        piano_phase_changed.send_robust(
             sender=Piano,
-            user=info.context.user,
             piano=piano,
             message_type=TipoMail.piano_phase_changed)
 
@@ -656,5 +656,36 @@ def try_and_close_avvio(piano:Piano):
         piano.save()
 
         return True
+
+    return False
+
+
+def try_and_close_adozione(piano: Piano):
+    logger.warning('check_and_close_adozione')
+
+    procedura_adozione: ProceduraAdozione = piano.procedura_adozione
+
+    if not procedura_adozione.conclusa:
+
+        piano_controdedotto = piano.getFirstAction(TipologiaAzione.piano_controdedotto)
+        rev_piano_post_cp = piano.getFirstAction(TipologiaAzione.rev_piano_post_cp)
+
+        _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
+
+        if is_executed(piano_controdedotto) \
+                and (not procedura_adozione.richiesta_conferenza_paesaggistica or is_executed(rev_piano_post_cp)) \
+                and (not _procedura_adozione_vas or _procedura_adozione_vas.conclusa):
+
+            logger.warning('CHIUSURA FASE ADOZIONE')
+
+            chiudi_pendenti(piano, attesa=True, necessaria=False)
+
+            procedura_adozione.conclusa = True
+            procedura_adozione.save()
+
+            procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(piano=piano)
+            piano.procedura_approvazione = procedura_approvazione
+            piano.save()
+            return True
 
     return False

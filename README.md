@@ -12,74 +12,84 @@
 ## Python/Django versions
 
 - Python 3.6+
-- Django 2.0.8+
+- Django 2.2.9+
 
 ## Install
-- Install system wide packages:\
-  `sudo apt install python3-dev`\
-  `sudo apt install postgresql-server-dev-10`\
-  `sudo apt install python3-rtree`
+- Install system wide packages:
 
-- Create a suitable virtualenv, e.g.:\
-  `mkvirtualenv --python=/usr/bin/python3 strt`
+      sudo apt install python3-dev
+      sudo apt install postgresql-server-dev-10
+      sudo apt install python3-rtree`
 
-- Clone the repository: \
- `git clone https://github.com/geosolutions-it/StatutoTerritorioRT.git`
+- Create a suitable virtualenv, e.g.:
 
-- Activate the virtual env:\
-  `. strt/bin/activate`
+      mkvirtualenv --python=/usr/bin/python3 strt
 
-- Install requirements with pip:\
-  `cd StatutoTerritorioRT/requirements`\
-  `pip install -r requirements.txt`
+- Clone the repository:
+ 
+      git clone https://github.com/geosolutions-it/StatutoTerritorioRT.git
+
+- Activate the virtual env (mind the initial dot):
+  
+      . strt/bin/activate
+
+- Install requirements with pip:
+
+      cd StatutoTerritorioRT/requirements
+      pip install -r requirements.txt
 
 
 ## Environment setup
 
-- Go to the deployment folder:\
-`cd StatutoTerritorioRT/deployment`
+- Go to the deployment folder:
+
+      cd StatutoTerritorioRT/deployment
 
 - Create the DB if not exists
-  ```
-  sudo -u postgres createuser -P <username>
+  
+      sudo -u postgres createuser -P <username>
 
-  sudo -u postgres createdb -O <username> <dbname>
-  sudo -u postgres psql -d <dbname> -c 'CREATE EXTENSION postgis;'
-  sudo -u postgres psql -d <dbname> -c 'GRANT ALL ON geometry_columns TO PUBLIC;';
-  sudo -u postgres psql -d <dbname> -c 'GRANT ALL ON spatial_ref_sys TO PUBLIC;';
-  sudo -u postgres psql -d <dbname> -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>;'
-  ```
+      sudo -u postgres createdb -O <username> <dbname>
+      sudo -u postgres psql -d <dbname> -c 'CREATE EXTENSION postgis;'
+      sudo -u postgres psql -d <dbname> -c 'GRANT ALL ON geometry_columns TO PUBLIC;';
+      sudo -u postgres psql -d <dbname> -c 'GRANT ALL ON spatial_ref_sys TO PUBLIC;';
+      sudo -u postgres psql -d <dbname> -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>;'  
 
-- Set your environment variables values in a `your_local.env` file (`dev.env` is an example) then run this script:\
-`source setenv.sh your_local.env`
+- Set your environment variables values in a `your_local.env` file (`dev.env` is an example) then run this script:
+
+      source setenv.sh your_local.env
 
 Update the `DJANGO_DATABASE_URL` accordingly or leave null for default sqlite DB
 
 ## Project setup
 
-- Go to the project management folder:\
-`cd StatutoTerritorioRT/strt`
+- Go to the project management folder:
 
-- Create the DB structure:\
-`python manage.py migrate`
+      cd StatutoTerritorioRT/strt
 
-- Create a super user:\
-`python manage.py createsuperuser`
+- Create the DB structure:
 
-- Load default data:\
-  `cd StatutoTerritorioRT/strt/fixtures`
-  ```
-  ./load_dump.sh
-  ```
+      python manage.py migrate
 
-- Run the Django development server:\
-`cd StatutoTerritorioRT/strt`\
-`python manage.py runserver`
+- Create a super user:
+
+      python manage.py createsuperuser
+
+- Load default data:
+
+      cd StatutoTerritorioRT/strt/fixtures  
+      ./load_dump.sh
+
+
+- Run the Django development server:
+
+      cd StatutoTerritorioRT/strt
+      python manage.py runserver
 
 - Visit http://localhost:8000/admin/strt_users/utente/
 
-- Set the passwords for the predefined users\
-The default password is `42`
+- Set the passwords for the predefined users.  
+  The default password is `42`
 
 - Visit http://localhost:8000/ with your web browser
 
@@ -88,17 +98,34 @@ The default password is `42`
 
 ### Prepare the client and theme:
 
-- Go to the Theme folder:\
-`cd StatutoTerritorioRT/strt/theme`
+- Go to the Theme folder:
 
-- Build the CSS:\
-`npm install`
+      cd StatutoTerritorioRT/strt/theme
 
-- Go to the Client folder:\
-`cd StatutoTerritorioRT/strt/serapide_client`
+- Build the CSS:
+
+      npm install
+
+- Go to the Client folder:
+
+      cd StatutoTerritorioRT/strt/serapide_client
 
 - Build the Frontend:
-  ```
-  npm install
-  npm run build-with-theme
-  ```
+
+      npm install
+      npm run build-with-theme
+
+
+### Run the tests
+
+To run tests locally:
+
+    CELERY_TASK_ALWAYS_EAGER=True skip_payload=true DJANGO_DATABASE_URL='sqlite:/tmp/serapide' python manage.py test
+    
+You need:
+- `CELERY_TASK_ALWAYS_EAGER=True` in order to run validation tasks in the same process the tests are running,
+  or you'll need to run the celery command in another process, making sure both processes share the same test DB. 
+- `DJANGO_DATABASE_URL='sqlite:/tmp/serapide'` in order to use an easily disposable and fast DB   
+- `skip_payload=true` you may want to disable the client payload output; please note that if the property is defined 
+   _with any value_ the payload logging will be skipped.
+   

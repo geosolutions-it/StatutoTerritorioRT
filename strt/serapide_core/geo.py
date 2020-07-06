@@ -16,7 +16,7 @@ from serapide_core.modello.models import (
     Azione,
     Piano,
     Risorsa,
-    AzioneReport,
+    AzioneReport, PianoControdedotto, PianoRevPostCP,
 )
 
 from serapide_core.modello.enums import (
@@ -41,7 +41,7 @@ def handle_message(lotto: LottoCartografico, tipo: TipoReportAzione, msg_dict, m
     report.save()
 
 
-def process_carto(piano: Piano, risorse, lotto: LottoCartografico, tipo: TipoRisorsa, msg: list):
+def process_carto(lotto: LottoCartografico, tipo: TipoRisorsa, msg: list):
     '''
     - check resource exists
     - unzip resource file
@@ -65,6 +65,8 @@ def process_carto(piano: Piano, risorse, lotto: LottoCartografico, tipo: TipoRis
         return
     exp_names = [item.name for item in expected_shapefiles]
 
+    risorse = get_risorse(lotto)
+
     risorse_filtrate: Risorsa = risorse.filter(tipo=tipo.value, archiviata=False)
     risorse_cnt = risorse_filtrate.all().count()
 
@@ -79,7 +81,7 @@ def process_carto(piano: Piano, risorse, lotto: LottoCartografico, tipo: TipoRis
 
     root_dir = getattr(settings, 'STORAGE_ROOT_DIR', False)
     res_step = '{:08}_{}'.format(risorsa.id,tipo.value)
-    resource_dir = os.path.join(root_dir, piano.codice, 'geo', res_step)
+    resource_dir = os.path.join(root_dir, lotto.piano.codice, 'geo', res_step)
     unzip_dir = os.path.join(resource_dir, 'unzip')
 
     # Handle temp dir
@@ -204,3 +206,26 @@ def rezip_shp(shp_file, destination_dir):
             basename = os.path.basename(file)
             if basename.startswith(src_barename):
                 zip_file.write(os.path.join(shp_source_dir, file), basename)
+
+
+def get_risorse(lotto: LottoCartografico):
+
+    tipologia: TipologiaAzione = lotto.azione_parent.tipologia
+
+    if tipologia == TipologiaAzione.trasmissione_adozione:
+        return lotto.piano.procedura_adozione.risorse
+
+    elif tipologia == TipologiaAzione.piano_controdedotto:
+        return PianoControdedotto.objects.filter(piano=lotto.piano).get().risorse
+
+    elif tipologia == TipologiaAzione.rev_piano_post_cp:
+        return PianoRevPostCP.objects.filter(piano=lotto.piano).get().risorse
+
+    elif tipologia == TipologiaAzione.trasmissione_approvazione:
+        return lotto.piano.procedura_approvazione.risorse
+
+    elif tipologia == TipologiaAzione.esito_conferenza_paesaggistica_ap:
+        return None  # TODO
+
+    else:
+        raise Exception('Tipologia azione cartografica inaspettata [{}]'.format(tipologia))

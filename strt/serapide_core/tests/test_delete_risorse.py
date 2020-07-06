@@ -81,13 +81,8 @@ class AbstractSerapideDeleteTest(AbstractSerapideProcsTest):
             self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)
 
         # CREATE and DELETE
-        nome,response = self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
-        content = json.loads(response.content)
-        risorse = content['data']['upload']['pianoAggiornato']['risorse']['edges']
-        logger.warning("LOOK FOR FILE %s"%nome)
-        res_code = [edge['node']['uuid'] for edge in risorse if edge['node']['nome']==nome][0]
-        logger.warning("CODICE RISORSA %s"% res_code)
-        response = self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', res_code)
+        uuid,nome,response = self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
+        self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', uuid)
 
         self.upload('800_upload_file.query', self.codice_piano, TipoRisorsa.DELIBERA)
         self.sendCNV('004_update_procedura_vas.query', 'UPDATE VAS', self.codice_vas, 'tipologia', tipovas.value)
@@ -100,13 +95,8 @@ class AbstractSerapideDeleteTest(AbstractSerapideProcsTest):
         elif tipovas == TipologiaVAS.PROCEDIMENTO_SEMPLIFICATO:
             tr = TipoRisorsa.DOCUMENTO_PRELIMINARE_VAS
 
-        nome, response = self.upload('005_vas_upload_file.query', self.codice_vas, tr)
-        content = json.loads(response.content)
-        risorse = content['data']['upload']['proceduraVasAggiornata']['risorse']['edges']
-        logger.warning("LOOK FOR FILE %s"%nome)
-        res_code = [edge['node']['uuid'] for edge in risorse if edge['node']['nome']==nome][0]
-        logger.warning("CODICE RISORSA %s"% res_code)
-        response = self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', res_code)
+        uuid, nome, response = self.upload('005_vas_upload_file.query', self.codice_vas, tr)
+        self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', uuid)
 
         self.upload('005_vas_upload_file.query', self.codice_vas, tr)
 
@@ -153,13 +143,8 @@ class AbstractSerapideDeleteTest(AbstractSerapideProcsTest):
     def contributi_tecnici(self):
         self.sendCNV('902_get_avvio.query', 'GET AVVIO', self.codice_piano)
 
-        nome,response = self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
-        content = json.loads(response.content)
-        risorse = content['data']['upload']['proceduraAvvioAggiornata']['risorse']['edges']
-        logger.warning("LOOK FOR FILE %s"%nome)
-        res_code = [edge['node']['uuid'] for edge in risorse if edge['node']['nome']==nome][0]
-        logger.warning("CODICE RISORSA %s"% res_code)
-        self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', res_code)
+        uuid, nome, response = self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
+        self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', uuid)
 
         self.upload('802_avvio_upload_file.query', self.codice_avvio, TipoRisorsa.CONTRIBUTI_TECNICI)
 
@@ -178,13 +163,8 @@ class AbstractSerapideDeleteTest(AbstractSerapideProcsTest):
         if tipo == TipologiaCopianificazione.POSTICIPATA:
             self.sendCNV('020_richiesta_cc.query', 'RICHIESTA CONF COP', self.codice_avvio)
 
-        nome, response = self.upload('803_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
-        content = json.loads(response.content)
-        risorse = content['data']['upload']['conferenzaCopianificazioneAggiornata']['risorse']['edges']
-        logger.warning("LOOK FOR FILE %s"%nome)
-        res_code = [edge['node']['uuid'] for edge in risorse if edge['node']['nome']==nome][0]
-        logger.warning("CODICE RISORSA %s"% res_code)
-        self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', res_code)
+        uuid, nome, response = self.upload('803_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
+        self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', uuid)
 
         self.upload('803_conferenza_upload_file.query', codice_cc, TipoRisorsa.ELABORATI_CONFERENZA)
 

@@ -12,7 +12,7 @@
 
 from serapide_core.modello.enums import (
     TipologiaPiano,
-    TipoRisorsa,
+    TipoRisorsa, TipologiaAzione,
 )
 
 from strt_users.enums import (
@@ -143,4 +143,17 @@ MAPPING_RISORSA_ENUM = {
     TipoRisorsa.DELIBERA: PS_StrategiaEnum,  # TODO
     TipoRisorsa.DELIBERA: PS_QuadroConoscitivoEnum,  # TODO
     TipoRisorsa.DELIBERA: PS_StatutoDelTerritorioEnum,  # TODO
+}
+
+MAPPING_AZIONI_CARTO_NEXT = {
+    TipologiaAzione.trasmissione_adozione:
+        TipologiaAzione.validazione_cartografia_adozione,
+    TipologiaAzione.piano_controdedotto:
+        TipologiaAzione.validazione_cartografia_controdedotta,
+    TipologiaAzione.rev_piano_post_cp:
+        TipologiaAzione.validazione_cartografia_cp_adozione,
+    TipologiaAzione.trasmissione_approvazione:
+        TipologiaAzione.validazione_cartografia_approvazione,
+    TipologiaAzione.esito_conferenza_paesaggistica_ap:
+        TipologiaAzione.validazione_cartografia_cp_approvazione
 }

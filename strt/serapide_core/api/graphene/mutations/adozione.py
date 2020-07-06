@@ -15,28 +15,21 @@ import graphene
 import traceback
 
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
 
 from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
 from serapide_core.api.graphene.mutations.cartografica import inizializza_procedura_cartografica
-from serapide_core.api.graphene.mutations.piano import check_and_promote
+from serapide_core.api.graphene.mutations.piano import check_and_promote, try_and_close_adozione
 from serapide_core.helpers import update_create_instance
 
 from serapide_core.api.piano_utils import (
     needs_execution,
-    is_executed,
     ensure_fase,
     chiudi_azione,
     crea_azione,
-    chiudi_pendenti,
     get_scadenza, get_now,
-)
-
-from serapide_core.signals import (
-    piano_phase_changed,
 )
 
 from serapide_core.modello.models import (
@@ -47,7 +40,6 @@ from serapide_core.modello.models import (
     ProceduraAdozione,
     ParereAdozioneVAS,
     ProceduraAdozioneVAS,
-    ProceduraApprovazione,
     RisorseAdozioneVas,
     Delega,
 
@@ -66,41 +58,9 @@ from serapide_core.api.graphene import (
 from strt_users.enums import QualificaRichiesta, Qualifica
 
 import serapide_core.api.auth.user as auth
-import serapide_core.api.auth.piano as auth_piano
-from strt_users.models import Utente, Assegnatario
+from strt_users.models import Assegnatario
 
 logger = logging.getLogger(__name__)
-
-
-def check_and_close_adozione(piano: Piano):
-    logger.warning('check_and_close_adozione')
-
-    procedura_adozione: ProceduraAdozione = piano.procedura_adozione
-
-    if not procedura_adozione.conclusa:
-
-        piano_controdedotto = piano.getFirstAction(TipologiaAzione.piano_controdedotto)
-        rev_piano_post_cp = piano.getFirstAction(TipologiaAzione.rev_piano_post_cp)
-
-        _procedura_adozione_vas = ProceduraAdozioneVAS.objects.filter(piano=piano).last()
-
-        if is_executed(piano_controdedotto) \
-                and (not procedura_adozione.richiesta_conferenza_paesaggistica or is_executed(rev_piano_post_cp)) \
-                and (not _procedura_adozione_vas or _procedura_adozione_vas.conclusa):
-
-            logger.warning('CHIUSURA FASE ADOZIONE')
-
-            chiudi_pendenti(piano, attesa=True, necessaria=False)
-
-            procedura_adozione.conclusa = True
-            procedura_adozione.save()
-
-            procedura_approvazione, created = ProceduraApprovazione.objects.get_or_create(piano=piano)
-            piano.procedura_approvazione = procedura_approvazione
-            piano.save()
-            return True
-
-    return False
 
 
 class UpdateProceduraAdozione(relay.ClientIDMutation):
@@ -172,19 +132,7 @@ class TrasmissioneAdozione(graphene.Mutation):
         if needs_execution(_trasmissione_adozione):
             chiudi_azione(_trasmissione_adozione)
 
-            inizializza_procedura_cartografica(
-                piano,
-                TipologiaAzione.validazione_cartografia_adozione,
-                _trasmissione_adozione)
-
-
-            # crea_azione(
-            #     Azione(
-            #         piano=piano,
-            #         tipologia=TipologiaAzione.pubblicazione_burt,
-            #         qualifica_richiesta=QualificaRichiesta.COMUNE,
-            #         stato=STATO_AZIONE.necessaria,
-            #     ))
+            inizializza_procedura_cartografica(_trasmissione_adozione)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -499,19 +447,7 @@ class PianoControdedotto(graphene.Mutation):
         if needs_execution(_piano_controdedotto):
             chiudi_azione(_piano_controdedotto)
 
-            if procedura_adozione.richiesta_conferenza_paesaggistica:
-                crea_azione(
-                    Azione(
-                        piano=piano,
-                        tipologia=TipologiaAzione.esito_conferenza_paesaggistica,
-                        qualifica_richiesta=QualificaRichiesta.REGIONE,
-                        stato=StatoAzione.ATTESA
-                    ))
-
-            else:
-                return check_and_close_adozione(piano)
-
-        return False
+            inizializza_procedura_cartografica(_piano_controdedotto)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -525,10 +461,7 @@ class PianoControdedotto(graphene.Mutation):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
-            closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
-
-            if closed:
-                check_and_promote(_piano, info)
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
             return PianoControdedotto(
                 adozione_aggiornata=_procedura_adozione,
@@ -629,9 +562,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
         if needs_execution(_rev_piano_post_cp):
             chiudi_azione(_rev_piano_post_cp)
 
-            return check_and_close_adozione(piano)
-
-        return False
+            inizializza_procedura_cartografica(_rev_piano_post_cp)
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -645,10 +576,7 @@ class RevisionePianoPostConfPaesaggistica(graphene.Mutation):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:
-            closed = cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
-
-            if closed:
-                check_and_promote(_piano, info)
+            cls.update_actions_for_phase(_piano.fase, _piano, _procedura_adozione, info.context.user)
 
             return RevisionePianoPostConfPaesaggistica(
                 adozione_aggiornata=_procedura_adozione,
@@ -891,7 +819,7 @@ class UploadElaboratiAdozioneVAS(graphene.Mutation):
             _procedura_adozione_vas.conclusa = True
             _procedura_adozione_vas.save()
 
-            check_and_close_adozione(piano)
+            try_and_close_adozione(piano)
 
     @classmethod
     def mutate(cls, root, info, **input):

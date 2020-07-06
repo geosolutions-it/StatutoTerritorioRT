@@ -20,6 +20,7 @@ from graphene import relay
 
 from graphql_extensions.exceptions import GraphQLError
 
+from serapide_core.api.graphene.mutations.cartografica import inizializza_procedura_cartografica
 from serapide_core.api.graphene.mutations.piano import check_and_promote
 from serapide_core.api.piano_utils import (
     needs_execution,
@@ -122,27 +123,30 @@ class TrasmissioneApprovazione(graphene.Mutation):
         if needs_execution(_trasmissione_approvazione):
             chiudi_azione(_trasmissione_approvazione)
 
-            if not piano.procedura_adozione.richiesta_conferenza_paesaggistica:
-                # Se non è stata fatta prima, va fatta ora...
-                crea_azione(
-                    Azione(
-                        piano=piano,
-                        tipologia=TipologiaAzione.esito_conferenza_paesaggistica_ap,
-                        qualifica_richiesta=QualificaRichiesta.REGIONE,
-                        stato=StatoAzione.ATTESA
-                    ))
+            inizializza_procedura_cartografica(_trasmissione_approvazione)
 
-                procedura_approvazione.richiesta_conferenza_paesaggistica = True
-                procedura_approvazione.save()
 
-            else:
-                crea_azione(
-                    Azione(
-                        piano=piano,
-                        tipologia=TipologiaAzione.pubblicazione_approvazione,
-                        qualifica_richiesta=QualificaRichiesta.COMUNE,
-                        stato=StatoAzione.NECESSARIA
-                    ))
+            # if not piano.procedura_adozione.richiesta_conferenza_paesaggistica:
+            #     # Se non è stata fatta prima, va fatta ora...
+            #     crea_azione(
+            #         Azione(
+            #             piano=piano,
+            #             tipologia=TipologiaAzione.esito_conferenza_paesaggistica_ap,
+            #             qualifica_richiesta=QualificaRichiesta.REGIONE,
+            #             stato=StatoAzione.ATTESA
+            #         ))
+            #
+            #     procedura_approvazione.richiesta_conferenza_paesaggistica = True
+            #     procedura_approvazione.save()
+            #
+            # else:
+            #     crea_azione(
+            #         Azione(
+            #             piano=piano,
+            #             tipologia=TipologiaAzione.pubblicazione_approvazione,
+            #             qualifica_richiesta=QualificaRichiesta.COMUNE,
+            #             stato=StatoAzione.NECESSARIA
+            #         ))
 
     @classmethod
     def mutate(cls, root, info, **input):
@@ -198,13 +202,7 @@ class EsitoConferenzaPaesaggisticaAP(graphene.Mutation):
         if needs_execution(_esito_cp):
             chiudi_azione(_esito_cp)
 
-            crea_azione(
-                Azione(
-                    piano=piano,
-                    tipologia=TipologiaAzione.pubblicazione_approvazione,
-                    qualifica_richiesta=QualificaRichiesta.COMUNE,
-                    stato=StatoAzione.NECESSARIA
-                ))
+            inizializza_procedura_cartografica(_esito_cp)
 
     @classmethod
     def mutate(cls, root, info, **input):

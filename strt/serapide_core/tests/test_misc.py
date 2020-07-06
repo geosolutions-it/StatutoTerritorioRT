@@ -238,7 +238,6 @@ class MiscTest(AbstractSerapideProcsTest):
         self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
 
         az_ado: Azione = piano.azioni(TipologiaAzione.trasmissione_adozione).get()
-        self.assertIsNotNone(az_ado)
         self.assertEqual(az_ado.stato, StatoAzione.NECESSARIA)
 
         report = AzioneReport.objects.filter(azione=az_carto, tipo=TipoReportAzione.ERR).get()
@@ -256,7 +255,6 @@ class MiscTest(AbstractSerapideProcsTest):
         self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
 
         az_ado: Azione = piano.azioni(TipologiaAzione.trasmissione_adozione).get()
-        self.assertIsNotNone(az_ado)
         self.assertEqual(az_ado.stato, StatoAzione.NECESSARIA)
 
         report = AzioneReport.objects.filter(azione=az_carto, tipo=TipoReportAzione.ERR).get()
@@ -274,11 +272,9 @@ class MiscTest(AbstractSerapideProcsTest):
         self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
 
         az_carto: Azione = piano.azioni(TipologiaAzione.validazione_cartografia_adozione).get()
-        self.assertIsNotNone(az_carto.data)
         self.assertEqual(az_carto.stato, StatoAzione.FALLITA)
 
         az_ado: Azione = piano.azioni(TipologiaAzione.trasmissione_adozione).get()
-        self.assertIsNotNone(az_ado)
         self.assertEqual(az_ado.stato, StatoAzione.NECESSARIA)
 
         report = AzioneReport.objects.filter(azione=az_carto, tipo=TipoReportAzione.ERR).get()
@@ -288,19 +284,37 @@ class MiscTest(AbstractSerapideProcsTest):
         for uuid in [u1]:
             self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', uuid)
 
-        # good shapefile
+        # zip with bad shape names
         u1,_,_ = self.upload('804_adozione_upload_file.query', self.codice_adozione,
-                    TipoRisorsa.ASSETTI_INSEDIATIVI,
-                    datafile='RT_sempl_3003.zip')
+                    TipoRisorsa.DISCIPLINA_INSEDIAMENTI,
+                    datafile='assetti_3003.zip')
 
         self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
 
         az_carto: Azione = piano.azioni(TipologiaAzione.validazione_cartografia_adozione).get()
-        self.assertIsNotNone(az_carto.data)
+        self.assertEqual(az_carto.stato, StatoAzione.FALLITA)
+
+        az_ado: Azione = piano.azioni(TipologiaAzione.trasmissione_adozione).get()
+        self.assertEqual(az_ado.stato, StatoAzione.NECESSARIA)
+
+        report = AzioneReport.objects.filter(azione=az_carto, tipo=TipoReportAzione.ERR).first()
+        self.assertTrue('Shapefile inaspettato' in report.messaggio)
+
+        # cleanup
+        for uuid in [u1]:
+            self.sendCXX('003d_delete_risorsa.query', 'DELETE RISORSA', self.codice_piano, 'codice_risorsa', uuid)
+
+        # good shapefile
+        u1,_,_ = self.upload('804_adozione_upload_file.query', self.codice_adozione,
+                    TipoRisorsa.ASSETTI_INSEDIATIVI,
+                    datafile='assetti_3003.zip')
+
+        self.sendCNV('052_trasmissione_adozione.query', 'TRASMISSIONE ADOZIONE', self.codice_adozione)
+
+        az_carto: Azione = piano.azioni(TipologiaAzione.validazione_cartografia_adozione).get()
         self.assertEqual(az_carto.stato, StatoAzione.ESEGUITA)
 
         az_ado: Azione = piano.azioni(TipologiaAzione.trasmissione_adozione).get()
-        self.assertIsNotNone(az_ado)
         self.assertEqual(az_ado.stato, StatoAzione.ESEGUITA)
 
         report = AzioneReport.objects.filter(azione=az_carto, tipo=TipoReportAzione.ERR).first()

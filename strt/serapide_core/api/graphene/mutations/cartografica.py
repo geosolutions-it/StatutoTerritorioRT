@@ -15,6 +15,7 @@ from serapide_core.api.piano_utils import (
     crea_azione,
     riapri_azione,
 )
+from serapide_core.modello.enums_geo import MAPPING_AZIONI_CARTO_NEXT
 
 from serapide_core.modello.models import (
     Piano,
@@ -34,9 +35,11 @@ from strt_users.enums import QualificaRichiesta
 logger = logging.getLogger(__name__)
 
 
-def inizializza_procedura_cartografica(piano: Piano, tipo: TipologiaAzione, parent: Azione):
+def inizializza_procedura_cartografica(parent: Azione):
+    piano: Piano = parent.piano
+    tipo_carto: TipologiaAzione = MAPPING_AZIONI_CARTO_NEXT[parent.tipologia]
 
-    azione_carto = piano.getFirstAction(tipo)
+    azione_carto = piano.getFirstAction(tipo_carto)
 
     # Le azioni di controllo cartografico possono fallire: in quel caso l'azione precedente viene resa nuovamente
     # eseguibile. Una volta che l'azione parent è nuovamente eseguita, non creeremo una nuova azione cartografica,
@@ -48,7 +51,7 @@ def inizializza_procedura_cartografica(piano: Piano, tipo: TipologiaAzione, pare
         azione_carto = crea_azione(
             Azione(
                 piano=piano,
-                tipologia=TipologiaAzione.validazione_cartografia_adozione,
+                tipologia=tipo_carto,
                 qualifica_richiesta=QualificaRichiesta.AUTO,
                 stato=StatoAzione.NECESSARIA,
             ))

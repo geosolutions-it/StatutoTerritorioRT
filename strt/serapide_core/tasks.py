@@ -15,13 +15,14 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 
 # from serapide_core.signals import log
+import serapide_core.api.graphene.mutations.piano as piano_mutations
 from serapide_core.geo import process_carto
 from serapide_core.modello.enums_geo import MAPPING_PIANO_RISORSE
 
 from serapide_core.modello.models import (
     LottoCartografico,
     Azione,
-    Piano,
+    Piano, PianoControdedotto, PianoRevPostCP,
 )
 
 from serapide_core.modello.enums import (
@@ -50,7 +51,6 @@ def esegui_procedura_cartografica(lotto_id):
     lotto: LottoCartografico = LottoCartografico.objects.filter(id=lotto_id).get()
 
     azione: Azione = lotto.azione
-    tipologia  = azione.tipologia
     piano: Piano = azione.piano
 
     msgs = {
@@ -61,8 +61,9 @@ def esegui_procedura_cartografica(lotto_id):
 
     # ci sono lotti diversi a seconda della tipologia di piano
     tipi_risorsa = MAPPING_PIANO_RISORSE.get(piano.tipologia, ())
-    for tipo in tipi_risorsa:
-        process_carto(piano, piano.procedura_adozione.risorse, lotto, tipo, msgs)
+
+    for tipo_risorsa in tipi_risorsa:
+        process_carto(lotto, tipo_risorsa, msgs)
 
     error = len(msgs[TipoReportAzione.ERR]) > 0
 
@@ -82,6 +83,7 @@ def esegui_procedura_cartografica(lotto_id):
         utils.riapri_azione(lotto.azione_parent)
     else:
         utils.chiudi_azione(azione)
+        # todo: crea azione di ingestione
         crea_azione_post_cartografica(lotto.azione.piano, lotto.azione.tipologia)
 
 
@@ -94,14 +96,58 @@ def crea_azione_post_cartografica(piano: Piano, tipologia: TipologiaAzione):
                 qualifica_richiesta=QualificaRichiesta.COMUNE,
                 stato=StatoAzione.NECESSARIA,
             ))
-    elif tipologia == TipologiaAzione.cartografia_controdedotta:
-        pass
-    elif tipologia == TipologiaAzione.cartografia_cp_adozione:
-        pass
-    elif tipologia == TipologiaAzione.cartografia_approvazione:
-        pass
-    elif tipologia == TipologiaAzione.cartografia_cp_approvazione:
-        pass
+
+    elif tipologia == TipologiaAzione.validazione_cartografia_controdedotta:
+        procedura_adozione = piano.procedura_adozione
+        if procedura_adozione.richiesta_conferenza_paesaggistica:
+            utils.crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TipologiaAzione.esito_conferenza_paesaggistica,
+                    qualifica_richiesta=QualificaRichiesta.REGIONE,
+                    stato=StatoAzione.ATTESA
+                ))
+        else:
+            if piano_mutations.try_and_close_adozione(piano):
+                piano_mutations.check_and_promote(piano)
+
+    elif tipologia == TipologiaAzione.validazione_cartografia_cp_adozione:
+        if piano_mutations.try_and_close_adozione(piano):
+            piano_mutations.check_and_promote(piano)
+
+    elif tipologia == TipologiaAzione.validazione_cartografia_approvazione:
+        if not piano.procedura_adozione.richiesta_conferenza_paesaggistica:
+            # Se non è stata fatta prima, va fatta ora...
+            utils.crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TipologiaAzione.esito_conferenza_paesaggistica_ap,
+                    qualifica_richiesta=QualificaRichiesta.REGIONE,
+                    stato=StatoAzione.ATTESA
+                ))
+
+            procedura_approvazione = piano.procedura_approvazione
+            procedura_approvazione.richiesta_conferenza_paesaggistica = True
+            procedura_approvazione.save()
+
+        else:
+            utils.crea_azione(
+                Azione(
+                    piano=piano,
+                    tipologia=TipologiaAzione.pubblicazione_approvazione,
+                    qualifica_richiesta=QualificaRichiesta.COMUNE,
+                    stato=StatoAzione.NECESSARIA
+                ))
+
+    elif tipologia == TipologiaAzione.validazione_cartografia_cp_approvazione:
+        utils.crea_azione(
+            Azione(
+                piano=piano,
+                tipologia=TipologiaAzione.pubblicazione_approvazione,
+                qualifica_richiesta=QualificaRichiesta.COMUNE,
+                stato=StatoAzione.NECESSARIA
+            ))
+
     else:
         raise Exception('Tipologia azione cartografica inaspettata [{}]'.format(tipologia))
 
