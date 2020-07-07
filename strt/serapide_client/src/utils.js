@@ -34,8 +34,11 @@ export const getActionIcon = (stato) => {
     switch (stato) {
         case "NECESSARIA":
             return "alarm_add"
+        case "FALLITA":
+            return "warning"
         case "ATTESA":
             return "alarm_on"
+        case "ESEGUITA":  
         default:
             return "alarm_off"
     }
@@ -45,6 +48,9 @@ export const getActionIconColor = (stato) => {
         case "NECESSARIA":
         case "ATTESA":
             return "text-serapide"
+        case "FALLITA":
+            return "text-danger"
+        case "ESEGUITA":
         default:
             return ""
     }

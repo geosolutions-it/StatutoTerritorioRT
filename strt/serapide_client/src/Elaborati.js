@@ -8,7 +8,7 @@ const testuali_comuni = {
     "indagini_geologiche_idrauliche_sismiche": {order: 4, label: "RELAZIONE INDAGINI GEOLOGICHE IDRAULICHE SISMICHE", tooltip: "art.104 comma 9 l.r. 65/2014"},
     "relazione_responsabile": {order: 5, label: "RELAZIONE TECNICA RESPONSABILE DEL PROCEDIMENTO", tooltip: "art. 95 comma 7 l.r. 65/2014"},
     "relazione_garante_informazione_partecipazione" : {order: 6, label: "RELAZIONE DEL GARANTE DELL’INFORMAZIONE E DELLA PARTECIPAZIONE", tooltip: "art. 38 comma 2 l.r. 65/2014"},
-    "valutazioni": {order: 7, label: "VALUTAZIONI", tooltip: "art. 14 l.r. 65/2014; l.r. 10/2010", fileType: "application/zip,application/x-zip-compressed,.zip"},
+    "valutazioni": {order: 7, label: "VALUTAZIONI", tooltip: "art. 14 l.r. 65/2014; l.r. 10/2010", fileType: "application/zip,application/x-zip-compressed,.zip", icon: "archive"},
 
 }
 

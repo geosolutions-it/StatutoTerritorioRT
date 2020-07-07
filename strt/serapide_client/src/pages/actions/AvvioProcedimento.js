@@ -70,7 +70,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                 <ActionTitle>
                     Avvio del Procedimento | <span className="text-nowrap">(Atto di Avvio)<TextWithTooltip dataTip="art. 17 L.R. 65/2014"/></span>
                 </ActionTitle>
-
+                
                 <Resource useLabel iconSize="icon-15" fontSize="size-11" fileSize={false} className="border-0 mt-3" icon="attach_file" resource={delibera}/>
                 <ActionParagraphTitle>
                     <TextWithTooltip text="Elaborati allegati alla delibera di avvio del procedimento" dataTip="ai sensi dell’art. 17 comma 3, lett. a,b,c,d,e,f, L.R. 65/2014"/>

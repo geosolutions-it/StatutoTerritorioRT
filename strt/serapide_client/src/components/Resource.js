@@ -15,7 +15,6 @@ const getFileSize = (dim) => dim ? `${Math.round(parseFloat(dim)/100)/10} MB` : 
 
 
 const ResourceTitle = ({resource: {downloadUrl, label = "", tooltip = "", nome} = {}, useLabel, fontSize} = {}) => {
-    
     const lab = useLabel && label ?  label : nome
     const tip = (<TextWithTooltip dataTip={tooltip} className={fontSize} dataTipDisable={!useLabel} text={lab}/>)
     return downloadUrl ?(
@@ -46,7 +45,7 @@ export default ({
     fileSize = true,
     vertical = false,
     onDeleteResource = () => {console.warn("Delete mutation non passata")}} = {}) => {
-    const  { nome, uuid, lastUpdate, dimensione, downloadUrl} =  resource ?? {};
+    const  { nome, uuid, lastUpdate, dimensione, downloadUrl, valida} =  resource ?? {};
     let toastId
     const deleteResource = () => onDeleteResource({ variables: { id: uuid, codice}})
     const confirm = () => {
@@ -59,8 +58,8 @@ export default ({
           });
         }
     }
-    const iconClasses = `material-icons text-serapide ${iconSize}`;
-    const downloadIcon = (<i className={ ` ${iconClasses} pointer `}>{isLocked ? "cloud_download" : "check_circle"}</i>);
+    const iconClasses = `material-icons ${valida ?? true ? "text-serapide" : "text-danger"} ${iconSize}`;
+    const downloadIcon = (<i className={` ${iconClasses} pointer `}>{isLocked ? "cloud_download" : "check_circle"}</i>);
     if (isEmpty(resource)) {
         return <div className={`${className} row align-items-center`}></div>
     }

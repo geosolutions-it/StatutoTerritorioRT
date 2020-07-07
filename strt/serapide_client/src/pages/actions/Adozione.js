@@ -20,6 +20,7 @@ import {EnhancedDateSelector} from 'components/DateSelector'
 import Input from 'components/EnhancedInput'
 import Elaborati from 'components/ElaboratiPiano'
 import {List as Si} from 'components/SoggettiIstituzionali'
+import ErrorsReport from 'components/ErrorsReport'
 
 import  {showError, getResourceByType, getInputFactory, getCodice, VAS_DOCS, ADOZIONE_DOCS, AVVIO_DOCS} from 'utils'
 import {rebuildTooltip} from 'enhancers'
@@ -50,7 +51,8 @@ const fileProps = {className: `border-0`, mutation: ADOZIONE_FILE_UPLOAD,
                     
 const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})(({
     vas: {node:{ risorse: {edges: resVas =[]} = {}} = {}} = {},
-    proceduraAdozione: {node: {
+    proceduraAdozione: {
+        node: {
             uuid,
             dataDeliberaAdozione, dataRicezioneOsservazioni,
             dataRicezionePareri,
@@ -65,9 +67,12 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
             risorse: {edges: resources=[]} = {}
             
             },
+        azione: {
+            lottoErrato
+        },
         back}) => {
 
-            
+            const report = lottoErrato?.azione?.report ?? [];
             const deliberaAdozione = getResourceByType(edges, ADOZIONE_DOCS.DELIBERA)
             const norme = getResourceByType(resources, AVVIO_DOCS.NORME_TECNICHE_ATTUAZIONE)
             const rapportoA = getResourceByType(resVas, VAS_DOCS.RAPPORTO_AMBIENTALE)
@@ -75,6 +80,8 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AdozioneProc"})((
                 <ActionTitle>
                    Trasmissione Adozione
                 </ActionTitle>
+                <ErrorsReport report={report}/>
+
                 <ActionParagraphTitle>RIFERIMENTI DOCUMENTALI</ActionParagraphTitle>
                 <ActionSubParagraphTitle>NORME TECNICHE DI ATTUAZIONE</ActionSubParagraphTitle>
                 <Resource iconSize="icon-15" fontSize="size-11" useLabel fileSize={false} className="border-0 my-3" icon="attach_file" resource={norme}/>

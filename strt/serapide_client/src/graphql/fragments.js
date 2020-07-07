@@ -54,6 +54,7 @@ fragment Risorsa on RisorsaNode {
     dimensione
     downloadUrl
     lastUpdate
+    valida
     user{
       fiscalCode
       firstName
@@ -81,6 +82,20 @@ fragment Contatto on QualificaUfficioNode{
   }
 }
 `
+export const LOTTO = gql`
+fragment Lotto on LottoCartograficoNode {
+  id
+  azione {
+    id
+    uuid
+    report {
+      tipo
+      messaggio
+      data
+    }
+  }
+}
+`
 export const AZIONI = gql`
 fragment Azioni on AzioneNode {
       order
@@ -95,7 +110,11 @@ fragment Azioni on AzioneNode {
       eseguibile
       avvioScadenza # data di avvio scadenza
       scadenza #data entro la quale eseguire azione
+      lottoErrato {
+        ...Lotto
+      }
 }
+${LOTTO}
 `
 export const RISORSE = gql`
 fragment Risorse on RisorsaNodeConnection{
