@@ -143,6 +143,8 @@ def process_carto(lotto: LottoCartografico, tipo: TipoRisorsa, msg: list):
     os.makedirs(rezip_dir)
 
     for shp in shp_list:
+        handle_message(lotto, TipoReportAzione.INFO, msg,
+                       'Shapefile accettato {file}'.format(file=os.path.basename(shp)))
         rezip_shp(shp, rezip_dir)
 
     risorsa.valida = True
