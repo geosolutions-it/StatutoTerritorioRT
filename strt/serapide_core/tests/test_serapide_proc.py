@@ -66,7 +66,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
         response = self._client.get(self.GET_PROFILES_URL)
         self.assertEqual(200, response.status_code, 'GET PROFILES failed')
 
-    def create_piano_and_promote(self, tipovas: TipologiaVAS):
+    def create_piano_and_promote(self, tipovas: TipologiaVAS, descr=None):
         response = self.create_piano(DataLoader.IPA_FI)
 
         content = json.loads(response.content)
@@ -78,7 +78,7 @@ class AbstractSerapideProcsTest(AbstractSerapideTest):
 
         for nome, val in [
             ("dataDelibera", now.isoformat()),
-            ("descrizione", "Piano di test - VAS {vas} [{dt}]".format(dt=now, vas=tipovas.name)),
+            ("descrizione", descr or "Piano di test - VAS {vas} [{dt}]".format(dt=now, vas=tipovas.name)),
             ("soggettoProponenteUuid", DataLoader.uffici_stored[DataLoader.IPA_FI][DataLoader.UFF1].uuid.__str__())
         ]:
             self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, nome, val)

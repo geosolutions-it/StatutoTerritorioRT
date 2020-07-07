@@ -10,6 +10,7 @@
 #########################################################################
 
 import json
+import logging
 from collections import OrderedDict
 
 from django.core.paginator import QuerySetPaginator, Paginator
@@ -40,6 +41,8 @@ from serapide_core.modello.models import (
     LottoCartografico,
     ElaboratoCartografico,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class HTTPErrorAwareMixin:
@@ -85,15 +88,15 @@ class PrivateGraphQLView(HTTPErrorAwareMixin,
 
 
 def geo_search(request, **kwargs):
-    q = kwargs.get('q', None)
+    q = request.GET.get('q', None)
+    page = request.GET.get('page', 1)
+    limit = request.GET.get('limit', 10)
+
     qs = Piano.objects
     if q:
         qs = qs.filter(descrizione__icontains=q)
 
     qs = qs.order_by('codice')
-
-    page = kwargs.get('page', 1)
-    limit = kwargs.get('limit', 10)
 
     paginator = Paginator(qs.all(), limit)
     page_obj = paginator.get_page(page)

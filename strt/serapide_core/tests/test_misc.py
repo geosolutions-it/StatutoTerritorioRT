@@ -359,3 +359,29 @@ class MiscTest(AbstractSerapideProcsTest):
         #     self.sendCNV('051_update_procedura_adozione.query', 'UPDATE ADOZIONE', self.codice_adozione, nome, val)
         #
         # self.sendCNV('201_pubblicazione_burt.query', 'PUBBLICAZIONE BURT', self.codice_adozione)
+
+    def test_map_search(self):
+
+        self.do_login()
+
+        for d in ('AAAZ', 'aaaZ', 'ABBB', 'BBB', 'ZZZ' ):
+            self.create_piano_and_promote(TipologiaVAS.VERIFICA, descr=d)
+
+        response = self._client.get(
+                                    "/serapide/geo/map/search?q={}".format('A'),
+                                    content_type = "application/json"
+                                    )
+        logger.warning('GEO SEARCH {} {}'.format(response, response.content))
+        content = json.loads(response.content)
+        print(json.dumps(content, indent=4))
+        self.assertEqual(3, content['totalCount'])
+
+        response = self._client.get(
+                                    "/serapide/geo/map/search?page=2&limit=2",
+                                    content_type = "application/json"
+                                    )
+        logger.warning('GEO SEARCH {} {}'.format(response, response.content))
+        content = json.loads(response.content)
+        print(json.dumps(content, indent=4))
+        self.assertEqual(5, content['totalCount'])
+        self.assertEqual(2, len(content['results']))
