@@ -147,8 +147,8 @@ class TipologiaPiano(SerapideEnum):
     UNKNOWN = 'UNKNOWN'
     OPERATIVO = 'OPERATIVO'
     STRUTTURALE = 'STRUTTURALE'
-    VARIANTE_OPERATIVO = 'Variante operativo'
-    VARIANTE_STRUTTURALE = 'Variante strutturale'
+    # VARIANTE_OPERATIVO = 'Variante operativo'
+    # VARIANTE_STRUTTURALE = 'Variante strutturale'
 
 
 class TipologiaVAS(SerapideEnum):

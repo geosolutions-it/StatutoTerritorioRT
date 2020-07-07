@@ -126,12 +126,10 @@ MAPPING_PIANO_RISORSE = {
         TipoRisorsa.DELIBERA,  # TODO
         TipoRisorsa.DELIBERA,  # TODO
     ),
-    TipologiaPiano.VARIANTE_OPERATIVO: (
-        # TODO
-    ),
-    TipologiaPiano.VARIANTE_STRUTTURALE: (
-        # TODO
-    ),
+    # TipologiaPiano.VARIANTE_OPERATIVO: (
+    # ),
+    # TipologiaPiano.VARIANTE_STRUTTURALE: (
+    # ),
 }
 
 

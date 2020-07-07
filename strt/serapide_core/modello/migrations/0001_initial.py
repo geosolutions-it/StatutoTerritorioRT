@@ -123,7 +123,14 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, null=True)),
                 ('codice', models.CharField(max_length=255, unique=True)),
-                ('tipologia', models.CharField(choices=[(serapide_core.modello.enums.TipologiaPiano('UNKNOWN'), 'UNKNOWN'), (serapide_core.modello.enums.TipologiaPiano('OPERATIVO'), 'OPERATIVO'), (serapide_core.modello.enums.TipologiaPiano('STRUTTURALE'), 'STRUTTURALE'), (serapide_core.modello.enums.TipologiaPiano('Variante operativo'), 'Variante operativo'), (serapide_core.modello.enums.TipologiaPiano('Variante strutturale'), 'Variante strutturale')], default=serapide_core.modello.enums.TipologiaPiano('UNKNOWN'), max_length=35)),
+                ('tipologia', models.CharField(choices=[
+                    (serapide_core.modello.enums.TipologiaPiano('UNKNOWN'), 'UNKNOWN'),
+                    (serapide_core.modello.enums.TipologiaPiano('OPERATIVO'), 'OPERATIVO'),
+                    (serapide_core.modello.enums.TipologiaPiano('STRUTTURALE'), 'STRUTTURALE'),
+                    # (serapide_core.modello.enums.TipologiaPiano('Variante operativo'), 'Variante operativo'),
+                    # (serapide_core.modello.enums.TipologiaPiano('Variante strutturale'), 'Variante strutturale')
+                    ],
+                    default=serapide_core.modello.enums.TipologiaPiano('UNKNOWN'), max_length=35)),
                 ('descrizione', models.TextField(blank=True, null=True)),
                 ('url', models.URLField(blank=True, default='', null=True)),
                 ('numero_delibera', models.TextField(blank=True, null=True)),
