@@ -91,8 +91,14 @@ def geo_search(request, **kwargs):
     q = request.GET.get('q', None)
     page = request.GET.get('page', 1)
     limit = request.GET.get('limit', 10)
+    include_empty = request.GET.get('include_empty', None)
 
-    qs = Piano.objects
+    if include_empty:
+        qs = Piano.objects
+    else:
+        lotti_popolati = ElaboratoCartografico.objects.values('lotto').distinct()
+        qs = Piano.objects.filter(lotto__in=lotti_popolati)
+
     if q:
         qs = qs.filter(descrizione__icontains=q)
 

@@ -328,10 +328,9 @@ class MiscTest(AbstractSerapideProcsTest):
                                     content_type = "application/json"
                                     )
         logger.warning('GEO SEARCH {} {}'.format(response, response.content))
-
-        content = json.dumps(json.loads(response.content), indent=4)
-        print(content)
-
+        content = json.loads(response.content)
+        print(json.dumps(content, indent=4))
+        self.assertEqual(1, content['totalCount'])
 
         response = self._client.get(
                                     "/serapide/geo/map/{}".format(self.codice_piano),
@@ -368,7 +367,7 @@ class MiscTest(AbstractSerapideProcsTest):
             self.create_piano_and_promote(TipologiaVAS.VERIFICA, descr=d)
 
         response = self._client.get(
-                                    "/serapide/geo/map/search?q={}".format('A'),
+                                    "/serapide/geo/map/search?q={}&include_empty=1".format('A'),
                                     content_type = "application/json"
                                     )
         logger.warning('GEO SEARCH {} {}'.format(response, response.content))
@@ -377,7 +376,7 @@ class MiscTest(AbstractSerapideProcsTest):
         self.assertEqual(3, content['totalCount'])
 
         response = self._client.get(
-                                    "/serapide/geo/map/search?page=2&limit=2",
+                                    "/serapide/geo/map/search?page=2&limit=2&include_empty=1",
                                     content_type = "application/json"
                                     )
         logger.warning('GEO SEARCH {} {}'.format(response, response.content))

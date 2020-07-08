@@ -1002,8 +1002,8 @@ class RisorsePubblicazione(models.Model):
 # ############################################################################ #
 
 class LottoCartografico(models.Model):
-    piano = models.ForeignKey(Piano, on_delete=models.CASCADE)
-    azione = models.ForeignKey(Azione, on_delete=models.CASCADE)
+    piano = models.ForeignKey(Piano, on_delete=models.CASCADE, related_name='lotto')
+    azione = models.ForeignKey(Azione, on_delete=models.CASCADE, related_name='lotto_validato')
     azione_parent = models.ForeignKey(Azione, on_delete=models.CASCADE, related_name='lotto_generato')
 
     class Meta:
