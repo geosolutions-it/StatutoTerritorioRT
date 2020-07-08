@@ -155,3 +155,11 @@ MAPPING_AZIONI_CARTO_NEXT = {
     TipologiaAzione.esito_conferenza_paesaggistica_ap:
         TipologiaAzione.validazione_cartografia_cp_approvazione
 }
+
+MAPPING_AZIONI_CARTO_LABEL = {
+    TipologiaAzione.validazione_cartografia_adozione: 'Adottato',
+    TipologiaAzione.validazione_cartografia_controdedotta: 'Controdedotto',
+    TipologiaAzione.validazione_cartografia_cp_adozione: 'Conferenza Paesaggistica ante Approvazione',
+    TipologiaAzione.validazione_cartografia_approvazione: 'Approvato',
+    TipologiaAzione.validazione_cartografia_cp_approvazione: 'Conferenza Paesaggistica post Approvazione',
+}

@@ -14,6 +14,7 @@ import logging
 from collections import OrderedDict
 
 from django.core.paginator import QuerySetPaginator, Paginator
+from django.db.models import Exists
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.renderers import JSONRenderer
@@ -33,7 +34,7 @@ from serapide_core.modello.enums_geo import (
     PO_CartografiaDisciplinaInsediamentiEnum,
     PS_StrategiaEnum,
     PS_StatutoDelTerritorioEnum,
-    PS_QuadroConoscitivoEnum,
+    PS_QuadroConoscitivoEnum, MAPPING_AZIONI_CARTO_LABEL,
 )
 
 from serapide_core.modello.models import (
@@ -146,9 +147,9 @@ def geo_get(request, pk=None):
             layers.append(layer)
 
             layer['id'] = elaborato.id
-            layer['group'] = 'piano.{}'.format(lotto.azione.tipologia.name)  # todo
+            layer['group'] = lotto.azione.tipologia.name
             layer['search'] = 'TODO'
-            layer['name'] = elaborato.nome
+            layer['name'] = elaborato.nome  # TODO
             layer['description'] = find_layer_desc(elaborato.nome)
             layer['title'] = elaborato.nome
             layer['type'] = 'wms'
@@ -182,3 +183,12 @@ def find_layer_desc(nome_ec):
             return fixed.value
 
     return 'Sconosciuto'
+
+
+def geo_groups(request):
+    ret = [{
+        'id': tipo_azione.name,
+        'title': label,
+    } for tipo_azione,label in MAPPING_AZIONI_CARTO_LABEL.items()]
+
+    return JsonResponse({'groups': ret}, status=200)
