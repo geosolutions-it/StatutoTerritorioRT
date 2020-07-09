@@ -5,6 +5,8 @@ import os
 import datetime
 from collections import Counter
 
+from django.test import Client
+
 from serapide_core.modello.enums import (
     TipoRisorsa,
     TipologiaVAS,
@@ -242,16 +244,25 @@ class CartoTest(AbstractSerapideProcsTest):
         self.assertEqual(1, LottoCartografico.objects.count())
         self.assertEqual(2, ElaboratoCartografico.objects.count())
 
+        logger.warning('===== GEO SEARCH ALL -- anonymous')
+        anon_client = Client()
+        response = anon_client.get("/serapide/geo/map/search",content_type = "application/json")
+        content = json.loads(response.content)
+        self.assertEqual(0, content['totalCount'])
+
         logger.warning('===== GEO SEARCH ALL')
-        response = self._client.get(
-                                    "/serapide/geo/map/search",
-                                    content_type = "application/json"
-                                    )
+        response = self._client.get("/serapide/geo/map/search", content_type = "application/json")
         content = json.loads(response.content)
         print(json.dumps(content, indent=4))
         self.assertEqual(1, content['totalCount'])
 
         search_by = "test carto"
+
+        logger.warning('===== GEO SEARCH BY {} -- anonymous'.format(search_by))
+        response = anon_client.get("/serapide/geo/map/search?q={}".format(search_by),content_type = "application/json")
+        content = json.loads(response.content)
+        self.assertEqual(0, content['totalCount'])
+
         logger.warning('===== GEO SEARCH BY {}'.format(search_by))
         response = self._client.get(
                                     # "/serapide/geo/map/search",
@@ -263,16 +274,18 @@ class CartoTest(AbstractSerapideProcsTest):
         self.assertEqual(1, content['totalCount'])
 
         logger.warning('===== GEO GET MAP')
-        response = self._client.get(
-                                    "/serapide/geo/map/{}".format(self.codice_piano),
-                                    content_type = "application/json"
-                                    )
+        response = self._client.get("/serapide/geo/map/{}".format(self.codice_piano),content_type = "application/json")
         logger.warning('GEO GET {} {}'.format(response, response.content))
-
         content = json.dumps(json.loads(response.content), indent=4)
         print(content)
 
-
+        logger.warning('===== GEO GET MAP -- anonymous')
+        response = anon_client.get("/serapide/geo/map/{}".format(self.codice_piano),content_type = "application/json")
+        logger.warning('GEO GET {} {}'.format(response, response.content))
+        content = json.loads(response.content)
+        print(json.dumps(content, indent=4))
+        self.assertTrue(content['err'])
+        
         #
         # response = self.client.post(
         #     self.GRAPHQL_URL,

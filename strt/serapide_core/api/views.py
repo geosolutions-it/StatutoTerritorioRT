@@ -28,6 +28,7 @@ from graphene_file_upload.django import FileUploadGraphQLView
 
 from graphql_extensions.views import GraphQLView
 
+from serapide_core.api.auth.user import is_recognizable, get_piani_visibili_id
 from serapide_core.modello.enums_geo import (
     PO_CartografiaSupportoPrevisioniEnum,
     PO_CartografiaAssettiInsediativiEnum,
@@ -94,11 +95,11 @@ def geo_search(request, **kwargs):
     limit = request.GET.get('limit', 10)
     include_empty = request.GET.get('include_empty', None)
 
-    if include_empty:
-        qs = Piano.objects
-    else:
+    qs = get_piano_qs(request.user)
+
+    if not include_empty:
         lotti_popolati = ElaboratoCartografico.objects.values('lotto').distinct()
-        qs = Piano.objects.filter(lotto__in=lotti_popolati).distinct()
+        qs = qs.filter(lotto__in=lotti_popolati).distinct()
 
     if q:
         qs = qs.filter(descrizione__icontains=q)
@@ -127,7 +128,12 @@ def geo_search(request, **kwargs):
 
 def geo_get(request, pk=None):
     # piano: Piano = get_object_or_404(Piano, pk=pk)
-    piano: Piano = Piano.objects.filter(codice=pk).first()
+    piano_qs = get_piano_qs(request.user)
+    piano: Piano = piano_qs.filter(codice=pk).first()
+
+    if not piano:
+        return JsonResponse({'err':'piano non trovato'}, status=404)
+
     lotti = LottoCartografico.objects.filter(piano=piano)
 
     obj = OrderedDict()
@@ -192,3 +198,11 @@ def geo_groups(request):
     } for tipo_azione,label in MAPPING_AZIONI_CARTO_LABEL.items()]
 
     return JsonResponse({'groups': ret}, status=200)
+
+
+def get_piano_qs(user):
+    if is_recognizable(user):
+        id_piani = get_piani_visibili_id(user)
+        return Piano.objects.filter(id__in=id_piani)
+    else:
+        return Piano.objects.none()
