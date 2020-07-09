@@ -98,7 +98,7 @@ def geo_search(request, **kwargs):
         qs = Piano.objects
     else:
         lotti_popolati = ElaboratoCartografico.objects.values('lotto').distinct()
-        qs = Piano.objects.filter(lotto__in=lotti_popolati)
+        qs = Piano.objects.filter(lotto__in=lotti_popolati).distinct()
 
     if q:
         qs = qs.filter(descrizione__icontains=q)

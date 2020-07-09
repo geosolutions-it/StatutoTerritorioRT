@@ -77,18 +77,15 @@ class DeletePianoTest(AbstractSerapideProcsTest):
         self.upload('005_vas_upload_file.query', self.codice_vas, TipoRisorsa.DOCUMENTO_PRELIMINARE_VERIFICA_VAS)
 
         sogg_op = []
-        sogg_op.append({
-            'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_RT][DataLoader.UFF_GC_TN].uuid.__str__(),
-            'qualifica': Qualifica.GC.name})
-        sogg_op.append({
-            'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_RT][DataLoader.UFF_PIAN].uuid.__str__(),
-            'qualifica': Qualifica.PIAN.name})
-        sogg_op.append({
-            'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_PI][DataLoader.UFF1].uuid.__str__(),
-            'qualifica': Qualifica.AC.name})
-        sogg_op.append({
-            'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_LU][DataLoader.UFF1].uuid.__str__(),
-            'qualifica': Qualifica.SCA.name})
+        for ente, uff, q in [
+            (DataLoader.IPA_RT, DataLoader.UFF_GC_TN, Qualifica.GC),
+            (DataLoader.IPA_RT, DataLoader.UFF_PIAN, Qualifica.PIAN),
+            (DataLoader.IPA_PI, DataLoader.UFF1, Qualifica.AC),
+            (DataLoader.IPA_LU, DataLoader.UFF1, Qualifica.SCA),
+        ]:
+            sogg_op.append({
+                'ufficioUuid': DataLoader.uffici_stored[ente][uff].uuid.__str__(),
+                'qualifica': q.name})
 
         self.sendCNV('002_update_piano.query', 'UPDATE PIANO', self.codice_piano, "soggettiOperanti", sogg_op)
 
