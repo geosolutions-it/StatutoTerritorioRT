@@ -181,8 +181,8 @@ def validate_shp(lotto, shp_file):
                 nome=basename,
                 crs=epsg,
                 minx=c.bounds[0],
-                maxx=c.bounds[1],
-                miny=c.bounds[2],
+                miny=c.bounds[1],
+                maxx=c.bounds[2],
                 maxy=c.bounds[3],
                 ingerito=False,
             )
