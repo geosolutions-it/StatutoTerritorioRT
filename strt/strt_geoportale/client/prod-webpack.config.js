@@ -1,6 +1,11 @@
 const path = require("path");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const extractThemesPlugin = require('./MapStore2/build/themes.js').extractThemesPlugin;
+const DefinePlugin = require('webpack/lib/DefinePlugin');
+
+const fs = require('fs-extra');
+const versionData = fs.readFileSync(path.join(__dirname, 'static', 'mapstore', 'version.txt'), 'utf8');
+const __MS_VERSION__ = versionData.toString();
 
 const paths = {
     base: __dirname,
@@ -23,7 +28,10 @@ module.exports = require('./MapStore2/build/buildConfig')(
         new CopyWebpackPlugin([
             { from: path.join(paths.framework, 'translations'), to: path.join(paths.dist, "MapStore2", "web", "client", "translations") },
             { from: path.join(paths.base, 'translations'), to: path.join(paths.dist, "translations") }
-        ])
+        ]),
+        new DefinePlugin({
+            '__MS_VERSION__': '"' + __MS_VERSION__  + '"'
+        })
     ],
     {
         "@mapstore": path.resolve(__dirname, "MapStore2", "web", "client"),
