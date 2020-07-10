@@ -15,8 +15,11 @@ import Message from '@mapstore/components/I18N/Message';
 
 const loopFilter = ({ node, filterText, currentLocale }) => {
     return !!node?.nodes?.find((nd) => {
-        if (nd?.nodes) {
+        if (nd.nodes) {
             return loopFilter({ node: nd, filterText, currentLocale });
+        }
+        if (nd.dummy) {
+            return false;
         }
         const { title: currentTitle } = getTitleAndTooltip({ node: nd, currentLocale });
         return currentTitle.toLowerCase().indexOf(filterText.toLocaleLowerCase()) !== -1;
@@ -105,11 +108,15 @@ class HeaderNode extends Component {
             <div
                 className="ms-header-node">
                 <div className="ms-header-node-title">{title}</div>
+                {node?.description && <div className="ms-header-node-description">{node.description}</div>}
+                {node?.caption && <div className="ms-header-node-caption">{node.caption}</div>}
                 <Filter
                     filterText={filterText}
                     onFilter={(newFilterText) => this.setState({ filterText: newFilterText })}
                 />
-                {isEmpty && <div className="ms-header-node-empty"><Message msgId="noLayerFilterResults"/></div>}
+                {isEmpty && <div className="ms-header-node-empty">
+                    <Message msgId={!filterText ? 'noLayerInGroup' : 'noLayerFilterResults'}/>
+                </div>}
                 {groupChildren}
             </div>
         );

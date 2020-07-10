@@ -6,24 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import axios from '@mapstore/libs/ajax';
-
-
 import ConfigUtils from '@mapstore/utils/ConfigUtils';
-
-// redirect all relative requests to mapstore
-axios.interceptors.request.use(
-    config => {
-        if (config.url && !config.url.startsWith("http") && !config.url.startsWith("/")) {
-            return {
-                ...config,
-                url: `/static/${config.url}`
-            };
-        }
-        return config;
-    }
-);
-
 
 // Fix mapLayout
 

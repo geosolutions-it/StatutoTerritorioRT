@@ -32,7 +32,7 @@ import ContentTabs from '@mapstore/plugins/ContentTabs';
 // import ContextCreatorPlugin from '@mapstore/plugins/ContextCreator';
 // import ContextManagerPlugin from '@mapstore/plugins/contextmanager/ContextManager';
 import CookiePlugin from '@mapstore/plugins/Cookie';
-import CreateNewMapPlugin from '@mapstore/plugins/CreateNewMap';
+// import CreateNewMapPlugin from '@mapstore/plugins/CreateNewMap';
 // import Dashboard from '@mapstore/plugins/Dashboard';
 // import DashboardEditor from '@mapstore/plugins/DashboardEditor';
 // import DashboardsPlugin from '@mapstore/plugins/Dashboards';
@@ -73,7 +73,7 @@ import MapFooterPlugin from '@mapstore/plugins/MapFooter';
 import MapLoadingPlugin from '@mapstore/plugins/MapLoading';
 import MapPlugin from '@mapstore/plugins/Map';
 import MapSearchPlugin from '@mapstore/plugins/MapSearch';
-import MapsPlugin from '@mapstore/plugins/Maps';
+// import MapsPlugin from '@mapstore/plugins/Maps';
 import MapCatalogPlugin from '@mapstore/plugins/MapCatalog';
 import MapTemplatesPlugin from '@mapstore/plugins/MapTemplates';
 import MeasurePlugin from '@mapstore/plugins/Measure';
@@ -123,6 +123,8 @@ import ReactSwipe from 'react-swipeable-views';
 import SwipeHeader from '@mapstore/components/data/identify/SwipeHeader';
 
 // custom
+import HomeCatalogPlugin from '@js/plugins/HomeCatalog';
+import SerapideCatalogPlugin from '@js/plugins/SerapideCatalog';
 import TOCPlugin from '@js/plugins/TOC';
 
 export const plugins = {
@@ -145,7 +147,7 @@ export const plugins = {
     CRSSelectorPlugin,
     ContentTabs,
     CookiePlugin,
-    CreateNewMapPlugin,
+    // CreateNewMapPlugin,
     DetailsPlugin,
     DrawerMenuPlugin,
     ExpanderPlugin,
@@ -169,7 +171,7 @@ export const plugins = {
     MapLoadingPlugin,
     MapPlugin,
     MapSearchPlugin,
-    MapsPlugin,
+    // MapsPlugin,
     MapCatalogPlugin,
     MapTemplatesPlugin,
     MeasurePlugin,
@@ -200,7 +202,11 @@ export const plugins = {
     WFSDownloadPlugin,
     ZoomAllPlugin,
     ZoomInPlugin,
-    ZoomOutPlugin
+    ZoomOutPlugin,
+
+    // custom
+    HomeCatalogPlugin,
+    SerapideCatalogPlugin
 };
 
 export const requires = {

@@ -23,8 +23,14 @@ function TOC({
     activateSortLayer = false,
     ...props
 }) {
+    // get button of serapide project from others plugin
+    const buttons = props.items
+        .filter(({ serapideButton }) => serapideButton)
+        .map(({ serapideButton: Tool, name }) => <Tool key={name}/> );
+
     return (
         <div className="ms-toc">
+            <div className="ms-toc-tools">{buttons}</div>
             <MSTOCPlugin
                 { ...props }
                 activateRemoveLayer={activateRemoveLayer}

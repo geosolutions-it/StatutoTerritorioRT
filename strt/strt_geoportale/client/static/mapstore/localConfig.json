@@ -12,7 +12,13 @@
           "https://gs-stable.geo-solutions.it:443/geoserver"
         ]
     },
-    "geoStoreUrl": "./",
+    "serapideAPI": {
+      "geoMapSearch": "/serapide/geo/map/search",
+      "geoMapId": "/serapide/geo/map/{id}",
+      "geoGroups": "/serapide/geo/groups"
+    },
+    "geoStoreUrl": "/static/mapstore/",
+    "configurationFolder": "/static/mapstore/",
     "mailingList": "https://groups.google.com/forum/#!forum/mapstore-users",
     "printUrl": "pdf/info.json",
     "bingApiKey": "AhuXBu7ipR1gNbBfXhtUAyCZ6rkC5PkWpxs2MnMRZ1ZupxQfivjLCch22ozKSCAn",
@@ -47,7 +53,27 @@
       {"name": "browser", "path": "browser"},
       {"name": "geostorymode", "path": "geostory.mode"},
       {"name": "featuregridmode", "path": "featuregrid.mode"}],
-    "projectionDefs": [],
+    "projectionDefs": [
+      {
+        "code": "EPSG:3003",
+        "def": "+proj=tmerc +lat_0=0 +lon_0=9 +k=0.9996 +x_0=1500000 +y_0=0 +ellps=intl +towgs84=-104.1,-49.1,-9.9,0.971,-2.917,0.714,-11.68 +units=m +no_defs",
+        "extent": [1241482.0019, 973563.1609, 1830078.9331, 5215189.0853],
+        "worldExtent": [6.6500, 8.8000, 12.0000, 47.0500]
+      }, {
+        "code": "epsg:3003",
+        "def": "+proj=tmerc +lat_0=0 +lon_0=9 +k=0.9996 +x_0=1500000 +y_0=0 +ellps=intl +towgs84=-104.1,-49.1,-9.9,0.971,-2.917,0.714,-11.68 +units=m +no_defs",
+        "extent": [1241482.0019, 973563.1609, 1830078.9331, 5215189.0853],
+        "worldExtent": [6.6500, 8.8000, 12.0000, 47.0500]
+      }, {
+        "code": "EPSG:6707",
+        "def": "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
+        "extent": [218994.50166281, 3850723.16246129, 1257783.02862271, 5264909.35712538],
+        "worldExtent": [5.93, 34.76, 18.99, 47.1]
+      }, {
+      "code": "epsg:6707",
+      "def": "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
+      "extent": [218994.50166281, 3850723.16246129, 1257783.02862271, 5264909.35712538],
+      "worldExtent": [5.93, 34.76, 18.99, 47.1] }],
     "initialState": {
       "defaultState": {
         "locale": {
@@ -336,7 +362,8 @@
             "Timeline",
             "Playback",
             "FeedbackMask",
-            "StyleEditor"
+            "StyleEditor",
+            "SerapideCatalog"
         ],
         "embedded": [{
                 "name": "Map",
@@ -450,23 +477,14 @@
             "FeedbackMask"
         ],
         "common": [ "Attribution", "ScrollTop", "Notifications"],
-        "maps": [ "MapSearch",  "ContentTabs",
+        "maps": [
           {
-            "name": "Maps",
+            "name": "HomeDescription",
             "cfg": {
-              "mapsOptions": {
-                "start": 0,
-                "limit": 12
-              },
-              "fluid": true
+              "name": ""
             }
-          }, 
-          {
-          "name": "Cookie",
-          "cfg": {
-            "externalCookieUrl" : "",
-            "declineUrl" : "http://www.google.com"
-          }
-        }]
+          },
+          "HomeCatalog"
+        ]
     }
 }
