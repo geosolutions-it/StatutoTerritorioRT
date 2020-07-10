@@ -84,7 +84,7 @@
     },
     "scripts": {
         "clean": "rimraf dist",
-        "compile": "npm run clean && mkdirp ./dist && webpack --config prod-webpack.config.js --env.production",
+        "compile": "npm run clean && mkdirp ./dist && node ./clientVersion.js && webpack --config prod-webpack.config.js --env.production",
         "start": "webpack-dev-server --progress --colors --hot --inline --content-base .",
         "mvntest": "karma start ./karma.conf.single-run.js --reporters junit,dots,coverage",
         "lint": "eslint js --ext .jsx,.js",

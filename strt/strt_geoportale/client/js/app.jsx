@@ -7,6 +7,32 @@
  */
 
 import ConfigUtils from '@mapstore/utils/ConfigUtils';
+import axios from '@mapstore/libs/ajax';
+
+// list of path that need version parameter
+const pathsNeedVersion = [
+    'localConfig.json',
+    '/translations/',
+    'map.json'
+];
+
+const version = process.env.NODE_ENV === 'production' ? __MS_VERSION__ : '';
+
+axios.interceptors.request.use(
+    config => {
+        if (config.url && version && pathsNeedVersion.filter(url => config.url.match(url))[0]) {
+            return {
+                ...config,
+                params: {
+                    ...config.params,
+                    version
+                }
+            };
+        }
+        return config;
+    }
+);
+
 
 // Fix mapLayout
 
@@ -54,6 +80,8 @@ import plugins from './plugins';
 import main from '@mapstore/product/main';
 import appEpics from '@js/epics/app';
 
+import { loadVersion } from '@mapstore/actions/version';
+
 main({
     ...appConfig, pages: [{
         name: "home",
@@ -73,4 +101,10 @@ main({
         component: require('@mapstore/product/pages/MapViewer')
     }], themeCfg: { path: '/static/mapstore/themes', prefixContainer: '#geoportale' },
     appEpics
-}, plugins);
+}, plugins, cfg => ({
+    ...cfg,
+    enableExtensions: false,
+    initialActions: [
+        loadVersion.bind(null, '/static/mapstore/version.txt')
+    ]
+}));
