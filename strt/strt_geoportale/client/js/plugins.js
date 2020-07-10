@@ -8,7 +8,7 @@
 
 import History from '@mapstore/plugins/History';
 
-import AboutPlugin from '@mapstore/product/plugins/About';
+// import AboutPlugin from '@mapstore/product/plugins/About';
 import AttributionPlugin from '@mapstore/product/plugins/Attribution';
 // import ExamplesPlugin from '@mapstore/product/plugins/Examples';
 // import FooterPlugin from '@mapstore/product/plugins/Footer';
@@ -21,7 +21,7 @@ import MapTypePlugin from '@mapstore/product/plugins/MapType';
 import NavMenu from '@mapstore/product/plugins/NavMenu';
 // framework plugins
 import AddGroupPlugin from '@mapstore/plugins/AddGroup';
-import AnnotationsPlugin from '@mapstore/plugins/Annotations';
+// import AnnotationsPlugin from '@mapstore/plugins/Annotations';
 import AutoMapUpdatePlugin from '@mapstore/plugins/AutoMapUpdate';
 import BackgroundSelectorPlugin from '@mapstore/plugins/BackgroundSelector';
 import BackgroundSwitcherPlugin from '@mapstore/plugins/BackgroundSwitcher';
@@ -53,16 +53,16 @@ import FullScreenPlugin from '@mapstore/plugins/FullScreen';
 // import DashboardSavePlugin from '@mapstore/plugins/DashboardSave';
 // import DashboardSaveAsPlugin from '@mapstore/plugins/DashboardSave';
 // import GeoStoryNavigationPlugin from '@mapstore/plugins/GeoStoryNavigation';
-import GlobeViewSwitcherPlugin from '@mapstore/plugins/GlobeViewSwitcher';
+// import GlobeViewSwitcherPlugin from '@mapstore/plugins/GlobeViewSwitcher';
 import GoFull from '@mapstore/plugins/GoFull';
 import GridContainerPlugin from '@mapstore/plugins/GridContainer';
 import GroupManagerPlugin from '@mapstore/plugins/manager/GroupManager';
-import HelpLinkPlugin from '@mapstore/plugins/HelpLink';
+// import HelpLinkPlugin from '@mapstore/plugins/HelpLink';
 // import HelpPlugin from '@mapstore/plugins/Help';
-import HomePlugin from '@mapstore/plugins/Home';
+// import HomePlugin from '@mapstore/plugins/Home';
 import IdentifyPlugin from '@mapstore/plugins/Identify';
 import LanguagePlugin from '@mapstore/plugins/Language';
-import LocatePlugin from '@mapstore/plugins/Locate';
+// import LocatePlugin from '@mapstore/plugins/Locate';
 import LoginPlugin from '@mapstore/plugins/Login';
 // import ManagerMenuPlugin from '@mapstore/plugins/manager/ManagerMenu';
 // import ManagerPlugin from '@mapstore/plugins/manager/Manager';
@@ -128,7 +128,7 @@ import SerapideCatalogPlugin from '@js/plugins/SerapideCatalog';
 import TOCPlugin from '@js/plugins/TOC';
 
 export const plugins = {
-    AboutPlugin,
+    // AboutPlugin,
     AttributionPlugin,
     ForkPlugin,
     HeaderPlugin,
@@ -139,7 +139,7 @@ export const plugins = {
     NavMenu,
     // framework plugins
     AddGroupPlugin,
-    AnnotationsPlugin,
+    // AnnotationsPlugin,
     AutoMapUpdatePlugin,
     BackgroundSelectorPlugin,
     BackgroundSwitcherPlugin,
@@ -156,15 +156,15 @@ export const plugins = {
     FilterLayerPlugin,
     FloatingLegendPlugin,
     FullScreenPlugin,
-    GlobeViewSwitcherPlugin,
+    // GlobeViewSwitcherPlugin,
     GoFull,
     GridContainerPlugin,
     GroupManagerPlugin,
-    HelpLinkPlugin,
-    HomePlugin,
+    // HelpLinkPlugin,
+    // HomePlugin,
     IdentifyPlugin,
     LanguagePlugin,
-    LocatePlugin,
+    // LocatePlugin,
     LoginPlugin,
     MapEditorPlugin,
     MapFooterPlugin,
