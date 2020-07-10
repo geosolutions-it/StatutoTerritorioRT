@@ -96,6 +96,43 @@ describe('serapide epics', function() {
             callback,
             state);
     });
+    it('strtAddMapConfigurations without serapide id', function(done) {
+
+        const state = {};
+
+        const data = {
+            groups: [{
+                id: "validazione_cartografia_adozione",
+                title: "Adottato"
+            }]
+        };
+        mockAxios.onGet()
+            .reply(() => {
+                return [ 200, data];
+            });
+
+        const NUMBER_OF_ACTIONS = 3;
+
+        const callback = (actions) => {
+            try {
+                expect(actions.map(({ type }) => type)).toEqual([
+                    ADD_GROUP,
+                    ADD_GROUP,
+                    MOVE_NODE
+                ]);
+            } catch (e) {
+                done(e);
+            }
+            done();
+        };
+
+        testEpic(
+            strtAddMapConfigurations,
+            NUMBER_OF_ACTIONS,
+            configureMap(),
+            callback,
+            state);
+    });
     it('strtSearchSerapide with error on groups request', function(done) {
 
         const state = {

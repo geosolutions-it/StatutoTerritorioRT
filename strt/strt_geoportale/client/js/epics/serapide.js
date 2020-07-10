@@ -56,21 +56,25 @@ import uuidv1 from 'uuid/v1';
 export const strtAddMapConfigurations = (action$, store) =>
     action$.ofType(MAP_CONFIG_LOADED)
         .switchMap(() =>{
-            const state = store.getState();
-            const search = state?.router?.location?.search;
-            const { query = {} } = search && url.parse(search, true) || {};
-            const id = query[ID_PARAM];
-            if (!id) {
-                return Observable.empty();
-            }
-
             return Observable.defer(() => getSerapideGroups())
                 .switchMap((defaultGroups) => {
+                    const state = store.getState();
+                    const search = state?.router?.location?.search;
+                    const { query = {} } = search && url.parse(search, true) || {};
+                    const id = query[ID_PARAM];
                     setDefaultGroupsIds(defaultGroups.map((group) => group.id));
+                    const addGroupsActions = defaultGroups.map(({ parent, ...group }) =>
+                        addGroup(undefined, parent, group)
+                    );
+                    if (!id) {
+                        return Observable.of(
+                            ...addGroupsActions,
+                            // move piano group on top of TOC
+                            moveNode('piano', 'root', 0)
+                        );
+                    }
                     return Observable.of(
-                        ...defaultGroups.map(({ parent, ...group }) =>
-                            addGroup(undefined, parent, group)
-                        ),
+                        ...addGroupsActions,
                         // move piano group on top of TOC
                         moveNode('piano', 'root', 0),
                         selectCatalogEntrySerapide({ id })
