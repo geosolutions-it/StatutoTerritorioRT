@@ -1,13 +1,35 @@
 
+@import "./less/serapide-catalog.less";
 @import "./less/toc.less";
 
 // custom toc styles
 .ms-empty-group {
     display: none;
 }
+.ms-toc-tools {
+    text-align: center;
+}
 
 .ms-header-node-empty {
     width: 100%;
     font-style: italic;
     padding: 8px 0;
+}
+
+// homepage
+
+#page-maps {
+    padding-top: 0;
+    .srtr-serapide-catalog-body > div {
+        position: relative;
+        max-width: 1400px;
+    }
+}
+#container .page-maps .ms-home-description {
+    background-image: none;
+    background: @ms2-color-shade-lighter;
+    padding-top: 0;
+    .container {
+        background-color: transparent;
+    }
 }

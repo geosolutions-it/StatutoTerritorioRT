@@ -1,0 +1,141 @@
+
+
+.srtr-serapide-catalog {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.srtr-serapide-catalog-head {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .form-group:last-child {
+        margin-bottom: 0;
+    }
+    .form-group {
+        max-width: 500px;
+        width: 100%;
+        margin-bottom: 4px;
+        padding: 4px;
+        .shadow-soft;
+    }
+    .form-control {
+        height: 40px;
+    }
+
+    input:not(:focus) {
+        box-shadow: none;
+        border: none;
+    }
+
+    .input-group-addon {
+        .btn-default;
+        .no-border;
+    }
+}
+
+.srtr-serapide-catalog-body {
+    flex: 1;
+    position: relative;
+    overflow: auto;
+}
+
+.srtr-serapide-catalog-body > div {
+    padding: 8px;
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.srtr-serapide-catalog-card {
+    padding: 8px;
+    margin: 4px;
+    display: inline-flex;
+    flex: 1;
+    border: 1px solid @ms2-color-shade-lighter;
+    transition: 0.3s box-shadow;
+    min-width: ~"calc(25% - 8px)";
+    max-width: ~"calc(25% - 8px)";
+    min-height: 150px;
+    &:hover {
+        cursor: pointer;
+        .shadow-soft;
+    }
+    &.ms-selected {
+        border: 2px solid lighten(@ms2-color-primary, 15%);
+    }
+}
+
+.ms-lg {
+    .srtr-serapide-catalog-card {
+        min-width: ~"calc(33.3% - 8px)";
+        max-width: ~"calc(33.3% - 8px)";
+    }
+}
+
+.ms-md {
+    .srtr-serapide-catalog-card {
+        min-width: ~"calc(50% - 8px)";
+        max-width: ~"calc(50% - 8px)";
+    }
+}
+
+.ms-sm {
+    .srtr-serapide-catalog-card {
+        min-width: ~"calc(100% - 8px)";
+        max-width: ~"calc(100% - 8px)";
+    }
+}
+
+.strt-catalog-alert-message {
+    text-align: center;
+    margin: auto;
+    padding: 32px 0;
+    .glyphicon {
+        color: @ms2-color-shade-lighter;
+        font-size: 128px;
+    }
+}
+
+.srtr-serapide-catalog-info {
+    flex: 1;
+    padding-left: 10px;
+    border-left: 6px solid #FED403;
+    margin-left: 10px;
+    overflow: hidden;
+    > * {
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 1px 0;
+    }
+    h4 {
+        margin: 4px 0;
+        font-weight: bold;
+    }
+    p {
+        margin: 4px 0;
+    }
+}
+
+.srtr-serapide-catalog-footer {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .pagination {
+        margin: 0;
+    }
+}
+
+.srtr-type-icon {
+    width: 32px;
+    height: 32px;
+}
