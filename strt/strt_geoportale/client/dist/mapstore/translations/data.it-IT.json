@@ -2,8 +2,22 @@
     "locale": "it-IT",
     "messages": {
         "noLayerFilterResults": "Nessun livello disponibile per il filtro utilizzato",
+        "noLayerInGroup": "Nessun livello disponibile per questo gruppo",
         "serapide": {
-            "userLayers": "Livelli Utente"
+            "userLayers": "Livelli Utente",
+            "catalogTitle": "Serapide",
+            "catalogFilterPlaceholder": "Filtra i piani per nome, comune o tipo",
+            "noResultsAvailableTitle": "Nessun risultato disponibile",
+            "noResultsAvailable": "Non ci sono risultati disponibile che corrisponde ai parametri utilizzati nella richiesta",
+            "resultsErrorTitle": "Errore",
+            "resultsError": "Non è possibile connettersi al servizio di ricerca",
+            "selectSerapideLayers": "Seleziona piano",
+            "serapideCatalogTitle": "Serapide catalog",
+            "noPianoAvailableTitle": "Errore di connessione",
+            "noPianoAvailable": "Non è possibile recuperare il piano richiesto"
+        },
+        "home": {
+            "shortDescription": "<h1>GeoPortale</h1>"
         }
     }
 }
