@@ -13,13 +13,9 @@ import json
 import logging
 from collections import OrderedDict
 
+from django.conf import settings
+
 from django.core.paginator import QuerySetPaginator, Paginator
-from django.db.models import Exists
-from rest_framework import status
-from rest_framework.generics import get_object_or_404
-from rest_framework.renderers import JSONRenderer
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -35,7 +31,7 @@ from serapide_core.modello.enums_geo import (
     PO_CartografiaDisciplinaInsediamentiEnum,
     PS_StrategiaEnum,
     PS_StatutoDelTerritorioEnum,
-    PS_QuadroConoscitivoEnum, MAPPING_AZIONI_CARTO_LABEL,
+    PS_QuadroConoscitivoEnum, MAPPING_AZIONI_VALIDAZIONECARTO_LABEL,
 )
 
 from serapide_core.modello.models import (
@@ -155,11 +151,11 @@ def geo_get(request, pk=None):
             layer['id'] = elaborato.id
             layer['group'] = lotto.azione.tipologia.name
             layer['search'] = 'TODO'
-            layer['name'] = elaborato.nome  # TODO
+            layer['name'] = elaborato.get_layer_name()
             layer['description'] = find_layer_desc(elaborato.nome)
             layer['title'] = elaborato.nome
             layer['type'] = 'wms'
-            layer['url'] = 'to be defined by settings'
+            layer['url'] = getattr(settings, 'GEOSERVER_BASE_URL')
 
             bbox = OrderedDict()
             bbox['crs'] = elaborato.crs
@@ -172,7 +168,6 @@ def geo_get(request, pk=None):
             layer['bbox'] = bbox
 
             layer['visibility'] = True
-            layer['singleTile'] = False
 
     return JsonResponse(obj, status=200)
 
@@ -195,7 +190,7 @@ def geo_groups(request):
     ret = [{
         'id': tipo_azione.name,
         'title': label,
-    } for tipo_azione,label in MAPPING_AZIONI_CARTO_LABEL.items()]
+    } for tipo_azione,label in MAPPING_AZIONI_VALIDAZIONECARTO_LABEL.items()]
 
     return JsonResponse({'groups': ret}, status=200)
 

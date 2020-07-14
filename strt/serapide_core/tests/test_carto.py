@@ -237,6 +237,9 @@ class CartoTest(AbstractSerapideProcsTest):
         az_ado: Azione = piano.azioni(TipologiaAzione.trasmissione_adozione).get()
         self.assertEqual(az_ado.stato, StatoAzione.ESEGUITA)
 
+        az_ingest: Azione = piano.azioni(TipologiaAzione.ingestione_cartografia_adozione).get()
+        self.assertTrue(az_ingest.stato in [StatoAzione.NECESSARIA, StatoAzione.FALLITA])
+
         report = AzioneReport.objects.filter(azione=az_carto, tipo=TipoReportAzione.ERR).first()
         self.assertIsNone(report)
 
@@ -285,7 +288,7 @@ class CartoTest(AbstractSerapideProcsTest):
         content = json.loads(response.content)
         print(json.dumps(content, indent=4))
         self.assertTrue(content['err'])
-        
+
         #
         # response = self.client.post(
         #     self.GRAPHQL_URL,

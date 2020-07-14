@@ -8,7 +8,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 #########################################################################
-
+from collections import OrderedDict
 
 from serapide_core.modello.enums import (
     TipologiaPiano,
@@ -122,14 +122,10 @@ MAPPING_PIANO_RISORSE = {
         TipoRisorsa.SUPPORTO_PREVISIONI_P_C,
     ),
     TipologiaPiano.STRUTTURALE: (
-        TipoRisorsa.DELIBERA,  # TODO
-        TipoRisorsa.DELIBERA,  # TODO
-        TipoRisorsa.DELIBERA,  # TODO
+        TipoRisorsa.PS_STRATEGIA,
+        TipoRisorsa.PS_QUADRO_CONOSCITIVO,
+        TipoRisorsa.PS_STATUTO_DEL_TERRITORIO,
     ),
-    # TipologiaPiano.VARIANTE_OPERATIVO: (
-    # ),
-    # TipologiaPiano.VARIANTE_STRUTTURALE: (
-    # ),
 }
 
 
@@ -138,9 +134,19 @@ MAPPING_RISORSA_ENUM = {
     TipoRisorsa.DISCIPLINA_INSEDIAMENTI: PO_CartografiaDisciplinaInsediamentiEnum,
     TipoRisorsa.SUPPORTO_PREVISIONI_P_C: PO_CartografiaSupportoPrevisioniEnum,
 
-    TipoRisorsa.DELIBERA: PS_StrategiaEnum,  # TODO
-    TipoRisorsa.DELIBERA: PS_QuadroConoscitivoEnum,  # TODO
-    TipoRisorsa.DELIBERA: PS_StatutoDelTerritorioEnum,  # TODO
+    TipoRisorsa.PS_STRATEGIA: PS_StrategiaEnum,
+    TipoRisorsa.PS_QUADRO_CONOSCITIVO: PS_QuadroConoscitivoEnum,
+    TipoRisorsa.PS_STATUTO_DEL_TERRITORIO: PS_StatutoDelTerritorioEnum,
+}
+
+MAPPING_RISORSA_SHORTNAME = {
+    TipoRisorsa.ASSETTI_INSEDIATIVI: 'ASSETTI',
+    TipoRisorsa.DISCIPLINA_INSEDIAMENTI: 'DISCIPLINA',
+    TipoRisorsa.SUPPORTO_PREVISIONI_P_C: 'SUPPORTO',
+
+    TipoRisorsa.PS_STRATEGIA: 'STRATEGIA',
+    TipoRisorsa.PS_QUADRO_CONOSCITIVO: 'CONOSCITIVO',
+    TipoRisorsa.PS_STATUTO_DEL_TERRITORIO: 'STATUTO',
 }
 
 MAPPING_AZIONI_CARTO_NEXT = {
@@ -156,10 +162,27 @@ MAPPING_AZIONI_CARTO_NEXT = {
         TipologiaAzione.validazione_cartografia_cp_approvazione
 }
 
-MAPPING_AZIONI_CARTO_LABEL = {
-    TipologiaAzione.validazione_cartografia_adozione: 'Adottato',
-    TipologiaAzione.validazione_cartografia_controdedotta: 'Controdedotto',
-    TipologiaAzione.validazione_cartografia_cp_adozione: 'Conferenza Paesaggistica ante Approvazione',
-    TipologiaAzione.validazione_cartografia_approvazione: 'Approvato',
-    TipologiaAzione.validazione_cartografia_cp_approvazione: 'Conferenza Paesaggistica post Approvazione',
+
+MAPPING_AZIONI_VALIDAZIONECARTO_LABEL = OrderedDict([
+    (TipologiaAzione.validazione_cartografia_adozione, 'Adottato'),
+    (TipologiaAzione.validazione_cartografia_controdedotta, 'Controdedotto'),
+    (TipologiaAzione.validazione_cartografia_cp_adozione, 'Conferenza Paesaggistica ante Approvazione'),
+    (TipologiaAzione.validazione_cartografia_approvazione, 'Approvato'),
+    (TipologiaAzione.validazione_cartografia_cp_approvazione, 'Conferenza Paesaggistica post Approvazione'),
+])
+
+MAPPING_AZIONI_VALIDAZIONECARTO_PREFIX = {
+    TipologiaAzione.validazione_cartografia_adozione: 'ADOZ',
+    TipologiaAzione.validazione_cartografia_controdedotta: 'CNTR',
+    TipologiaAzione.validazione_cartografia_cp_adozione: 'CPAD',
+    TipologiaAzione.validazione_cartografia_approvazione: 'APPR',
+    TipologiaAzione.validazione_cartografia_cp_approvazione: 'CPAP',
+}
+
+MAPPING_AZIONI_VALIDAZIONECARTO_INGESTIONE = {
+    TipologiaAzione.validazione_cartografia_adozione: TipologiaAzione.ingestione_cartografia_adozione,
+    TipologiaAzione.validazione_cartografia_controdedotta: TipologiaAzione.ingestione_cartografia_controdedotta,
+    TipologiaAzione.validazione_cartografia_cp_adozione: TipologiaAzione.ingestione_cartografia_cp_adozione,
+    TipologiaAzione.validazione_cartografia_approvazione:TipologiaAzione.ingestione_cartografia_approvazione,
+    TipologiaAzione.validazione_cartografia_cp_approvazione: TipologiaAzione.ingestione_cartografia_cp_approvazione,
 }

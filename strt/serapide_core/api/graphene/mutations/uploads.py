@@ -76,18 +76,18 @@ class UploadBaseBase(graphene.Mutation):
     @classmethod
     def handle_uploaded_data(cls, file, media_prefix, fase, tipo_file=None, user=None):
         # Ensuring Media Folder exists and is writable
-        _base_media_folder = os.path.join(settings.MEDIA_ROOT, media_prefix)
-        if not os.path.exists(_base_media_folder):
-            os.makedirs(_base_media_folder)
+        _upload_folder = os.path.join(settings.UPLOAD_ROOT_DIR, media_prefix)
+        if not os.path.exists(_upload_folder):
+            os.makedirs(_upload_folder)
         if not isinstance(file, list):
             file = [file]
         resources = []
         for f in file:
             _dimensione_file = f.size / 1024  # size in KB
-            if os.path.exists(_base_media_folder) and \
-            type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
+            if os.path.exists(_upload_folder) and \
+                    type(f) in (TemporaryUploadedFile, InMemoryUploadedFile):
                 _file_name = str(f)
-                _file_path = '{}/{}'.format(media_prefix, _file_name)
+                _file_path = os.path.join(_upload_folder, _file_name)
                 _risorsa = None
 
                 with default_storage.open(_file_path, 'wb+') as _destination:

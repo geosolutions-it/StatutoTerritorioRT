@@ -16,13 +16,22 @@ from celery.utils.log import get_task_logger
 
 # from serapide_core.signals import log
 import serapide_core.api.graphene.mutations.piano as piano_mutations
-from serapide_core.geo import process_carto
-from serapide_core.modello.enums_geo import MAPPING_PIANO_RISORSE
+
+from serapide_core.geo import (
+    process_carto,
+    ingest,
+)
+
+from serapide_core.modello.enums_geo import (
+    MAPPING_PIANO_RISORSE,
+    MAPPING_AZIONI_CARTO_NEXT,
+    MAPPING_AZIONI_VALIDAZIONECARTO_INGESTIONE,
+)
 
 from serapide_core.modello.models import (
     LottoCartografico,
     Azione,
-    Piano, PianoControdedotto, PianoRevPostCP,
+    Piano, PianoControdedotto, PianoRevPostCP, ElaboratoCartografico,
 )
 
 from serapide_core.modello.enums import (
@@ -40,6 +49,25 @@ task_logger = get_task_logger(__name__)
 # logger = logging.getLogger(__name__)
 
 
+def crea_msgs():
+    return {
+        TipoReportAzione.INFO : [],
+        TipoReportAzione.WARN : [],
+        TipoReportAzione.ERR : [],
+    }
+
+
+def log_msgs(msgs, title):
+    for tipo_report,logger in (
+            (TipoReportAzione.ERR, task_logger.error),
+            (TipoReportAzione.WARN, task_logger.warning),
+            (TipoReportAzione.INFO, task_logger.info,)):
+        if len(msgs[tipo_report]):
+            logger('{} - {}'.format(tipo_report, title))
+            for msg in msgs[tipo_report]:
+                logger(' - {}'.format(msg))
+
+
 @shared_task
 def esegui_procedura_cartografica(lotto_id):
     """
@@ -53,11 +81,7 @@ def esegui_procedura_cartografica(lotto_id):
     azione: Azione = lotto.azione
     piano: Piano = azione.piano
 
-    msgs = {
-        TipoReportAzione.INFO : [],
-        TipoReportAzione.WARN : [],
-        TipoReportAzione.ERR : [],
-    }
+    msgs = crea_msgs()
 
     # ci sono lotti diversi a seconda della tipologia di piano
     tipi_risorsa = MAPPING_PIANO_RISORSE.get(piano.tipologia, ())
@@ -68,14 +92,7 @@ def esegui_procedura_cartografica(lotto_id):
     error = len(msgs[TipoReportAzione.ERR]) > 0
 
     # Log report
-    for tipo_report,logger in (
-            (TipoReportAzione.ERR, task_logger.error),
-            (TipoReportAzione.WARN, task_logger.warning),
-            (TipoReportAzione.INFO, task_logger.info,)):
-        if len(msgs[tipo_report]):
-            logger('{} - Elaborati cartografici'.format(tipo_report))
-            for msg in msgs[tipo_report]:
-                logger(' - {}'.format(msg))
+    log_msgs(msgs, "Elaborati cartografici")
 
     if error:
         utils.chiudi_azione(azione, stato=StatoAzione.FALLITA)
@@ -83,8 +100,39 @@ def esegui_procedura_cartografica(lotto_id):
         utils.riapri_azione(lotto.azione_parent)
     else:
         utils.chiudi_azione(azione)
-        # todo: crea azione di ingestione
         crea_azione_post_cartografica(lotto.azione.piano, lotto.azione.tipologia)
+        crea_azione_ingestione(azione)
+        esegui_ingestione.delay(lotto_id)
+
+
+@shared_task
+def esegui_ingestione(lotto_id):
+    lotto: LottoCartografico = LottoCartografico.objects.filter(id=lotto_id).get()
+    az_verifica = lotto.azione
+    az_ingestione = az_verifica.piano.getFirstAction(MAPPING_AZIONI_VALIDAZIONECARTO_INGESTIONE[az_verifica.tipologia])
+
+    result_azione = StatoAzione.ESEGUITA
+
+    for elaborato in ElaboratoCartografico.objects.filter(lotto=lotto):
+        msgs = crea_msgs()
+        ok = ingest(elaborato, az_ingestione, msgs)
+        if not ok:
+            result_azione = StatoAzione.FALLITA
+        log_msgs(msgs, "Ingestione {}".format(elaborato.nome))
+
+    utils.chiudi_azione(az_ingestione, stato=result_azione)
+
+
+def crea_azione_ingestione(azione_validazione: Azione):
+    tipo_validazione = azione_validazione.tipologia
+    tipo_ingestione = MAPPING_AZIONI_VALIDAZIONECARTO_INGESTIONE[tipo_validazione]
+    return utils.crea_azione(
+        Azione(
+            piano=azione_validazione.piano,
+            tipologia=tipo_ingestione,
+            qualifica_richiesta=QualificaRichiesta.AUTO,
+            stato=StatoAzione.NECESSARIA,
+        ))
 
 
 def crea_azione_post_cartografica(piano: Piano, tipologia: TipologiaAzione):

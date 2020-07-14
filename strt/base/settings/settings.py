@@ -22,7 +22,6 @@ from django.utils.translation import gettext_lazy as _
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
 REACT_APP_DIR = os.path.join(BASE_DIR, 'serapide_client') # serapide-client
 GEOPORTALE_REACT_APP_DIR = os.path.join(BASE_DIR, 'strt_geoportale', 'client') # serapide-client
-STORAGE_ROOT_DIR =  EnvUtil.get_env_var('STORAGE_ROOT_DIR', default=os.path.join(BASE_DIR, 'storage'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -178,7 +177,6 @@ DATABASES['test'] = {'ENGINE': 'django.db.backends.sqlite3'}
 #
 
 
-#AUTH_USER_MODEL = 'strt_users.AppUser'
 AUTH_USER_MODEL = 'strt_users.Utente'
 
 # Password validation
@@ -246,23 +244,25 @@ TIME_ZONE = EnvUtil.get_env_var('TIME_ZONE', default='UTC')
 USE_TZ = EnvUtil.get_env_var('USE_TZ', type=bool, default=True)
 
 # Celery
-CELERY_BROKER_URL = 'memory://'
+# CELERY_BROKER_URL = 'memory://'
+CELERY_BROKER_URL = 'redis://'
 CELERY_SCHEDULE_INTERVAL = int(os.getenv('CELERY_SCHEDULE_INTERVAL', 10))
 CELERY_ENABLE_UTC = True
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_RESULT_PERSISTENT = False
 CELERY_ACKS_LATE = True
-CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_ALWAYS_EAGER = EnvUtil.get_env_var('CELERY_TASK_ALWAYS_EAGER', default=False)
+CELERY_TASK_TRACK_STARTED = True  # etj
 CELERY_TASK_IGNORE_RESULT = True
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['json']
 
 CELERY_BEAT_SCHEDULE = {
-    'delayed-action-sync-task': {
-        'task': 'serapide_core.tasks.synch_actions',
-        'schedule': timedelta(seconds=CELERY_SCHEDULE_INTERVAL),
-    }
+    # 'delayed-action-sync-task': {
+    #     'task': 'serapide_core.tasks.synch_actions',
+    #     'schedule': timedelta(seconds=CELERY_SCHEDULE_INTERVAL),
+    # }
 }
 
 # CrispyForm template pack
@@ -290,6 +290,10 @@ MEDIA_ROOT = EnvUtil.get_env_var(
 )
 MEDIA_URL = '/media/'
 
+UPLOAD_ROOT_DIR =  EnvUtil.get_env_var('UPLOAD_ROOT_DIR', default=os.path.join(MEDIA_ROOT, 'upload'))
+CARTO_ROOT_DIR =  EnvUtil.get_env_var('CARTO_ROOT_DIR', default=os.path.join(MEDIA_ROOT, 'carto'))
+
+
 # CORS_ORIGIN_ALLOW_ALL = True
 INTERNAL_IPS = EnvUtil.get_env_var('DJANGO_INTERNAL_IPS', type=list, default=[], separator=' ')
 
@@ -310,6 +314,17 @@ GRAPHENE_DJANGO_EXTRAS = {
     'CACHE_ACTIVE': True,
     'CACHE_TIMEOUT': 300    # seconds
 }
+
+GEOSERVER_BASE_URL = EnvUtil.get_env_var('GEOSERVER_BASE_URL', default='http://localhost:8080/geoserver')
+
+OGC_SERVER = {
+    "url": "{base_url}/rest".format(base_url=GEOSERVER_BASE_URL),
+    "user": "admin",
+    "password": "geoserver",
+    "MAX_RETRIES": 5,
+    "BACKOFF_FACTOR": 0.3,
+}
+
 
 MIDDLEWARE = (
     # Django middleware

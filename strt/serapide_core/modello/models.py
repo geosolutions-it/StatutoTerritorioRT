@@ -44,7 +44,7 @@ from .enums import (
     TipoExpire,
     TipoReportAzione,
 )
-
+from .enums_geo import MAPPING_AZIONI_VALIDAZIONECARTO_PREFIX
 
 log = logging.getLogger(__name__)
 
@@ -1023,11 +1023,24 @@ class ElaboratoCartografico(models.Model):
     maxy = models.FloatField(null=False)
     crs = models.CharField(max_length=12, null=False, blank=False)
 
+    zipfile = models.TextField(null=True)
     ingerito = models.BooleanField(null=False, default=False)
 
     class Meta:
         db_table = "strt_cartografia_elaborato"
 
+    def get_layer_name(self):
+        ws,prefix,name = self.get_layer_components()
+        return '{}:{}_{}'.format(ws,prefix,name)
+
+    def get_workspace_layername(self):
+        ws,prefix,name = self.get_layer_components()
+        return ws, '{}_{}'.format(prefix,name)
+
+    def get_layer_components(self):
+        azione = self.lotto.azione
+        prefix = MAPPING_AZIONI_VALIDAZIONECARTO_PREFIX.get(azione.tipologia)
+        return self.lotto.piano.codice, prefix, self.nome
 
 # ############################################################################ #
 # Model Signals

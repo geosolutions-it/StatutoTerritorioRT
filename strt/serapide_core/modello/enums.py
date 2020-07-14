@@ -97,6 +97,11 @@ class TipoRisorsa(SerapideEnum):
     DELIBERA_APPROVAZIONE = "delibera_approvazione"
     CONFORMITA_PIT = "conformita-pit"
 
+    # cartografie PS
+    PS_STRATEGIA = 'carto_ps_strategia',
+    PS_QUADRO_CONOSCITIVO = 'carto_ps_quadro_conoscitivo',
+    PS_STATUTO_DEL_TERRITORIO = 'carto_ps_statuto_territorio'
+
 
 TIPOLOGIA_RISORSA = {
     TipoRisorsa.DELIBERA.value: {

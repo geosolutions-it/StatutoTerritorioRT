@@ -9,7 +9,9 @@ import zipfile
 from django.conf import settings
 from django.utils import timezone
 
-from serapide_core.modello.enums_geo import MAPPING_RISORSA_ENUM
+from serapide_core.geoserver.upload_simple_workflow import ValidateFileStep
+from serapide_core.geoserver.utils import upload_to_geoserver, ensure_workspace_exists
+from serapide_core.modello.enums_geo import MAPPING_RISORSA_ENUM, MAPPING_RISORSA_SHORTNAME
 from serapide_core.modello.models import (
     LottoCartografico,
     ElaboratoCartografico,
@@ -33,15 +35,15 @@ def handle_message(lotto: LottoCartografico, tipo: TipoReportAzione, msg_dict, m
     msg_dict[tipo].append(message)
 
     report = AzioneReport(
-        azione = lotto.azione,
-        tipo = tipo,
-        messaggio = message,
-        data = datetime.datetime.now(timezone.get_current_timezone())
+        azione=lotto.azione,
+        tipo=tipo,
+        messaggio=message,
+        data=datetime.datetime.now(timezone.get_current_timezone())
     )
     report.save()
 
 
-def process_carto(lotto: LottoCartografico, tipo: TipoRisorsa, msg: list):
+def process_carto(lotto: LottoCartografico, tipo_risorsa: TipoRisorsa, msg: list):
     '''
     - check resource exists
     - unzip resource file
@@ -52,35 +54,35 @@ def process_carto(lotto: LottoCartografico, tipo: TipoRisorsa, msg: list):
       
     :param piano:
     :param risorse: querySet delle risorse da esaminare
-    :param tipo:
+    :param tipo_risorsa:
     :param errs: lista di errori alla quale appendere eventuali errori riscontrati
     :return:
     '''
 
-    expected_shapefiles = MAPPING_RISORSA_ENUM.get(tipo, None)
+    expected_shapefiles = MAPPING_RISORSA_ENUM.get(tipo_risorsa, None)
     if expected_shapefiles is None:
         # Non dovrebbe accadere: è un errore nella definizione delle liste
         handle_message(lotto, TipoReportAzione.ERR, msg, "*** Lista di shapefile accettabili vuota. Tipo: {tipo}"
-                       .format(tipo=tipo.value))
+                       .format(tipo=tipo_risorsa.value))
         return
     exp_names = [item.name for item in expected_shapefiles]
 
     risorse = get_risorse(lotto)
 
-    risorse_filtrate: Risorsa = risorse.filter(tipo=tipo.value, archiviata=False)
+    risorse_filtrate: Risorsa = risorse.filter(tipo=tipo_risorsa.value, archiviata=False)
     risorse_cnt = risorse_filtrate.all().count()
 
     if risorse_cnt > 1:
-        handle_message(lotto, TipoReportAzione.ERR, msg, "Troppe risorse di tipo: {}".format(tipo.value))
+        handle_message(lotto, TipoReportAzione.ERR, msg, "Troppe risorse di tipo: {}".format(tipo_risorsa.value))
         return
     elif risorse_cnt == 0:
-        handle_message(lotto, TipoReportAzione.INFO, msg, "Risorsa non trovata: {}".format(tipo.value))
+        handle_message(lotto, TipoReportAzione.INFO, msg, "Risorsa non trovata: {}".format(tipo_risorsa.value))
         return
 
     risorsa = risorse_filtrate.get()
 
-    root_dir = getattr(settings, 'STORAGE_ROOT_DIR', False)
-    res_step = '{:08}_{}'.format(risorsa.id,tipo.value)
+    root_dir = getattr(settings, 'CARTO_ROOT_DIR', False)
+    res_step = '{:08}_{}'.format(risorsa.id, MAPPING_RISORSA_SHORTNAME.get(tipo_risorsa, 'UNKNOWN'))
     resource_dir = os.path.join(root_dir, lotto.piano.codice, 'geo', res_step)
     unzip_dir = os.path.join(resource_dir, 'unzip')
 
@@ -109,7 +111,7 @@ def process_carto(lotto: LottoCartografico, tipo: TipoRisorsa, msg: list):
 
     if len(shp_list) == 0:
         handle_message(lotto, TipoReportAzione.ERR, msg, "Nessuno shapefile trovato. Tipo: {tipo}"
-                       .format(tipo=tipo.value))
+                       .format(tipo=tipo_risorsa.value))
         continue_processing = False
     else:
         for fullpathshape in shp_list:
@@ -117,7 +119,7 @@ def process_carto(lotto: LottoCartografico, tipo: TipoRisorsa, msg: list):
             base, _ = os.path.splitext(base)
             if base not in exp_names:
                 handle_message(lotto, TipoReportAzione.ERR, msg, 'Shapefile inaspettato {file}. Tipo: {tipo}'
-                               .format(file=base, tipo=tipo))
+                               .format(file=base, tipo=tipo_risorsa))
                 continue_processing = False
                 continue
 
@@ -126,13 +128,17 @@ def process_carto(lotto: LottoCartografico, tipo: TipoRisorsa, msg: list):
         risorsa.save()
         return
 
+    elaborati = {}
+
     for shp in shp_list:
-        shp_err = validate_shp(lotto, shp)
-        if shp_err:
+        ec,shp_err = validate_shp(lotto, shp)
+
+        if ec:
+            elaborati[shp] = ec
+        else:
             shp_base = os.path.basename(shp)
             handle_message(lotto, TipoReportAzione.ERR, msg, 'Errore validazione {file}: {err}'.format(file=shp_base, err=shp_err))
             continue_processing = False
-            continue
 
     if not continue_processing:
         risorsa.valida = False
@@ -143,9 +149,14 @@ def process_carto(lotto: LottoCartografico, tipo: TipoRisorsa, msg: list):
     os.makedirs(rezip_dir)
 
     for shp in shp_list:
+        ec:ElaboratoCartografico = elaborati[shp]
+
         handle_message(lotto, TipoReportAzione.INFO, msg,
-                       'Shapefile accettato {file}'.format(file=os.path.basename(shp)))
-        rezip_shp(shp, rezip_dir)
+                       'Shapefile accettato {file}'.format(file=ec.nome))
+        rezip = rezip_shp(shp, rezip_dir)
+
+        ec.zipfile = rezip
+        ec.save()
 
     risorsa.valida = True
     risorsa.save()
@@ -163,7 +174,7 @@ def search_shp(dir):
     return shps
 
 
-def validate_shp(lotto, shp_file):
+def validate_shp(lotto, shp_file) -> (ElaboratoCartografico,str):
     try:
         with fiona.open(shp_file, 'r') as c:
             epsg = c.crs.get('init', None)
@@ -171,7 +182,7 @@ def validate_shp(lotto, shp_file):
             # coordinate nel sistema di riferimento Gauss-Boaga fuso Ovest (codice EPSG:3003)
             # o nel sistema di riferimento UTM-ETRF2000 epoca 2008.0 fuso 32 (codice EPSG: 6707).
             if epsg not in ('epsg:3003', 'epsg:6707'):
-                return 'CRS non consentito: {}'.format(c.crs)
+                return None, 'CRS non consentito: {}'.format(c.crs)
 
             basename = os.path.basename(shp_file)
             basename,_ = os.path.splitext(basename)
@@ -186,13 +197,11 @@ def validate_shp(lotto, shp_file):
                 maxy=c.bounds[3],
                 ingerito=False,
             )
-            ec.save()
+            return ec, None
 
     except Exception as ex:
         logger.warning('Errore in validazione', exc_info=True)
-        return 'Errore lettura shp: {}'.format(ex)
-
-    return None
+        return None, 'Errore lettura shp: {}'.format(ex)
 
 
 def rezip_shp(shp_file, destination_dir):
@@ -208,6 +217,8 @@ def rezip_shp(shp_file, destination_dir):
             basename = os.path.basename(file)
             if basename.startswith(src_barename):
                 zip_file.write(os.path.join(shp_source_dir, file), basename)
+
+    return dest_zip
 
 
 def get_risorse(lotto: LottoCartografico):
@@ -231,3 +242,35 @@ def get_risorse(lotto: LottoCartografico):
 
     else:
         raise Exception('Tipologia azione cartografica inaspettata [{}]'.format(tipologia))
+
+
+def ingest(elaborato: ElaboratoCartografico, az_ingestione: Azione, msgs) -> bool:
+    ws_name, layername = elaborato.get_workspace_layername()
+    zip = elaborato.zipfile
+
+    try:
+        vstep = ValidateFileStep()
+        files = vstep.execute(external_input={'file':zip})
+
+    except Exception as e:
+        logger.warning('Errore in ingestione - step validateFile: {}'.format(e), exc_info=True)
+        return False
+
+    try:
+        ensure_workspace_exists(ws_name)
+
+        results = upload_to_geoserver(
+            layer_name=layername,
+            layer_type='VECTOR',
+            files=files,
+            base_file=elaborato.nome,
+            charset='UTF-8',
+            overwrite=True,
+            workspace=ws_name)
+        return results
+
+
+    except Exception as e:
+        logger.warning('Errore in ingestione - upload: {}'.format(e), exc_info=True)
+        return False
+
