@@ -315,12 +315,13 @@ GRAPHENE_DJANGO_EXTRAS = {
     'CACHE_TIMEOUT': 300    # seconds
 }
 
-GEOSERVER_BASE_URL = EnvUtil.get_env_var('GEOSERVER_BASE_URL', default='http://localhost:8080/geoserver')
+GEOSERVER_BASE_URL = EnvUtil.get_env_var('GEOSERVER_BASE_URL',
+                                         default='http://{hostname}/geoserver'.format(hostname=HOSTNAME))
 
 OGC_SERVER = {
-    "url": "{base_url}/rest".format(base_url=GEOSERVER_BASE_URL),
+    "url": EnvUtil.get_env_var('GEOSERVER_REST_URL', default='http://localhost:8080/geoserver/rest'),
     "user": "admin",
-    "password": "geoserver",
+    "password": EnvUtil.get_env_var('GEOSERVER_PASSWORD', default='geoserver'),
     "MAX_RETRIES": 5,
     "BACKOFF_FACTOR": 0.3,
 }
