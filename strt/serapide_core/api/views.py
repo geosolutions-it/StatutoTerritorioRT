@@ -143,6 +143,10 @@ def geo_get(request, pk=None):
     map['layers'] = layers
     obj['map'] = map
 
+    geoserver_base_url = getattr(settings, 'GEOSERVER_BASE_URL')
+    wms_url = '{}/wms'.format(geoserver_base_url)
+    wfs_url = '{}/wfs'.format(geoserver_base_url)
+
     for lotto in lotti:
         for elaborato in ElaboratoCartografico.objects.filter(lotto=lotto):
             layer = OrderedDict()
@@ -150,12 +154,12 @@ def geo_get(request, pk=None):
 
             layer['id'] = elaborato.id
             layer['group'] = lotto.azione.tipologia.name
-            layer['search'] = 'TODO'
             layer['name'] = elaborato.get_layer_name()
             layer['description'] = find_layer_desc(elaborato.nome)
             layer['title'] = elaborato.nome
             layer['type'] = 'wms'
-            layer['url'] = getattr(settings, 'GEOSERVER_BASE_URL')
+            layer['url'] = wms_url
+            layer['search'] = wfs_url
 
             bbox = OrderedDict()
             bbox['crs'] = elaborato.crs
