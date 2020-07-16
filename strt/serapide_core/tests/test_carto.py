@@ -243,6 +243,12 @@ class CartoTest(AbstractSerapideProcsTest):
         report = AzioneReport.objects.filter(azione=az_carto, tipo=TipoReportAzione.ERR).first()
         self.assertIsNone(report)
 
+        for r in AzioneReport.objects.filter(azione=az_ingest, tipo=TipoReportAzione.ERR):
+            logger.warning('INGEST REPORT: {tipo}: {msg}'.format(tipo=r.tipo, msg=r.messaggio))
+
+        report = AzioneReport.objects.filter(azione=az_ingest).first()
+        self.assertIsNotNone(report)
+
         self.assertEqual(1, Piano.objects.count())
         self.assertEqual(1, LottoCartografico.objects.count())
         self.assertEqual(2, ElaboratoCartografico.objects.count())

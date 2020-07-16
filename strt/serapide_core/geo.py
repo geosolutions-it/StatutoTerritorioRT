@@ -31,11 +31,11 @@ from serapide_core.modello.enums import (
 logger = logging.getLogger(__name__)
 
 
-def handle_message(lotto: LottoCartografico, tipo: TipoReportAzione, msg_dict, message):
+def handle_message(azione: Azione, tipo: TipoReportAzione, msg_dict, message, lotto: LottoCartografico=None):
     msg_dict[tipo].append(message)
 
     report = AzioneReport(
-        azione=lotto.azione,
+        azione=azione,
         tipo=tipo,
         messaggio=message,
         data=datetime.datetime.now(timezone.get_current_timezone())
@@ -59,24 +59,28 @@ def process_carto(lotto: LottoCartografico, tipo_risorsa: TipoRisorsa, msg: list
     :return:
     '''
 
+    azione_validazione:Azione = lotto.azione
+
     expected_shapefiles = MAPPING_RISORSA_ENUM.get(tipo_risorsa, None)
     if expected_shapefiles is None:
         # Non dovrebbe accadere: è un errore nella definizione delle liste
-        handle_message(lotto, TipoReportAzione.ERR, msg, "*** Lista di shapefile accettabili vuota. Tipo: {tipo}"
-                       .format(tipo=tipo_risorsa.value))
+        handle_message(azione_validazione, TipoReportAzione.ERR, msg,
+                       "*** Lista di shapefile accettabili vuota. Tipo: {tipo}".format(tipo=tipo_risorsa.value))
         return
     exp_names = [item.name for item in expected_shapefiles]
 
     risorse = get_risorse(lotto)
 
-    risorse_filtrate: Risorsa = risorse.filter(tipo=tipo_risorsa.value, archiviata=False)
+    risorse_filtrate = risorse.filter(tipo=tipo_risorsa.value, archiviata=False)
     risorse_cnt = risorse_filtrate.all().count()
 
     if risorse_cnt > 1:
-        handle_message(lotto, TipoReportAzione.ERR, msg, "Troppe risorse di tipo: {}".format(tipo_risorsa.value))
+        handle_message(azione_validazione, TipoReportAzione.ERR, msg,
+                       "Troppe risorse di tipo: {}".format(tipo_risorsa.value))
         return
     elif risorse_cnt == 0:
-        handle_message(lotto, TipoReportAzione.INFO, msg, "Risorsa non trovata: {}".format(tipo_risorsa.value))
+        handle_message(azione_validazione, TipoReportAzione.INFO, msg,
+                       "Risorsa non trovata: {}".format(tipo_risorsa.value))
         return
 
     risorsa = risorse_filtrate.get()
@@ -97,9 +101,9 @@ def process_carto(lotto: LottoCartografico, tipo_risorsa: TipoRisorsa, msg: list
         with zipfile.ZipFile(risorsa.file, 'r') as zip_ref:
             zip_ref.extractall(unzip_dir)
     except Exception as e:
-        handle_message(lotto, TipoReportAzione.ERR, msg, "Errore nell'estrazione file {file}: {err}".format(
-            file=os.path.basename(risorsa.file.name),
-            err=e))
+        handle_message(azione_validazione, TipoReportAzione.ERR, msg,
+                       "Errore nell'estrazione file {file}: {err}".format(
+                            file=os.path.basename(risorsa.file.name), err=e))
         risorsa.valida = False
         risorsa.save()
         return
@@ -110,16 +114,16 @@ def process_carto(lotto: LottoCartografico, tipo_risorsa: TipoRisorsa, msg: list
     continue_processing = True
 
     if len(shp_list) == 0:
-        handle_message(lotto, TipoReportAzione.ERR, msg, "Nessuno shapefile trovato. Tipo: {tipo}"
-                       .format(tipo=tipo_risorsa.value))
+        handle_message(azione_validazione, TipoReportAzione.ERR, msg,
+                       "Nessuno shapefile trovato. Tipo: {tipo}".format(tipo=tipo_risorsa.value))
         continue_processing = False
     else:
         for fullpathshape in shp_list:
             base = os.path.basename(fullpathshape)
             base, _ = os.path.splitext(base)
             if base not in exp_names:
-                handle_message(lotto, TipoReportAzione.ERR, msg, 'Shapefile inaspettato {file}. Tipo: {tipo}'
-                               .format(file=base, tipo=tipo_risorsa))
+                handle_message(azione_validazione, TipoReportAzione.ERR, msg,
+                               'Shapefile inaspettato {file}. Tipo: {tipo}'.format(file=base, tipo=tipo_risorsa))
                 continue_processing = False
                 continue
 
@@ -137,7 +141,8 @@ def process_carto(lotto: LottoCartografico, tipo_risorsa: TipoRisorsa, msg: list
             elaborati[shp] = ec
         else:
             shp_base = os.path.basename(shp)
-            handle_message(lotto, TipoReportAzione.ERR, msg, 'Errore validazione {file}: {err}'.format(file=shp_base, err=shp_err))
+            handle_message(azione_validazione, TipoReportAzione.ERR, msg,
+                           'Errore validazione {file}: {err}'.format(file=shp_base, err=shp_err))
             continue_processing = False
 
     if not continue_processing:
@@ -151,7 +156,7 @@ def process_carto(lotto: LottoCartografico, tipo_risorsa: TipoRisorsa, msg: list
     for shp in shp_list:
         ec:ElaboratoCartografico = elaborati[shp]
 
-        handle_message(lotto, TipoReportAzione.INFO, msg,
+        handle_message(azione_validazione, TipoReportAzione.INFO, msg,
                        'Shapefile accettato {file}'.format(file=ec.nome))
         rezip = rezip_shp(shp, rezip_dir)
 
@@ -253,7 +258,9 @@ def ingest(elaborato: ElaboratoCartografico, az_ingestione: Azione, msgs) -> boo
         files = vstep.execute(external_input={'file':zip})
 
     except Exception as e:
-        logger.warning('Errore in ingestione - step validateFile: {}'.format(e), exc_info=True)
+        err_msg = 'Errore in ingestione - step validateFile: {}'.format(e)
+        logger.warning(err_msg, exc_info=True)
+        handle_message(az_ingestione, TipoReportAzione.ERR, msgs, err_msg)
         return False
 
     try:
@@ -269,8 +276,10 @@ def ingest(elaborato: ElaboratoCartografico, az_ingestione: Azione, msgs) -> boo
             workspace=ws_name)
         return results
 
-
     except Exception as e:
-        logger.warning('Errore in ingestione - upload: {}'.format(e), exc_info=True)
+        err_msg = 'Errore in ingestione - upload: {}'.format(e)
+        logger.warning(err_msg, exc_info=True)
+        handle_message(az_ingestione, TipoReportAzione.ERR, msgs, err_msg)
+
         return False
 
