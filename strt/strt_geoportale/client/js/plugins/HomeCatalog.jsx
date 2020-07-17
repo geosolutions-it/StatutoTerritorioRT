@@ -18,14 +18,12 @@ import epics from '@js/epics/serapide';
 import serapide from '@js/reducers/serapide';
 
 import { searchSerapide } from '@js/actions/serapide';
-import { mapTypeSelector } from '@mapstore/selectors/maptype';
 
 import { getMapUrl } from '@js/utils/GeoportaleUtils';
 
 function selectMapSerapideThunk(params) {
-    return (dispatch, getState) => {
-        const mapType = mapTypeSelector(getState());
-        const mapUrl = getMapUrl(mapType, params);
+    return (dispatch) => {
+        const mapUrl = getMapUrl(params);
         return dispatch(push(mapUrl));
     };
 }

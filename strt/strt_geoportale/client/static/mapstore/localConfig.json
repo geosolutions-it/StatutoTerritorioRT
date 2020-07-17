@@ -3,13 +3,9 @@
         "url": "/proxy/?url=",
         "autoDetectCORS": true,
         "useCORS": [
-          "http://demo.geo-solutions.it/geoserver",
-          "https://demo.geo-solutions.it:443/geoserver",
-          "https://demo.geo-solutions.it/geoserver",
           "https://nominatim.openstreetmap.org",
-          "http://cloudsdi.geo-solutions.it",
-          "https://gs-stable.geo-solutions.it/geoserver",
-          "https://gs-stable.geo-solutions.it:443/geoserver"
+          "http://dev.serapide.geo-solutions.it/geoserver",
+          "https://dev.serapide.geo-solutions.it/geoserver"
         ]
     },
     "serapideAPI": {
@@ -20,8 +16,7 @@
     "geoStoreUrl": "/static/mapstore/",
     "configurationFolder": "/static/mapstore/",
     "mailingList": "https://groups.google.com/forum/#!forum/mapstore-users",
-    "printUrl": "pdf/info.json",
-    "bingApiKey": "AhuXBu7ipR1gNbBfXhtUAyCZ6rkC5PkWpxs2MnMRZ1ZupxQfivjLCch22ozKSCAn",
+    "printUrl": "https://dev.serapide.geo-solutions.it/geoserver/pdf/info.json",
     "mapquestApiKey": "__API_KEY_MAPQUEST__",
     "initialMapFilter": "",
     "ignoreMobileCss": false,
@@ -52,7 +47,8 @@
       {"name": "router", "path": "router.location.pathname"},
       {"name": "browser", "path": "browser"},
       {"name": "geostorymode", "path": "geostory.mode"},
-      {"name": "featuregridmode", "path": "featuregrid.mode"}],
+      {"name": "featuregridmode", "path": "featuregrid.mode"},
+      {"name": "printEnabled", "path": "print.capabilities"}],
     "projectionDefs": [
       {
         "code": "EPSG:3003",
@@ -254,8 +250,41 @@
       }
     },
     "plugins": {
-        "mobile": [
-        ],
+        "mobile": [{
+          "name": "Map",
+          "cfg": {
+              "mapOptions": {
+                "openlayers": {
+                  "interactions": {
+                    "pinchRotate": false,
+                    "altShiftDragRotate": false
+                  }
+                }
+              },
+              "tools": ["locate"]
+          }
+      }, "DrawerMenu", {
+        "name": "TOC",
+        "cfg": {
+            "activateMetedataTool": false,
+            "activateMapTitle": false,
+            "activateSortLayer": false,
+            "activateLayerFilterTool": false,
+            "activateQueryTool": false
+        }
+    },{
+      "name": "Identify",
+      "showIn": ["Settings"],
+      "cfg": {
+          "showFullscreen": true,
+          "position": "bottom",
+          "size": 0.5,
+          "fluid": true,
+          "viewerOptions": {
+              "container": "{context.ReactSwipe}"
+          }
+      }
+  }, "SerapideCatalog"],
         "desktop": [ "Details",
           {
             "name": "Map",
@@ -437,7 +466,8 @@
             "Playback",
             "FeedbackMask",
             "StyleEditor",
-            "SerapideCatalog"
+            "SerapideCatalog",
+            "Print"
         ],
         "embedded": [{
                 "name": "Map",

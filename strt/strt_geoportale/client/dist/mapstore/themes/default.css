@@ -19882,6 +19882,9 @@ Ported to CodeMirror by Peter Kroon
   font-style: italic;
   padding: 8px 0;
 }
+.Geoportale .viewer {
+  transform: translate(0, 0);
+}
 .Geoportale #page-maps {
   padding-top: 0;
 }

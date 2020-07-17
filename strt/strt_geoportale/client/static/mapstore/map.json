@@ -15,6 +15,9 @@
         "projection": "EPSG:900913",
         "units": "m",
         "zoom": 8,
+        "info": {
+            "canEdit": false
+        },
         "layers": [
             {
                 "id": "mapnik__0",
@@ -111,7 +114,8 @@
                 "hidden": false,
                 "params": {
                     "map": "dbtm_rt.qgs"
-                }
+                },
+                "queryable": false
             }
         ],
         "groups": [
