@@ -159,8 +159,9 @@ def geo_get(request, pk=None):
             layer['title'] = elaborato.nome
             layer['type'] = 'wms'
             layer['url'] = wms_url
-            layer['search'] = wfs_url
-
+            layer['search'] = {
+                'url': wfs_url,
+                'type': 'wfs' }
             bbox = OrderedDict()
             bbox['crs'] = elaborato.crs
             bounds = OrderedDict()
