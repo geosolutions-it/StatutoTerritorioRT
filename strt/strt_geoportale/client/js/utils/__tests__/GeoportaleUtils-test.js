@@ -14,21 +14,19 @@ import {
 
 describe('GeoportaleUtils', () => {
     it('test getMapUrl', () => {
-        const mapType = 'openlayers';
         const params = {
             mapId: 'config',
             id: 'c_2'
         };
-        const mapUrl = getMapUrl(mapType, params);
-        expect(mapUrl).toBe('/viewer/openlayers/config?s_uid=c_2');
+        const mapUrl = getMapUrl(params);
+        expect(mapUrl).toBe('/viewer/config?s_uid=c_2');
     });
     it('test getMapUrl with missing mapId (fallback to map config)', () => {
-        const mapType = 'openlayers';
         const params = {
             id: 'c_2'
         };
-        const mapUrl = getMapUrl(mapType, params);
-        expect(mapUrl).toBe('/viewer/openlayers/map?s_uid=c_2');
+        const mapUrl = getMapUrl(params);
+        expect(mapUrl).toBe('/viewer/map?s_uid=c_2');
     });
     it('test mergeLayersBBOXs', () => {
         const layers = [

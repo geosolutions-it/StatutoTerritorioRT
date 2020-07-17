@@ -17,8 +17,8 @@ export const setDefaultGroupsIds = (groupsIds) => {
 
 export const getDefaultGroupsIds = () => DEFAULT_GROUPS_IDS;
 
-export const getMapUrl = (mapType, params) => {
-    return `/viewer/${mapType}/${params.mapId || 'map'}?${ID_PARAM}=${params.id}`;
+export const getMapUrl = (params) => {
+    return `/viewer/${params.mapId || 'map'}?${ID_PARAM}=${params.id}`;
 };
 
 export const get4326BBOX = (bbox) => {

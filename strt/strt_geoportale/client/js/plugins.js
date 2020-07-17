@@ -83,7 +83,7 @@ import MousePositionPlugin from '@mapstore/plugins/MousePosition';
 import NotificationsPlugin from '@mapstore/plugins/Notifications';
 import OmniBarPlugin from '@mapstore/plugins/OmniBar';
 import PlaybackPlugin from '@mapstore/plugins/Playback.jsx';
-// import PrintPlugin from '@mapstore/plugins/Print';
+import PrintPlugin from '@mapstore/plugins/Print';
 import QueryPanelPlugin from '@mapstore/plugins/QueryPanel';
 import RedirectPlugin from '@mapstore/plugins/Redirect';
 const RedoPlugin = History;
@@ -180,6 +180,7 @@ export const plugins = {
     NotificationsPlugin,
     OmniBarPlugin,
     PlaybackPlugin,
+    PrintPlugin,
     QueryPanelPlugin,
     RedirectPlugin,
     RedoPlugin,

@@ -36,7 +36,6 @@ import {
     push,
     replace
 } from 'connected-react-router';
-import { mapTypeSelector } from '@mapstore/selectors/maptype';
 import {
     getMapUrl,
     ID_PARAM,
@@ -111,8 +110,7 @@ export const strtSelectCatalogEntrySerapide = (action$, store) =>
             const mapId = state?.mapInitialConfig?.mapId;
 
             if (selected.mapId !== undefined && selected.mapId !== mapId) {
-                const mapType = mapTypeSelector(state);
-                const mapUrl = getMapUrl(mapType, selected);
+                const mapUrl = getMapUrl(selected);
                 return Observable.of(push(mapUrl));
             }
 
