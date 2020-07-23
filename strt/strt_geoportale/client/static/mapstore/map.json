@@ -86,7 +86,79 @@
                 "name": "DBTM_DataBaseTopograficoMultiscala",
                 "opacity": 1,
                 "description": "DBTM_DataBaseTopograficoMultiscala",
-                "title": "DBTM_DataBaseTopograficoMultiscala",
+                "title": "Test cartografia di base",
+                "type": "wms",
+                "url": "http://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv",
+                "bbox": {
+                    "crs": "EPSG:4326",
+                    "bounds": {
+                        "minx": "8.14065",
+                        "miny": "42.101",
+                        "maxx": "13.9843",
+                        "maxy": "44.5339"
+                    }
+                },
+                "visibility": true,
+                "singleTile": true,
+                "allowedSRS": {
+                    "EPSG:3003": true,
+                    "EPSG:4326": true,
+                    "EPSG:3857": true,
+                    "EPSG:6707": true
+                },
+                "dimensions": [],
+                "hideLoading": false,
+                "handleClickOnLayer": false,
+                "catalogURL": null,
+                "useForElevation": false,
+                "hidden": false,
+                "params": {
+                    "map": "dbtm_rt.qgs"
+                },
+                "queryable": false
+            },
+            {
+                "id": "test_invarianti",
+                "group": "invarianti",
+                "name": "DBTM_DataBaseTopograficoMultiscala",
+                "description": "DBTM_DataBaseTopograficoMultiscala",
+                "title": "Test invarianti",
+                "type": "wms",
+                "url": "http://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv",
+                "bbox": {
+                    "crs": "EPSG:4326",
+                    "bounds": {
+                        "minx": "8.14065",
+                        "miny": "42.101",
+                        "maxx": "13.9843",
+                        "maxy": "44.5339"
+                    }
+                },
+                "visibility": true,
+                "singleTile": true,
+                "allowedSRS": {
+                    "EPSG:3003": true,
+                    "EPSG:4326": true,
+                    "EPSG:3857": true,
+                    "EPSG:6707": true
+                },
+                "dimensions": [],
+                "hideLoading": false,
+                "handleClickOnLayer": false,
+                "catalogURL": null,
+                "useForElevation": false,
+                "hidden": false,
+                "params": {
+                    "map": "dbtm_rt.qgs"
+                },
+                "queryable": false
+            },
+            {
+                "id": "test_risorse_acqua",
+                "group": "risorse_rt.acqua",
+                "name": "DBTM_DataBaseTopograficoMultiscala",
+                "description": "DBTM_DataBaseTopograficoMultiscala",
+                "title": "Test risorse acqua",
                 "type": "wms",
                 "url": "http://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv",
                 "bbox": {
@@ -120,8 +192,23 @@
         ],
         "groups": [
             {
+                "id": "invarianti",
+                "title": "Invarianti",
+                "expanded": true
+            },
+            {
+                "id": "risorse_rt",
+                "title": "Risorse RT",
+                "expanded": true
+            },
+            {
+                "id": "risorse_rt.acqua",
+                "title": "Acqua",
+                "expanded": true
+            },
+            {
                 "id": "basi_cartografiche",
-                "title": "Basi cartografiche",
+                "title": "Cartografia di base",
                 "expanded": true
             }
         ]

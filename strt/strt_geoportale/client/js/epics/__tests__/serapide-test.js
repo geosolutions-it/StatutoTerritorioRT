@@ -23,6 +23,7 @@ import {
     UPDATE_NODE
 } from '@mapstore/actions/layers';
 import { SHOW_NOTIFICATION } from '@mapstore/actions/notifications';
+import { SET_CONTROL_PROPERTY } from '@mapstore/actions/controls';
 import {
     SELECT_CATALOG_ENTRY_SERAPIDE,
     LOADING_DATA_SERAPIDE,
@@ -73,7 +74,7 @@ describe('serapide epics', function() {
                 return [ 200, data];
             });
 
-        const NUMBER_OF_ACTIONS = 4;
+        const NUMBER_OF_ACTIONS = 5;
 
         const callback = (actions) => {
             try {
@@ -81,7 +82,8 @@ describe('serapide epics', function() {
                     ADD_GROUP,
                     ADD_GROUP,
                     MOVE_NODE,
-                    SELECT_CATALOG_ENTRY_SERAPIDE
+                    SELECT_CATALOG_ENTRY_SERAPIDE,
+                    SET_CONTROL_PROPERTY
                 ]);
             } catch (e) {
                 done(e);
@@ -111,14 +113,15 @@ describe('serapide epics', function() {
                 return [ 200, data];
             });
 
-        const NUMBER_OF_ACTIONS = 3;
+        const NUMBER_OF_ACTIONS = 4;
 
         const callback = (actions) => {
             try {
                 expect(actions.map(({ type }) => type)).toEqual([
                     ADD_GROUP,
                     ADD_GROUP,
-                    MOVE_NODE
+                    MOVE_NODE,
+                    SET_CONTROL_PROPERTY
                 ]);
             } catch (e) {
                 done(e);

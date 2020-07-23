@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { createPlugin } from '@mapstore/utils/PluginsUtils';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
 import ResizableModal from '@mapstore/components/misc/ResizableModal';
 import Portal from '@mapstore/components/misc/Portal';
 import Message from '@mapstore/components/I18N/Message';
@@ -71,12 +70,9 @@ function TOCButton({
     onClick
 }) {
     return (
-        <Button
-            onClick={() => onClick()}
-            bsStyle="primary"
-        >
+        <a onClick={() => onClick()}>
             <Message msgId="serapide.selectSerapideLayers"/>
-        </Button>
+        </a>
     );
 }
 

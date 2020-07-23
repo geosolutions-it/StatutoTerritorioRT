@@ -45,13 +45,16 @@ class HeaderNode extends Component {
         onSort: PropTypes.func,
         onError: PropTypes.func,
         currentLocale: PropTypes.string,
-        setDndState: PropTypes.func
+        setDndState: PropTypes.func,
+        filterHeaderNode: PropTypes.func,
+        headerButtons: PropTypes.array
     };
 
     static defaultProps = {
         node: {},
         level: 1,
-        currentLocale: 'en-US'
+        currentLocale: 'en-US',
+        filterHeaderNode: () => true
     };
 
     state = {
@@ -67,8 +70,14 @@ class HeaderNode extends Component {
             onError,
             currentLocale,
             setDndState,
-            children
+            children,
+            filterHeaderNode,
+            headerButtons
         } = this.props;
+
+        if (!filterHeaderNode(node)) {
+            return null;
+        }
 
         const { filterText } = this.state;
 
@@ -107,8 +116,8 @@ class HeaderNode extends Component {
 
         return (
             <div
-                className="ms-header-node">
-                <div className="ms-header-node-title">{title}</div>
+                className={'ms-header-node ms-group-' + node.id}>
+                <div className="ms-header-node-title"><div>{title}</div>{headerButtons}</div>
                 {node?.description && <div className="ms-header-node-description">{node.description}</div>}
                 {node?.caption && <div className="ms-header-node-caption">{node.caption}</div>}
                 <Filter

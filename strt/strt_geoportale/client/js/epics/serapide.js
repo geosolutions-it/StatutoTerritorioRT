@@ -15,6 +15,7 @@ import {
     moveNode,
     updateNode
 } from '@mapstore/actions/layers';
+import { setControlProperty } from '@mapstore/actions/controls';
 import { zoomToExtent } from '@mapstore/actions/map';
 import { MAP_CONFIG_LOADED } from '@mapstore/actions/config';
 import {
@@ -69,14 +70,16 @@ export const strtAddMapConfigurations = (action$, store) =>
                         return Observable.of(
                             ...addGroupsActions,
                             // move piano group on top of TOC
-                            moveNode('piano', 'root', 0)
+                            moveNode('piano', 'root', 0),
+                            setControlProperty('drawer', 'enabled', true)
                         );
                     }
                     return Observable.of(
                         ...addGroupsActions,
                         // move piano group on top of TOC
                         moveNode('piano', 'root', 0),
-                        selectCatalogEntrySerapide({ id })
+                        selectCatalogEntrySerapide({ id }),
+                        setControlProperty('drawer', 'enabled', true)
                     );
                 });
         });

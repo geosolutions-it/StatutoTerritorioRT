@@ -17,6 +17,50 @@
     .ms-toc-layer .ms-head {
         border-top: 4px solid #FED403;
     }
+    .nav-justified > li {
+        display: block;
+        width: 100%;
+        font-size: @font-size-small;
+        & > a {
+            padding: 4px;
+            border-top: 2px solid #FED403;
+        }
+        &.ms-group-basi_cartografiche {
+            & > a {
+                border-color: #e2001a;
+            }
+        }
+        &.active {
+            color: @ms2-color-text-primary;
+            background-color: @ms2-color-primary;
+            & > a {
+                color: @ms2-color-text-primary;
+            }
+        }
+    }
+    .nav > li > a:hover,
+    .nav > li > a:focus {
+        color: @ms2-color-text;
+    }
+    .ms-header-node-title {
+        display: flex;
+        align-items: center;
+        & > div:first-child {
+            flex: 1;
+        }
+        a {
+            font-size: @font-size-small;
+            text-decoration: underline;
+            cursor: pointer;
+            :hover {
+                color: @ms2-color-info;
+            }
+        }
+    }
+
+    .ms-group-basi_cartografiche .ms-toc-layer .ms-head {
+        border-color: #e2001a;
+    }
 }
 
 .print-submit {
