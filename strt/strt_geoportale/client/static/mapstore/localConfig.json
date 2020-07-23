@@ -48,7 +48,8 @@
       {"name": "browser", "path": "browser"},
       {"name": "geostorymode", "path": "geostory.mode"},
       {"name": "featuregridmode", "path": "featuregrid.mode"},
-      {"name": "printEnabled", "path": "print.capabilities"}],
+      {"name": "printEnabled", "path": "print.capabilities"},
+      {"name": "printTitle", "path": "print.spec.name"}],
     "projectionDefs": [
       {
         "code": "EPSG:3003",
@@ -467,7 +468,14 @@
             "FeedbackMask",
             "StyleEditor",
             "SerapideCatalog",
-            "Print"
+            {
+              "name": "Print",
+              "cfg": {
+                "overrideOptions": {
+                  "outputFilename": "{state('printTitle') && state('printTitle').replace(/[\\W_]+/g,'_') || 'geoportale'}"
+                }
+              }
+            }
         ],
         "embedded": [{
                 "name": "Map",
