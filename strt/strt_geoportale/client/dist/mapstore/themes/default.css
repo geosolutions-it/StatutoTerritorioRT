@@ -19831,15 +19831,15 @@ Ported to CodeMirror by Peter Kroon
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 .Geoportale .ms-toc .ms-toc-group.ms-selected > .ms-head {
-  color: #333333;
+  color: #ffffff;
   background-color: #6d6d6d;
 }
 .Geoportale .ms-toc .ms-toc-group.ms-selected > .ms-head .btn {
-  color: #333333;
+  color: #ffffff;
 }
 .Geoportale .ms-toc .ms-toc-group.ms-selected .mapstore-small-size-loader {
-  border-color: rgba(51, 51, 51, 0.2);
-  border-left-color: #333333;
+  border-color: rgba(255, 255, 255, 0.2);
+  border-left-color: #ffffff;
 }
 .Geoportale .ms-toc .ms-toc-group:hover {
   -webkit-box-shadow: none;
@@ -19904,5 +19904,11 @@ Ported to CodeMirror by Peter Kroon
 /* override bootstrap variables */
 .Geoportale .ms-toc .ms-toc-layer .ms-head {
   border-top: 4px solid #FED403;
+}
+.Geoportale .print-submit .sk-circle-wrapper {
+  display: inline-block;
+}
+.Geoportale .print-submit .sk-circle-wrapper .sk-circle:before {
+  background-color: #ffffff !important;
 }
 
