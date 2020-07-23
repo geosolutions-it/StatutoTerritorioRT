@@ -19866,11 +19866,6 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .ms-header-node > .toc-group-children {
   padding-left: 0;
 }
-.Geoportale .toc-list-item + .ms-header-node {
-  padding-top: 16px;
-  margin-top: 32px;
-  border-top: 1px solid #dddddd;
-}
 .Geoportale .ms-toc-tools {
   text-align: center;
 }
@@ -19878,6 +19873,7 @@ Ported to CodeMirror by Peter Kroon
   width: 100%;
   font-style: italic;
   padding: 8px 0;
+  font-size: 12px;
 }
 .Geoportale .viewer {
   transform: translate(0, 0);
@@ -19901,6 +19897,47 @@ Ported to CodeMirror by Peter Kroon
 /* override bootstrap variables */
 .Geoportale .ms-toc .ms-toc-layer .ms-head {
   border-top: 4px solid #FED403;
+}
+.Geoportale .ms-toc .nav-justified > li {
+  display: block;
+  width: 100%;
+  font-size: 12px;
+}
+.Geoportale .ms-toc .nav-justified > li > a {
+  padding: 4px;
+  border-top: 2px solid #FED403;
+}
+.Geoportale .ms-toc .nav-justified > li.ms-group-basi_cartografiche > a {
+  border-color: #e2001a;
+}
+.Geoportale .ms-toc .nav-justified > li.active {
+  color: #ffffff;
+  background-color: #343a40;
+}
+.Geoportale .ms-toc .nav-justified > li.active > a {
+  color: #ffffff;
+}
+.Geoportale .ms-toc .nav > li > a:hover,
+.Geoportale .ms-toc .nav > li > a:focus {
+  color: #333333;
+}
+.Geoportale .ms-toc .ms-header-node-title {
+  display: flex;
+  align-items: center;
+}
+.Geoportale .ms-toc .ms-header-node-title > div:first-child {
+  flex: 1;
+}
+.Geoportale .ms-toc .ms-header-node-title a {
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.Geoportale .ms-toc .ms-header-node-title a :hover {
+  color: #595f64;
+}
+.Geoportale .ms-toc .ms-group-basi_cartografiche .ms-toc-layer .ms-head {
+  border-color: #e2001a;
 }
 .Geoportale .print-submit .sk-circle-wrapper {
   display: inline-block;

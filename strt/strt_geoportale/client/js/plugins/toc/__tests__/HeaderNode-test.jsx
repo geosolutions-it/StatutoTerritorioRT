@@ -33,7 +33,7 @@ describe('HeaderNode', () => {
         const filterNode = headerNode.querySelector('.mapstore-filter');
         expect(filterNode).toBeTruthy();
 
-        const titleNode = headerNode.querySelector('.ms-header-node-title');
+        const titleNode = headerNode.querySelector('.ms-header-node-title > div:first-child');
         expect(titleNode).toBeTruthy();
         expect(titleNode.innerHTML).toBe('Title');
     });

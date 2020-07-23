@@ -6,7 +6,10 @@
  * LICENSE file in the root directory of this source tree.
 */
 
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Nav, NavItem } from 'react-bootstrap';
+import { selectNode } from '@mapstore/actions/layers';
 import { createPlugin } from '@mapstore/utils/PluginsUtils';
 import { TOCPlugin as MSTOCPlugin, reducers, epics } from '@mapstore/plugins/TOC';
 import PropTypes from 'prop-types';
@@ -21,6 +24,29 @@ function TOC({
     activateAddGroupButton = false,
     activateSettingsTool = false,
     activateSortLayer = false,
+    tocGroups = [
+        {
+            id: 'piano',
+            label: 'Piano',
+            include: ['piano']
+        },
+        {
+            id: 'risorse_rt',
+            label: 'Risorse RT',
+            include: ['risorse_rt']
+        },
+        {
+            id: 'invarianti',
+            label: 'Invarianti',
+            include: ['invarianti']
+        },
+        {
+            id: 'basi_cartografiche',
+            label: 'Cartografia di base',
+            include: ['basi_cartografiche']
+        }
+    ],
+    onSelectNode,
     ...props
 }) {
     // get button of serapide project from others plugin
@@ -28,9 +54,29 @@ function TOC({
         .filter(({ serapideButton }) => serapideButton)
         .map(({ serapideButton: Tool, name }) => <Tool key={name}/> );
 
+    const [selected, setSelected] = useState(tocGroups[0]);
+
     return (
         <div className="ms-toc">
-            <div className="ms-toc-tools">{buttons}</div>
+            <Nav
+                justified
+                stacked
+                bsSize="sm"
+            >
+                {tocGroups.map((entry) =>
+                    <NavItem
+                        key={entry.id}
+                        className={'ms-group-' + entry.id}
+                        active={selected.id === entry.id}
+                        onClick={() => {
+                            setSelected(entry);
+                            // deselect layers on change tab
+                            onSelectNode();
+                        }}>
+                        {entry.label}
+                    </NavItem>)}
+            </Nav>
+
             <MSTOCPlugin
                 { ...props }
                 activateRemoveLayer={activateRemoveLayer}
@@ -43,6 +89,10 @@ function TOC({
                 groupNodeComponent={(groupNodeProps) =>
                     <GroupNode
                         { ...groupNodeProps }
+                        headerButtons={selected.id === 'piano' && buttons || undefined}
+                        filterHeaderNode={node => {
+                            return selected?.include.indexOf(node.id) !== -1;
+                        }}
                         replaceComponent={({ level })=> level === 1 ? HeaderNode : null}
                     />}
             />
@@ -55,7 +105,9 @@ TOC.contextTypes = {
 };
 
 export default createPlugin('TOC', {
-    component: TOC,
+    component: connect(() => ({}), {
+        onSelectNode: selectNode
+    })(TOC),
     containers: {
         DrawerMenu: {
             name: 'toc',

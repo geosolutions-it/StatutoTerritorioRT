@@ -11,7 +11,7 @@
             "noResultsAvailable": "Non ci sono risultati disponibile che corrisponde ai parametri utilizzati nella richiesta",
             "resultsErrorTitle": "Errore",
             "resultsError": "Non è possibile connettersi al servizio di ricerca",
-            "selectSerapideLayers": "Seleziona piano",
+            "selectSerapideLayers": "Cambia piano",
             "serapideCatalogTitle": "Serapide catalog",
             "noPianoAvailableTitle": "Errore di connessione",
             "noPianoAvailable": "Non è possibile recuperare il piano richiesto",
