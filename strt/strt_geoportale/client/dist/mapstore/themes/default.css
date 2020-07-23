@@ -19871,13 +19871,10 @@ Ported to CodeMirror by Peter Kroon
   margin-top: 32px;
   border-top: 1px solid #dddddd;
 }
-.Geoportale .ms-empty-group {
-  display: none;
-}
 .Geoportale .ms-toc-tools {
   text-align: center;
 }
-.Geoportale .ms-header-node-empty {
+.Geoportale .ms-nodes-empty {
   width: 100%;
   font-style: italic;
   padding: 8px 0;

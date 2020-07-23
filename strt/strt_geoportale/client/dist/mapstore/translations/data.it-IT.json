@@ -14,7 +14,8 @@
             "selectSerapideLayers": "Seleziona piano",
             "serapideCatalogTitle": "Serapide catalog",
             "noPianoAvailableTitle": "Errore di connessione",
-            "noPianoAvailable": "Non è possibile recuperare il piano richiesto"
+            "noPianoAvailable": "Non è possibile recuperare il piano richiesto",
+            "pianoNoLayer": "Allegati non ancora pubblicati per questo gruppo"
         },
         "home": {
             "shortDescription": "<h1>GeoPortale</h1>"
