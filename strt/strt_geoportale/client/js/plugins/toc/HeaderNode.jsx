@@ -84,6 +84,7 @@ class HeaderNode extends Component {
                 position="collapsible">
                 {cloneElement(children, {
                     filterText,
+                    emptyMessageId: node.id === 'piano' && 'serapide.pianoNoLayer',
                     replaceNodeOptions: (currentNode, nodeType) => ({
                         ...currentNode,
                         ...(nodeType === 'group' && filterText && { expanded: true })
@@ -114,7 +115,7 @@ class HeaderNode extends Component {
                     filterText={filterText}
                     onFilter={(newFilterText) => this.setState({ filterText: newFilterText })}
                 />
-                {isEmpty && <div className="ms-header-node-empty">
+                {isEmpty && <div className="ms-nodes-empty">
                     <Message msgId={!filterText ? 'noLayerInGroup' : 'noLayerFilterResults'}/>
                 </div>}
                 {groupChildren}

@@ -16,6 +16,7 @@ import SideCard from '@mapstore/components/misc/cardgrids/SideCard';
 import Toolbar from '@mapstore/components/misc/toolbar/Toolbar';
 import ReactTooltip from 'react-tooltip';
 import Portal from '@mapstore/components/misc/Portal';
+import Message from '@mapstore/components/I18N/Message';
 
 export class GroupNode extends Component {
 
@@ -42,7 +43,8 @@ export class GroupNode extends Component {
         replaceComponent: PropTypes.bool,
         filter: PropTypes.func,
         replaceNodeOptions: PropTypes.func,
-        filterText: PropTypes.string
+        filterText: PropTypes.string,
+        emptyMessageId: PropTypes.string
     };
 
     static defaultProps = {
@@ -90,7 +92,8 @@ export class GroupNode extends Component {
             replaceComponent,
             filter,
             replaceNodeOptions,
-            filterText
+            filterText,
+            emptyMessageId
         } = this.props;
 
         const node = replaceNodeOptions?.(nodeProp, 'group') || nodeProp;
@@ -107,7 +110,8 @@ export class GroupNode extends Component {
             const { title, tooltipText } = getTitleAndTooltip({ node, currentLocale });
             const placeholderClassName = (isDragging || node.placeholder ? ' is-placeholder ' : '');
             const selected = selectedNodes.find((s) => s === node.id) ? true : false;
-            const emptyClassName = node?.nodes?.length === 0 ? ' ms-empty-group' : '';
+            const isEmpty = node?.nodes?.length === 0;
+            const emptyClassName = isEmpty ? ' ms-empty-group' : '';
             const errorClassName = node.loadingError ? ' ms-group-error' : '';
             const selectedClassName = selected ? ' ms-selected' : '';
             const draggableClassName = draggable && ' ms-draggable' || '';
@@ -126,6 +130,7 @@ export class GroupNode extends Component {
                                 className: 'square-button-md'
                             }}
                             buttons={[{
+                                visible: !isEmpty,
                                 glyph: expanded ? 'collapse-down' : 'expand',
                                 onClick: (event) => {
                                     event.stopPropagation();
@@ -140,6 +145,7 @@ export class GroupNode extends Component {
                                 className: 'square-button-md'
                             }}
                             buttons={[{
+                                visible: !isEmpty,
                                 glyph: node.visibility ? 'eye-open' : 'eye-close',
                                 onClick: (event) => {
                                     event.stopPropagation();
@@ -162,6 +168,7 @@ export class GroupNode extends Component {
                     filter={filter}>
                     {cloneElement(children, {
                         filterText,
+                        emptyMessageId,
                         replaceNodeOptions,
                         filter
                     })}
@@ -178,6 +185,9 @@ export class GroupNode extends Component {
                     type="group">
                     {connectDragPreview(connectDropTarget(draggable ? connectDragSource(groupHead) : groupHead))}
                     {isDragging || node.placeholder ? null : groupChildren}
+                    {isEmpty && <div className="ms-nodes-empty">
+                        <Message msgId={emptyMessageId || 'noLayerInGroup'}/>
+                    </div>}
                 </Node>
                 <Portal>
                     <ReactTooltip place="top" type="dark" effect="solid"/>
