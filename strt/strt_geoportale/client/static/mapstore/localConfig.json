@@ -378,7 +378,7 @@
                 "name": "Measure",
                 "cfg": {
                   "defaultOptions": {
-                    "showAddAsAnnotation": true
+                    "showAddAsAnnotation": false
                   }
                 }
             }, {
