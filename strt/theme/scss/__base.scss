@@ -165,7 +165,8 @@ $sizeBase: 15;
     cursor: default !important;
 }
 .serapide {
-   
+    position: relative;
+    z-index: 0;
     width: 100%;
     .pointer{
         cursor: pointer;

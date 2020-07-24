@@ -1,7 +1,8 @@
 // Local variables
 .strt {
     @import "./__variables";
-
+    z-index: 1;
+    position: relative;
 // Bootstrap and its default variables
     @import "node_modules/bootstrap/scss/bootstrap";
     
