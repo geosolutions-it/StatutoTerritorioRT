@@ -1,5 +1,7 @@
 @charset "UTF-8";
 .strt {
+  z-index: 1;
+  position: relative;
   /*!
  * Bootstrap v4.2.1 (https://getbootstrap.com/)
  * Copyright 2011-2018 The Bootstrap Authors
@@ -8738,6 +8740,8 @@
   .strt .default {
     cursor: default !important; }
   .strt .serapide {
+    position: relative;
+    z-index: 0;
     width: 100%; }
     .strt .serapide .pointer {
       cursor: pointer; }
