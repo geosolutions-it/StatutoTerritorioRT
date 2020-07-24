@@ -9093,7 +9093,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .option-icon {
   font-size: 14px;
-  margin-right: 13px;
+  margin-right: 8px;
   color: #343a40;
 }
 .Geoportale .bg-body {
@@ -9136,21 +9136,21 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .toolbar-btn-transition-enter.toolbar-btn-transition-enter-active {
   transition: all 0.3s;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 7px;
+  padding-right: 7px;
   overflow: hidden;
 }
 .Geoportale .toolbar-btn-transition-enter.toolbar-btn-transition-enter-active .square-btn-size {
-  width: 32px;
+  width: 29px;
 }
 .Geoportale .toolbar-btn-transition-leave {
   transition: all 0.3s;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 7px;
+  padding-right: 7px;
   overflow: hidden;
 }
 .Geoportale .toolbar-btn-transition-leave .square-btn-size {
-  width: 32px;
+  width: 29px;
 }
 .Geoportale .toolbar-btn-transition-leave.toolbar-btn-transition-leave-active {
   width: 0;
@@ -9183,14 +9183,14 @@ structure .glyphicon-{iconName}-content
   background-color: #ffffff;
 }
 .Geoportale .mapstore-filter.form-group {
-  margin: 10px 0 0 0;
+  margin: 5.5px 0 0 0;
 }
 .Geoportale .mapstore-filter.form-group .input-group {
-  height: 32px;
+  height: 29px;
   width: 100%;
 }
 .Geoportale .mapstore-filter.form-group .input-group input {
-  height: 32px;
+  height: 29px;
 }
 .Geoportale .mapstore-filter.form-group .input-group .input-group-addon {
   position: absolute;
@@ -9780,7 +9780,7 @@ structure .glyphicon-{iconName}-content
   height: 100%;
 }
 .Geoportale .configure-plugins-step .configure-map-templates-transfer .mapstore-side-preview .glyphicon {
-  font-size: 52px;
+  font-size: 40px;
   margin: auto;
   color: white;
 }
@@ -9837,7 +9837,7 @@ structure .glyphicon-{iconName}-content
   height: 100%;
 }
 .Geoportale .new-map-dialog .new-map-preview .glyphicon {
-  font-size: 52px;
+  font-size: 40px;
   margin: auto;
   color: white;
 }
@@ -9907,7 +9907,7 @@ structure .glyphicon-{iconName}-content
 .Geoportale .ms2-transfer .ms2-transfer-subpanel .ms2-transfer-header .ms2-transfer-title-area h4 {
   display: flex;
   overflow-wrap: anywhere;
-  min-height: 32px;
+  min-height: 29px;
 }
 .Geoportale .ms2-transfer .ms2-transfer-subpanel .ms2-transfer-header .ms2-transfer-title-area h4 span {
   flex: 1;
@@ -9965,8 +9965,8 @@ structure .glyphicon-{iconName}-content
   display: block;
   float: left;
   background-color: transparent;
-  font-size: 26px;
-  margin: 9px 12px;
+  font-size: 24px;
+  margin: 5px 7px;
 }
 .Geoportale #mapstore-drawermenu .navHeader > .glyphicon:hover {
   background-color: transparent;
@@ -10012,7 +10012,7 @@ structure .glyphicon-{iconName}-content
   padding: 0;
 }
 .Geoportale .dropdown-menu .glyphicon {
-  font-size: 16px;
+  font-size: 15px;
   margin-right: 15px;
   color: #343a40;
   vertical-align: middle;
@@ -10035,7 +10035,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .navbar-dx .dropdown-menu li a,
 .Geoportale .navbar-home .dropdown-menu li a {
-  max-height: 52px;
+  max-height: 40px;
   outline: none;
   color: #333333;
 }
@@ -10373,7 +10373,7 @@ structure .glyphicon-{iconName}-content
   padding: 0 8px;
 }
 .Geoportale .ms-identify-swipe-header .ms-identify-swipe-header-arrow {
-  min-width: 32px;
+  min-width: 29px;
 }
 .Geoportale .coordinateRow {
   margin: 8px 0px;
@@ -10640,11 +10640,11 @@ structure .glyphicon-{iconName}-content
   opacity: 0.1;
 }
 .Geoportale .ms-geostory-builder .msSideGrid .ms-over:not(.ms-dragging).ms-above > div {
-  padding-bottom: 32px;
+  padding-bottom: 29px;
   border-bottom: 2px solid #343a40;
 }
 .Geoportale .ms-geostory-builder .msSideGrid .ms-over:not(.ms-dragging).ms-below > div {
-  padding-top: 32px;
+  padding-top: 29px;
   border-top: 2px solid #343a40;
 }
 .Geoportale .ms-geostory-builder .ms-section-preview {
@@ -10695,8 +10695,8 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .ms-sections-container-small-screen .ms-section-title .ms-content-text {
   width: 100%;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 22.5px;
+  padding-right: 22.5px;
 }
 .Geoportale .ms-sections-container-small-screen .ms-section-title .ms-content-text.ms-align-left .ms-content-body,
 .Geoportale .ms-sections-container-small-screen .ms-section-title .ms-content-text.ms-align-right .ms-content-body,
@@ -10712,12 +10712,12 @@ structure .glyphicon-{iconName}-content
   width: auto;
 }
 .Geoportale .ms-sections-container-small-screen .ms-section-paragraph {
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 22.5px;
+  padding-right: 22.5px;
 }
 .Geoportale .ms-sections-container-small-screen .ms-section-immersive .ms-content-column {
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 22.5px;
+  padding-right: 22.5px;
   min-width: auto;
 }
 .Geoportale .ms-sections-container-small-screen .ms-content {
@@ -10753,7 +10753,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .ms-sections-container-small-screen .ms-section.ms-expandable-background.ms-section-title .ms-content-text,
 .Geoportale .ms-sections-container-small-screen .ms-section.ms-expandable-background.ms-section-immersive .ms-content-column {
-  padding-right: 40px;
+  padding-right: 37px;
 }
 .Geoportale .ms-sections-container-medium-screen .ms-section .ms-section-background .ms-section-background-container {
   /* size of content */
@@ -10771,8 +10771,8 @@ structure .glyphicon-{iconName}-content
   width: 60%;
 }
 .Geoportale .ms-sections-container-medium-screen .ms-section-title .ms-content-text {
-  padding-left: 48px;
-  padding-right: 48px;
+  padding-left: 43.5px;
+  padding-right: 43.5px;
 }
 .Geoportale .ms-sections-container-medium-screen .ms-section-title .ms-content-text.ms-align-center .ms-content-body {
   margin-left: auto;
@@ -10787,8 +10787,8 @@ structure .glyphicon-{iconName}-content
   margin-right: 0;
 }
 .Geoportale .ms-sections-container-medium-screen .ms-section-paragraph {
-  padding-left: 48px;
-  padding-right: 48px;
+  padding-left: 43.5px;
+  padding-right: 43.5px;
 }
 .Geoportale .ms-sections-container-medium-screen .ms-content {
   /* size of content */
@@ -10852,8 +10852,8 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-sm .ms-section-title .ms-content-text {
   width: 100%;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 22.5px;
+  padding-right: 22.5px;
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-sm .ms-section-title .ms-content-text.ms-align-left .ms-content-body,
 .Geoportale .ms-cascade-story .ms-sections-container.ms-sm .ms-section-title .ms-content-text.ms-align-right .ms-content-body,
@@ -10869,12 +10869,12 @@ structure .glyphicon-{iconName}-content
   width: auto;
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-sm .ms-section-paragraph {
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 22.5px;
+  padding-right: 22.5px;
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-sm .ms-section-immersive .ms-content-column {
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 22.5px;
+  padding-right: 22.5px;
   min-width: auto;
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-sm .ms-content {
@@ -10910,7 +10910,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-sm .ms-section.ms-expandable-background.ms-section-title .ms-content-text,
 .Geoportale .ms-cascade-story .ms-sections-container.ms-sm .ms-section.ms-expandable-background.ms-section-immersive .ms-content-column {
-  padding-right: 40px;
+  padding-right: 37px;
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-md .ms-section .ms-section-background .ms-section-background-container {
   /* size of content */
@@ -10928,8 +10928,8 @@ structure .glyphicon-{iconName}-content
   width: 60%;
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-md .ms-section-title .ms-content-text {
-  padding-left: 48px;
-  padding-right: 48px;
+  padding-left: 43.5px;
+  padding-right: 43.5px;
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-md .ms-section-title .ms-content-text.ms-align-center .ms-content-body {
   margin-left: auto;
@@ -10944,8 +10944,8 @@ structure .glyphicon-{iconName}-content
   margin-right: 0;
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-md .ms-section-paragraph {
-  padding-left: 48px;
-  padding-right: 48px;
+  padding-left: 43.5px;
+  padding-right: 43.5px;
 }
 .Geoportale .ms-cascade-story .ms-sections-container.ms-md .ms-content {
   /* size of content */
@@ -11100,7 +11100,7 @@ structure .glyphicon-{iconName}-content
 .Geoportale .ms-cascade-story .ms-section .ms-section-contents .ms-column-contents .ms-content-toolbar {
   display: flex;
   padding: 0 16px;
-  padding-top: 16px;
+  padding-top: 14.5px;
 }
 .Geoportale .ms-cascade-story .ms-section .ms-section-contents .ms-column-contents .ms-content-toolbar .btn-group {
   margin-right: 0;
@@ -11113,7 +11113,7 @@ structure .glyphicon-{iconName}-content
   border-top: 1px solid #dddddd;
   border-right: 1px solid #dddddd;
   border-left: 1px solid #dddddd;
-  width: 34px;
+  width: 31px;
   border-top-left-radius: 50%;
   margin-left: 50%;
   transform: translateX(-50%);
@@ -11134,40 +11134,40 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .ms-cascade-story .ms-section .add-bar .btn,
 .Geoportale .btn-group-vertical .ms-cascade-story .ms-section .add-bar .btn {
-  height: 32px;
-  width: 32px;
+  height: 29px;
+  width: 29px;
   padding: 0;
   outline: 0;
 }
 .Geoportale .ms-cascade-story .ms-section .add-bar .btn .glyphicon {
   margin: auto;
-  font-size: 16px;
+  font-size: 15px;
 }
 .Geoportale .ms-cascade-story .ms-section .add-bar .btn .ms-loader {
-  height: 16px;
-  width: 16px;
+  height: 15px;
+  width: 15px;
   margin: auto;
 }
 .Geoportale .ms-cascade-story .ms-section .add-bar .btn .ms-loader > div {
   margin: auto;
   text-indent: -9999em;
-  border-top: 1.6px solid rgba(255, 255, 255, 0.2);
-  border-right: 1.6px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1.6px solid rgba(255, 255, 255, 0.2);
-  border-left: 1.6px solid #ffffff;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-right: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-left: 1.5px solid #ffffff;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
   -webkit-animation: mapstore-circle-load8 1.1s infinite linear;
   animation: mapstore-circle-load8 1.1s infinite linear;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 .Geoportale .ms-cascade-story .ms-section .add-bar .btn .ms-loader > div .mapstore-circle-loader:after {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 .Geoportale .ms-cascade-story .ms-section .add-bar .btn.disabled,
 .Geoportale .ms-cascade-story .ms-section .add-bar .btn[disabled],
@@ -11238,8 +11238,8 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .ms-cascade-story .ms-section.ms-section-title .ms-content-text .ms-content-toolbar {
   position: absolute;
-  margin-left: -16px;
-  margin-top: -19.2px;
+  margin-left: -14.5px;
+  margin-top: -17.4px;
   padding: 0;
   z-index: 2;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
@@ -11251,12 +11251,12 @@ structure .glyphicon-{iconName}-content
   margin-right: auto;
 }
 .Geoportale .ms-cascade-story .ms-section.ms-section-title .ms-content-text.ms-align-left .ms-content-body {
-  margin-left: 40px;
+  margin-left: 37px;
   margin-right: auto;
 }
 .Geoportale .ms-cascade-story .ms-section.ms-section-title .ms-content-text.ms-align-right .ms-content-body {
   margin-left: auto;
-  margin-right: 40px;
+  margin-right: 37px;
 }
 .Geoportale .ms-cascade-story .ms-section.ms-section-title .ms-content-text.ms-size-full {
   width: 100%;
@@ -11379,7 +11379,7 @@ structure .glyphicon-{iconName}-content
   min-width: 500px;
   display: flex;
   pointer-events: none;
-  padding: 64px 38px;
+  padding: 64px 35px;
   padding-top: 164px;
   /* themes of column container */
 }
@@ -11394,8 +11394,8 @@ structure .glyphicon-{iconName}-content
 .Geoportale .ms-cascade-story .ms-section.ms-section-immersive .ms-content-column > .ms-content-body > .ms-content-toolbar {
   position: absolute;
   z-index: 2;
-  margin-left: -16px;
-  margin-top: -19.2px;
+  margin-left: -14.5px;
+  margin-top: -17.4px;
   padding: 0;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
@@ -11833,7 +11833,7 @@ structure .glyphicon-{iconName}-content
   background-color: inherit;
 }
 .Geoportale .ms-cascade-story .ms-media-error .glyphicon {
-  font-size: 52px;
+  font-size: 40px;
 }
 .Geoportale .ms-cascade-story .ms-media-loader {
   background-color: transparent;
@@ -11917,40 +11917,40 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .ms-expand-media-button,
 .Geoportale .btn-group-vertical .ms-expand-media-button {
-  height: 32px;
-  width: 32px;
+  height: 29px;
+  width: 29px;
   padding: 0;
   outline: 0;
 }
 .Geoportale .ms-expand-media-button .glyphicon {
   margin: auto;
-  font-size: 16px;
+  font-size: 15px;
 }
 .Geoportale .ms-expand-media-button .ms-loader {
-  height: 16px;
-  width: 16px;
+  height: 15px;
+  width: 15px;
   margin: auto;
 }
 .Geoportale .ms-expand-media-button .ms-loader > div {
   margin: auto;
   text-indent: -9999em;
-  border-top: 1.6px solid rgba(255, 255, 255, 0.2);
-  border-right: 1.6px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1.6px solid rgba(255, 255, 255, 0.2);
-  border-left: 1.6px solid #ffffff;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-right: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-left: 1.5px solid #ffffff;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
   -webkit-animation: mapstore-circle-load8 1.1s infinite linear;
   animation: mapstore-circle-load8 1.1s infinite linear;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 .Geoportale .ms-expand-media-button .ms-loader > div .mapstore-circle-loader:after {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 .Geoportale .ms-expand-media-button.disabled,
 .Geoportale .ms-expand-media-button[disabled],
@@ -11994,7 +11994,7 @@ structure .glyphicon-{iconName}-content
   display: flex;
   align-items: center;
   margin: 4px 0;
-  min-height: 32px;
+  min-height: 29px;
 }
 .Geoportale .ms-custom-theme-picker-field > div {
   display: flex;
@@ -12147,7 +12147,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .ms-geostory-navigation .ms-geostory-navigation-bar .ms-geostory-navigation-tools .ms-geostory-navigation-elements .ms-geostory-navigation-navigable-items {
   flex: 1;
-  min-height: 32px;
+  min-height: 29px;
   max-width: 50%;
   background-color: inherit;
   margin: 4px 0;
@@ -12202,19 +12202,19 @@ structure .glyphicon-{iconName}-content
   color: #343a40;
 }
 .Geoportale .mapstore-langselector {
-  height: 52px;
+  height: 40px;
   float: right;
 }
 .Geoportale .mapstore-langselector .dropdown {
-  height: 52px;
+  height: 40px;
 }
 .Geoportale .mapstore-langselector .dropdown .dropdown-toggle {
   border: none !important;
   padding: 0;
-  height: 50px;
+  height: 38px;
 }
 .Geoportale .mapstore-langselector .dropdown .dropdown-toggle .btn {
-  height: 50px;
+  height: 38px;
   border: none;
 }
 .Geoportale .mapstore-langselector .dropdown .dropdown-toggle .caret {
@@ -12251,7 +12251,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .page-maps .ms-home-description {
   background-color: #ffffff;
-  padding: 52px 0 0 0;
+  padding: 40px 0 0 0;
   background-position: center;
 }
 .Geoportale .page-maps .ms-home-description .container {
@@ -12333,8 +12333,8 @@ structure .glyphicon-{iconName}-content
   display: inline-block;
   margin-bottom: 0;
   vertical-align: middle;
-  width: 52px !important;
-  height: 52px !important;
+  width: 40px !important;
+  height: 40px !important;
   border: none !important;
   box-shadow: none !important;
 }
@@ -12406,25 +12406,25 @@ structure .glyphicon-{iconName}-content
   height: 100%;
 }
 .Geoportale .mapstore-inline-loader {
-  margin: 8px;
+  margin: 7px;
   text-indent: -9999em;
-  border-top: 1.6px solid rgba(52, 58, 64, 0.2);
-  border-right: 1.6px solid rgba(52, 58, 64, 0.2);
-  border-bottom: 1.6px solid rgba(52, 58, 64, 0.2);
-  border-left: 1.6px solid #343a40;
+  border-top: 1.5px solid rgba(52, 58, 64, 0.2);
+  border-right: 1.5px solid rgba(52, 58, 64, 0.2);
+  border-bottom: 1.5px solid rgba(52, 58, 64, 0.2);
+  border-left: 1.5px solid #343a40;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
   -webkit-animation: mapstore-circle-load8 1.1s infinite linear;
   animation: mapstore-circle-load8 1.1s infinite linear;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 .Geoportale .mapstore-inline-loader .mapstore-circle-loader:after {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 @-webkit-keyframes mapstore-circle-load8 {
   .Geoportale 0% {
@@ -12520,7 +12520,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .ms-user-details-table .row {
   border-bottom: 1px solid #dddddd;
-  min-height: 52px;
+  min-height: 40px;
   display: flex;
 }
 .Geoportale .ms-user-details-table .row .col-sm-6 {
@@ -12825,7 +12825,7 @@ structure .glyphicon-{iconName}-content
   background-color: #f2f2f2 !important;
 }
 .Geoportale #mapstore-navbar .navbar-dx .search-result-list {
-  top: 65px;
+  top: 48px;
 }
 .Geoportale .navbar-dx .MapSearchBar .input-group {
   background-color: #ffffff;
@@ -12859,7 +12859,7 @@ structure .glyphicon-{iconName}-content
   }
   .Geoportale #mapstore-navbar .MapSearchBar {
     width: 400px;
-    top: 52px;
+    top: 40px;
     left: auto;
   }
   .Geoportale #mapstore-navbar .search-result-list {
@@ -12877,7 +12877,7 @@ structure .glyphicon-{iconName}-content
     position: fixed;
     left: 1px;
     right: 1px;
-    top: 52px;
+    top: 40px;
     width: auto;
   }
   .Geoportale #mapstore-navbar .navbar-dx .MapSearchBar .input-group {
@@ -13069,7 +13069,7 @@ structure .glyphicon-{iconName}-content
   height: 100%;
 }
 .Geoportale .map-catalog-panel .map-catalog-preview .glyphicon {
-  font-size: 52px;
+  font-size: 40px;
   margin: auto;
   color: white;
 }
@@ -13085,7 +13085,7 @@ structure .glyphicon-{iconName}-content
   height: 100%;
 }
 .Geoportale .map-templates-preview .glyphicon {
-  font-size: 52px;
+  font-size: 40px;
   margin: auto;
   color: white;
 }
@@ -13116,7 +13116,7 @@ structure .glyphicon-{iconName}-content
   position: relative;
 }
 .Geoportale .map-templates-favourites .glyphicon {
-  font-size: 17.33333333px;
+  font-size: 13.33333333px;
 }
 .Geoportale .map-templates-all {
   padding-bottom: 15px;
@@ -13405,8 +13405,8 @@ structure .glyphicon-{iconName}-content
   margin-bottom: 0;
 }
 .Geoportale .navbar .square-button {
-  height: 52px;
-  width: 52px;
+  height: 40px;
+  width: 40px;
 }
 .Geoportale .nav-menu {
   overflow-x: hidden;
@@ -13421,13 +13421,13 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .nav-body {
   position: absolute;
-  top: 52px;
+  top: 40px;
   bottom: 0;
   overflow: auto;
   width: 100%;
 }
 .Geoportale #mapstore-navbar-container {
-  height: 52px;
+  height: 40px;
 }
 /* OpenLayers minimap style */
 .Geoportale .ol-custom-overviewmap button {
@@ -13550,15 +13550,15 @@ structure .glyphicon-{iconName}-content
   border-top-color: #ffcc33;
 }
 .Geoportale .ol-rotate {
-  width: 52px;
-  height: 52px;
+  width: 40px;
+  height: 40px;
   background: none;
   margin-right: 7px;
 }
 .Geoportale .ol-rotate .ol-rotate-reset {
   box-shadow: -1px 1px 5px 1px #5e5e5e;
-  height: 52px;
-  width: 52px;
+  height: 40px;
+  width: 40px;
   color: #ffffff;
   background-color: #343a40;
   border-color: #292d32;
@@ -13638,7 +13638,7 @@ structure .glyphicon-{iconName}-content
   border-top: none !important;
 }
 .Geoportale .ms-side-panel .ms-header > .row > .col-xs-2 {
-  min-width: 52px;
+  min-width: 40px;
 }
 .Geoportale .ms-side-panel .ms-header .ms-close span {
   display: block;
@@ -13849,7 +13849,7 @@ structure .glyphicon-{iconName}-content
 .Geoportale .mapstore-string-select .m-options ul li {
   list-style-type: none;
   padding: 0 10px;
-  min-width: 52px;
+  min-width: 40px;
   height: auto;
 }
 .Geoportale .mapstore-string-select .m-options ul li:hover {
@@ -13891,11 +13891,11 @@ structure .glyphicon-{iconName}-content
   background-color: #ffffff;
 }
 .Geoportale .mapstore-query-builder .ms2-border-layout-body {
-  padding: 20px;
+  padding: 17px;
 }
 .Geoportale .mapstore-query-builder .ms2-border-layout-body .mapstore-switch-panel {
-  margin-bottom: 20px;
-  padding: 0 10px;
+  margin-bottom: 17px;
+  padding: 0 8.5px;
   border: none;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
@@ -13906,14 +13906,14 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .mapstore-query-builder .ms2-border-layout-body .mapstore-conditions-group {
   padding: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 8.5px;
 }
 .Geoportale .mapstore-query-builder .ms2-border-layout-body .mapstore-conditions-group .col-xs-2 {
   padding: 0;
 }
 .Geoportale .mapstore-query-builder .ms2-border-layout-body .mapstore-conditions-group .mapstore-conditions-group {
   padding-bottom: 5px;
-  padding-left: 20px;
+  padding-left: 17px;
   border-left: 2px solid #000000;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
@@ -13941,9 +13941,9 @@ structure .glyphicon-{iconName}-content
   padding-right: 0px;
 }
 .Geoportale .mapstore-query-builder .m-label {
-  margin-top: 10px;
-  height: 32px;
-  line-height: 32px;
+  margin-top: 5.5px;
+  height: 29px;
+  line-height: 29px;
 }
 .Geoportale .mapstore-query-builder .filter-field-fixed-row {
   height: 52px;
@@ -13961,13 +13961,13 @@ structure .glyphicon-{iconName}-content
   background-color: #fafafa;
 }
 .Geoportale #mapstore-drawermenu #query-form-panel .remove-filter-button .glyphicon {
-  font-size: 10px;
+  font-size: 9px;
 }
 .Geoportale #mapstore-drawermenu #query-form-panel .remove-filter-button span {
-  line-height: 10px;
+  line-height: 9px;
 }
 .Geoportale #query-form-panel .query-toolbar {
-  height: 52px;
+  height: 40px;
   background-color: #ffffff;
 }
 .Geoportale #query-form-panel button:disabled {
@@ -14113,7 +14113,7 @@ structure .glyphicon-{iconName}-content
     width: 100%;
   }
   .Geoportale .data-grid-top-toolbar > .flex-center .col-xs-4:nth-child(1) {
-    width: calc(100% - 52px);
+    width: calc(100% - 40px);
     padding: 0;
     margin-left: 5px;
   }
@@ -14122,7 +14122,7 @@ structure .glyphicon-{iconName}-content
     display: none;
   }
   .Geoportale .data-grid-top-toolbar > .flex-center .col-xs-4:nth-child(3) {
-    width: 62px;
+    width: 50px;
     padding: 0;
     margin-right: 5px;
   }
@@ -14670,7 +14670,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .rules-manager .react-codemirror2 {
   margin-bottom: 10px;
-  height: 156px;
+  height: 120px;
 }
 .Geoportale .rules-manager .CodeMirror {
   height: 100%;
@@ -14870,7 +14870,7 @@ structure .glyphicon-{iconName}-content
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.06), inset 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 .Geoportale .rules-manager .ms-header {
-  height: 52px;
+  height: 40px;
   border-bottom: 1px solid #dddddd;
   display: flex;
 }
@@ -14971,8 +14971,8 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .rules-manager .floating-btn {
   position: absolute;
-  bottom: 78px;
-  right: 26px;
+  bottom: 60px;
+  right: 20px;
   -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   -moz-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -15002,7 +15002,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .rules-manager .ms2-border-layout-content .ms-rule-editor .mapstore-switch-panel .ReactCodeMirror {
   margin-bottom: 10px;
-  height: 156px;
+  height: 120px;
 }
 .Geoportale .rules-manager .ms2-border-layout-content .ms-rule-editor .mapstore-switch-panel .row:last-child {
   margin-bottom: 10px;
@@ -15039,7 +15039,7 @@ structure .glyphicon-{iconName}-content
   color: rgba(51, 51, 51, 0.2);
 }
 .Geoportale .rules-manager .ms-panel-header-container .ms-toolbar-container {
-  height: 52px;
+  height: 40px;
   width: 100%;
   display: flex;
 }
@@ -15718,8 +15718,8 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .noUi-target.noUi-horizontal .noUi-base .noUi-origin .noUi-handle:before,
 .Geoportale .noUi-target.noUi-horizontal .noUi-base .noUi-origin .noUi-handle:after {
-  height: 20px;
-  width: 20px;
+  height: 17px;
+  width: 17px;
   background: transparent;
   left: 0;
   top: 0;
@@ -15804,7 +15804,7 @@ structure .glyphicon-{iconName}-content
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 20px;
+  line-height: 17px;
 }
 .Geoportale .msSideGrid {
   margin: 8px 16px;
@@ -15819,7 +15819,7 @@ structure .glyphicon-{iconName}-content
   background-color: #ffffff;
 }
 .Geoportale .msSideGrid .ms-drag-over.ms-sm {
-  height: 52px;
+  height: 40px;
 }
 .Geoportale .msSideGrid .items-list .col-xs-12:hover {
   z-index: 1;
@@ -15841,7 +15841,7 @@ structure .glyphicon-{iconName}-content
 }
 .Geoportale .mapstore-side-card .ms-head {
   display: flex;
-  height: 104px;
+  height: 80px;
 }
 .Geoportale .mapstore-side-card .mapstore-side-card-container {
   display: flex;
@@ -15862,8 +15862,8 @@ structure .glyphicon-{iconName}-content
 .Geoportale .mapstore-side-card .mapstore-side-preview {
   display: flex;
   margin: 0;
-  width: 104px;
-  height: 104px;
+  width: 80px;
+  height: 80px;
   overflow: hidden;
   padding: 4px;
 }
@@ -15960,16 +15960,16 @@ structure .glyphicon-{iconName}-content
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 .Geoportale .mapstore-side-card.ms-sm .ms-head {
-  height: 52px;
+  height: 40px;
 }
 .Geoportale .mapstore-side-card.ms-sm .mapstore-side-preview {
-  width: 52px;
-  height: 52px;
+  width: 40px;
+  height: 40px;
   padding: 8px;
 }
 .Geoportale .mapstore-side-card.ms-sm .mapstore-side-preview > .glyphicon {
   text-align: center;
-  font-size: 26px;
+  font-size: 24px;
 }
 .Geoportale .mapstore-side-card.ms-sm .mapstore-side-card-info {
   padding: 8px 16px 8px 8px;
@@ -16499,7 +16499,7 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .ms-color-selector {
   position: relative;
   display: flex;
-  height: 32px;
+  height: 29px;
   width: 100%;
   border: 1px solid #dddddd;
   padding: 4px;
@@ -16533,9 +16533,9 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .mapstore-switch-btn {
   position: relative;
   display: inline-block;
-  width: 32px;
+  width: 26px;
   /* 60 */
-  height: 20px;
+  height: 17px;
   /* 34 */
 }
 .Geoportale .mapstore-switch-btn .m-slider {
@@ -16553,8 +16553,8 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .mapstore-switch-btn .m-slider:before {
   position: absolute;
   content: " ";
-  height: 12px;
-  width: 12px;
+  height: 9px;
+  width: 9px;
   left: 4px;
   bottom: 4px;
   background-color: #ffffff;
@@ -16569,7 +16569,7 @@ Ported to CodeMirror by Peter Kroon
   opacity: 1.0;
 }
 .Geoportale .mapstore-switch-btn input:checked + .m-slider:before {
-  transform: translateX(12px);
+  transform: translateX(9px);
 }
 .Geoportale .mapstore-switch-btn input:focus + .m-slider {
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
@@ -16593,55 +16593,55 @@ Ported to CodeMirror by Peter Kroon
   margin: 0;
 }
 .Geoportale .mapstore-switch-panel .panel-heading {
-  height: 52px;
+  height: 40px;
   border: none;
   padding: 0;
   background-color: #ffffff;
   color: #333333;
 }
 .Geoportale .mapstore-switch-panel .panel-heading .pull-left {
-  line-height: 52px;
+  line-height: 40px;
 }
 .Geoportale .mapstore-switch-panel .panel-heading .mapstore-switch-btn,
 .Geoportale .mapstore-switch-panel .panel-heading .switch-error,
 .Geoportale .mapstore-switch-panel .panel-heading .switch-loading {
   float: right;
-  margin: 16px 0;
+  margin: 11.5px 0;
 }
 .Geoportale .mapstore-switch-panel .panel-heading .switch-loading {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
 }
 .Geoportale .mapstore-switch-panel .panel-heading .btn-group {
   float: right;
-  margin: 14px 0;
-  margin-right: 7px;
+  margin: 9.5px 0;
+  margin-right: 4.75px;
 }
 .Geoportale .mapstore-switch-panel .panel-heading .btn-group .square-button-sm {
   padding: 0;
   text-align: center;
-  padding-top: 2px;
-  margin-left: 7px;
+  padding-top: 1.875px;
+  margin-left: 4.75px;
 }
 .Geoportale .mapstore-switch-panel .panel-heading .btn-group .square-button-sm span {
-  font-size: 16px;
+  font-size: 15px;
 }
 .Geoportale .mapstore-switch-panel .panel-body {
   padding: 0;
   /** TODO MOVE THIS ANIMATION IN QUERY PANEL */
 }
 .Geoportale .mapstore-switch-panel .panel-body .mapstore-block-width .m-label {
-  height: 32px;
-  line-height: 32px;
+  height: 29px;
+  line-height: 29px;
   width: 100%;
   text-overflow: ellipsis;
-  margin-top: 10px;
+  margin-top: 5.5px;
 }
 .Geoportale .mapstore-switch-panel .panel-body .mapstore-block-width .rw-combobox {
-  margin-top: 9px;
+  margin-top: 3px;
 }
 .Geoportale .mapstore-switch-panel .panel-body .mapstore-block-width .btn-group {
-  margin-top: 10px;
+  margin-top: 5.5px;
 }
 .Geoportale .mapstore-switch-panel .panel-body .switch-panel-transition-enter {
   /*background-color: darken(@ms2-color-text-primary, 5%);*/
@@ -16656,7 +16656,7 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .mapstore-switch-panel .panel-body .switch-panel-transition-enter.switch-panel-transition-enter-active.mapstore-block-width,
 .Geoportale .mapstore-switch-panel .panel-body .switch-panel-transition-enter.switch-panel-transition-enter-active.mapstore-conditions-group .mapstore-block-width {
   overflow: hidden;
-  height: 52px;
+  height: 40px;
   transition: 300ms ease-in;
 }
 .Geoportale .mapstore-switch-panel .panel-body .switch-panel-transition-leave {
@@ -16665,7 +16665,7 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .mapstore-switch-panel .panel-body .switch-panel-transition-leave.mapstore-block-width,
 .Geoportale .mapstore-switch-panel .panel-body .switch-panel-transition-leave.mapstore-conditions-group .mapstore-block-width {
   overflow: hidden;
-  height: 52px;
+  height: 40px;
   transition: 300ms ease-in;
 }
 .Geoportale .mapstore-switch-panel .panel-body .switch-panel-transition-leave.switch-panel-transition-leave-active {
@@ -16682,93 +16682,93 @@ Ported to CodeMirror by Peter Kroon
   overflow-x: hidden;
 }
 .Geoportale .square-button {
-  height: 52px;
-  width: 52px;
+  height: 40px;
+  width: 40px;
   outline: 0;
 }
 .Geoportale .square-button .glyphicon {
   margin: auto;
-  font-size: 26px;
+  font-size: 24px;
 }
 .Geoportale .square-button .ms-loader {
-  height: 26px;
-  width: 26px;
+  height: 24px;
+  width: 24px;
   margin: auto;
 }
 .Geoportale .square-button .ms-loader > div {
   margin: auto;
   text-indent: -9999em;
-  border-top: 2.6px solid rgba(255, 255, 255, 0.2);
-  border-right: 2.6px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 2.6px solid rgba(255, 255, 255, 0.2);
-  border-left: 2.6px solid #ffffff;
+  border-top: 2.4px solid rgba(255, 255, 255, 0.2);
+  border-right: 2.4px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 2.4px solid rgba(255, 255, 255, 0.2);
+  border-left: 2.4px solid #ffffff;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
   -webkit-animation: mapstore-circle-load8 1.1s infinite linear;
   animation: mapstore-circle-load8 1.1s infinite linear;
   border-radius: 50%;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
 }
 .Geoportale .square-button .ms-loader > div .mapstore-circle-loader:after {
   border-radius: 50%;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
 }
 .Geoportale .btn-group-vertical > .square-button {
-  width: 52px;
+  width: 40px;
 }
 .Geoportale .square-button-md.input-group-addon {
   display: flex;
 }
 .Geoportale .square-button-md,
 .Geoportale .btn-group-vertical .square-button-md {
-  height: 32px;
-  width: 32px;
+  height: 29px;
+  width: 29px;
   padding: 0;
   outline: 0;
 }
 .Geoportale .square-button-md .glyphicon {
   margin: auto;
-  font-size: 16px;
+  font-size: 15px;
 }
 .Geoportale .square-button-md .ms-loader {
-  height: 16px;
-  width: 16px;
+  height: 15px;
+  width: 15px;
   margin: auto;
 }
 .Geoportale .square-button-md .ms-loader > div {
   margin: auto;
   text-indent: -9999em;
-  border-top: 1.6px solid rgba(255, 255, 255, 0.2);
-  border-right: 1.6px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1.6px solid rgba(255, 255, 255, 0.2);
-  border-left: 1.6px solid #ffffff;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-right: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-left: 1.5px solid #ffffff;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
   -webkit-animation: mapstore-circle-load8 1.1s infinite linear;
   animation: mapstore-circle-load8 1.1s infinite linear;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 .Geoportale .square-button-md .ms-loader > div .mapstore-circle-loader:after {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 .Geoportale .square-button-sm,
 .Geoportale .btn-group-vertical .square-button-sm {
-  height: 20px;
-  width: 20px;
+  height: 17px;
+  width: 17px;
   padding: 0;
   outline: 0 ;
 }
 .Geoportale .square-button-sm .glyphicon {
   margin: auto;
-  font-size: 10px;
+  font-size: 9px;
 }
 .Geoportale .square-button.disabled,
 .Geoportale .square-button-md.disabled,
@@ -17186,8 +17186,8 @@ Ported to CodeMirror by Peter Kroon
   padding: 0;
 }
 .Geoportale .mapstore-chart-advance-options .ms2-border-layout-body .mapstore-switch-panel {
-  margin-bottom: 20px;
-  padding: 0 10px;
+  margin-bottom: 17px;
+  padding: 0 8.5px;
   border: none;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
@@ -17461,11 +17461,11 @@ Ported to CodeMirror by Peter Kroon
   display: flex;
 }
 .Geoportale .ms-annotations-panel .ms2-border-layout-content .msSideGrid .mapstore-side-preview > span {
-  font-size: 52px;
+  font-size: 48px;
   margin: auto;
 }
 .Geoportale .ms-annotations-panel .ms2-border-layout-content .msSideGrid .mapstore-side-card-desc {
-  height: 52px;
+  height: 40px;
   overflow: hidden;
 }
 .Geoportale .ms-annotations-panel .ms2-border-layout-content .ms-preview {
@@ -17515,8 +17515,8 @@ Ported to CodeMirror by Peter Kroon
   min-height: 180px;
 }
 .Geoportale .ms-thumb-geom {
-  width: 52px;
-  height: 52px;
+  width: 40px;
+  height: 40px;
 }
 .Geoportale .ms-thumb-geom svg {
   margin: auto;
@@ -17635,14 +17635,14 @@ Ported to CodeMirror by Peter Kroon
   padding: 0 15px;
 }
 .Geoportale .mapstore-permission-group .row .ms-col-grab {
-  width: 13px;
+  width: 12px;
   padding: 0;
   overflow: hidden;
   display: flex;
 }
 .Geoportale .mapstore-permission-group .row .ms-col-grab span {
-  width: 6.5px;
-  height: 13px;
+  width: 6px;
+  height: 12px;
   margin: auto;
 }
 .Geoportale .mapstore-permission-group .row .ms-col {
@@ -17675,10 +17675,10 @@ Ported to CodeMirror by Peter Kroon
   margin: 0;
 }
 .Geoportale .modal-properties-container .col-xs-12 {
-  margin-top: 9px;
+  margin-top: 3px;
 }
 .Geoportale .modal-properties-container .col-xs-12 .form-group {
-  height: 52px;
+  height: 40px;
   margin-left: -15px;
   margin-right: -15px;
   margin-left: 0;
@@ -17691,10 +17691,10 @@ Ported to CodeMirror by Peter Kroon
   font-weight: normal;
   line-height: 34px;
   margin: 0;
-  margin-top: 9px;
+  margin-top: 3px;
 }
 .Geoportale .modal-properties-container .col-xs-12 .form-group input {
-  margin-top: 9px;
+  margin-top: 3px;
   float: left;
   width: 50%;
 }
@@ -17729,7 +17729,7 @@ Ported to CodeMirror by Peter Kroon
 }
 .Geoportale .modal-properties-container .ms-section {
   overflow: hidden;
-  height: 52px;
+  height: 40px;
   border-bottom: 1px solid transparent;
   box-shadow: none;
   display: flex;
@@ -17812,7 +17812,7 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .modal-properties-container .ms-permissions-container .ms-permission-row {
   width: 100%;
   /*border-left: 2px solid contrast(@ms2-color-background);*/
-  height: 52px;
+  height: 40px;
 }
 .Geoportale .modal-properties-container .ms-permissions-container .ms-permission-row > * {
   float: left;
@@ -17822,9 +17822,9 @@ Ported to CodeMirror by Peter Kroon
   margin-right: 20px;
 }
 .Geoportale .modal-properties-container .ms-permissions-container .ms-permission-row .Select {
-  width: calc(50% - 32px - 5px);
+  width: calc(50% - 29px - 5px);
   margin-right: 5px;
-  margin-top: 9px;
+  margin-top: 3px;
 }
 .Geoportale .modal-properties-container .ms-permissions-container .ms-permission-row .Select .Select-control {
   border-radius: 0;
@@ -17838,18 +17838,18 @@ Ported to CodeMirror by Peter Kroon
 }
 .Geoportale .modal-properties-container .ms-permissions-container .ms-permission-row button {
   float: right;
-  margin-top: 10px;
+  margin-top: 5.5px;
 }
 .Geoportale .modal-properties-container .ms-permissions-container .ms-permission-row .ms-permission-title {
   width: calc(50% - 20px);
-  height: 52px;
-  line-height: 52px;
+  height: 40px;
+  line-height: 40px;
   margin-right: 20px;
   font-style: italic;
 }
 .Geoportale .modal-properties-container .ms-permissions-container .ms-row-head {
   border-left: none;
-  margin-bottom: 13px;
+  margin-bottom: 10px;
   margin-top: 10px;
   /*border-bottom: 1px solid @ms2-color-shade-lighter;*/
 }
@@ -17857,15 +17857,15 @@ Ported to CodeMirror by Peter Kroon
   margin: 0;
 }
 .Geoportale .modal-properties-container .mapstore-block-width .m-label {
-  margin-top: 10px;
-  height: 32px;
-  line-height: 32px;
+  margin-top: 5.5px;
+  height: 29px;
+  line-height: 29px;
 }
 .Geoportale .modal-properties-container .mapstore-block-width .btn-group {
-  margin-top: 10px;
+  margin-top: 5.5px;
 }
 .Geoportale .modal-properties-container .mapstore-block-width .ms-details-sheet {
-  height: 52px;
+  height: 40px;
   padding: 10px 0;
   overflow: hidden;
   /*.shadow;*/
@@ -17879,8 +17879,8 @@ Ported to CodeMirror by Peter Kroon
   margin-top: 0;
 }
 .Geoportale .modal-properties-container .mapstore-block-width .ms-details-sheet strong {
-  height: 32px;
-  line-height: 32px;
+  height: 29px;
+  line-height: 29px;
   font-weight: normal;
 }
 .Geoportale .modal-properties-container .mapstore-block-width .ms-details-sheet img {
@@ -17891,11 +17891,11 @@ Ported to CodeMirror by Peter Kroon
   margin: 4px 0;
   padding-left: 4px;
   padding-right: 4px;
-  height: 182px;
+  height: 140px;
   overflow: visible;
 }
 .Geoportale .ms-grid-container .ms-map-card-col .gridcard {
-  height: 182px;
+  height: 140px;
   transition: all 0.3s;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
@@ -17950,13 +17950,13 @@ Ported to CodeMirror by Peter Kroon
   -webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.12), inset 0 4px 8px rgba(0, 0, 0, 0.24);
   -moz-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.12), inset 0 4px 8px rgba(0, 0, 0, 0.24);
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.12), inset 0 4px 8px rgba(0, 0, 0, 0.24);
-  height: 208px;
+  height: 160px;
   overflow: hidden;
   white-space: nowrap;
   overflow-x: auto;
 }
 .Geoportale .ms-grid-container.ms-grid-horizontal .ms-grid .ms-map-card-col {
-  width: 208px;
+  width: 160px;
   float: none;
   display: inline-block;
   overflow: hidden;
@@ -18050,8 +18050,8 @@ Ported to CodeMirror by Peter Kroon
   height: unset;
 }
 .Geoportale .ms-resizable-modal > .modal-content > .modal-header {
-  height: 52px;
-  padding: 17.5px;
+  height: 40px;
+  padding: 11.5px;
   border: none;
 }
 .Geoportale .ms-resizable-modal > .modal-content > .modal-header .modal-title {
@@ -18123,7 +18123,7 @@ Ported to CodeMirror by Peter Kroon
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
   border: transparent;
-  min-height: 52px;
+  min-height: 40px;
 }
 .Geoportale .ms-resizable-modal > .modal-content > .modal-body .ms-editor .quill .ql-container {
   flex: 1;
@@ -18132,13 +18132,13 @@ Ported to CodeMirror by Peter Kroon
   border: transparent;
 }
 .Geoportale .ms-resizable-modal > .modal-content > .modal-footer {
-  min-height: 52px;
+  min-height: 40px;
   border: none;
   padding: 0;
   z-index: 10;
 }
 .Geoportale .ms-resizable-modal > .modal-content > .modal-footer .btn-group {
-  margin: 9px;
+  margin: 3px;
 }
 @media (min-width: 505px) and (max-width: 768px) {
   .Geoportale .ms-resizable-modal > .modal-content {
@@ -18178,8 +18178,8 @@ Ported to CodeMirror by Peter Kroon
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
-  min-height: 52px;
-  padding: 14px;
+  min-height: 40px;
+  padding: 8px;
 }
 .Geoportale .ms-modal-quill-container .quill .ql-container {
   flex: 1;
@@ -18968,7 +18968,7 @@ Ported to CodeMirror by Peter Kroon
   padding-right: 8px;
   border-right: 1px solid #dddddd;
   background-color: #ffffff;
-  min-height: 32px;
+  min-height: 29px;
   display: flex;
   align-items: center;
 }
@@ -19634,7 +19634,7 @@ Ported to CodeMirror by Peter Kroon
   display: none;
 }
 .Geoportale .ms-toc .mapstore-toc-head .btn-group {
-  min-height: 32px;
+  min-height: 29px;
 }
 .Geoportale .ms-toc {
   position: relative;
@@ -19691,8 +19691,8 @@ Ported to CodeMirror by Peter Kroon
 }
 .Geoportale .ms-toc .mapstore-side-card .mapstore-side-preview {
   width: auto;
-  height: 32px;
-  max-height: 32px;
+  height: 29px;
+  max-height: 29px;
   padding: 0;
   display: flex;
   align-items: center;
@@ -19846,15 +19846,15 @@ Ported to CodeMirror by Peter Kroon
   box-shadow: none;
 }
 .Geoportale .ms-toc .toc-group-children {
-  padding-left: 32px;
+  padding-left: 29px;
   margin-left: 0;
 }
 .Geoportale .ms-toc .ms-hide {
   opacity: 0.5;
 }
 .Geoportale .ms-toc .ms-loader {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 .Geoportale .ms-toc .toc-toolbar-btn-transition-enter {
   opacity: 0 !important;
@@ -19907,8 +19907,6 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale #container .page-maps .ms-home-description .container {
   background-color: transparent;
 }
-/* mapstore2 variables */
-/* override bootstrap variables */
 .Geoportale .ms-toc .ms-toc-layer .ms-head {
   border-top: 4px solid #FED403;
 }
@@ -19916,13 +19914,17 @@ Ported to CodeMirror by Peter Kroon
   display: block;
   width: 100%;
   font-size: 12px;
+  border: 1px solid #dddddd;
+  border-right: 2px solid #FED403;
+  border-left: 2px solid #FED403;
+  margin: 0;
 }
 .Geoportale .ms-toc .nav-justified > li > a {
   padding: 4px;
-  border-top: 2px solid #FED403;
 }
-.Geoportale .ms-toc .nav-justified > li.ms-group-basi_cartografiche > a {
-  border-color: #e2001a;
+.Geoportale .ms-toc .nav-justified > li.ms-group-basi_cartografiche {
+  border-right-color: #e2001a;
+  border-left-color: #e2001a;
 }
 .Geoportale .ms-toc .nav-justified > li.active {
   color: #ffffff;
@@ -19931,9 +19933,17 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .ms-toc .nav-justified > li.active > a {
   color: #ffffff;
 }
+.Geoportale .ms-toc .nav-justified > li + li {
+  border-top: none;
+}
 .Geoportale .ms-toc .nav > li > a:hover,
 .Geoportale .ms-toc .nav > li > a:focus {
   color: #333333;
+}
+.Geoportale .ms-toc .nav > li.active > a:hover,
+.Geoportale .ms-toc .nav > li.active > a:focus {
+  color: #ffffff;
+  background-color: #343a40;
 }
 .Geoportale .ms-toc .ms-header-node-title {
   display: flex;
@@ -19959,4 +19969,27 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .print-submit .sk-circle-wrapper .sk-circle:before {
   background-color: #ffffff !important;
 }
+.Geoportale .square-button {
+  padding: 0;
+}
+.Geoportale .MapSearchBar .input-group .searchInput {
+  min-height: 40px;
+}
+.Geoportale div#mapstore-globalspinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Geoportale div#mapstore-globalspinner .sk-circle-wrapper {
+  margin: 0 !important;
+}
+.Geoportale #mapstore-navbar-container .dropdown-menu .dropdown-header,
+.Geoportale #mapstore-navbar-container .dropdown-menu > li > a {
+  padding: 4px 8px;
+}
+.Geoportale .mapstore-side-card .mapstore-side-card-info {
+  padding: 2px 16px;
+}
+/* mapstore2 variables */
+/* override bootstrap variables */
 

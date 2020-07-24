@@ -179,11 +179,17 @@ export const strtSelectCatalogEntrySerapide = (action$, store) =>
                             loadingDataSerapide(false)
                         );
                     })
-                    .catch(() => {
+                    .catch(({ data }) => {
+                        const errorMessage = data?.err;
                         return Observable.of(
                             errorNotification({
                                 title: 'serapide.noPianoAvailableTitle',
-                                message: 'serapide.noPianoAvailable'
+                                message: errorMessage
+                                    ? 'serapide.genericError'
+                                    : 'serapide.noPianoAvailable',
+                                values: {
+                                    errorMessage
+                                }
                             }),
                             loadingDataSerapide(false)
                         );

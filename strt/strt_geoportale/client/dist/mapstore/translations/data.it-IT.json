@@ -13,8 +13,9 @@
             "resultsError": "Non è possibile connettersi al servizio di ricerca",
             "selectSerapideLayers": "Cambia piano",
             "serapideCatalogTitle": "Serapide catalog",
-            "noPianoAvailableTitle": "Errore di connessione",
-            "noPianoAvailable": "Non è possibile recuperare il piano richiesto",
+            "noPianoAvailableTitle": "Errore",
+            "noPianoAvailable": "non è possibile recuperare il piano richiesto",
+            "genericError": "{errorMessage} ",
             "pianoNoLayer": "Allegati non ancora pubblicati per questo gruppo"
         },
         "home": {

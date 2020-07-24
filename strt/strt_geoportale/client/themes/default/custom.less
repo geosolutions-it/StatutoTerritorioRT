@@ -35,3 +35,110 @@
         background-color: transparent;
     }
 }
+
+// toc border and menu
+
+.ms-toc {
+    .ms-toc-layer .ms-head {
+        border-top: 4px solid #FED403;
+    }
+    .nav-justified > li {
+        display: block;
+        width: 100%;
+        font-size: @font-size-small;
+        border: 1px solid @ms2-color-shade-lighter;
+        border-right: 2px solid #FED403;
+        border-left: 2px solid #FED403;
+        margin: 0;
+        & > a {
+            padding: 4px;
+        }
+        &.ms-group-basi_cartografiche {
+            border-right-color: #e2001a;
+            border-left-color: #e2001a;
+        }
+        &.active {
+            color: @ms2-color-text-primary;
+            background-color:  @ms2-color-primary;
+            & > a {
+                color: @ms2-color-text-primary;
+            }
+        }
+        + li {
+            border-top: none;
+        }
+    }
+    .nav > li > a:hover,
+    .nav > li > a:focus {
+        color: @ms2-color-text;
+    }
+    .nav > li.active > a:hover,
+    .nav > li.active > a:focus {
+        color: @ms2-color-text-primary;
+        background-color:  @ms2-color-primary;
+    }
+    .ms-header-node-title {
+        display: flex;
+        align-items: center;
+        & > div:first-child {
+            flex: 1;
+        }
+        a {
+            font-size: @font-size-small;
+            text-decoration: underline;
+            cursor: pointer;
+            :hover {
+                color: @ms2-color-info;
+            }
+        }
+    }
+
+    .ms-group-basi_cartografiche .ms-toc-layer .ms-head {
+        border-color: #e2001a;
+    }
+}
+
+// print loading
+
+.print-submit {
+    .sk-circle-wrapper {
+        display: inline-block;
+        .sk-circle:before {
+            background-color: #ffffff !important;
+        }
+    }
+}
+
+// buttons
+
+.square-button {
+    padding: 0;
+}
+
+// search
+
+.MapSearchBar .input-group .searchInput {
+    min-height: @square-btn-size;
+}
+
+
+// global spinner
+
+div#mapstore-globalspinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .sk-circle-wrapper {
+        margin: 0 !important;
+    }
+}
+
+// menu
+#mapstore-navbar-container .dropdown-menu .dropdown-header,
+#mapstore-navbar-container .dropdown-menu > li > a {
+    padding: 4px 8px;
+}
+
+.mapstore-side-card .mapstore-side-card-info {
+    padding: 2px 16px;
+}

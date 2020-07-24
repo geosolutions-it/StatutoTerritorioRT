@@ -28,7 +28,7 @@ function TOC({
         {
             id: 'piano',
             label: 'Piano',
-            include: ['piano']
+            include: ['piano', 'Default']
         },
         {
             id: 'risorse_rt',
@@ -89,7 +89,7 @@ function TOC({
                 groupNodeComponent={(groupNodeProps) =>
                     <GroupNode
                         { ...groupNodeProps }
-                        headerButtons={selected.id === 'piano' && buttons || undefined}
+                        getHeaderButtons={(node) => node.id === 'piano' && buttons || undefined}
                         filterHeaderNode={node => {
                             return selected?.include.indexOf(node.id) !== -1;
                         }}

@@ -47,14 +47,15 @@ class HeaderNode extends Component {
         currentLocale: PropTypes.string,
         setDndState: PropTypes.func,
         filterHeaderNode: PropTypes.func,
-        headerButtons: PropTypes.array
+        getHeaderButtons: PropTypes.func
     };
 
     static defaultProps = {
         node: {},
         level: 1,
         currentLocale: 'en-US',
-        filterHeaderNode: () => true
+        filterHeaderNode: () => true,
+        getHeaderButtons: () => null
     };
 
     state = {
@@ -72,12 +73,14 @@ class HeaderNode extends Component {
             setDndState,
             children,
             filterHeaderNode,
-            headerButtons
+            getHeaderButtons
         } = this.props;
 
         if (!filterHeaderNode(node)) {
             return null;
         }
+
+        const headerButtons = getHeaderButtons(node);
 
         const { filterText } = this.state;
 
