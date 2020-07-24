@@ -19856,6 +19856,20 @@ Ported to CodeMirror by Peter Kroon
   width: 16px;
   height: 16px;
 }
+.Geoportale .ms-toc .toc-toolbar-btn-transition-enter {
+  opacity: 0 !important;
+  transition: all 0.3s !important;
+}
+.Geoportale .ms-toc .toc-toolbar-btn-transition-enter.toc-toolbar-btn-transition-enter-active {
+  opacity: 1 !important;
+}
+.Geoportale .ms-toc .toc-toolbar-btn-transition-leave {
+  transition: all 0.3s !important;
+  opacity: 1 !important;
+}
+.Geoportale .ms-toc .toc-toolbar-btn-transition-leave.toc-toolbar-btn-transition-leave-active {
+  opacity: 0 !important;
+}
 .Geoportale .ms-header-node {
   padding-bottom: 8px;
 }
