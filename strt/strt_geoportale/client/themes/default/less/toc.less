@@ -278,6 +278,20 @@
         width: @icon-size-md;
         height: @icon-size-md;
     }
+    .toc-toolbar-btn-transition-enter {
+        opacity: 0 !important;
+        transition: all 0.3s !important;
+        &.toc-toolbar-btn-transition-enter-active {
+            opacity: 1 !important;
+        }
+    }
+    .toc-toolbar-btn-transition-leave {
+        transition: all 0.3s !important;
+        opacity: 1 !important;
+        &.toc-toolbar-btn-transition-leave-active {
+            opacity: 0 !important;
+        }
+    }
 }
 
 .ms-header-node {
