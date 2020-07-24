@@ -46,38 +46,5 @@
                 <span>{% trans 'contatti'|upper %}</span>
             </a>
         </li>
-        {% if request.user.is_authenticated %}
-        <li class="nav-item">
-            <a class="nav-link text-{{ text_color }} pr-0" href="/serapide">
-                <span>{% trans 'serapide'|upper %}</span>
-            </a>
-        </li>
-        <!-- User menu -->
-        <li class="usermenu text-white dropdown nav-item order-last">
-            <span aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="link-icon nav-link">
-            <a class="utenti align-self-center dropdown-toggle">
-                <i class="material-icons align-bottom text-serapide m-0 icon-34">account_circle</i>
-            </a>
-            </span>
-            <div role="menu" aria-hidden="true"
-                 class="dropdown-menu dropdown-menu-right">
-                <span class="role text-serapide">{% trans 'ruolo'|upper %}:</span>
-                {% for m in request.user.memberships %}
-                    {% if m.organization.code == request.session.organization %}
-                    <span class="d-block role role-item text-serapide">{{ m.description|default_if_none:m.type }}</span>
-                    {% endif %}
-                {% endfor %}
-                <a class="dropdown-item" href="{% url 'users_profile_detail' %}">
-                    {% trans 'profilo'|capfirst %}
-                </a>
-                <a class="dropdown-item" href="">
-                    {% trans 'impostazioni'|capfirst %}
-                </a>
-                <a class="dropdown-item" href="{% url 'logout' %}">
-                    {% trans 'logout'|capfirst %}
-                </a>
-            </div>
-        </li><!-- end User menu -->
-        {% endif %}
     </ul>
 </div><!-- end NAVBAR COLLPSABLE CONTENT -->
