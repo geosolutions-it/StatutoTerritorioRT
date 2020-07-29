@@ -28,7 +28,7 @@ const getResource = (el, tipo, icon = "picture_as_pdf") => el && (<Resource
                                     resource={el}/>)
 
 // Due sezioni Elaborati testuali ed elaborati Cartografici
-export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMutation, upload = true, fontSize, iconSize, vertical = false, useLabel = false}) => {
+export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMutation, upload = true, fontSize, iconSize, vertical = false, useLabel = false, codicePiano}) => {
    
     const {testuali = {}} = Elaborati[tipoPiano] || {};
     const {cartografici = {}} = Elaborati[tipoPiano] || {};
@@ -57,6 +57,9 @@ export default ({uuid, tipoPiano ="operativo", resources, mutation, resourceMuta
             ) }
         </div>
         <ActionSubParagraphTitle className="size-13 my-3">Elaborati Cartografici</ActionSubParagraphTitle>
+        {codicePiano && <a className="block text-blue size-13 pb-3 pointer" href={`/geoportale/#/viewer/map?s_uid=${codicePiano}`}>Visualizza su Mappa</a>}  
+        
+        
         <div className="container border" style={{maxHeight: 200, minHeight: 80, overflowY: "scroll"}}>
             {map(cartografici, ((value, tipo) => ({...value, tipo}))).sort(order).map(({label, tooltip, tipo} ) => {
                 const el = getElaborato(tipo, resources)

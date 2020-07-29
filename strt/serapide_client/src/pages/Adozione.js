@@ -43,7 +43,8 @@ const UI = enhancers(({
     vasAdozione: { node: { risorse : {edges: risorseVasAdozione = []} = {}} = {}} = {},
     vas: { node: { risorse : {edges: risorseVas = []} = {}} = {}} = {},
     piano: {
-        soggettiOperanti = []
+        soggettiOperanti = [],
+        codice
     } = {}
     , toggleSection, section} = {}) => {
     
@@ -77,7 +78,7 @@ const UI = enhancers(({
                 </React.Fragment>): (
                     <div className="col-12 py-2">DELIBERA ADOZIONE NON CARICATA NEL SISTEMA</div>)}
                 <div className="col-12 pt-4">
-                    <Elaborati upload={false} risorseAdozione={risorseAdozione} risorseControdeduzioni={risorseControdeduzioni} risorsePostCP={risorsePostCP}></Elaborati>
+                    <Elaborati codicePiano={codice} upload={false} risorseAdozione={risorseAdozione} risorseControdeduzioni={risorseControdeduzioni} risorsePostCP={risorsePostCP}></Elaborati>
                 </div>
                 <div className="border-top w-100 my-5"></div>  
                 <Si useIcon soggettiOperanti={soggettiOperanti}/>

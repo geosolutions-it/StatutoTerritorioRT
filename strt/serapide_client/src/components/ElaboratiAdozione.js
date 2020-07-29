@@ -20,7 +20,7 @@ import {withControllableState} from 'enhancers'
 const enhancers = withControllableState('section', 'toggleSection', 'adozione')
 
 
-export default enhancers( ({risorseAdozione=[], risorseControdeduzioni=[], risorsePostCP=[], section, toggleSection}) => {
+export default enhancers( ({risorseAdozione=[], risorseControdeduzioni=[], risorsePostCP=[], section, toggleSection, ...props}) => {
     return (
         <React.Fragment>
         <Nav tabs>
@@ -48,13 +48,13 @@ export default enhancers( ({risorseAdozione=[], risorseControdeduzioni=[], risor
             </Nav>
             <TabContent activeTab={section}>
                 <TabPane tabId="adozione">
-                    {risorseAdozione.length > 0 ? <Elaborati upload={false} resources={risorseAdozione}></Elaborati> : (<div className="mt-2 py-2">Nessun elaborato presente</div>) }
+                    {risorseAdozione.length > 0 ? <Elaborati upload={false} resources={risorseAdozione} {...props}></Elaborati> : (<div className="mt-2 py-2">Nessun elaborato presente</div>) }
                 </TabPane>
                 <TabPane tabId="controdedotto">
-                {risorseControdeduzioni.length>0 ? <Elaborati upload={false} resources={risorseControdeduzioni}></Elaborati>  : (<div className="mt-2 py-2">Nessun elaborato presente</div>) }
+                {risorseControdeduzioni.length>0 ? <Elaborati upload={false} resources={risorseControdeduzioni} {...props}></Elaborati>  : (<div className="mt-2 py-2">Nessun elaborato presente</div>) }
                 </TabPane>
                 <TabPane tabId="revisionePostCp">
-                    {risorsePostCP.length > 0 ? <Elaborati upload={false} resources={risorsePostCP}></Elaborati> : (<div className="mt-2 py-2">Nessun elaborato presente</div>) }
+                    {risorsePostCP.length > 0 ? <Elaborati upload={false} resources={risorsePostCP} {...props}></Elaborati> : (<div className="mt-2 py-2">Nessun elaborato presente</div>) }
                 </TabPane>
             </TabContent>
             </React.Fragment>

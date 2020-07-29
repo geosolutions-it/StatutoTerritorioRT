@@ -30,7 +30,8 @@ const UI = ({
         richiestaConferenzaPaesaggistica
         } = {}, 
     piano: {
-        soggettiOperanti = []
+        soggettiOperanti = [],
+        codice
     } = {}
     } = {}) => {
 
@@ -48,7 +49,7 @@ const UI = ({
                 </div>
                 <div className="col-12 mt-3 py-2">ELABORATI PIANO</div>
                 <div className="col-12 pt-3">
-                    <Elaborati upload={false} resources={risorseApprovazione}></Elaborati>
+                    <Elaborati upload={false} resources={risorseApprovazione} codicePiano={codice}></Elaborati>
                 </div>
                 <div className="border-top w-100 my-5"></div>  
                 <div className="col-12 pt-3">DESTINATARI</div>

@@ -59,7 +59,8 @@ class Piano extends React.PureComponent {
                             <div className="flex-grow-1 pr-4">
                                 <h4 className="text-uppercase h-pre mb-0">{getEnteLabel(piano.ente)}</h4>  
                                 <div className="text-capitalize h-title">{`${getPianoLabel(piano.tipo)} ${piano.codice}`}</div>  
-                                <div className="h-sub">{piano.descrizione}</div>  
+                                <div className="h-sub">{piano.descrizione}</div>
+                                <a className="text-blue pinter" href={`/geoportale/#/viewer/map?s_uid=${piano.codice}`}>Visualizza Mappa del Piano</a>  
                             </div>
                             <StatoProgress className="stato-progress-xxl" stato={piano.fase} legend></StatoProgress>
                         </div>

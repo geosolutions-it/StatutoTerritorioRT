@@ -8741,10 +8741,12 @@
     cursor: default !important; }
   .strt .serapide {
     position: relative;
-    z-index: 0;
+    z-index: auto;
     width: 100%; }
     .strt .serapide .pointer {
       cursor: pointer; }
+    .strt .serapide .top-navbar {
+      z-index: 1031; }
     .strt .serapide .tipo__option {
       font-size: 80%;
       border-bottom: 1px solid #dee2e6; }
