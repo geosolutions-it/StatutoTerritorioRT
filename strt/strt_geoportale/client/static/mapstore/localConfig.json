@@ -85,7 +85,7 @@
           "defaultTextAnnotation": "New"
         },
         "maptype": {
-            "mapType": "{context.mode === 'desktop' ? 'openlayers' : 'leaflet'}"
+            "mapType": "openlayers"
         },
         "catalog": {
           "default": {
@@ -285,7 +285,31 @@
               "container": "{context.ReactSwipe}"
           }
       }
-  }, "SerapideCatalog"],
+    },
+    {
+      "name": "Toolbar",
+      "id": "NavigationBar",
+      "cfg": {
+        "id": "navigationBar"
+      }
+    },
+    {
+      "name": "ZoomIn",
+      "override": {
+        "Toolbar": {
+          "alwaysVisible": true
+        }
+      }
+    },
+    {
+      "name": "ZoomOut",
+      "override": {
+        "Toolbar": {
+          "alwaysVisible": true
+        }
+      }
+    },
+    "SerapideCatalog"],
         "desktop": [ "Details",
           {
             "name": "Map",
@@ -366,7 +390,7 @@
                     "activateMetedataTool": false,
                     "layerOptions": {
                       "legendOptions": {
-                        "WMSLegendOptions": "forceLabels:on;fontSize:30",
+                        "WMSLegendOptions": "forceLabels:on;fontSize:12",
                         "scaleDependent": true
                       }
                     }
