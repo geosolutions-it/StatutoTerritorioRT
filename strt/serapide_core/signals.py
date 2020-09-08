@@ -14,7 +14,7 @@ import logging
 from django.dispatch import Signal
 
 from strt_users.enums import Qualifica
-from serapide_core.modello.enums import TipoMail
+from serapide_core.modello.enums import TipoMail, MAIL_SPECIFICA_PER_AZIONE
 from serapide_core.modello.models import Piano, Azione
 
 import serapide_core.api.auth.user as auth_user
@@ -170,7 +170,8 @@ def piano_phase_changed_notification(sender, **kwargs):
         mail_args['azione_tipo_name'] = azione.tipologia.name
         mail_args['azione_tipo_label'] = azione.tipologia.value
         mail_args['azione_scadenza'] = azione.scadenza
-        notification_type = 'azione_generica'  # il nome del template
+        # il nome del template
+        notification_type = MAIL_SPECIFICA_PER_AZIONE.get(azione.tipologia, TipoMail.azione_generica).name
 
     elif notification_type and isinstance(notification_type, TipoMail):
         destinatari = get_destinatari_da_tipomail(piano, notification_type)

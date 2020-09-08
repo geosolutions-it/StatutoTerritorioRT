@@ -58,6 +58,14 @@ class EmailBackend(BaseBackend):
                 "current_site_name": current_site.name
             })
 
+            # put in some Piano fields explicitly, since piano.codice etc seem not to work in template
+            piano = extra_context["piano"]
+            context.update({
+                "piano_codice":      piano.codice,
+                "piano_descrizione": piano.descrizione or '',
+                "piano_ente":        piano.ente.nome,
+            })
+
             context.update(extra_context)
 
             messages = self.get_formatted_messages((
@@ -70,13 +78,6 @@ class EmailBackend(BaseBackend):
                 "message":       messages["full.txt"]
             })
 
-            # put in some Piano fields explicitly, since piano.codice etc seem not to work in template
-            piano = context["piano"]
-            context.update({
-                "piano_codice":      piano.codice,
-                "piano_descrizione": piano.descrizione,
-            })
-
             subject = "".join(render_to_string("pinax/notifications/email_subject.txt", context).splitlines())
             body = render_to_string("pinax/notifications/email_body.txt", context)
             # if(recipient.)
@@ -85,8 +86,8 @@ class EmailBackend(BaseBackend):
 
             to = '"{name} {surname}"<{email}>'.format(
                 email=recipient.email,
-                name=recipient.first_name if recipient.first_name else '',
-                surname=recipient.last_name if recipient.last_name else '')
+                name=recipient.first_name or '',
+                surname=recipient.last_name or '')
 
             email = EmailMessage(
                 subject=subject,
@@ -98,8 +99,8 @@ class EmailBackend(BaseBackend):
 
             connection.send_messages([email, ])
             # The connection was already open so send_messages() doesn't close it.
-        except BaseException:
-            pass
+        except BaseException as e:
+            logger.warning('Error in sending mail notification', e)
         finally:
             # We need to manually close the connection.
             connection.close()

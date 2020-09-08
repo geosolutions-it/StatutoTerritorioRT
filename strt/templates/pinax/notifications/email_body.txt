@@ -2,9 +2,6 @@
 <body>
 {% url "pinax_notifications:notice_settings" as notices_url %}
 <p>
-{% blocktrans %}Nuova notifica da {{ current_site_name }}{% endblocktrans %}
-</p>
-<p>
 {{ message }}
 </p>
 </body>

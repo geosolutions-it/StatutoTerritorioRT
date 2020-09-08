@@ -40,26 +40,12 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
 
     NOTIFICATIONS = (
         # label, display, description
-        ("message_sent", _("Messaggio Ricevuto"), _("Messaggio Ricevuto"),),
+        # ("message_sent", _("Messaggio Ricevuto"), _("Messaggio Ricevuto"),),
         ("piano_phase_changed", _("Piano Aggiornato"), _("Piano Aggiornato"),),
-        ("contributi_tecnici", _("Contributi Tecnici"), _("Contributi Tecnici"),),
-        ("piano_verifica_vas_updated", _("Documento Preliminare VAS"), _("Documento Preliminare VAS"),),
-        ("conferenza_copianificazione", _("Conferenza di Copianificazione"), _("Conferenza di Copianificazione"),),
-        ("tutti_pareri_inviati", _("Pareri pronti per la verifica"), _("Pareri pronti per la verifica"),),
-        ("protocollo_genio_civile", _("Protocollo Genio Civile"), _("Protocollo Genio Civile"),),
-        ("richiesta_integrazioni", _("Richiesta Integrazioni"), _("Richiesta Integrazioni"),),
-        ("integrazioni_richieste", _("Integrazioni Richieste"), _("Integrazioni Richieste"),),
-        ("trasmissione_adozione", _("Trasmissione Adozione"), _("Trasmissione Adozione"),),
-        ("piano_controdedotto", _("Piano Controdedotto"), _("Piano Controdedotto"),),
-        ("esito_conferenza_paesaggistica", _("Esito Conferenza Paesaggistica"), _("Esito Conferenza Paesaggistica"),),
-        ("parere_motivato_ac", _("Parere Motivato AC"), _("Parere Motivato AC"),),
-        ("upload_elaborati_adozione_vas", _("Elaborati Adozione VAS"), _("Elaborati Adozione VAS"),),
-        ("rev_piano_post_cp", _("Revisione Piano post CP"), _("Revisione Piano post CP"),),
-        ("trasmissione_approvazione", _("Trasmissione Approvazione"), _("Trasmissione Approvazione"),),
-        ("attribuzione_conformita_pit", _("Attribuzione Conformità PIT"), _("Attribuzione Conformità PIT"),),
         ("pubblicazione_piano", _("Pubblicazione Piano"), _("Pubblicazione Piano"),),
 
         ("azione_generica", _("Nuova azione"), _("Nuova azione"),),
+        ("azione_creato_piano", "Nuovo piano creato", "Nuovo piano creato",),
     )
 
     name = 'serapide_core.modello'

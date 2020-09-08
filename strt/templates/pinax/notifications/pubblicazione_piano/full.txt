@@ -1,10 +1,22 @@
 {% load i18n %}
 {% autoescape off %}
-<p>Gentile <i>{{ recipient }}</i>,</p>
+{% if recipient.ufficio %}
+    <p>All'attenzione dell'Ufficio <strong>{{ recipient.ufficio.nome }}</strong>,
+       Ente <i><strong>{{ recipient.ufficio.ente.nome }}</strong></i>,</p>
+{% else %}
+    <p>Gentile <i>{{ recipient.first_name }} {{ recipient.last_name }}</i>,</p>
+{% endif %}
 
-<p>Con riferimento al piano <strong>{{ piano.tipologia }}</strong> Codice: <strong>{{ piano.codice }}</strong> - <i>"{{ piano.descrizione }}"</i></p>
 
-<p>Le notifichiamo che il piano è stato Pubblicato da parte dell'utente <strong>{{ user }}</strong>.</p>
+<p>Con riferimento al piano
+<ul>
+    <li>Tipo: <strong>{{ piano.tipologia }}</strong> </li>
+    <li><i>"{{ piano.descrizione }}"</i></li>
+    <li>Codice: <strong>{{ piano.codice }}</strong></li>
+    <li>Comune di {{ piano.ente.nome }}</li>
+</ul>
+si notifica che il piano è stato Pubblicato.</p>
+
 <p>
 Pubblicazione:
 <ul>
@@ -12,11 +24,17 @@ Pubblicazione:
 </ul>
 </p>
 <p>
-{% for t in tokens %}{% if t.user == recipient %}Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:<br/>
-<a href="{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ t.key }}">{{ t.key }}</a>
+
+{% if recipient.token %}
+<p>
+   Per accedere al portale e verificare le azioni e lo stato del piano, utilizzare il seguente link:<br/>
+   <a href="{{ default_http_protocol }}://{{ current_site }}/serapide/?token={{ recipient.token.key }}">{{ recipient.token.key }}</a>
 </p>
 <p>
-<strong>ATTENZIONE:</strong> Il token di accesso <strong>{{ t.key }}</strong> a lei assegnato, è personalizzato e ha validità fino a data: {{ t.expires }}.<br/>
-Conservare il token di accesso segreto e non condividere il link generato con alcuno.{% endif %}{% endfor %}
+<strong>ATTENZIONE:</strong> Il token di accesso <strong>{{ recipient.token.key }}</strong> a lei assegnato,
+è personalizzato e ha validità fino a data: {{ recipient.token.expires }}.<br/>
+Conservare il token di accesso segreto e non condividere il link generato con alcuno.
 </p>
+{% endif %}
+
 {% endautoescape %}

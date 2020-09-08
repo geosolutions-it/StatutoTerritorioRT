@@ -32,10 +32,6 @@ from serapide_core.api.piano_utils import (
 )
 from serapide_core.helpers import update_create_instance
 
-from serapide_core.signals import (
-    piano_phase_changed,
-)
-
 from serapide_core.modello.models import (
     Fase,
     Piano,

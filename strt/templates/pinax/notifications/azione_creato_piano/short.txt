@@ -1,0 +1,1 @@
+{% autoescape off %}{% load i18n %}{% blocktrans %}{{ azione_tipo_label }} - {{ piano_codice }} ({{ piano_ente }}){% endblocktrans %}{% endautoescape %}

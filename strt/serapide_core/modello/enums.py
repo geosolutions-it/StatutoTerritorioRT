@@ -381,26 +381,17 @@ class TipoExpire(Enum):
 
 
 class TipoMail(Enum):
-    # conferenza_copianificazione = ''
-    # contributi_tecnici = ''
-    # esito_conferenza_paesaggistica = ''
-    # integrazioni_richieste = ''
     # message_sent = ''
-    # parere_motivato_ac = ''
-    # piano_controdedotto = ''
-    piano_phase_changed = ''
-    # piano_verifica_vas_updated = ''
-    # protocollo_genio_civile = ''
-    pubblicazione_piano = ''
-    # rev_piano_post_cp = ''
-    # richiesta_integrazioni = ''
-    # trasmissione_adozione = ''
-    # trasmissione_approvazione = ''
-    # tutti_pareri_inviati = ''
-    # upload_elaborati_adozione_vas = ''
-    azione_generica = ''
-    trasmissione_dp_vas = ''
+    piano_phase_changed = 'piano_phase_changed'
+    pubblicazione_piano = 'pubblicazione_piano'
+    azione_generica = 'azione_generica'
+    azione_creato_piano = 'azione_creato_piano'
+    trasmissione_dp_vas = 'trasmissione_dp_vas'
 
+
+MAIL_SPECIFICA_PER_AZIONE = {
+    TipologiaAzione.creato_piano: TipoMail.azione_creato_piano,
+}
 
 class TipoReportAzione(SerapideEnum):
     INFO = 'info'
