@@ -409,7 +409,7 @@ class AzioneReport(models.Model):
     data = models.DateTimeField()
 
     class Meta:
-        db_table = "strt_azione_report"
+        db_table = "strt_core_azione_report"
 
     @classmethod
     def from_db(cls, db, field_names, values):
