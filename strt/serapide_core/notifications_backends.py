@@ -100,7 +100,8 @@ class EmailBackend(BaseBackend):
             connection.send_messages([email, ])
             # The connection was already open so send_messages() doesn't close it.
         except BaseException as e:
-            logger.warning('Error in sending mail notification', e)
+            logger.error('Error in sending mail notification for [{}] to [{}]'.format(notice_type, recipient),
+                         exc_info=e)
         finally:
             # We need to manually close the connection.
             connection.close()
