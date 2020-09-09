@@ -46,6 +46,7 @@ class SerapideCoreModelloAppConfig(NotificationsAppConfigBase):
 
         ("azione_generica", _("Nuova azione"), _("Nuova azione"),),
         ("azione_creato_piano", "Nuovo piano creato", "Nuovo piano creato",),
+        ("trasmissione_dp_vas", "Trasmissione documento preliminare", "Trasmissione documento preliminare",),
     )
 
     name = 'serapide_core.modello'

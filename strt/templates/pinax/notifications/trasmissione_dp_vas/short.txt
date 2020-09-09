@@ -1,0 +1,1 @@
+{% autoescape off %}{% load i18n %}{% blocktrans %}Trasmissione documento preliminare VAS - {{ piano_descrizione }} ({{ piano_ente }}){% endblocktrans %}{% endautoescape %}
