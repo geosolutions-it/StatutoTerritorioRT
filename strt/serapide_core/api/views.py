@@ -195,7 +195,7 @@ def geo_groups(request):
     ret = [{
         'id': tipo_azione.name,
         'title': label,
-    } for tipo_azione,label in MAPPING_AZIONI_VALIDAZIONECARTO_LABEL.items()]
+    } for tipo_azione,label in MAPPING_AZIONI_VALIDAZIONECARTO_LABEL.items()].reverse()
 
     return JsonResponse({'groups': ret}, status=200)
 
