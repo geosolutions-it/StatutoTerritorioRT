@@ -741,7 +741,7 @@ class PianoNode(DjangoObjectType):
     alerts_count = graphene.String()
     azioni = graphene.List(AzioneNode)
 
-    esiste_elaborato_cartografico_valido = graphene.Boolean()
+    esiste_elaborato_cartografico_ingerito = graphene.Boolean()
 
     def resolve_azioni(self, info, **args):
         return Azione.objects.filter(piano=self)
@@ -786,7 +786,7 @@ class PianoNode(DjangoObjectType):
     def resolve_fase(self, info, **args):
         return self.fase.name
 
-    def resolve_esiste_elaborato_cartografico_valido(self, info, **args):
+    def resolve_esiste_elaborato_cartografico_ingerito(self, info, **args):
         return ElaboratoCartografico.objects \
             .filter(lotto__piano=self) \
             .filter(ingerito=True) \

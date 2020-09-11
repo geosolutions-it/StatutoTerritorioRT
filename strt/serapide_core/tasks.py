@@ -118,6 +118,10 @@ def esegui_ingestione(lotto_id):
         ok = ingest(elaborato, az_ingestione, msgs)
         if not ok:
             result_azione = StatoAzione.FALLITA
+        else:
+            elaborato.ingerito = True
+            elaborato.save()
+
         log_msgs(msgs, "Ingestione {}".format(elaborato.nome))
 
     utils.chiudi_azione(az_ingestione, stato=result_azione)
