@@ -249,7 +249,7 @@ fragment Piano on PianoNode {
   }
   proceduraVas {uuid}
   proceduraAvvio {uuid}
-  esisteElaboratoCartograficoValido
+  esisteElaboratoCartograficoIngerito
 }
 ${RISORSE}
 ${USER}
