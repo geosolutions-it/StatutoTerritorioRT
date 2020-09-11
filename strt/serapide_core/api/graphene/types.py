@@ -86,6 +86,7 @@ from serapide_core.modello.models import (
     RisorseApprovazione,
     RisorsePubblicazione,
     LottoCartografico,
+    ElaboratoCartografico,
 )
 
 logger = logging.getLogger(__name__)
@@ -740,6 +741,8 @@ class PianoNode(DjangoObjectType):
     alerts_count = graphene.String()
     azioni = graphene.List(AzioneNode)
 
+    esiste_elaborato_cartografico_valido = graphene.Boolean()
+
     def resolve_azioni(self, info, **args):
         return Azione.objects.filter(piano=self)
 
@@ -782,6 +785,12 @@ class PianoNode(DjangoObjectType):
 
     def resolve_fase(self, info, **args):
         return self.fase.name
+
+    def resolve_esiste_elaborato_cartografico_valido(self, info, **args):
+        return ElaboratoCartografico.objects \
+            .filter(lotto__piano=self) \
+            .filter(ingerito=True) \
+            .exists()
 
     class Meta:
         model = Piano
