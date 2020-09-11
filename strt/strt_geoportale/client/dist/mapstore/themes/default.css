@@ -19880,6 +19880,10 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .ms-header-node > .toc-group-children {
   padding-left: 0;
 }
+.Geoportale .toc-layer-tooltip {
+  max-width: 225px;
+  word-break: break-word;
+}
 .Geoportale .ms-toc-tools {
   text-align: center;
 }

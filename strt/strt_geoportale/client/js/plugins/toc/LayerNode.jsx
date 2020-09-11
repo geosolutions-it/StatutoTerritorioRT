@@ -114,8 +114,8 @@ export class LayerNode extends Component {
 
         const node = replaceNodeOptions?.(nodeProp, 'layer') || nodeProp;
 
-        const { title, tooltipText } = getTitleAndTooltip({ node, currentLocale });
-
+        const { title, tooltipText: titleTooltipText } = getTitleAndTooltip({ node, currentLocale });
+        const tooltipText = node?.description || titleTooltipText;
         const isDummy = !!node?.dummy;
         const expanded = node.expanded;
 
@@ -172,7 +172,7 @@ export class LayerNode extends Component {
                         }]}
                     />}
                     className={`ms-toc-layer${selectedClassName}${errorClassName}${warningClassName}`}
-                    title={titleTooltip ? <span data-tip={tooltipText} >{titleComponent}</span> : titleComponent}
+                    title={titleTooltip ? <span data-tip={tooltipText} data-for={node.id} >{titleComponent}</span> : titleComponent}
                     tools={<Toolbar
                         btnDefaultProps={{
                             className: 'square-button-md'
@@ -236,7 +236,7 @@ export class LayerNode extends Component {
                         {isDraggable ? connectDragPreview(head) : head}
                     </Node>}
                 <Portal>
-                    <ReactTooltip place="top" type="dark" effect="solid" />
+                    <ReactTooltip className="toc-layer-tooltip" id={node.id} place="top" type="dark" effect="solid" multiline />
                 </Portal>
             </div>
         );
