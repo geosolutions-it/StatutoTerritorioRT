@@ -144,7 +144,14 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
                                     label="SOGGETTI ISTITUZIONALI"
                                     btn={(toggleOpen) => (
                                         <div className="row">
-                                            <Button fontSize="size-8"  iconSize="icon-13" classNameLabel="py-0" onClick={toggleOpen} className="rounded-pill" color="serapide" icon="add_circle" label="Seleziona soggetti istituzionali"/>
+                                            <Button fontSize="size-8"
+                                                    iconSize="icon-13"
+                                                    classNameLabel="py-0"
+                                                    onClick={toggleOpen}
+                                                    className="rounded-pill border-color-danger"
+                                                    color="serapide" icon="add_circle" label={
+                                                        si.length < 2 ? (<TextWithTooltip color="danger" dataTip="Genio Civile e Pianificazione Urbanistica soggetti mandatori" text="Seleziona soggetti istituzionali"/>) : "Seleziona soggetti istituzionali"
+                                                    }/>
                                         </div>
                                         )}
                                     >
@@ -204,7 +211,7 @@ const UI = rebuildTooltip({onUpdate: false, log: false, comp: "AvvioProc"})(({
 
 
                 <div className="align-self-center mt-7">
-                <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={obiettivi && quadro && garante && programma && si.length > 0  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
+                <SalvaInvia fontSize="size-8" onCompleted={back} variables={{codice: uuid}} mutation={AVVIA_PIANO} canCommit={obiettivi && quadro && garante && programma && si.length > 1  && dataScadenzaRisposta && garanteNominativo && garantePec}></SalvaInvia>
 
                 </div>
             </React.Fragment>)})

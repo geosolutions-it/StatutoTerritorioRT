@@ -23,7 +23,7 @@ export default ({tipologia, docInizialeVAS = {}, pareriVerificaVAS = {}, provved
         <div className="pl-2 pr-2">
             <div className="mt-4 mb-4">
                 
-                {tipologia !== VAS_TYPES.PROCEDURA_ORDINARIA && (
+                {tipologia !== VAS_TYPES.PROCEDURA_ORDINARIA && tipologia !== VAS_TYPES.NON_NECESSARIA && (
                 <React.Fragment>
                     <TextWithTooltip className="mb-2 text-uppercase" dataTip={docInizialeVAS.tooltip} text={docInizialeVAS.label}></TextWithTooltip>  
                     <Resource  isLocked className="border-0 mt-2" icon="attach_file" resource={docInizialeVAS}/>
