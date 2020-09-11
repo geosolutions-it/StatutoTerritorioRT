@@ -55,7 +55,7 @@ return (
                 <React.Fragment>
                     {/* <ThemeInjector themeClass={themeClass}/> */}
                     <Injector el="user-navbar-list">
-                        <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount} attore={utente.attore} canCreatePiano/>
+                        <NavBar messaggi={utente.unreadMessages} alertsCount={utente.alertsCount} attore={utente.attore} canCreatePiano={canCreatePiano}/>
                     </Injector>
                     <ReactTooltip></ReactTooltip>
                     <div className="serapide-content serapide-top-offset position-relative overflow-auto">
