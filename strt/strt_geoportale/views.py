@@ -14,6 +14,6 @@ from serapide_core.api.auth.user import (
 )
 from django.contrib.auth.decorators import user_passes_test
 
-@user_passes_test(has_profile)
+#@user_passes_test(has_profile)
 def geportale_home(request):
     return render(request, "geoportale/geoportale.html")
