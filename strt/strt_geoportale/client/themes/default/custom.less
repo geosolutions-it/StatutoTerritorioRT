@@ -18,21 +18,39 @@
     transform: ~"translate(0, 0)";
 }
 
+.fill {
+    background-color: #f8f9fa;
+}
+
 // homepage
 
 #page-maps {
-    padding-top: 0;
     .srtr-serapide-catalog-body > div {
         position: relative;
         max-width: 1400px;
     }
+    background-color: #f8f9fa;
+    max-width: 1720px;
+    margin: 0 auto;
+    padding-top: 70px;
 }
 #container .page-maps .ms-home-description {
     background-image: none;
-    background: @ms2-color-shade-lighter;
+    background-color: transparent;
     padding-top: 0;
     .container {
         background-color: transparent;
+    }
+    .container > .row > .text-center > p {
+        text-align: left;
+        padding-left: 40px;
+        border-bottom: 2px solid #ffc107;
+    }
+    h1 {
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        font-weight: 500;
+        font-family: "Helvetica Neue", Helvetica, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
 }
 
@@ -141,4 +159,9 @@ div#mapstore-globalspinner {
 
 .mapstore-side-card .mapstore-side-card-info {
     padding: 2px 16px;
+}
+
+.strt-homepage-catalog {
+    background-color: #ffffff;
+    width: ~"calc(100% - 30px)";
 }

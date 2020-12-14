@@ -12,6 +12,7 @@ import { createPlugin } from '@mapstore/utils/PluginsUtils';
 import { Grid } from 'react-bootstrap';
 import { push } from 'connected-react-router';
 
+import StaticCatalog from '@js/plugins/serapidecatalog/StaticCatalog';
 import Catalog from '@js/plugins/serapidecatalog/Catalog';
 
 import epics from '@js/epics/serapide';
@@ -28,9 +29,20 @@ function selectMapSerapideThunk(params) {
     };
 }
 
+const ConnectedStaticCatalog = connect(createSelector(
+    [
+        state => state?.serapide?.defaultMaps
+    ], (results) => ({
+        results
+    }),
+), {
+    onSelect: selectMapSerapideThunk
+})(StaticCatalog);
+
 function HomeCatalog(props) {
     return (
-        <Grid>
+        <Grid className="strt-homepage-catalog" fluid>
+            <ConnectedStaticCatalog />
             <Catalog { ...props }/>
         </Grid>
     );
@@ -42,14 +54,16 @@ const selector = createSelector([
     state => state?.serapide?.results,
     state => state?.serapide?.totalCount,
     state => state?.serapide?.page,
-    state => state?.serapide?.error
-], (selected, loading, results, totalCount, page, error) => ({
+    state => state?.serapide?.error,
+    state => state?.serapide?.isCatalogEmpty
+], (selected, loading, results, totalCount, page, error, isCatalogEmpty) => ({
     selected,
     loading,
     results,
     totalCount,
     page,
-    error
+    error,
+    isCatalogEmpty
 }));
 
 export default createPlugin('HomeCatalog', {
