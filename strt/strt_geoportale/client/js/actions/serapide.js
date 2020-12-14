@@ -12,6 +12,8 @@ export const UPDATE_CATALOG_RESULTS_SERAPIDE = 'UPDATE_CATALOG_RESULTS:SERAPIDE'
 export const ERROR_CATALOG_RESULTS_SERAPIDE = 'ERROR_CATALOG_RESULTS_SERAPIDE';
 export const LOADING_DATA_SERAPIDE = 'LOADING_DATA:SERAPIDE';
 export const SEARCH_SERAPIDE = 'SEARCH:SERAPIDE';
+export const SET_DEFAULT_MAPS = 'SET_DEFAULT_MAPS:SERAPIDE';
+export const SET_EMPTY_CATALOG = 'SET_EMPTY_CATALOG:SERAPIDE';
 
 export const enableCatalogSerapide = (enabled) => ({
     type: ENABLE_CATALOG_SERAPIDE,
@@ -38,7 +40,18 @@ export const loadingDataSerapide = (loading) => ({
     loading
 });
 
-export const searchSerapide = (params) => ({
+export const searchSerapide = (params, isFirstRequest) => ({
     type: SEARCH_SERAPIDE,
-    params
+    params,
+    isFirstRequest
+});
+
+export const setDefaultMaps = (defaultMaps) => ({
+    type: SET_DEFAULT_MAPS,
+    defaultMaps
+});
+
+export const setEmptyCatalog = (isCatalogEmpty) => ({
+    type: SET_EMPTY_CATALOG,
+    isCatalogEmpty
 });

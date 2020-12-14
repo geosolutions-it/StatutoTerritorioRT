@@ -12,51 +12,9 @@ import { Pagination, FormGroup, InputGroup, Glyphicon, FormControl as FormContro
 import Message from '@mapstore/components/I18N/Message';
 import Loader from '@mapstore/components/misc/Loader';
 import localizedProps from '@mapstore/components/misc/enhancers/localizedProps';
+import Icon from '@js/plugins/serapidecatalog/Icon';
 import { withResizeDetector } from 'react-resize-detector';
 const FormControl = localizedProps('placeholder')(FormControlRB);
-
-function Icon({
-    type,
-    color,
-    labels = {
-        operativo: 'PO',
-        strutturale: 'PS'
-    }
-}) {
-    return (
-        <svg
-            className="srtr-type-icon"
-            viewBox="0 0 64 64">
-            <rect
-                x="0"
-                y="0"
-                width="64"
-                height="64"
-                fill="#343a40"
-            />
-            <text
-                x="32"
-                y="32"
-                textAnchor="middle"
-                alignmentBaseline="middle"
-                fontSize="32"
-                fontWeight="bold"
-                fill={color}
-            >
-                {labels[type.toLowerCase()] || type.substring(0, 2)}
-            </text>
-        </svg>
-    );
-}
-
-Icon.propTypes = {
-    type: PropTypes.string,
-    color: PropTypes.string
-};
-
-Icon.defaultProps = {
-    color: '#FED403'
-};
 
 function ErrorResults() {
     return (
@@ -97,21 +55,22 @@ function SerapideCatalog({
     onSelect,
     onSearch,
     error,
-    width
+    width,
+    isCatalogEmpty
 }) {
 
     const [ q, setQ ] = useState('');
-    function handleSearch(newOptions) {
+    function handleSearch(newOptions, isFirstRequest) {
         onSearch({
             limit,
             page,
             q,
             ...newOptions
-        });
+        }, isFirstRequest);
     }
 
     useEffect(() => {
-        handleSearch();
+        handleSearch(undefined, true);
     }, []);
 
     const pages = totalCount !== undefined
@@ -129,7 +88,7 @@ function SerapideCatalog({
                 ? ' ms-lg'
                 : ' ms-xl';
 
-    return (
+    return isCatalogEmpty ? null : (
         <div className={`srtr-serapide-catalog${sizeClassName}`}>
             <div className="srtr-serapide-catalog-head">
                 <FormGroup>
@@ -228,7 +187,8 @@ SerapideCatalog.propTypes = {
     totalCount: PropTypes.number,
     selected: PropTypes.object,
     onSelect: PropTypes.func,
-    onSearch: PropTypes.func
+    onSearch: PropTypes.func,
+    isCatalogEmpty: PropTypes.boolean
 };
 
 SerapideCatalog.defaultProps = {
@@ -236,7 +196,8 @@ SerapideCatalog.defaultProps = {
     page: 1,
     limit: 12,
     onSelect: () => {},
-    onSearch: () => {}
+    onSearch: () => {},
+    isCatalogEmpty: false
 };
 
 const SerapideCatalogWithResizeDetector = withResizeDetector(SerapideCatalog);

@@ -18,6 +18,9 @@ export const setDefaultGroupsIds = (groupsIds) => {
 export const getDefaultGroupsIds = () => DEFAULT_GROUPS_IDS;
 
 export const getMapUrl = (params) => {
+    if (params.mapType === 'static') {
+        return `/viewer/${params.mapId || 'map'}?static=${params.id}`;
+    }
     return `/viewer/${params.mapId || 'map'}?${ID_PARAM}=${params.id}`;
 };
 

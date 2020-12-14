@@ -19896,8 +19896,14 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .viewer {
   transform: translate(0, 0);
 }
+.Geoportale .fill {
+  background-color: #f8f9fa;
+}
 .Geoportale #page-maps {
-  padding-top: 0;
+  background-color: #f8f9fa;
+  max-width: 1720px;
+  margin: 0 auto;
+  padding-top: 70px;
 }
 .Geoportale #page-maps .srtr-serapide-catalog-body > div {
   position: relative;
@@ -19905,11 +19911,22 @@ Ported to CodeMirror by Peter Kroon
 }
 .Geoportale #container .page-maps .ms-home-description {
   background-image: none;
-  background: #dddddd;
+  background-color: transparent;
   padding-top: 0;
 }
 .Geoportale #container .page-maps .ms-home-description .container {
   background-color: transparent;
+}
+.Geoportale #container .page-maps .ms-home-description .container > .row > .text-center > p {
+  text-align: left;
+  padding-left: 40px;
+  border-bottom: 2px solid #ffc107;
+}
+.Geoportale #container .page-maps .ms-home-description h1 {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: "Helvetica Neue", Helvetica, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 .Geoportale .ms-toc .ms-toc-layer .ms-head {
   border-top: 4px solid #FED403;
@@ -19993,6 +20010,10 @@ Ported to CodeMirror by Peter Kroon
 }
 .Geoportale .mapstore-side-card .mapstore-side-card-info {
   padding: 2px 16px;
+}
+.Geoportale .strt-homepage-catalog {
+  background-color: #ffffff;
+  width: calc(100% - 30px);
 }
 /* mapstore2 variables */
 /* override bootstrap variables */

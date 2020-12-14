@@ -1,0 +1,98 @@
+{
+    "results": [
+        {
+            "id": "1",
+            "mapId": "piani_operativi",
+            "mapType": "static",
+            "name": "Mappa regionale dei Piani Operativi",
+            "description": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?",
+            "type": "OPERATIVO",
+            "selectedGroup": "piani_operativi",
+            "tocGroups": [
+                {
+                    "id": "piani_operativi",
+                    "label": "Piani Operativi",
+                    "include": [
+                        "piani_operativi",
+                        "Default"
+                    ]
+                },
+                {
+                    "id": "piano_paesaggistico_regionale",
+                    "label": "Piano paesaggistico regionale",
+                    "include": [
+                        "piano_paesaggistico_regionale"
+                    ]
+                },
+                {
+                    "id": "risorse_rt",
+                    "label": "Risorse RT",
+                    "include": [
+                        "risorse_rt"
+                    ]
+                },
+                {
+                    "id": "invarianti",
+                    "label": "Invarianti",
+                    "include": [
+                        "invarianti"
+                    ]
+                },
+                {
+                    "id": "basi_cartografiche",
+                    "label": "Cartografia di base",
+                    "include": [
+                        "basi_cartografiche"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "mapId": "piani_strutturali",
+            "mapType": "static",
+            "name": "Mappa regionale dei Piani Strutturali",
+            "description": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?",
+            "type": "STRUTTURELE",
+            "selectedGroup": "piani_strutturali",
+            "tocGroups": [
+                {
+                    "id": "piani_strutturali",
+                    "label": "Piani Strutturali",
+                    "include": [
+                        "piani_strutturali",
+                        "Default"
+                    ]
+                },
+                {
+                    "id": "piano_paesaggistico_regionale",
+                    "label": "Piano paesaggistico regionale",
+                    "include": [
+                        "piano_paesaggistico_regionale"
+                    ]
+                },
+                {
+                    "id": "risorse_rt",
+                    "label": "Risorse RT",
+                    "include": [
+                        "risorse_rt"
+                    ]
+                },
+                {
+                    "id": "invarianti",
+                    "label": "Invarianti",
+                    "include": [
+                        "invarianti"
+                    ]
+                },
+                {
+                    "id": "basi_cartografiche",
+                    "label": "Cartografia di base",
+                    "include": [
+                        "basi_cartografiche"
+                    ]
+                }
+            ]
+        }
+    ]
+}

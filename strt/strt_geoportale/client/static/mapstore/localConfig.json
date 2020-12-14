@@ -5,7 +5,9 @@
         "useCORS": [
           "https://nominatim.openstreetmap.org",
           "http://dev.serapide.geo-solutions.it/geoserver",
-          "https://dev.serapide.geo-solutions.it/geoserver"
+          "https://dev.serapide.geo-solutions.it/geoserver",
+          "http://www502.regione.toscana.it",
+          "https://geoportale.lamma.rete.toscana.it"
         ]
     },
     "serapideAPI": {
@@ -22,6 +24,7 @@
     "ignoreMobileCss": false,
     "useAuthenticationRules": true,
     "loadAfterTheme": true,
+    "mapLayout": {"left": {"sm": 500, "md": 500, "lg": 600}, "right": {"md": 658}, "bottom": {"sm": 30}},
     "defaultMapOptions": {
       "cesium": {
           "flyTo": true,
@@ -96,8 +99,14 @@
                 "isNew": true,
                 "autoload": false
             },
-            "selectedService": "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA IV INVARIANTE DEL PIT-PPR",
+            "selectedService": "GeoServer",
             "services": {
+              "GeoServer": {
+                "url": "/geoserver/wms",
+                "type": "wms",
+                "title": "GeoServer",
+                "autoload": false
+              },
               "Vaglia": {
                 "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows?",
                 "type": "wms",
@@ -336,7 +345,16 @@
                 }
               }
             }
-          }, "AutoMapUpdate", "DrawerMenu", "Version", "Notifications", "BackgroundSelector",
+          }, "AutoMapUpdate",
+          {
+            "name": "DrawerMenu",
+            "cfg": {
+              "menuOptions": {
+                "width": 500
+              }
+            }
+          },
+          "Version", "Notifications", "BackgroundSelector",
             {
               "name": "Share",
               "cfg": {

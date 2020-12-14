@@ -13,10 +13,14 @@ import {
     SELECT_CATALOG_ENTRY_SERAPIDE,
     LOADING_DATA_SERAPIDE,
     UPDATE_CATALOG_RESULTS_SERAPIDE,
-    ERROR_CATALOG_RESULTS_SERAPIDE
+    ERROR_CATALOG_RESULTS_SERAPIDE,
+    SET_DEFAULT_MAPS,
+    SET_EMPTY_CATALOG
 } from '@js/actions/serapide';
 
-const serapide = (state = {}, action) => {
+const serapide = (state = {
+    isCatalogEmpty: true
+}, action) => {
     switch (action.type) {
     case ENABLE_CATALOG_SERAPIDE: {
         return { ...state, enabled: action.enabled };
@@ -44,6 +48,18 @@ const serapide = (state = {}, action) => {
         return {
             ...state,
             error: action.error
+        };
+    }
+    case SET_DEFAULT_MAPS: {
+        return {
+            ...state,
+            defaultMaps: action.defaultMaps
+        };
+    }
+    case SET_EMPTY_CATALOG: {
+        return {
+            ...state,
+            isCatalogEmpty: action.isCatalogEmpty
         };
     }
     default:

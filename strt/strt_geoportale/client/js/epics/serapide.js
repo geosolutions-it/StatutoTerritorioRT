@@ -24,7 +24,9 @@ import {
     SEARCH_SERAPIDE,
     updateCatalogResultsSerapide,
     errorCatalogResultsSerapide,
-    loadingDataSerapide
+    loadingDataSerapide,
+    setDefaultMaps,
+    setEmptyCatalog
 } from '@js/actions/serapide';
 
 import {
@@ -52,6 +54,25 @@ import capitalize from 'lodash/capitalize';
 
 import url from 'url';
 import uuidv1 from 'uuid/v1';
+import { LOCATION_CHANGE } from 'connected-react-router';
+import axios from '@mapstore/libs/ajax';
+
+export const strtInitApp = action$ =>
+    action$.ofType(LOCATION_CHANGE)
+        .switchMap((action) => {
+            if (action?.payload?.isFirstRendering) {
+                return Observable.defer(() =>
+                    axios.get('/static/mapstore/defaultMaps.json')
+                        .then(({ data }) => data.results)
+                        .catch(() => [])
+                )
+                    .switchMap((results) => {
+                        return Observable.of(setDefaultMaps(results)); 
+                    });
+            }
+            return Observable.empty();
+        })
+        .take(1);
 
 export const strtAddMapConfigurations = (action$, store) =>
     action$.ofType(MAP_CONFIG_LOADED)
@@ -61,6 +82,11 @@ export const strtAddMapConfigurations = (action$, store) =>
                     const state = store.getState();
                     const search = state?.router?.location?.search;
                     const { query = {} } = search && url.parse(search, true) || {};
+                    if (query.static) {
+                        return Observable.of(
+                            setControlProperty('drawer', 'enabled', true)
+                        );
+                    }
                     const id = query[ID_PARAM];
                     setDefaultGroupsIds(defaultGroups.map((group) => group.id));
                     const addGroupsActions = defaultGroups.map(({ parent, ...group }) =>
@@ -87,11 +113,13 @@ export const strtAddMapConfigurations = (action$, store) =>
 export const strtSearchSerapide = (action$) =>
     action$.ofType(SEARCH_SERAPIDE)
         .switchMap((action) => {
-            const { params } = action;
+            const { params, isFirstRequest } = action;
             return Observable.defer(() => requestSerapideData(params))
                 .switchMap((response) => {
                     const { results = [], totalCount, page } = response || {};
+                    const isCatalogEmpty = !!(totalCount === 0 && results.length === 0 && !params.q);
                     return Observable.of(
+                        ...(isFirstRequest ? [ setEmptyCatalog(isCatalogEmpty) ] : []),
                         updateCatalogResultsSerapide({ results, totalCount, page }),
                         loadingDataSerapide(false)
                     );
@@ -201,5 +229,6 @@ export const strtSelectCatalogEntrySerapide = (action$, store) =>
 export default {
     strtAddMapConfigurations,
     strtSearchSerapide,
-    strtSelectCatalogEntrySerapide
+    strtSelectCatalogEntrySerapide,
+    strtInitApp
 };

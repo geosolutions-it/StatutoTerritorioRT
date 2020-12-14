@@ -6,8 +6,9 @@
  * LICENSE file in the root directory of this source tree.
 */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import { Nav, NavItem } from 'react-bootstrap';
 import { selectNode } from '@mapstore/actions/layers';
 import { createPlugin } from '@mapstore/utils/PluginsUtils';
@@ -16,7 +17,7 @@ import PropTypes from 'prop-types';
 import HeaderNode from '@js/plugins/toc/HeaderNode';
 import GroupNode from '@js/plugins/toc/GroupNode';
 import LayerNode from '@js/plugins/toc/LayerNode';
-
+import url from 'url';
 function TOC({
     activateRemoveLayer = false,
     activateRemoveGroup = false,
@@ -24,6 +25,7 @@ function TOC({
     activateAddGroupButton = false,
     activateSettingsTool = false,
     activateSortLayer = false,
+    defaultSelectedGroup,
     tocGroups = [
         {
             id: 'piano',
@@ -54,7 +56,13 @@ function TOC({
         .filter(({ serapideButton }) => serapideButton)
         .map(({ serapideButton: Tool, name }) => <Tool key={name}/> );
 
-    const [selected, setSelected] = useState(tocGroups[0]);
+    const [selected, setSelected] = useState(defaultSelectedGroup || tocGroups[0]);
+
+    useEffect(() => {
+        if (defaultSelectedGroup) {
+            setSelected(defaultSelectedGroup)
+        }
+    }, [defaultSelectedGroup])
 
     return (
         <div className="ms-toc">
@@ -104,10 +112,34 @@ TOC.contextTypes = {
     loadedPlugins: PropTypes.object
 };
 
+function getTocGroups(state) {
+    const search = state?.router?.location?.search;
+    const defaultMaps = state?.serapide?.defaultMaps;
+    const { query = {} } = search && url.parse(search, true) || {};
+    if (query.static && defaultMaps) {
+        const { tocGroups = null, selectedGroup = undefined } = defaultMaps.find(({ id }) => id === query.static) || {};
+        const defaultSelectedGroup = tocGroups?.find(({ id }) => selectedGroup === id);
+        return { tocGroups, defaultSelectedGroup };
+    }
+    return { tocGroups: null, defaultSelectedGroup: undefined };
+}
+
 export default createPlugin('TOC', {
-    component: connect(() => ({}), {
-        onSelectNode: selectNode
-    })(TOC),
+    component: connect(
+        createSelector([getTocGroups], ({ tocGroups, defaultSelectedGroup }) => ({
+            tocGroups,
+            defaultSelectedGroup
+        })),
+        { onSelectNode: selectNode },
+        (stateProps, dispatchProps, ownProps) => ({
+            ...ownProps,
+            ...stateProps,
+            ...dispatchProps,
+            tocGroups: stateProps.tocGroups
+                ? stateProps.tocGroups
+                : ownProps.tocGroups
+        })
+    )(TOC),
     containers: {
         DrawerMenu: {
             name: 'toc',
