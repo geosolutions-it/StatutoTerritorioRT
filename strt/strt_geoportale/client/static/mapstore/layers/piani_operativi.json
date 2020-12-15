@@ -1,0 +1,635 @@
+{
+    "layers": [
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.vicchio",
+            "name": "po:pat_po_vicchio",
+            "title": "PAT PO",
+            "description": "Aree interessate da piani attuativi",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.438348797764922,
+                    "miny": 43.906082549950185,
+                    "maxx": 11.47336465937447,
+                    "maxy": 43.98613419543243
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.vicchio",
+            "name": "po:puc_po_vicchio",
+            "title": "PUC PO",
+            "description": "Aree interessate da progetti unitari convenzionati\"",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.418425093980206,
+                    "miny": 43.908681363967915,
+                    "maxx": 11.485397972677912,
+                    "maxy": 43.96418561255769
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.vaglia",
+            "name": "po:pat_po_vaglia",
+            "title": "PAT PO",
+            "description": "Aree interessate da piani attuativi",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.271531309584445,
+                    "miny": 43.842570337874406,
+                    "maxx": 11.340036845600782,
+                    "maxy": 43.91606891952531
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.vaglia",
+            "name": "po:puc_po_vaglia",
+            "title": "PUC PO",
+            "description": "Aree interessate da progetti unitari convenzionati\"",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.276308354151398,
+                    "miny": 43.86998618320915,
+                    "maxx": 11.324995879030508,
+                    "maxy": 43.91191219202558
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.vaglia",
+            "name": "po:ned_po_vaglia",
+            "title": "NED PO",
+            "description": "Ulteriori aree interessate da nuova edificazione consentiti all’interno del perimetro del territorio urbanizzato",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.277170129571285,
+                    "miny": 43.841477064652295,
+                    "maxx": 11.35094255946042,
+                    "maxy": 43.921062087569744
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.scandicci",
+            "name": "po:pat_po_scandicci",
+            "title": "PAT PO",
+            "description": "Aree interessate da piani attuativi",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.102036870028968,
+                    "miny": 43.69329743354592,
+                    "maxx": 11.200451183057954,
+                    "maxy": 43.77177419905513
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.scandicci",
+            "name": "po:puc_po_scandicci",
+            "title": "PUC PO",
+            "description": "Aree interessate da progetti unitari convenzionati",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.10070237917886,
+                    "miny": 43.69440165777669,
+                    "maxx": 11.201379148992752,
+                    "maxy": 43.782921193373326
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.scandicci",
+            "name": "po:ned_po_scandicci",
+            "title": "NED PO",
+            "description": "Ulteriori aree interessate da nuova edificazione consentiti all’interno del perimetro del territorio urbanizzato",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.11571313125408,
+                    "miny": 43.68917251749786,
+                    "maxx": 11.200010248436431,
+                    "maxy": 43.77028596694847
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.quarrata",
+            "name": "po:pat_po_quarrata",
+            "title": "PAT PO",
+            "description": "Aree interessate da piani attuativi",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.972935935587945,
+                    "miny": 43.83439745977675,
+                    "maxx": 10.987160778593001,
+                    "maxy": 43.85338300415746
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.quarrata",
+            "name": "po:rig_po_quarrata",
+            "title": "RIG PO",
+            "description": "Aree interessate da interventi di rigenerazione urbana",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.931603072938096,
+                    "miny": 43.82554470403826,
+                    "maxx": 11.013976975777554,
+                    "maxy": 43.883371966335986
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.quarrata",
+            "name": "po:puc_po_quarrata",
+            "title": "PUC PO",
+            "description": "Aree interessate da progetti unitari convenzionati",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.958964581888313,
+                    "miny": 43.84016213592228,
+                    "maxx": 11.013367434325103,
+                    "maxy": 43.86481452145048
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.quarrata",
+            "name": "po:ned_po_quarrata",
+            "title": "NED PO",
+            "description": "Ulteriori aree interessate da nuova edificazione consentiti all’interno del perimetro del territorio urbanizzato",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.931942247181103,
+                    "miny": 43.83606350796243,
+                    "maxx": 11.013141114041076,
+                    "maxy": 43.869112378975395
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.montemurlo",
+            "name": "po:pat_po_montemurlo",
+            "title": "PAT PO",
+            "description": "Aree interessate da piani attuativi",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.026292657136366,
+                    "miny": 43.90820956923178,
+                    "maxx": 11.058930696791506,
+                    "maxy": 43.93732900131841
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.montemurlo",
+            "name": "po:rig_po_montemurlo",
+            "title": "RIG PO",
+            "description": "Aree interessate da interventi di rigenerazione urbana",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.027165687702844,
+                    "miny": 43.902011727157515,
+                    "maxx": 11.062144980710757,
+                    "maxy": 43.93300355015559
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.montemurlo",
+            "name": "po:puc_po_montemurlo",
+            "title": "PUC PO",
+            "description": "Aree interessate da progetti unitari convenzionati",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.030648642257683,
+                    "miny": 43.90532516634164,
+                    "maxx": 11.089741998873247,
+                    "maxy": 43.95730505880841
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.montemurlo",
+            "name": "po:ned_po_montemurlo",
+            "title": "NED PO",
+            "description": "Ulteriori aree interessate da nuova edificazione consentiti all’interno del perimetro del territorio urbanizzato",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.026329053000632,
+                    "miny": 43.905244148265126,
+                    "maxx": 11.061488366278402,
+                    "maxy": 43.933006038600986
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.greve_in_chianti",
+            "name": "po:pat_po_greve_in_chianti",
+            "title": "PAT PO",
+            "description": "Aree interessate da piani attuativi",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.280178143388923,
+                    "miny": 43.535333905442414,
+                    "maxx": 11.359890698458628,
+                    "maxy": 43.683214802284105
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "piani_operativi.greve_in_chianti",
+            "name": "po:puc_po_greve_in_chianti",
+            "title": "PUC PO",
+            "description": "Aree interessate da progetti unitari convenzionati",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 11.253909187791956,
+                    "miny": 43.53206247576787,
+                    "maxx": 11.40277182230712,
+                    "maxy": 43.68542141622957
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        }
+    ],
+    "groups": [
+        {
+            "id": "piani_operativi",
+            "title": "Piani Operativi",
+            "expanded": true
+        },
+        {
+            "id": "piani_operativi.greve_in_chianti",
+            "title": "Greve in Chianti",
+            "expanded": true
+        },
+        {
+            "id": "piani_operativi.montemurlo",
+            "title": "Montemurlo",
+            "expanded": true
+        },
+        {
+            "id": "piani_operativi.quarrata",
+            "title": "Quarrata",
+            "expanded": true
+        },
+        {
+            "id": "piani_operativi.scandicci",
+            "title": "Scandicci",
+            "expanded": true
+        },
+        {
+            "id": "piani_operativi.vaglia",
+            "title": "Vaglia",
+            "expanded": true
+        },
+        {
+            "id": "piani_operativi.vicchio",
+            "title": "Vicchio",
+            "expanded": true
+        }
+    ]
+}
