@@ -6,12 +6,23 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { Component, cloneElement } from 'react';
+import React, { Component, cloneElement, memo } from 'react';
 import PropTypes from 'prop-types';
 import GroupChildren from '@mapstore/components/TOC/fragments/GroupChildren';
 import { getTitleAndTooltip } from '@mapstore/utils/TOCUtils';
 import Filter from '@mapstore/components/misc/Filter';
 import Message from '@mapstore/components/I18N/Message';
+
+const replaceNodeOptions = (currentNode, nodeType, filterText) => {
+    if (nodeType === 'group' && filterText) {
+        return {
+            ...currentNode,
+            expanded: true
+        }
+    }
+    return currentNode;
+};
+
 
 const loopFilter = ({ node, filterText, currentLocale }) => {
     return !!node?.nodes?.find((nd) => {
@@ -97,10 +108,7 @@ class HeaderNode extends Component {
                 {cloneElement(children, {
                     filterText,
                     emptyMessageId: node.id === 'piano' && 'serapide.pianoNoLayer',
-                    replaceNodeOptions: (currentNode, nodeType) => ({
-                        ...currentNode,
-                        ...(nodeType === 'group' && filterText && { expanded: true })
-                    }),
+                    replaceNodeOptions: (currentNode, nodeType) => replaceNodeOptions(currentNode, nodeType, filterText),
                     filter: (currentNode, nodeType) => {
                         if (nodeType === 'group' && filterText) {
                             return loopFilter({ node: currentNode, filterText, currentLocale });
@@ -136,4 +144,4 @@ class HeaderNode extends Component {
     }
 }
 
-export default HeaderNode;
+export default memo(HeaderNode);

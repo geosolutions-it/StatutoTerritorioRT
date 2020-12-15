@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { Component, cloneElement } from 'react';
+import React, { Component, cloneElement, memo } from 'react';
 import Node from '@mapstore/components/TOC/Node';
 import PropTypes from 'prop-types';
 import draggableComponent from '@mapstore/components/TOC/enhancers/draggableComponent';
@@ -199,4 +199,4 @@ export class GroupNode extends Component {
     }
 }
 
-export default draggableComponent('LayerOrGroup', GroupNode);
+export default draggableComponent('LayerOrGroup', memo(GroupNode));

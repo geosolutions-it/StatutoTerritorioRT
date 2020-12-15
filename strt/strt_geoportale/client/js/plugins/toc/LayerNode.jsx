@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { Component } from 'react';
+import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
 import Node from '@mapstore/components/TOC/Node';
 import { getTitleAndTooltip } from '@mapstore/utils/TOCUtils';
@@ -248,4 +248,4 @@ export class LayerNode extends Component {
     }
 }
 
-export default draggableComponent('LayerOrGroup', LayerNode);
+export default draggableComponent('LayerOrGroup', memo(LayerNode));
