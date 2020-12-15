@@ -9,6 +9,9 @@
 import ConfigUtils from '@mapstore/utils/ConfigUtils';
 import axios from '@mapstore/libs/ajax';
 
+// dev tools to print out updated layers for static maps
+// import './staticMapsUtils';
+
 // list of path that need version parameter
 const pathsNeedVersion = [
     'localConfig.json',
