@@ -112,9 +112,9 @@ const UndoPlugin = History;
 // import UserExtensionsPlugin from '@mapstore/plugins/UserExtensions';
 import VersionPlugin from '@mapstore/plugins/Version';
 import WFSDownloadPlugin from '@mapstore/plugins/WFSDownload';
-// import WidgetsBuilderPlugin from '@mapstore/plugins/WidgetsBuilder';
-// import WidgetsPlugin from '@mapstore/plugins/Widgets';
-// import WidgetsTrayPlugin from '@mapstore/plugins/WidgetsTray';
+import WidgetsBuilderPlugin from '@mapstore/plugins/WidgetsBuilder';
+import WidgetsPlugin from '@mapstore/plugins/Widgets';
+import WidgetsTrayPlugin from '@mapstore/plugins/WidgetsTray';
 import ZoomAllPlugin from '@mapstore/plugins/ZoomAll';
 import ZoomInPlugin from '@mapstore/plugins/ZoomIn';
 import ZoomOutPlugin from '@mapstore/plugins/ZoomOut';
@@ -204,6 +204,10 @@ export const plugins = {
     ZoomAllPlugin,
     ZoomInPlugin,
     ZoomOutPlugin,
+
+    WidgetsBuilderPlugin,
+    WidgetsPlugin,
+    WidgetsTrayPlugin,
 
     // custom
     HomeCatalogPlugin,
