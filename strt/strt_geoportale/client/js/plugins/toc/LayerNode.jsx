@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { Component } from 'react';
+import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
 import Node from '@mapstore/components/TOC/Node';
 import { getTitleAndTooltip } from '@mapstore/utils/TOCUtils';
@@ -22,6 +22,7 @@ import Highlighter from 'react-highlight-words';
 import ReactTooltip from 'react-tooltip';
 import Portal from '@mapstore/components/misc/Portal';
 import tooltip from '@mapstore/components/misc/enhancers/tooltip';
+import { InView } from 'react-intersection-observer';
 
 const GlyphIndicator = tooltip(Glyphicon);
 
@@ -89,7 +90,7 @@ export class LayerNode extends Component {
         connectDropTarget: (cmp) => cmp
     };
 
-    render() {
+    renderNode(inView) {
 
         const {
             node: nodeProp,
@@ -163,7 +164,7 @@ export class LayerNode extends Component {
                         }}
                         buttons={[{
                             glyph: expanded ? 'collapse-down' : 'expand',
-                            tooltipId: 'toc.displayLegendAndTools',
+                            tooltipId: inView ? 'toc.displayLegendAndTools' : undefined,
                             visible: !!Body,
                             onClick: (event) => {
                                 event.stopPropagation();
@@ -183,7 +184,9 @@ export class LayerNode extends Component {
                                 visible: !!node?.layerFilter,
                                 glyph: 'filter-layer',
                                 active: !node?.layerFilter?.disabled,
-                                tooltipId: node?.layerFilter?.disabled ? 'toc.filterIconDisabled' : 'toc.filterIconEnabled',
+                                tooltipId: inView
+                                    ? node?.layerFilter?.disabled ? 'toc.filterIconDisabled' : 'toc.filterIconEnabled'
+                                    : undefined,
                                 onClick: (event) => {
                                     event.stopPropagation();
                                     const layerFilter = node?.layerFilter;
@@ -196,7 +199,9 @@ export class LayerNode extends Component {
                             },
                             {
                                 glyph: node.visibility ? 'eye-open' : 'eye-close',
-                                tooltipId: warningClassName ? 'toc.toggleLayerVisibilityWarning' : 'toc.toggleLayerVisibility',
+                                tooltipId: inView
+                                    ? warningClassName ? 'toc.toggleLayerVisibilityWarning' : 'toc.toggleLayerVisibility'
+                                    : undefined,
                                 loading: !!node.loading,
                                 onClick: (event) => {
                                     event.stopPropagation();
@@ -235,9 +240,9 @@ export class LayerNode extends Component {
                         type="layer">
                         {isDraggable ? connectDragPreview(head) : head}
                     </Node>}
-                <Portal>
+                {inView && <Portal>
                     <ReactTooltip className="toc-layer-tooltip" id={node.id} place="top" type="dark" effect="solid" multiline />
-                </Portal>
+                </Portal>}
             </div>
         );
 
@@ -246,6 +251,18 @@ export class LayerNode extends Component {
         }
         return null;
     }
+
+    render() {
+        return (
+            <InView>
+                {({ inView, ref }) => (
+                <div ref={ref}>
+                    {this.renderNode(inView)}
+                </div>
+                )}
+            </InView>
+        );
+    }
 }
 
-export default draggableComponent('LayerOrGroup', LayerNode);
+export default draggableComponent('LayerOrGroup', memo(LayerNode));

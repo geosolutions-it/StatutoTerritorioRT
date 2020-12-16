@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { Component, cloneElement } from 'react';
+import React, { Component, cloneElement, memo } from 'react';
 import Node from '@mapstore/components/TOC/Node';
 import PropTypes from 'prop-types';
 import draggableComponent from '@mapstore/components/TOC/enhancers/draggableComponent';
@@ -17,6 +17,7 @@ import Toolbar from '@mapstore/components/misc/toolbar/Toolbar';
 import ReactTooltip from 'react-tooltip';
 import Portal from '@mapstore/components/misc/Portal';
 import Message from '@mapstore/components/I18N/Message';
+import { InView } from 'react-intersection-observer';
 
 export class GroupNode extends Component {
 
@@ -67,7 +68,7 @@ export class GroupNode extends Component {
         filter: () => true
     };
 
-    render() {
+    renderNode(inView) {
         const {
             node: nodeProp,
             style,
@@ -189,14 +190,26 @@ export class GroupNode extends Component {
                         <Message msgId={emptyMessageId || 'noLayerInGroup'}/>
                     </div>}
                 </Node>
-                <Portal>
+                {inView && <Portal>
                     <ReactTooltip place="top" type="dark" effect="solid"/>
-                </Portal>
+                </Portal>}
                 </>
             );
         }
         return null;
     }
+
+    render() {
+        return (
+            <InView>
+                {({ inView, ref }) => (
+                <div ref={ref}>
+                    {this.renderNode(inView)}
+                </div>
+                )}
+            </InView>
+        );
+    }
 }
 
-export default draggableComponent('LayerOrGroup', GroupNode);
+export default draggableComponent('LayerOrGroup', memo(GroupNode));

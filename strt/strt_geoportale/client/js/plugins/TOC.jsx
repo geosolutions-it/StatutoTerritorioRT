@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Nav, NavItem } from 'react-bootstrap';
 import { selectNode } from '@mapstore/actions/layers';
+import { selectedNodesSelector } from '@mapstore/selectors/layers';
 import { createPlugin } from '@mapstore/utils/PluginsUtils';
 import { TOCPlugin as MSTOCPlugin, reducers, epics } from '@mapstore/plugins/TOC';
 import PropTypes from 'prop-types';
@@ -48,6 +49,7 @@ function TOC({
             include: ['basi_cartografiche']
         }
     ],
+    isNodeSelected,
     onSelectNode,
     ...props
 }) {
@@ -79,7 +81,9 @@ function TOC({
                         onClick={() => {
                             setSelected(entry);
                             // deselect layers on change tab
-                            onSelectNode();
+                            if (isNodeSelected) {
+                                onSelectNode();
+                            }
                         }}>
                         {entry.label}
                     </NavItem>)}
@@ -126,9 +130,10 @@ function getTocGroups(state) {
 
 export default createPlugin('TOC', {
     component: connect(
-        createSelector([getTocGroups], ({ tocGroups, defaultSelectedGroup }) => ({
+        createSelector([getTocGroups, selectedNodesSelector], ({ tocGroups, defaultSelectedGroup }, selectedNodes) => ({
             tocGroups,
-            defaultSelectedGroup
+            defaultSelectedGroup,
+            isNodeSelected: !!(selectedNodes?.length > 0)
         })),
         { onSelectNode: selectNode },
         (stateProps, dispatchProps, ownProps) => ({

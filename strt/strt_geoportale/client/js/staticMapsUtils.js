@@ -9,10 +9,10 @@
 import snakeCase from 'lodash/snakeCase';
 import wms from '@mapstore/observables/wms';
 
-import invarianti from '../../static/mapstore/layers/invarianti.json';
-import pianiOperativi from '../../static/mapstore/layers/piani_operativi.json';
-import pianiStrutturali from '../../static/mapstore/layers/piani_strutturali.json';
-import pianoPaesaggisticoRegionale from '../../static/mapstore/layers/piano_paesaggistico_regionale.json';
+import invarianti from '../static/mapstore/layers/invarianti.json';
+import pianiOperativi from '../static/mapstore/layers/piani_operativi.json';
+import pianiStrutturali from '../static/mapstore/layers/piani_strutturali.json';
+import pianoPaesaggisticoRegionale from '../static/mapstore/layers/piano_paesaggistico_regionale.json';
 
 const bgLayers = [{
     "id": "mapnik__0",
@@ -504,6 +504,16 @@ export const printLayersOfPianoPaesaggisticoRegionale = () => {
     ]));
 }
 
+function addParamsToLayers(layers, params) {
+    return layers.map(layer => ({
+        ...layer,
+        visibility: false,
+        format: 'image/png8',
+        tileSize: 512,
+        ...params
+    }));
+}
+
 export const printStaticMaps = () => {
     // mappa_piani_operativi.json
     console.log('mappa_piani_operativi.json');
@@ -511,10 +521,10 @@ export const printStaticMaps = () => {
         JSON.stringify(
             mappaBase(
                 [
-                    ...pianoPaesaggisticoRegionale.layers,
-                    ...invarianti.layers,
-                    ...pianiStrutturali.layers,
-                    ...pianiOperativi.layers.map((l) => ({ ...l, visibility: false }))
+                    ...addParamsToLayers(pianoPaesaggisticoRegionale.layers, { format: 'image/png' }),
+                    ...addParamsToLayers(invarianti.layers),
+                    ...addParamsToLayers(pianiStrutturali.layers),
+                    ...addParamsToLayers(pianiOperativi.layers)
                 ],
                 [
                     ...pianoPaesaggisticoRegionale.groups,
@@ -531,10 +541,10 @@ export const printStaticMaps = () => {
         JSON.stringify(
             mappaBase(
                 [
-                    ...pianoPaesaggisticoRegionale.layers,
-                    ...invarianti.layers,
-                    ...pianiStrutturali.layers.map((l) => ({ ...l, visibility: false })),
-                    ...pianiOperativi.layers
+                    ...addParamsToLayers(pianoPaesaggisticoRegionale.layers, { format: 'image/png' }),
+                    ...addParamsToLayers(invarianti.layers),
+                    ...addParamsToLayers(pianiStrutturali.layers),
+                    ...addParamsToLayers(pianiOperativi.layers)
                 ],
                 [
                     ...pianoPaesaggisticoRegionale.groups,
