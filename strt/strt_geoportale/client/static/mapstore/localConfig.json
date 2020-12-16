@@ -517,7 +517,10 @@
                   "outputFilename": "{state('printTitle') && state('printTitle').replace(/[\\W_]+/g,'_') || 'geoportale'}"
                 }
               }
-            }
+            },
+            "WidgetsBuilder",
+            "Widgets",
+            "WidgetsTray"
         ],
         "embedded": [{
                 "name": "Map",
