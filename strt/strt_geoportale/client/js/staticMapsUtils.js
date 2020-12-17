@@ -9,6 +9,7 @@
 import snakeCase from 'lodash/snakeCase';
 import wms from '@mapstore/observables/wms';
 
+import cartografiaDiBase from '../static/mapstore/layers/cartografia_di_base.json';
 import invarianti from '../static/mapstore/layers/invarianti.json';
 import pianiOperativi from '../static/mapstore/layers/piani_operativi.json';
 import pianiStrutturali from '../static/mapstore/layers/piani_strutturali.json';
@@ -253,6 +254,10 @@ const pianoPaesaggisticoRegionaleArray = [
     ]]
 ];
 
+const cartografiaDiBaseArray = [
+    ['Cartografia di base', []]
+];
+
 const pianiOperativiArray = [
     ['Piani Operativi', []],
     ['Piani Operativi', 'Greve in Chianti', ['po:puc_po_greve_in_chianti', 'po:pat_po_greve_in_chianti']],
@@ -479,6 +484,76 @@ export const printLayersOfPianoPaesaggisticoRegionale = () => {
     });
 }
 
+export const printLayersOfCartografiaDiBase = () => {
+    const layers = [
+        [
+            'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms', // wmsUrl
+            'wmsofc', // mapParam
+            'rt_ofc.10k13', // layerName
+            'Ortofoto 2013' // title
+        ],
+        [
+            'https://www502.regione.toscana.it/ows_ofc/com.rt.wms.RTmap/wms', // wmsUrl
+            'owsofc', // mapParam
+            'rt_ofc.5k16.32bit', // layerName
+            'Ortofoto 2016 20cm' // title
+        ],
+        [
+            'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms', // wmsUrl
+            'wmsambamm', // mapParam
+            'rt_ambamm.idcomuni.rt.poly', // layerName
+            'Confini comunali 2018' // title
+        ],
+        [
+            'https://www502.regione.toscana.it/ows_ctr/com.rt.wms.RTmap/ows', // wmsUrl
+            'owsctr', // mapParam
+            'rt_ctr.10k_impianto', // layerName
+            'CTR 1:10.000' // title
+        ]
+    ];
+    Promise.all(
+        layers.map(([ wmsUrl, mapParam, layerName, title ]) => getCap({
+            wmsUrl,
+            mapParam,
+            mapResolution: 91
+        }).then((capLayers) => {
+            const layer = capLayers.find((capLayer) => capLayer.name === layerName);
+            return {...layer, title, group: 'cartografia_di_base'}
+        }))
+    ).then((newLayers) => {
+        const allLayers = [
+            ...newLayers,
+            {
+                type: 'wms',
+                url: 'https://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv',
+                name: 'DBTM_DataBaseTopograficoMultiscala',
+                title: 'DBT Multiscala',
+                format: 'image/png; mode=8bit',
+                group: 'cartografia_di_base',
+                params: {
+                    map: 'dbtm_rt.qgs',
+                    map_resolution: 91
+                }
+            }
+        ]
+        const order = [
+            'rt_ofc.10k13',
+            'rt_ofc.5k16.32bit',
+            'DBTM_DataBaseTopograficoMultiscala',
+            'rt_ambamm.idcomuni.rt.poly',
+            'rt_ctr.10k_impianto'
+        ]
+        console.log('Layers', JSON.stringify(order.reverse().map((name) => allLayers.find(layer => layer.name === name))));
+        console.log('Groups', JSON.stringify([
+            {
+                "id": "cartografia_di_base",
+                "title": "Cartografia di base",
+                "expanded": true
+            }
+        ]));
+    });
+}
+
 function addParamsToLayers(layers, params) {
     return layers.map(layer => ({
         ...layer,
@@ -495,6 +570,7 @@ export const printStaticMaps = () => {
         JSON.stringify(
             mappaBase(
                 [
+                    ...addParamsToLayers(cartografiaDiBase.layers),
                     ...addParamsToLayers(pianoPaesaggisticoRegionale.layers),
                     ...addParamsToLayers(risorse.layers),
                     ...addParamsToLayers(invarianti.layers),
@@ -502,6 +578,7 @@ export const printStaticMaps = () => {
                     ...addParamsToLayers(pianiOperativi.layers),
                 ],
                 [
+                    ...cartografiaDiBase.groups,
                     ...pianoPaesaggisticoRegionale.groups,
                     ...risorse.groups,
                     ...invarianti.groups,
@@ -517,6 +594,7 @@ export const printStaticMaps = () => {
         JSON.stringify(
             mappaBase(
                 [
+                    ...addParamsToLayers(cartografiaDiBase.layers),
                     ...addParamsToLayers(pianoPaesaggisticoRegionale.layers),
                     ...addParamsToLayers(risorse.layers),
                     ...addParamsToLayers(invarianti.layers),
@@ -524,6 +602,7 @@ export const printStaticMaps = () => {
                     ...addParamsToLayers(pianiOperativi.layers)
                 ],
                 [
+                    ...cartografiaDiBase.groups,
                     ...pianoPaesaggisticoRegionale.groups,
                     ...risorse.groups,
                     ...invarianti.groups,

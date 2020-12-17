@@ -44,6 +44,13 @@
                     "include": [
                         "invarianti"
                     ]
+                },
+                {
+                    "id": "cartografia_di_base",
+                    "label": "Cartografia di base",
+                    "include": [
+                        "cartografia_di_base"
+                    ]
                 }
             ]
         },
@@ -90,6 +97,13 @@
                     "label": "Invarianti",
                     "include": [
                         "invarianti"
+                    ]
+                },
+                {
+                    "id": "cartografia_di_base",
+                    "label": "Cartografia di base",
+                    "include": [
+                        "cartografia_di_base"
                     ]
                 }
             ]
