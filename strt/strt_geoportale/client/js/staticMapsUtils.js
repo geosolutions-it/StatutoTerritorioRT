@@ -13,6 +13,65 @@ import invarianti from '../static/mapstore/layers/invarianti.json';
 import pianiOperativi from '../static/mapstore/layers/piani_operativi.json';
 import pianiStrutturali from '../static/mapstore/layers/piani_strutturali.json';
 import pianoPaesaggisticoRegionale from '../static/mapstore/layers/piano_paesaggistico_regionale.json';
+import risorse from '../static/mapstore/layers/risorse.json';
+import axios from '@mapstore/libs/ajax';
+import xml2js from 'xml2js';
+
+function getCap({
+    wmsUrl,
+    mapParam,
+    mapResolution
+}) {
+    return axios.get(`${wmsUrl}?map=${mapParam}&SERVICE=WMS&REQUEST=GetCapabilities`)
+        .then((response) => {
+            let json;
+            xml2js.parseString(response.data, {}, (ignore, result) => {
+                json = result;
+            });
+            const Layer = json?.WMS_Capabilities?.Capability?.[0]?.Layer?.[0];
+            const formats = json?.WMS_Capabilities?.Capability?.[0]?.Request?.[0]?.GetMap?.[0]?.Format;
+            const allowedSRS = Layer?.CRS.reduce((acc, crs) => ({
+                ...acc,
+                [crs]: true
+            }), {});
+            const format = formats.indexOf('image/png8') !== -1
+                ? 'image/png8'
+                : formats.indexOf('image/png; mode=8bit') !== -1
+                    ? 'image/png; mode=8bit'
+                    : formats.indexOf('image/png') !== -1
+                        ? 'image/png'
+                        : formats[0];
+            const layers = Layer?.Layer.map((Lyr) => {
+                const bbox = Lyr.EX_GeographicBoundingBox[0];
+                return {
+                    "type": "wms",
+                    "format": format,
+                    "url": wmsUrl,
+                    "visibility": false,
+                    "name": Lyr.Name[0],
+                    "title": Lyr.Title[0],
+                    "description": Lyr.Abstract[0],
+                    "params": {
+                        "map": mapParam,
+                        "map_resolution": mapResolution
+                    },
+                    "bbox": {
+                        "crs": "EPSG:4326",
+                        "bounds": {
+                            "minx": parseFloat(bbox.westBoundLongitude[0]),
+                            "miny": parseFloat(bbox.southBoundLatitude[0]),
+                            "maxx": parseFloat(bbox.eastBoundLongitude[0]),
+                            "maxy": parseFloat(bbox.northBoundLatitude[0])
+                        }
+                    },
+                    ...(Lyr.MinScaleDenominator && { "minScaleDenominator": parseFloat(Lyr.MinScaleDenominator)}),
+                    ...(Lyr.MaxScaleDenominator && { "maxScaleDenominator": parseFloat(Lyr.MaxScaleDenominator) }),
+                    allowedSRS
+                };
+            });
+            return layers;
+        });
+}
 
 const bgLayers = [{
     "id": "mapnik__0",
@@ -104,182 +163,94 @@ const mappaBase = (layers, groups) => ({
     }
 });
 
-/*
-// snippet to get info in the html page
-let arr = []
-let nodes = [...document.querySelectorAll('dl')]
-
-for (let i = 0; i < nodes.length; i++) {
-    arr.push([
-        nodes[i].querySelector('table > tbody > tr > td > b').innerText,
-        nodes[i].querySelector('table > tbody > tr > td > table > tbody > tr > td').innerText
-    ])
-}
-
-console.log(JSON.stringify(arr));
-*/
+const risorseArray = [
+    ['Risorse', []],
+    ['Risorse', 'Struttura ecosistemica', []],
+    ['Risorse', 'Struttura ecosistemica', 'Biodiveristà', [
+        'rt_arprot.idparnaz.rt.poly',
+        'rt_arprot.idparnaz.rt.poly.dissolve',
+        'rt_arprot.idpartoscoem.rt.poly',
+        'rt_arprot.idparforcas.rt.poly',
+        'rt_arprot.idpararctos.rt.poly',
+        'rt_arprot.idrisnatstat.rt.poly',
+        'rt_arprot.idareemarineprotette.rt.poly',
+        'rt_arprot.idparreg.rt.poly',
+        'rt_arprot.idparreg_alpiapuane.rt.poly',
+        'rt_arprot.idparreg_maremma.rt.poly',
+        'rt_arprot.idparreg_migliarino_sanrossore.rt.poly',
+        'rt_arprot.idparprov.rt.poly',
+        'rt_arprot.idrisnatprov.rt.poly',
+        'rt_arprot.idanpil.rt.poly',
+        'rt_arprot.idsir.rt.poly',
+        'rt_arprot.idsir_sir.rt.poly',
+        'rt_arprot.idnat2000_sic.rt.poly',
+        'rt_arprot.idnat2000_zps.rt.poly',
+        'rt_arprot.idnat2000_sic_zps.rt.poly',
+        'rt_arprot.idramsar.rt.poly',
+        'rt_arprot.id.pn.rns.pr.pp.rnp.rt.poly.dissolve',
+        'rt_arprot.idgeotopi.rt.poly',
+        'rt_arprot.renato.habitat.rt.point'
+    ]],
+    ['Risorse', 'Struttura ecosistemica', 'Flora', [
+        'rt_arprot.idalbmon.rt.point',
+        'rt_arprot.idalbmon_lr60_1998.rt.point',
+        'rt_arprot.habitat_hascitu.rt',
+        'rt_arprot.habitat_hascitu.rt.point.cod_zsc',
+        'rt_arprot.habitat_hascitu.rt.point.code_priority',
+        'rt_arprot.habitat_hascitu.rt.point.coribio',
+        'rt_arprot.habitat_hascitu.rt.point.tipoveg',
+        'rt_arprot.habitat_hascitu.rt.stampa',
+        'rt_arprot.renato.specie.vegetali.rt.point',
+        'rt_arprot.renato.fitocenosi.rt.point'
+    ]],
+    ['Risorse', 'Struttura ecosistemica', 'Fauna', [
+        'rt_arprot.santuario_mammiferi_marini.rt',
+        'rt_arprot.renato.specie.anfibi.rt.point',
+        'rt_arprot.renato.specie.crostacei.rt.point',
+        'rt_arprot.renato.specie.insetti.rt.point',
+        'rt_arprot.renato.specie.mammiferi.rt.point',
+        'rt_arprot.renato.specie.molluschi.rt.point',
+        'rt_arprot.renato.specie.pesci.rt.point',
+        'rt_arprot.renato.specie.rettili.rt.point',
+        'rt_arprot.renato.specie.uccelli.rt.point'
+    ]]
+];
 
 const pianoPaesaggisticoRegionaleArray = [
-    [
+    ['Piano paesaggistico regionale', [
         "rt_piapae.idambpae.rt.poly",
-        "Ambiti di Paesaggio",
-        "Gli Ambiti di paesaggio descrivono i caratteri peculiari e le caratteristiche paesaggistiche del territorio regionale derivanti dalla natura, dalla storia e dalle loro interrelazioni e, in riferimento ai quali, il Piano definisce specifici obiettivi di qualita' e normative d'uso. Il territorio di ciascun Ambito e' composto da un insieme di comuni, eccetto il caso del comune di Castelnuovo Berardenga, il cui territorio e' ripartito fra due Ambiti distinti. Dataset areale: 'Ambiti di paesaggio'. Scala di visibilita 1:1 - 1:5.000.000. Territorio coperto: intera regione."
-    ],
-    [
         "lett_a_artut",
-        "Aree tutelate per legge - Lettera a) - I territori costieri",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Buffer realizzato a partire dalla linea di costa individuata con foto restituzione stereoscopica alla scala 1:10.000 da fotogrammi aerei del 2010. Dataset areale, 'Aree tutelate - I Sistemi costieri'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intera fascia costiera regionale."
-    ],
-    [
         "lett_b_laghi",
-        "Aree tutelate per legge - Lettera b) - I territori contermini ai laghi",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Buffer realizzato a partire dalla linea di riva degli specchi d'acqua con perimetro maggiore o uguale a 500 ml, presenti nel Sistema acque_CTR 10K della Regione Toscana. Dataset areale: 'Aree tutelate - I Sistemi costieri'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "specchi_acqua500m",
-        "Specchi d'acqua 500 metri",
-        "Specchi d'acqua con perimetro maggiore di 500 ml, presenti nel Sistema acque_CTR 10K della Regione Toscana. Dataset areale: 'Specchi d'acqua con perimetro maggiore di 500 ml'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "lett_c_aree_tutelate",
-        "Aree tutelate per legge - Lettera c) - I fiumi, i torrenti, i corsi d'acqua",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Buffer realizzato a partire da grafo idrico (mezzeria del corso d'acqua) ovvero, quando possibile, dalla linea di identificazione dell'area bagnata o dell'area idrica dei corsi d'acqua presenti nel Sistema acque /CTR 10K della Regione Toscana. Dataset areale: 'Aree tutelate'.Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "lett_c_fiumi",
-        "Fiumi, torrenti, corsi d'acqua",
-        "Grafo dei soli corsi d'acqua interessati, in tutto o in parte, da aree di tutela, presenti nel Sistema acque _CTR 10K della Regione Toscana."
-    ],
-    [
         "rt_piapae.grafo.sistema.acque.rt",
-        "Grafo Sistema acque_CTR",
-        "Grafo del Sistema acque _CTR 10K della Regione Toscana. Lo strato e' una riproposizione di quello dei corsi d'acqua presente nel WMS 'IDROGRAFIA'.Dataset lineare: 'Grafo Sistema acque_CTR'. Scala di visibilita' 1:1 - 1:5000000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "lett_d_artut",
-        "Aree tutelate per legge - Lettera d) - Le montagne per la parte eccedente 1.200 msl",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Aree individuate a partire dalle curve di livello rappresentate nel database topografico della Regione Toscana. Dataset areale: 'Aree tutelate'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "lett_e_artut",
-        "Aree tutelate per legge - Lettera e) - I circhi glaciali",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Aree individuate con foto restituzione stereoscopica alla scala 1:10.000 da fotogrammi aerei del 2010 e verifica di campo. Dataset areale: 'Aree tutelate'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "rt_piapae.idparnaz.rt.poly",
-        "Aree tutelate per legge - Lett. f) Parchi nazionali",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini dei parchi nazionali sono definiti e approvati dagli Enti parco competenti. Lo strato e' una riproposizione di quello dei parchi nazionali presente nel WMS 'Aree protette'. Dataset areale: 'Parchi nazionali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "rt_piapae.idrisnatstat.rt.poly",
-        "Aree tutelate per legge - Lett. f) - Riserve statali",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini delle riserve statali sono definiti e approvati dall' Ente statale competente. Lo strato e' una riproposizione di quello delle riserve statali presente nel WMS 'Aree protette'.Dataset areale: 'Riserve statali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "rt_piapae.idparreg.rt.poly",
-        "Aree tutelate per legge - Lett. f) - Parchi regionali",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini dei parchi regionali sono definiti e approvati dagli Enti parco competenti. Lo strato e' una riproposizione di quello dei parchi regionali presente nel WMS 'Aree protette'. Dataset areale: 'Parchi regionali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "rt_piapae.idparprov.rt.poly",
-        "Aree tutelate per legge - Lett. f) - Parchi provinciali",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini dei parchi provinciali sono definiti e approvati dagli Enti provinciali competenti. Lo strato e' una riproposizione di quello dei parchi provinciali presente nel WMS 'Aree protette'. Dataset areale: 'Parchi provinciali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "rt_piapae.idrisnatprov.rt.poly",
-        "Aree tutelate per legge - Lett. f) - Riserve naturali provinciali",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini delle riserve naturali provinciali sono definiti e approvati dagli Enti provinciali competenti. Lo strato e' una riproposizione di quello delle riserve naturali provinciali presente nel WMS 'Aree protette'. Dataset areale: 'Riserve provinciali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "lett_g_artut",
-        "Aree tutelate per legge - Lett. g) - I territori coperti da foreste e da boschi - aggiornamento DCR 93/2018",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Il dataset e' composto dalla Classe 1 (Boschi), della Classe 1bis (Strade in aree boscate) e della Classe 2 (Aree assimilabili a bosco) estratte dal database 'Uso e copertura del suolo' della Regione Toscana, foto interpretato da OFC dell'anno 2010 alla scala 1:10.000. Lo strato e' una riproposizione di quello gia' presente nel WMS 'Uso e copertura del suolo'. Dataset areale: 'Aree tutelate'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Il dataset e' un aggiornamento con DCR 93/2018."
-    ],
-    [
         "lett_g_artut_20150327_20181009",
-        "Aree tutelate per legge - Lett. g) - I territori coperti da foreste e da boschi - Dato storico",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Il dataset e' composto dalla Classe 1 (Boschi), della Classe 1bis (Strade in aree boscate) e della Classe 2 (Aree assimilabili a bosco) estratte dal database 'Uso e copertura del suolo' della Regione Toscana, foto interpretato da OFC dell'anno 2010 alla scala 1:10.000. Lo strato e' una riproposizione di quello gia' presente nel WMS 'Uso e copertura del suolo'. Dataset areale: 'Aree tutelate'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Dato storico. Riferito alla data del 27/03/2015."
-    ],
-    [
         "lett_h_usicivici",
-        "Aree tutelate per legge - Lett. h) - Le zone gravate da usi civici",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Lo strato propone i comuni nei quali vi e' una presenza o assenza accertata di Usi civici nonche' di quelli in cui l'accertamento non e' stato eseguito. Dataset areale: 'Comuni'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "lett_i_artut",
-        "Aree tutelate per legge - Lett. i) - Le zone umide",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Lo strato propone i perimetri delle aree individuate ai sensi della convenzione internazionale di Ramsar relativa alle zone umide di importanza internazionale, sottoscritta nel 1971 da un gruppo di paesi, istituzioni scientifiche ed organizzazioni internazionali. Lo strato e' una riproposizione di quello delle zone umide ramsar presente nel WMS 'Aree protette'. Dataset areale: 'Aree tutelate'. Scala di visibilita 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "lett_m_artut",
-        "Aree tutelate per legge - Lett. m) - Le zone di interesse archeologico.",
-        "Zone tutelate di cui all'art. 11.3 lett. a) e b) dell'Elaborato 7B della Disciplina dei beni paesaggistici. Dataset areale: 'Zone tutelate di cui all'art. 11.3 lett. a) e b) dell'Elaborato 7B della Disciplina dei beni paesaggistici'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "rt_piapae.vinc_archeo_ricad",
-        "Aree tutelate per legge - Lett. m) - Le zone di interesse archeologico - Beni archeologici tutelati ai sensi della parte II del D.Lgs. 42/2004 con valenza paesaggistica ricadenti nelle zone tutelate di cui all'art. 11.3 lett. a) e b)",
-        "Dataset areale: ' Le zone di interesse archeologico - Beni archeologici tutelati ai sensi della parte II del D.Lgs. 42/2004 con valenza paesaggistica ricadenti nelle zone tutelate di cui all'art. 11.3 lett. a) e b)'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Avvertenza: l'attestazione dei vincoli culturali viene rilasciata dalla competente Soprintendenza."
-    ],
-    [
         "rt_piapae.vinc_archeo_coinc_1",
-        "Aree tutelate per legge - Lett. m) - Le zone di interesse archeologico - Zone tutelate di cui all'art. 11.3 lett. c) dell'Elaborato 7B della Disciplina dei beni paesaggistici.",
-        "Dataset areale: 'Zone tutelate di cui all'art. 11.3 lett. c) dell'Elaborato 7B della Disciplina dei beni paesaggistici'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Avvertenza: l'attestazione dei vincoli culturali viene rilasciata dalla competente Soprintendenza."
-    ],
-    [
         "rt_piapae.vinc_archeo_coinc_2",
-        "Aree tutelate per legge - Lett. m) - Le zone di interesse archeologico - Beni archeologici tutelati ai sensi della parte II del D.Lgs. 42/2004 con valenza paesaggistica coincidenti con le zone tutelate di cui all'art. 11.3 lett. c)",
-        "Dataset areale: 'Le zone di interesse archeologico - Beni archeologici tutelati ai sensi della parte II del D.Lgs. 42/2004 con valenza paesaggistica coincidenti con le zone tutelate di cui all'art. 11.3 lett. c). Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale Avvertenza: l'attestazione dei vincoli culturali viene rilasciata dalla competente Soprintendenza."
-    ],
-    [
         "ulter_cont_unesco",
-        "Ulteriori contesti",
-        "Lo strato propone i perimetri delle aree individuate in Toscana dalla Commissione per il Patrimonio Mondiale quali siti con valore universale."
-    ],
-    [
         "rt_piapae.idpae1_a.rt",
-        "Immobili ed aree di notevole interesse pubblico",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 136. Dataset areale: 'Immobili ed aree di notevole interesse pubblico'. Scala di visibilita 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "rt_piapae.idpae1_a_etichette.rt",
-        "Etichette degli immobili ed aree di notevole interesse pubblico",
-        "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 136. Dataset areale: 'Immobili ed aree di notevole interesse pubblico'. Etichette. Scala di visibilita 1:1 - 1:100.000. Territorio coperto: intero territorio regionale."
-    ],
-    [
         "rt_piapae.topografica50k.color.rt",
-        "Carta topografica 1:50.000",
-        "Carta topografica 1:50.000. Lo strato propone la Carta topografica regionale in scala 1:50.000 in versione a colori. La carta e' stata realizzata elaborando le seguenti fonti cartografiche principali: Viabilita': DataBaseTopografico_Regione Toscana_(2000_2010); OpenStreetMap_2012) - Linee ferroviarie: DBT_RT_(2000_2010) - Insediamenti: DBT_RT_(2000_2010); BD_Catastale_AdT_(2012) - Infrastrutture e attrezzature: Fotointerpretazione da OFC_AGEA_RT_(2010) - Uso e Copertura del suolo: UCS_RT_(2007) - Toponomastica: DBT_RT_(2000_2010); IGM - Idrografia e zone umide: DBT_RT_(2000_2010) - Orografia: DBT_RT_(2000_2010); LaRIST - Batimetria: DBT_RT_(2000_2010)."
-    ],
-    [
         "rt_piapae.carta_dei_caratteri_del_paesaggio.50k.ct.rt",
-        "Carta dei caratteri del paesaggio 1:50.000",
-        "Carta dei caratteri del paesaggio 1:50.000. Lo strato propone la Carta dei caratteri del paesaggio in scala 1:50.000. La carta e' stata realizzata elaborando le seguenti fonti cartografiche principali: Rilievo ombreggiato: DBT_RT_(2000_2010); LaRIST - Tipi fisiografici: CIST_(2013) - Calanchi e biancane: DB_CARG_RT_(.....); QC_PTCP - Idrografia e zone umide: DBT_RT_(2000_2010) - Fonti Termali: QC_PTCP - Batimetria: DBT_RT_(2000_2010) - Caratteri vegetazionali: UCS_RT_(2007); IFT_RT_(2009); Carta della Vegetazione_ Arrigoni_RT_(1998); Fotointerpretazione da OFC_AGEA_RT_(2010) - Vegetazione Riparia: UCS_RT_(2007); DB_CARG_RT_(2010); QC_PTCP - Alberate: QC_PTC - Allineamento centuriazione: QC_PTC - Centri matrice: DBT_RT/LaRIST_(2010_2012) - Edifici: DBT_RT/LaRIST_(2010_2012); BD_Catastale_AdT_(2012) - Percorsi fondativi: CIST_(2013) - Viabilita': DataBaseTopografico_Regione Toscana_(2000_2010); OpenStreetMap_(2012) - Linee ferroviarie: DBT_RT_(2000_2010) -) - Infrastrutture e attrezzature: Fotointerpretazione da OFC_AGEA_RT_(2010) - Presidi fortificati: BD_UNISI - Cinte murarie: DBT_RT_(2000_2010) - Acquedotti storici: QC_PTC - Copertura del suolo: UCS_RT_(2007) - Sistemazioni di versante delle colture legnose permanenti: DBT_RT_(2000_2010) - Scoline: DBT_RT_(2000_2010) - Trama del mosaico colturale dei seminativi di pianura: DBT_RT_(2000_2010); UCS_RT_(2007); BD_Catastale_AdT_(2012)."
-    ],
-    [
         "rt_piapae.carta_dei_sistemi_morfogenetici.50k.ct.rt",
-        "Carta dei sistemi morfogenetici 1:50.000",
-        "Carta dei sistemi morfogenetici 1:50.000. Lo strato propone la carta dei caratteri morfogenetici del territorio toscano in scala 1:50.000. La carta e' il frutto dell'analisi e dell'elaborazione di strati informativi provenienti da fonti istituzionali o frutto di elaborazioni originali. La principale fonte informativa e' il SITA della Regione Toscana. La carta e' finalizzata alla rappresentazione dei caratteri morfogenetici del territorio toscano, ovvero degli elementi obiettivamente riconoscibili della struttura fisica del paesaggio, definiti da una combinazione dei fattori che presiedono allo sviluppo delle forme del rilievo (fattori strutturali, temporali e geologici). La procedura adottata per la realizzazione della carta si e' basata principalmente sull'utilizzazione del Continuum Geologico Regionale, scala 1:10.000, e su un processo di generalizzazione delle informazioni in essa contenuta e di analisi integrata delle informazioni provenienti anche da altre banche dati (idrologiche, idrogeologiche, pedologiche, etc.) secondo una metodologia ispirata al metodo dei land systems. Sulla base di analisi integrate, la fotointerpretazione del rilievo ha permesso infine l'individuazione di associazioni di forme ricorrenti, che caratterizzano ogni sistema morfogenetico."
-    ],
-    [
         "rt_piapae.carta_del_territorio_urbanizzato.50k.ct.rt",
-        "Carta del territorio urbanizzato 1:50.000",
-        "Lo strato propone la carta del territorio urbanizzato in scala 1:50000. La carta e' finalizzata a fornire un supporto operativo per distinguere cio' che puo' essere considerato territorio a tutti gli effetti urbanizzato, il cui riuso non comporta pertanto nuovo 'consumo' di suolo, dal territorio utilizzabile a fini agricoli o dotato di valenze ambientali. La Carta del Territorio Urbanizzato rappresenta una ipotesi di perimetrazione delle aree urbanizzate realizzata utilizzando un modello geo-statistico per la illustrazione del quale si rimanda al capitolo relativo alla metodologia generale della 3a Invariante a livello regionale. Allo stesso capitolo si rinvia per le specificazioni normative relative alla applicazione del metodo per la perimetrazione del territorio urbanizzato a livello comunale. Il modello geostatistico utilizzato per la costruzione della carta del territorio urbanizzato, fondato sugli indicatori di continuita' e densita' dell'urbanizzato, ha consentito di elaborare per ogni ambito di paesaggio una carta in scala 1/50000, che individua le aree a edificato continuo, identificandone indicativamente anche i tipi di tessuto. Questa scala, adottata nel Piano paesaggistico per le schede degli Ambiti di paesaggio, non consente assolutamente di trasferire meccanicamente i confini del territorio urbanizzato individuati dalla carta alle scale proprie dei piani strutturali; ha validita' dunque unicamente come quadro indicativo, rispetto al quale e' necessario un percorso di verifica, reinterpretazione e puntualizzazione nell'elaborazione degli strumenti urbanistici."
-    ],
-    [
         "rt_piapae.carta_della_rete_ecologica.50k.ct.rt",
-        "Carta della rete ecologica 1:50.000",
-        "Carta della rete ecologica 1:50.000. Lo strato propone la carta della rete ecologica della Toscana in scala 1:50000. La carta e' finalizzata alla evidenziazione degli elementi strutturali e funzionali della rete ecologica regionale. La redazione della carta e' il risultato di una sintesi e rielaborazione di numerose informazioni provenienti da fonti istituzionali e/o libere. La redazione della carta si e' basata su modelli di idoneita' ambientale dei diversi usi del suolo rispetto alle specie di Vertebrati focali, sensibili alla frammentazione, tipiche degli ecosistemi forestali o agropastorali. Le principali fasi di redazione della carta sono state: (i) definizione degli obiettivi di conservazione in relazione ai fattori di frammentazione che agiscono alla scala regionale; (ii) selezione della carta Corine Land Cover IV livello, anno 2006 (scala 1:100.000); (iii) rilievo fotogrammetrico (fotogrammi anno 2010-AGEA-RT) per rilevare la presenza e ampiezza della vegetazione ripariale lungo le aste fluviali principali e integrazione dello strato informativo con il CLC 2006; (iv) elaborazione dei modelli di idoneita' ambientale (con procedura GLM) per le guilds di specie focali, previa rasterizzazione e generalizzazione del CLC2006 e utilizzo di altre banche dati (Tipi Climatici_RT e Inventario Forestale Toscano_RT); (v) trasposizione del valore di idoneita' dalle celle raster ai poligoni della carta vettoriale CLC 2006; (vi) definizione degli elementi strutturali delle reti; (vii) trasposizione del valore di idoneita' dei poligoni CLC 2006 allo strato informativo relativo all'uso del suolo della regione Toscana generalizzato in scala 1:50.000 (viii) individuazione degli elementi funzionali della rete ecologica."
-    ],
-    [
         "rt_piapae.parco_agricolo_piana_pit",
-        "Parco agricolo della Piana - PIT - Salvaguardia A",
-        "Parco Agricolo della Piana - PIT"
-    ],
-    [
         "rt_piapae.costa_fittizia",
-        "Costa fittizia",
-        "Strato vettoriale riportante la costa fittizia impiegata per la realizzazione del dataset della 'lettera a'"
-    ]
+    ]]
 ];
 
 const pianiOperativiArray = [
@@ -418,7 +389,7 @@ const getLayersCapabilities = (layersArray, text) =>{
         const layersObjs = capabilities.map((layer) => {
             return {
                 "type": "wms",
-                "format": "image/png",
+                "format": "image/png8",
                 "url": "/geoserver/wms",
                 "visibility": false,
                 "group": layer.group,
@@ -456,6 +427,25 @@ const getLayersCapabilities = (layersArray, text) =>{
     })
 }
 
+export const printLayersOfRisorse = () => {
+    const { layers, groups } = parseLayersArrays(risorseArray);
+    getCap({
+        wmsUrl: 'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms',
+        mapParam: 'wmsarprot',
+        mapResolution: 91
+    }).then((capLayers) => {
+        const newLayers = layers.reverse().map((layer) => {
+            const options = capLayers.find((capLayer) => capLayer.name === layer.name);
+            if (!options) {
+                console.log(layer.name, 'not found');
+            }
+            return { ...options, ...layer };
+        });
+        console.log('layers/risorse.json');
+        console.log('Layers', JSON.stringify(newLayers));
+        console.log('Groups', JSON.stringify(groups));
+    });
+}
 
 export const printLayersOfPianiOperativi = () => {
     getLayersCapabilities(pianiOperativiArray, 'layers/piani_operativi.json');
@@ -470,45 +460,29 @@ export const printLayersOfInvarianti = () => {
 }
 
 export const printLayersOfPianoPaesaggisticoRegionale = () => {
-    const pPR = pianoPaesaggisticoRegionaleArray.reverse().map(([name, title, desc]) => ({
-        "type": "wms",
-        "format": "image/png",
-        "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-        "visibility": false,
-        "group": "piano_paesaggistico_regionale",
-        "name": name,
-        "title": title,
-        "description": desc,
-        "params": {
-            "map": "wmspiapae",
-            "map_resolution": 91
-        },
-        "bbox": {
-            "crs": "EPSG:4326",
-            "bounds": {
-                "minx": 9.664338414951173,
-                "miny": 42.21054230277022,
-                "maxx": 12.411684664287653,
-                "maxy": 44.47372015451805
+    const { layers, groups } = parseLayersArrays(pianoPaesaggisticoRegionaleArray);
+    getCap({
+        wmsUrl: 'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms',
+        mapParam: 'wmspiapae',
+        mapResolution: 91
+    }).then((capLayers) => {
+        console.log('layers/piano_paesaggistico_regionale.json');
+        const newLayers = layers.reverse().map((layer) => {
+            const options = capLayers.find((capLayer) => capLayer.name === layer.name);
+            if (!options) {
+                console.log(layer.name, 'not found');
             }
-        }
-    }));
-    console.log('layers/piano_paesaggistico_regionale.json');
-    console.log('Layers', JSON.stringify(pPR));
-    console.log('Groups', JSON.stringify([
-        {
-            "id": "piano_paesaggistico_regionale",
-            "title": "Piano paesaggistico regionale",
-            "expanded": true
-        }
-    ]));
+            return { ...options, ...layer };
+        });
+        console.log('Layers', JSON.stringify(newLayers));
+        console.log('Groups', JSON.stringify(groups));
+    });
 }
 
 function addParamsToLayers(layers, params) {
     return layers.map(layer => ({
         ...layer,
         visibility: false,
-        format: 'image/png8',
         tileSize: 512,
         ...params
     }));
@@ -521,13 +495,15 @@ export const printStaticMaps = () => {
         JSON.stringify(
             mappaBase(
                 [
-                    ...addParamsToLayers(pianoPaesaggisticoRegionale.layers, { format: 'image/png' }),
+                    ...addParamsToLayers(pianoPaesaggisticoRegionale.layers),
+                    ...addParamsToLayers(risorse.layers),
                     ...addParamsToLayers(invarianti.layers),
                     ...addParamsToLayers(pianiStrutturali.layers),
-                    ...addParamsToLayers(pianiOperativi.layers)
+                    ...addParamsToLayers(pianiOperativi.layers),
                 ],
                 [
                     ...pianoPaesaggisticoRegionale.groups,
+                    ...risorse.groups,
                     ...invarianti.groups,
                     ...pianiStrutturali.groups,
                     ...pianiOperativi.groups
@@ -541,13 +517,15 @@ export const printStaticMaps = () => {
         JSON.stringify(
             mappaBase(
                 [
-                    ...addParamsToLayers(pianoPaesaggisticoRegionale.layers, { format: 'image/png' }),
+                    ...addParamsToLayers(pianoPaesaggisticoRegionale.layers),
+                    ...addParamsToLayers(risorse.layers),
                     ...addParamsToLayers(invarianti.layers),
                     ...addParamsToLayers(pianiStrutturali.layers),
                     ...addParamsToLayers(pianiOperativi.layers)
                 ],
                 [
                     ...pianoPaesaggisticoRegionale.groups,
+                    ...risorse.groups,
                     ...invarianti.groups,
                     ...pianiStrutturali.groups,
                     ...pianiOperativi.groups

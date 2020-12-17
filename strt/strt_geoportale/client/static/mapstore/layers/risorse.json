@@ -5,11 +5,517 @@
             "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
-            "name": "rt_piapae.costa_fittizia",
-            "title": "Costa fittizia",
-            "description": "Strato vettoriale riportante la costa fittizia impiegata per la realizzazione del dataset della 'lettera a'",
+            "name": "rt_arprot.renato.specie.uccelli.rt.point",
+            "title": "Renato Biomart - Uccelli",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Uccelli'",
             "params": {
-                "map": "wmspiapae",
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.fauna"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.specie.rettili.rt.point",
+            "title": "Renato Biomart - Rettili",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Rettili'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.fauna"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.specie.pesci.rt.point",
+            "title": "Renato Biomart - Pesci",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Pesci'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.fauna"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.specie.molluschi.rt.point",
+            "title": "Renato Biomart - Molluschi",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Molluschi'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.fauna"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.specie.mammiferi.rt.point",
+            "title": "Renato Biomart - Mammiferi",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Mammiferi'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.fauna"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.specie.insetti.rt.point",
+            "title": "Renato Biomart - Insetti",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Insetti'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.fauna"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.specie.crostacei.rt.point",
+            "title": "Renato Biomart - Crostacei",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Crostacei'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.fauna"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.specie.anfibi.rt.point",
+            "title": "Renato Biomart - Anfibi",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Anfibi'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.fauna"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.santuario_mammiferi_marini.rt",
+            "title": "Santuario Mammiferi Marini",
+            "description": "Santuario Mammiferi Marini - DM del 2 Marzo 2012",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 6.04618,
+                    "miny": 40.786,
+                    "maxx": 11.6007,
+                    "maxy": 44.4268
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.fauna"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.fitocenosi.rt.point",
+            "title": "Renato Biomart - Fitocenosi",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Fitocenosi'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.flora"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.specie.vegetali.rt.point",
+            "title": "Renato Biomart - Vegetali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Vegetali'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.flora"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.habitat_hascitu.rt.stampa",
+            "title": "Habitat - HaSCITu Stampa",
+            "description": "Habitat - Fonte HaSCITu. Questo layer e' finalizzato a fornire supporto per specifiche carte generate in una webapp regionale (http://www502.regione.toscana.it/searcherlite/hascitu_start.jsp).",
+            "params": {
+                "map": "wmsarprot",
                 "map_resolution": 91
             },
             "bbox": {
@@ -44,27 +550,27 @@
                 "EPSG:32632": true,
                 "EPSG:32633": true
             },
-            "group": "piano_paesaggistico_regionale"
+            "group": "risorse.struttura_ecosistemica.flora"
         },
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
-            "name": "rt_piapae.parco_agricolo_piana_pit",
-            "title": "Parco agricolo della Piana - PIT - Salvaguardia A",
-            "description": "Parco Agricolo della Piana - PIT",
+            "name": "rt_arprot.habitat_hascitu.rt.point.tipoveg",
+            "title": "Habitat - HaSCITu - Tipo vegetazione",
+            "description": "Habitat - Fonte HaSCITu. dataset puntuale aggregato per Tipo vegetazione. Questo layer e' finalizzato a fornire supporto per specifiche carte generate in una webapp regionale (http://www502.regione.toscana.it/searcherlite/hascitu_start.jsp)",
             "params": {
-                "map": "wmspiapae",
+                "map": "wmsarprot",
                 "map_resolution": 91
             },
             "bbox": {
                 "crs": "EPSG:4326",
                 "bounds": {
-                    "minx": 11.01,
-                    "miny": 43.7704,
-                    "maxx": 11.2321,
-                    "maxy": 43.9427
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
                 }
             },
             "minScaleDenominator": 1,
@@ -90,165 +596,27 @@
                 "EPSG:32632": true,
                 "EPSG:32633": true
             },
-            "group": "piano_paesaggistico_regionale"
+            "group": "risorse.struttura_ecosistemica.flora"
         },
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
-            "name": "rt_piapae.carta_della_rete_ecologica.50k.ct.rt",
-            "title": "Carta della rete ecologica 1:50.000",
-            "description": "Carta della rete ecologica 1:50.000. Lo strato propone la carta della rete ecologica della Toscana in scala 1:50000. La carta e' finalizzata alla evidenziazione degli elementi strutturali e funzionali della rete ecologica regionale. La redazione della carta e' il risultato di una sintesi e rielaborazione di numerose informazioni provenienti da fonti istituzionali e/o libere. La redazione della carta si e' basata su modelli di idoneita' ambientale dei diversi usi del suolo rispetto alle specie di Vertebrati focali, sensibili alla frammentazione, tipiche degli ecosistemi forestali o agropastorali. Le principali fasi di redazione della carta sono state: (i) definizione degli obiettivi di conservazione in relazione ai fattori di frammentazione che agiscono alla scala regionale; (ii) selezione della carta Corine Land Cover IV livello, anno 2006 (scala 1:100.000); (iii) rilievo fotogrammetrico (fotogrammi anno 2010-AGEA-RT) per rilevare la presenza e ampiezza della vegetazione ripariale lungo le aste fluviali principali e integrazione dello strato informativo con il CLC 2006; (iv) elaborazione dei modelli di idoneita' ambientale (con procedura GLM) per le guilds di specie focali, previa rasterizzazione e generalizzazione del CLC2006 e utilizzo di altre banche dati (Tipi Climatici_RT e Inventario Forestale Toscano_RT); (v) trasposizione del valore di idoneita' dalle celle raster ai poligoni della carta vettoriale CLC 2006; (vi) definizione degli elementi strutturali delle reti; (vii) trasposizione del valore di idoneita' dei poligoni CLC 2006 allo strato informativo relativo all'uso del suolo della regione Toscana generalizzato in scala 1:50.000 (viii) individuazione degli elementi funzionali della rete ecologica.",
+            "name": "rt_arprot.habitat_hascitu.rt.point.coribio",
+            "title": "Habitat - HaSCITu - Coribio",
+            "description": "Habitat - Fonte HaSCITu. dataset puntuale aggregato per CORIBIO. Questo layer e' finalizzato a fornire supporto per specifiche carte generate in una webapp regionale (http://www502.regione.toscana.it/searcherlite/hascitu_start.jsp)",
             "params": {
-                "map": "wmspiapae",
+                "map": "wmsarprot",
                 "map_resolution": 91
             },
             "bbox": {
                 "crs": "EPSG:4326",
                 "bounds": {
-                    "minx": 9.66344,
-                    "miny": 42.2098,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 150000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.carta_del_territorio_urbanizzato.50k.ct.rt",
-            "title": "Carta del territorio urbanizzato 1:50.000",
-            "description": "Lo strato propone la carta del territorio urbanizzato in scala 1:50000. La carta e' finalizzata a fornire un supporto operativo per distinguere cio' che puo' essere considerato territorio a tutti gli effetti urbanizzato, il cui riuso non comporta pertanto nuovo 'consumo' di suolo, dal territorio utilizzabile a fini agricoli o dotato di valenze ambientali. La Carta del Territorio Urbanizzato rappresenta una ipotesi di perimetrazione delle aree urbanizzate realizzata utilizzando un modello geo-statistico per la illustrazione del quale si rimanda al capitolo relativo alla metodologia generale della 3a Invariante a livello regionale. Allo stesso capitolo si rinvia per le specificazioni normative relative alla applicazione del metodo per la perimetrazione del territorio urbanizzato a livello comunale. Il modello geostatistico utilizzato per la costruzione della carta del territorio urbanizzato, fondato sugli indicatori di continuita' e densita' dell'urbanizzato, ha consentito di elaborare per ogni ambito di paesaggio una carta in scala 1/50000, che individua le aree a edificato continuo, identificandone indicativamente anche i tipi di tessuto. Questa scala, adottata nel Piano paesaggistico per le schede degli Ambiti di paesaggio, non consente assolutamente di trasferire meccanicamente i confini del territorio urbanizzato individuati dalla carta alle scale proprie dei piani strutturali; ha validita' dunque unicamente come quadro indicativo, rispetto al quale e' necessario un percorso di verifica, reinterpretazione e puntualizzazione nell'elaborazione degli strumenti urbanistici.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66344,
-                    "miny": 42.2098,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 150000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.carta_dei_sistemi_morfogenetici.50k.ct.rt",
-            "title": "Carta dei sistemi morfogenetici 1:50.000",
-            "description": "Carta dei sistemi morfogenetici 1:50.000. Lo strato propone la carta dei caratteri morfogenetici del territorio toscano in scala 1:50.000. La carta e' il frutto dell'analisi e dell'elaborazione di strati informativi provenienti da fonti istituzionali o frutto di elaborazioni originali. La principale fonte informativa e' il SITA della Regione Toscana. La carta e' finalizzata alla rappresentazione dei caratteri morfogenetici del territorio toscano, ovvero degli elementi obiettivamente riconoscibili della struttura fisica del paesaggio, definiti da una combinazione dei fattori che presiedono allo sviluppo delle forme del rilievo (fattori strutturali, temporali e geologici). La procedura adottata per la realizzazione della carta si e' basata principalmente sull'utilizzazione del Continuum Geologico Regionale, scala 1:10.000, e su un processo di generalizzazione delle informazioni in essa contenuta e di analisi integrata delle informazioni provenienti anche da altre banche dati (idrologiche, idrogeologiche, pedologiche, etc.) secondo una metodologia ispirata al metodo dei land systems. Sulla base di analisi integrate, la fotointerpretazione del rilievo ha permesso infine l'individuazione di associazioni di forme ricorrenti, che caratterizzano ogni sistema morfogenetico.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66344,
-                    "miny": 42.2098,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 150000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.carta_dei_caratteri_del_paesaggio.50k.ct.rt",
-            "title": "Carta dei caratteri del paesaggio 1:50.000",
-            "description": "Carta dei caratteri del paesaggio 1:50.000. Lo strato propone la Carta dei caratteri del paesaggio in scala 1:50.000. La carta e' stata realizzata elaborando le seguenti fonti cartografiche principali: Rilievo ombreggiato: DBT_RT_(2000_2010); LaRIST - Tipi fisiografici: CIST_(2013) - Calanchi e biancane: DB_CARG_RT_(.....); QC_PTCP - Idrografia e zone umide: DBT_RT_(2000_2010) - Fonti Termali: QC_PTCP - Batimetria: DBT_RT_(2000_2010) - Caratteri vegetazionali: UCS_RT_(2007); IFT_RT_(2009); Carta della Vegetazione_ Arrigoni_RT_(1998); Fotointerpretazione da OFC_AGEA_RT_(2010) - Vegetazione Riparia: UCS_RT_(2007); DB_CARG_RT_(2010); QC_PTCP - Alberate: QC_PTC - Allineamento centuriazione: QC_PTC - Centri matrice: DBT_RT/LaRIST_(2010_2012) - Edifici: DBT_RT/LaRIST_(2010_2012); BD_Catastale_AdT_(2012) - Percorsi fondativi: CIST_(2013)  - Viabilita': DataBaseTopografico_Regione Toscana_(2000_2010); OpenStreetMap_(2012) - Linee ferroviarie: DBT_RT_(2000_2010) -) - Infrastrutture e attrezzature: Fotointerpretazione da OFC_AGEA_RT_(2010) - Presidi fortificati: BD_UNISI - Cinte murarie: DBT_RT_(2000_2010) - Acquedotti storici: QC_PTC - Copertura del suolo: UCS_RT_(2007) - Sistemazioni di versante delle colture legnose permanenti: DBT_RT_(2000_2010) - Scoline: DBT_RT_(2000_2010) - Trama del mosaico colturale dei seminativi di pianura: DBT_RT_(2000_2010); UCS_RT_(2007); BD_Catastale_AdT_(2012).",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66344,
-                    "miny": 42.2098,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
                 }
             },
             "minScaleDenominator": 1,
@@ -274,429 +642,27 @@
                 "EPSG:32632": true,
                 "EPSG:32633": true
             },
-            "group": "piano_paesaggistico_regionale"
+            "group": "risorse.struttura_ecosistemica.flora"
         },
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
-            "name": "rt_piapae.topografica50k.color.rt",
-            "title": "Carta topografica 1:50.000",
-            "description": "Carta topografica 1:50.000. Lo strato propone la Carta topografica regionale in scala 1:50.000 in versione a colori. La carta e' stata realizzata elaborando le seguenti fonti cartografiche principali: Viabilita': DataBaseTopografico_Regione Toscana_(2000_2010); OpenStreetMap_2012) - Linee ferroviarie: DBT_RT_(2000_2010) - Insediamenti: DBT_RT_(2000_2010); BD_Catastale_AdT_(2012) - Infrastrutture e attrezzature: Fotointerpretazione da OFC_AGEA_RT_(2010) - Uso e Copertura del suolo: UCS_RT_(2007) - Toponomastica: DBT_RT_(2000_2010); IGM - Idrografia e zone umide: DBT_RT_(2000_2010) - Orografia: DBT_RT_(2000_2010); LaRIST - Batimetria: DBT_RT_(2000_2010).",
+            "name": "rt_arprot.habitat_hascitu.rt.point.code_priority",
+            "title": "Habitat - HaSCITu - Code_Priority",
+            "description": "Habitat - Fonte HaSCITu. dataset puntuale aggregato per CODE_PRIORITY. Questo layer e' finalizzato a fornire supporto per specifiche carte generate in una webapp regionale (http://www502.regione.toscana.it/searcherlite/hascitu_start.jsp)",
             "params": {
-                "map": "wmspiapae",
+                "map": "wmsarprot",
                 "map_resolution": 91
             },
             "bbox": {
                 "crs": "EPSG:4326",
                 "bounds": {
-                    "minx": 9.66344,
-                    "miny": 42.2098,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 150000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.idpae1_a_etichette.rt",
-            "title": "Etichette degli immobili ed aree di notevole interesse pubblico",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 136. Dataset areale: 'Immobili ed aree di notevole interesse pubblico'. Etichette. Scala di visibilita 1:1 - 1:100.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66344,
-                    "miny": 42.2098,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 100000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.idpae1_a.rt",
-            "title": "Immobili ed aree di notevole interesse pubblico - DCR n. 46 del 23/07/2019",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 136. Dataset areale: 'Immobili ed aree di notevole interesse pubblico'. Scala di visibilita 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. DCR n.46 del 23/07/2019",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66344,
-                    "miny": 42.2098,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "ulter_cont_unesco",
-            "title": "Ulteriori contesti",
-            "description": "Lo strato propone i perimetri delle aree individuate in Toscana dalla Commissione per il Patrimonio Mondiale quali siti con valore universale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66344,
-                    "miny": 42.2098,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.vinc_archeo_coinc_2",
-            "title": "Aree tutelate per legge - Lett. m) - Le zone di interesse archeologico - Beni archeologici tutelati ai sensi della parte II del D.Lgs. 42/2004 con valenza paesaggistica coincidenti con le zone tutelate di cui all'art. 11.3 lett. c)",
-            "description": "Dataset areale: 'Le zone di interesse archeologico - Beni archeologici tutelati ai sensi della parte II del D.Lgs. 42/2004 con valenza paesaggistica coincidenti con le zone tutelate di cui all'art. 11.3 lett. c). Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale Avvertenza: l'attestazione dei vincoli culturali viene rilasciata dalla competente Soprintendenza.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 10.0404,
-                    "miny": 42.2313,
-                    "maxx": 12.1637,
-                    "maxy": 44.1767
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.vinc_archeo_coinc_1",
-            "title": "Aree tutelate per legge - Lett. m) - Le zone di interesse archeologico - Zone tutelate di cui all'art. 11.3 lett. c) dell'Elaborato 7B della Disciplina dei beni paesaggistici.",
-            "description": "Dataset areale: 'Zone tutelate di cui all'art. 11.3 lett. c) dell'Elaborato 7B della Disciplina dei beni paesaggistici'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Avvertenza: l'attestazione dei vincoli culturali viene rilasciata dalla competente Soprintendenza.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 10.0404,
-                    "miny": 42.2313,
-                    "maxx": 12.1637,
-                    "maxy": 44.1767
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.vinc_archeo_ricad",
-            "title": "Aree tutelate per legge - Lett. m) - Le zone di interesse archeologico - Beni archeologici tutelati ai sensi della parte II del D.Lgs. 42/2004 con valenza paesaggistica ricadenti nelle zone tutelate di cui all'art. 11.3 lett. a) e b)",
-            "description": "Dataset areale: ' Le zone di interesse archeologico - Beni archeologici tutelati ai sensi della parte II del D.Lgs. 42/2004 con valenza paesaggistica ricadenti nelle zone tutelate di cui all'art. 11.3 lett. a) e b)'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Avvertenza: l'attestazione dei vincoli culturali viene rilasciata dalla competente Soprintendenza.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 10.0404,
-                    "miny": 42.2313,
-                    "maxx": 12.1637,
-                    "maxy": 44.1767
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "lett_m_artut",
-            "title": "Aree tutelate per legge - Lett. m) - Le zone di interesse archeologico.",
-            "description": "Zone tutelate di cui all'art. 11.3 lett. a) e b) dell'Elaborato 7B della Disciplina dei beni paesaggistici. Dataset areale:  'Zone tutelate di cui all'art. 11.3 lett. a) e b) dell'Elaborato 7B della Disciplina dei beni paesaggistici'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 10.0404,
-                    "miny": 42.2313,
-                    "maxx": 12.1637,
-                    "maxy": 44.1767
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "lett_i_artut",
-            "title": "Aree tutelate per legge - Lett. i) - Le zone umide",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Lo strato propone i perimetri delle aree individuate ai sensi della convenzione internazionale di Ramsar relativa alle zone umide di importanza internazionale, sottoscritta nel 1971 da un gruppo di paesi, istituzioni scientifiche ed organizzazioni internazionali. Lo strato e' una riproposizione di quello delle zone umide ramsar  presente nel WMS 'Aree protette'. Dataset areale: 'Aree tutelate'. Scala di visibilita 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 10.2105,
-                    "miny": 42.3911,
-                    "maxx": 11.461,
-                    "maxy": 43.8754
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "lett_h_usicivici",
-            "title": "Aree tutelate per legge - Lett. h) - Le zone gravate da usi civici",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Lo strato propone i comuni nei quali vi e' una presenza o assenza accertata di Usi civici nonche' di quelli in cui l'accertamento non e' stato eseguito. Dataset areale: 'Comuni'. Scala di visibilita' 1:1 - 1:5.000.000.  Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66346,
-                    "miny": 42.2109,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
                 }
             },
             "minScaleDenominator": 1,
@@ -722,110 +688,18 @@
                 "EPSG:32632": true,
                 "EPSG:32633": true
             },
-            "group": "piano_paesaggistico_regionale"
+            "group": "risorse.struttura_ecosistemica.flora"
         },
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
-            "name": "lett_g_artut_20150327_20181009",
-            "title": "Aree tutelate per legge - Lett. g) - I territori coperti da foreste e da boschi - Dato storico",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Il dataset e' composto dalla Classe 1 (Boschi), della Classe 1bis (Strade in aree boscate) e della Classe 2 (Aree assimilabili a bosco) estratte dal database 'Uso e copertura del suolo' della Regione Toscana, foto interpretato da OFC dell'anno 2010 alla scala 1:10.000. Lo strato e' una riproposizione di quello gia' presente nel WMS 'Uso e copertura del suolo'. Dataset areale: 'Aree tutelate'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Dato storico. Riferito alla data del 27/03/2015.",
+            "name": "rt_arprot.habitat_hascitu.rt.point.cod_zsc",
+            "title": "Habitat - HaSCITu - ZSC",
+            "description": "Habitat - Fonte HaSCITu. dataset puntuale aggregato per codice ZSC. Questo layer e' finalizzato a fornire supporto per specifiche carte generate in una webapp regionale (http://www502.regione.toscana.it/searcherlite/hascitu_start.jsp)",
             "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66346,
-                    "miny": 42.2109,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 100000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "lett_g_artut",
-            "title": "Aree tutelate per legge - Lett. g) - I territori coperti da foreste e da boschi - aggiornamento DCR 93/2018",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Il dataset e' composto dalla Classe 1 (Boschi), della Classe 1bis (Strade in aree boscate) e della Classe 2 (Aree assimilabili a bosco) estratte dal database 'Uso e copertura del suolo' della Regione Toscana, foto interpretato da OFC dell'anno 2010 alla scala 1:10.000. Lo strato e' una riproposizione di quello gia' presente nel WMS 'Uso e copertura del suolo'. Dataset areale: 'Aree tutelate'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Il dataset e' un aggiornamento con DCR 93/2018.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66346,
-                    "miny": 42.2109,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 100000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.idrisnatprov.rt.poly",
-            "title": "Aree tutelate per legge - Lett. f) - Riserve naturali provinciali",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini delle riserve naturali provinciali sono definiti e approvati dagli Enti provinciali competenti. Lo strato e' una riproposizione di quello delle riserve naturali provinciali presente nel WMS 'Aree protette'. Dataset areale: 'Riserve provinciali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
+                "map": "wmsarprot",
                 "map_resolution": 91
             },
             "bbox": {
@@ -835,324 +709,6 @@
                     "miny": 42.079,
                     "maxx": 12.7825,
                     "maxy": 44.7022
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.idparprov.rt.poly",
-            "title": "Aree tutelate per legge - Lett. f) - Parchi provinciali",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini dei parchi provinciali sono definiti e approvati dagli Enti provinciali competenti. Lo strato e' una riproposizione di quello dei parchi provinciali presente nel WMS 'Aree protette'. Dataset areale:  'Parchi provinciali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.363,
-                    "miny": 42.079,
-                    "maxx": 12.7825,
-                    "maxy": 44.7022
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.idparreg.rt.poly",
-            "title": "Aree tutelate per legge - Lett. f) - Parchi regionali",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini dei parchi regionali  sono definiti e approvati dagli Enti parco competenti. Lo strato e' una riproposizione di quello dei parchi regionali presente nel WMS 'Aree protette'. Dataset areale: 'Parchi regionali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.363,
-                    "miny": 42.079,
-                    "maxx": 12.7825,
-                    "maxy": 44.7022
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.idrisnatstat.rt.poly",
-            "title": "Aree tutelate per legge - Lett. f) - Riserve statali",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini delle riserve statali sono definiti e approvati dall' Ente statale competente. Lo strato  e' una riproposizione di quello delle riserve statali presente nel WMS 'Aree protette'.Dataset areale: 'Riserve statali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.363,
-                    "miny": 42.079,
-                    "maxx": 12.7825,
-                    "maxy": 44.7022
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.idparnaz.rt.poly",
-            "title": "Aree tutelate per legge - Lett. f) Parchi nazionali",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. I confini dei parchi nazionali sono definiti e approvati dagli Enti parco competenti. Lo strato  e' una riproposizione di quello dei parchi nazionali presente nel WMS 'Aree protette'. Dataset areale:  'Parchi nazionali'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.363,
-                    "miny": 42.079,
-                    "maxx": 12.7825,
-                    "maxy": 44.7022
-                }
-            },
-            "minScaleDenominator": 1,
-            "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "lett_e_artut",
-            "title": "Aree tutelate per legge - Lettera e) - I circhi glaciali",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Aree individuate con foto restituzione stereoscopica alla scala 1:10.000  da fotogrammi aerei del 2010 e verifica di campo. Dataset areale:  'Aree tutelate'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.76561,
-                    "miny": 44.019,
-                    "maxx": 10.6643,
-                    "maxy": 44.4481
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "lett_d_artut",
-            "title": "Aree tutelate per legge - Lettera d) - Le montagne per la parte eccedente 1.200 msl",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Aree individuate a partire dalle curve di livello rappresentate nel database topografico della Regione Toscana. Dataset areale: 'Aree tutelate'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.67012,
-                    "miny": 42.8397,
-                    "maxx": 12.3295,
-                    "maxy": 44.4739
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.grafo.sistema.acque.rt",
-            "title": "Grafo Sistema acque_CTR",
-            "description": "Grafo del Sistema acque _CTR 10K della Regione Toscana. Lo strato e' una riproposizione di quello dei corsi d'acqua presente nel WMS 'IDROGRAFIA'.Dataset lineare: 'Grafo Sistema acque_CTR'. Scala di visibilita' 1:1 - 1:5000000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.64269,
-                    "miny": 42.2096,
-                    "maxx": 12.4578,
-                    "maxy": 44.4752
                 }
             },
             "minScaleDenominator": 1,
@@ -1178,29 +734,31 @@
                 "EPSG:32632": true,
                 "EPSG:32633": true
             },
-            "group": "piano_paesaggistico_regionale"
+            "group": "risorse.struttura_ecosistemica.flora"
         },
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
-            "name": "lett_c_fiumi",
-            "title": "Fiumi, torrenti, corsi d'acqua",
-            "description": "Grafo dei soli corsi d'acqua interessati, in tutto o in parte, da aree di tutela, presenti nel Sistema acque _CTR 10K della Regione Toscana.",
+            "name": "rt_arprot.habitat_hascitu.rt",
+            "title": "Habitat - HaSCITu",
+            "description": "Habitat - Fonte HaSCITu (Habitats in the Sites of Community Importance in Tuscany) Cartografia degli Habitat meritevoli di conservazione ai sensi della Direttiva 92/43 nei Siti di Interesse Comunitario della Regione Toscana. Il layer contiene anche poligoni di uso suolo a delimitare le aree intercluse nello ZSC di appartenenza che non rappresentano habitat.",
             "params": {
-                "map": "wmspiapae",
+                "map": "wmsarprot",
                 "map_resolution": 91
             },
             "bbox": {
                 "crs": "EPSG:4326",
                 "bounds": {
-                    "minx": 9.66964,
-                    "miny": 42.4159,
-                    "maxx": 12.4211,
-                    "maxy": 44.468
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
                 }
             },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
             "allowedSRS": {
                 "EPSG:3003": true,
                 "EPSG:3004": true,
@@ -1222,203 +780,27 @@
                 "EPSG:32632": true,
                 "EPSG:32633": true
             },
-            "group": "piano_paesaggistico_regionale"
+            "group": "risorse.struttura_ecosistemica.flora"
         },
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
-            "name": "lett_c_aree_tutelate",
-            "title": "Aree tutelate per legge - Lettera c) - I fiumi, i torrenti, i corsi d'acqua",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Buffer realizzato a partire da grafo idrico (mezzeria del corso d'acqua) ovvero, quando possibile, dalla linea di identificazione dell'area bagnata o dell'area idrica dei corsi d'acqua presenti nel Sistema acque /CTR 10K della Regione Toscana. Dataset areale: 'Aree tutelate'.Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
+            "name": "rt_arprot.idalbmon_lr60_1998.rt.point",
+            "title": "Alberi Monumentali della Regione Toscana - ex censimento LR n. 60/98",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Alberi Monumentali della Regione Toscana ai sensi della L.R. 30 del 29 Marzo 2015, del D.M. 23 Ottobre 2014 e della L.10 del 14 Gennaio 2013. Per tali esemplari arborei sono previste misure di conservazione e prescrizioni volte alla loro tutela e valorizzazione.",
             "params": {
-                "map": "wmspiapae",
+                "map": "wmsarprot",
                 "map_resolution": 91
             },
             "bbox": {
                 "crs": "EPSG:4326",
                 "bounds": {
-                    "minx": 9.66685,
-                    "miny": 42.3241,
-                    "maxx": 12.4578,
-                    "maxy": 44.4693
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "specchi_acqua500m",
-            "title": "Specchi d'acqua 500 metri",
-            "description": "Specchi d'acqua con perimetro maggiore di 500 ml, presenti nel Sistema acque_CTR 10K della Regione Toscana. Dataset areale:  'Specchi d'acqua con perimetro maggiore di 500 ml'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 10.0957,
-                    "miny": 42.3757,
-                    "maxx": 12.1401,
-                    "maxy": 44.3529
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "lett_b_laghi",
-            "title": "Aree tutelate per legge - Lettera b)  - I territori contermini ai laghi",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Buffer realizzato a partire dalla linea di riva degli specchi d'acqua con perimetro maggiore o uguale a 500 ml, presenti nel Sistema acque_CTR 10K della Regione Toscana. Dataset areale:  'Aree tutelate - I Sistemi costieri'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 10.0957,
-                    "miny": 42.3757,
-                    "maxx": 12.1401,
-                    "maxy": 44.3529
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "lett_a_artut",
-            "title": "Aree tutelate per legge - Lettera a) - I territori costieri",
-            "description": "Aree di tutela individuate ai sensi del D.lgs. 42/2004, art 142. Buffer realizzato a partire dalla linea di costa individuata con foto restituzione stereoscopica alla scala 1:10.000 da fotogrammi aerei del 2010. Dataset areale, 'Aree tutelate - I Sistemi costieri'. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intera fascia costiera  regionale.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.78153,
-                    "miny": 42.2308,
-                    "maxx": 11.5261,
-                    "maxy": 44.05
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
-            "group": "piano_paesaggistico_regionale"
-        },
-        {
-            "type": "wms",
-            "format": "image/png; mode=8bit",
-            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
-            "visibility": false,
-            "name": "rt_piapae.idambpae.rt.poly",
-            "title": "Ambiti di Paesaggio",
-            "description": "Gli Ambiti di paesaggio descrivono i caratteri peculiari e le caratteristiche paesaggistiche del territorio regionale derivanti dalla natura, dalla storia e dalle loro interrelazioni e, in riferimento ai quali, il Piano definisce specifici obiettivi di qualita' e normative d'uso. Il territorio di ciascun Ambito e' composto da un insieme di comuni, eccetto il caso del comune di Castelnuovo Berardenga, il cui territorio e' ripartito fra due Ambiti distinti. Dataset areale:  'Ambiti di paesaggio'. Scala di visibilita 1:1 - 1:5.000.000. Territorio coperto: intera regione.",
-            "params": {
-                "map": "wmspiapae",
-                "map_resolution": 91
-            },
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66344,
-                    "miny": 42.2098,
-                    "maxx": 12.4132,
-                    "maxy": 44.4742
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
                 }
             },
             "minScaleDenominator": 1,
@@ -1444,13 +826,1137 @@
                 "EPSG:32632": true,
                 "EPSG:32633": true
             },
-            "group": "piano_paesaggistico_regionale"
+            "group": "risorse.struttura_ecosistemica.flora"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idalbmon.rt.point",
+            "title": "Alberi Monumentali della Regione Toscana - D.C.R. n. 8 del 12 febbraio 2019 - D.M. 757 del 19 aprile 2019",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Alberi Monumentali della Regione Toscana ai sensi del D.C.R. n. 8 del 12 febbraio 2019 - D.M. 757 del 19 aprile 2019, del D.M. n.5450 del 19/12/2017 (Approvazione dell'elenco nazionale degli Alberi Monumentali), della L.R. 30 del 29 Marzo 2015, del D.M. 23 Ottobre 2014 e della L.10 del 14 Gennaio 2013. Per tali esemplari arborei sono previste misure di conservazione e prescrizioni volte alla loro tutela e valorizzazione. (https://www.politicheagricole.it/flex/cm/pages/ServeAttachment.php/L/IT/D/6%252F9%252F0%252FD.d4d335ba95868bd4466d/P/BLOB%3AID%3D12055/E/pdf)",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10,
+                    "miny": 41,
+                    "maxx": 13,
+                    "maxy": 45
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.flora"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.renato.habitat.rt.point",
+            "title": "Renato Biomart - Habitat",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Renato Biomart - Habitat'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idgeotopi.rt.poly",
+            "title": "Geotopi di importanza regionale",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Geotopi di importanza regionale'.",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.id.pn.rns.pr.pp.rnp.rt.poly.dissolve",
+            "title": "Aree protette - dissolve",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette'. Il dataset e' vestito con solo contorno composto da tratti orientati verso la parte interna e ridimensionati in base alla scala. Il dataset e' ottenuto per dissolvenza da Riserve nazionali, Parchi nazionali, Riserve provinciali, Parchi provinciali, Parchi regionali",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idramsar.rt.poly",
+            "title": "Zone umide ramsar",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - Zone umide riconosciute ramsar. Il dataset e' ottenuto mediante l'applicazione della regola (STATO='RIC')",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idnat2000_sic_zps.rt.poly",
+            "title": "Siti Natura 2000 - ZSC e ZPS coincidenti (ZSC-ZPS)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Siti Natura 2000 - ZSC e ZPS coincidenti (ZSC-ZPS)'.",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idnat2000_zps.rt.poly",
+            "title": "Siti Natura 2000 (ZPS)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Siti Natura 2000 - Zone di Protezione Speciale (ZPS)'.",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idnat2000_sic.rt.poly",
+            "title": "Siti Natura 2000 - Zone Speciali di Conservazione (ZSC)- SIC e pSIC",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Siti Natura 2000 - Zone Speciali di Conservazione (ZSC)- ex SIC, SIC e pSIC'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idsir_sir.rt.poly",
+            "title": "Siti di interesse regionale (sir)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Siti di interesse regionale (sir)'.",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idsir.rt.poly",
+            "title": "Siti di importanza regionale e Natura 2000",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset complessivo di Siti di Interesse Regionale (sir) e Siti Natura 2000'.",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idanpil.rt.poly",
+            "title": "Aree naturali protette di interesse locale",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - Aree naturali protette di interesse locale (anpil).",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idrisnatprov.rt.poly",
+            "title": "Riserve naturali regionali (ex provinciali)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - Riserve naturali regionali (ex provinciali).",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idparprov.rt.poly",
+            "title": "Parchi provinciali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - Parchi provinciali.",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idparreg_migliarino_sanrossore.rt.poly",
+            "title": "Parco Regionale - Migliarino San Rossore Massaciuccoli",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Trattasi del medesimo dataset 'Aree protette - Parchi regionali' filtrato al solo Parco di Migliarino San Rossore e Massaciuccoli (PR02)",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idparreg_maremma.rt.poly",
+            "title": "Parco Regionale - Maremma",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Trattasi del medesimo dataset 'Aree protette - Parchi regionali' filtrato al solo Parco della Maremma (PR01)",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idparreg_alpiapuane.rt.poly",
+            "title": "Parco Regionale - Alpi Apuane",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Trattasi del medesimo dataset 'Aree protette - Parchi regionali' filtrato al solo Parco delle Alpi Apuane (codice PR03)",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idparreg.rt.poly",
+            "title": "Parchi regionali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - Parchi regionali.",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idareemarineprotette.rt.poly",
+            "title": "Aree Marine Protette",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - Aree Marine Protette. Fonte Ministero dell'Ambiente e della Tutela del Territorio e del Mare. DM 21-10-2009",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idrisnatstat.rt.poly",
+            "title": "Riserve naturali dello Stato - scala 1:25.000",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - Riserve naturali statali.",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idpararctos.rt.poly",
+            "title": "Parco arcipelago toscano",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - parchi nazionali - subset parco arcipelago toscano. Il subset e' espresso dalla regola CODICE='PN02'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idparforcas.rt.poly",
+            "title": "Parco delle foreste casentinesi",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - parchi nazionali - subset parco delle foreste casentinesi. Il subset e' espresso dalla regola CODICE='PN01'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idpartoscoem.rt.poly",
+            "title": "Parco Appennino Tosco-Emiliano",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - parchi nazionali - subset parco appennino tosco-emiliano'. Il subset e' espresso dalla regola CODICE='PN03'",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idparnaz.rt.poly.dissolve",
+            "title": "Parchi nazionali - dissolve",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - parchi nazionali'. Il dataset e' vestito con solo contorno composto da triangoli orientati e ridimensionati in base alla scala",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_arprot.idparnaz.rt.poly",
+            "title": "Parchi nazionali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree protette - parchi nazionali'.",
+            "params": {
+                "map": "wmsarprot",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3004": true,
+                "EPSG:6706": true,
+                "EPSG:6707": true,
+                "EPSG:6708": true,
+                "EPSG:6709": true,
+                "EPSG:23032": true,
+                "EPSG:23033": true,
+                "EPSG:23034": true,
+                "EPSG:25832": true,
+                "EPSG:25833": true,
+                "EPSG:4326": true,
+                "EPSG:4230": true,
+                "EPSG:4258": true,
+                "EPSG:4265": true,
+                "EPSG:4806": true,
+                "EPSG:3857": true,
+                "EPSG:32632": true,
+                "EPSG:32633": true
+            },
+            "group": "risorse.struttura_ecosistemica.biodiverista"
         }
     ],
     "groups": [
         {
-            "id": "piano_paesaggistico_regionale",
-            "title": "Piano paesaggistico regionale",
+            "id": "risorse",
+            "title": "Risorse",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_ecosistemica",
+            "title": "Struttura ecosistemica",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_ecosistemica.biodiverista",
+            "title": "Biodiveristà",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_ecosistemica.flora",
+            "title": "Flora",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_ecosistemica.fauna",
+            "title": "Fauna",
             "expanded": true
         }
     ]

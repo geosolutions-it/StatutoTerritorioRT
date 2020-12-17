@@ -32,6 +32,13 @@
                     ]
                 },
                 {
+                    "id": "risorse",
+                    "label": "Risorse",
+                    "include": [
+                        "risorse"
+                    ]
+                },
+                {
                     "id": "invarianti",
                     "label": "Invarianti",
                     "include": [
@@ -69,6 +76,13 @@
                     "label": "Piano paesaggistico regionale",
                     "include": [
                         "piano_paesaggistico_regionale"
+                    ]
+                },
+                {
+                    "id": "risorse",
+                    "label": "Risorse",
+                    "include": [
+                        "risorse"
                     ]
                 },
                 {

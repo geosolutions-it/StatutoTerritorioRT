@@ -2,7 +2,7 @@
     "layers": [
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.vicchio",
@@ -35,7 +35,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.vicchio",
@@ -68,7 +68,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.vaglia",
@@ -101,7 +101,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.vaglia",
@@ -134,7 +134,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.vaglia",
@@ -167,7 +167,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.scandicci",
@@ -200,7 +200,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.scandicci",
@@ -233,7 +233,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.scandicci",
@@ -266,7 +266,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.quarrata",
@@ -299,7 +299,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.quarrata",
@@ -332,7 +332,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.quarrata",
@@ -365,7 +365,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.quarrata",
@@ -398,7 +398,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.montemurlo",
@@ -431,7 +431,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.montemurlo",
@@ -464,7 +464,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.montemurlo",
@@ -497,7 +497,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.montemurlo",
@@ -530,7 +530,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.greve_in_chianti",
@@ -563,7 +563,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_operativi.greve_in_chianti",
