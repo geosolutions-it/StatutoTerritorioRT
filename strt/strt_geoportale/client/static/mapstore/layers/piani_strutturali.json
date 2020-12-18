@@ -2,7 +2,7 @@
     "layers": [
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.vaglia",
@@ -35,7 +35,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.forte_dei_marmi",
@@ -68,7 +68,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.fiesole",
@@ -101,7 +101,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.vagli_di_sotto",
@@ -134,7 +134,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.vicchio",
@@ -167,7 +167,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.scandicci",
@@ -200,7 +200,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.reggello",
@@ -233,7 +233,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.quarrata",
@@ -266,7 +266,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.piancastagnaio",
@@ -299,7 +299,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.peccioli",
@@ -332,7 +332,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.montignoso",
@@ -365,7 +365,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.montemurlo",
@@ -398,7 +398,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.montecarlo",
@@ -431,7 +431,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.lucca",
@@ -464,7 +464,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.livorno",
@@ -497,7 +497,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.lastra_a_signa",
@@ -530,7 +530,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.greve_in_chianti",
@@ -563,7 +563,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.figline_incisa",
@@ -596,7 +596,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.cutigliano",
@@ -629,7 +629,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.civitella_val_di_chiana",
@@ -662,7 +662,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.caciana_t_lari",
@@ -695,7 +695,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.camaiore",
@@ -728,7 +728,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_marciano_lucignano.marciano_chiana",
@@ -761,7 +761,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_marciano_lucignano.lucignano",
@@ -794,7 +794,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.villa_colemandina",
@@ -827,7 +827,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.sillano_giuncugnano",
@@ -860,7 +860,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.san_romano_gna",
@@ -893,7 +893,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.pieve_fosciana",
@@ -926,7 +926,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.piazza_al_serchio",
@@ -959,7 +959,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.molazzana",
@@ -992,7 +992,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.minucciano",
@@ -1025,7 +1025,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.gallicano",
@@ -1058,7 +1058,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.fosciandora",
@@ -1091,7 +1091,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.fabbriche_vergemoli",
@@ -1124,7 +1124,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.castiglione_gna",
@@ -1157,7 +1157,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.castelnuovo_gna",
@@ -1190,7 +1190,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.careggine",
@@ -1223,7 +1223,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_garfagnana.camporgiano",
@@ -1256,7 +1256,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_media_valle_serchio.pescaglia",
@@ -1289,7 +1289,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_media_valle_serchio.coreglia_antelm",
@@ -1322,7 +1322,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_media_valle_serchio.borgo_a_mozzano",
@@ -1355,7 +1355,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_media_valle_serchio.barga",
@@ -1388,7 +1388,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_media_valle_serchio.bagni_di_lucca",
@@ -1421,7 +1421,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_sesto_calenzano.sesto_fno",
@@ -1454,7 +1454,7 @@
         },
         {
             "type": "wms",
-            "format": "image/png",
+            "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
             "group": "piani_strutturali.psi_sesto_calenzano.calenzano",

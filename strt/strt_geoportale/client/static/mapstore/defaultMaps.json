@@ -32,10 +32,24 @@
                     ]
                 },
                 {
+                    "id": "risorse",
+                    "label": "Risorse",
+                    "include": [
+                        "risorse"
+                    ]
+                },
+                {
                     "id": "invarianti",
                     "label": "Invarianti",
                     "include": [
                         "invarianti"
+                    ]
+                },
+                {
+                    "id": "cartografia_di_base",
+                    "label": "Cartografia di base",
+                    "include": [
+                        "cartografia_di_base"
                     ]
                 }
             ]
@@ -72,10 +86,24 @@
                     ]
                 },
                 {
+                    "id": "risorse",
+                    "label": "Risorse",
+                    "include": [
+                        "risorse"
+                    ]
+                },
+                {
                     "id": "invarianti",
                     "label": "Invarianti",
                     "include": [
                         "invarianti"
+                    ]
+                },
+                {
+                    "id": "cartografia_di_base",
+                    "label": "Cartografia di base",
+                    "include": [
+                        "cartografia_di_base"
                     ]
                 }
             ]
