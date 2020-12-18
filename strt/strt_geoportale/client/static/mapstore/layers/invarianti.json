@@ -5,535 +5,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.categoria_b_discontinua_dgr_1148_2002.rete_aree_umide",
-            "name": "invarianti:aree_umide",
-            "title": "Aree umide",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 10.132705837031448,
-                    "miny": 42.378608699785445,
-                    "maxx": 12.094510222510849,
-                    "maxy": 44.01226414894365
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_b_discontinua_dgr_1148_2002.rete_pozze",
-            "name": "invarianti:rete_pozze",
-            "title": "Pozze",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.70975517425141,
-                    "miny": 42.35879472851977,
-                    "maxx": 12.398676966876476,
-                    "maxy": 44.467718968579845
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_b_discontinua_dgr_1148_2002.rete_alberi_isolati",
-            "name": "invarianti:rete_alberi_isolati",
-            "title": "Alberi isolati",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.702283887091022,
-                    "miny": 42.362000232795715,
-                    "maxx": 12.361055323906298,
-                    "maxy": 44.34268691854626
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.limitazioni_del_suoli",
-            "name": "invarianti:deficit_idrico",
-            "title": "Deficit idrico",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66342553861484,
-                    "miny": 42.20977361437311,
-                    "maxx": 12.413184975794099,
-                    "maxy": 44.474204927920674
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.limitazioni_del_suoli",
-            "name": "invarianti:erosione",
-            "title": "Erosione",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.663425538617293,
-                    "miny": 42.209773614606895,
-                    "maxx": 12.413184975794099,
-                    "maxy": 44.474204927920674
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
-            "name": "invarianti:fertilità",
-            "title": "Fertilità",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.663425538617293,
-                    "miny": 42.209773614606895,
-                    "maxx": 12.413184975794099,
-                    "maxy": 44.474204927920674
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
-            "name": "invarianti:lcc",
-            "title": "lcc",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.663425538617293,
-                    "miny": 42.209773614606895,
-                    "maxx": 12.413184975794099,
-                    "maxy": 44.474204927920674
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.rete_praterie",
-            "name": "invarianti:rete_praterie_radure",
-            "title": "Praterie e radure",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.695664642658588,
-                    "miny": 42.39184612781383,
-                    "maxx": 12.395820483650743,
-                    "maxy": 44.472191883630416
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.rete_muretti_a_secco",
-            "name": "invarianti:rete_muretti_secco",
-            "title": "Muretti a secco",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.68969381096792,
-                    "miny": 42.22362420184277,
-                    "maxx": 12.391925621186552,
-                    "maxy": 44.46641937586841
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.rete_siepi",
-            "name": "invarianti:vegetazione_evoluzione",
-            "title": "Vegetazione in evoluzione",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.668741577643909,
-                    "miny": 42.29043850396552,
-                    "maxx": 12.41086636342219,
-                    "maxy": 44.47360263870976
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.rete_siepi",
-            "name": "invarianti:rete_siepi",
-            "title": "Siepi",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.69560323226735,
-                    "miny": 42.31934504770218,
-                    "maxx": 12.409537768227308,
-                    "maxy": 44.45337117587459
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.aree_boscate",
-            "name": "invarianti:aree_boscate",
-            "title": "Boschi",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.66347801574859,
-                    "miny": 42.21477456282885,
-                    "maxx": 12.413184975927452,
-                    "maxy": 44.47420492824997
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.idrografia",
-            "name": "invarianti:corsi_acqua_areali",
-            "title": "Corsi d'acqua areali",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.726003363397759,
-                    "miny": 42.35648403455676,
-                    "maxx": 12.410206174073272,
-                    "maxy": 44.46146976915048
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.idrografia",
-            "name": "invarianti:scoline",
-            "title": "Scoline",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.755127483932696,
-                    "miny": 42.36278857976756,
-                    "maxx": 12.364084451199474,
-                    "maxy": 44.458094064919955
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.idrografia",
-            "name": "invarianti:rete_idraulico_agraria",
-            "title": "Rete idraulica agraria",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.818101894144563,
-                    "miny": 42.386151738813616,
-                    "maxx": 12.364683735774262,
-                    "maxy": 44.45728721843436
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.categoria_a_continua_dgr_1148_2002.idrografia",
-            "name": "invarianti:reticolo_idrologico",
-            "title": "Reticolo idrologico",
-            "description": "",
-            "bbox": {
-                "crs": "EPSG:4326",
-                "bounds": {
-                    "minx": 9.665770388924496,
-                    "miny": 42.21092030380024,
-                    "maxx": 12.41092619845314,
-                    "maxy": 44.47506855924476
-                }
-            },
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3785": true,
-                "EPSG:3857": true,
-                "EPSG:4269": true,
-                "EPSG:4326": true,
-                "EPSG:6707": true,
-                "EPSG:102113": true,
-                "EPSG:900913": true
-            },
-            "search": {
-                "url": "/geoserver/wfs",
-                "type": "wfs"
-            }
-        },
-        {
-            "type": "wms",
-            "format": "image/png8",
-            "url": "/geoserver/wms",
-            "visibility": false,
-            "group": "invarianti.rete_viaria",
+            "group": "invarianti.invariante_iv.rete_viaria",
             "name": "invarianti:strade_50k",
             "title": "Strade, scala 1:5000",
             "description": "",
@@ -566,7 +38,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.rete_viaria",
+            "group": "invarianti.invariante_iv.rete_viaria",
             "name": "invarianti:percorsi_fondativi",
             "title": "Percorsi fondativi",
             "description": "",
@@ -599,7 +71,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.rete_viaria",
+            "group": "invarianti.invariante_iv.rete_viaria",
             "name": "invarianti:sentieri_mulattiere",
             "title": "Sentieri e mulattiere",
             "description": "",
@@ -632,7 +104,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.rete_viaria",
+            "group": "invarianti.invariante_iv.rete_viaria",
             "name": "invarianti:strade_campestri",
             "title": "Strade campestri",
             "description": "",
@@ -665,7 +137,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.rete_colture_agrarie",
+            "group": "invarianti.invariante_iv.rete_colture_agrarie",
             "name": "invarianti:olivo",
             "title": "Olivo",
             "description": "",
@@ -698,7 +170,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.rete_colture_agrarie",
+            "group": "invarianti.invariante_iv.rete_colture_agrarie",
             "name": "invarianti:colture_in_abbandono",
             "title": "Colture in abbandono",
             "description": "",
@@ -731,7 +203,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.rete_colture_agrarie",
+            "group": "invarianti.invariante_iv.rete_colture_agrarie",
             "name": "invarianti:colture_arboree_specializzate",
             "title": "Colture Arboree Specializzate",
             "description": "",
@@ -764,7 +236,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.rete_colture_agrarie",
+            "group": "invarianti.invariante_iv.rete_colture_agrarie",
             "name": "invarianti:prati_stabili",
             "title": "Prati stabili",
             "description": "",
@@ -797,7 +269,535 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.bacini_neogenici",
+            "group": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002.rete_aree_umide",
+            "name": "invarianti:aree_umide",
+            "title": "Aree umide",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.132705837031448,
+                    "miny": 42.378608699785445,
+                    "maxx": 12.094510222510849,
+                    "maxy": 44.01226414894365
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002.rete_pozze",
+            "name": "invarianti:rete_pozze",
+            "title": "Pozze",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.70975517425141,
+                    "miny": 42.35879472851977,
+                    "maxx": 12.398676966876476,
+                    "maxy": 44.467718968579845
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002.rete_alberi_isolati",
+            "name": "invarianti:rete_alberi_isolati",
+            "title": "Alberi isolati",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.702283887091022,
+                    "miny": 42.362000232795715,
+                    "maxx": 12.361055323906298,
+                    "maxy": 44.34268691854626
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.limitazioni_del_suoli",
+            "name": "invarianti:deficit_idrico",
+            "title": "Deficit idrico",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66342553861484,
+                    "miny": 42.20977361437311,
+                    "maxx": 12.413184975794099,
+                    "maxy": 44.474204927920674
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.limitazioni_del_suoli",
+            "name": "invarianti:erosione",
+            "title": "Erosione",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.663425538617293,
+                    "miny": 42.209773614606895,
+                    "maxx": 12.413184975794099,
+                    "maxy": 44.474204927920674
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
+            "name": "invarianti:fertilità",
+            "title": "Fertilità",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.663425538617293,
+                    "miny": 42.209773614606895,
+                    "maxx": 12.413184975794099,
+                    "maxy": 44.474204927920674
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
+            "name": "invarianti:lcc",
+            "title": "lcc",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.663425538617293,
+                    "miny": 42.209773614606895,
+                    "maxx": 12.413184975794099,
+                    "maxy": 44.474204927920674
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_praterie",
+            "name": "invarianti:rete_praterie_radure",
+            "title": "Praterie e radure",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.695664642658588,
+                    "miny": 42.39184612781383,
+                    "maxx": 12.395820483650743,
+                    "maxy": 44.472191883630416
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_muretti_a_secco",
+            "name": "invarianti:rete_muretti_secco",
+            "title": "Muretti a secco",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.68969381096792,
+                    "miny": 42.22362420184277,
+                    "maxx": 12.391925621186552,
+                    "maxy": 44.46641937586841
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_siepi",
+            "name": "invarianti:vegetazione_evoluzione",
+            "title": "Vegetazione in evoluzione",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.668741577643909,
+                    "miny": 42.29043850396552,
+                    "maxx": 12.41086636342219,
+                    "maxy": 44.47360263870976
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_siepi",
+            "name": "invarianti:rete_siepi",
+            "title": "Siepi",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.69560323226735,
+                    "miny": 42.31934504770218,
+                    "maxx": 12.409537768227308,
+                    "maxy": 44.45337117587459
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.aree_boscate",
+            "name": "invarianti:aree_boscate",
+            "title": "Boschi",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66347801574859,
+                    "miny": 42.21477456282885,
+                    "maxx": 12.413184975927452,
+                    "maxy": 44.47420492824997
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.idrografia",
+            "name": "invarianti:corsi_acqua_areali",
+            "title": "Corsi d'acqua areali",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.726003363397759,
+                    "miny": 42.35648403455676,
+                    "maxx": 12.410206174073272,
+                    "maxy": 44.46146976915048
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.idrografia",
+            "name": "invarianti:scoline",
+            "title": "Scoline",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.755127483932696,
+                    "miny": 42.36278857976756,
+                    "maxx": 12.364084451199474,
+                    "maxy": 44.458094064919955
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.idrografia",
+            "name": "invarianti:rete_idraulico_agraria",
+            "title": "Rete idraulica agraria",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.818101894144563,
+                    "miny": 42.386151738813616,
+                    "maxx": 12.364683735774262,
+                    "maxy": 44.45728721843436
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.idrografia",
+            "name": "invarianti:reticolo_idrologico",
+            "title": "Reticolo idrologico",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.665770388924496,
+                    "miny": 42.21092030380024,
+                    "maxx": 12.41092619845314,
+                    "maxy": 44.47506855924476
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_i.bacini_neogenici",
             "name": "invarianti:Bacini_Neogenici-calanchi_biancane_balze_III",
             "title": "Balze",
             "description": "",
@@ -830,7 +830,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.bacini_neogenici",
+            "group": "invarianti.invariante_i.bacini_neogenici",
             "name": "invarianti:bacini_neogenici_calanchi_biancane_balze_II",
             "title": "Calanchi",
             "description": "",
@@ -863,7 +863,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.bacini_neogenici",
+            "group": "invarianti.invariante_i.bacini_neogenici",
             "name": "invarianti:Bacini_Neogenici-calanchi_biancane_balze",
             "title": "Biancane",
             "description": "",
@@ -896,7 +896,40 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.aree_di_margine",
+            "group": "invarianti.invariante_i.aree_di_margine",
+            "name": "aree_di_margine_conoidi_terrazzi_II",
+            "title": "Terrazzi fluviali",
+            "description": "",
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.76567765638977,
+                    "miny": 42.41066718452073,
+                    "maxx": 12.395379656290412,
+                    "maxy": 44.395215456596
+                }
+            },
+            "allowedSRS": {
+                "EPSG:3003": true,
+                "EPSG:3785": true,
+                "EPSG:3857": true,
+                "EPSG:4269": true,
+                "EPSG:4326": true,
+                "EPSG:6707": true,
+                "EPSG:102113": true,
+                "EPSG:900913": true
+            },
+            "search": {
+                "url": "/geoserver/wfs",
+                "type": "wfs"
+            }
+        },
+        {
+            "type": "wms",
+            "format": "image/png8",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "group": "invarianti.invariante_i.aree_di_margine",
             "name": "invarianti:aree_di_margine_conoidi_terrazzi",
             "title": "Conoidi alluvionali",
             "description": "",
@@ -929,7 +962,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.crinali",
+            "group": "invarianti.invariante_i.crinali",
             "name": "invarianti:crinali",
             "title": "Crinali",
             "description": "",
@@ -962,7 +995,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.sottosistemi_morfogenetici",
+            "group": "invarianti.invariante_i.sottosistemi_morfogenetici",
             "name": "invarianti:sottosistemi_morfogenetici_ssm",
             "title": "Sottosistemi morfogenetici",
             "description": "",
@@ -995,7 +1028,7 @@
             "format": "image/png8",
             "url": "/geoserver/wms",
             "visibility": false,
-            "group": "invarianti.pozzi",
+            "group": "invarianti.invariante_i.pozzi",
             "name": "invarianti:pozzi",
             "title": "Pozzi",
             "description": "",
@@ -1031,98 +1064,113 @@
             "expanded": true
         },
         {
-            "id": "invarianti.pozzi",
+            "id": "invarianti.invariante_i",
+            "title": "Invariante I",
+            "expanded": true
+        },
+        {
+            "id": "invarianti.invariante_i.pozzi",
             "title": "Pozzi",
             "expanded": true
         },
         {
-            "id": "invarianti.sottosistemi_morfogenetici",
+            "id": "invarianti.invariante_i.sottosistemi_morfogenetici",
             "title": "Sottosistemi morfogenetici ",
             "expanded": true
         },
         {
-            "id": "invarianti.crinali",
+            "id": "invarianti.invariante_i.crinali",
             "title": "Crinali ",
             "expanded": true
         },
         {
-            "id": "invarianti.aree_di_margine",
+            "id": "invarianti.invariante_i.aree_di_margine",
             "title": "Aree di margine",
             "expanded": true
         },
         {
-            "id": "invarianti.bacini_neogenici",
+            "id": "invarianti.invariante_i.bacini_neogenici",
             "title": "Bacini neogenici",
             "expanded": true
         },
         {
-            "id": "invarianti.rete_colture_agrarie",
-            "title": "Rete colture agrarie",
+            "id": "invarianti.invariante_ii",
+            "title": "Invariante II",
             "expanded": true
         },
         {
-            "id": "invarianti.rete_viaria",
-            "title": "Rete viaria",
-            "expanded": true
-        },
-        {
-            "id": "invarianti.categoria_a_continua_dgr_1148_2002",
+            "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002",
             "title": "Categoria_A_continua (DGR 1148/2002)",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_a_continua_dgr_1148_2002.idrografia",
+            "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.idrografia",
             "title": "Idrografia",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_a_continua_dgr_1148_2002.aree_boscate",
+            "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.aree_boscate",
             "title": "Aree boscate",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_a_continua_dgr_1148_2002.rete_siepi",
+            "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_siepi",
             "title": "Rete siepi",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_a_continua_dgr_1148_2002.rete_muretti_a_secco",
+            "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_muretti_a_secco",
             "title": "Rete muretti a secco",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_a_continua_dgr_1148_2002.rete_praterie",
+            "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_praterie",
             "title": "Rete praterie",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
+            "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
             "title": "Capacità uso dei suoli",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_a_continua_dgr_1148_2002.limitazioni_del_suoli",
+            "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.limitazioni_del_suoli",
             "title": "Limitazioni del suoli",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_b_discontinua_dgr_1148_2002",
+            "id": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002",
             "title": "Categoria_B_discontinua (DGR 1148/2002)",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_b_discontinua_dgr_1148_2002.rete_alberi_isolati",
+            "id": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002.rete_alberi_isolati",
             "title": "Rete alberi isolati",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_b_discontinua_dgr_1148_2002.rete_pozze",
+            "id": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002.rete_pozze",
             "title": "Rete pozze",
             "expanded": true
         },
         {
-            "id": "invarianti.categoria_b_discontinua_dgr_1148_2002.rete_aree_umide",
+            "id": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002.rete_aree_umide",
             "title": "Rete aree umide",
+            "expanded": true
+        },
+        {
+            "id": "invarianti.invariante_iv",
+            "title": "Invariante IV",
+            "expanded": true
+        },
+        {
+            "id": "invarianti.invariante_iv.rete_colture_agrarie",
+            "title": "Rete colture agrarie",
+            "expanded": true
+        },
+        {
+            "id": "invarianti.invariante_iv.rete_viaria",
+            "title": "Rete viaria",
             "expanded": true
         }
     ]

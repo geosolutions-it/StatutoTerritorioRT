@@ -3,6 +3,458 @@
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_castore/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_opificistorici.opifici.etichette.rt",
+            "title": "Etichette degli Opifici manifatturieri nella Toscana del XIX secolo.",
+            "description": "Layer wms per la consultazione delle etichette relative agli opifici manifatturieri nella Toscana del XIX secolo.",
+            "params": {
+                "map": "owsopificistorici",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.patrimonio_culturale.documenti_della_cultura"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_castore/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_opificistorici.opifici.point.rt",
+            "title": "Opifici manifatturieri nella Toscana del XIX secolo.",
+            "description": "Layer wms per la consultazione degli opifici manifatturieri nella Toscana del XIX secolo.",
+            "params": {
+                "map": "owsopificistorici",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.patrimonio_culturale.documenti_della_cultura"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_benicult.idarcheologico.rt",
+            "title": "Beni archeologici tutelati ai sensi della paete II del D.Lgs. 42/2004",
+            "description": "La base di dati utilizzata per censire e catalogare i provvedimenti, per quanto concerne i beni archeologici, e' costituita dall'insieme degli atti di tutela custoditi negli archivi dell'ufficio vincoli della Soprintendenza Archeologica. Dal 2004, tutti i provvedimenti emessi vengono direttamente forniti dalla Direzione Regionale per i Beni Culturali e Paesaggistici agli Uffici competenti della Regione Toscana. La banca dati e' in aggiornamento continuo. Per la completezza del censimento e l'accuratezza della georeferenziazione, puo' essere considerata come strumento informativo e conoscitivo di prima istanza. Tuttavia, non essendo ancora completate le attivita' di verifica e validazione della banca dati da parte delle Soprintendenze competenti, a queste ultime si e' tenuti a rivolgersi per l'attestazione legale del singolo provvedimento di vincolo.",
+            "params": {
+                "map": "owsbenicult",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.patrimonio_culturale.documenti_della_cultura"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_benicult.idarchitettonico.rt",
+            "title": "Beni architettonici tutelati ai sensi della parte II del D.Lgs. 42/2004",
+            "description": "La base di dati utilizzata per censire e catalogare i provvedimenti, per quanto concerne i beni architettonici, e' costituita dall'insieme degli atti di tutela custoditi negli archivi dei vari uffici vincoli delle diverse Soprintendenze. Dal 2004, tutti i provvedimenti emessi vengono direttamente forniti dalla Direzione Regionale per i Beni Culturali e Paesaggistici agli Uffici competenti della Regione Toscana. La banca dati e' in aggiornamento continuo. Per la completezza del censimento e l'accuratezza della georeferenziazione, puo' essere considerata come strumento informativo e conoscitivo di prima istanza. Tuttavia, non essendo ancora completate le attivita' di verifica e validazione della banca dati da parte delle Soprintendenze competenti, a queste ultime si e' tenuti a rivolgersi per l'attestazione legale del singolo provvedimento di vincolo.",
+            "params": {
+                "map": "owsbenicult",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.patrimonio_culturale.documenti_della_cultura"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_benicult.idpaesaggistico.rt",
+            "title": "Beni paesaggistici tutelati ai sensi dell' art. 136 del D.Lgs. 42/2004 con procedimento non ancora concluso",
+            "description": "La base di dati utilizzata per censire e catalogare i provvedimenti, per quanto concerne i beni paesaggistici, e' costituita dall'insieme dei Decreti di vincolo e, se unica fonte di dati o se reputate necessarie per meglio identificare le aree vincolate, dai verbali delle commissioni provinciali per la tutela delle bellezze naturali, custoditi negli archivi dei vari uffici vincoli delle Soprintendenze toscane. La componente cartografica inerente i beni soggetti a vincolo paesaggistico e' stata verificata e validata congiuntamente dalle Soprintendenze territoriali del MIBACT e dalla Regione Toscana anche ai fini dell'implementazione della DCR 37/2015 recante 'Approvazione dell'Atto di integrazione del piano di indirizzo territoriale (PIT) con valenza di piano paesaggistico'. Si segnala la Banca Dati SITAP. Sistema Informativo TerritorialeAmbientale e Paesaggistico, a riferimento geografico su scala nazionale per la tutela dei beni paesaggistici realizzata dal Ministero dei beni e delle attivita' culturali e del turismo, accessibile al seguente indirizzo http://www.sitap.beniculturali.it/",
+            "params": {
+                "map": "owsbenicult",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.patrimonio_culturale.documenti_della_cultura"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_rinnovabili.iddpadi.differenza.rt",
+            "title": "Delimitazione aree interne",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset di servizio. Usato per meglio delimitare i contorni delle aree interne.",
+            "params": {
+                "map": "wmsrinnovabili",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.energia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_rinnovabili.iddpadi.rt",
+            "title": "LR 11/2011 Art. 7 - Diversa perimetrazione in aree DOP e IGP",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'LR 11/2011 Art. 7 - Diversa perimetrazione in aree DOP e IGP'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsrinnovabili",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.energia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_rinnovabili.idaadp.rt",
+            "title": "LR 11/2011 Art. 7 - Aree agricole di particolare pregio",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'LR 11/2011 Art. 7 - Aree agricole di particolare pregio'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsrinnovabili",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.6955,
+                    "miny": 42.2132,
+                    "maxx": 12.2819,
+                    "maxy": 44.3958
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.energia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_rinnovabili.idzicv.rt",
+            "title": "LR 11/2011 Art. 7 - Zone all'interno di coni visivi e panoramici",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'LR 11/2011 Art. 7 - Zone all'interno di coni visivi e panoramici'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsrinnovabili",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.energia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.iarir_ul.poly.rt",
+            "title": "Aziende a rischio di incidente rilevante (Seveso)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset delle aziende a rischio di incidente rilevante. Fonte dati: ARPAT (http://sira.arpat.toscana.it/sira/inspire/preview.php?dataset=AZ_RIS&page=0).In riferimento al D.Lgs. 334/99, gli stabilimenti industriali vengono classificati in due tipologie, sulla base dei quantitativi di sostanze pericolose presenti: 'stabilimenti in art. 6, o di soglia inferiore (Notifica)', 'stabilimenti in art. 8, o di soglia superiore (Notifica + Rapporto di Sicurezza)'. L'indicatore (D = Driving forces of environment change) quantifica direttamente il numero delle Aziende che sono 'cause primarie' di eventuali incidenti con conseguenze oltre che sull'uomo anche sull'ambiente. Esprime in numero complessivo di aziende che ricadono nella normativa del D.Lgs. 334/99 e s.m. (art.6 e art.8 del decreto) conosciuta anche come direttiva 'Seveso'. La normativa prevede una serie di adempimenti per il 'Gestore' dell'Azienda a rischio, e una serie di compiti di verifica e controllo per l'Autorita' competente (Regione, art.6 e Ministero Ambiente, art.8). Per i controlli delle Aziende in art.6 la Regione si avvale di ARPAT che attua un programma annuale di verifiche ispettive con sopralluoghi negli stabilimenti. ARPAT collabora anche con il Ministero competente per le verifiche ispettive nelle Aziende in art.8 e, come la Regione, e' membro del Comitato Tecnico Regionale (CTR) presieduto dai Vigili del Fuoco che ha il compito di esaminare i Rapporti di Sicurezza presentati dalle Aziende in art.8. Altre informazioni alla seguente url: http://www.arpat.toscana.it/temi-ambientali/sistemi-produttivi/seveso)",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "group": "risorse.struttura_insediativa.salute_umana"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.presidisanitari.poly.rt",
+            "title": "Presidi sanitari",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Presidi sanitari'.",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "group": "risorse.struttura_insediativa.salute_umana"
+        },
+        {
+            "type": "link",
+            "href": "http://territorio.irpet.it/#!/",
+            "title": "Osservatorio territoriale",
+            "group": "risorse.struttura_insediativa.processi_socioeconomici_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.scuole.point.rt",
+            "title": "Scuole (fonte Settore Istruzione e educazione e MIUR)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Localizzazione Scuole'. Fonte Settore Istruzione e educazione e MIUR - dati aggiornati ad Agosto 2013",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/cartografia/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_amb_cens.centri_nuclei_2001",
+            "title": "Centri e nuclei ISTAT 2001",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset Centri e Nuclei ISTAT ricavati dai dati del censimento 2001.Le etichette sono regolate sulla base della scala e della popolazione",
+            "params": {
+                "map": "wmsambcens",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.69579,
+                    "miny": 42.3237,
+                    "maxx": 12.3947,
+                    "maxy": 44.4565
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/cartografia/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_amb_cens.aree_prod_2011",
+            "title": "Aree produttive ISTAT 2011",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset Aree Produttive ISTAT ricavate dai dati del censimento 2011.",
+            "params": {
+                "map": "wmsambcens",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.69579,
+                    "miny": 42.3237,
+                    "maxx": 12.3947,
+                    "maxy": 44.4565
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/cartografia/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_amb_cens.centri_nuclei_2011",
+            "title": "Centri e nuclei ISTAT 2011",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset Centri e Nuclei ISTAT ricavati dai dati del censimento 2011.",
+            "params": {
+                "map": "wmsambcens",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.69579,
+                    "miny": 42.3237,
+                    "maxx": 12.3947,
+                    "maxy": 44.4565
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_sentieristica/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_sent.idrifcai.2005.rt",
+            "title": "Rifugi CAI 2005",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset puntuale 'Rifugi CAI 2005'.",
+            "params": {
+                "map": "owssentieristica",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.95162,
+                    "miny": 43.8094,
+                    "maxx": 11.8771,
+                    "maxy": 44.408
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_sentieristica/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_sent.idsentcai.2005.rt",
+            "title": "Sentieri CAI 2005",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset lineare 'Sentieri CAI 2005'. Aggiornato al 2005",
+            "params": {
+                "map": "owssentieristica",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.72872,
+                    "miny": 42.3684,
+                    "maxx": 12.3926,
+                    "maxy": 44.4737
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_sentieristica/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_sent.idareecai.rt",
+            "title": "Aree CAI 2005",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree CAI'. Il dato e' aggiornato al 2005",
+            "params": {
+                "map": "owssentieristica",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
             "name": "rt_arprot.renato.specie.uccelli.rt.point",
@@ -23,27 +475,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.fauna"
         },
         {
@@ -69,27 +500,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.fauna"
         },
         {
@@ -115,27 +525,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.fauna"
         },
         {
@@ -161,27 +550,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.fauna"
         },
         {
@@ -207,27 +575,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.fauna"
         },
         {
@@ -253,27 +600,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.fauna"
         },
         {
@@ -299,27 +625,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.fauna"
         },
         {
@@ -345,27 +650,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.fauna"
         },
         {
@@ -391,27 +675,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.fauna"
         },
         {
@@ -437,27 +700,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -483,27 +725,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -529,27 +750,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -575,27 +775,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -621,27 +800,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -667,27 +825,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -713,27 +850,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -759,27 +875,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000000,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -805,27 +900,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -851,27 +925,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.flora"
         },
         {
@@ -897,27 +950,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -943,27 +975,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -989,27 +1000,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1035,27 +1025,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1081,27 +1050,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1127,27 +1075,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1173,27 +1100,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1219,27 +1125,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1265,27 +1150,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1311,27 +1175,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1357,27 +1200,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1403,27 +1225,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1449,27 +1250,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1495,27 +1275,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1541,27 +1300,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1587,27 +1325,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1633,27 +1350,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1679,27 +1375,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1725,27 +1400,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1771,27 +1425,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1817,27 +1450,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1863,27 +1475,6 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
         },
         {
@@ -1909,34 +1500,2260 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000100,
-            "allowedSRS": {
-                "EPSG:3003": true,
-                "EPSG:3004": true,
-                "EPSG:6706": true,
-                "EPSG:6707": true,
-                "EPSG:6708": true,
-                "EPSG:6709": true,
-                "EPSG:23032": true,
-                "EPSG:23033": true,
-                "EPSG:23034": true,
-                "EPSG:25832": true,
-                "EPSG:25833": true,
-                "EPSG:4326": true,
-                "EPSG:4230": true,
-                "EPSG:4258": true,
-                "EPSG:4265": true,
-                "EPSG:4806": true,
-                "EPSG:3857": true,
-                "EPSG:32632": true,
-                "EPSG:32633": true
-            },
             "group": "risorse.struttura_ecosistemica.biodiverista"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_carsismo_speleologia.idareecarsificabili.poly.rt",
+            "title": "Aree potenzialmente carsificabili",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Aree potenzialmente carsificabili'.",
+            "params": {
+                "map": "owsspeleologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_carsismo_speleologia.idsorgenticarsiche.point.rt",
+            "title": "Sorgenti carsiche",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Sorgenti carsiche'.",
+            "params": {
+                "map": "owsspeleologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_carsismo_speleologia.idformecarsiche.poly.rt",
+            "title": "Forme carsiche areali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Forme carsiche areali'.",
+            "params": {
+                "map": "owsspeleologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_carsismo_speleologia.idformecarsiche.point.rt",
+            "title": "Forma carsiche puntuali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Forme carsiche puntuali'.",
+            "params": {
+                "map": "owsspeleologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_carsismo_speleologia.iddoline.poly.rt",
+            "title": "Doline areali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Doline areali'.",
+            "params": {
+                "map": "owsspeleologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_carsismo_speleologia.iddoline.point.rt",
+            "title": "Doline puntuali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Doline puntuali'.",
+            "params": {
+                "map": "owsspeleologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_carsismo_speleologia.idingrotte.point.rt",
+            "title": "Ingressi grotte",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset puntuale 'Ingressi grotte'.",
+            "params": {
+                "map": "owsspeleologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_morfologia.dtm_10m_idrol.rt",
+            "title": "DTM 10 metri idrologico",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. DTM con cella di 10m rielaborato a fini di modellistica idrologica.",
+            "params": {
+                "map": "wmsmorfologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.morfologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_morfologia.iddtm.10m.rt",
+            "title": "DTM 10 metri orografico",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'DEM-DTM 10m' fonte Regione Toscana - SITA. Il dataset e' ricavato dalla CTR10K.",
+            "params": {
+                "map": "wmsmorfologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.morfologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "unita_di_paesaggio",
+            "title": "Unita' di Paesaggio",
+            "description": "Il dataset e' stato semplificato con l'algoritmo 'Douglas-Peuker' usando la funzione ST_SimplifyPreserveTopology con tolleranza 0,5 metri.",
+            "params": {
+                "map": "owspedologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.pedologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "capacita_di_uso_e_fertilita_dei_suoli",
+            "title": "Capacita' d'uso e fertilita' dei suoli",
+            "description": "La realizzazione della carta di capacita' d'uso e' stata fatta secondo la metodologia della 'Land Capability Classification' (LCC) elaborata nel 1961 dal Soil Conservation Service del Dipartimento dell'Agricoltura degli Stati Uniti d'America (USDA), mentre la Classificazione della Fertilita' ha seguito la metodologia proposta da Sanchez (1982) ed e' in parte inserita nella carta di Capacita' d'uso; essa tiene in maggior considerazione gli elementi della fertilita' agronomica dei suoli (tessitura, pH, calcare, CSC, sodio, salinita') classificando le limitazioni che essi inducono sulla gestione del suolo.Il metodo non considera la potenzialita' dei suoli rispetto ad usi particolari o a specifiche colture, ma assegna ad ogni tipo pedologico una capacita' d'uso generica che tiene conto di tutti i suoi parametri permanenti e non modificabili da interventi antropici.La LCC si fonda su una serie di principi ispiratori__ La valutazione si riferisce al complesso di colture praticabili nel territorio in questione e non ad una coltura in particolare._ Vengono escluse le valutazioni dei fattori socio-economici._ Al concetto di limitazione e' legato quello di flessibilita' colturale, nel senso che all'aumentare del grado di limitazione corrisponde una diminuzione nella gamma dei possibili usi agro-silvo-pastorali._ Le limitazioni prese in considerazione sono quelle permanenti e non quelle temporanee, quelle cioe' che possono essere risolte da appropriati interventi di miglioramento (per es. concimazioni)._ Nel termine 'difficolta' di gestione' vengono comprese tutte quelle pratiche conservative e sistematorie necessarie affinche' l'uso non determini perdita di fertilita' o degradazione del suolo._ La valutazione considera un livello di conduzione gestionale medio elevato, ma allo stesso tempo accessibile alla maggioranza degli operatori agricoli.La classificazione prevede tre livelli di definizione_1) la classe;2) la sottoclasse;3) l'unita'.Delle otto classi solo le prime quattro, pur presentando limitazioni crescenti, vengono indicate come adatte all'uso agricolo; le classi dalla quinta alla settima non sono adatte a tale attivita', ma sono destinate al pascolo e alla forestazione; la classe ottava comprende suoli da destinarsi esclusivamente a fini ricreativi, estetici, naturalistici. Il dataset e' stato semplificato con l'algoritmo 'Douglas-Peuker' usando la funzione ST_SimplifyPreserveTopology con tolleranza 0,5 metri.",
+            "params": {
+                "map": "owspedologia",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.pedologia"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ucs.iducs.10k.2016.rt.full",
+            "title": "UCS10k 2016 - Total rendering",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Uso del Suolo 10K - Anno 2016 - Vestizione completa'. Lo strato riporta l'intera vestizione dell' uso suolo 2016 con tutti gli strati",
+            "params": {
+                "map": "wmsucs",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 250000,
+            "group": "risorse.suolo_e_sottosuolo.uso_suolo"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv",
+            "visibility": false,
+            "name": "FN - Frane Non Rappresentabili",
+            "title": "FN - Frane Non Rappresentabili",
+            "params": {
+                "map": "dbgeomorfologico_rt.qgs",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.7371,
+                    "miny": 42.2916,
+                    "maxx": 12.2578,
+                    "maxy": 44.4703
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 250000,
+            "group": "risorse.suolo_e_sottosuolo.db_geomorfologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv",
+            "visibility": false,
+            "name": "FR - Frane",
+            "title": "FR - Frane",
+            "params": {
+                "map": "dbgeomorfologico_rt.qgs",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66662,
+                    "miny": 42.294,
+                    "maxx": 12.404,
+                    "maxy": 44.4722
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 250000,
+            "group": "risorse.suolo_e_sottosuolo.db_geomorfologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv",
+            "visibility": false,
+            "name": "rt_dbg.el_geol.limite_geologico",
+            "title": "Limite geologico",
+            "description": "DataBase Geologico Regionale - Elementi geologici: 'Limite geologico' contiene i contatti litologici, stratigrafici e tettonici che possono avere significato di contorno di unitа' geologica (ULF) oppure di limite intraformazionale.",
+            "params": {
+                "map": "dbgeologico_rt.qgs",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66338,
+                    "miny": 42.2098,
+                    "maxx": 12.4123,
+                    "maxy": 44.4741
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.db_geologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv",
+            "visibility": false,
+            "name": "rt_dbg.el_geol.unita_geologica_areale_10k",
+            "title": "Unita geologica areale",
+            "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale' oggetti geologici che rappresentano le unitа stratigrafiche e tettoniche del substrato",
+            "params": {
+                "map": "dbgeologico_rt.qgs",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66338,
+                    "miny": 42.2098,
+                    "maxx": 12.4123,
+                    "maxy": 44.4741
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 75000,
+            "group": "risorse.suolo_e_sottosuolo.db_geologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv",
+            "visibility": false,
+            "name": "rt_dbg.el_geol.unita_geologica_areale_100k",
+            "title": "Unita geologica areale 100K",
+            "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale 100K' oggetti geologici che rappresentano le unitа stratigrafiche e tettoniche del substrato. Versione semplificata per la visualizzazione in scala 1:100.000",
+            "params": {
+                "map": "dbgeologico_rt.qgs",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66338,
+                    "miny": 42.2098,
+                    "maxx": 12.4123,
+                    "maxy": 44.4741
+                }
+            },
+            "minScaleDenominator": 75000,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.db_geologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_idrogeologico/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_idrogeol.idrd32671923.rt.poly",
+            "title": "R.D. n.3267/1923",
+            "description": "Intervallo di visibilita' 1:1 -1:5.000.000. Il dataset riporta le perimetrazioni del 'R.D. n.3267/1923'. Fonte Amministrazioni provinciali. Originariamente la copertura era composta da un unico strato, realizzato nel 1983 da RT alla scala 1:25.000 nell'ambito del progetto 'Inventario Forestale della Toscana', per la individuazione del solo Regio Decreto 3267/1923. Successivamente, nel 2011-2012, e' stato sostituito con state due coperture distinte: una rappresenta la ricognizione operata dalle singole province del Regio Decreto 3267/1923 su base CTR 1:10.000, l'altra rappresenta la ricognizione delle aree boscate presenti nella banca dati dell'Uso del Suolo della Regione Toscana, fotointerpretate da OFC AGEA del 2010 sulla base dei parametri dimensionali minimi previsti dalla L.R. 39/2000.",
+            "params": {
+                "map": "owsidrogeologico",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_idrogeologico/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_idrogeol.areeboscate.2007.rt.poly",
+            "title": "Aree boscate 2007",
+            "description": "Aree boscate, con valore meramente ricognitivo, estratte dal dataset 'uso suolo 2007'. Fonte Regione Toscana. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Il dataset rappresenta le 'Aree Boscate' del dataset 'Uso del Suolo 2007' mediante estrazione delle geometrie aventi il codice UCS2007 con valori (311,312,313,321,322,323,324,1221) e successivamente dissolvenza per comune.Si ricorda che tale vincolo ha valore meramente ricognitivo e che la valutazione della presenza del bosco (e del relativo vincolo idrogeologico) va fatta in situ con rilievo a terra (secondo le indicazioni e i parametri della legge e del regolamento forestale, lr 39/00 art 3 e dpgr 48/R/2003 art 2).",
+            "params": {
+                "map": "owsidrogeologico",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 100000,
+            "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_idrogeologico/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_idrogeol.areeboscate.2010.rt.poly",
+            "title": "Aree boscate 2010",
+            "description": "Aree boscate, con valore meramente ricognitivo, estratte dal dataset 'uso suolo 2010'. Fonte Regione Toscana. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Il dataset rappresenta le 'Aree Boscate' del dataset 'Uso del Suolo 2010' mediante estrazione delle geometrie aventi il codice UCS2010 con valori (311,312,313,321,322,323,324,1221) e successivamente dissolvenza per comune.Si ricorda che tale vincolo ha valore meramente ricognitivo e che la valutazione della presenza del bosco (e del relativo vincolo idrogeologico) va fatta in situ con rilievo a terra (secondo le indicazioni e i parametri della legge e del regolamento forestale, lr 39/00 art 3 e dpgr 48/R/2003 art 2).",
+            "params": {
+                "map": "owsidrogeologico",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 100000,
+            "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_idrogeologico/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_idrogeol.areeboscate.2013.rt.poly",
+            "title": "Aree boscate 2013",
+            "description": "Aree boscate, con valore meramente ricognitivo, estratte dal dataset 'uso suolo 2013'. Fonte Regione Toscana. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Il dataset rappresenta le 'Aree Boscate' del dataset 'Uso del Suolo 2013' mediante estrazione delle geometrie aventi il codice UCS2013 con valori (311,312,313,321,322,323,324,1221) e successivamente dissolvenza per comune.Si ricorda che tale vincolo ha valore meramente ricognitivo e che la valutazione della presenza del bosco (e del relativo vincolo idrogeologico) va fatta in situ con rilievo a terra (secondo le indicazioni e i parametri della legge e del regolamento forestale, lr 39/00 art 3 e dpgr 48/R/2003 art 2).",
+            "params": {
+                "map": "owsidrogeologico",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 100000,
+            "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_idrogeologico/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_idrogeol.areeboscate.2016.rt.poly",
+            "title": "Aree boscate 2016",
+            "description": "Aree boscate, con valore meramente ricognitivo, estratte dal dataset 'uso suolo 2016'. Fonte Regione Toscana. Scala di visibilita' 1:1 - 1:5.000.000. Territorio coperto: intero territorio regionale. Il dataset rappresenta le 'Aree Boscate' del dataset 'Uso del Suolo 2016' mediante estrazione delle geometrie aventi il codice UCS2016 con valori (311,312,313,321,322,323,324,1221) e successivamente dissolvenza per comune.Si ricorda che tale vincolo ha valore meramente ricognitivo e che la valutazione della presenza del bosco (e del relativo vincolo idrogeologico) va fatta in situ con rilievo a terra (secondo le indicazioni e i parametri della legge e del regolamento forestale, lr 39/00 art 3 e dpgr 48/R/2003 art 2).",
+            "params": {
+                "map": "owsidrogeologico",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 100000,
+            "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_terremoti.eventi.ingv.strumentali",
+            "title": "Terremoti INGV strumentali",
+            "description": "Dataset dei terremoti registrati da INGV limitato a quelli 'Strumentali' con magnitudo inferiore a 2. Il dataset e' limitato al box geografico 9.10 42.00 14.00 45.20. Dataset rilasciato con licenza CC-BY 4.0",
+            "params": {
+                "map": "owsterremoti",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.1,
+                    "miny": 42,
+                    "maxx": 14,
+                    "maxy": 45.2
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.terremoti"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_terremoti.eventi.ingv",
+            "title": "Terremoti INGV",
+            "description": "Dataset dei terremoti registrati da INGV eccetto quelli cosidetti 'Strumentali' ovvero quelli con magnitudo superiore o uguale a 2. IL dataset e' limitato al box geografico: 9.10 42.00 14.00 45.20. Dataset rilasciato con licenza CC-BY 4.0",
+            "params": {
+                "map": "owsterremoti",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.1,
+                    "miny": 42,
+                    "maxx": 14,
+                    "maxy": 45.2
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.terremoti"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_terremoti.eventi.cpti15",
+            "title": "Terremoti CPTI15",
+            "description": "Dataset dei terremoti 'storici' riportati nel dataset CPTI15 (Catalogo Parametrico dei Terremoti Italiani 2015). Il dataset e' limitato al box geografico: 9.10 42.00 14.00 45.20. URL: https://emidius.mi.ingv.it/CPTI15-DBMI15/. Rovida A., Locati M., Camassi R., Lolli B., Gasperini P. (eds), 2016. CPTI15, the 2015 version of the Parametric Catalogue of Italian Earthquakes. Istituto Nazionale di Geofisica e Vulcanologia. doi:http://doi.org/10.6092/INGV.IT-CPTI15. Licenza: CPTI15 viene rilasciato con una licenza Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International CC BY-NC-SA 4.0 'https://creativecommons.org/licenses/by-nc-sa/4.0/'",
+            "params": {
+                "map": "owsterremoti",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.1,
+                    "miny": 42,
+                    "maxx": 14,
+                    "maxy": 45.2
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.suolo_e_sottosuolo.terremoti"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_ds/RETICOLO/ows",
+            "visibility": false,
+            "name": "reticolo_lr_79_2012",
+            "title": "Reticolo idrografico e di gestione LR 79/2012 aggiornamento 2020",
+            "description": "Reticolo idrografico e di gestione LR 79/2012 aggiornamento 2020",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.665770388924496,
+                    "miny": 42.210920303800265,
+                    "maxx": 12.41092619845314,
+                    "maxy": 44.475068559244754
+                }
+            },
+            "group": "risorse.acqua.rt_difesa_del_suolo"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_ds/RETICOLO/ows",
+            "visibility": false,
+            "name": "reticolo_lr_79_2012",
+            "title": "Reticolo idrografico e di gestione LR 79/2012 aggiornamento 2020",
+            "description": "Reticolo idrografico e di gestione LR 79/2012 aggiornamento 2020",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.665770388924496,
+                    "miny": 42.210920303800265,
+                    "maxx": 12.41092619845314,
+                    "maxy": 44.475068559244754
+                }
+            },
+            "group": "risorse.acqua.rt_difesa_del_suolo"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_ds/RETICOLO/ows",
+            "visibility": false,
+            "name": "comprensori_bonifica_10_06_2016",
+            "title": "comprensori_bonifica_10_06_2016",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.663458696761372,
+                    "miny": 42.21004692558991,
+                    "maxx": 12.412563371554906,
+                    "maxy": 44.47421914105439
+                }
+            },
+            "group": "risorse.acqua.rt_difesa_del_suolo"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M12",
+            "title": "Pnum_2009-M12",
+            "description": "Numero dei giorni piovosi del mese di dicembre (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M11",
+            "title": "Pnum_2009-M11",
+            "description": "Numero dei giorni piovosi del mese di novembre (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M10",
+            "title": "Pnum_2009-M10",
+            "description": "Numero dei giorni piovosi del mese di ottobre (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M09",
+            "title": "Pnum_2009-M09",
+            "description": "Numero dei giorni piovosi del mese di settembre (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M08",
+            "title": "Pnum_2009-M08",
+            "description": "Numero dei giorni piovosi del mese di agosto (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M07",
+            "title": "Pnum_2009-M07",
+            "description": "Numero dei giorni piovosi del mese di luglio (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M06",
+            "title": "Pnum_2009-M06",
+            "description": "Numero dei giorni piovosi del mese di giugno (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M05",
+            "title": "Pnum_2009-M05",
+            "description": "Numero dei giorni piovosi del mese di maggio (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M04",
+            "title": "Pnum_2009-M04",
+            "description": "Numero dei giorni piovosi del mese di aprile (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M03",
+            "title": "Pnum_2009-M03",
+            "description": "Numero dei giorni piovosi del mese di marzo (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M02",
+            "title": "Pnum_2009-M02",
+            "description": "Numero dei giorni piovosi del mese di febbraio (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M01",
+            "title": "Pnum_2009-M01",
+            "description": "Numero dei giorni piovosi del mese di gennaio (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaNum:Pnum_2009-M00",
+            "title": "Pnum_2009-M00",
+            "description": "Numero dei giorni piovosi del mese di dicembre (gg) relativi all'anno 2009. I dati sono stati ottenuti elaborando le spazializzazioni dei dati di pioggia giornalieri. L'algoritmo considera giorno piovoso se si verifica una pioggia maggiore di 0 mm.",
+            "params": {
+                "namespace": "PioggiaNum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.numero_giorni_piovosi_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M12",
+            "title": "Tmin_2009-M12",
+            "description": "Media della temperatura minima del mese di dicembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M11",
+            "title": "Tmin_2009-M11",
+            "description": "Media della temperatura minima del mese di novembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M10",
+            "title": "Tmin_2009-M10",
+            "description": "Media della temperatura minima del mese di ottobre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M09",
+            "title": "Tmin_2009-M09",
+            "description": "Media della temperatura minima del mese di settembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M08",
+            "title": "Tmin_2009-M08",
+            "description": "Media della temperatura minima del mese di agosto (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M07",
+            "title": "Tmin_2009-M07",
+            "description": "Media della temperatura minima del mese di luglio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M06",
+            "title": "Tmin_2009-M06",
+            "description": "Media della temperatura minima del mese di giugno (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M05",
+            "title": "Tmin_2009-M05",
+            "description": "Media della temperatura minima del mese di maggio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M04",
+            "title": "Tmin_2009-M04",
+            "description": "Media della temperatura minima del mese di aprile (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M03",
+            "title": "Tmin_2009-M03",
+            "description": "Media della temperatura minima del mese di marzo (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M02",
+            "title": "Tmin_2009-M02",
+            "description": "Media della temperatura minima del mese di febbraio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMin:Tmin_2009-M01",
+            "title": "Tmin_2009-M01",
+            "description": "Media della temperatura minima del mese di gennaio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMin"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M12",
+            "title": "Tmax_2009-M12",
+            "description": "Media della temperatura massima del mese di dicembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M11",
+            "title": "Tmax_2009-M11",
+            "description": "Media della temperatura massima del mese di novembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M10",
+            "title": "Tmax_2009-M10",
+            "description": "Media della temperatura massima del mese di ottobre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M09",
+            "title": "Tmax_2009-M09",
+            "description": "Media della temperatura massima del mese di settembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M08",
+            "title": "Tmax_2009-M08",
+            "description": "Media della temperatura massima del mese di agosto (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M07",
+            "title": "Tmax_2009-M07",
+            "description": "Media della temperatura massima del mese di luglio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M06",
+            "title": "Tmax_2009-M06",
+            "description": "Media della temperatura massima del mese di giugno (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M05",
+            "title": "Tmax_2009-M05",
+            "description": "Media della temperatura massima del mese di maggio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M04",
+            "title": "Tmax_2009-M04",
+            "description": "Media della temperatura massima del mese di aprile (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M03",
+            "title": "Tmax_2009-M03",
+            "description": "Media della temperatura massima del mese di marzo (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M02",
+            "title": "Tmax_2009-M02",
+            "description": "Media della temperatura massima del mese di febbraio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "TempMax:Tmax_2009-M01",
+            "title": "Tmax_2009-M01",
+            "description": "Media della temperatura massima del mese di gennaio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "TempMax"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M12",
+            "title": "Pcum_2009-M12",
+            "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M11",
+            "title": "Pcum_2009-M11",
+            "description": "Cumulata delle precipitazioni del mese di novembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M10",
+            "title": "Pcum_2009-M10",
+            "description": "Cumulata delle precipitazioni del mese di ottobre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M09",
+            "title": "Pcum_2009-M09",
+            "description": "Cumulata delle precipitazioni del mese di settembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M08",
+            "title": "Pcum_2009-M08",
+            "description": "Cumulata delle precipitazioni del mese di agosto relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M07",
+            "title": "Pcum_2009-M07",
+            "description": "Cumulata delle precipitazioni del mese di luglio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M06",
+            "title": "Pcum_2009-M06",
+            "description": "Cumulata delle precipitazioni del mese di giugno relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M05",
+            "title": "Pcum_2009-M05",
+            "description": "Cumulata delle precipitazioni del mese di maggio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M04",
+            "title": "Pcum_2009-M04",
+            "description": "Cumulata delle precipitazioni del mese di aprile relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M03",
+            "title": "Pcum_2009-M03",
+            "description": "Cumulata delle precipitazioni del mese di marzo relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M02",
+            "title": "Pcum_2009-M02",
+            "description": "Cumulata delle precipitazioni del mese di febbraio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M01",
+            "title": "Pcum_2009-M01",
+            "description": "Cumulata delle precipitazioni del mese di gennaio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+            "visibility": false,
+            "name": "PioggiaCum:Pcum_2009-M00",
+            "title": "Pcum_2009-M00",
+            "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+            "params": {
+                "namespace": "PioggiaCum"
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.583410025964909,
+                    "miny": 42.135988874481974,
+                    "maxx": 12.612299417054357,
+                    "maxy": 44.555212581826524
+                }
+            },
+            "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.LR39_2005_art35_comma_4.rt",
+            "title": "aree di protezione LR 39/2005 art. 35 comma4 - DGR 903/2020",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale tratto dalla LR 39/2005 art. 35 comma 4 e successiva DGR 903/2020. Misure minime di protezione dall'inquinamento luminoso: 'nella fascia compresa tra il raggio di 25km e il raggio di 50km dalle stazioni astronomiche che svolgono attivita' di ricerca scientifica e di divulgazione scientifica i fasci luminosi dovranno essere orientati almeno a 90 gradi dalla direzione in cui si trovano i telescopi",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.LR39_2005_art35_comma_2.rt",
+            "title": "aree di protezione LR 39/2005 art. 35 comma2 - DGR 903/2020",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale tratto dalla LR 39/2005 art. 35 comma 2 e successiva DGR 903/2020. Misure minime di protezione dall'inquinamento luminoso: 'entro 1km in linea d'aria dalle stazioni astronomiche che svolgono attivita' di ricerca scientifica e di divulgazione scientifica sono vietate tutte le sorgenti di luce, che producono qualunque emissione di luce verso l'alto'",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.LR39_2005_art35_comma_1.rt",
+            "title": "aree di protezione LR 39/2005 art. 35 comma1 - DGR 903/2020",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale tratto dalla 'LR 39/2005 art. 35 comma 1 e successiva DGR 903/2020. Misure minime di protezione dall'inquinamento luminoso: 'zona di particolare protezione dall'inquinamento luminoso per le stazioni astronomiche che svolgono attivita' di ricerca scientifica e di divulgazione scientifica'.",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.stazioni_astronomiche.rt",
+            "title": "stazioni astronomiche LR 39/2005 art 34 - DGR 903/2020",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset puntuale 'Stazioni astronomiche DGR 903/2020'. Il dataset rappresenta la localizzazione puntuale delle stazioni astronomiche interessate dalla DGR 903/2020 inerente le zone di protezione dall'inquinamento luminoso",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpcramsf_p.rt",
+            "title": "PCRA Misurazioni fonometriche (p)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset puntuale 'PCRA - Misurazioni fonometriche puntuali'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpcrarcr_a.rt",
+            "title": "PCRA Recettori (A)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'PCRA - Recettori'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpcrairi_p.rt",
+            "title": "PCRA Interventi risanamento (p)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset puntuale 'PCRA - Interventi risanamento puntuali'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpcrairi_l.rt",
+            "title": "PCRA Interventi risanamento (l)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset lineare 'PCRA - Interventi risanamento lineari'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpcrairi_a.rt",
+            "title": "PCRA Interventi risanamento (A)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'PCRA - Interventi risanamento areali'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpcrafru_l.rt",
+            "title": "PCRA Fonti rumore (L)",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset lineare 'PCRA - Fonti rumore'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpcraarcrit_a.rt",
+            "title": "PCRA Aree critiche",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset poligonale 'PCRA - Aree critiche'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpccazon.rt",
+            "title": "PCCA Zonizzazione acustica",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset poligonale 'PCCA - Zonizzazione acustica'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpccaqua.rt",
+            "title": "PCCA Aree di qualita",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset poligonale 'PCCA - Aree di qualita'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpccaspt.rt",
+            "title": "PCCA Aree spettacolo temporaneo",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset poligonale 'PCCA - Aree spettacolo temporaneo'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_inqfis.idpccaspt.rt",
+            "title": "PCCA Aree spettacolo temporaneo",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset poligonale 'PCCA - Aree spettacolo temporaneo'. Il dataset originale e' nel sistema di riferimento GaussBoaga fuso ovest (epsg:3003).",
+            "params": {
+                "map": "wmsinqfis",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.aria.inquinamento_fisico"
         }
     ],
     "groups": [
         {
             "id": "risorse",
             "title": "Risorse",
+            "expanded": true
+        },
+        {
+            "id": "risorse.aria",
+            "title": "Aria",
+            "expanded": true
+        },
+        {
+            "id": "risorse.aria.inquinamento_fisico",
+            "title": "Inquinamento fisico",
+            "expanded": true
+        },
+        {
+            "id": "risorse.clima",
+            "title": "Clima",
+            "expanded": true
+        },
+        {
+            "id": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
+            "title": "Cumulata mensile delle precipitazioni in mm - (1995-2009)",
+            "expanded": true
+        },
+        {
+            "id": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
+            "title": "Media delle temperature massime del mese in °C - (1995-2009)",
+            "expanded": true
+        },
+        {
+            "id": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
+            "title": "Media delle temperature minime del mese in °C - (1995-2009)",
+            "expanded": true
+        },
+        {
+            "id": "risorse.clima.numero_giorni_piovosi_19952009",
+            "title": "Numero giorni piovosi - (1995-2009)",
+            "expanded": true
+        },
+        {
+            "id": "risorse.acqua",
+            "title": "Acqua",
+            "expanded": true
+        },
+        {
+            "id": "risorse.acqua.rt_difesa_del_suolo",
+            "title": "RT difesa del suolo",
+            "expanded": true
+        },
+        {
+            "id": "risorse.suolo_e_sottosuolo",
+            "title": "Suolo e sottosuolo",
+            "expanded": true
+        },
+        {
+            "id": "risorse.suolo_e_sottosuolo.terremoti",
+            "title": "Terremoti",
+            "expanded": true
+        },
+        {
+            "id": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico",
+            "title": "Vincolo idrogeologico",
+            "expanded": true
+        },
+        {
+            "id": "risorse.suolo_e_sottosuolo.db_geologico",
+            "title": "DB geologico",
+            "expanded": true
+        },
+        {
+            "id": "risorse.suolo_e_sottosuolo.db_geomorfologico",
+            "title": "DB geomorfologico",
+            "expanded": true
+        },
+        {
+            "id": "risorse.suolo_e_sottosuolo.uso_suolo",
+            "title": "Uso suolo",
+            "expanded": true
+        },
+        {
+            "id": "risorse.suolo_e_sottosuolo.pedologia",
+            "title": "Pedologia",
+            "expanded": true
+        },
+        {
+            "id": "risorse.suolo_e_sottosuolo.morfologia",
+            "title": "Morfologia",
+            "expanded": true
+        },
+        {
+            "id": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia",
+            "title": "Carsismo e speleologia",
             "expanded": true
         },
         {
@@ -1957,6 +3774,46 @@
         {
             "id": "risorse.struttura_ecosistemica.fauna",
             "title": "Fauna",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_insediativa",
+            "title": "Struttura insediativa",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
+            "title": "Infrastrutture per la mobilità",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_insediativa.popolazione_irpet",
+            "title": "Popolazione (IRPET)",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_insediativa.processi_socioeconomici_irpet",
+            "title": "Processi socio-economici (IRPET)",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_insediativa.salute_umana",
+            "title": "Salute umana",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_insediativa.energia",
+            "title": "Energia",
+            "expanded": true
+        },
+        {
+            "id": "risorse.patrimonio_culturale",
+            "title": "Patrimonio culturale",
+            "expanded": true
+        },
+        {
+            "id": "risorse.patrimonio_culturale.documenti_della_cultura",
+            "title": "Documenti della cultura",
             "expanded": true
         }
     ]
