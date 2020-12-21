@@ -128,6 +128,56 @@
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.igr_ul.point.rt",
+            "title": "Impianti di gestione rifiuti",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Impianti di gestione rifiuti'",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.rifiuti"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.aasfd_ul.point.rt",
+            "title": "Aree agricole per spandimento fanghi da depurazione ",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Aree agricole per spandimento fanghi da depurazione '",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.rifiuti"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
             "name": "rt_rinnovabili.iddpadi.differenza.rt",
@@ -253,6 +303,29 @@
             "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
             "visibility": false,
+            "name": "rt_itnt.sisbon.point.rt",
+            "title": "Siti interessati da procedimenti di bonifica",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset dei 'Siti interessati da procedimento di Bonifica' estratto settimanalmente dalla omologa Banca Dati, comprendente sia i siti iscritti nell'Anagrafe di cui all'Art. 251 del D.Lgs. 152/06 che quelli non iscritti (sia in procedura ordinaria sia in procedura semplificata e anche ricadenti sui SIN). Al suddetto dataset sono state associate alcune informazioni di sintesi relative al procedimento in corso (siti con ITER ATTIVI) o concluso (siti con ITER CHIUSI). Fonte dati: ARPAT (http://sira.arpat.toscana.it/apex/f?p=SISBON:REPORT_PER_RT::CSV:IR_REPORT_GEOSCOPIO)",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "group": "risorse.struttura_insediativa.salute_umana"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
             "name": "rt_itnt.presidisanitari.poly.rt",
             "title": "Presidi sanitari",
             "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Presidi sanitari'.",
@@ -270,6 +343,81 @@
                 }
             },
             "group": "risorse.struttura_insediativa.salute_umana"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.ri_ul_nm.point.rt",
+            "title": "Registro Imprese non manifatturiere",
+            "description": "Scala di visibilita 1:1 - 1:50.000. Dataset 'Registro Imprese' filtrato sulle imprese non manifatturiere. L'archivio riporta la georeferenziazione, operata al meglio sulla base degli stradari disponibili, delle Unita' Locali del Registro Imprese relativo al territorio della Toscana, risultanti registrate al 31 dicembre dell'anno di riferimento. Il Registro Imprese e' un registro informatico e pubblico, che contiene le informazioni giuridiche ed economiche di tutte le imprese italiane, che operano sul territorio nazionale. Il Registro Imprese e' gestito a livello provinciale dalle Camere di Commercio ed e' retto da un Conservatore. Ulteriori informazioni disponibili sul sito http://www.registroimprese.it/",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 50000,
+            "group": "risorse.struttura_insediativa.processi_socioeconomici_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.ri_ul.point.rt",
+            "title": "Registro Imprese manifatturiere",
+            "description": "Scala di visibilita 1:1 - 1:50.000. Dataset 'Registro Imprese' filtrato sulle imprese manifatturiere. L'archivio riporta la georeferenziazione, operata al meglio sulla base degli stradari disponibili, delle Unita' Locali del Registro Imprese relativo al territorio della Toscana, risultanti registrate al 31 dicembre dell'anno di riferimento. Il Registro Imprese e' un registro informatico e pubblico, che contiene le informazioni giuridiche ed economiche di tutte le imprese italiane, che operano sul territorio nazionale. Il Registro Imprese e' gestito a livello provinciale dalle Camere di Commercio ed e' retto da un Conservatore. Ulteriori informazioni disponibili sul sito http://www.registroimprese.it/",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 50000,
+            "group": "risorse.struttura_insediativa.processi_socioeconomici_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.ri_ul.point.rt.01",
+            "title": "Reg. Imprese Tessile e Abbigliamento",
+            "description": "Registro Imprese. Layer filtrato sul codice 01 'Tessile e Abbigliamento'",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.processi_socioeconomici_irpet"
         },
         {
             "type": "link",
@@ -300,6 +448,256 @@
             },
             "minScaleDenominator": 1,
             "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idunionecomuni.rt.poly",
+            "title": "Unione di comuni (LR.68/2011) areali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Unione di comuni (LR.68/2011)'. Le geometrie sono tratte dal dataset 'Comuni' e quindi sono intrinsecamente multiscalaltiscala. Territorio coperto: intera regione",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idcentroamm.rt.point",
+            "title": "Sedi amministrative puntuali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Sedi amministrative'. Territorio coperto: intera regione",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idcircondari.rt.poly",
+            "title": "Circondari areali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Circondari'. Territorio coperto: intera regione",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idcommont2008.rt.poly",
+            "title": "Comunita montane 2008 (LR.37/2008) areali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Comunita montane 2008' (LR.37/2008). Territorio coperto: intera regione",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idregione.rt.poly",
+            "title": "Regione areale",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Regione' multiscala di provenienza CTR10k, CTR2k, Catasto e Ortofoto. Territorio coperto: intera regione",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 10000000,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idareametropol.rt.poly",
+            "title": "Aree metropolitane areali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Aree metropolitane'. Territorio coperto: intera regione",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idcittametropol.rt.poly",
+            "title": "Citta metropolitana",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Citta metropolitana' multiscala di provenienza CTR10k, CTR2k, Catasto e Ortofoto. Territorio coperto: intera regione",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idprovince.rt.poly",
+            "title": "Province areali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Province' multiscala di provenienza CTR10k, CTR2k, Catasto e Ortofoto. Territorio coperto: intera regione",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.66344,
+                    "miny": 42.2098,
+                    "maxx": 12.4132,
+                    "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idcomuni.rt.line",
+            "title": "Tratti dei confini comunali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset lineare 'Tratti dei confini comunali' multiscala di provenienza CTR10k, CTR2k, Catasto e Ortofoto. Territorio coperto: intera regione, IL dataset riporta i tratti lineari che delimitano il confine dei vari comuni. Il dataset contiene tutti i tratti dei vari rilasci dei confini comunali areali succedutisi nel corso degli anni",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000100,
+            "group": "risorse.struttura_insediativa.popolazione_irpet"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+            "visibility": false,
+            "name": "rt_ambamm.idcomuni.rt.poly",
+            "title": "Comuni areali 01-01-2019",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset areale 'Comuni' multiscala di provenienza CTR10k, CTR2k, Catasto e Ortofoto. Territorio coperto: intera regione. E' possibile applicare un filtro sul campo 'codcom', IL dataset riporta i confini comunali in vigore dal 01/01/2019",
+            "params": {
+                "map": "wmsambamm",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 10000100,
             "group": "risorse.struttura_insediativa.popolazione_irpet"
         },
         {
@@ -446,6 +844,181 @@
                     "miny": 42.2098,
                     "maxx": 12.4132,
                     "maxy": 44.4742
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.scali",
+            "title": "Scali",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Scali'. Fonte Iter.Net",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.stazioni",
+            "title": "Stazioni ferroviarie",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Stazioni ferroviarie'. Fonte Iter.Net",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.ferrovie",
+            "title": "Ferrovie Iter.net",
+            "description": "Scala di visibilita 1:1 - 1:128.000. Dataset Ferrovie Iter.Net",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.cippi",
+            "title": "Cippi chilometrici",
+            "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Cippi chilometrici'. Fonte Iter.Net",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.civici",
+            "title": "Numeri civici",
+            "description": "Scala di visibilita 1:1 - 1:128.000. Dataset Numeri civici Iter.Net",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 10000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.elem_strad",
+            "title": "Elementi stradali Iter.net",
+            "description": "Scala di visibilita 1:1 - 1:128.000. Dataset Elementi stradali Iter.Net",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
+                }
+            },
+            "minScaleDenominator": 1,
+            "maxScaleDenominator": 5000000,
+            "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows",
+            "visibility": false,
+            "name": "rt_itnt.strade",
+            "title": "Strade Iter.net",
+            "description": "Scala di visibilita 1:1 - 1:128.000. Dataset Strade Iter.Net",
+            "params": {
+                "map": "owsinfrastrutturepresidi",
+                "map_resolution": 91
+            },
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.363,
+                    "miny": 42.079,
+                    "maxx": 12.7825,
+                    "maxy": 44.7022
                 }
             },
             "minScaleDenominator": 1,
@@ -3804,6 +4377,11 @@
         {
             "id": "risorse.struttura_insediativa.energia",
             "title": "Energia",
+            "expanded": true
+        },
+        {
+            "id": "risorse.struttura_insediativa.rifiuti",
+            "title": "Rifiuti",
             "expanded": true
         },
         {

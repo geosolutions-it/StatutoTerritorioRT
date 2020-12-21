@@ -371,6 +371,13 @@ const risorseArray = [
     ['Risorse', 'Struttura insediativa', []],
 
     ['Risorse', 'Struttura insediativa', 'Infrastrutture per la mobilità', [
+        'rt_itnt.strade',
+        'rt_itnt.elem_strad',
+        'rt_itnt.civici',
+        'rt_itnt.cippi',
+        'rt_itnt.ferrovie',
+        'rt_itnt.stazioni',
+        'rt_itnt.scali',
         'rt_sent.idareecai.rt',
         'rt_sent.idsentcai.2005.rt',
         'rt_sent.idrifcai.2005.rt'
@@ -379,6 +386,16 @@ const risorseArray = [
         'rt_amb_cens.centri_nuclei_2011',
         'rt_amb_cens.aree_prod_2011',
         'rt_amb_cens.centri_nuclei_2001',
+        'rt_ambamm.idcomuni.rt.poly',
+        'rt_ambamm.idcomuni.rt.line',
+        'rt_ambamm.idprovince.rt.poly',
+        'rt_ambamm.idcittametropol.rt.poly',
+        'rt_ambamm.idareametropol.rt.poly',
+        'rt_ambamm.idregione.rt.poly',
+        'rt_ambamm.idcommont2008.rt.poly',
+        'rt_ambamm.idcircondari.rt.poly',
+        'rt_ambamm.idcentroamm.rt.point',
+        'rt_ambamm.idunionecomuni.rt.poly',
         'rt_itnt.scuole.point.rt'
     ]],
     ['Risorse', 'Struttura insediativa', 'Processi socio-economici (IRPET)', [
@@ -386,10 +403,14 @@ const risorseArray = [
             "type": "link",
             "href": "http://territorio.irpet.it/#!/",
             "title": "Osservatorio territoriale"
-        }
+        },
+        'rt_itnt.ri_ul.point.rt.01',
+        'rt_itnt.ri_ul.point.rt',
+        'rt_itnt.ri_ul_nm.point.rt'
     ]],
     ['Risorse', 'Struttura insediativa', 'Salute umana', [
         'rt_itnt.presidisanitari.poly.rt',
+        'rt_itnt.sisbon.point.rt',
         'rt_itnt.iarir_ul.poly.rt'
     ]],
     ['Risorse', 'Struttura insediativa', 'Energia', [
@@ -397,6 +418,10 @@ const risorseArray = [
         'rt_rinnovabili.idaadp.rt',
         'rt_rinnovabili.iddpadi.rt',
         'rt_rinnovabili.iddpadi.differenza.rt'
+    ]],
+    ['Risorse', 'Struttura insediativa', 'Rifiuti', [
+        'rt_itnt.aasfd_ul.point.rt',
+        'rt_itnt.igr_ul.point.rt'
     ]],
     ['Risorse', 'Patrimonio culturale', []],
     ['Risorse', 'Patrimonio culturale', 'Documenti della cultura', [
@@ -791,6 +816,13 @@ export const printLayersOfRisorse = () => {
                 map: 'wmsmorfologia',
                 map_resolution: 91
             }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'wmsambamm',
+                map_resolution: 91
+            }
         }
     ]
     
@@ -947,9 +979,21 @@ export const printStaticMaps = () => {
                     ...addParamsToLayers(cartografiaDiBase.layers),
                     ...addParamsToLayers(pianoPaesaggisticoRegionale.layers),
                     ...addParamsToLayers(risorse.layers),
-                    ...addParamsToLayers(invarianti.layers),
-                    ...addParamsToLayers(pianiStrutturali.layers),
-                    ...addParamsToLayers(pianiOperativi.layers),
+                    ...addParamsToLayers(invarianti.layers, {
+                        featureInfo: {
+                            format: 'PROPERTIES'
+                        }
+                    }),
+                    ...addParamsToLayers(pianiStrutturali.layers, {
+                        featureInfo: {
+                            format: 'PROPERTIES'
+                        }
+                    }),
+                    ...addParamsToLayers(pianiOperativi.layers, {
+                        featureInfo: {
+                            format: 'PROPERTIES'
+                        }
+                    }),
                 ],
                 [
                     ...cartografiaDiBase.groups,
@@ -971,9 +1015,21 @@ export const printStaticMaps = () => {
                     ...addParamsToLayers(cartografiaDiBase.layers),
                     ...addParamsToLayers(pianoPaesaggisticoRegionale.layers),
                     ...addParamsToLayers(risorse.layers),
-                    ...addParamsToLayers(invarianti.layers),
-                    ...addParamsToLayers(pianiStrutturali.layers),
-                    ...addParamsToLayers(pianiOperativi.layers)
+                    ...addParamsToLayers(invarianti.layers, {
+                        featureInfo: {
+                            format: 'PROPERTIES'
+                        }
+                    }),
+                    ...addParamsToLayers(pianiStrutturali.layers, {
+                        featureInfo: {
+                            format: 'PROPERTIES'
+                        }
+                    }),
+                    ...addParamsToLayers(pianiOperativi.layers, {
+                        featureInfo: {
+                            format: 'PROPERTIES'
+                        }
+                    })
                 ],
                 [
                     ...cartografiaDiBase.groups,
