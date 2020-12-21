@@ -915,6 +915,12 @@ export const printLayersOfCartografiaDiBase = () => {
             'owsctr', // mapParam
             'rt_ctr.10k_impianto', // layerName
             'CTR 1:10.000' // title
+        ],
+        [
+            'https://www502.regione.toscana.it/ows_ofc/com.rt.wms.RTmap/wms', // wmsUrl
+            'owsofc', // mapParam
+            'rt_ofc.5k19.32bit', // layerName
+            'Ortofoto 2019 20cm' // title
         ]
     ];
     Promise.all(
@@ -928,26 +934,14 @@ export const printLayersOfCartografiaDiBase = () => {
         }))
     ).then((newLayers) => {
         const allLayers = [
-            ...newLayers,
-            {
-                type: 'wms',
-                url: 'https://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv',
-                name: 'DBTM_DataBaseTopograficoMultiscala',
-                title: 'DBT Multiscala',
-                format: 'image/png; mode=8bit',
-                group: 'cartografia_di_base',
-                params: {
-                    map: 'dbtm_rt.qgs',
-                    map_resolution: 91
-                }
-            }
+            ...newLayers
         ]
         const order = [
-            'rt_ofc.10k13',
-            'rt_ofc.5k16.32bit',
-            'DBTM_DataBaseTopograficoMultiscala',
             'rt_ambamm.idcomuni.rt.poly',
-            'rt_ctr.10k_impianto'
+            'rt_ctr.10k_impianto',
+            'rt_ofc.5k19.32bit',
+            'rt_ofc.5k16.32bit',
+            'rt_ofc.10k13',
         ]
         console.log('Layers', JSON.stringify(order.reverse().map((name) => allLayers.find(layer => layer.name === name))));
         console.log('Groups', JSON.stringify([
