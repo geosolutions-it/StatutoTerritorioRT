@@ -257,12 +257,6 @@
               "description": "Italiano"
             }
           }
-        },
-        "mapInfo": {
-          "enabled": true,
-          "configuration": {
-            "infoFormat": "application/json"
-          }
         }
       }
     },
