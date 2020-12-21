@@ -61,7 +61,6 @@ export const strtInitApp = action$ =>
     action$.ofType(LOCATION_CHANGE)
         .switchMap((action) => {
             if (action?.payload?.isFirstRendering) {
-                import('../staticMapsUtils');
                 return Observable.defer(() =>
                     axios.get('/static/mapstore/defaultMaps.json')
                         .then(({ data }) => data.results)
