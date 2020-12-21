@@ -18,7 +18,7 @@ const replaceNodeOptions = (currentNode, nodeType, filterText) => {
         return {
             ...currentNode,
             expanded: true
-        }
+        };
     }
     return currentNode;
 };

@@ -25,7 +25,7 @@
     "ignoreMobileCss": false,
     "useAuthenticationRules": true,
     "loadAfterTheme": true,
-    "mapLayout": {"left": {"sm": 500, "md": 500, "lg": 600}, "right": {"md": 658}, "bottom": {"sm": 30}},
+    "mapLayout": {"left": {"sm": 400, "md": 500, "lg": 600}, "right": {"md": 658}, "bottom": {"sm": 30}},
     "defaultMapOptions": {
       "cesium": {
           "flyTo": true,
@@ -257,6 +257,12 @@
               "description": "Italiano"
             }
           }
+        },
+        "mapInfo": {
+          "enabled": true,
+          "configuration": {
+            "infoFormat": "application/json"
+          }
         }
       }
     },
@@ -351,7 +357,7 @@
             "name": "DrawerMenu",
             "cfg": {
               "menuOptions": {
-                "width": 500
+                "width": 400
               }
             }
           },

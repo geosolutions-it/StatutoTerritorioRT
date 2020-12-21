@@ -63,7 +63,7 @@
     .mapstore-layers-container {
         position: absolute;
         width: 100%;
-        padding: 8px;
+        padding: 0;
 
         .noUi-target {
             margin: 0;
@@ -266,7 +266,7 @@
     }
 
     .toc-group-children {
-        padding-left: @square-btn-medium-size;
+        padding-left: 15px;
         margin-left: 0;
     }
 
@@ -299,9 +299,18 @@
     .ms-header-node-title {
         font-weight: bold;
         font-size: @font-size-large;
+        padding: 4px 8px;
+    }
+    > .mapstore-filter {
+        padding: 8px;
+        background-color: @ms-toc-background;
+        position: sticky;
+        top: -1px;
+        z-index: 20;
     }
     > .toc-group-children {
-        padding-left: 0;
+        padding: 8px;
+        padding-top: 0px;
     }
 }
 

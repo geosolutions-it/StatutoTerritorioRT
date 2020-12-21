@@ -6,6 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+/* eslint-disable */
+
 import snakeCase from 'lodash/snakeCase';
 import wms from '@mapstore/observables/wms';
 
@@ -17,13 +19,23 @@ import pianoPaesaggisticoRegionale from '../static/mapstore/layers/piano_paesagg
 import risorse from '../static/mapstore/layers/risorse.json';
 import axios from '@mapstore/libs/ajax';
 import xml2js from 'xml2js';
+import flatten from 'lodash/flatten';
+import isObject from 'lodash/isObject';
 
 function getCap({
     wmsUrl,
     mapParam,
-    mapResolution
+    mapResolution,
+    params
 }) {
-    return axios.get(`${wmsUrl}?map=${mapParam}&SERVICE=WMS&REQUEST=GetCapabilities`)
+    return axios.get(wmsUrl, {
+        params: {
+            SERVICE: 'WMS',
+            REQUEST: 'GetCapabilities',
+            ...(mapParam && { map: mapParam }),
+            ...params
+        }
+    })
         .then((response) => {
             let json;
             xml2js.parseString(response.data, {}, (ignore, result) => {
@@ -42,7 +54,8 @@ function getCap({
                     : formats.indexOf('image/png') !== -1
                         ? 'image/png'
                         : formats[0];
-            const layers = Layer?.Layer.map((Lyr) => {
+
+            const getLayer = (Lyr) => {
                 const bbox = Lyr.EX_GeographicBoundingBox[0];
                 return {
                     "type": "wms",
@@ -51,10 +64,11 @@ function getCap({
                     "visibility": false,
                     "name": Lyr.Name[0],
                     "title": Lyr.Title[0],
-                    "description": Lyr.Abstract[0],
+                    ...(Lyr?.Abstract?.[0] && { "description": Lyr?.Abstract?.[0]}),
                     "params": {
-                        "map": mapParam,
-                        "map_resolution": mapResolution
+                        ...(mapParam && {"map": mapParam}),
+                        ...(mapResolution && {"map_resolution": mapResolution}),
+                        ...params
                     },
                     "bbox": {
                         "crs": "EPSG:4326",
@@ -67,9 +81,22 @@ function getCap({
                     },
                     ...(Lyr.MinScaleDenominator && { "minScaleDenominator": parseFloat(Lyr.MinScaleDenominator)}),
                     ...(Lyr.MaxScaleDenominator && { "maxScaleDenominator": parseFloat(Lyr.MaxScaleDenominator) }),
-                    allowedSRS
+                    // allowedSRS
                 };
-            });
+            }
+            const layers = Layer?.Layer.reduce((acc, Lyr) => {
+                if (Lyr?.Layer) {
+                    return [
+                        ...acc,
+                        getLayer(Lyr),
+                        ...Lyr.Layer.map((Ly) => getLayer(Ly))
+                    ];
+                }
+                return [
+                    ...acc,
+                    getLayer(Lyr)
+                ];
+            }, []);
             return layers;
         });
 }
@@ -166,6 +193,132 @@ const mappaBase = (layers, groups) => ({
 
 const risorseArray = [
     ['Risorse', []],
+    ['Risorse', 'Aria', []],
+    ['Risorse', 'Aria', 'Inquinamento fisico', [
+        'rt_inqfis.idpccaspt.rt',
+        'rt_inqfis.idpccaspt.rt',
+        'rt_inqfis.idpccaqua.rt',
+        'rt_inqfis.idpccazon.rt',
+        'rt_inqfis.idpcraarcrit_a.rt',
+        'rt_inqfis.idpcrafru_l.rt',
+        'rt_inqfis.idpcrairi_a.rt',
+        'rt_inqfis.idpcrairi_l.rt',
+        'rt_inqfis.idpcrairi_p.rt',
+        'rt_inqfis.idpcrarcr_a.rt',
+        'rt_inqfis.idpcramsf_p.rt',
+        'rt_inqfis.stazioni_astronomiche.rt',
+        'rt_inqfis.LR39_2005_art35_comma_1.rt',
+        'rt_inqfis.LR39_2005_art35_comma_2.rt',
+        'rt_inqfis.LR39_2005_art35_comma_4.rt'
+    ]],
+    ['Risorse', 'Clima', []],
+    ['Risorse', 'Clima', 'Cumulata mensile delle precipitazioni in mm - (1995-2009)', [
+        'PioggiaCum:Pcum_2009-M00',
+        'PioggiaCum:Pcum_2009-M01',
+        'PioggiaCum:Pcum_2009-M02',
+        'PioggiaCum:Pcum_2009-M03',
+        'PioggiaCum:Pcum_2009-M04',
+        'PioggiaCum:Pcum_2009-M05',
+        'PioggiaCum:Pcum_2009-M06',
+        'PioggiaCum:Pcum_2009-M07',
+        'PioggiaCum:Pcum_2009-M08',
+        'PioggiaCum:Pcum_2009-M09',
+        'PioggiaCum:Pcum_2009-M10',
+        'PioggiaCum:Pcum_2009-M11',
+        'PioggiaCum:Pcum_2009-M12'
+    ]],
+    ['Risorse', 'Clima', 'Media delle temperature massime del mese in °C - (1995-2009)', [
+        'TempMax:Tmax_2009-M01',
+        'TempMax:Tmax_2009-M02',
+        'TempMax:Tmax_2009-M03',
+        'TempMax:Tmax_2009-M04',
+        'TempMax:Tmax_2009-M05',
+        'TempMax:Tmax_2009-M06',
+        'TempMax:Tmax_2009-M07',
+        'TempMax:Tmax_2009-M08',
+        'TempMax:Tmax_2009-M09',
+        'TempMax:Tmax_2009-M10',
+        'TempMax:Tmax_2009-M11',
+        'TempMax:Tmax_2009-M12'
+    ]],
+    ['Risorse', 'Clima', 'Media delle temperature minime del mese in °C - (1995-2009)', [
+        'TempMin:Tmin_2009-M01',
+        'TempMin:Tmin_2009-M02',
+        'TempMin:Tmin_2009-M03',
+        'TempMin:Tmin_2009-M04',
+        'TempMin:Tmin_2009-M05',
+        'TempMin:Tmin_2009-M06',
+        'TempMin:Tmin_2009-M07',
+        'TempMin:Tmin_2009-M08',
+        'TempMin:Tmin_2009-M09',
+        'TempMin:Tmin_2009-M10',
+        'TempMin:Tmin_2009-M11',
+        'TempMin:Tmin_2009-M12'
+    ]],
+    ['Risorse', 'Clima', 'Numero giorni piovosi - (1995-2009)', [
+        'PioggiaNum:Pnum_2009-M00',
+        'PioggiaNum:Pnum_2009-M01',
+        'PioggiaNum:Pnum_2009-M02',
+        'PioggiaNum:Pnum_2009-M03',
+        'PioggiaNum:Pnum_2009-M04',
+        'PioggiaNum:Pnum_2009-M05',
+        'PioggiaNum:Pnum_2009-M06',
+        'PioggiaNum:Pnum_2009-M07',
+        'PioggiaNum:Pnum_2009-M08',
+        'PioggiaNum:Pnum_2009-M09',
+        'PioggiaNum:Pnum_2009-M10',
+        'PioggiaNum:Pnum_2009-M11',
+        'PioggiaNum:Pnum_2009-M12'
+    ]],
+    ['Risorse', 'Acqua', []],
+    ['Risorse', 'Acqua', 'RT difesa del suolo', [
+        'comprensori_bonifica_10_06_2016',
+        'reticolo_lr_79_2012',
+        'reticolo_lr_79_2012'
+    ]],
+    ['Risorse', 'Suolo e sottosuolo', []],
+    ['Risorse', 'Suolo e sottosuolo', 'Terremoti', [
+        'rt_terremoti.eventi.cpti15',
+        'rt_terremoti.eventi.ingv',
+        'rt_terremoti.eventi.ingv.strumentali'
+    ]],
+    ['Risorse', 'Suolo e sottosuolo', 'Vincolo idrogeologico', [
+        'rt_idrogeol.areeboscate.2016.rt.poly',
+        'rt_idrogeol.areeboscate.2013.rt.poly',
+        'rt_idrogeol.areeboscate.2010.rt.poly',
+        'rt_idrogeol.areeboscate.2007.rt.poly',
+        'rt_idrogeol.idrd32671923.rt.poly'
+    ]],
+    ['Risorse', 'Suolo e sottosuolo', 'DB geologico', [
+        'rt_dbg.el_geol.unita_geologica_areale_100k',
+        'rt_dbg.el_geol.unita_geologica_areale_10k',
+        'rt_dbg.el_geol.limite_geologico'
+    ]],
+    ['Risorse', 'Suolo e sottosuolo', 'DB geomorfologico', [
+        'FR - Frane',
+        'FN - Frane Non Rappresentabili'
+    ]],
+    ['Risorse', 'Suolo e sottosuolo', 'Uso suolo', [
+        'rt_ucs.iducs.10k.2016.rt.full'
+    ]],
+    ['Risorse', 'Suolo e sottosuolo', 'Pedologia', [
+        'capacita_di_uso_e_fertilita_dei_suoli',
+        'unita_di_paesaggio'
+    ]],
+    ['Risorse', 'Suolo e sottosuolo', 'Morfologia', [
+        'rt_morfologia.iddtm.10m.rt',
+        'rt_morfologia.dtm_10m_idrol.rt'
+    ]],
+    ['Risorse', 'Suolo e sottosuolo', 'Carsismo e speleologia', [
+        'rt_carsismo_speleologia.idingrotte.point.rt',
+        'rt_carsismo_speleologia.iddoline.point.rt',
+        'rt_carsismo_speleologia.iddoline.poly.rt',
+        'rt_carsismo_speleologia.idformecarsiche.point.rt',
+        'rt_carsismo_speleologia.idformecarsiche.poly.rt',
+        'rt_carsismo_speleologia.idsorgenticarsiche.point.rt',
+        'rt_carsismo_speleologia.idareecarsificabili.poly.rt'
+    ]],
+    
     ['Risorse', 'Struttura ecosistemica', []],
     ['Risorse', 'Struttura ecosistemica', 'Biodiveristà', [
         'rt_arprot.idparnaz.rt.poly',
@@ -214,7 +367,45 @@ const risorseArray = [
         'rt_arprot.renato.specie.pesci.rt.point',
         'rt_arprot.renato.specie.rettili.rt.point',
         'rt_arprot.renato.specie.uccelli.rt.point'
-    ]]
+    ]],
+    ['Risorse', 'Struttura insediativa', []],
+
+    ['Risorse', 'Struttura insediativa', 'Infrastrutture per la mobilità', [
+        'rt_sent.idareecai.rt',
+        'rt_sent.idsentcai.2005.rt',
+        'rt_sent.idrifcai.2005.rt'
+    ]],
+    ['Risorse', 'Struttura insediativa', 'Popolazione (IRPET)', [
+        'rt_amb_cens.centri_nuclei_2011',
+        'rt_amb_cens.aree_prod_2011',
+        'rt_amb_cens.centri_nuclei_2001',
+        'rt_itnt.scuole.point.rt'
+    ]],
+    ['Risorse', 'Struttura insediativa', 'Processi socio-economici (IRPET)', [
+        {
+            "type": "link",
+            "href": "http://territorio.irpet.it/#!/",
+            "title": "Osservatorio territoriale"
+        }
+    ]],
+    ['Risorse', 'Struttura insediativa', 'Salute umana', [
+        'rt_itnt.presidisanitari.poly.rt',
+        'rt_itnt.iarir_ul.poly.rt'
+    ]],
+    ['Risorse', 'Struttura insediativa', 'Energia', [
+        'rt_rinnovabili.idzicv.rt',
+        'rt_rinnovabili.idaadp.rt',
+        'rt_rinnovabili.iddpadi.rt',
+        'rt_rinnovabili.iddpadi.differenza.rt'
+    ]],
+    ['Risorse', 'Patrimonio culturale', []],
+    ['Risorse', 'Patrimonio culturale', 'Documenti della cultura', [
+        'rt_benicult.idpaesaggistico.rt',
+        'rt_benicult.idarchitettonico.rt',
+        'rt_benicult.idarcheologico.rt',
+        'rt_opificistorici.opifici.point.rt',
+        'rt_opificistorici.opifici.etichette.rt'
+    ]],
 ];
 
 const pianoPaesaggisticoRegionaleArray = [
@@ -327,27 +518,31 @@ const pianiStrutturaliArray = [
 
 const invariantiArray = [
     ['Invarianti', []],
-    ['Invarianti', 'Pozzi', ['invarianti:pozzi']],
-    ['Invarianti', 'Sottosistemi morfogenetici ', ['invarianti:sottosistemi_morfogenetici_ssm']],
-    ['Invarianti', 'Crinali ', ['invarianti:crinali']],
-    ['Invarianti', 'Aree di margine', ['invarianti:aree_di_margine_conoidi_terrazzi']],
-    ['Invarianti', 'Bacini neogenici', ['invarianti:Bacini_Neogenici-calanchi_biancane_balze', 'invarianti:bacini_neogenici_calanchi_biancane_balze_II', 'invarianti:Bacini_Neogenici-calanchi_biancane_balze_III']],
-    ['Invarianti', 'Rete colture agrarie', ['invarianti:prati_stabili', 'invarianti:colture_arboree_specializzate', 'invarianti:colture_in_abbandono', 'invarianti:olivo']],
-    ['Invarianti', 'Rete viaria', ['invarianti:strade_campestri', 'invarianti:sentieri_mulattiere', 'invarianti:percorsi_fondativi', 'invarianti:strade_50k']],
+    ['Invarianti', 'Invariante I', []],
+    ['Invarianti', 'Invariante I', 'Pozzi', ['invarianti:pozzi']],
+    ['Invarianti', 'Invariante I', 'Sottosistemi morfogenetici ', ['invarianti:sottosistemi_morfogenetici_ssm']],
+    ['Invarianti', 'Invariante I', 'Crinali ', ['invarianti:crinali']],
+    ['Invarianti', 'Invariante I', 'Aree di margine', ['invarianti:aree_di_margine_conoidi_terrazzi', 'aree_di_margine_conoidi_terrazzi_II']],
+    ['Invarianti', 'Invariante I', 'Bacini neogenici', ['invarianti:Bacini_Neogenici-calanchi_biancane_balze', 'invarianti:bacini_neogenici_calanchi_biancane_balze_II', 'invarianti:Bacini_Neogenici-calanchi_biancane_balze_III']],
     
-    ['Invarianti', 'Categoria_A_continua (DGR 1148/2002)', []],
-    ['Invarianti', 'Categoria_A_continua (DGR 1148/2002)', 'Idrografia', ['invarianti:reticolo_idrologico', 'invarianti:rete_idraulico_agraria', 'invarianti:scoline', 'invarianti:corsi_acqua_areali']],
-    ['Invarianti', 'Categoria_A_continua (DGR 1148/2002)', 'Aree boscate', ['invarianti:aree_boscate']],
-    ['Invarianti', 'Categoria_A_continua (DGR 1148/2002)', 'Rete siepi', ['invarianti:rete_siepi', 'invarianti:vegetazione_evoluzione']],
-    ['Invarianti', 'Categoria_A_continua (DGR 1148/2002)', 'Rete muretti a secco', ['invarianti:rete_muretti_secco']],
-    ['Invarianti', 'Categoria_A_continua (DGR 1148/2002)', 'Rete praterie', ['invarianti:rete_praterie_radure']],
-    ['Invarianti', 'Categoria_A_continua (DGR 1148/2002)', 'Capacità uso dei suoli', ['invarianti:lcc', 'invarianti:fertilità']],
-    ['Invarianti', 'Categoria_A_continua (DGR 1148/2002)', 'Limitazioni del suoli', ['invarianti:erosione', 'invarianti:deficit_idrico']],
+    ['Invarianti', 'Invariante II', []],
+    ['Invarianti', 'Invariante II', 'Categoria_A_continua (DGR 1148/2002)', []],
+    ['Invarianti', 'Invariante II', 'Categoria_A_continua (DGR 1148/2002)', 'Idrografia', ['invarianti:reticolo_idrologico', 'invarianti:rete_idraulico_agraria', 'invarianti:scoline', 'invarianti:corsi_acqua_areali']],
+    ['Invarianti', 'Invariante II', 'Categoria_A_continua (DGR 1148/2002)', 'Aree boscate', ['invarianti:aree_boscate']],
+    ['Invarianti', 'Invariante II', 'Categoria_A_continua (DGR 1148/2002)', 'Rete siepi', ['invarianti:rete_siepi', 'invarianti:vegetazione_evoluzione']],
+    ['Invarianti', 'Invariante II', 'Categoria_A_continua (DGR 1148/2002)', 'Rete muretti a secco', ['invarianti:rete_muretti_secco']],
+    ['Invarianti', 'Invariante II', 'Categoria_A_continua (DGR 1148/2002)', 'Rete praterie', ['invarianti:rete_praterie_radure']],
+    ['Invarianti', 'Invariante II', 'Categoria_A_continua (DGR 1148/2002)', 'Capacità uso dei suoli', ['invarianti:lcc', 'invarianti:fertilità']],
+    ['Invarianti', 'Invariante II', 'Categoria_A_continua (DGR 1148/2002)', 'Limitazioni del suoli', ['invarianti:erosione', 'invarianti:deficit_idrico']],
 
-    ['Invarianti', 'Categoria_B_discontinua (DGR 1148/2002)', []],
-    ['Invarianti', 'Categoria_B_discontinua (DGR 1148/2002)', 'Rete alberi isolati', ['invarianti:rete_alberi_isolati']],
-    ['Invarianti', 'Categoria_B_discontinua (DGR 1148/2002)', 'Rete pozze', ['invarianti:rete_pozze']],
-    ['Invarianti', 'Categoria_B_discontinua (DGR 1148/2002)', 'Rete aree umide', ['invarianti:aree_umide']]
+    ['Invarianti', 'Invariante II', 'Categoria_B_discontinua (DGR 1148/2002)', []],
+    ['Invarianti', 'Invariante II', 'Categoria_B_discontinua (DGR 1148/2002)', 'Rete alberi isolati', ['invarianti:rete_alberi_isolati']],
+    ['Invarianti', 'Invariante II', 'Categoria_B_discontinua (DGR 1148/2002)', 'Rete pozze', ['invarianti:rete_pozze']],
+    ['Invarianti', 'Invariante II', 'Categoria_B_discontinua (DGR 1148/2002)', 'Rete aree umide', ['invarianti:aree_umide']],
+
+    ['Invarianti', 'Invariante IV', []],
+    ['Invarianti', 'Invariante IV', 'Rete colture agrarie', ['invarianti:prati_stabili', 'invarianti:colture_arboree_specializzate', 'invarianti:colture_in_abbandono', 'invarianti:olivo']],
+    ['Invarianti', 'Invariante IV', 'Rete viaria', ['invarianti:strade_campestri', 'invarianti:sentieri_mulattiere', 'invarianti:percorsi_fondativi', 'invarianti:strade_50k']],
 ];
 
 const parseLayersArrays = (layersArray) => {
@@ -368,10 +563,10 @@ const parseLayersArrays = (layersArray) => {
             ],
             layers: [
                 ...acc.layers,
-                ...layersNames.map((name) => ({
-                    name,
-                    group
-                }))
+                ...layersNames.map((name) => isObject(name)
+                    ? { ...name, group }
+                    : { name, group }
+                )
             ]
         };
     }, { groups: [], layers: []});
@@ -434,12 +629,191 @@ const getLayersCapabilities = (layersArray, text) =>{
 
 export const printLayersOfRisorse = () => {
     const { layers, groups } = parseLayersArrays(risorseArray);
-    getCap({
-        wmsUrl: 'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms',
-        mapParam: 'wmsarprot',
-        mapResolution: 91
-    }).then((capLayers) => {
+
+    const risorseCaps = [
+        {
+            url: 'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'wmsinqfis',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows',
+            params: {
+                namespace: 'PioggiaCum'
+            }
+        },
+        {
+            url: 'https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows',
+            params: {
+                namespace: 'TempMax'
+            }
+        },
+        {
+            url: 'https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows',
+            params: {
+                namespace: 'TempMin'
+            }
+        },
+        {
+            url: 'https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows',
+            params: {
+                namespace: 'PioggiaNum'
+            }
+        },
+        {
+            url: 'https://geoportale.lamma.rete.toscana.it/geoserver_ds/RETICOLO/ows'
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'owsterremoti',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'owsterremoti',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv',
+            params: {
+                map: 'dbgeologico_rt.qgs',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv',
+            params: {
+                map: 'dbgeomorfologico_rt.qgs',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'wmsucs',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'owspedologia',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'owsspeleologia',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'wmsarprot',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'owsedificato',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows',
+            params: {
+                map: 'owsinfrastrutturepresidi',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows_sentieristica/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'owssentieristica',
+                map_resolution: 91
+            }
+        },
+    
+        {
+            url: 'https://www502.regione.toscana.it/cartografia/wmsraster/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'wmsambcens',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows',
+            params: {
+                map: 'owsinfrastrutturepresidi',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'wmsrinnovabili',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'owsbenicult',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows_castore/com.rt.wms.RTmap/ows',
+            params: {
+                map: 'owsopificistorici',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/ows_idrogeologico/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'owsidrogeologico',
+                map_resolution: 91
+            }
+        },
+        {
+            url: 'https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms',
+            params: {
+                map: 'wmsmorfologia',
+                map_resolution: 91
+            }
+        }
+    ]
+    
+    Promise.all(risorseCaps.map((res) =>
+        getCap({
+            wmsUrl: res.url,
+            params: res.params
+        })
+            .then((capLayers) => {
+                return capLayers;
+            })
+            .catch((err) => {
+                console.log('ERROR', JSON.stringify(res), err);
+                return null;
+            })
+    
+    )).then(capLayersArray => {
+        console.log(capLayersArray);
+        const capLayers = flatten(capLayersArray);
         const newLayers = layers.reverse().map((layer) => {
+            if (layer.type === 'link') {
+                return layer;
+            }
             const options = capLayers.find((capLayer) => capLayer.name === layer.name);
             if (!options) {
                 console.log(layer.name, 'not found');

@@ -37,7 +37,8 @@ import {
 
 import {
     push,
-    replace
+    replace,
+    LOCATION_CHANGE
 } from 'connected-react-router';
 import {
     getMapUrl,
@@ -54,7 +55,6 @@ import capitalize from 'lodash/capitalize';
 
 import url from 'url';
 import uuidv1 from 'uuid/v1';
-import { LOCATION_CHANGE } from 'connected-react-router';
 import axios from '@mapstore/libs/ajax';
 
 export const strtInitApp = action$ =>
@@ -67,7 +67,7 @@ export const strtInitApp = action$ =>
                         .catch(() => [])
                 )
                     .switchMap((results) => {
-                        return Observable.of(setDefaultMaps(results)); 
+                        return Observable.of(setDefaultMaps(results));
                     });
             }
             return Observable.empty();

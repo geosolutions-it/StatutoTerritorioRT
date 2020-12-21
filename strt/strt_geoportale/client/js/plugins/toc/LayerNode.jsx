@@ -41,6 +41,9 @@ const layerToolsByTypes = {
                 </>
             );
         }
+    },
+    link: {
+        isActive: () => false
     }
 };
 
@@ -122,7 +125,7 @@ export class LayerNode extends Component {
 
         const placeholderClassName = (isDragging || node.placeholder ? ' is-placeholder ' : '');
 
-        const hideClassName = !node.visibility || node.invalid ? ' ms-hide' : '';
+        const hideClassName = node.type !== 'link' && (!node.visibility || node.invalid) ? ' ms-hide' : '';
         const selectedClassName = selectedNodes.find((nodeId) => nodeId === node.id) ? ' ms-selected' : '';
         const errorClassName = node.loadingError === 'Error' ? ' ms-node-error' : '';
         const warningClassName = node.loadingError === 'Warning' ? ' ms-node-warning' : '';
@@ -155,9 +158,12 @@ export class LayerNode extends Component {
         const head = (
             <div
                 onClick={(event) =>
-                    onSelect(node.id, 'layer', event.ctrlKey)}>
+                    node.type !== 'link' && onSelect(node.id, 'layer', event.ctrlKey)}>
                 <SideCard
                     size="sm"
+                    style={{
+                        cursor: 'pointer'
+                    }}
                     preview={<Toolbar
                         btnDefaultProps={{
                             className: 'square-button-md'
@@ -170,11 +176,15 @@ export class LayerNode extends Component {
                                 event.stopPropagation();
                                 onUpdateNode(node.id, 'layers', { expanded: !expanded });
                             }
+                        },
+                        {
+                            visible: node.type === 'link',
+                            Element: () => <GlyphIndicator glyph="link" style={{ padding: '0 4px' }}/>
                         }]}
                     />}
                     className={`ms-toc-layer${selectedClassName}${errorClassName}${warningClassName}`}
                     title={titleTooltip ? <span data-tip={tooltipText} data-for={node.id} >{titleComponent}</span> : titleComponent}
-                    tools={<Toolbar
+                    tools={node.type !== 'link' && <Toolbar
                         btnDefaultProps={{
                             className: 'square-button-md'
                         }}
@@ -213,7 +223,7 @@ export class LayerNode extends Component {
                     body={
                         <>
                         {expanded && Body && <div className="ms-layer-node-body"><Body { ...this.props } /></div>}
-                        {activateOpacityTool &&
+                        {node.type !== 'link' && activateOpacityTool &&
                             <OpacitySlider
                                 opacity={node.opacity}
                                 disabled={!node.visibility}
@@ -231,7 +241,7 @@ export class LayerNode extends Component {
                 style={isDummy ? { opacity: 0, boxShadow: 'none' } : {}}
                 className="toc-list-item">
                 {isDummy
-                    ? <div style={{ padding: 0, height: 8 }} className="toc-default-layer-head"/>
+                    ? <div style={{ padding: 0, height: 0 }} className="toc-default-layer-head"/>
                     : <Node
                         node={node}
                         className={`toc-default-layer${placeholderClassName}${hideClassName}`}
@@ -246,8 +256,18 @@ export class LayerNode extends Component {
             </div>
         );
 
+        const tocListItemNode = node.type === 'link'
+            ? <a href={node.href}
+                target="_blank"
+                rel="noopener noreferrer">
+                {tocListItem}
+            </a>
+            : tocListItem;
+
         if (node?.showComponent !== false && !node?.hide && filter(node, 'layer')) {
-            return connectDropTarget(isDraggable && !isDummy ? connectDragSource(tocListItem) : tocListItem);
+            return connectDropTarget(isDraggable && !isDummy
+                ? connectDragSource(tocListItemNode)
+                : tocListItemNode);
         }
         return null;
     }
@@ -256,9 +276,9 @@ export class LayerNode extends Component {
         return (
             <InView>
                 {({ inView, ref }) => (
-                <div ref={ref}>
-                    {this.renderNode(inView)}
-                </div>
+                    <div ref={ref}>
+                        {this.renderNode(inView)}
+                    </div>
                 )}
             </InView>
         );
