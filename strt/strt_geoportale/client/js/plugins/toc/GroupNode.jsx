@@ -203,9 +203,9 @@ export class GroupNode extends Component {
         return (
             <InView>
                 {({ inView, ref }) => (
-                <div ref={ref}>
-                    {this.renderNode(inView)}
-                </div>
+                    <div ref={ref}>
+                        {this.renderNode(inView)}
+                    </div>
                 )}
             </InView>
         );

@@ -62,9 +62,9 @@ function TOC({
 
     useEffect(() => {
         if (defaultSelectedGroup) {
-            setSelected(defaultSelectedGroup)
+            setSelected(defaultSelectedGroup);
         }
-    }, [defaultSelectedGroup])
+    }, [defaultSelectedGroup]);
 
     return (
         <div className="ms-toc">

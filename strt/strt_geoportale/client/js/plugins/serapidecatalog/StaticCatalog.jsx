@@ -52,7 +52,6 @@ function StaticCatalog({
                                     />
                                     <div
                                         className="srtr-serapide-catalog-info"
-                                        
                                     >
                                         <h4 style={{ fontSize: 24 }}>{entry?.name}</h4>
                                         <p style={{ whiteSpace: 'normal' }}>{entry?.description}</p>
