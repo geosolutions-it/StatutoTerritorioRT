@@ -19661,7 +19661,7 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .ms-toc .mapstore-layers-container {
   position: absolute;
   width: 100%;
-  padding: 8px;
+  padding: 0;
 }
 .Geoportale .ms-toc .mapstore-layers-container .noUi-target {
   margin: 0;
@@ -19846,7 +19846,7 @@ Ported to CodeMirror by Peter Kroon
   box-shadow: none;
 }
 .Geoportale .ms-toc .toc-group-children {
-  padding-left: 29px;
+  padding-left: 15px;
   margin-left: 0;
 }
 .Geoportale .ms-toc .ms-hide {
@@ -19876,9 +19876,18 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .ms-header-node .ms-header-node-title {
   font-weight: bold;
   font-size: 18px;
+  padding: 4px 8px;
+}
+.Geoportale .ms-header-node > .mapstore-filter {
+  padding: 8px;
+  background-color: #ffffff;
+  position: sticky;
+  top: -1px;
+  z-index: 20;
 }
 .Geoportale .ms-header-node > .toc-group-children {
-  padding-left: 0;
+  padding: 8px;
+  padding-top: 0px;
 }
 .Geoportale .toc-layer-tooltip {
   max-width: 225px;
