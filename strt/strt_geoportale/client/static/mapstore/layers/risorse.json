@@ -2701,6 +2701,44 @@
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:fiumi_stato_ecologico_2010_2018",
+            "title": "Fiumi stato ecologico 2010-2018",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.78949308714865,
+                    "miny": 42.38001769850326,
+                    "maxx": 12.23194663842383,
+                    "maxy": 44.42764837733057
+                }
+            },
+            "group": "risorse.acqua.qualita_dellacqua"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:fiumi_stato_chimico_2010_2018",
+            "title": "Fiumi stato chimico 2010-2018",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 9.78949308714865,
+                    "miny": 42.38001769850326,
+                    "maxx": 12.23194663842383,
+                    "maxy": 44.42764837733057
+                }
+            },
+            "group": "risorse.acqua.qualita_dellacqua"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
             "url": "https://geoportale.lamma.rete.toscana.it/geoserver_ds/RETICOLO/ows",
             "visibility": false,
             "name": "reticolo_lr_79_2012",
@@ -3860,6 +3898,177 @@
         {
             "type": "wms",
             "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:pm10_superamenti_2007_2019",
+            "title": "PM10 superamenti 2007-2019",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.073083205135477,
+                    "miny": 42.74525905284962,
+                    "maxx": 11.919479055130077,
+                    "maxy": 44.07747565418235
+                }
+            },
+            "group": "risorse.aria.qualita_dellaria.superamenti"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:no2_superamenti_2007_2019",
+            "title": "NO2 superamenti 2007-2019",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.071493236991472,
+                    "miny": 42.65303261368734,
+                    "maxx": 11.919479055130077,
+                    "maxy": 44.07747565418235
+                }
+            },
+            "group": "risorse.aria.qualita_dellaria.superamenti"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:o3_sup_soglia_obbiettivo_vegetazione_medie_2010_2019",
+            "title": "OZONO: soglia obbiettivo protezione vegetazione(AOT40), medie 2010-2019",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.376699693548204,
+                    "miny": 42.65303261368734,
+                    "maxx": 11.912145194661967,
+                    "maxy": 43.924111467081154
+                }
+            },
+            "group": "risorse.aria.qualita_dellaria.medie_pluriennali"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:o3_sup_soglia_obbiettivo_salute_medie_2010_2019",
+            "title": "OZONO: soglia obbiettivo protezione salute, medie 2010-2019",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.376699693548204,
+                    "miny": 42.65303261368734,
+                    "maxx": 11.912145194661967,
+                    "maxy": 43.924111467081154
+                }
+            },
+            "group": "risorse.aria.qualita_dellaria.medie_pluriennali"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:benzoapirene_medie_2009_2019",
+            "title": "Benzoapirene medie 2009-2019",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.317615767543659,
+                    "miny": 42.906291889810994,
+                    "maxx": 11.907057713551936,
+                    "maxy": 43.884711685140466
+                }
+            },
+            "group": "risorse.aria.qualita_dellaria.medie_annuali"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:benzene_medie_2009_2019",
+            "title": "Benzene medie 2009-2019",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.317615767543659,
+                    "miny": 42.91987821619536,
+                    "maxx": 11.289840475294794,
+                    "maxy": 43.884711685140466
+                }
+            },
+            "group": "risorse.aria.qualita_dellaria.medie_annuali"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:pm25_medie_2007_2019",
+            "title": "PM25 medie 2007-2019",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.109918549081105,
+                    "miny": 42.761669098861276,
+                    "maxx": 11.914083982877592,
+                    "maxy": 44.03110476073719
+                }
+            },
+            "group": "risorse.aria.qualita_dellaria.medie_annuali"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:no2_medie_2007_2019",
+            "title": "NO2 medie 2007-2019",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.071493236991472,
+                    "miny": 42.65303261368734,
+                    "maxx": 11.919479055130077,
+                    "maxy": 44.07747565418235
+                }
+            },
+            "group": "risorse.aria.qualita_dellaria.medie_annuali"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
+            "url": "/geoserver/wms",
+            "visibility": false,
+            "name": "risorse:pm10_medie_2007_2019",
+            "title": "PM10 medie 2007-2019",
+            "params": {},
+            "bbox": {
+                "crs": "EPSG:4326",
+                "bounds": {
+                    "minx": 10.073083205135477,
+                    "miny": 42.74525905284962,
+                    "maxx": 11.919479055130077,
+                    "maxy": 44.07747565418235
+                }
+            },
+            "group": "risorse.aria.qualita_dellaria.medie_annuali"
+        },
+        {
+            "type": "wms",
+            "format": "image/png; mode=8bit",
             "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
             "visibility": false,
             "name": "rt_inqfis.LR39_2005_art35_comma_4.rt",
@@ -4250,6 +4459,26 @@
             "expanded": true
         },
         {
+            "id": "risorse.aria.qualita_dellaria",
+            "title": "Qualità dell'aria",
+            "expanded": true
+        },
+        {
+            "id": "risorse.aria.qualita_dellaria.medie_annuali",
+            "title": "Medie annuali",
+            "expanded": true
+        },
+        {
+            "id": "risorse.aria.qualita_dellaria.medie_pluriennali",
+            "title": "Medie pluriennali",
+            "expanded": true
+        },
+        {
+            "id": "risorse.aria.qualita_dellaria.superamenti",
+            "title": "Superamenti",
+            "expanded": true
+        },
+        {
             "id": "risorse.clima",
             "title": "Clima",
             "expanded": true
@@ -4282,6 +4511,11 @@
         {
             "id": "risorse.acqua.rt_difesa_del_suolo",
             "title": "RT difesa del suolo",
+            "expanded": true
+        },
+        {
+            "id": "risorse.acqua.qualita_dellacqua",
+            "title": "Qualità dell'acqua",
             "expanded": true
         },
         {

@@ -211,6 +211,24 @@ const risorseArray = [
         'rt_inqfis.LR39_2005_art35_comma_2.rt',
         'rt_inqfis.LR39_2005_art35_comma_4.rt'
     ]],
+    ['Risorse', 'Aria', 'Qualità dell\'aria', []],
+    ['Risorse', 'Aria', 'Qualità dell\'aria', 'Medie annuali', [
+        'risorse:pm10_medie_2007_2019',
+        'risorse:no2_medie_2007_2019',
+        'risorse:pm25_medie_2007_2019',
+        'risorse:benzene_medie_2009_2019',
+        'risorse:benzoapirene_medie_2009_2019',
+    ]],
+    ['Risorse', 'Aria', 'Qualità dell\'aria', 'Medie pluriennali', [
+        'risorse:o3_sup_soglia_obbiettivo_salute_medie_2010_2019',
+        'risorse:o3_sup_soglia_obbiettivo_vegetazione_medie_2010_2019'
+    ]],
+
+    ['Risorse', 'Aria', 'Qualità dell\'aria', 'Superamenti', [
+        'risorse:no2_superamenti_2007_2019',
+        'risorse:pm10_superamenti_2007_2019'
+    ]],
+
     ['Risorse', 'Clima', []],
     ['Risorse', 'Clima', 'Cumulata mensile delle precipitazioni in mm - (1995-2009)', [
         'PioggiaCum:Pcum_2009-M00',
@@ -276,6 +294,12 @@ const risorseArray = [
         'reticolo_lr_79_2012',
         'reticolo_lr_79_2012'
     ]],
+
+    ['Risorse', 'Acqua', 'Qualità dell\'acqua', [
+        'risorse:fiumi_stato_chimico_2010_2018',
+        'risorse:fiumi_stato_ecologico_2010_2018'
+    ]],
+
     ['Risorse', 'Suolo e sottosuolo', []],
     ['Risorse', 'Suolo e sottosuolo', 'Terremoti', [
         'rt_terremoti.eventi.cpti15',
@@ -823,6 +847,9 @@ export const printLayersOfRisorse = () => {
                 map: 'wmsambamm',
                 map_resolution: 91
             }
+        },
+        {
+            url: '/geoserver/wms'
         }
     ]
     
@@ -954,12 +981,11 @@ export const printLayersOfCartografiaDiBase = () => {
     });
 }
 
-function addParamsToLayers(layers, params) {
-    return layers.map(layer => ({
+function addParamsToLayers(layers, params = l => l) {
+    return layers.map(layer => params({
         ...layer,
         visibility: false,
-        tileSize: 512,
-        ...params
+        tileSize: 512
     }));
 }
 
@@ -972,22 +998,36 @@ export const printStaticMaps = () => {
                 [
                     ...addParamsToLayers(cartografiaDiBase.layers),
                     ...addParamsToLayers(pianoPaesaggisticoRegionale.layers),
-                    ...addParamsToLayers(risorse.layers),
-                    ...addParamsToLayers(invarianti.layers, {
+                    ...addParamsToLayers(risorse.layers, layer => layer.url === '/geoserver/wms'
+                    ? {
+                        ...layer,
+                        featureInfo: {
+                            format: 'PROPERTIES'
+                        },
+                        search: {
+                            url: '/geoserver/wfs',
+                            type: 'wfs'
+                        }
+                    }
+                    : layer),
+                    ...addParamsToLayers(invarianti.layers, layer => ({
+                        ...layer,
                         featureInfo: {
                             format: 'PROPERTIES'
                         }
-                    }),
-                    ...addParamsToLayers(pianiStrutturali.layers, {
+                    })),
+                    ...addParamsToLayers(pianiStrutturali.layers, layer => ({
+                        ...layer,
                         featureInfo: {
                             format: 'PROPERTIES'
                         }
-                    }),
-                    ...addParamsToLayers(pianiOperativi.layers, {
+                    })),
+                    ...addParamsToLayers(pianiOperativi.layers, layer => ({
+                        ...layer,
                         featureInfo: {
                             format: 'PROPERTIES'
                         }
-                    }),
+                    })),
                 ],
                 [
                     ...cartografiaDiBase.groups,
@@ -1008,22 +1048,36 @@ export const printStaticMaps = () => {
                 [
                     ...addParamsToLayers(cartografiaDiBase.layers),
                     ...addParamsToLayers(pianoPaesaggisticoRegionale.layers),
-                    ...addParamsToLayers(risorse.layers),
-                    ...addParamsToLayers(invarianti.layers, {
+                    ...addParamsToLayers(risorse.layers, layer => layer.url === '/geoserver/wms'
+                        ? {
+                            ...layer,
+                            featureInfo: {
+                                format: 'PROPERTIES'
+                            },
+                            search: {
+                                url: '/geoserver/wfs',
+                                type: 'wfs'
+                            }
+                        }
+                        : layer),
+                    ...addParamsToLayers(invarianti.layers, layer => ({
+                        ...layer,
                         featureInfo: {
                             format: 'PROPERTIES'
                         }
-                    }),
-                    ...addParamsToLayers(pianiStrutturali.layers, {
+                    })),
+                    ...addParamsToLayers(pianiStrutturali.layers, layer => ({
+                        ...layer,
                         featureInfo: {
                             format: 'PROPERTIES'
                         }
-                    }),
-                    ...addParamsToLayers(pianiOperativi.layers, {
+                    })),
+                    ...addParamsToLayers(pianiOperativi.layers, layer => ({
+                        ...layer,
                         featureInfo: {
                             format: 'PROPERTIES'
                         }
-                    })
+                    }))
                 ],
                 [
                     ...cartografiaDiBase.groups,
