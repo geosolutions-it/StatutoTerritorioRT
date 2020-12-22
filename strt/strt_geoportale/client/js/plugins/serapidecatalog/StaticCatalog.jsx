@@ -9,7 +9,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '@js/plugins/serapidecatalog/Icon';
-import { withResizeDetector } from 'react-resize-detector';
 
 function StaticCatalog({
     results,
@@ -77,6 +76,4 @@ StaticCatalog.defaultProps = {
     onSelect: () => {}
 };
 
-const StaticCatalogWithResizeDetector = withResizeDetector(StaticCatalog);
-
-export default StaticCatalogWithResizeDetector;
+export default StaticCatalog;

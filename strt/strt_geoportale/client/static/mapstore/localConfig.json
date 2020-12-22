@@ -1,14 +1,10 @@
 {
     "proxyUrl": {
-        "url": "/proxy/?url=",
-        "autoDetectCORS": true,
+        "url": "https://dev.serapide.geo-solutions.it:3128/?url=",
         "useCORS": [
           "https://nominatim.openstreetmap.org",
           "http://dev.serapide.geo-solutions.it/geoserver",
-          "https://dev.serapide.geo-solutions.it/geoserver",
-          "http://www502.regione.toscana.it",
-          "https://geoportale.lamma.rete.toscana.it",
-          "https://www502.regione.toscana.it"
+          "https://dev.serapide.geo-solutions.it/geoserver"
         ]
     },
     "serapideAPI": {

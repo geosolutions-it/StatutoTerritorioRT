@@ -13,7 +13,6 @@ import Message from '@mapstore/components/I18N/Message';
 import Loader from '@mapstore/components/misc/Loader';
 import localizedProps from '@mapstore/components/misc/enhancers/localizedProps';
 import Icon from '@js/plugins/serapidecatalog/Icon';
-import { withResizeDetector } from 'react-resize-detector';
 const FormControl = localizedProps('placeholder')(FormControlRB);
 
 function ErrorResults() {
@@ -200,6 +199,4 @@ SerapideCatalog.defaultProps = {
     isCatalogEmpty: false
 };
 
-const SerapideCatalogWithResizeDetector = withResizeDetector(SerapideCatalog);
-
-export default SerapideCatalogWithResizeDetector;
+export default SerapideCatalog;

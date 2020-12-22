@@ -21,6 +21,7 @@ import serapide from '@js/reducers/serapide';
 import { searchSerapide } from '@js/actions/serapide';
 
 import { getMapUrl } from '@js/utils/GeoportaleUtils';
+import ReactResizeDetector  from 'react-resize-detector';
 
 function selectMapSerapideThunk(params) {
     return (dispatch) => {
@@ -42,8 +43,16 @@ const ConnectedStaticCatalog = connect(createSelector(
 function HomeCatalog(props) {
     return (
         <Grid className="strt-homepage-catalog" fluid>
-            <ConnectedStaticCatalog />
-            <Catalog { ...props }/>
+            <ReactResizeDetector handleWidth>
+                {({ width }) => {
+                    return (
+                        <div>
+                            <ConnectedStaticCatalog width={width}/>
+                            <Catalog { ...props } width={width}/>
+                        </div>
+                    );
+                }}
+            </ReactResizeDetector>
         </Grid>
     );
 }
