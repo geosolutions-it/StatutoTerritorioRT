@@ -24,6 +24,7 @@ import {
 
 import epics from '@js/epics/serapide';
 import serapide from '@js/reducers/serapide';
+import ReactResizeDetector  from 'react-resize-detector';
 
 function SerapideCatalogPlugin({ enabled, onClose, ...props }) {
     return (
@@ -33,7 +34,11 @@ function SerapideCatalogPlugin({ enabled, onClose, ...props }) {
                 title={<Message msgId="serapide.catalogTitle"/>}
                 size="lg"
                 onClose={onClose}>
-                <Catalog {...props} />
+                <ReactResizeDetector handleWidth>
+                    {({ width }) => <>
+                        <Catalog { ...props } width={width}/>
+                    </>}
+                </ReactResizeDetector>
             </ResizableModal>
         </Portal>
     );
