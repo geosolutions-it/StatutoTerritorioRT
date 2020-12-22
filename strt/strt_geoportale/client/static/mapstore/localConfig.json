@@ -1,6 +1,6 @@
 {
     "proxyUrl": {
-        "url": "https://dev.serapide.geo-solutions.it:3128/?url=",
+        "url": "/proxy/proxy/?url=",
         "useCORS": [
           "https://nominatim.openstreetmap.org",
           "http://dev.serapide.geo-solutions.it/geoserver",
