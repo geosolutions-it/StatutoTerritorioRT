@@ -19850,7 +19850,7 @@ Ported to CodeMirror by Peter Kroon
   margin-left: 0;
 }
 .Geoportale .ms-toc .ms-hide {
-  opacity: 0.5;
+  opacity: 0.75;
 }
 .Geoportale .ms-toc .ms-loader {
   width: 15px;
