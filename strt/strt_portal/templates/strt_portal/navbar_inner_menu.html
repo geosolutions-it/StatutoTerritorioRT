@@ -12,27 +12,27 @@
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto pl-2">
         <li class="nav-item">
-            <a class="nav-link text-{{ text_color }}" href="/">
+            <a class="nav-link text-{{ text_color }}" href="#cosa-e">
                 <span>{% trans 'cosa è'|upper %}</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-{{ text_color }}" href="/">
+            <a class="nav-link text-{{ text_color }}" href="#a-cosa-serve">
                 <span>{% trans 'A cosa serve'|upper %}</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-{{ text_color }}" href="/">
+            <a class="nav-link text-{{ text_color }}" href="#chi-ha-realizzato">
                 <span>{% trans 'chi lo ha realizzato'|upper %}</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-{{ text_color }}" href="/">
-                <span>{% trans 'le specifiche techiche'|upper %}</span>
+            <a class="nav-link text-{{ text_color }}" href="#le-specifiche-tecniche">
+                <span>{% trans 'le specifiche tecniche'|upper %}</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-{{ text_color }}" href="/">
+            <a class="nav-link text-{{ text_color }}" href="#i-manuali">
                 <span>{% trans 'i manuali'|upper %}</span>
             </a>
         </li>
@@ -42,14 +42,26 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-{{ text_color }}" href="/">
+            <a class="nav-link text-{{ text_color }}" href="#accedi-ai-servizi">
                 <span>{% trans 'accedi ai servizi'|upper %}</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-{{ text_color }}" href="{% url 'geportale_home' %}">
-                <span>{% trans 'geoportale'|upper %}</span>
-            </a>
-        </li>
     </ul>
-</div><!-- end NAVBAR COLLPSABLE CONTENT -->
+</div>
+<script>
+(function(){
+    // add an offset after scrolling to the target anchor
+    var navItems = document.querySelectorAll('a[href^="#"]');
+    for (var i = 0; i < navItems.length; i++) {
+        navItems[i].addEventListener('click', function (e) {
+            e.preventDefault();
+            var navbar = document.querySelector('.top-navbar');
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                window.scrollTo(0, target.offsetTop - navbar.clientHeight - 50);
+            }
+        });
+    }
+})()
+</script>
+<!-- end NAVBAR COLLPSABLE CONTENT -->
