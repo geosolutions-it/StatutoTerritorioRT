@@ -240,7 +240,7 @@ a {
 }
 .third-section-row {
     padding-left: 4rem;
-    padding-right: 4re,;
+    padding-right: 4rem;
     padding-top: 11.66rem;
 }
 .section-row {
@@ -506,4 +506,9 @@ a {
             max-width: 800px !important;
         }
     }
+}
+
+.clean-ul {
+    padding: 0px;
+    list-style-type: none;
 }

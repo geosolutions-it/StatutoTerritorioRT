@@ -4,7 +4,7 @@
     z-index: 1;
     position: relative;
 // Bootstrap and its default variables
-    @import "node_modules/bootstrap/scss/bootstrap";
+    @import "../../serapide_client/node_modules/bootstrap/scss/bootstrap.scss";
     
     @at-root :root {
         // Custom variable values only support SassScript inside `#{}`.

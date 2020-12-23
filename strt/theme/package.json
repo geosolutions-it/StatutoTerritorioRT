@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-task:scss-compile": "node-sass --source-map true scss/ -o ../static/css --include-path scss/ && cp ./node_modules/bootstrap/dist/js/bootstrap.min.js ../static/js/. && cp ./node_modules/popper.js/dist/umd/popper.min.js ../static/js/.",
+    "build-task:scss-compile": "node-sass --source-map true scss/ -o ../static/css --include-path scss/ && cp ../serapide_client/node_modules/bootstrap/dist/js/bootstrap.min.js ../static/js/. && cp ../serapide_client/node_modules/popper.js/dist/umd/popper.min.js ../static/js/.",
     "autoprefixer": "postcss dist/css/*.css --use autoprefixer -d dist/css",
     "minify": "css-minify -d dist/css",
     "sass:build": "npm-run-all -p build-task:*",

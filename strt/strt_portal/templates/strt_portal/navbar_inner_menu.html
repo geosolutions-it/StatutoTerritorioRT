@@ -13,27 +13,27 @@
     <ul class="navbar-nav ml-auto pl-2">
         <li class="nav-item">
             <a class="nav-link text-{{ text_color }}" href="/">
-                <span>{% trans 'portale'|upper %}</span>
+                <span>{% trans 'cosa è'|upper %}</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-{{ text_color }}" href="/">
-                <span>{% trans 'pianificazione'|upper %}</span>
+                <span>{% trans 'A cosa serve'|upper %}</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-{{ text_color }}" href="/">
-                <span>{% trans 'statuto del territorio'|upper %}</span>
+                <span>{% trans 'chi lo ha realizzato'|upper %}</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-{{ text_color }}" href="{% url 'geportale_home' %}">
-                <span>{% trans 'geoportale'|upper %}</span>
+            <a class="nav-link text-{{ text_color }}" href="/">
+                <span>{% trans 'le specifiche techiche'|upper %}</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-{{ text_color }}" href="http://dati.toscana.it/dataset" target="_blank">
-                <span>{% trans 'open data'|upper %}</span>
+            <a class="nav-link text-{{ text_color }}" href="/">
+                <span>{% trans 'i manuali'|upper %}</span>
             </a>
         </li>
         <li class="nav-item">
@@ -42,8 +42,13 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-{{ text_color }} pr-0" href="">
-                <span>{% trans 'contatti'|upper %}</span>
+            <a class="nav-link text-{{ text_color }}" href="/">
+                <span>{% trans 'accedi ai servizi'|upper %}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-{{ text_color }}" href="{% url 'geportale_home' %}">
+                <span>{% trans 'geoportale'|upper %}</span>
             </a>
         </li>
     </ul>
