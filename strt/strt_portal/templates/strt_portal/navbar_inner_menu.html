@@ -58,7 +58,6 @@
             var navbar = document.querySelector('.top-navbar');
             var target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                console.log(navbar.clientHeight);
                 window.scrollTo(0, target.offsetTop - navbar.clientHeight - 50);
             }
         });
