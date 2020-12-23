@@ -24,7 +24,7 @@
 </section>
 <hr />
 <section class="py-5">
-    <div class="container">
+    <div class="container" style="max-width: 1280px">
         <div id="cosa-e" class="row mb-5">
             <div class="col-3 icon-col text-right">
                 <p class="medium-text wrap-text">
@@ -65,7 +65,7 @@
 </section>
 <hr />
 <section class="py-5">
-    <div class="container">
+    <div class="container" style="max-width: 1280px">
         <div id="le-specifiche-tecniche" class="row mb-5">
             <div class="col-3 icon-col text-right">
                 <p class="medium-text wrap-text">
@@ -90,7 +90,13 @@
                 </p>
             </div>
         </div>
-        <div id="accedi-ai-servizi" class="row">
+    </div>
+</section>
+<hr />
+
+<section class="py-5">
+    <div class="container" style="max-width: 1280px">
+        <div id="accedi-ai-servizi" class="row" style="margin-bottom: 40px">
             <div class="col-3 icon-col text-right">
                 <p class="medium-text wrap-text">
                     Accedi ai Servizi
@@ -102,58 +108,44 @@
                 </p>
             </div>
         </div>
-    </div>
-</section>
-<hr />
-
-<section class="py-5">
-    <div class="container">
-        <div class="row text-center mb-5">
-            <div class="col-12">
-                <h4>Accesso ai servizi per la pianificazione, per la VAS, per la confirmazione al PIT-PPR</h4>
-            </div>
-        </div>
         <div class="row">
-            <div class="col-3" style="border-left:4px solid #FED403;">
+            <div class="col-3" style="border-left:2px solid #FED403">
                 <h5>QUADRO CONOSCITIVO</h5>
                 <p class="wrap-text">
                     Il Geoportale e l’accesso alle banche dati e agli indicatori sulle risorse e sul patrimonio territoriale per l’elaborazione dei quadri conoscitivi dei piani, per la VAS e per la VIA
                 </p>
                 <p>
-                    <a class="btn btn-serapide" href="{% url 'geportale_home' %}#/viewer/mappa_piani_operativi?static=1" role="button">Vai al Geoportale</a>
+                    <a class="btn btn-serapide" style="font-size: 0.8em" href="{% url 'geportale_home' %}#/viewer/mappa_piani_operativi?static=1" role="button">GEOPORTALE</a>
                 </p>
             </div>
-            <div class="col-3" style="border-left:4px solid #FED403;">
+            <div class="col-3" style="border-left:2px solid #FED403;">
                 <h5>FORMAZIONE DEL PIANO</h5>
                 <p class="wrap-text">
                     Il software SERAPIDE per il procedimento di formazione on-line dei piani comunali strutturali ed operativi: dall’avvio del procedimento all’approvazione
                 </p>
                 <p>
-                    <a class="btn btn-serapide" href="/serapide" role="button">Vai a formazione del piano</a>
+                    <a class="btn btn-serapide" href="/serapide" role="button">SERAPIDE</a>
                 </p>
             </div>
-            <div class="col-3" style="border-left:4px solid #FED403;">
+            <div class="col-3" style="border-left:2px solid #FED403;">
                 <h5>VALUTAZIONE E CONFORMAZIONE</h5>
                 <p class="wrap-text">
                     Il Geoportale e l’accesso alle banche dati e agli indicatori sulle risorse e sul patrimonio territoriale per l’elaborazione dei quadri conoscitivi dei piani, per la VAS e per la VIA
                 </p>
                 <p>
-                    <a class="btn btn-serapide"href="{% url 'geportale_home' %}#/viewer/mappa_piani_operativi?static=1" role="button">Vai al Geoportale</a>
+                    <a class="btn btn-serapide" style="font-size: 0.8em" href="http://159.213.57.114/vasPianiCom/admin/" target="_blank" role="button">Valutazione e confirmità</a>
                 </p>
                 <p>
-                    <a class="btn btn-serapide" href="http://159.213.57.114/vasPianiCom/admin/" role="button">Valutazione e confirmità</a>
-                </p>
-                <p>
-                    <a class="btn btn-serapide btn-sm" href="http://159.213.57.114/consultazionePIT.html" role="button">Banca data normativa del PIT-PPR</a>
+                    <a class="btn btn-serapide" style="font-size: 0.8em" href="http://159.213.57.114/consultazionePIT.html" target="_blank" role="button">Banca data normativa del PIT-PPR</a>
                 </p>
             </div>
-            <div class="col-3" style="border-left:4px solid #FED403;">
+            <div class="col-3" style="border-left:2px solid #FED403;">
                 <h5>MONITORAGGIO URBANISTICO</h5>
                 <p class="wrap-text">
                     Il software INPUT per il monitoraggio urbanistico della pianificazione comunale strutturale e operativa
                 </p>
                 <p>
-                    <a class="btn btn-serapide" href="http://159.213.57.114/Database%20Strumenti%20Urbanistici.html" role="button">Vai a monitoraggio urbanistico</a>
+                    <a class="btn btn-serapide" style="font-size: 0.8em" href="http://159.213.57.114/Database%20Strumenti%20Urbanistici.html" target="_blank" role="button">Vai a monitoraggio urbanistico</a>
                 </p>
             </div>
         </div>
