@@ -18,9 +18,14 @@ Start the development application locally:
 
 The application runs at `http://localhost:8081` afterwards.
 
-Read more on the [wiki](undefined/wiki).
+## Update static maps
 
-## Update the static map list (development only)
+It is possible update static maps by following these steps:
+
+- update json files inside the [static/mapstore/maps/](static/mapstore/maps) directory
+- minify the maps with the command `npm run minify-static-maps`
+- commit the changes
+## Generate the static maps (development only)
 
 The static maps available in the geoportale homepage are listed in this customizable file [defaultMaps.json](static/mapstore/defaultMaps.json).
 
