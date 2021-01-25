@@ -62,5 +62,165 @@
       "qualifica_ufficio": 8,
       "utente": "PIANRT22A15E715G"
    }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 9,
+   "fields": {
+      "qualifica_ufficio": 9,
+      "utente": "ETJCOM99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 10,
+   "fields": {
+      "qualifica_ufficio": 9,
+      "utente": "ALLCOM99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 11,
+   "fields": {
+      "qualifica_ufficio": 10,
+      "utente": "ETJACZ99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 12,
+   "fields": {
+      "qualifica_ufficio": 10,
+      "utente": "ALLACZ99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 13,
+   "fields": {
+      "qualifica_ufficio": 11,
+      "utente": "ETJSCA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 14,
+   "fields": {
+      "qualifica_ufficio": 11,
+      "utente": "ALLSCA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 15,
+   "fields": {
+      "qualifica_ufficio": 12,
+      "utente": "ETJGCA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 16,
+   "fields": {
+      "qualifica_ufficio": 12,
+      "utente": "ALLGCA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 17,
+   "fields": {
+      "qualifica_ufficio": 13,
+      "utente": "ETJPIA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 18,
+   "fields": {
+      "qualifica_ufficio": 13,
+      "utente": "ALLPIA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 19,
+   "fields": {
+      "qualifica_ufficio": 14,
+      "utente": "ETJCOM99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 20,
+   "fields": {
+      "qualifica_ufficio": 14,
+      "utente": "ALLCOM99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 21,
+   "fields": {
+      "qualifica_ufficio": 15,
+      "utente": "ETJACZ99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 22,
+   "fields": {
+      "qualifica_ufficio": 15,
+      "utente": "ALLACZ99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 23,
+   "fields": {
+      "qualifica_ufficio": 16,
+      "utente": "ETJSCA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 24,
+   "fields": {
+      "qualifica_ufficio": 16,
+      "utente": "ALLSCA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 25,
+   "fields": {
+      "qualifica_ufficio": 17,
+      "utente": "ETJGCA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 26,
+   "fields": {
+      "qualifica_ufficio": 17,
+      "utente": "ALLGCA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 27,
+   "fields": {
+      "qualifica_ufficio": 18,
+      "utente": "ETJPIA99A99E999Z"
+   }
+},
+{
+   "model": "strt_users.assegnatario",
+   "pk": 28,
+   "fields": {
+      "qualifica_ufficio": 18,
+      "utente": "ALLPIA99A99E999Z"
+   }
 }
 ]

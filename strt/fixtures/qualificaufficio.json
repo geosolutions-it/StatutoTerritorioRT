@@ -3,7 +3,7 @@
    "model": "strt_users.qualificaufficio",
    "pk": 1,
    "fields": {
-      "ufficio": 9,
+      "ufficio": 19,
       "qualifica": "AC"
    }
 },
@@ -11,7 +11,7 @@
    "model": "strt_users.qualificaufficio",
    "pk": 2,
    "fields": {
-      "ufficio": 9,
+      "ufficio": 19,
       "qualifica": "OPCOM"
    }
 },
@@ -19,7 +19,7 @@
    "model": "strt_users.qualificaufficio",
    "pk": 3,
    "fields": {
-      "ufficio": 9,
+      "ufficio": 19,
       "qualifica": "SCA"
    }
 },
@@ -27,7 +27,7 @@
    "model": "strt_users.qualificaufficio",
    "pk": 4,
    "fields": {
-      "ufficio": 10,
+      "ufficio": 20,
       "qualifica": "AC"
    }
 },
@@ -35,7 +35,7 @@
    "model": "strt_users.qualificaufficio",
    "pk": 5,
    "fields": {
-      "ufficio": 11,
+      "ufficio": 31,
       "qualifica": "SCA"
    }
 },
@@ -43,7 +43,7 @@
    "model": "strt_users.qualificaufficio",
    "pk": 6,
    "fields": {
-      "ufficio": 13,
+      "ufficio": 33,
       "qualifica": "AC"
    }
 },
@@ -60,6 +60,86 @@
    "pk": 8,
    "fields": {
       "ufficio": 8,
+      "qualifica": "PIAN"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 9,
+   "fields": {
+      "ufficio": 21,
+      "qualifica": "OPCOM"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 10,
+   "fields": {
+      "ufficio": 22,
+      "qualifica": "AC"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 11,
+   "fields": {
+      "ufficio": 23,
+      "qualifica": "SCA"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 12,
+   "fields": {
+      "ufficio": 12,
+      "qualifica": "GC"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 13,
+   "fields": {
+      "ufficio": 13,
+      "qualifica": "PIAN"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 14,
+   "fields": {
+      "ufficio": 26,
+      "qualifica": "OPCOM"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 15,
+   "fields": {
+      "ufficio": 27,
+      "qualifica": "AC"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 16,
+   "fields": {
+      "ufficio": 28,
+      "qualifica": "SCA"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 17,
+   "fields": {
+      "ufficio": 17,
+      "qualifica": "GC"
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 18,
+   "fields": {
+      "ufficio": 18,
       "qualifica": "PIAN"
    }
 }

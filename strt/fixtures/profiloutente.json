@@ -70,5 +70,131 @@
       "profilo": "OPERATORE",
       "ente": 3
    }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 9,
+   "fields": {
+      "utente": "ETJRUP99A99E999Z",
+      "profilo": "ADMIN_ENTE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 10,
+   "fields": {
+      "utente": "ETJRUP99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 11,
+   "fields": {
+      "utente": "ETJCOM99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 12,
+   "fields": {
+      "utente": "ETJSCA99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 13,
+   "fields": {
+      "utente": "ETJACZ99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 14,
+   "fields": {
+      "utente": "ETJGCA99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 1
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 15,
+   "fields": {
+      "utente": "ETJPIA99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 1
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 16,
+   "fields": {
+      "utente": "ALLRUP99A99E999Z",
+      "profilo": "ADMIN_ENTE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 17,
+   "fields": {
+      "utente": "ALLRUP99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 18,
+   "fields": {
+      "utente": "ALLCOM99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 19,
+   "fields": {
+      "utente": "ALLSCA99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 20,
+   "fields": {
+      "utente": "ALLACZ99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 2
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 21,
+   "fields": {
+      "utente": "ALLGCA99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 1
+   }
+},
+{
+   "model": "strt_users.profiloutente",
+   "pk": 22,
+   "fields": {
+      "utente": "ALLPIA99A99E999Z",
+      "profilo": "OPERATORE",
+      "ente": 1
+   }
 }
 ]
