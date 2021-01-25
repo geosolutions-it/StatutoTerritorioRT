@@ -265,6 +265,12 @@ class QualificaUfficio(models.Model):
         choices=Qualifica.create_choices(),
         max_length=Qualifica.get_max_len(),
         null=False)
+    is_soggetto_default = models.BooleanField(
+        _('Soggetto di default'),
+        default=False,
+        help_text=_('Soggetto operante di default'),
+    )
+
 
     def __str__(self):
         q = self.qualifica.name if isinstance(self.qualifica, Qualifica) else "!!!{}".format(self.qualifica)
@@ -294,6 +300,10 @@ class QualificaUfficio(models.Model):
                 ente=self.ufficio.ente,
                 tipo=self.ufficio.ente.tipo
             ))
+
+    @classmethod
+    def get_soggetti_default(cls):
+        return QualificaUfficio.objects.filter(is_soggetto_default=True)
 
     # OVERRIDE
     def save(self, *args, **kwargs):

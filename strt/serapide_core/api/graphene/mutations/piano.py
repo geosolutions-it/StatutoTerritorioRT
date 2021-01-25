@@ -260,6 +260,11 @@ class CreatePiano(relay.ClientIDMutation):
 
             nuovo_piano = update_create_instance(_piano, _piano_data)
 
+            # Aggiunta soggetti operanti di default
+            for qu in QualificaUfficio.get_soggetti_default():
+                so = SoggettoOperante(piano=nuovo_piano, qualifica_ufficio=qu)
+                so.save()
+
             # Inizializzazione Azioni del Piano
             _order = 0
 

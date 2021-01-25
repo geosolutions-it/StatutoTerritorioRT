@@ -16,7 +16,7 @@ from serapide_core.modello.enums import (
 )
 
 from serapide_core.modello.models import (
-    Piano,
+    Piano, SoggettoOperante,
     Delega,
     Azione,
     AzioneReport,
@@ -26,6 +26,7 @@ from serapide_core.modello.models import (
 from strt_users.enums import (
     Qualifica,
 )
+from strt_users.models import QualificaUfficio
 
 from .test_data_setup import DataLoader
 from .test_serapide_abs import AbstractSerapideTest, dump_result
@@ -136,3 +137,49 @@ class MiscTest(AbstractSerapideProcsTest):
         #
         # self.assertEqual(0, Token.objects.all().count(), 'Token non eliminato')
         # self.assertEqual(0, Delega.objects.all().count(), 'Delega non eliminata')
+
+
+    def test_nessun_soggetto_operante_di_default(self):
+
+        self.do_login()
+
+        response = self.create_piano(DataLoader.IPA_FI)
+
+        content = json.loads(response.content)
+        self.codice_piano = content['data']['createPiano']['nuovoPiano']['codice']
+        piano = Piano.objects.get(codice=self.codice_piano)
+        self.assertIsNotNone(piano)
+
+        so = SoggettoOperante.objects.filter(piano=piano)
+        self.assertEqual(0, len(so))
+
+
+    def test_soggetti_operanti_di_default(self):
+
+        self.do_login()
+
+        # make existing QU as default
+        qu_pian = QualificaUfficio.objects.filter(
+            qualifica=Qualifica.PIAN,
+            ufficio=DataLoader.uffici_stored[DataLoader.IPA_RT][DataLoader.UFF_PIAN]).get()
+        self.assertIsNotNone(qu_pian)
+        qu_pian.is_soggetto_default = True
+        qu_pian.save()
+
+        # create GUEST QU and set as default
+        qu_guest = QualificaUfficio(
+            qualifica=Qualifica.READONLY,
+            ufficio=DataLoader.uffici_stored[DataLoader.IPA_RT][DataLoader.UFF_GC_TN],
+            is_soggetto_default=True
+        )
+        qu_guest.save()
+
+        response = self.create_piano(DataLoader.IPA_FI)
+
+        content = json.loads(response.content)
+        self.codice_piano = content['data']['createPiano']['nuovoPiano']['codice']
+        piano = Piano.objects.get(codice=self.codice_piano)
+        self.assertIsNotNone(piano)
+
+        so = SoggettoOperante.objects.filter(piano=piano)
+        self.assertEqual(2, len(so))

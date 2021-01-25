@@ -93,9 +93,9 @@ class UfficioModelAdmin(admin.ModelAdmin):
 
 @admin.register(QualificaUfficio)
 class QualificaUfficioModelAdmin(admin.ModelAdmin):
-    list_display = ['ufficio', 'qualifica']
+    list_display = ['ufficio', 'qualifica', 'is_soggetto_default']
     search_fields = ['ufficio']
-    list_filter = ['qualifica', "ufficio__ente"]
+    list_filter = ['qualifica', "ufficio__ente", 'is_soggetto_default']
 
     def get_list_display(self, request):
         return self.list_display
