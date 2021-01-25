@@ -99,7 +99,7 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
                                                         <i className="material-icons text-serapide">bookmark</i>
                                                         {`${nomeEnte} ${nome}`}
                                                     </div>)) : (
-                                                        <div className="d-flex pt-3">Soggeti SCA non selezionati</div>
+                                                        <div className="d-flex pt-3">Soggetti SCA non selezionati</div>
                                                     )
                                                 }
                                             </div>
@@ -112,3 +112,4 @@ export default ({match: {params: {code} = {}} = {}, ...props}) => {
         </Query>)}
     </Query>)
 }
+
