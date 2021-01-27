@@ -190,7 +190,7 @@ class UsersDBTests(TestCase):
                 pass
 
         qu.ufficio = self.uffici_db[IPA_FI][0]
-        qu.qualifica = Qualifica.PIAN
+        qu.qualifica = Qualifica.OPREG
 
         with transaction.atomic():
             try:

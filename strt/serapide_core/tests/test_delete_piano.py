@@ -79,7 +79,7 @@ class DeletePianoTest(AbstractSerapideProcsTest):
         sogg_op = []
         for ente, uff, q in [
             (DataLoader.IPA_RT, DataLoader.UFF_GC_TN, Qualifica.GC),
-            (DataLoader.IPA_RT, DataLoader.UFF_PIAN, Qualifica.PIAN),
+            (DataLoader.IPA_RT, DataLoader.UFF_PIAN, Qualifica.OPREG),
             (DataLoader.IPA_PI, DataLoader.UFF1, Qualifica.AC),
             (DataLoader.IPA_LU, DataLoader.UFF1, Qualifica.SCA),
         ]:

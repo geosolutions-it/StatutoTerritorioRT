@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 class UserMembershipDataView(APIView):
 
     def get(self, request):
-        if Utente.objects.count() == 0:
+        if Utente.objects.filter(is_staff=False).count() == 0:
             DataLoader.loadData()
 
         # usando SPID, dovremo avere tutti le informazioni dell'utente negli header

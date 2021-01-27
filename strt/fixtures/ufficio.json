@@ -3,7 +3,7 @@
    "model": "strt_users.ufficio",
    "pk": 1,
    "fields": {
-      "uuid": "e874bfb7-7117-4cc2-a43b-09031dfdc8d4",
+      "uuid": "f00ffd2e-1f76-47f0-aca1-82605638b904",
       "nome": "Ufficio 1",
       "descrizione": null,
       "ente": 1,
@@ -14,7 +14,7 @@
    "model": "strt_users.ufficio",
    "pk": 2,
    "fields": {
-      "uuid": "38a1ec80-d742-43f5-88e3-857e159cb9e2",
+      "uuid": "2f62839b-d620-4e58-a415-eefd449f11b6",
       "nome": "Ufficio 2",
       "descrizione": null,
       "ente": 1,
@@ -25,73 +25,139 @@
    "model": "strt_users.ufficio",
    "pk": 3,
    "fields": {
-      "uuid": "12ca42a6-8f3b-4f94-bddd-1b0e3163b59a",
+      "uuid": "3a379e6a-2c2c-43c9-b602-a619a1086fe3",
       "nome": "GENIO CIVILE TOSCANA NORD",
       "descrizione": null,
       "ente": 1,
-      "email": null
+      "email": "ufficio.test@test.xxx"
    }
 },
 {
    "model": "strt_users.ufficio",
    "pk": 4,
    "fields": {
-      "uuid": "21c46882-f9ea-4b10-ad45-da4b0f94db86",
+      "uuid": "e854cc99-df41-4ce8-ad13-9054a1a6c829",
       "nome": "GENIO CIVILE TOSCANA SUD",
       "descrizione": null,
       "ente": 1,
-      "email": null
+      "email": "ufficio.test@test.xxx"
    }
 },
 {
    "model": "strt_users.ufficio",
    "pk": 5,
    "fields": {
-      "uuid": "ba6f654f-01f3-4f22-b44c-c6124bf8c951",
+      "uuid": "f1256a1f-b063-449f-b703-e5e418e638ef",
       "nome": "GENIO CIVILE TOSCANA VALDARNO CENTRALE",
       "descrizione": null,
       "ente": 1,
-      "email": null
+      "email": "ufficio.test@test.xxx"
    }
 },
 {
    "model": "strt_users.ufficio",
    "pk": 6,
    "fields": {
-      "uuid": "9a8df31a-0c20-4858-9092-6c5cf71bb853",
+      "uuid": "e86c7278-08f7-4bc8-aa70-eca926869ee2",
       "nome": "GENIO CIVILE TOSCANA VALDARNO INFERIORE",
       "descrizione": null,
       "ente": 1,
-      "email": null
+      "email": "ufficio.test@test.xxx"
    }
 },
 {
    "model": "strt_users.ufficio",
    "pk": 7,
    "fields": {
-      "uuid": "3c8072b9-736d-4715-a425-e9716d17a034",
+      "uuid": "1b1858a4-5f8a-45bd-b5a9-bc9fc2d34e75",
       "nome": "GENIO CIVILE TOSCANA VALDARNO SUPERIORE",
       "descrizione": null,
       "ente": 1,
-      "email": null
+      "email": "ufficio.test@test.xxx"
    }
 },
 {
    "model": "strt_users.ufficio",
    "pk": 8,
    "fields": {
-      "uuid": "278fe432-a52c-4a0f-b5d8-0f27b0353abd",
+      "uuid": "80113095-4c1b-46a4-96d9-b8b20824c9c3",
       "nome": "Uff Pianificazione",
       "descrizione": null,
       "ente": 1,
-      "email": null
+      "email": "ufficio.test@test.xxx"
    }
 },
 {
    "model": "strt_users.ufficio",
    "pk": 9,
    "fields": {
-      "uuid": "b10bf6ce-752a-4434-8db7-56867b29db7b",
+      "uuid": "5fe2c562-26fc-4443-bb4d-2b941885b093",
+      "nome": "Ufficio ETJ GC",
+      "descrizione": null,
+      "ente": 1,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 10,
+   "fields": {
+      "uuid": "8746fb65-8e75-4aec-89a0-4cb23df4b118",
+      "nome": "Ufficio ETJ Paesaggio",
+      "descrizione": null,
+      "ente": 1,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 11,
+   "fields": {
+      "uuid": "899364fe-b455-445c-90be-dc4525661d45",
+      "nome": "Ufficio ETJ Urbanistica",
+      "descrizione": null,
+      "ente": 1,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 12,
+   "fields": {
+      "uuid": "65ebb1e7-a7a1-443e-80e6-e74801ec0a12",
+      "nome": "Ufficio G.All. GC",
+      "descrizione": null,
+      "ente": 1,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 13,
+   "fields": {
+      "uuid": "33609f17-84f1-4d8a-8428-796a384e771b",
+      "nome": "Ufficio G.All. Paesaggio",
+      "descrizione": null,
+      "ente": 1,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 14,
+   "fields": {
+      "uuid": "62855346-8cca-44a2-9ce3-2fad176d2e67",
+      "nome": "Ufficio G.All. Urbanistica",
+      "descrizione": null,
+      "ente": 1,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 15,
+   "fields": {
+      "uuid": "d545272d-84d1-498b-a15c-1c1b17efe8be",
       "nome": "Ufficio 1",
       "descrizione": null,
       "ente": 2,
@@ -100,9 +166,9 @@
 },
 {
    "model": "strt_users.ufficio",
-   "pk": 10,
+   "pk": 16,
    "fields": {
-      "uuid": "2ddf8195-adb2-40f6-ab7e-492d2341726e",
+      "uuid": "60ae22e2-eb3b-48bc-bb82-e1614249cb11",
       "nome": "Ufficio 2",
       "descrizione": null,
       "ente": 2,
@@ -111,9 +177,75 @@
 },
 {
    "model": "strt_users.ufficio",
-   "pk": 11,
+   "pk": 17,
    "fields": {
-      "uuid": "817929a5-19fd-4c29-afaf-139112d2eefb",
+      "uuid": "bf2cdf64-10c0-4990-a708-6f0986e44947",
+      "nome": "Ufficio ETJ Comunale",
+      "descrizione": null,
+      "ente": 2,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 18,
+   "fields": {
+      "uuid": "1485e8eb-ef98-4964-9446-b7599a4730ce",
+      "nome": "Ufficio ETJ AC",
+      "descrizione": null,
+      "ente": 2,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 19,
+   "fields": {
+      "uuid": "cf728409-7f69-4428-81aa-eda510809c15",
+      "nome": "Ufficio ETJ SCA",
+      "descrizione": null,
+      "ente": 2,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 20,
+   "fields": {
+      "uuid": "54d6ef76-7619-4046-9d2a-5137ee7f17a9",
+      "nome": "Ufficio G.All. Comunale",
+      "descrizione": null,
+      "ente": 2,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 21,
+   "fields": {
+      "uuid": "59eeb885-1f12-45a9-9a74-59a02f7b33d5",
+      "nome": "Ufficio G.All. AC",
+      "descrizione": null,
+      "ente": 2,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 22,
+   "fields": {
+      "uuid": "a26fe05e-8149-4013-8d74-582596d64f61",
+      "nome": "Ufficio G.All. SCA",
+      "descrizione": null,
+      "ente": 2,
+      "email": "@gmail.com"
+   }
+},
+{
+   "model": "strt_users.ufficio",
+   "pk": 23,
+   "fields": {
+      "uuid": "a185a909-45fd-438c-bf10-ecaeac4563f7",
       "nome": "Ufficio 1",
       "descrizione": null,
       "ente": 3,
@@ -122,9 +254,9 @@
 },
 {
    "model": "strt_users.ufficio",
-   "pk": 12,
+   "pk": 24,
    "fields": {
-      "uuid": "308c3021-f91f-4907-8d62-c0be5d284b06",
+      "uuid": "04bafb94-1309-4e55-948e-0f070f6d9a4f",
       "nome": "Ufficio 2",
       "descrizione": null,
       "ente": 3,
@@ -133,9 +265,9 @@
 },
 {
    "model": "strt_users.ufficio",
-   "pk": 13,
+   "pk": 25,
    "fields": {
-      "uuid": "9c1386e8-c0cf-403b-b455-0582d7df2f50",
+      "uuid": "fd4a8784-653f-451d-b1fc-29039ef573f2",
       "nome": "Ufficio 1",
       "descrizione": null,
       "ente": 4,

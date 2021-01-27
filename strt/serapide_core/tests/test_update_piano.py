@@ -79,7 +79,7 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
             'qualifica': Qualifica.GC.name})
         sogg_op.append({
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_RT][DataLoader.UFF_PIAN].uuid.__str__(),
-            'qualifica': Qualifica.PIAN.name})
+            'qualifica': Qualifica.OPREG.name})
         sogg_op.append({
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_PI][DataLoader.UFF1].uuid.__str__(),
             'qualifica': Qualifica.AC.name})
@@ -115,7 +115,7 @@ class UpdatePianoTest(AbstractSerapideProcsTest):
             'qualifica': Qualifica.GC.name})
         sogg_op.append({
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_RT][DataLoader.UFF_PIAN].uuid.__str__(),
-            'qualifica': Qualifica.PIAN.name})
+            'qualifica': Qualifica.OPREG.name})
         sogg_op.append({
             'ufficioUuid': DataLoader.uffici_stored[DataLoader.IPA_PI][DataLoader.UFF1].uuid.__str__(),
             'qualifica': Qualifica.AC.name})

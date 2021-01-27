@@ -134,7 +134,7 @@ class AvvioPiano(graphene.Mutation):
             if not cls.autorita_ok(piano, [Qualifica.GC]):
                 raise GraphQLError("Genio Civile non trovato tra i soggetti operanti", code=400)
 
-            if not cls.autorita_ok(piano, [Qualifica.PIAN, Qualifica.URB]):
+            if not cls.autorita_ok(piano, [Qualifica.OPREG]):
                 raise GraphQLError("Pianificazione o Urbanistica non trovato tra i soggetti operanti", code=400)
 
             if procedura_avvio.conferenza_copianificazione is None:
@@ -339,7 +339,7 @@ class ContributiTecnici(graphene.Mutation):
         if not auth.can_access_piano(info.context.user, _piano):
             return GraphQLError("Forbidden - Utente non abilitato ad editare questo piano", code=403)
 
-        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.PIAN):
+        if not auth.can_edit_piano(info.context.user, _piano, Qualifica.OPREG):
             return GraphQLError("Forbidden - Utente non abilitato per questa azione", code=403)
 
         try:

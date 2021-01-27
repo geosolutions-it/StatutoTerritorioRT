@@ -83,7 +83,7 @@ class MiscTest(AbstractSerapideProcsTest):
         sogg_op = []
         for ente, uff, q in [
             (DataLoader.IPA_RT, DataLoader.UFF_GC_TN, Qualifica.GC),
-            (DataLoader.IPA_RT, DataLoader.UFF_PIAN, Qualifica.PIAN),
+            (DataLoader.IPA_RT, DataLoader.UFF_PIAN, Qualifica.OPREG),
             (DataLoader.IPA_PI, DataLoader.UFF1, Qualifica.AC),
             (DataLoader.IPA_LU, DataLoader.UFF1, Qualifica.SCA),
         ]:
@@ -160,7 +160,7 @@ class MiscTest(AbstractSerapideProcsTest):
 
         # make existing QU as default
         qu_pian = QualificaUfficio.objects.filter(
-            qualifica=Qualifica.PIAN,
+            qualifica=Qualifica.OPREG,
             ufficio=DataLoader.uffici_stored[DataLoader.IPA_RT][DataLoader.UFF_PIAN]).get()
         self.assertIsNotNone(qu_pian)
         qu_pian.is_soggetto_default = True

@@ -88,7 +88,16 @@ class Migration(migrations.Migration):
             name='QualificaUfficio',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('qualifica', models.CharField(choices=[(strt_users.enums.Qualifica('Operatore Comunale'), 'Operatore Comunale'), (strt_users.enums.Qualifica('AC - Aut Competente'), 'AC - Aut Competente'), (strt_users.enums.Qualifica('SCA'), 'SCA'), (strt_users.enums.Qualifica('Genio Civile'), 'Genio Civile'), (strt_users.enums.Qualifica('Pianificazione'), 'Pianificazione'), (strt_users.enums.Qualifica('Urbanistica'), 'Urbanistica'), (strt_users.enums.Qualifica('Sola lettura'), 'Sola lettura')], max_length=18)),
+                ('qualifica', models.CharField(
+                    choices=[
+                        (strt_users.enums.Qualifica('Operatore Comunale'), 'Operatore Comunale'),
+                        (strt_users.enums.Qualifica('AC - Aut Competente'), 'AC - Aut Competente'),
+                        (strt_users.enums.Qualifica('SCA'), 'SCA'),
+                        (strt_users.enums.Qualifica('Genio Civile'), 'Genio Civile'),
+                        # (strt_users.enums.Qualifica('Pianificazione'), 'Pianificazione'),
+                        # (strt_users.enums.Qualifica('Urbanistica'), 'Urbanistica'),
+                        (strt_users.enums.Qualifica('Sola lettura'), 'Sola lettura')],
+                    max_length=18)),
                 ('ufficio', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='strt_users.Ufficio')),
             ],
             options={

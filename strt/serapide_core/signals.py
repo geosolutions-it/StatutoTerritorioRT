@@ -124,20 +124,20 @@ def get_destinatari_da_tipomail(piano: Piano, tipo: TipoMail):
         return get_destinatari_da_qualifiche(piano, [Qualifica.AC])
 
     elif tipo == TipoMail.piano_phase_changed:
-        return get_destinatari_da_qualifiche(piano, [Qualifica.AC, Qualifica.SCA, Qualifica.OPCOM, Qualifica.URB,
-                                                     Qualifica.PIAN, Qualifica.GC])
+        return get_destinatari_da_qualifiche(piano, [Qualifica.OPCOM, Qualifica.OPREG,
+                                                     Qualifica.AC, Qualifica.SCA, Qualifica.GC])
 
     elif tipo == TipoMail.pubblicazione_piano:
-        return get_destinatari_da_qualifiche(piano, [Qualifica.AC, Qualifica.SCA, Qualifica.OPCOM, Qualifica.URB,
-                                                     Qualifica.PIAN, Qualifica.GC])
+        return get_destinatari_da_qualifiche(piano, [Qualifica.OPCOM, Qualifica.OPREG,
+                                                     Qualifica.AC, Qualifica.SCA, Qualifica.GC])
     else:
         logger.warning('*** TipoMail non gestito [{}]'.format(tipo))
         return []
 
 
 def get_destinatari_da_piano(piano):
-    return get_destinatari_da_qualifiche(piano, [Qualifica.AC, Qualifica.SCA, Qualifica.OPCOM, Qualifica.URB,
-                                                 Qualifica.PIAN, Qualifica.GC])
+    return get_destinatari_da_qualifiche(piano, [Qualifica.OPCOM, Qualifica.OPREG,
+                                                 Qualifica.AC, Qualifica.SCA, Qualifica.GC])
 
 
 # TODO: questo nome di funzione va cambiato dato che gestisce tutte le mail

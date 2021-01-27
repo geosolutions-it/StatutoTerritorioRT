@@ -103,11 +103,10 @@ class TipoEnte(SerapideEnum):
 
 class Qualifica(SerapideEnum):
     OPCOM = 'Operatore Comunale'
+    OPREG = 'Operatore Regionale'
     AC = 'AC - Aut Competente'
     SCA = 'SCA'
     GC = 'Genio Civile'
-    PIAN = 'Pianificazione'
-    URB = 'Urbanistica'
     READONLY = 'Sola lettura'
 
     def is_allowed(self, tipo: TipoEnte):
@@ -116,23 +115,20 @@ class Qualifica(SerapideEnum):
 
 ALLOWED_QUALIFICA_BY_TIPOENTE = {
     Qualifica.OPCOM: [TipoEnte.COMUNE],
+    Qualifica.OPREG: [TipoEnte.REGIONE],
     Qualifica.AC: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
     Qualifica.SCA: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
     Qualifica.GC: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
-    Qualifica.PIAN: [TipoEnte.REGIONE],
-    Qualifica.URB: [TipoEnte.REGIONE],
     Qualifica.READONLY: [TipoEnte.COMUNE, TipoEnte.REGIONE, TipoEnte.ALTRO],
 }
 
 
 class QualificaRichiesta(SerapideEnum):
     COMUNE = 'Responsabile Comunale'
+    REGIONE = 'Responsabile Regionale'
     AC = 'AC'
     SCA = 'SCA'
     GC = 'Genio Civile'
-    PIAN = 'Responsabile Pianificazione'
-    URB = 'Responsabile Urbanistica'
-    REGIONE = 'Responsabile Regionale'
     AUTO = 'Sistema'
 
     def is_ok(self, qual:Qualifica):
@@ -144,12 +140,10 @@ class QualificaRichiesta(SerapideEnum):
 
 ALLOWED_QUALIFICA_BY_RICHIESTA = {
     QualificaRichiesta.COMUNE: [Qualifica.OPCOM],
+    QualificaRichiesta.REGIONE: [Qualifica.OPREG],
     QualificaRichiesta.AC: [Qualifica.AC],
     QualificaRichiesta.SCA: [Qualifica.SCA],
     QualificaRichiesta.GC: [Qualifica.GC],
-    QualificaRichiesta.PIAN: [Qualifica.PIAN],
-    QualificaRichiesta.URB: [Qualifica.URB],
-    QualificaRichiesta.REGIONE: [Qualifica.PIAN, Qualifica.PIAN],
     QualificaRichiesta.AUTO: [],
 }
 

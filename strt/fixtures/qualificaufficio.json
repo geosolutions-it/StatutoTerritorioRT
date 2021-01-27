@@ -3,48 +3,54 @@
    "model": "strt_users.qualificaufficio",
    "pk": 1,
    "fields": {
-      "ufficio": 9,
-      "qualifica": "AC"
+      "ufficio": 15,
+      "qualifica": "AC",
+      "is_soggetto_default": false
    }
 },
 {
    "model": "strt_users.qualificaufficio",
    "pk": 2,
    "fields": {
-      "ufficio": 9,
-      "qualifica": "OPCOM"
+      "ufficio": 15,
+      "qualifica": "OPCOM",
+      "is_soggetto_default": false
    }
 },
 {
    "model": "strt_users.qualificaufficio",
    "pk": 3,
    "fields": {
-      "ufficio": 9,
-      "qualifica": "SCA"
+      "ufficio": 15,
+      "qualifica": "SCA",
+      "is_soggetto_default": false
    }
 },
 {
    "model": "strt_users.qualificaufficio",
    "pk": 4,
    "fields": {
-      "ufficio": 10,
-      "qualifica": "AC"
+      "ufficio": 16,
+      "qualifica": "AC",
+      "is_soggetto_default": false
    }
 },
 {
    "model": "strt_users.qualificaufficio",
    "pk": 5,
    "fields": {
-      "ufficio": 11,
-      "qualifica": "SCA"
+      "ufficio": 23,
+      "qualifica": "SCA",
+      "is_soggetto_default": false
    }
 },
 {
    "model": "strt_users.qualificaufficio",
    "pk": 6,
    "fields": {
-      "ufficio": 13,
-      "qualifica": "AC"
+      "ufficio": 25,
+      "qualifica": "AC",
+      "is_soggetto_default": false
    }
 },
 {
@@ -52,7 +58,8 @@
    "pk": 7,
    "fields": {
       "ufficio": 3,
-      "qualifica": "GC"
+      "qualifica": "GC",
+      "is_soggetto_default": false
    }
 },
 {
@@ -60,7 +67,116 @@
    "pk": 8,
    "fields": {
       "ufficio": 8,
-      "qualifica": "PIAN"
+      "qualifica": "OPREG",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 9,
+   "fields": {
+      "ufficio": 17,
+      "qualifica": "OPCOM",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 10,
+   "fields": {
+      "ufficio": 18,
+      "qualifica": "AC",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 11,
+   "fields": {
+      "ufficio": 19,
+      "qualifica": "SCA",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 12,
+   "fields": {
+      "ufficio": 9,
+      "qualifica": "GC",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 13,
+   "fields": {
+      "ufficio": 10,
+      "qualifica": "OPREG",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 14,
+   "fields": {
+      "ufficio": 11,
+      "qualifica": "OPREG",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 15,
+   "fields": {
+      "ufficio": 20,
+      "qualifica": "OPCOM",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 16,
+   "fields": {
+      "ufficio": 21,
+      "qualifica": "AC",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 17,
+   "fields": {
+      "ufficio": 22,
+      "qualifica": "SCA",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 18,
+   "fields": {
+      "ufficio": 12,
+      "qualifica": "GC",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 19,
+   "fields": {
+      "ufficio": 13,
+      "qualifica": "OPREG",
+      "is_soggetto_default": false
+   }
+},
+{
+   "model": "strt_users.qualificaufficio",
+   "pk": 20,
+   "fields": {
+      "ufficio": 14,
+      "qualifica": "OPREG",
+      "is_soggetto_default": false
    }
 }
 ]

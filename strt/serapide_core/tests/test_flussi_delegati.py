@@ -31,7 +31,7 @@ class FlussiDelegatiTest(FlussiTest):
         key = self.get_delega(self.codice_piano, Qualifica.GC, 'CREA DELEGA GC by RESP')
         self.bind_delega(client, key)
 
-        key = self.get_delega(self.codice_piano, Qualifica.PIAN, 'CREA DELEGA PIAN by RESP')
+        key = self.get_delega(self.codice_piano, Qualifica.OPREG, 'CREA DELEGA OPREG by RESP')
         self.bind_delega(client, key)
 
         key = self.get_delega(self.codice_piano, Qualifica.AC, 'CREA DELEGA AC', client=self.client_ac)
