@@ -104,7 +104,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 128100,
                 "group": "cartografia_di_base",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -130,7 +133,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "cartografia_di_base",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -156,7 +162,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "cartografia_di_base",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -182,7 +191,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 70000,
                 "group": "cartografia_di_base",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -208,7 +220,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 10000100,
                 "group": "cartografia_di_base",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -255,7 +270,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -302,7 +320,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -349,7 +370,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -396,7 +420,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -443,7 +470,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -490,7 +520,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -537,7 +570,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -584,7 +620,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -631,7 +670,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -676,7 +718,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -721,7 +766,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -766,7 +814,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -811,7 +862,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -856,7 +910,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -901,7 +958,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -948,7 +1008,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -995,7 +1058,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1042,7 +1108,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1089,7 +1158,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1136,7 +1208,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1183,7 +1258,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1230,7 +1308,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1277,7 +1358,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1322,7 +1406,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1367,7 +1454,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1414,7 +1504,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1459,7 +1552,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1504,7 +1600,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1549,7 +1648,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1594,7 +1696,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1639,7 +1744,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1686,7 +1794,10 @@
                     "EPSG:32633": true
                 },
                 "group": "piano_paesaggistico_regionale",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1712,7 +1823,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.patrimonio_culturale.documenti_della_cultura",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1738,7 +1852,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.patrimonio_culturale.documenti_della_cultura",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1764,7 +1881,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.patrimonio_culturale.documenti_della_cultura",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1790,7 +1910,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.patrimonio_culturale.documenti_della_cultura",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1816,7 +1939,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.patrimonio_culturale.documenti_della_cultura",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1842,7 +1968,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.rifiuti",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1868,7 +1997,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.rifiuti",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1894,7 +2026,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.energia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1920,7 +2055,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.energia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1946,7 +2084,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.energia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1972,7 +2113,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.energia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -1996,7 +2140,10 @@
                     }
                 },
                 "group": "risorse.struttura_insediativa.salute_umana",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2020,7 +2167,10 @@
                     }
                 },
                 "group": "risorse.struttura_insediativa.salute_umana",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2044,7 +2194,10 @@
                     }
                 },
                 "group": "risorse.struttura_insediativa.salute_umana",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2070,7 +2223,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 50000,
                 "group": "risorse.struttura_insediativa.processi_socioeconomici_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2096,7 +2252,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 50000,
                 "group": "risorse.struttura_insediativa.processi_socioeconomici_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2122,7 +2281,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.processi_socioeconomici_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "link",
@@ -2156,7 +2318,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2182,7 +2347,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2208,7 +2376,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2234,7 +2405,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2260,7 +2434,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2286,7 +2463,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 10000000,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2312,7 +2492,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2338,7 +2521,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2364,7 +2550,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2390,7 +2579,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2416,7 +2608,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 10000100,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2442,7 +2637,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2468,7 +2666,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2494,7 +2695,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.popolazione_irpet",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2520,7 +2724,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2546,7 +2753,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2572,7 +2782,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2598,7 +2811,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2624,7 +2840,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2650,7 +2869,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2676,7 +2898,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2702,7 +2927,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 10000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2728,7 +2956,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2754,7 +2985,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2780,7 +3014,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.fauna",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2806,7 +3043,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.fauna",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2832,7 +3072,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.fauna",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2858,7 +3101,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.fauna",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2884,7 +3130,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.fauna",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2910,7 +3159,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.fauna",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2936,7 +3188,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.fauna",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2962,7 +3217,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.fauna",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -2988,7 +3246,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_ecosistemica.fauna",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3014,7 +3275,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3040,7 +3304,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3066,7 +3333,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3092,7 +3362,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3118,7 +3391,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3144,7 +3420,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3170,7 +3449,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3196,7 +3478,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3222,7 +3507,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3248,7 +3536,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.flora",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3274,7 +3565,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3300,7 +3594,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3326,7 +3623,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3352,7 +3652,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3378,7 +3681,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3404,7 +3710,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3430,7 +3739,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3456,7 +3768,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3482,7 +3797,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3508,7 +3826,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3534,7 +3855,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3560,7 +3884,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3586,7 +3913,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3612,7 +3942,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3638,7 +3971,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3664,7 +4000,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3690,7 +4029,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3716,7 +4058,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3742,7 +4087,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3768,7 +4116,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3794,7 +4145,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3820,7 +4174,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3846,7 +4203,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.struttura_ecosistemica.biodiverista",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3872,7 +4232,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3898,7 +4261,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3924,7 +4290,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3950,7 +4319,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -3976,7 +4348,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4002,7 +4377,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4028,7 +4406,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4054,7 +4435,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.morfologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4080,7 +4464,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.morfologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4106,7 +4493,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.pedologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4132,7 +4522,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.pedologia",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4158,7 +4551,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 250000,
                 "group": "risorse.suolo_e_sottosuolo.uso_suolo",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4183,7 +4579,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 250000,
                 "group": "risorse.suolo_e_sottosuolo.db_geomorfologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4208,7 +4607,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 250000,
                 "group": "risorse.suolo_e_sottosuolo.db_geomorfologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4217,7 +4619,7 @@
                 "visibility": false,
                 "name": "rt_dbg.el_geol.limite_geologico",
                 "title": "Limite geologico",
-                "description": "DataBase Geologico Regionale - Elementi geologici: 'Limite geologico' contiene i contatti litologici, stratigrafici e tettonici che possono avere significato di contorno di unitа' geologica (ULF) oppure di limite intraformazionale.",
+                "description": "DataBase Geologico Regionale - Elementi geologici: 'Limite geologico' contiene i contatti litologici, stratigrafici e tettonici che possono avere significato di contorno di unit\u0430' geologica (ULF) oppure di limite intraformazionale.",
                 "params": {
                     "map": "dbgeologico_rt.qgs",
                     "map_resolution": 91
@@ -4234,7 +4636,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.db_geologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4243,7 +4648,7 @@
                 "visibility": false,
                 "name": "rt_dbg.el_geol.unita_geologica_areale_10k",
                 "title": "Unita geologica areale",
-                "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale' oggetti geologici che rappresentano le unitа stratigrafiche e tettoniche del substrato",
+                "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale' oggetti geologici che rappresentano le unit\u0430 stratigrafiche e tettoniche del substrato",
                 "params": {
                     "map": "dbgeologico_rt.qgs",
                     "map_resolution": 91
@@ -4260,7 +4665,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 75000,
                 "group": "risorse.suolo_e_sottosuolo.db_geologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4269,7 +4677,7 @@
                 "visibility": false,
                 "name": "rt_dbg.el_geol.unita_geologica_areale_100k",
                 "title": "Unita geologica areale 100K",
-                "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale 100K' oggetti geologici che rappresentano le unitа stratigrafiche e tettoniche del substrato. Versione semplificata per la visualizzazione in scala 1:100.000",
+                "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale 100K' oggetti geologici che rappresentano le unit\u0430 stratigrafiche e tettoniche del substrato. Versione semplificata per la visualizzazione in scala 1:100.000",
                 "params": {
                     "map": "dbgeologico_rt.qgs",
                     "map_resolution": 91
@@ -4286,7 +4694,10 @@
                 "minScaleDenominator": 75000,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.db_geologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4312,7 +4723,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4338,7 +4752,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 100000,
                 "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4364,7 +4781,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 100000,
                 "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4390,7 +4810,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 100000,
                 "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4416,7 +4839,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 100000,
                 "group": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4442,7 +4868,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.terremoti",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4468,7 +4897,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.terremoti",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4494,7 +4926,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.suolo_e_sottosuolo.terremoti",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4569,7 +5004,10 @@
                     }
                 },
                 "group": "risorse.acqua.rt_difesa_del_suolo",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4590,7 +5028,10 @@
                     }
                 },
                 "group": "risorse.acqua.rt_difesa_del_suolo",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4610,7 +5051,10 @@
                     }
                 },
                 "group": "risorse.acqua.rt_difesa_del_suolo",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4633,7 +5077,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4656,7 +5103,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4679,7 +5129,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4702,7 +5155,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4725,7 +5181,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4748,7 +5207,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4771,7 +5233,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4794,7 +5259,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4817,7 +5285,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4840,7 +5311,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4863,7 +5337,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4886,7 +5363,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4909,7 +5389,10 @@
                     }
                 },
                 "group": "risorse.clima.numero_giorni_piovosi_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4918,7 +5401,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M12",
                 "title": "Tmin_2009-M12",
-                "description": "Media della temperatura minima del mese di dicembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di dicembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -4932,7 +5415,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4941,7 +5427,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M11",
                 "title": "Tmin_2009-M11",
-                "description": "Media della temperatura minima del mese di novembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di novembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -4955,7 +5441,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4964,7 +5453,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M10",
                 "title": "Tmin_2009-M10",
-                "description": "Media della temperatura minima del mese di ottobre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di ottobre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -4978,7 +5467,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -4987,7 +5479,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M09",
                 "title": "Tmin_2009-M09",
-                "description": "Media della temperatura minima del mese di settembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di settembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5001,7 +5493,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5010,7 +5505,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M08",
                 "title": "Tmin_2009-M08",
-                "description": "Media della temperatura minima del mese di agosto (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di agosto (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5024,7 +5519,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5033,7 +5531,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M07",
                 "title": "Tmin_2009-M07",
-                "description": "Media della temperatura minima del mese di luglio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di luglio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5047,7 +5545,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5056,7 +5557,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M06",
                 "title": "Tmin_2009-M06",
-                "description": "Media della temperatura minima del mese di giugno (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di giugno (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5070,7 +5571,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5079,7 +5583,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M05",
                 "title": "Tmin_2009-M05",
-                "description": "Media della temperatura minima del mese di maggio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di maggio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5093,7 +5597,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5102,7 +5609,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M04",
                 "title": "Tmin_2009-M04",
-                "description": "Media della temperatura minima del mese di aprile (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di aprile (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5116,7 +5623,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5125,7 +5635,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M03",
                 "title": "Tmin_2009-M03",
-                "description": "Media della temperatura minima del mese di marzo (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di marzo (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5139,7 +5649,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5148,7 +5661,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M02",
                 "title": "Tmin_2009-M02",
-                "description": "Media della temperatura minima del mese di febbraio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di febbraio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5162,7 +5675,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5171,7 +5687,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M01",
                 "title": "Tmin_2009-M01",
-                "description": "Media della temperatura minima del mese di gennaio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di gennaio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5185,7 +5701,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5194,7 +5713,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M12",
                 "title": "Tmax_2009-M12",
-                "description": "Media della temperatura massima del mese di dicembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di dicembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5208,7 +5727,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5217,7 +5739,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M11",
                 "title": "Tmax_2009-M11",
-                "description": "Media della temperatura massima del mese di novembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di novembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5231,7 +5753,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5240,7 +5765,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M10",
                 "title": "Tmax_2009-M10",
-                "description": "Media della temperatura massima del mese di ottobre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di ottobre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5254,7 +5779,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5263,7 +5791,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M09",
                 "title": "Tmax_2009-M09",
-                "description": "Media della temperatura massima del mese di settembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di settembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5277,7 +5805,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5286,7 +5817,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M08",
                 "title": "Tmax_2009-M08",
-                "description": "Media della temperatura massima del mese di agosto (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di agosto (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5300,7 +5831,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5309,7 +5843,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M07",
                 "title": "Tmax_2009-M07",
-                "description": "Media della temperatura massima del mese di luglio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di luglio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5323,7 +5857,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5332,7 +5869,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M06",
                 "title": "Tmax_2009-M06",
-                "description": "Media della temperatura massima del mese di giugno (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di giugno (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5346,7 +5883,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5355,7 +5895,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M05",
                 "title": "Tmax_2009-M05",
-                "description": "Media della temperatura massima del mese di maggio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di maggio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5369,7 +5909,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5378,7 +5921,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M04",
                 "title": "Tmax_2009-M04",
-                "description": "Media della temperatura massima del mese di aprile (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di aprile (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5392,7 +5935,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5401,7 +5947,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M03",
                 "title": "Tmax_2009-M03",
-                "description": "Media della temperatura massima del mese di marzo (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di marzo (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5415,7 +5961,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5424,7 +5973,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M02",
                 "title": "Tmax_2009-M02",
-                "description": "Media della temperatura massima del mese di febbraio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di febbraio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5438,7 +5987,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5447,7 +5999,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M01",
                 "title": "Tmax_2009-M01",
-                "description": "Media della temperatura massima del mese di gennaio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di gennaio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5461,7 +6013,10 @@
                     }
                 },
                 "group": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5470,7 +6025,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M12",
                 "title": "Pcum_2009-M12",
-                "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5484,7 +6039,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5493,7 +6051,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M11",
                 "title": "Pcum_2009-M11",
-                "description": "Cumulata delle precipitazioni del mese di novembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di novembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5507,7 +6065,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5516,7 +6077,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M10",
                 "title": "Pcum_2009-M10",
-                "description": "Cumulata delle precipitazioni del mese di ottobre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di ottobre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5530,7 +6091,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5539,7 +6103,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M09",
                 "title": "Pcum_2009-M09",
-                "description": "Cumulata delle precipitazioni del mese di settembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di settembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5553,7 +6117,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5562,7 +6129,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M08",
                 "title": "Pcum_2009-M08",
-                "description": "Cumulata delle precipitazioni del mese di agosto relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di agosto relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5576,7 +6143,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5585,7 +6155,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M07",
                 "title": "Pcum_2009-M07",
-                "description": "Cumulata delle precipitazioni del mese di luglio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di luglio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5599,7 +6169,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5608,7 +6181,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M06",
                 "title": "Pcum_2009-M06",
-                "description": "Cumulata delle precipitazioni del mese di giugno relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di giugno relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5622,7 +6195,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5631,7 +6207,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M05",
                 "title": "Pcum_2009-M05",
-                "description": "Cumulata delle precipitazioni del mese di maggio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di maggio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5645,7 +6221,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5654,7 +6233,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M04",
                 "title": "Pcum_2009-M04",
-                "description": "Cumulata delle precipitazioni del mese di aprile relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di aprile relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5668,7 +6247,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5677,7 +6259,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M03",
                 "title": "Pcum_2009-M03",
-                "description": "Cumulata delle precipitazioni del mese di marzo relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di marzo relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5691,7 +6273,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5700,7 +6285,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M02",
                 "title": "Pcum_2009-M02",
-                "description": "Cumulata delle precipitazioni del mese di febbraio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di febbraio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5714,7 +6299,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5723,7 +6311,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M01",
                 "title": "Pcum_2009-M01",
-                "description": "Cumulata delle precipitazioni del mese di gennaio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di gennaio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5737,7 +6325,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -5746,7 +6337,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M00",
                 "title": "Pcum_2009-M00",
-                "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -5760,7 +6351,10 @@
                     }
                 },
                 "group": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6029,7 +6623,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6055,7 +6652,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6081,7 +6681,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6107,7 +6710,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6133,7 +6739,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6159,7 +6768,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6185,7 +6797,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6211,7 +6826,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6237,7 +6855,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6263,7 +6884,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6289,7 +6913,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6315,7 +6942,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000100,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6341,7 +6971,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6367,7 +7000,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6393,7 +7029,10 @@
                 "minScaleDenominator": 1,
                 "maxScaleDenominator": 5000000,
                 "group": "risorse.aria.inquinamento_fisico",
-                "tileSize": 512
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             },
             {
                 "type": "wms",
@@ -6882,8 +7521,8 @@
                 "url": "/geoserver/wms",
                 "visibility": false,
                 "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
-                "name": "invarianti:fertilità",
-                "title": "Fertilità",
+                "name": "invarianti:fertilit\u00e0",
+                "title": "Fertilit\u00e0",
                 "description": "",
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -7587,7 +8226,7 @@
                 "group": "piani_strutturali.vaglia",
                 "name": "ps:tu_ps_vaglia",
                 "title": "TU PS Vaglia",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7624,7 +8263,7 @@
                 "group": "piani_strutturali.forte_dei_marmi",
                 "name": "ps:tu_ps_forte_dei_marmi",
                 "title": "TU PS Forte dei Marmi",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7661,7 +8300,7 @@
                 "group": "piani_strutturali.fiesole",
                 "name": "ps:tu_ps_fiesole",
                 "title": "TU PS Fiesole",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7698,7 +8337,7 @@
                 "group": "piani_strutturali.vagli_di_sotto",
                 "name": "ps:tu_ps_vagli_di_sotto",
                 "title": "TU PS Vagli di Sotto",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7735,7 +8374,7 @@
                 "group": "piani_strutturali.vicchio",
                 "name": "ps:tu_ps_vicchio",
                 "title": "TU PS Vicchio",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7772,7 +8411,7 @@
                 "group": "piani_strutturali.scandicci",
                 "name": "ps:tu_ps_scandicci",
                 "title": "TU PS Scandicci",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7809,7 +8448,7 @@
                 "group": "piani_strutturali.reggello",
                 "name": "ps:tu_ps_reggello",
                 "title": "TU PS Reggello",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7846,7 +8485,7 @@
                 "group": "piani_strutturali.quarrata",
                 "name": "ps:tu_ps_quarrata",
                 "title": "TU PS Quarrata",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7883,7 +8522,7 @@
                 "group": "piani_strutturali.piancastagnaio",
                 "name": "ps:tu_ps_piancastagnaio",
                 "title": "TU PS Piancastagnaio",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7920,7 +8559,7 @@
                 "group": "piani_strutturali.peccioli",
                 "name": "ps:tu_ps_peccioli",
                 "title": "TU PS Peccioli",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7957,7 +8596,7 @@
                 "group": "piani_strutturali.montignoso",
                 "name": "ps:tu_ps_montignoso",
                 "title": "TU PS Montignoso",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -7994,7 +8633,7 @@
                 "group": "piani_strutturali.montemurlo",
                 "name": "ps:tu_ps_montemurlo",
                 "title": "TU PS Montemurlo",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8031,7 +8670,7 @@
                 "group": "piani_strutturali.montecarlo",
                 "name": "ps:tu_ps_montecarlo",
                 "title": "TU PS Montecarlo",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8068,7 +8707,7 @@
                 "group": "piani_strutturali.lucca",
                 "name": "ps:tu_ps_lucca",
                 "title": "TU PS Lucca",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8105,7 +8744,7 @@
                 "group": "piani_strutturali.livorno",
                 "name": "ps:tu_ps_livorno",
                 "title": "TU PS Livorno",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8142,7 +8781,7 @@
                 "group": "piani_strutturali.lastra_a_signa",
                 "name": "ps:tu_ps_lastra_a_signa",
                 "title": "TU PS Lastra a Signa",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8179,7 +8818,7 @@
                 "group": "piani_strutturali.greve_in_chianti",
                 "name": "ps:tu_ps_greve_in_chianti",
                 "title": "TU PS Greve in Chianti",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8216,7 +8855,7 @@
                 "group": "piani_strutturali.figline_incisa",
                 "name": "ps:tu_ps_figline_incisa_valdarno",
                 "title": "TU PS Figline Incisa Valdarno",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8253,7 +8892,7 @@
                 "group": "piani_strutturali.cutigliano",
                 "name": "ps:tu_ps_cutigliano",
                 "title": "TU PS Cutigliano",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8290,7 +8929,7 @@
                 "group": "piani_strutturali.civitella_val_di_chiana",
                 "name": "ps:tu_ps_civitella_val_di_chiana",
                 "title": "TU PS Civitella Val di Chiana",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8327,7 +8966,7 @@
                 "group": "piani_strutturali.caciana_t_lari",
                 "name": "ps:tu_ps_cascina_terme_lari",
                 "title": "TU PS Cascina Terme Lari",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8364,7 +9003,7 @@
                 "group": "piani_strutturali.camaiore",
                 "name": "ps:tu_ps_camaiore",
                 "title": "TU PS Camaiore",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8401,7 +9040,7 @@
                 "group": "piani_strutturali.psi_marciano_lucignano.marciano_chiana",
                 "name": "ps:tu_ps_marciano_della_chiana",
                 "title": "TU PS Marciano della Chiana",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8438,7 +9077,7 @@
                 "group": "piani_strutturali.psi_marciano_lucignano.lucignano",
                 "name": "ps:tu_ps_lucignano",
                 "title": "TU PS Lucignano",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8475,7 +9114,7 @@
                 "group": "piani_strutturali.psi_garfagnana.villa_colemandina",
                 "name": "ps:tu_ps_villa_collemandina",
                 "title": "TU PS Villa Collemandina",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8512,7 +9151,7 @@
                 "group": "piani_strutturali.psi_garfagnana.sillano_giuncugnano",
                 "name": "ps:tu_ps_sillano_giuncugnano",
                 "title": "TU PS Sillano Giuncugnano",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8549,7 +9188,7 @@
                 "group": "piani_strutturali.psi_garfagnana.san_romano_gna",
                 "name": "ps:tu_ps_san_romano_garfagnana",
                 "title": "TU PS San Romano Garfagnana",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8586,7 +9225,7 @@
                 "group": "piani_strutturali.psi_garfagnana.pieve_fosciana",
                 "name": "ps:tu_ps_pieve_fosciana",
                 "title": "TU PS Pieve Fosciana",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8623,7 +9262,7 @@
                 "group": "piani_strutturali.psi_garfagnana.piazza_al_serchio",
                 "name": "ps:tu_ps_piazza_al_serchio",
                 "title": "TU PS Piazza al Serchio",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8660,7 +9299,7 @@
                 "group": "piani_strutturali.psi_garfagnana.molazzana",
                 "name": "ps:tu_ps_molazzana",
                 "title": "TU PS Molazzana",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8697,7 +9336,7 @@
                 "group": "piani_strutturali.psi_garfagnana.minucciano",
                 "name": "ps:tu_ps_minucciano",
                 "title": "TU PS Minucciano",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8734,7 +9373,7 @@
                 "group": "piani_strutturali.psi_garfagnana.gallicano",
                 "name": "ps:tu_ps_gallicano",
                 "title": "TU PS Callicano",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8771,7 +9410,7 @@
                 "group": "piani_strutturali.psi_garfagnana.fosciandora",
                 "name": "ps:tu_ps_fosciandora",
                 "title": "TU PS Fosciandora",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8808,7 +9447,7 @@
                 "group": "piani_strutturali.psi_garfagnana.fabbriche_vergemoli",
                 "name": "ps:tu_ps_fabbriche_vergemoli",
                 "title": "TU PS Fabbriche Vergemoli",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8845,7 +9484,7 @@
                 "group": "piani_strutturali.psi_garfagnana.castiglione_gna",
                 "name": "ps:tu_ps_castiglione_garfagnana",
                 "title": "TU PS Castiglione Garfagnana",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8882,7 +9521,7 @@
                 "group": "piani_strutturali.psi_garfagnana.castelnuovo_gna",
                 "name": "ps:tu_ps_castelnuovo_garfagnana",
                 "title": "TU PS Castelnuovo Garfagnana",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8919,7 +9558,7 @@
                 "group": "piani_strutturali.psi_garfagnana.careggine",
                 "name": "ps:tu_ps_careggine",
                 "title": "TU PS Careggine",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8956,7 +9595,7 @@
                 "group": "piani_strutturali.psi_garfagnana.camporgiano",
                 "name": "ps:tu_ps_camporgiano",
                 "title": "TU PS Camporgiano",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8993,7 +9632,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.pescaglia",
                 "name": "ps:tu_ps_pescaglia",
                 "title": "TU PS Pescaglia",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9030,7 +9669,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.coreglia_antelm",
                 "name": "ps:tu_ps_coreglia_antelminelli",
                 "title": "TU PS Coreglia Antelminelli",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9067,7 +9706,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.borgo_a_mozzano",
                 "name": "ps:tu_ps_borgo_a_mozzano",
                 "title": "TU PS Borgo a Mozzano",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9104,7 +9743,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.barga",
                 "name": "ps:tu_ps_barga",
                 "title": "TU PS Barga",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9141,7 +9780,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.bagni_di_lucca",
                 "name": "ps:tu_ps_bagni_di_lucca",
                 "title": "TU PS Bagni di Lucca",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9178,7 +9817,7 @@
                 "group": "piani_strutturali.psi_sesto_calenzano.sesto_fno",
                 "name": "ps:tu_ps_sesto_fiorentino",
                 "title": "TU PS Sesto Fiorentino",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9215,7 +9854,7 @@
                 "group": "piani_strutturali.psi_sesto_calenzano.calenzano",
                 "name": "ps:tu_ps_calenzano",
                 "title": "TU PS Calenzano",
-                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -10063,602 +10702,602 @@
             {
                 "id": "cartografia_di_base",
                 "title": "Cartografia di base",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piano_paesaggistico_regionale",
                 "title": "Piano paesaggistico regionale",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse",
                 "title": "Risorse",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.aria",
                 "title": "Aria",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.aria.inquinamento_fisico",
                 "title": "Inquinamento fisico",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.aria.qualita_dellaria",
-                "title": "Qualità dell'aria",
-                "expanded": true
+                "title": "Qualit\u00e0 dell'aria",
+                "expanded": false
             },
             {
                 "id": "risorse.aria.qualita_dellaria.medie_annuali",
                 "title": "Medie annuali",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.aria.qualita_dellaria.medie_pluriennali",
                 "title": "Medie pluriennali",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.aria.qualita_dellaria.superamenti",
                 "title": "Superamenti",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.clima",
                 "title": "Clima",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.clima.cumulata_mensile_delle_precipitazioni_in_mm_19952009",
                 "title": "Cumulata mensile delle precipitazioni in mm - (1995-2009)",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "title": "Media delle temperature massime del mese in °C - (1995-2009)",
-                "expanded": true
+                "title": "Media delle temperature massime del mese in \u00b0C - (1995-2009)",
+                "expanded": false
             },
             {
                 "id": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "title": "Media delle temperature minime del mese in °C - (1995-2009)",
-                "expanded": true
+                "title": "Media delle temperature minime del mese in \u00b0C - (1995-2009)",
+                "expanded": false
             },
             {
                 "id": "risorse.clima.numero_giorni_piovosi_19952009",
                 "title": "Numero giorni piovosi - (1995-2009)",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.acqua",
                 "title": "Acqua",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.acqua.rt_difesa_del_suolo",
                 "title": "RT difesa del suolo",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.acqua.qualita_dellacqua",
-                "title": "Qualità dell'acqua",
-                "expanded": true
+                "title": "Qualit\u00e0 dell'acqua",
+                "expanded": false
             },
             {
                 "id": "risorse.suolo_e_sottosuolo",
                 "title": "Suolo e sottosuolo",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.suolo_e_sottosuolo.terremoti",
                 "title": "Terremoti",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.suolo_e_sottosuolo.vincolo_idrogeologico",
                 "title": "Vincolo idrogeologico",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.suolo_e_sottosuolo.db_geologico",
                 "title": "DB geologico",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.suolo_e_sottosuolo.db_geomorfologico",
                 "title": "DB geomorfologico",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.suolo_e_sottosuolo.uso_suolo",
                 "title": "Uso suolo",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.suolo_e_sottosuolo.pedologia",
                 "title": "Pedologia",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.suolo_e_sottosuolo.morfologia",
                 "title": "Morfologia",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.suolo_e_sottosuolo.carsismo_e_speleologia",
                 "title": "Carsismo e speleologia",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_ecosistemica",
                 "title": "Struttura ecosistemica",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_ecosistemica.biodiverista",
-                "title": "Biodiveristà",
-                "expanded": true
+                "title": "Biodiverist\u00e0",
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_ecosistemica.flora",
                 "title": "Flora",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_ecosistemica.fauna",
                 "title": "Fauna",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_insediativa",
                 "title": "Struttura insediativa",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "title": "Infrastrutture per la mobilità",
-                "expanded": true
+                "title": "Infrastrutture per la mobilit\u00e0",
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_insediativa.popolazione_irpet",
                 "title": "Popolazione (IRPET)",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_insediativa.processi_socioeconomici_irpet",
                 "title": "Processi socio-economici (IRPET)",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_insediativa.salute_umana",
                 "title": "Salute umana",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_insediativa.energia",
                 "title": "Energia",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.struttura_insediativa.rifiuti",
                 "title": "Rifiuti",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.patrimonio_culturale",
                 "title": "Patrimonio culturale",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "risorse.patrimonio_culturale.documenti_della_cultura",
                 "title": "Documenti della cultura",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti",
                 "title": "Invarianti",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_i",
                 "title": "Invariante I",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_i.pozzi",
                 "title": "Pozzi",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_i.sottosistemi_morfogenetici",
                 "title": "Sottosistemi morfogenetici ",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_i.crinali",
                 "title": "Crinali ",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_i.aree_di_margine",
                 "title": "Aree di margine",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_i.bacini_neogenici",
                 "title": "Bacini neogenici",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii",
                 "title": "Invariante II",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002",
                 "title": "Categoria_A_continua (DGR 1148/2002)",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.idrografia",
                 "title": "Idrografia",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.aree_boscate",
                 "title": "Aree boscate",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_siepi",
                 "title": "Rete siepi",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_muretti_a_secco",
                 "title": "Rete muretti a secco",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.rete_praterie",
                 "title": "Rete praterie",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
-                "title": "Capacità uso dei suoli",
-                "expanded": true
+                "title": "Capacit\u00e0 uso dei suoli",
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.limitazioni_del_suoli",
                 "title": "Limitazioni del suoli",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002",
                 "title": "Categoria_B_discontinua (DGR 1148/2002)",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002.rete_alberi_isolati",
                 "title": "Rete alberi isolati",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002.rete_pozze",
                 "title": "Rete pozze",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_ii.categoria_b_discontinua_dgr_1148_2002.rete_aree_umide",
                 "title": "Rete aree umide",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_iv",
                 "title": "Invariante IV",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_iv.rete_colture_agrarie",
                 "title": "Rete colture agrarie",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "invarianti.invariante_iv.rete_viaria",
                 "title": "Rete viaria",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali",
                 "title": "Piani Strutturali",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_sesto_calenzano",
                 "title": "PSI Sesto Calenzano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_sesto_calenzano.calenzano",
                 "title": "Calenzano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_sesto_calenzano.sesto_fno",
                 "title": "Sesto F.no",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_media_valle_serchio",
                 "title": "PSI Media Valle Serchio",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_media_valle_serchio.bagni_di_lucca",
                 "title": "Bagni di Lucca",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_media_valle_serchio.barga",
                 "title": "Barga",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_media_valle_serchio.borgo_a_mozzano",
                 "title": "Borgo a Mozzano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_media_valle_serchio.coreglia_antelm",
                 "title": "Coreglia Antelm.",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_media_valle_serchio.pescaglia",
                 "title": "Pescaglia",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana",
                 "title": "PSI Garfagnana",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.camporgiano",
                 "title": "Camporgiano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.careggine",
                 "title": "Careggine",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.castelnuovo_gna",
                 "title": "Castelnuovo G.na",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.castiglione_gna",
                 "title": "Castiglione G.na",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.fabbriche_vergemoli",
                 "title": "Fabbriche Vergemoli",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.fosciandora",
                 "title": "Fosciandora",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.gallicano",
                 "title": "Gallicano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.minucciano",
                 "title": "Minucciano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.molazzana",
                 "title": "Molazzana",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.piazza_al_serchio",
                 "title": "Piazza al Serchio",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.pieve_fosciana",
                 "title": "Pieve Fosciana",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.san_romano_gna",
                 "title": "San Romano G.na",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.sillano_giuncugnano",
                 "title": "Sillano Giuncugnano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_garfagnana.villa_colemandina",
                 "title": "Villa Colemandina",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_marciano_lucignano",
                 "title": "PSI Marciano Lucignano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_marciano_lucignano.lucignano",
                 "title": "Lucignano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.psi_marciano_lucignano.marciano_chiana",
                 "title": "Marciano Chiana",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.camaiore",
                 "title": "Camaiore",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.caciana_t_lari",
                 "title": "Caciana T. - Lari",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.civitella_val_di_chiana",
                 "title": "Civitella Val di Chiana",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.cutigliano",
                 "title": "Cutigliano",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.figline_incisa",
                 "title": "Figline Incisa",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.greve_in_chianti",
                 "title": "Greve in Chianti",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.lastra_a_signa",
                 "title": "Lastra a Signa",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.livorno",
                 "title": "Livorno",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.lucca",
                 "title": "Lucca",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.montecarlo",
                 "title": "Montecarlo",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.montemurlo",
                 "title": "Montemurlo",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.montignoso",
                 "title": "Montignoso",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.peccioli",
                 "title": "Peccioli",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.piancastagnaio",
                 "title": "Piancastagnaio",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.quarrata",
                 "title": "Quarrata",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.reggello",
                 "title": "Reggello",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.scandicci",
                 "title": "Scandicci",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.vicchio",
                 "title": "Vicchio",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.vagli_di_sotto",
                 "title": "Vagli di Sotto",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.fiesole",
                 "title": "Fiesole",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.forte_dei_marmi",
                 "title": "Forte dei Marmi",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_strutturali.vaglia",
                 "title": "Vaglia",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_operativi",
                 "title": "Piani Operativi",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_operativi.greve_in_chianti",
                 "title": "Greve in Chianti",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_operativi.montemurlo",
                 "title": "Montemurlo",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_operativi.peccioli",
                 "title": "Peccioli",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_operativi.quarrata",
                 "title": "Quarrata",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_operativi.scandicci",
                 "title": "Scandicci",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_operativi.vaglia",
                 "title": "Vaglia",
-                "expanded": true
+                "expanded": false
             },
             {
                 "id": "piani_operativi.vicchio",
                 "title": "Vicchio",
-                "expanded": true
+                "expanded": false
             }
         ]
     }

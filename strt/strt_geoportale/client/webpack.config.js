@@ -2,7 +2,7 @@ const path = require('path');
 
 const extractThemesPlugin = require('./MapStore2/build/themes.js').extractThemesPlugin;
 const PORT = '8082';
-const USE_REMOTE = process.env.USE_REMOTE || false;
+const USE_REMOTE = process.env.USE_REMOTE || true;
 const DEV_SERVER_HOST = process.env.REMOTE_HOST || 'localhost:8000';
 const protocol = process.env.REMOTE_PROTOCOL || 'http';
 
