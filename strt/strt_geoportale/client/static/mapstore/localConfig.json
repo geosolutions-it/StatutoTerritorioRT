@@ -98,89 +98,16 @@
             },
             "selectedService": "GeoServer",
             "services": {
-              "GeoServer": {
-                "url": "/geoserver/wms",
-                "type": "wms",
-                "title": "GeoServer",
-                "autoload": false
-              },
-              "Vaglia": {
-                "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/ows?",
-                "type": "wms",
-                "title": "Vaglia",
-                "autoload": false
-              },
-              "CASTORE": {
-                "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmscastore&",
-                "type": "wms",
-                "title": "CASTORE",
-                "autoload": false
-              },
               "PIANO_PAESAGGISTICO": {
                 "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmspiapae&map_resolution=91&",
                 "type": "wms",
-                "title": "PIANO_PAESAGGISTICO",
+                "title": "Piano Paesaggistico (Geoscopio)",
                 "autoload": false
-              },
-              "Ortofoto 20cm 2016 AGEA - Consorzio TeA": {
-                "url": "http://www502.regione.toscana.it/ows_ofc/com.rt.wms.RTmap/wms?map=owsofc&map_resolution=91&",
-                "type": "wms",
-                "title": "Ortofoto 20cm 2016 AGEA - Consorzio TeA",
-                "autoload": false
-              },
-              "Ortofoto": {
-                "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsofc&map_resolution=91&language=ita&",
-                "type": "wms",
-                "title": "Ortofoto",
-                "autoload": false,
-                "oldService": "ORTOFOTO"
-              },
-              "AMBITI AMMINISTRATIVI": {
-                "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsambamm&map_resolution=91&",
-                "type": "wms",
-                "title": "AMBITI AMMINISTRATIVI",
-                "autoload": false
-              },
-              "INDICATORI ARPAT": {
-                "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
-                "type": "wms",
-                "title": "INDICATORI ARPAT",
-                "autoload": false
-              },
-              "Geoscopio_wms CTR": {
-                "url": "http://www502.regione.toscana.it/ows_ctr/com.rt.wms.RTmap/ows?map=owsctr&",
-                "type": "wms",
-                "title": "Geoscopio_wms CTR",
-                "autoload": false,
-                "showAdvancedSettings": false,
-                "showTemplate": false,
-                "hideThumbnail": false,
-                "metadataTemplate": "<p>${description}</p>"
-              },
-              "Geoscopio_wms PIANO_PAESAGGISTICO": {
-                "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmspiapae&map_resolution=91&",
-                "type": "wms",
-                "title": "Geoscopio_wms PIANO_PAESAGGISTICO",
-                "autoload": false,
-                "showAdvancedSettings": false,
-                "showTemplate": false,
-                "hideThumbnail": false,
-                "metadataTemplate": "<p>${description}</p>"
-              },
-              "Geoscopio_DBTM": {
-                "url": "http://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv?map=dbtm_rt.qgs&",
-                "type": "wms",
-                "title": "Geoscopio_DBTM",
-                "autoload": false,
-                "showAdvancedSettings": false,
-                "showTemplate": false,
-                "hideThumbnail": false,
-                "metadataTemplate": "<p>${description}</p>"
               },
               "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA I INVARIANTE DEL PIT-PPR": {
                 "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/invarianti/wms?",
                 "type": "wms",
-                "title": "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA I INVARIANTE DEL PIT-PPR",
+                "title": "Elementi funcionali alla declinazione della I invariante del PIT-PPR (LAMMA)",
                 "autoload": false,
                 "showAdvancedSettings": true,
                 "showTemplate": false,
@@ -191,7 +118,7 @@
               "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA II INVARIANTE DEL PIT-PPR": {
                 "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/invariante_II/wms?",
                 "type": "wms",
-                "title": "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA II INVARIANTE DEL PIT-PPR",
+                "title": "Elementi funcionali alla declinazione della II invariante del PIT-PPR (LAMMA)",
                 "autoload": false,
                 "showAdvancedSettings": false,
                 "showTemplate": false,
@@ -202,7 +129,75 @@
               "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA IV INVARIANTE DEL PIT-PPR": {
                 "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/invariante_IV/wms?",
                 "type": "wms",
-                "title": "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA IV INVARIANTE DEL PIT-PPR",
+                "title": "Elementi funcionali alla declinazione della IV invariante del PIT-PPR (LAMMA)",
+                "autoload": false,
+                "showAdvancedSettings": false,
+                "showTemplate": false,
+                "hideThumbnail": false,
+                "metadataTemplate": "<p>${description}</p>"
+              },
+              "INDICATORI ARPAT": {
+                "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/arpat/wms",
+                "type": "wms",
+                "title": "Indicatori ARPAT",
+                "autoload": false
+              },
+              "LAMMA_CLIMA": {
+                "url": "https://geoportale.lamma.rete.toscana.it/geoserver_clima/ows",
+                "type": "wms",
+                "title": "Clima (LAMMA)",
+                "autoload": false
+              },
+              "DB_GEOLOGICO": {
+                "url": "http://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv?map=dbgeologico_rt.qgs",
+                "type": "wms",
+                "title": "DB Geologico (Geoscopio)",
+                "autoload": false
+              },
+              "DB_GEOMORFOLOGICO": {
+                "url": "http://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv?map=dbgeomorfologico_rt.qgs",
+                "type": "wms",
+                "title": "DB Geomorfologico (Geoscopio)",
+                "autoload": false
+              },
+              "DB_GEOMORFOLOGICO": {
+                "url": "http://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms?map=owspedologia&map_resolution=91&",
+                "type": "wms",
+                "title": "DB Pedologico (Geoscopio)",
+                "autoload": false
+              },
+              "INFRASTRUTTURE_PRESIDI": {
+                "url": "http://www502.regione.toscana.it/ows_infrastrutture_presidi/com.rt.wms.RTmap/ows?map=owsinfrastrutturepresidi&",
+                "type": "wms",
+                "title": "Infrastrutture e Presidi",
+                "autoload": false
+              },
+              "CASTORE": {
+                "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmscastore&",
+                "type": "wms",
+                "title": "Castore (Geoscopio)",
+                "autoload": false
+              },
+              "AMBITI AMMINISTRATIVI": {
+                "url": "http://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms?map=wmsambamm&map_resolution=91&",
+                "type": "wms",
+                "title": "Ambiti Amministrativi (Geoscopio)",
+                "autoload": false
+              },
+              "Geoscopio CTR": {
+                "url": "http://www502.regione.toscana.it/ows_ctr/com.rt.wms.RTmap/ows?map=owsctr&",
+                "type": "wms",
+                "title": "CTR (Geoscopio)",
+                "autoload": false,
+                "showAdvancedSettings": false,
+                "showTemplate": false,
+                "hideThumbnail": false,
+                "metadataTemplate": "<p>${description}</p>"
+              },
+              "Geoscopio_DBTM": {
+                "url": "http://www502.regione.toscana.it/geoscopio_qg/cgi-bin/qgis_mapserv?map=dbtm_rt.qgs&",
+                "type": "wms",
+                "title": "DBTM (Geoscopio)",
                 "autoload": false,
                 "showAdvancedSettings": false,
                 "showTemplate": false,
