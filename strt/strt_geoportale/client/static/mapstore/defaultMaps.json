@@ -13,42 +13,48 @@
                     "id": "risorse",
                     "label": "Risorse",
                     "include": [
-                        "risorse"
+                        "risorse",
+                        "Default"
                     ]
                 },
                 {
                     "id": "invarianti",
                     "label": "Invarianti",
                     "include": [
-                        "invarianti"
+                        "invarianti",
+                        "Default"
                     ]
                 },
                 {
                     "id": "piano_paesaggistico_regionale",
                     "label": "Piano paesaggistico regionale",
                     "include": [
-                        "piano_paesaggistico_regionale"
+                        "piano_paesaggistico_regionale",
+                        "Default"
                     ]
                 },
                 {
                     "id": "piani_strutturali",
                     "label": "Piani Strutturali",
                     "include": [
-                        "piani_strutturali"
+                        "piani_strutturali",
+                        "Default"
                     ]
                 },
                 {
                     "id": "piani_operativi",
                     "label": "Piani Operativi",
                     "include": [
-                        "piani_operativi"
+                        "piani_operativi",
+                        "Default"
                     ]
                 },
                 {
                     "id": "cartografia_di_base",
                     "label": "Cartografia di base",
                     "include": [
-                        "cartografia_di_base"
+                        "cartografia_di_base",
+                        "Default"
                     ]
                 }
             ]
@@ -66,28 +72,32 @@
                     "id": "risorse",
                     "label": "Risorse",
                     "include": [
-                        "risorse"
+                        "risorse",
+                        "Default"
                     ]
                 },
                 {
                     "id": "invarianti",
                     "label": "Invarianti",
                     "include": [
-                        "invarianti"
+                        "invarianti",
+                        "Default"
                     ]
                 },
                 {
                     "id": "piano_paesaggistico_regionale",
                     "label": "Piano paesaggistico regionale",
                     "include": [
-                        "piano_paesaggistico_regionale"
+                        "piano_paesaggistico_regionale",
+                        "Default"
                     ]
                 },
                 {
                     "id": "piani_strutturali",
                     "label": "Piani Strutturali",
                     "include": [
-                        "piani_strutturali"
+                        "piani_strutturali",
+                        "Default"
                     ]
                 },
                 {
@@ -102,7 +112,8 @@
                     "id": "cartografia_di_base",
                     "label": "Cartografia di base",
                     "include": [
-                        "cartografia_di_base"
+                        "cartografia_di_base",
+                        "Default"
                     ]
                 }
             ]
