@@ -107,7 +107,7 @@
               "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA I INVARIANTE DEL PIT-PPR": {
                 "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/invarianti/wms?",
                 "type": "wms",
-                "title": "Elementi funcionali alla declinazione della I invariante del PIT-PPR (LAMMA)",
+                "title": "Elementi funzionali alla declinazione della I invariante del PIT-PPR (LAMMA)",
                 "autoload": false,
                 "showAdvancedSettings": true,
                 "showTemplate": false,
@@ -118,7 +118,7 @@
               "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA II INVARIANTE DEL PIT-PPR": {
                 "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/invariante_II/wms?",
                 "type": "wms",
-                "title": "Elementi funcionali alla declinazione della II invariante del PIT-PPR (LAMMA)",
+                "title": "Elementi funzionali alla declinazione della II invariante del PIT-PPR (LAMMA)",
                 "autoload": false,
                 "showAdvancedSettings": false,
                 "showTemplate": false,
@@ -129,7 +129,7 @@
               "ELEMENTI  FUNZIONALI ALLA DECLINAZIONE DELLA IV INVARIANTE DEL PIT-PPR": {
                 "url": "https://geoportale.lamma.rete.toscana.it/geoserver_sar/invariante_IV/wms?",
                 "type": "wms",
-                "title": "Elementi funcionali alla declinazione della IV invariante del PIT-PPR (LAMMA)",
+                "title": "Elementi funzionali alla declinazione della IV invariante del PIT-PPR (LAMMA)",
                 "autoload": false,
                 "showAdvancedSettings": false,
                 "showTemplate": false,
