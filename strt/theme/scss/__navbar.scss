@@ -44,6 +44,15 @@
     height: $portal-header;
     padding-left: 0px;
 }
+.navbar-menu {
+    .navbar-nav {
+        .nav-link span {
+            border-left: 4px solid #FED403;
+            padding-left: 4px;
+        }
+    }
+}
+
 .link-icon {
     cursor: pointer;
     display: flex;
@@ -71,7 +80,7 @@
     &.disabled,
     &:disabled {
         color: darken($white, 20%);
-    } 
+    }
 }
 .top-navbar a:hover {
     color: darken($white, 20%) !important;

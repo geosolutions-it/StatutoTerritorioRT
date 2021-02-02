@@ -7307,6 +7307,9 @@
     z-index: 1030;
     height: 70px;
     padding-left: 0px; }
+  .strt .serapide .navbar-menu .navbar-nav .nav-link span {
+    border-left: 4px solid #FED403;
+    padding-left: 4px; }
   .strt .serapide .link-icon {
     cursor: pointer;
     display: flex;
@@ -9204,6 +9207,11 @@
   .strt .clean-ul {
     padding: 0px;
     list-style-type: none; }
+  .strt .btn-hompage-action {
+    font-size: 0.8rem; }
+  @media (min-width: 1900px) {
+    .strt .btn-hompage-action {
+      font-size: 14px; } }
   .strt .pagina-container {
     max-width: 1720px;
     margin: 0 auto; }
@@ -9290,3 +9298,5 @@
         text-align: justify;
         padding: 0px 0px 5px 0px;
         margin-bottom: 40px; }
+
+/*# sourceMappingURL=serapide.css.map */

@@ -512,3 +512,12 @@ a {
     padding: 0px;
     list-style-type: none;
 }
+
+.btn-hompage-action {
+  font-size: 0.8rem;
+}
+@media (min-width: 1900px) {
+  .btn-hompage-action {
+    font-size: 14px;
+  }
+}
