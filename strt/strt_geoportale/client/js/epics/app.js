@@ -31,7 +31,7 @@ export const strtUpdateDefaultGroup = (action$, store) =>
             return Observable.empty();
         });
 
-
+// remove default group if empty
 export const strtRemoveDefaultGroup = (action$, store) =>
     action$.ofType(REMOVE_LAYER)
         .switchMap(() =>{
