@@ -2,7 +2,7 @@
     "locale": "it-IT",
     "messages": {
         "noLayerFilterResults": "Nessun livello disponibile per il filtro utilizzato",
-        "noLayerInGroup": "Nessun livello disponibile per questo gruppo",
+        "noLayerInGroup": "Nessun livello disponibile...",
         "serapide": {
             "userLayers": "Livelli Utente",
             "catalogTitle": "Serapide",
@@ -20,6 +20,9 @@
         },
         "home": {
             "shortDescription": "<h1>GeoPortale</h1>"
+        },
+        "toc": {
+            "toolTrashLayerTooltip": "Rimuovi livello"
         }
     }
 }
