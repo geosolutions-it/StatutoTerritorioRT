@@ -72,7 +72,9 @@ export class LayerNode extends Component {
         connectDropTarget: PropTypes.func,
         isDraggable: PropTypes.bool,
         isDragging: PropTypes.bool,
-        replaceNodeOptions: PropTypes.func
+        replaceNodeOptions: PropTypes.func,
+        onRemove: PropTypes.func,
+        enableInlineRemove: PropTypes.func
     };
 
     static defaultProps = {
@@ -90,7 +92,9 @@ export class LayerNode extends Component {
         hideOpacityTooltip: false,
         connectDragPreview: (cmp) => cmp,
         connectDragSource: (cmp) => cmp,
-        connectDropTarget: (cmp) => cmp
+        connectDropTarget: (cmp) => cmp,
+        onRemove: () => {},
+        enableInlineRemove: () => true
     };
 
     renderNode(inView) {
@@ -113,7 +117,9 @@ export class LayerNode extends Component {
             hideOpacityTooltip,
             replaceNodeOptions,
             titleTooltip,
-            indicators
+            indicators,
+            onRemove,
+            enableInlineRemove
         } = this.props;
 
         const node = replaceNodeOptions?.(nodeProp, 'layer') || nodeProp;
@@ -201,6 +207,15 @@ export class LayerNode extends Component {
                                     event.stopPropagation();
                                     const layerFilter = node?.layerFilter;
                                     onUpdateNode(node.id, 'layer', {layerFilter: { ...layerFilter, disabled: !layerFilter?.disabled }});
+                                }
+                            },
+                            {
+                                glyph: 'trash',
+                                tooltipId: 'toc.toolTrashLayerTooltip',
+                                visible: enableInlineRemove(node),
+                                onClick: (event) => {
+                                    event.stopPropagation();
+                                    onRemove(node.id);
                                 }
                             },
                             {

@@ -7,9 +7,11 @@
  */
 
 import { Observable } from 'rxjs';
-import { ADD_LAYER, updateNode } from '@mapstore/actions/layers';
+import { ADD_LAYER, REMOVE_LAYER, updateNode, removeNode } from '@mapstore/actions/layers';
 import find from 'lodash/find';
-import { groupsSelector } from '@mapstore/selectors/layers';
+import { groupsSelector, layersSelector } from '@mapstore/selectors/layers';
+
+const DEFAULT_GROUP_ID = 'Default';
 
 /*
 update the default group using the message id 'serapide.userLayers' from translations
@@ -22,7 +24,6 @@ export const strtUpdateDefaultGroup = (action$, store) =>
             const message = messages?.serapide?.userLayers;
             const title = message || 'User Layers';
             const groups = groupsSelector(state);
-            const DEFAULT_GROUP_ID = 'Default';
             const defaultGroup = find(groups, ({ id }) => id === DEFAULT_GROUP_ID);
             if (defaultGroup && defaultGroup.title !== title) {
                 return Observable.of(updateNode(DEFAULT_GROUP_ID, 'groups', { title }));
@@ -30,6 +31,19 @@ export const strtUpdateDefaultGroup = (action$, store) =>
             return Observable.empty();
         });
 
+
+export const strtRemoveDefaultGroup = (action$, store) =>
+    action$.ofType(REMOVE_LAYER)
+        .switchMap(() =>{
+            const state = store.getState();
+            const defaultGroupLayers = layersSelector(state).filter(({ group }) => group === undefined || group === DEFAULT_GROUP_ID);
+            if (defaultGroupLayers.length === 0) {
+                return Observable.of(removeNode(DEFAULT_GROUP_ID, 'groups'));
+            }
+            return Observable.empty();
+        });
+
 export default {
-    strtUpdateDefaultGroup
+    strtUpdateDefaultGroup,
+    strtRemoveDefaultGroup
 };
