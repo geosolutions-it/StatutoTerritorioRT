@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Nav, NavItem } from 'react-bootstrap';
-import { selectNode } from '@mapstore/actions/layers';
+import { selectNode, removeLayer } from '@mapstore/actions/layers';
 import { selectedNodesSelector } from '@mapstore/selectors/layers';
 import { createPlugin } from '@mapstore/utils/PluginsUtils';
 import { TOCPlugin as MSTOCPlugin, reducers, epics } from '@mapstore/plugins/TOC';
@@ -19,6 +19,13 @@ import HeaderNode from '@js/plugins/toc/HeaderNode';
 import GroupNode from '@js/plugins/toc/GroupNode';
 import LayerNode from '@js/plugins/toc/LayerNode';
 import url from 'url';
+
+const ConnectedLayerNode = connect(() => ({
+    enableInlineRemove: node => !!(node?.group === 'Default' || node?.group === undefined)
+}), {
+    onRemove: removeLayer
+})(LayerNode);
+
 function TOC({
     activateRemoveLayer = false,
     activateRemoveGroup = false,
@@ -97,7 +104,7 @@ function TOC({
                 activateAddGroupButton={activateAddGroupButton}
                 activateSettingsTool={activateSettingsTool}
                 activateSortLayer={activateSortLayer}
-                layerNodeComponent={LayerNode}
+                layerNodeComponent={ConnectedLayerNode}
                 groupNodeComponent={(groupNodeProps) =>
                     <GroupNode
                         { ...groupNodeProps }
