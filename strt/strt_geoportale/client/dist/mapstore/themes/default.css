@@ -19889,6 +19889,11 @@ Ported to CodeMirror by Peter Kroon
   padding: 8px;
   padding-top: 0px;
 }
+.Geoportale .ms-header-node .ms-header-node-toggle-expanded {
+  margin: 0 8px;
+  border-color: transparent;
+  text-decoration: underline;
+}
 .Geoportale .toc-layer-tooltip {
   max-width: 225px;
   word-break: break-word;
