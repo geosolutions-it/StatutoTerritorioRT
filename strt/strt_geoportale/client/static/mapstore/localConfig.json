@@ -21,7 +21,7 @@
     "ignoreMobileCss": false,
     "useAuthenticationRules": true,
     "loadAfterTheme": true,
-    "mapLayout": {"left": {"sm": 400, "md": 500, "lg": 600}, "right": {"md": 658}, "bottom": {"sm": 30}},
+    "mapLayout": {"left": {"sm": 400, "md": 500, "lg": 600}, "right": {"md": 500}, "bottom": {"sm": 30}},
     "defaultMapOptions": {
       "cesium": {
           "flyTo": true,
@@ -358,6 +358,7 @@
             {
                 "name": "Identify",
                 "cfg": {
+                    "size": 500,
                     "showHighlightFeatureButton": true,
                     "viewerOptions": {
                         "container": "{context.ReactSwipe}"
@@ -423,7 +424,8 @@
             }, {
                 "name": "MetadataExplorer",
                 "cfg": {
-                    "wrap": true
+                    "wrap": true,
+                    "width": 500
                 }
             }
             , {
