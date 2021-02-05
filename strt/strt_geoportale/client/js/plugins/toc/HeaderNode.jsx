@@ -12,6 +12,7 @@ import GroupChildren from '@mapstore/components/TOC/fragments/GroupChildren';
 import { getTitleAndTooltip } from '@mapstore/utils/TOCUtils';
 import Filter from '@mapstore/components/misc/Filter';
 import Message from '@mapstore/components/I18N/Message';
+import { Button } from 'react-bootstrap';
 
 const replaceNodeOptions = (currentNode, nodeType, filterText) => {
     if (nodeType === 'group' && filterText) {
@@ -58,7 +59,8 @@ class HeaderNode extends Component {
         currentLocale: PropTypes.string,
         setDndState: PropTypes.func,
         filterHeaderNode: PropTypes.func,
-        getHeaderButtons: PropTypes.func
+        getHeaderButtons: PropTypes.func,
+        onUpdateNode: PropTypes.func
     };
 
     static defaultProps = {
@@ -84,7 +86,8 @@ class HeaderNode extends Component {
             setDndState,
             children,
             filterHeaderNode,
-            getHeaderButtons
+            getHeaderButtons,
+            onUpdateNode
         } = this.props;
 
         if (!filterHeaderNode(node)) {
@@ -124,7 +127,13 @@ class HeaderNode extends Component {
         );
 
         const isEmpty = !loopFilter({ node, filterText, currentLocale });
-
+        // only direct groups child should be toggle with the collapse/expand all button
+        const hasGroupsChild = !!node?.nodes?.find(({ nodes }) => nodes);
+        const expanded = !!(hasGroupsChild && node.nodes
+            .find((nestedNode) => nestedNode.nodes
+                ? nestedNode.expanded === undefined ? true : nestedNode.expanded
+                : nestedNode.expanded
+            ));
         return (
             <div
                 className={'ms-header-node ms-group-' + node.id}>
@@ -138,6 +147,24 @@ class HeaderNode extends Component {
                 {isEmpty && <div className="ms-nodes-empty">
                     <Message msgId={!filterText ? 'noLayerInGroup' : 'noLayerFilterResults'}/>
                 </div>}
+                {hasGroupsChild && <Button
+                    bsSize="xs"
+                    className="ms-header-node-toggle-expanded"
+                    onClick={() => {
+                        node.nodes.forEach((nestedNode) => {
+                            const nodeExpanded = nestedNode.expanded === undefined ? true : nestedNode.expanded;
+                            if (nestedNode.nodes && nodeExpanded === expanded) {
+                                onUpdateNode(
+                                    nestedNode.id,
+                                    'groups',
+                                    { expanded: !expanded }
+                                );
+                            }
+                        });
+                    }}
+                >
+                    <Message msgId={expanded ? 'serapide.collapseAll' : 'serapide.expandAll'}/>
+                </Button>}
                 {groupChildren}
             </div>
         );
