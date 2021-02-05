@@ -87,8 +87,8 @@ describe('LayerNode', () => {
             />, document.getElementById("container"));
 
         const buttons = document.querySelectorAll('.square-button-md .glyphicon');
-        expect(buttons.length).toBe(1);
-        const visibilityButton = buttons[0];
+        expect(buttons.length).toBe(2);
+        const visibilityButton = buttons[1];
         Simulate.click(visibilityButton);
     });
 

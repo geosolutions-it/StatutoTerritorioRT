@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Nav, NavItem } from 'react-bootstrap';
-import { selectNode, removeLayer } from '@mapstore/actions/layers';
+import { selectNode, removeLayer, updateNode } from '@mapstore/actions/layers';
 import { selectedNodesSelector } from '@mapstore/selectors/layers';
 import { createPlugin } from '@mapstore/utils/PluginsUtils';
 import { TOCPlugin as MSTOCPlugin, reducers, epics } from '@mapstore/plugins/TOC';
@@ -25,6 +25,10 @@ const ConnectedLayerNode = connect(() => ({
 }), {
     onRemove: removeLayer
 })(LayerNode);
+
+const ConnectedHeaderNode = connect(() => ({}), {
+    onUpdateNode: updateNode
+})(HeaderNode);
 
 function TOC({
     activateRemoveLayer = false,
@@ -112,7 +116,7 @@ function TOC({
                         filterHeaderNode={node => {
                             return selected?.include.indexOf(node.id) !== -1;
                         }}
-                        replaceComponent={({ level })=> level === 1 ? HeaderNode : null}
+                        replaceComponent={({ level })=> level === 1 ? ConnectedHeaderNode : null}
                     />}
             />
         </div>

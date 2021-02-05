@@ -16,7 +16,9 @@
             "noPianoAvailableTitle": "Errore",
             "noPianoAvailable": "non è possibile recuperare il piano richiesto",
             "genericError": "{errorMessage} ",
-            "pianoNoLayer": "Allegati non ancora pubblicati per questo gruppo"
+            "pianoNoLayer": "Allegati non ancora pubblicati per questo gruppo",
+            "collapseAll": "Comprimi",
+            "expandAll": "Espandi"
         },
         "home": {
             "shortDescription": "<h1>GeoPortale</h1>"
