@@ -20024,6 +20024,16 @@ Ported to CodeMirror by Peter Kroon
   background-color: #ffffff;
   width: calc(100% - 30px);
 }
+.Geoportale #mapstore-navbar .MapSearchBar,
+.Geoportale #mapstore-navbar .search-result-list {
+  left: -460px;
+}
+@media (min-width: 992px) {
+  .Geoportale #mapstore-navbar .MapSearchBar,
+  .Geoportale #mapstore-navbar .search-result-list {
+    width: 460px;
+  }
+}
 /* mapstore2 variables */
 /* override bootstrap variables */
 
