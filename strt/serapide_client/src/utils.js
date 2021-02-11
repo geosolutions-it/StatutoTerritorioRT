@@ -117,7 +117,7 @@ export const isAdminEnte = (profiles = []) => getAdminEnti(profiles).length > 0;
 export const getResourcesByType = (resources, type) => resources.filter(({node: {tipo} ={}}) => tipo === type).map(({node}) => node) 
 export const getResourceByType = (resources, type) => getResourcesByType(resources, type).shift()
 // Lista delle qualifiche per soggetti istituzionali
-export const SOGGETTI_ISTITUZIONALI = ["GC", "PIAN"]
+export const SOGGETTI_ISTITUZIONALI = ["GC", "OPREG"]
 // Restituisce i soggetti istituzionali
 export const getSoggettiIsti = (soggettiOperanti = []) => soggettiOperanti.filter(({qualificaUfficio: {qualifica} = {}} = {}) => SOGGETTI_ISTITUZIONALI.includes(qualifica));
 
