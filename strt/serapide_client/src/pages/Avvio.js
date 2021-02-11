@@ -29,6 +29,7 @@ const enhancers = withControllableState('section', 'toggleSection', 'vas')
 
 const UI = enhancers(({
     procedureAvvio: {node: {
+        conferenzaCopianificazione,
         dataScadenzaRisposta,
         notificaGenioCivile,
         garanteNominativo, garantePec,
@@ -146,11 +147,23 @@ const UI = enhancers(({
                         }
                         const {node: {dataRichiestaConferenza, risorse: {edges: elabConf = []} = {}} = {}} = conferenza
                         const elaboratiConferenza =  getResourcesByType(elabConf, AVVIO_DOCS.ELABORATI_CONFERENZA)
+                        let confMessage = '';
+                        switch (conferenzaCopianificazione) {
+                            case "NECESSARIA":
+                                confMessage = !!dataRichiestaConferenza ? `del ${formatDate(dataRichiestaConferenza)}` : "in attesa dei contributi tecnici";
+                                break;
+                            case "POSTICIPATA":
+                                confMessage = !!dataRichiestaConferenza ? `del ${formatDate(dataRichiestaConferenza)}` : "positcipata";
+                                break;
+                            case "NON_NECESSARIA":
+                                confMessage = "non necessaria";
+                                break;
+                        }
                         return (
                         <div className="row pt-4">
                             <div className="col-8 d-flex align-items-center">
                                 <span className="pl-1">RICHIESTA CONFERENZA DI COPIANIFICAZIONE</span>
-                                <span className="ml-3 font-weight-bold">{!!dataRichiestaConferenza ? `del ${formatDate(dataRichiestaConferenza)}` : "Nessuna richiesta"}</span>
+                                <span className="ml-3 font-weight-bold">{confMessage}</span>
                             </div>
                             
                             <div className="w-100 border-top pt-2 my-3 mx-4 border-serapide"></div>
