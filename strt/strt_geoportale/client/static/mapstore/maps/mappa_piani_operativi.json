@@ -2289,7 +2289,7 @@
             {
                 "type": "link",
                 "href": "http://territorio.irpet.it/#!/",
-                "title": "Osservatorio territoriale",
+                "title": "Osservatorio territoriale (IRPET)",
                 "group": "risorse.struttura_insediativa.processi_socioeconomici_irpet",
                 "visibility": false,
                 "tileSize": 512
@@ -10726,7 +10726,7 @@
             },
             {
                 "id": "risorse.aria.qualita_dellaria",
-                "title": "Qualit\u00e0 dell'aria",
+                "title": "Qualit\u00e0 dell'aria (ARPAT)",
                 "expanded": false
             },
             {
@@ -10746,7 +10746,7 @@
             },
             {
                 "id": "risorse.clima",
-                "title": "Clima",
+                "title": "Clima (LaMMA)",
                 "expanded": false
             },
             {
@@ -10781,7 +10781,7 @@
             },
             {
                 "id": "risorse.acqua.qualita_dellacqua",
-                "title": "Qualit\u00e0 dell'acqua",
+                "title": "Qualit\u00e0 dell'acqua (ARPAT)",
                 "expanded": false
             },
             {
@@ -10861,12 +10861,12 @@
             },
             {
                 "id": "risorse.struttura_insediativa.popolazione_irpet",
-                "title": "Popolazione (IRPET)",
+                "title": "Popolazione",
                 "expanded": false
             },
             {
                 "id": "risorse.struttura_insediativa.processi_socioeconomici_irpet",
-                "title": "Processi socio-economici (IRPET)",
+                "title": "Processi socio-economici",
                 "expanded": false
             },
             {
