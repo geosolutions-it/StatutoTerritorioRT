@@ -6,7 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import ConfigUtils from '@mapstore/utils/ConfigUtils';
+import {
+    setConfigProp,
+    setLocalConfigurationFile
+} from '@mapstore/utils/ConfigUtils';
 import axios from '@mapstore/libs/ajax';
 
 // dev tools to print out updated layers for static maps
@@ -39,22 +42,22 @@ axios.interceptors.request.use(
 
 // Fix mapLayout
 
-ConfigUtils.setConfigProp('mapLayout', { left: { sm: 300, md: 500, lg: 600 }, right: { md: 658 }, bottom: { sm: 30 } });
+setConfigProp('mapLayout', { left: { sm: 300, md: 500, lg: 600 }, right: { md: 658 }, bottom: { sm: 30 } });
 
 /**
  * Add custom (overriding) translations with:
  *
  * ConfigUtils.setConfigProp('translationsPath', ['./MapStore2/web/client/translations', './translations']);
  */
-ConfigUtils.setConfigProp('translationsPath', ['/static/mapstore/MapStore2/web/client/translations', '/static/mapstore/translations']);
-ConfigUtils.setConfigProp('themePrefix', 'Geoportale');
+setConfigProp('translationsPath', ['/static/mapstore/MapStore2/web/client/translations', '/static/mapstore/translations']);
+setConfigProp('themePrefix', 'Geoportale');
 
 /**
  * Use a custom plugins configuration file with:
  *
  * ConfigUtils.setLocalConfigurationFile('localConfig.json');
  */
-ConfigUtils.setLocalConfigurationFile('/static/mapstore/localConfig.json');
+setLocalConfigurationFile('/static/mapstore/localConfig.json');
 
 /**
  * Use a custom application configuration file with:
@@ -84,24 +87,26 @@ import main from '@mapstore/product/main';
 import appEpics from '@js/epics/app';
 
 import { loadVersion } from '@mapstore/actions/version';
+import Maps from '@mapstore/product/pages/Maps';
+import MapViewer from '@mapstore/product/pages/MapViewer';
 
 main({
     ...appConfig, pages: [{
         name: "home",
         path: "/",
-        component: require('@mapstore/product/pages/Maps')
+        component: Maps
     }, {
         name: "maps",
         path: "/maps",
-        component: require('@mapstore/product/pages/Maps')
+        component: Maps
     }, {
         name: "mapviewer",
         path: "/viewer/:mapType/:mapId",
-        component: require('@mapstore/product/pages/MapViewer')
+        component: MapViewer
     }, {
         name: "mapviewer",
         path: "/viewer/:mapId",
-        component: require('@mapstore/product/pages/MapViewer')
+        component: MapViewer
     }], themeCfg: { path: '/static/mapstore/themes', prefixContainer: '#geoportale' },
     appEpics
 }, plugins, cfg => ({

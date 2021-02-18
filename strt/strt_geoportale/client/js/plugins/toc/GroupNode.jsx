@@ -178,21 +178,21 @@ export class GroupNode extends Component {
 
             return (
                 <>
-                <Node
-                    node={node}
-                    className={`toc-default-group toc-group-${level}${placeholderClassName}${errorClassName}${emptyClassName}`}
-                    style={style}
-                    animateCollapse={false}
-                    type="group">
-                    {connectDragPreview(connectDropTarget(draggable ? connectDragSource(groupHead) : groupHead))}
-                    {isDragging || node.placeholder ? null : groupChildren}
-                    {isEmpty && <div className="ms-nodes-empty">
-                        <Message msgId={emptyMessageId || 'noLayerInGroup'}/>
-                    </div>}
-                </Node>
-                {inView && <Portal>
-                    <ReactTooltip place="top" type="dark" effect="solid"/>
-                </Portal>}
+                    <Node
+                        node={node}
+                        className={`toc-default-group toc-group-${level}${placeholderClassName}${errorClassName}${emptyClassName}`}
+                        style={style}
+                        animateCollapse={false}
+                        type="group">
+                        {connectDragPreview(connectDropTarget(draggable ? connectDragSource(groupHead) : groupHead))}
+                        {isDragging || node.placeholder ? null : groupChildren}
+                        {isEmpty && <div className="ms-nodes-empty">
+                            <Message msgId={emptyMessageId || 'noLayerInGroup'}/>
+                        </div>}
+                    </Node>
+                    {inView && <Portal>
+                        <ReactTooltip place="top" type="dark" effect="solid"/>
+                    </Portal>}
                 </>
             );
         }

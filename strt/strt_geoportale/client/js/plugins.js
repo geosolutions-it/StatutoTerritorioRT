@@ -24,7 +24,7 @@ import AddGroupPlugin from '@mapstore/plugins/AddGroup';
 // import AnnotationsPlugin from '@mapstore/plugins/Annotations';
 import AutoMapUpdatePlugin from '@mapstore/plugins/AutoMapUpdate';
 import BackgroundSelectorPlugin from '@mapstore/plugins/BackgroundSelector';
-import BackgroundSwitcherPlugin from '@mapstore/plugins/BackgroundSwitcher';
+// import BackgroundSwitcherPlugin from '@mapstore/plugins/BackgroundSwitcher';
 import BurgerMenuPlugin from '@mapstore/plugins/BurgerMenu';
 import CRSSelectorPlugin from '@mapstore/plugins/CRSSelector';
 import ContentTabs from '@mapstore/plugins/ContentTabs';
@@ -111,7 +111,7 @@ const UndoPlugin = History;
 // import UserManagerPlugin from '@mapstore/plugins/manager/UserManager';
 // import UserExtensionsPlugin from '@mapstore/plugins/UserExtensions';
 import VersionPlugin from '@mapstore/plugins/Version';
-import WFSDownloadPlugin from '@mapstore/plugins/WFSDownload';
+import LayerDownloadPlugin from '@mapstore/plugins/LayerDownload';
 import WidgetsBuilderPlugin from '@mapstore/plugins/WidgetsBuilder';
 import WidgetsPlugin from '@mapstore/plugins/Widgets';
 import WidgetsTrayPlugin from '@mapstore/plugins/WidgetsTray';
@@ -142,7 +142,7 @@ export const plugins = {
     // AnnotationsPlugin,
     AutoMapUpdatePlugin,
     BackgroundSelectorPlugin,
-    BackgroundSwitcherPlugin,
+    // BackgroundSwitcherPlugin,
     BurgerMenuPlugin,
     CRSSelectorPlugin,
     ContentTabs,
@@ -200,7 +200,7 @@ export const plugins = {
     ToolbarPlugin,
     UndoPlugin,
     VersionPlugin,
-    WFSDownloadPlugin,
+    LayerDownloadPlugin,
     ZoomAllPlugin,
     ZoomInPlugin,
     ZoomOutPlugin,
