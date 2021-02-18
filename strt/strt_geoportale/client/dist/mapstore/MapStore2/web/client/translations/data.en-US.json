@@ -27,7 +27,12 @@
         "showMore": "Show more...",
         "collapse": "Collapse",
         "expand": "Expand",
+        "Links": "Links",
         "Forbidden": "Forbidden",
+        "layerNameChangeError": {
+            "title": "Name change error",
+            "message": "The layer failed to reload with a changed name"
+        },
         "version": {
             "label": "Version"
         },
@@ -93,10 +98,31 @@
             "propertiesFormatDescription": "Shows feature info results as properties list",
             "templateFormatTitle": "TEMPLATE",
             "templateFormatDescription": "Customize feature info results format",
+            "hideFormatTitle": "DISABLE IDENTIFY",
+            "hideFormatDescription": "Disable the feature info for this layer",
             "templateFormatInfoAlert1": "Click on edit button to add a new template.",
             "templateFormatInfoAlert2": "Use ${ attribute } to wrap the properties you need to display",
             "templateFormatInfoAlertExample": "The id of the feature is ${ properties }",
             "templatePreview": "Template preview",
+            "visibilityLimits": {
+                "title": "Visibility limits",
+                "serverValuesUpdateUndefined": "The server did not provided scale visibility limits for this layer",
+                "serverValuesUpdate": "The server provided minimum and maximum scale visibility limits for this layer",
+                "serverValuesUpdateMinScale": "The server provided only minimum scale visibility limit for this layer",
+                "serverValuesUpdateMaxScale": "The server provided only maximum scale visibility limit for this layer",
+                "rangeError": "The minimum value is greater than the maximum value. Please provide a range where the maximum value is greater than the minimum value",
+                "serverValuesError": "It is not possible to request minimum and maximum scale visibility limits to the server. Probably due to error in the network connection or missing capability endpoint",
+                "updateWMSCapabilities": "Request minimum and maximum scale visibility limits to the server",
+                "maxValue": "Max value (excluded)",
+                "maxValuePlaceholder": "Select max value",
+                "valueNoResultsText": "No options match the input value",
+                "createOption": "Add new value {label}",
+                "minValue": "Min value (included)",
+                "minValuePlaceholder": "Select min value",
+                "type": "Limits type",
+                "scale": "Scale",
+                "resolution": "Resolution"
+            },
             "tooltip": {
                 "label": "Tooltip",
                 "title": "Title",
@@ -107,7 +133,9 @@
                 "right": "Right",
                 "left": "Left",
                 "bottom": "Bottom",
-                "top": "Top"
+                "top": "Top",
+                "editLayerName": "Edit layer name",
+                "confirmLayerName": "Confirm layer name change"
             },
             "legendOptions": {
               "title": "Legend",
@@ -120,8 +148,8 @@
                 "tooltip": "Note: This parameter requires specific configurations on GeoServer"
             }
         },
-        "longitude": "Longitude",
-        "latitude": "Latitude",
+        "longitude": "Lon",
+        "latitude": "Lat",
         "notification": {
             "update": "Update",
             "warning": "Warning",
@@ -160,6 +188,9 @@
         "elevationNotAvailable": "N/A",
         "mapScale": "Scale:",
         "showMousePositionCoordinates": "Show/Hide coordinates",
+        "showCrsSelector": "Select projection",
+        "crsSelectorFilterPlaceholder": "Filter projection",
+        "crsSelectorSelectedCRS": "Selected:",
         "menu": "Menu",
         "options": "Options",
         "settings": "Settings",
@@ -195,7 +226,44 @@
                 "jet": "{number, plural, =0 {Jet} =1 {Jet} other {Jet}}",
                 "brown": "{number, plural, =0 {Brown} =1 {Brown} other {Browns}}",
                 "purple": "{number, plural, =0 {Purple} =1 {Purple} other {Purples}}",
-                "random": "{number, plural, =0 {Random} =1 {Random} other {Random}}"
+                "random": "{number, plural, =0 {Random} =1 {Random} other {Random}}",
+                "orrd":"OrRd",
+                "pubu":"PuBu",
+                "bupu":"BuPu",
+                "oranges":"Oranges",
+                "bugn":"BuGn",
+                "ylorbr":"YlOrBr",
+                "ylgn":"YlGn",
+                "reds":"Reds",
+                "rdpu":"RdPu",
+                "greens":"Greens",
+                "ylgnbu":"YlGnBu",
+                "purples":"Purples",
+                "gnbu":"GnBu",
+                "greys":"Greys",
+                "ylorrd":"YlOrRd",
+                "purd":"PuRd",
+                "blues":"Blues",
+                "pubugn":"PuBuGn",
+                "viridis":"Viridis",
+                "spectral":"Spectral",
+                "rdylgn":"RdYlGn",
+                "rdbu":"RdBu",
+                "piyg":"PiYg",
+                "prgn":"PrGn",
+                "rdylbu":"RdYlBu",
+                "brbg":"BrBg",
+                "rdgy":"RdGy",
+                "puor":"PuOr",
+                "set2":"Set 2",
+                "accent":"Accent",
+                "set1":"Set 1",
+                "set3":"Set 3",
+                "dark2":"Dark 2",
+                "paired":"Paired",
+                "pastel2":"Pastel 2",
+                "pastel1":"Pastel 1",
+                "custom": "Custom"
             }
         },
         "home":{
@@ -306,6 +374,7 @@
 		},
         "resources": {
             "successSaved": "This resource has been saved correctly",
+            "savingError": "There was an error saving the resource",
             "deleteConfirmTitle": "Are you sure",
             "deleteConfirmMessage": "Are you sure you want to delete this resource?",
             "deleteConfirmButtonText": "Delete",
@@ -341,14 +410,14 @@
                 "unsavedMapCancelButtonText": "Close"
             },
             "geostories": {
-                "newGeostory": "New StoryMap",
-                "title": "StoryMaps ({count})",
-                "titleNoCount": "StoryMaps",
-                "create": "Create StoryMap",
-                "noGeostoryAvailable": "No StoryMap available",
-                "createANewOne": "Create a new StoryMap",
-                "deleteError": "There was an error deleting the StoryMap",
-                "errorLoadingGeostories": "There was an error loading StoryMaps"
+                "newGeostory": "New GeoStory",
+                "title": "GeoStories ({count})",
+                "titleNoCount": "GeoStories",
+                  "create": "Create GeoStory",
+                "noGeostoryAvailable": "No GeoStory available",
+                "createANewOne": "Create a new GeoStory",
+                "deleteError": "There was an error deleting the GeoStory",
+                "errorLoadingGeostories": "There was an error loading GeoStories"
             }
         },
         "map": {
@@ -408,7 +477,9 @@
                 "delete": "Delete details sheet",
                 "titleUnsavedChanges": "Are you sure to close without save your changes?",
                 "sureToClose": "Are you sure to close without save your changes?",
-                "fieldsChanged": "Some attributes has been changed"
+                "fieldsChanged": "Some attributes has been changed",
+                "showAtStartup": "Show at startup",
+                "showAsModal": "Show as modal"
             },
             "errors": {
                 "loading": {
@@ -465,7 +536,6 @@
             "removeLayer": "Remove layer",
             "loadingerror": "The layer has not been loaded correctly or not available.",
             "measure": "Measure",
-            "backgroundSwitcher": "Backgrounds",
             "layers": "Layers",
             "drawerButton": "Layers",
             "refreshTitle": "Update layers",
@@ -473,14 +543,25 @@
             "refreshMessage": "Reload WMS layers configuration from the server(s)",
             "refreshError": "Error updating layers: ",
             "epsgNotSupported": "CRS {epsg} not supported for zoom to layer",
+            "compareTool": "Compare tool",
+            "configureTool": "Configure",
+            "spyconfiguration": "Spyglass configuration",
+            "swipeconfiguration": "Swipe configuration",
+            "swipe": "Swipe",
+            "spyGlass": "Spy glass",
+            "direction": "Swipe direction",
+            "radius": "Radius",
             "filterIconEnabled": "Disable layer filter",
             "filterIconDisabled": "Enable layer filter",
+            "notVisibleZoomIn": "The layer is not visible because it is outside the resolution limits. Zoom in to show the layer",
+            "notVisibleZoomOut": "The layer is not visible because it is outside the resolution limits. Zoom out to show the layer",
             "refreshOptions": {
                 "bbox": "Update BBOX",
                 "search": "Update search options",
                 "title": "Update title",
                 "dimensions": "Update dimensions"
             },
+            "layerInfoTooltip": "Update layer title and description",
             "layerMetadata": {
                 "identifier": "Identifier",
                 "title": "Title",
@@ -610,6 +691,7 @@
         "identifyRevGeocodeCloseText": "Close",
         "identifyRevGeocodeError": "Unable to geocode",
         "identifyEdit": "Edit",
+        "identifyLayerSelectNoResult": "No layers found",
         "getFeatureInfoError": {
             "title": "Ooops! Something's wrong",
             "text": "An error has occurred during this <b>GetFeatureInfo</b> request"
@@ -636,7 +718,7 @@
             "MeasureArea": "Measure area",
             "MeasureBearing": "Measure bearing",
             "MeasureTrueBearing": "Measure true bearing",
-            "tooltip": "Measure length and area",
+            "tooltip": "Measure length, area and bearing",
             "title": "Measure",
             "lengthButtonText": "Line",
             "areaButtonText": "Area",
@@ -647,6 +729,7 @@
             "trueBearingLabel": "True bearing",
             "formula": "Formula for distance calculation",
             "showLabel": "Show measurement label",
+            "saveMeasure": "Save measurements to annotation",
             "addAsAnnotation": "Add as annotation",
             "newMeasure": "New annotation",
             "selectTool": "Select a measurement tool",
@@ -655,6 +738,7 @@
             "addAsLayer": "Add as layer"
         },
         "search":{
+            "layerMustBeVisible": "The target layer is inactive",
             "decimal": "Decimal",
             "aeronautical": "Aeronautical",
             "changeSearchInputField": "Change the search tool",
@@ -886,7 +970,6 @@
             "settingsPanel": "This is the helptext for the SettingsPanel",
             "gohome": "This is the helptext for Home",
             "measureComponent": "This is the helptext for the MeasureComponent",
-            "backgroundSwitcher": "This is the helptext for the BackgroundSwitcher",
             "layerSwitcher": "This is the helptext for the LayerSwitcher",
             "infoButton": "This is the helptext for the InfoButton",
             "locateBtn": "This is the helptext for the LocateBtn",
@@ -1005,18 +1088,21 @@
             "errorLoadingSymbols": "There was a problem loading the symbol list. Please, contact the administrator in order to check the configuration options.",
             "edit": "Edit",
             "remove": "Delete",
-            "save": "Save",
+            "save": "Save annotation",
+            "saveGeometry": "Save geometry",
             "cancel": "Cancel",
-            "back": "Back",
+            "back": "Back to annotation",
             "applyStyle": "Apply Style",
-            "addMarker": "Add a new geometry",
+            "addGeometry": "Add a new geometry",
             "styleGeometry": "Change style",
             "deleteGeometry": "Remove all annotation geometries",
+            "geometries": "Geometries",
             "removeannotation": "Do you want to remove the annotation with title: {title}?",
-            "removegeometry": "Do you want to remove all annotation features?",
+            "removegeometry": "Do you want to remove the annotation feature?",
             "confirm": "Confirm",
             "mandatory": "Mandatory field",
-            "emptygeometry": "Geometry cannot be empty",
+            "emptygeometry": "Add at least one valid geometry",
+            "empty": "No annotations yet, click on [+] to add annotations",
             "add": "New",
             "filter": "Filter annotations...",
             "undo": "Are you sure you want to abandon the annotation editing session?",
@@ -1026,8 +1112,19 @@
             "cancelModalGeom": "Cancel",
             "deleteFeature": "Delete this feature",
             "undoDeleteFeature": "Are you sure to delete this feature?",
+            "enableEdit": "Enable edit",
+            "editMeasurement": "Edit measurement",
             "title": "Annotations",
-            "zoomTo": "Zoom",
+            "zoomTo": "Zoom to annotation",
+            "zoomToGeometry": "Zoom to geometry",
+            "removeGeometry": "Remove",
+            "hide": "Hide annotation",
+            "show": "Show annotation",
+            "tabCoordinates": "Coordinates",
+            "warning": "Warning!",
+            "measureWarningText": "Navigating to edit measurement panel will remove any styling applied",
+            "notShowAgain": "Don't show this message again",
+            "tabStyle": "Style",
             "insertText": "Please insert the text annotation",
             "downloadtooltip": "Download annotations",
             "downloadcurrenttooltip": "Download current annotation",
@@ -1085,12 +1182,13 @@
             "changePwd": "Change Password",
             "newPwd": "New Password",
             "retypePwd": "Retype Password",
-            "passwordMinlenght": "Your password must be at least {minSize} character",
+            "passwordMinlenght": "Your password must be at least {data} character",
             "passwordCheckFail": "Passwords do not match!",
             "passwordInvalid": "Invalid password",
             "username": "Username",
             "password": "Password",
-            "passwordMessage": "Password must contain at least 6 characters",
+            "passwordMessage": "Password must contain at least 6 characters. Valid values for passwords include numerals, lower or upper-case letters and the following special characters: ! @ # $ % & * _.",
+            "passwordInvalidChar": "The password must not contain these characters: {data}",
             "passwordChanged": "Password changed",
             "passwordError": "Error changing password",
             "signIn":"Sign-in",
@@ -1173,6 +1271,7 @@
             "msgToCopyUrl": "Click to copy",
             "sharedTitle": "Check out my new map: ",
             "addCenterAndZoomParam": "Add center and zoom to sharing link",
+            "addMarkerAndZoomParam": "Add placemark and zoom to sharing link",
             "zoom": "Zoom",
             "marker": "Add marker on loaded map",
             "coordinate": "Coordinate",
@@ -1186,7 +1285,9 @@
             "addBboxParam": "Add bounding box param to sharing link",
             "wrongBboxParamTitle": "Invalid bounding box param",
             "wrongBboxParamMessage": "Bounding box params must be in EPSG:4326 and wrote as bbox=minx,miny,maxx,maxy",
-            "showHomeButton": "Link to MapStore home"
+            "showHomeButton": "Link to MapStore home",
+            "showSectionId": "Include scroll position",
+            "showConnections": "Show connections"
         },
         "snapshot": {
             "title": "Snapshot Preview",
@@ -1466,7 +1567,8 @@
             "deselectall": "Clear Selection",
             "backtosearch": "Back to search",
             "resultInfo": "{total, plural, =0 {No items} =1 {{total} Item of {total}} other {{start}-{end} of {total}}}",
-            "resultInfoVirtual": "{total, plural, =0 {No items} =1 {{total} Item of {total}} other {{total} Items}}",
+            "resultInfoVirtual": "{total, plural, =0 {No items} =1 {{total} Item} other {{total} Items}}",
+            "selectedInfo": "( {selected} Selected )",
             "pageInfo": "{totalPages, plural, =0 {No pages} =1 {Page {totalPages} of {totalPages}} other {Page {page} of {totalPages}}}",
             "pagination": {
                 "page": "Page",
@@ -1500,9 +1602,9 @@
                     "number": "Type a number or an expression. Examples: 10, > 2, < 10",
                     "date": "Type a date or an expression. Use {format} for the date.",
                     "geometry": {
-                        "disabled": "Filter clicking on the map",
-                        "enabled": "Click on the map to filter the results",
-                        "applied": "Remove the filter by mouse click"
+                        "disabled": "Filter clicking on map / Alt + mouse drag to draw a box filter. Hold also ctrl to add more features to the current filter",
+                        "enabled": "Click on map to select a feature / Alt + mouse drag to draw a box filter. Hold ctrl and click to select multiple features",
+                        "applied": "Clean the selection"
                     }
                 }
             },
@@ -1532,16 +1634,43 @@
                 "createNewChart": "Create a chart for the selected layer"
             }
         },
-        "wfsdownload": {
+        "layerdownload": {
             "title": "Export Data",
             "format": "File Format",
             "srs":  "Spatial Reference System",
             "export": "Export",
             "downloadonlycurrentpage": "Download only current page",
+            "cropDataSet": "Crop dataset to current viewport",
+            "downloadFilteredDataSet": "Download filtered dataset",
+            "advancedOptions": "Advanced options",
+            "compression": "Compression",
+            "tileWidth": "Tile width",
+            "tileHeight": "Tile height",
+            "quality": "Quality",
             "error": {
                 "title": "Error during export",
-                "invalidOutputFormat": "The selected export format is not available"
-            }
+                "invalidOutputFormat": "The selected export format is not available",
+                "downloadEstimatorTitle": "DownloadEstimator error",
+                "downloadEstimatorFailed": "DownloadEstimator request failed which means that exported file exceeds configured server limits. Try to change download options or add filter to your layer and try again."
+            },
+            "exportResultsMessages": {
+                "newExport": "The file will be available here when the export completes",
+                "exportFailure": "Export for layer \"{layerTitle}\" failed! Open export results dialog for more information.",
+                "exportSuccess": "Export for layer \"{layerTitle}\" finished successfully.",
+                "invalidHref": "The response from server did not contain a valid url address for exported files!"
+            },
+            "wpsExecuteError": {
+                "processFailed": "Download process failed! The server has returned the following exception report: \"{exceptionReport}\"",
+                "badResponse": "Download process failed! The server has returned incorrect data, error code: \"{errorCode}\"",
+                "executeProcessXhrFailed": "ExecuteProcess request failed! The server might be misconfigured or it has become unreachable",
+                "getExecutionStatusXhrFailed": "GetExecutionStatus request failed! The server might be misconfigured or it has become unreachable",
+                "unexpectedError": "Unexpected error occurred"
+            },
+            "noSupportedServiceFound": "The server doesn't support WFS or WPS download for this layer!"
+        },
+        "exportDataResults": {
+            "title": "Export data results",
+            "emptyStateMessage": "Export list is empty"
         },
         "widgets": {
             "types": {
@@ -1593,7 +1722,8 @@
                 "noLegendDescription": "The connected map has no layers to show in legend",
                 "nodatainviewport": "No data in the current viewport",
                 "timeoutExpired": "The service took too much time to respond. Maybe the query is too complex or the server is busy",
-                "genericError": "There was an error during data retrival"
+                "genericError": "There was an error during data retrival",
+                "genericErrorWithMessage": "There was an error during data retrieval: \"{message}\""
             },
             "builder": {
                 "header": {
@@ -1620,6 +1750,8 @@
                     "textPlaceholder": "Insert text...",
                     "useThisMap": "Use this map",
                     "configureMapOptions": "Configure map options",
+                    "enableIdentifyTool": "Enable identify tool",
+                    "disableIdentifyTool": "Disable identify tool",
                     "preview": "Preview",
                     "addLayer": "Add a layer to the map",
                     "useTheSelectedLayer": "Use the selected layer",
@@ -1648,6 +1780,8 @@
                     "confirmDelete": "Are you sure?",
                     "downloadData": "Download Data",
                     "exportImage": "Export Image",
+                    "maximize": "Maximize",
+                    "minimize": "Minimize",
                     "pin": "Pin",
                     "unpin": "Unpin",
                     "hide": "Hide",
@@ -1682,6 +1816,15 @@
             "widgetOptionsTitle": "Configure Widget Info",
             "placeHolder":{
                 "default":"Select attribute"
+            },
+            "operations": {
+              "COUNT": "COUNT",
+              "SUM":"SUM",
+              "AVG":"AVG",
+              "STDDEV":"STDDEV",
+              "MIN":"MIN",
+              "MAX":"MAX",
+              "NONE": "No Operation"
             },
             "groupByAttributes": {
                 "line": "X Attribute",
@@ -1730,25 +1873,33 @@
                 "bar": "Display Legend",
                 "gauge": "Display labels"
             },
-            "displayCartesian": {
-                "line": "Hide Grid",
-                "bar": "Hide Grid"
-            },
-            "xAxisAngle":{
-                "line": "X Axis: Label rotation angle °",
-                "bar": "X Axis: Label rotation angle °"
-            },
-            "yAxis":{
-                "line": "Hide Y axis",
-                "bar": "Hide Y axis"
-            },
-            "yAxisLabel":{
-                "line": "Legend Label",
-                "bar": "Legend Label"
-            },
-            "advancedOptions":{
-                "line": "Advanced Options",
-                "bar": "Advanced Options"
+            "advanced": {
+              "displayCartesian": "Hide Grid",
+              "xAxis": "X axis",
+              "xAxisAngle": "Label rotation",
+              "hideLabels": "Hide labels",
+              "format": "Format",
+              "prefix": "Prefix",
+              "suffix": "Suffix",
+              "examples": "Examples",
+              "formatExamples": "<div><ul><li><code>.0%</code>: rounded percentage, '12%'</li><li><code>.2s</code>:SI-prefix with two significant digits, '42M'</li><li><code>,.2r</code>: grouped thousands with two significant digits '4,200'</li></ul><em>More information about formatting syntax <a target=\"_blank\" href=\"https://d3-wiki.readthedocs.io/zh_CN/master/Formatting/\">here</a>.</em></div>",
+              "formula": "Formula",
+              "formulaExamples": "<div>Transform the value using a formula. Use the variable <code>value</code> in the expression:<h5>Examples</h5><ul><li><code>value + 2</code></li><li><code>value / 100</code></li></ul><em>More information about the syntax <a target=\"_blank\" href=\"https://github.com/m93a/filtrex#expressions\">here</a>.</em></div>",
+              "xAxisType": "Type",
+              "forceTicks": "Never skip labels",
+              "maxXAxisLabels": "The labels can not anyway be more than {max}",
+              "yAxis":  "Y axis",
+              "yAxisType": "Type",
+              "yAxisLabel": "Legend Label",
+              "title": "Advanced Options",
+              "legend": "Legend",
+              "axisTypes": {
+                "auto": "Auto",
+                "linear": "Linear",
+                "category": "Category",
+                "log": "Log",
+                "date": "Date"
+              }
             },
             "tray": {
                 "title": "Widgets",
@@ -1786,6 +1937,21 @@
                 "addACardToTheDashboard": "Add a widget to the dashboard",
                 "showConnections": "Show connections",
                 "hideConnections": "HideConnections"
+            },
+            "emptyTitle": "The dashboard is empty"
+        },
+        "dashboardEmbedded": {
+            "loadingSpinner": "Loading Dashboard",
+            "errors":{
+                "loading": {
+                    "title": "Error loading dashboard",
+                    "dashboardNotAccessible": "You don't have permission to access this dashboard",
+                    "pleaseLogin": "This dashboard is not public",
+                    "dashboardDoesNotExist": "The dashboard you are trying to access doesn't exist",
+                    "unknownError": "There was an error loading the dashboard",
+                    "notFound": "Dashboard not found",
+	                "notAccessible": "Dashboard not accessible"
+                }
             },
             "emptyTitle": "The dashboard is empty"
         },
@@ -1898,7 +2064,9 @@
             "deletedStyleErrorMessage": "Could not delete current style",
             "savedStyleTitle": "Style saved",
             "savedStyleMessage": "Style has been successfully saved",
-            "missingAvailableStyles": "Missing styles",
+            "errorTitle": "StyleEditor error",
+            "parsingCapabilitiesError": "<h4>Possible causes:</h4> it was not possible parse the capabilities and retrieve the styles",
+            "globalError": "<h4>Possible causes:</h4> it was not possible to connect to the service",
             "missingAvailableStylesMessage": "<ul><h4>Possible causes:</h4> <li>Selected layer is a layer group</li><li>Layer is not correctly configured server side</li></ul>",
             "createTmpErrorTitle": "New Temporary Style",
             "createTmpStyleErrorMessage": "Temporary style could not be created. This could due an unsupported style format on the style service",
@@ -1914,7 +2082,142 @@
             "setDefaultStyleSuccessTitle": "Success on set default style",
             "setDefaultStyleSuccessMessage": "Default Style has been successfully applied",
             "setDefaultStyleErrorTitle": "Error on set default style",
-            "setDefaultStyleErrorMessage": "It's not possible apply selected style as default"
+            "setDefaultStyleErrorMessage": "It's not possible apply selected style as default",
+
+            "enterLegendLabelPlaceholder": "Enter legend label",
+            "addMarkSymbolizer": "Add mark symbolizer",
+            "addMarkRule": "Add mark rule",
+            "shape": "Shape",
+            "fill": "Fill color",
+            "strokeColor": "Stroke color",
+            "strokeWidth": "Stroke width",
+            "radius": "Radius",
+            "rotation": "Rotation",
+            "addIconSymbolizer": "Add icon symbolizer",
+            "addIconRule": "Add icon rule",
+            "image": "Image",
+            "opacity": "Opacity",
+            "size": "Size",
+            "addLineSymbolizer": "Add line symbolizer",
+            "addLineRule": "Add line rule",
+            "lineStyle": "Line style",
+            "lineCap": "Line cap",
+            "lineJoin": "Line join",
+            "addFillSymbolizer": "Add fill symbolizer",
+            "addFillRule": "Add fill rule",
+            "outlineColor": "Outline color",
+            "outlineWidth": "Outline width",
+            "addTextSymbolizer": "Add text symbolizer",
+            "addTextRule": "Add text rule",
+            "label": "Label",
+            "fontFamily": "Font family",
+            "fontColor": "Font color",
+            "fontSize": "Font size",
+            "fontStyle": "Font style",
+            "fontWeight": "Font weight",
+            "haloColor": "Halo color",
+            "haloWidth": "Halo width",
+            "offsetX": "Offset x",
+            "offsetY": "Offset y",
+            "addRasterSymbolizer": "Add raster symbolizer",
+            "addRasterRule": "Add raster rule",
+            "colorRamp": "Color ramp",
+            "reverse": "Reverse order",
+            "attribute": "Attribute",
+            "method": "Method",
+            "intervals": "Intervals",
+            "continuous": "Continuous colors",
+
+            "lineCapButt": "Butt",
+            "lineCapRound": "Round",
+            "lineCapSquare": "Square",
+
+            "lineJoinBevel": "Bevel",
+            "lineJoinRound": "Round",
+            "lineJoinMiter": "Miter",
+            "fontStyleNormal": "Normal",
+            "fontStyleItalic": "Italic",
+            "fontWeightNormal": "Normal",
+            "fontWeightBold": "Bold",
+            "boolTrue": "True",
+            "boolFalse": "False",
+
+            "circle": " Circle",
+            "square": "Square",
+            "triangle": "Triangle",
+            "star": "Star",
+            "cross": "Cross",
+            "x": "X",
+            "verticalLine": "Vertical line",
+            "horizontalLine": "Horizontal line",
+            "slash": "Slash",
+            "backslash": "Backslash",
+            "dot": "Dot",
+            "plus": "Plus",
+            "times": "Times",
+            "openArrow": "Open arrow",
+            "closedArrow": "Closed arrow",
+            "band": "Band",
+            "none": "None",
+            "normalize": "Normalize",
+            "histogram": "Histogram",
+            "contrastEnhancement": "Contrast enhancement",
+            "placeholderInput": "Enter value",
+            "placeholderEnterImageUrl": "Enter image url",
+            "selectPlaceholder": "Select value",
+            "noResultsSelectInput": "No results",
+            "channelAuto": "Auto",
+            "openFilterBuilder": "Open filter builder",
+            "removeRule": "Remove rule",
+
+            "openScaleDenominator": "Open scale denominator filter",
+            "selectScale": "Select scale",
+            "noResultScales": "No scale match your filter",
+            "maxScaleDenominator": "Max scale",
+            "minScaleDenominator": "Min scale",
+
+            "simpleStyle": "Simple style",
+            "classificationStyle": "Classification style",
+            "patternMarkStyle": "Pattern mark style",
+            "patternIconStyle": "Pattern icon style",
+            "singleBand": "Single band",
+            "rgbaBands": "RGB bands",
+            "pseudoColor": "Pseudo color",
+
+            "undoStyle": "Undo style",
+            "redoStyle": "Redo style",
+
+            "equalInterval": "Equal interval",
+            "quantile": "Quantile",
+            "jenks": "Natural breaks (Jenks)",
+            "standardDeviation": "Standard deviation",
+            "switchToTextareaEditor": "Switch to text editor",
+            "switchToVisualEditor": "Switch to visual editor",
+            "alertForceTranslate": "You will lose all the changes added in the text mode by switching to visual editor. Are you sure to switch to visual style editor mode?",
+            "stayInTextareaEditor": "No, continue with text editor",
+            "useLatestValidStyle": "Yes, switch to visual editor",
+            "validationError": "Validation error",
+            "incorrectPropertyInputError": "This is probably due to missing or invalid value in the property inputs of the style editor.",
+
+            "emptyRuleEditorTitle": "Add new rules",
+            "emptyRuleEditor": "There are not rules for this style. Add a new rule by clicking on the desidered symbolizer type in the toolbar",
+            "classificationError": "Service unavailable. Currently it is not possible to create a classification",
+            "classificationRasterError": "Service unavailable. Currently it is not possible to create a raster classification",
+            "redChannel": "Red channel",
+            "greenChannel": "Green channel",
+            "blueChannel": "Blue channel",
+            "grayChannel": "Channel",
+            "ruleClassification": "Classification",
+            "ruleRaster": "Raster",
+            "customInterval": "Custom Interval",
+            "styleEmpty": "This style has no rules",
+            "incompleteClassification": "The classification is incomplete bacause the entries are not available. Ensure all properties are corretly provided",
+            "imageSrcEmpty": "Missing image source url in the icon style",
+            "imageSrcLoadError": "The provided image source could not be loaded. Try with a different url or ensure the source is reachable by MapStore",
+            "imageSrcInvalidBase64": "This is not a valid base64 image. Some style renderer does not support this type of source, you could use an external url source instead",
+            "imageSrcNotSupportedBase64Image": "Some style renderer does not support base64 images even if the current source is valid",
+            "warningTextOrderTitle": "Warning",
+            "warningTextOrder": "The order of rule containing text style could not match the rendering order on map. This behaviour is related to some rendering engine that draw label on top of other rules"
         },
         "playback": {
             "settings": {
@@ -2071,8 +2374,11 @@
             "selectworkspace": "You need to select the workspace to enable advanced options"
         },
         "geostory": {
+            "storyResources": "Story Resources",
+            "geostoreMap": "MapStore Maps",
             "loadingSpinner": "Loading Story",
             "addTitleSection": "Add Title Section",
+            "addBannerSection": "Add Banner Section",
             "addParagraphSection": "Add Paragraph Section",
             "addImmersiveSection": "Add Immersive Section",
             "addMediaSection": "Add Media Section",
@@ -2139,6 +2445,7 @@
                     "htmlTitlePlaceholder": "Insert title",
                     "htmlPlaceholder": "Insert text here...",
                     "titleTitle": "Title Section",
+                    "titleBanner": "Banner Section",
                     "titleParagraph": "Paragraph Section",
                     "titleImmersive": "Immersive Section",
                     "titleImmersiveContent": "Immersive Content",
@@ -2164,23 +2471,29 @@
                     "backConfirmNo": "No",
                     "backConfirmYes": "Yes",
                     "save": "Save settings",
-                    "headerTitle" : "Story Settings",
+                    "storyTheme" : "Story theme",
+                    "storyHeader" : "Story Header",
                     "title" : "Title",
                     "titlePlaceholder" : "Enter Title",
                     "logo" : "Logo",
-                    "logoPlaceholder": "Logo must not go beyond 48 px of height and is suggested a width of 96 px. max 500kb",
+                    "logoPlaceholder": "Drop your logo image here or click to select an image file (supported formats are png and jpeg)",
                     "autoplay" : "Autoplay",
                     "enableAutoplay" : "Enable autoplay",
                     "autoplayInterval" : "Autoplay interval (seconds)",
                     "autoplayIntervalPlaceholder" : "Enable autoplay interval",
                     "navbar" : "Navigation bar",
                     "showNavbar" : "Show navbar",
-                    "theme": "Theme",
+                    "theme": "Default Theme",
+                    "fontFamily": "Font Family",
+                    "webFontLoadError": "Failed to load some fonts from local configuration",
+                    "fontSize": "Font size",
+                    "overlay": "Overlay",
                     "templateTooltip":"This setting allows you to enable the Identify function on the map by defining a generic format for all the layers. It is possible to configure a different format for each single layer using the advanced map editor (pencil icon). For more information, see the <a href='https://mapstore.readthedocs.io/en/latest/user-guide/layer-settings/#templates' target='_blank'> user guide </a>. If a layer has defined its own Identify format, it will be used instead of the generic one set at the map level."
                 }
             },
             "errors": {
                 "loading": {
+                    "notFound": "Geostory not found",
                     "title": "Error",
                     "unknownError": "Unknown error",
                     "pleaseLogin": "Please login",
@@ -2216,6 +2529,20 @@
                 "shadowLabel": "Shadow",
                 "useAlternativeTextColor": "Use alternative text color",
                 "alternativeTextColorPopover": "<p>Warning: the selected text color could be not readable on this background.</p><p>An alternative text color is {color} &nbsp;<span class=\"ms-custom-theme-picker-alternative-text\" style=\"background-color:{color}\"></span></p>"
+            }
+        },
+        "geostoryEmbedded" : {
+            "loadingSpinner": "Loading Story",
+            "errors": {
+                "loading": {
+                    "notFound": "Geostory not found",
+                    "title": "Error",
+                    "unknownError": "Unknown error",
+                    "notAccessible": "This story is not accessible",
+                    "pleaseLogin": "Resource is not public",
+                    "geostoryNotAccessible": "You don't have permission to access this story",
+                    "geostoryDoesNotExist": "This story does not exist"
+                }
             }
         },
         "saveDialog": {
@@ -2288,7 +2615,8 @@
             "mediaList" : {
                 "removeResourceTitle": "Are you sure?",
                 "confirmRemoveResource": "Do you want to remove this media resource from the story?",
-                "confirmRemoveUsedResource": "This resource will also be removed from all the sections/contents where It's used leaving them empty. Do you want to remove It from the story?"
+                "confirmRemoveUsedResource": "This resource will also be removed from all the sections/contents where It's used leaving them empty. Do you want to remove It from the story?",
+                "resultsCount": "{count} of {total} {total, plural, one {Result} other {Results}}"
             },
             "imageList": {
                 "emptyList": "Click on the plus button to add a new image. See the user guide <a href='https://mapstore.readthedocs.io/en/latest/user-guide/media-editor-window/#images' target='_blank'/>here</a>"
@@ -2484,7 +2812,7 @@
             "descriptionGeorchestra": "Shows the version of GeOrchestra in map settings tool",
             "title": "Version"
           },
-          "WFSDownload": {
+          "LayerDownload": {
             "description": "Allows to download data from the Attribute Table",
             "title": "Download Data"
           },
@@ -2495,6 +2823,10 @@
           "WidgetsTray": {
             "description": "A tray to collapse and expand widgets on map. ",
             "title": "Widgets Tray"
+          },
+          "Globe": {
+            "description": "Sidebar button to toggle 3D mode on/off",
+            "title": "3D"
           },
           "ZoomAll": {
             "description": "Sidebar button to zoom to the map extent of the map",
@@ -2666,6 +2998,27 @@
             },
             "deleteError": "Unexpected error occurred while deleting the map",
             "updateError": "Unexpected error occurred while saving the map"
+        },
+        "layerInfo": {
+            "title": "Update layers titles and descriptions",
+            "noLayers": "No layers found",
+            "syncButton": "Sync titles and descriptions",
+            "selectAll": "Select all",
+            "deselectAll": "Deselect all",
+            "updatingLayers": "Updating layers {updatedCount}/{totalCount}",
+            "tooltips": {
+                "syncSuccess": "Title and description were successfully updated for this layer",
+                "syncError": "It's not possible to update the title and description of this layer. You could verify if all layer options are correct in the settings panel"
+            },
+            "syncingLayersSavingToServerError": {
+                "title": "Server Saving Error",
+                "message": "An unexpected error occurred when saving updated layers to server"
+            },
+            "syncingLayersGeneralError": {
+                "title": "General Error",
+                "message": "An unexpected error occurred during layers syncing. There is probably a bug in MapStore"
+            },
+            "layerType": "type: {type}"
         },
         "tutorial": {
             "title": "Tutorial",

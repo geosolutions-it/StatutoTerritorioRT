@@ -86,6 +86,8 @@
       "propertiesFormatDescription": "Näyttää ominaisuustietojen tulokset ominaisuusluettelona",
       "templateFormatTitle": "MALLI",
       "templateFormatDescription": "Mukauta ominaisuustietojen tulokset",
+      "hideFormatTitle": "VAMMAISEN TUNNISTAMINEN",
+      "hideFormatDescription": "Poista ominaisuuden tiedot tältä tasolta",
       "templateFormatInfoAlert1": "Napsauta Muokkaa-painiketta lisätäksesi uuden mallin.",
       "templateFormatInfoAlert2": "Käytä ${ attribute } kääriäksesi näytettävät ominaisuudet",
       "templateFormatInfoAlertExample": "Kohteen ID on ${ properties }",
@@ -142,6 +144,9 @@
     "elevationNotAvailable": "N/A",
     "mapScale": "Mittakaava:",
     "showMousePositionCoordinates": "Näytä/piilota koordinaatit",
+    "showCrsSelector": "Select projection",
+    "crsSelectorFilterPlaceholder": "Filter projection",
+    "crsSelectorSelectedCRS": "Selected:",
     "menu": "Valikko",
     "options": "Vaihtoehdot",
     "settings": "Asetukset",
@@ -444,7 +449,6 @@
       "removeLayer": "Poista taso",
       "loadingerror": "Tasoa ei ole ladattu oikein tai sitä ei ole saatavilla",
       "measure": "Toimenpide",
-      "backgroundSwitcher": "Taustat",
       "layers": "Tasot",
       "drawerButton": "Tasot",
       "refreshTitle": "Päivitä tasot",
@@ -792,7 +796,6 @@
       "settingsPanel": "Tämä on SettingsPanelin ohjeteksti",
       "gohome": "Tämä on pääsivun ohjeteksti",
       "measureComponent": "Tämä on toimenpidekomponentin ohjeteksti",
-      "backgroundSwitcher": "Tämä on BackgroundSwitcherin ohjeteksti",
       "layerSwitcher": "Tämä on LayerSwitcherin ohjeteksti",
       "infoButton": "Tämä on InfoButton-ohjeteksti",
       "locateBtn": "Tämä on LocateBtn-ohjelman ohjeteksti",
@@ -915,7 +918,7 @@
       "cancel": "Peruuta",
       "back": "Takaisin",
       "applyStyle": "Käytä tyyliä",
-      "addMarker": "Lisää uusi geometria",
+      "addGeometry": "Lisää uusi geometria",
       "styleGeometry": "Vaihda tyyli",
       "deleteGeometry": "Poista kaikki merkintägeometriat",
       "removeannotation": "Haluatko poistaa merkinnät otsikolla: {title}?",
@@ -990,7 +993,7 @@
       "changePwd": "Vaihda salasana",
       "newPwd": "Uusi salasana",
       "retypePwd": "Kirjoita salasana uudelleen",
-      "passwordMinlenght": "Salasan tulee olla vähintään {minSize} merkkiä",
+      "passwordMinlenght": "Salasan tulee olla vähintään {data} merkkiä",
       "passwordCheckFail": "Salasanat eivät täsmää!",
       "passwordInvalid": "Virheellinen salasana",
       "username": "Käyttäjänimi",
@@ -1404,7 +1407,7 @@
         "createNewChart": "Luo kaavio valitulle tasolle"
       }
     },
-    "wfsdownload": {
+    "layerdownload": {
       "title": "Vie tietoja",
       "format": "Tiedostomuoto",
       "srs": "SRS",
@@ -1941,6 +1944,7 @@
     "geostory": {
       "loadingSpinner": "Ladataan tarinaa",
       "addTitleSection": "Lisää otsikko-osa",
+      "addBannerSection": "Lisää banderolli",
       "addParagraphSection": "Lisää kappaleosa",
       "addImmersiveSection": "Lisää ympäröivä osio",
       "addMediaSection": "Lisää mediaosa",
@@ -1996,6 +2000,7 @@
           "htmlTitlePlaceholder": "Lisää otsikko",
           "htmlPlaceholder": "Lisää teksti tähän...",
           "titleTitle": "Otsikkoalue",
+          "titleBanner": "Banneriosa",
           "titleParagraph": "Kappalealue",
           "titleImmersive": "Syventävä alue",
           "titleImmersiveContent": "Syventävä sisältö",
@@ -2021,17 +2026,22 @@
           "backConfirmNo": "Ei",
           "backConfirmYes": "Kyllä",
           "save": "Tallenna asetukset",
-          "headerTitle": "Tarina-asetukset",
+          "storyTheme" : "Tarinan teema",
+          "storyHeader" : "Tarinan otsikko",
           "title": "Otsikko",
           "titlePlaceholder": "Kirjoita otsikko",
           "logo": "Logo",
-          "logoPlaceholder": "Logo ei saa ylittää 48 px korkeutta, ja sen leveydeksi suositellaan 96 px. enintään 500 kt",
+          "logoPlaceholder": "Pudota logo -kuvake tähän tai valitse kuvatiedosto napsauttamalla (tuetut muodot ovat png ja jpeg)",
           "autoplay": "Automaattinen toisto",
           "enableAutoplay": "Ota automaattinen toisto käyttöön",
           "autoplayInterval": "Automaattisen toiston väliaika (sekunteina)",
           "autoplayIntervalPlaceholder": "Ota automaattisen toiston väliaika käyttöön",
           "navbar": "Navigointipalkki",
-          "showNavbar": "Näytä navigointipalkki"
+          "showNavbar": "Näytä navigointipalkki",
+          "theme": "Oletusteema",
+          "fontFamily": "Kirjasinperhe",
+          "webFontLoadError": "Joidenkin kirjasinten lataus epäonnistui paikallisesta kokoonpanosta",
+          "fontSize": "Fonttikoko"
         }
       },
       "errors": {
@@ -2311,7 +2321,7 @@
         "descriptionGeorchestra": "Näyttää GeOrchestra-version kartta-asetukset -työkalussa",
         "title": "Versio"
       },
-      "WFSDownload": {
+      "LayerDownload": {
         "description": "Mahdollistaa tietojen lataamisen attribuuttitaulusta",
         "title": "Lataa tiedot"
       },
