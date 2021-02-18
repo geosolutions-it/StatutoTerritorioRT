@@ -23,6 +23,7 @@ import ReactTooltip from 'react-tooltip';
 import Portal from '@mapstore/components/misc/Portal';
 import tooltip from '@mapstore/components/misc/enhancers/tooltip';
 import { InView } from 'react-intersection-observer';
+import { isInsideResolutionsLimits } from '@mapstore/utils/LayersUtils';
 
 const GlyphIndicator = tooltip(Glyphicon);
 
@@ -32,12 +33,12 @@ const layerToolsByTypes = {
         Tools: ({ node, currentZoomLvl, scales, legendOptions }) => {
             return (
                 <>
-                <WMSLegend
-                    node={node}
-                    currentZoomLvl={currentZoomLvl}
-                    scales={scales}
-                    { ...legendOptions }
-                />
+                    <WMSLegend
+                        node={node}
+                        currentZoomLvl={currentZoomLvl}
+                        scales={scales}
+                        { ...legendOptions }
+                    />
                 </>
             );
         }
@@ -74,7 +75,8 @@ export class LayerNode extends Component {
         isDragging: PropTypes.bool,
         replaceNodeOptions: PropTypes.func,
         onRemove: PropTypes.func,
-        enableInlineRemove: PropTypes.func
+        enableInlineRemove: PropTypes.func,
+        resolution: PropTypes.number
     };
 
     static defaultProps = {
@@ -95,6 +97,13 @@ export class LayerNode extends Component {
         connectDropTarget: (cmp) => cmp,
         onRemove: () => {},
         enableInlineRemove: () => true
+    };
+
+    getVisibilityMessage = () => {
+        const maxResolution = this.props.node.maxResolution || Infinity;
+        return this.props.resolution >=  maxResolution
+            ? 'toc.notVisibleZoomIn'
+            : 'toc.notVisibleZoomOut';
     };
 
     renderNode(inView) {
@@ -119,7 +128,8 @@ export class LayerNode extends Component {
             titleTooltip,
             indicators,
             onRemove,
-            enableInlineRemove
+            enableInlineRemove,
+            resolution
         } = this.props;
 
         const node = replaceNodeOptions?.(nodeProp, 'layer') || nodeProp;
@@ -131,7 +141,8 @@ export class LayerNode extends Component {
 
         const placeholderClassName = (isDragging || node.placeholder ? ' is-placeholder ' : '');
 
-        const hideClassName = node.type !== 'link' && (!node.visibility || node.invalid) ? ' ms-hide' : '';
+        const insideResolutionsLimits = isInsideResolutionsLimits(node, resolution);
+        const hideClassName = node.type !== 'link' && (!node.visibility || node.invalid || !insideResolutionsLimits) ? ' ms-hide' : '';
         const selectedClassName = selectedNodes.find((nodeId) => nodeId === node.id) ? ' ms-selected' : '';
         const errorClassName = node.loadingError === 'Error' ? ' ms-node-error' : '';
         const warningClassName = node.loadingError === 'Warning' ? ' ms-node-warning' : '';
@@ -164,7 +175,8 @@ export class LayerNode extends Component {
         const head = (
             <div
                 onClick={(event) =>
-                    node.type !== 'link' && onSelect(node.id, 'layer', event.ctrlKey)}>
+                    node.type !== 'link' && onSelect(node.id, 'layer', event.ctrlKey)}
+            >
                 <SideCard
                     size="sm"
                     style={{
@@ -223,6 +235,10 @@ export class LayerNode extends Component {
                                 Element: () => <GlyphIndicator glyph="exclamation-mark" tooltipId="toc.loadingerror"/>
                             },
                             {
+                                visible: !!(node.visibility && !insideResolutionsLimits),
+                                Element: () => <GlyphIndicator glyph="info-sign" tooltipId={this.getVisibilityMessage()}/>
+                            },
+                            {
                                 glyph: node.visibility ? 'eye-open' : 'eye-close',
                                 tooltipId: inView
                                     ? warningClassName ? 'toc.toggleLayerVisibilityWarning' : 'toc.toggleLayerVisibility'
@@ -237,14 +253,14 @@ export class LayerNode extends Component {
                     />}
                     body={
                         <>
-                        {expanded && Body && <div className="ms-layer-node-body"><Body { ...this.props } /></div>}
-                        {node.type !== 'link' && activateOpacityTool &&
+                            {expanded && Body && <div className="ms-layer-node-body"><Body { ...this.props } /></div>}
+                            {node.type !== 'link' && activateOpacityTool &&
                             <OpacitySlider
                                 opacity={node.opacity}
                                 disabled={!node.visibility}
                                 hideTooltip={hideOpacityTooltip}
                                 onChange={opacity => onUpdateNode(node.id, 'layer', { opacity })}/>
-                        }
+                            }
                         </>
                     }
                 />

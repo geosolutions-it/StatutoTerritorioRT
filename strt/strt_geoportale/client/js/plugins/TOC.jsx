@@ -13,12 +13,14 @@ import { Nav, NavItem } from 'react-bootstrap';
 import { selectNode, removeLayer, updateNode } from '@mapstore/actions/layers';
 import { selectedNodesSelector } from '@mapstore/selectors/layers';
 import { createPlugin } from '@mapstore/utils/PluginsUtils';
-import { TOCPlugin as MSTOCPlugin, reducers, epics } from '@mapstore/plugins/TOC';
+import MSTOC from '@mapstore/plugins/TOC';
 import PropTypes from 'prop-types';
 import HeaderNode from '@js/plugins/toc/HeaderNode';
 import GroupNode from '@js/plugins/toc/GroupNode';
 import LayerNode from '@js/plugins/toc/LayerNode';
 import url from 'url';
+
+const { TOCPlugin: MSTOCPlugin, reducers, epics } = MSTOC;
 
 const ConnectedLayerNode = connect(() => ({
     enableInlineRemove: node => !!(node?.group === 'Default' || node?.group === undefined)

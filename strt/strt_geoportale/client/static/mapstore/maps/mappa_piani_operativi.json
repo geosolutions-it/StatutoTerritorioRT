@@ -107,7 +107,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 33.893125
             },
             {
                 "type": "wms",
@@ -136,7 +138,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -165,7 +169,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -194,7 +200,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 18.520833333333332
             },
             {
                 "type": "wms",
@@ -223,7 +231,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 2645.8597916666668
             },
             {
                 "type": "wms",
@@ -273,7 +283,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -323,7 +335,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -373,7 +387,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 39.6875
             },
             {
                 "type": "wms",
@@ -423,7 +439,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 39.6875
             },
             {
                 "type": "wms",
@@ -473,7 +491,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 39.6875
             },
             {
                 "type": "wms",
@@ -523,7 +543,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -573,7 +595,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 39.6875
             },
             {
                 "type": "wms",
@@ -623,7 +647,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 26.458333333333332
             },
             {
                 "type": "wms",
@@ -673,7 +699,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -1011,7 +1039,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -1061,7 +1091,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 26.458333333333332
             },
             {
                 "type": "wms",
@@ -1111,7 +1143,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 26.458333333333332
             },
             {
                 "type": "wms",
@@ -1161,7 +1195,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -1211,7 +1247,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -1261,7 +1299,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -1311,7 +1351,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -1361,7 +1403,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -1507,7 +1551,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -1797,7 +1843,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -1826,7 +1874,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -1855,7 +1905,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -1884,7 +1936,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -1913,7 +1967,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -1942,7 +1998,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -1971,7 +2029,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2000,7 +2060,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2029,7 +2091,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2058,7 +2122,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2087,7 +2153,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2116,7 +2184,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2226,7 +2296,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 13.229166666666666
             },
             {
                 "type": "wms",
@@ -2255,7 +2327,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 13.229166666666666
             },
             {
                 "type": "wms",
@@ -2284,7 +2358,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "link",
@@ -2321,7 +2397,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2350,7 +2428,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2379,7 +2459,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2408,7 +2490,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2437,7 +2521,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2466,7 +2552,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 2645.8333333333335
             },
             {
                 "type": "wms",
@@ -2495,7 +2583,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2524,7 +2614,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2553,7 +2645,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2582,7 +2676,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -2611,7 +2707,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 2645.8597916666668
             },
             {
                 "type": "wms",
@@ -2640,7 +2738,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2669,7 +2769,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2698,7 +2800,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2727,7 +2831,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2756,7 +2862,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2785,7 +2893,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2814,7 +2924,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2843,7 +2955,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2872,7 +2986,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2901,7 +3017,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2930,7 +3048,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -2959,7 +3079,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -2988,7 +3110,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -3017,7 +3141,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3046,7 +3172,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3075,7 +3203,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3104,7 +3234,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3133,7 +3265,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3162,7 +3296,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3191,7 +3327,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3220,7 +3358,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3249,7 +3389,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -3278,7 +3420,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3307,7 +3451,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3336,7 +3482,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -3365,7 +3513,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -3394,7 +3544,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -3423,7 +3575,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -3452,7 +3606,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -3481,7 +3637,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -3510,7 +3668,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3539,7 +3699,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3568,7 +3730,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3597,7 +3761,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3626,7 +3792,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3655,7 +3823,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3684,7 +3854,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3713,7 +3885,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3742,7 +3916,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3771,7 +3947,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3800,7 +3978,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3829,7 +4009,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3858,7 +4040,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3887,7 +4071,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3916,7 +4102,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3945,7 +4133,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -3974,7 +4164,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -4003,7 +4195,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -4032,7 +4226,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -4061,7 +4257,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -4090,7 +4288,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -4119,7 +4319,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -4148,7 +4350,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -4177,7 +4381,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -4206,7 +4412,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -4235,7 +4443,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4264,7 +4474,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4293,7 +4505,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4322,7 +4536,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4351,7 +4567,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4380,7 +4598,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4409,7 +4629,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4438,7 +4660,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4467,7 +4691,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4496,7 +4722,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4525,7 +4753,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4554,7 +4784,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 66.14583333333333
             },
             {
                 "type": "wms",
@@ -4582,7 +4814,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 66.14583333333333
             },
             {
                 "type": "wms",
@@ -4610,7 +4844,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 66.14583333333333
             },
             {
                 "type": "wms",
@@ -4619,7 +4855,7 @@
                 "visibility": false,
                 "name": "rt_dbg.el_geol.limite_geologico",
                 "title": "Limite geologico",
-                "description": "DataBase Geologico Regionale - Elementi geologici: 'Limite geologico' contiene i contatti litologici, stratigrafici e tettonici che possono avere significato di contorno di unit\u0430' geologica (ULF) oppure di limite intraformazionale.",
+                "description": "DataBase Geologico Regionale - Elementi geologici: 'Limite geologico' contiene i contatti litologici, stratigrafici e tettonici che possono avere significato di contorno di unitа' geologica (ULF) oppure di limite intraformazionale.",
                 "params": {
                     "map": "dbgeologico_rt.qgs",
                     "map_resolution": 91
@@ -4639,7 +4875,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4648,7 +4886,7 @@
                 "visibility": false,
                 "name": "rt_dbg.el_geol.unita_geologica_areale_10k",
                 "title": "Unita geologica areale",
-                "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale' oggetti geologici che rappresentano le unit\u0430 stratigrafiche e tettoniche del substrato",
+                "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale' oggetti geologici che rappresentano le unitа stratigrafiche e tettoniche del substrato",
                 "params": {
                     "map": "dbgeologico_rt.qgs",
                     "map_resolution": 91
@@ -4668,7 +4906,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -4677,7 +4917,7 @@
                 "visibility": false,
                 "name": "rt_dbg.el_geol.unita_geologica_areale_100k",
                 "title": "Unita geologica areale 100K",
-                "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale 100K' oggetti geologici che rappresentano le unit\u0430 stratigrafiche e tettoniche del substrato. Versione semplificata per la visualizzazione in scala 1:100.000",
+                "description": "DataBase Geologico Regionale - Elementi geologici: 'Unita geologica areale 100K' oggetti geologici che rappresentano le unitа stratigrafiche e tettoniche del substrato. Versione semplificata per la visualizzazione in scala 1:100.000",
                 "params": {
                     "map": "dbgeologico_rt.qgs",
                     "map_resolution": 91
@@ -4697,7 +4937,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 19.84375,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4726,7 +4968,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4755,7 +4999,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 26.458333333333332
             },
             {
                 "type": "wms",
@@ -4784,7 +5030,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 26.458333333333332
             },
             {
                 "type": "wms",
@@ -4813,7 +5061,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 26.458333333333332
             },
             {
                 "type": "wms",
@@ -4842,7 +5092,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 26.458333333333332
             },
             {
                 "type": "wms",
@@ -4871,7 +5123,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4900,7 +5154,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -4929,7 +5185,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -5401,7 +5659,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M12",
                 "title": "Tmin_2009-M12",
-                "description": "Media della temperatura minima del mese di dicembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di dicembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5427,7 +5685,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M11",
                 "title": "Tmin_2009-M11",
-                "description": "Media della temperatura minima del mese di novembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di novembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5453,7 +5711,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M10",
                 "title": "Tmin_2009-M10",
-                "description": "Media della temperatura minima del mese di ottobre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di ottobre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5479,7 +5737,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M09",
                 "title": "Tmin_2009-M09",
-                "description": "Media della temperatura minima del mese di settembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di settembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5505,7 +5763,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M08",
                 "title": "Tmin_2009-M08",
-                "description": "Media della temperatura minima del mese di agosto (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di agosto (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5531,7 +5789,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M07",
                 "title": "Tmin_2009-M07",
-                "description": "Media della temperatura minima del mese di luglio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di luglio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5557,7 +5815,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M06",
                 "title": "Tmin_2009-M06",
-                "description": "Media della temperatura minima del mese di giugno (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di giugno (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5583,7 +5841,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M05",
                 "title": "Tmin_2009-M05",
-                "description": "Media della temperatura minima del mese di maggio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di maggio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5609,7 +5867,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M04",
                 "title": "Tmin_2009-M04",
-                "description": "Media della temperatura minima del mese di aprile (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di aprile (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5635,7 +5893,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M03",
                 "title": "Tmin_2009-M03",
-                "description": "Media della temperatura minima del mese di marzo (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di marzo (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5661,7 +5919,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M02",
                 "title": "Tmin_2009-M02",
-                "description": "Media della temperatura minima del mese di febbraio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di febbraio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5687,7 +5945,7 @@
                 "visibility": false,
                 "name": "TempMin:Tmin_2009-M01",
                 "title": "Tmin_2009-M01",
-                "description": "Media della temperatura minima del mese di gennaio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura minima del mese di gennaio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMin"
                 },
@@ -5713,7 +5971,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M12",
                 "title": "Tmax_2009-M12",
-                "description": "Media della temperatura massima del mese di dicembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di dicembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5739,7 +5997,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M11",
                 "title": "Tmax_2009-M11",
-                "description": "Media della temperatura massima del mese di novembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di novembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5765,7 +6023,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M10",
                 "title": "Tmax_2009-M10",
-                "description": "Media della temperatura massima del mese di ottobre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di ottobre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5791,7 +6049,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M09",
                 "title": "Tmax_2009-M09",
-                "description": "Media della temperatura massima del mese di settembre (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di settembre (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5817,7 +6075,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M08",
                 "title": "Tmax_2009-M08",
-                "description": "Media della temperatura massima del mese di agosto (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di agosto (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5843,7 +6101,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M07",
                 "title": "Tmax_2009-M07",
-                "description": "Media della temperatura massima del mese di luglio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di luglio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5869,7 +6127,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M06",
                 "title": "Tmax_2009-M06",
-                "description": "Media della temperatura massima del mese di giugno (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di giugno (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5895,7 +6153,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M05",
                 "title": "Tmax_2009-M05",
-                "description": "Media della temperatura massima del mese di maggio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di maggio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5921,7 +6179,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M04",
                 "title": "Tmax_2009-M04",
-                "description": "Media della temperatura massima del mese di aprile (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di aprile (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5947,7 +6205,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M03",
                 "title": "Tmax_2009-M03",
-                "description": "Media della temperatura massima del mese di marzo (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di marzo (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5973,7 +6231,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M02",
                 "title": "Tmax_2009-M02",
-                "description": "Media della temperatura massima del mese di febbraio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di febbraio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -5999,7 +6257,7 @@
                 "visibility": false,
                 "name": "TempMax:Tmax_2009-M01",
                 "title": "Tmax_2009-M01",
-                "description": "Media della temperatura massima del mese di gennaio (\u00b0C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Media della temperatura massima del mese di gennaio (°C) relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto mediando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "TempMax"
                 },
@@ -6025,7 +6283,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M12",
                 "title": "Pcum_2009-M12",
-                "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6051,7 +6309,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M11",
                 "title": "Pcum_2009-M11",
-                "description": "Cumulata delle precipitazioni del mese di novembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di novembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6077,7 +6335,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M10",
                 "title": "Pcum_2009-M10",
-                "description": "Cumulata delle precipitazioni del mese di ottobre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di ottobre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6103,7 +6361,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M09",
                 "title": "Pcum_2009-M09",
-                "description": "Cumulata delle precipitazioni del mese di settembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di settembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6129,7 +6387,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M08",
                 "title": "Pcum_2009-M08",
-                "description": "Cumulata delle precipitazioni del mese di agosto relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di agosto relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6155,7 +6413,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M07",
                 "title": "Pcum_2009-M07",
-                "description": "Cumulata delle precipitazioni del mese di luglio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di luglio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6181,7 +6439,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M06",
                 "title": "Pcum_2009-M06",
-                "description": "Cumulata delle precipitazioni del mese di giugno relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di giugno relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6207,7 +6465,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M05",
                 "title": "Pcum_2009-M05",
-                "description": "Cumulata delle precipitazioni del mese di maggio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di maggio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6233,7 +6491,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M04",
                 "title": "Pcum_2009-M04",
-                "description": "Cumulata delle precipitazioni del mese di aprile relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di aprile relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6259,7 +6517,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M03",
                 "title": "Pcum_2009-M03",
-                "description": "Cumulata delle precipitazioni del mese di marzo relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di marzo relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6285,7 +6543,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M02",
                 "title": "Pcum_2009-M02",
-                "description": "Cumulata delle precipitazioni del mese di febbraio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di febbraio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6311,7 +6569,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M01",
                 "title": "Pcum_2009-M01",
-                "description": "Cumulata delle precipitazioni del mese di gennaio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di gennaio relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6337,7 +6595,7 @@
                 "visibility": false,
                 "name": "PioggiaCum:Pcum_2009-M00",
                 "title": "Pcum_2009-M00",
-                "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata \u00e8 pari a 1km di lato. Il risultato finale \u00e8 stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
+                "description": "Cumulata delle precipitazioni del mese di dicembre relativa all'anno 2009. I dati sono stati ottenuti attraverso la spazializzazione dei dati giornalieri delle stazioni meteorologiche distribuiti su tutto il territorio della Toscana con algoritmo DAYMET (http://www.daymet.org/) implementato dal Consorzio LAMMA, la risoluzione della cella adottata è pari a 1km di lato. Il risultato finale è stato ottenuto cumulando il dato relativo alle spazializzazioni giornaliere.",
                 "params": {
                     "namespace": "PioggiaCum"
                 },
@@ -6626,7 +6884,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6655,7 +6915,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6684,7 +6946,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6713,7 +6977,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6742,7 +7008,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6771,7 +7039,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6800,7 +7070,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6829,7 +7101,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6858,7 +7132,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6887,7 +7163,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6916,7 +7194,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -6945,7 +7225,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.943125
             },
             {
                 "type": "wms",
@@ -6974,7 +7256,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -7003,7 +7287,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -7032,7 +7318,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "HTML"
-                }
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 1322.9166666666667
             },
             {
                 "type": "wms",
@@ -7217,7 +7505,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7254,7 +7544,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7365,7 +7657,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7402,7 +7696,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7439,7 +7735,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7521,8 +7819,8 @@
                 "url": "/geoserver/wms",
                 "visibility": false,
                 "group": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
-                "name": "invarianti:fertilit\u00e0",
-                "title": "Fertilit\u00e0",
+                "name": "invarianti:fertilità",
+                "title": "Fertilità",
                 "description": "",
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -7624,7 +7922,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7661,7 +7961,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7772,7 +8074,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7809,7 +8113,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7846,7 +8152,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7883,7 +8191,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7920,7 +8230,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -7994,7 +8306,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -8105,7 +8419,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -8142,7 +8458,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 10000,
+                "maxResolution": 2.645833333333333
             },
             {
                 "type": "wms",
@@ -8216,7 +8534,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 25000,
+                "maxResolution": 6.614583333333333
             },
             {
                 "type": "wms",
@@ -8226,7 +8546,7 @@
                 "group": "piani_strutturali.vaglia",
                 "name": "ps:tu_ps_vaglia",
                 "title": "TU PS Vaglia",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8263,7 +8583,7 @@
                 "group": "piani_strutturali.forte_dei_marmi",
                 "name": "ps:tu_ps_forte_dei_marmi",
                 "title": "TU PS Forte dei Marmi",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8300,7 +8620,7 @@
                 "group": "piani_strutturali.fiesole",
                 "name": "ps:tu_ps_fiesole",
                 "title": "TU PS Fiesole",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8337,7 +8657,7 @@
                 "group": "piani_strutturali.vagli_di_sotto",
                 "name": "ps:tu_ps_vagli_di_sotto",
                 "title": "TU PS Vagli di Sotto",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8374,7 +8694,7 @@
                 "group": "piani_strutturali.vicchio",
                 "name": "ps:tu_ps_vicchio",
                 "title": "TU PS Vicchio",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8411,7 +8731,7 @@
                 "group": "piani_strutturali.scandicci",
                 "name": "ps:tu_ps_scandicci",
                 "title": "TU PS Scandicci",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8448,7 +8768,7 @@
                 "group": "piani_strutturali.reggello",
                 "name": "ps:tu_ps_reggello",
                 "title": "TU PS Reggello",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8485,7 +8805,7 @@
                 "group": "piani_strutturali.quarrata",
                 "name": "ps:tu_ps_quarrata",
                 "title": "TU PS Quarrata",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8522,7 +8842,7 @@
                 "group": "piani_strutturali.piancastagnaio",
                 "name": "ps:tu_ps_piancastagnaio",
                 "title": "TU PS Piancastagnaio",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8559,7 +8879,7 @@
                 "group": "piani_strutturali.peccioli",
                 "name": "ps:tu_ps_peccioli",
                 "title": "TU PS Peccioli",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8596,7 +8916,7 @@
                 "group": "piani_strutturali.montignoso",
                 "name": "ps:tu_ps_montignoso",
                 "title": "TU PS Montignoso",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8633,7 +8953,7 @@
                 "group": "piani_strutturali.montemurlo",
                 "name": "ps:tu_ps_montemurlo",
                 "title": "TU PS Montemurlo",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8670,7 +8990,7 @@
                 "group": "piani_strutturali.montecarlo",
                 "name": "ps:tu_ps_montecarlo",
                 "title": "TU PS Montecarlo",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8707,7 +9027,7 @@
                 "group": "piani_strutturali.lucca",
                 "name": "ps:tu_ps_lucca",
                 "title": "TU PS Lucca",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8744,7 +9064,7 @@
                 "group": "piani_strutturali.livorno",
                 "name": "ps:tu_ps_livorno",
                 "title": "TU PS Livorno",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8781,7 +9101,7 @@
                 "group": "piani_strutturali.lastra_a_signa",
                 "name": "ps:tu_ps_lastra_a_signa",
                 "title": "TU PS Lastra a Signa",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8818,7 +9138,7 @@
                 "group": "piani_strutturali.greve_in_chianti",
                 "name": "ps:tu_ps_greve_in_chianti",
                 "title": "TU PS Greve in Chianti",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8855,7 +9175,7 @@
                 "group": "piani_strutturali.figline_incisa",
                 "name": "ps:tu_ps_figline_incisa_valdarno",
                 "title": "TU PS Figline Incisa Valdarno",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8892,7 +9212,7 @@
                 "group": "piani_strutturali.cutigliano",
                 "name": "ps:tu_ps_cutigliano",
                 "title": "TU PS Cutigliano",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8929,7 +9249,7 @@
                 "group": "piani_strutturali.civitella_val_di_chiana",
                 "name": "ps:tu_ps_civitella_val_di_chiana",
                 "title": "TU PS Civitella Val di Chiana",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -8966,7 +9286,7 @@
                 "group": "piani_strutturali.caciana_t_lari",
                 "name": "ps:tu_ps_cascina_terme_lari",
                 "title": "TU PS Cascina Terme Lari",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9003,7 +9323,7 @@
                 "group": "piani_strutturali.camaiore",
                 "name": "ps:tu_ps_camaiore",
                 "title": "TU PS Camaiore",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9040,7 +9360,7 @@
                 "group": "piani_strutturali.psi_marciano_lucignano.marciano_chiana",
                 "name": "ps:tu_ps_marciano_della_chiana",
                 "title": "TU PS Marciano della Chiana",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9077,7 +9397,7 @@
                 "group": "piani_strutturali.psi_marciano_lucignano.lucignano",
                 "name": "ps:tu_ps_lucignano",
                 "title": "TU PS Lucignano",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9114,7 +9434,7 @@
                 "group": "piani_strutturali.psi_garfagnana.villa_colemandina",
                 "name": "ps:tu_ps_villa_collemandina",
                 "title": "TU PS Villa Collemandina",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9151,7 +9471,7 @@
                 "group": "piani_strutturali.psi_garfagnana.sillano_giuncugnano",
                 "name": "ps:tu_ps_sillano_giuncugnano",
                 "title": "TU PS Sillano Giuncugnano",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9188,7 +9508,7 @@
                 "group": "piani_strutturali.psi_garfagnana.san_romano_gna",
                 "name": "ps:tu_ps_san_romano_garfagnana",
                 "title": "TU PS San Romano Garfagnana",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9225,7 +9545,7 @@
                 "group": "piani_strutturali.psi_garfagnana.pieve_fosciana",
                 "name": "ps:tu_ps_pieve_fosciana",
                 "title": "TU PS Pieve Fosciana",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9262,7 +9582,7 @@
                 "group": "piani_strutturali.psi_garfagnana.piazza_al_serchio",
                 "name": "ps:tu_ps_piazza_al_serchio",
                 "title": "TU PS Piazza al Serchio",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9299,7 +9619,7 @@
                 "group": "piani_strutturali.psi_garfagnana.molazzana",
                 "name": "ps:tu_ps_molazzana",
                 "title": "TU PS Molazzana",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9336,7 +9656,7 @@
                 "group": "piani_strutturali.psi_garfagnana.minucciano",
                 "name": "ps:tu_ps_minucciano",
                 "title": "TU PS Minucciano",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9373,7 +9693,7 @@
                 "group": "piani_strutturali.psi_garfagnana.gallicano",
                 "name": "ps:tu_ps_gallicano",
                 "title": "TU PS Callicano",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9410,7 +9730,7 @@
                 "group": "piani_strutturali.psi_garfagnana.fosciandora",
                 "name": "ps:tu_ps_fosciandora",
                 "title": "TU PS Fosciandora",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9447,7 +9767,7 @@
                 "group": "piani_strutturali.psi_garfagnana.fabbriche_vergemoli",
                 "name": "ps:tu_ps_fabbriche_vergemoli",
                 "title": "TU PS Fabbriche Vergemoli",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9484,7 +9804,7 @@
                 "group": "piani_strutturali.psi_garfagnana.castiglione_gna",
                 "name": "ps:tu_ps_castiglione_garfagnana",
                 "title": "TU PS Castiglione Garfagnana",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9521,7 +9841,7 @@
                 "group": "piani_strutturali.psi_garfagnana.castelnuovo_gna",
                 "name": "ps:tu_ps_castelnuovo_garfagnana",
                 "title": "TU PS Castelnuovo Garfagnana",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9558,7 +9878,7 @@
                 "group": "piani_strutturali.psi_garfagnana.careggine",
                 "name": "ps:tu_ps_careggine",
                 "title": "TU PS Careggine",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9595,7 +9915,7 @@
                 "group": "piani_strutturali.psi_garfagnana.camporgiano",
                 "name": "ps:tu_ps_camporgiano",
                 "title": "TU PS Camporgiano",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9632,7 +9952,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.pescaglia",
                 "name": "ps:tu_ps_pescaglia",
                 "title": "TU PS Pescaglia",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9669,7 +9989,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.coreglia_antelm",
                 "name": "ps:tu_ps_coreglia_antelminelli",
                 "title": "TU PS Coreglia Antelminelli",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9706,7 +10026,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.borgo_a_mozzano",
                 "name": "ps:tu_ps_borgo_a_mozzano",
                 "title": "TU PS Borgo a Mozzano",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9743,7 +10063,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.barga",
                 "name": "ps:tu_ps_barga",
                 "title": "TU PS Barga",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9780,7 +10100,7 @@
                 "group": "piani_strutturali.psi_media_valle_serchio.bagni_di_lucca",
                 "name": "ps:tu_ps_bagni_di_lucca",
                 "title": "TU PS Bagni di Lucca",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9817,7 +10137,7 @@
                 "group": "piani_strutturali.psi_sesto_calenzano.sesto_fno",
                 "name": "ps:tu_ps_sesto_fiorentino",
                 "title": "TU PS Sesto Fiorentino",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -9854,7 +10174,7 @@
                 "group": "piani_strutturali.psi_sesto_calenzano.calenzano",
                 "name": "ps:tu_ps_calenzano",
                 "title": "TU PS Calenzano",
-                "description": "Quadro conoscitivo a supporto dell\u2019individuazione del perimetro del Territorio Urbanizzato",
+                "description": "Quadro conoscitivo a supporto dell’individuazione del perimetro del Territorio Urbanizzato",
                 "bbox": {
                     "crs": "EPSG:4326",
                     "bounds": {
@@ -10726,7 +11046,7 @@
             },
             {
                 "id": "risorse.aria.qualita_dellaria",
-                "title": "Qualit\u00e0 dell'aria (ARPAT)",
+                "title": "Qualità dell'aria (ARPAT)",
                 "expanded": false
             },
             {
@@ -10756,12 +11076,12 @@
             },
             {
                 "id": "risorse.clima.media_delle_temperature_massime_del_mese_in_c_19952009",
-                "title": "Media delle temperature massime del mese in \u00b0C - (1995-2009)",
+                "title": "Media delle temperature massime del mese in °C - (1995-2009)",
                 "expanded": false
             },
             {
                 "id": "risorse.clima.media_delle_temperature_minime_del_mese_in_c_19952009",
-                "title": "Media delle temperature minime del mese in \u00b0C - (1995-2009)",
+                "title": "Media delle temperature minime del mese in °C - (1995-2009)",
                 "expanded": false
             },
             {
@@ -10781,7 +11101,7 @@
             },
             {
                 "id": "risorse.acqua.qualita_dellacqua",
-                "title": "Qualit\u00e0 dell'acqua (ARPAT)",
+                "title": "Qualità dell'acqua (ARPAT)",
                 "expanded": false
             },
             {
@@ -10836,7 +11156,7 @@
             },
             {
                 "id": "risorse.struttura_ecosistemica.biodiverista",
-                "title": "Biodiverist\u00e0",
+                "title": "Biodiveristà",
                 "expanded": false
             },
             {
@@ -10856,7 +11176,7 @@
             },
             {
                 "id": "risorse.struttura_insediativa.infrastrutture_per_la_mobilita",
-                "title": "Infrastrutture per la mobilit\u00e0",
+                "title": "Infrastrutture per la mobilità",
                 "expanded": false
             },
             {
@@ -10966,7 +11286,7 @@
             },
             {
                 "id": "invarianti.invariante_ii.categoria_a_continua_dgr_1148_2002.capacita_uso_dei_suoli",
-                "title": "Capacit\u00e0 uso dei suoli",
+                "title": "Capacità uso dei suoli",
                 "expanded": false
             },
             {
