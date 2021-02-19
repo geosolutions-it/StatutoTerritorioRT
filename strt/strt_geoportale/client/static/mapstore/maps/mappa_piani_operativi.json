@@ -8536,7 +8536,7 @@
                     "format": "PROPERTIES"
                 },
                 "maxScaleDenominator": 75000,
-                "maxResolution": 6.614583333333333
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
