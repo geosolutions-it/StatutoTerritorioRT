@@ -7506,8 +7506,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 50000,
+                "maxResolution": 13.229166666666666
             },
             {
                 "type": "wms",
@@ -7545,8 +7545,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -7658,8 +7658,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -7697,8 +7697,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -7736,8 +7736,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -7923,8 +7923,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -7962,8 +7962,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -8037,7 +8037,9 @@
                 "tileSize": 512,
                 "featureInfo": {
                     "format": "PROPERTIES"
-                }
+                },
+                "maxScaleDenominator": 50000,
+                "maxResolution": 13.229166666666666
             },
             {
                 "type": "wms",
@@ -8075,8 +8077,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -8114,8 +8116,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -8153,8 +8155,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -8192,8 +8194,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -8231,8 +8233,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 50000,
+                "maxResolution": 13.229166666666666
             },
             {
                 "type": "wms",
@@ -8307,8 +8309,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -8420,8 +8422,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -8459,8 +8461,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 10000,
-                "maxResolution": 2.645833333333333
+                "maxScaleDenominator": 75000,
+                "maxResolution": 19.84375
             },
             {
                 "type": "wms",
@@ -8535,8 +8537,8 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 75000,
-                "maxResolution": 19.84375
+                "maxScaleDenominator": 50000,
+                "maxResolution": 13.229166666666666
             },
             {
                 "type": "wms",
