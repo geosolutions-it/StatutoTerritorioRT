@@ -8535,7 +8535,7 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 },
-                "maxScaleDenominator": 25000,
+                "maxScaleDenominator": 75000,
                 "maxResolution": 6.614583333333333
             },
             {
