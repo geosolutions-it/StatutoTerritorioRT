@@ -7307,6 +7307,8 @@
     z-index: 1030;
     height: 70px;
     padding-left: 0px; }
+    .strt .serapide .navbar .usermenu {
+      align-self: auto; }
   .strt .serapide .navbar-menu .navbar-nav .nav-link span {
     border-left: 4px solid #FED403;
     padding-left: 4px; }
