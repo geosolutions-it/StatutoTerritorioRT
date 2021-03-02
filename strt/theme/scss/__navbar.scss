@@ -43,6 +43,9 @@
     z-index: 1030; 
     height: $portal-header;
     padding-left: 0px;
+    .usermenu {
+        align-self: auto;
+    }
 }
 .navbar-menu {
     .navbar-nav {
