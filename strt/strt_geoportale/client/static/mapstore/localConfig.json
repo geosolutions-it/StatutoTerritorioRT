@@ -263,7 +263,7 @@
                   }
                 }
               },
-              "tools": ["locate"]
+              "tools": []
           }
       }, "DrawerMenu", {
         "name": "TOC",
@@ -519,7 +519,7 @@
         "embedded": [{
                 "name": "Map",
                 "cfg": {
-                    "tools": ["locate"],
+                    "tools": [],
                     "mapOptions": {
                     "openlayers": {
                       "interactions": {
