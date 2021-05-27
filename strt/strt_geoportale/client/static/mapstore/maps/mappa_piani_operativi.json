@@ -4756,6 +4756,36 @@
                 },
                 "minResolution": 0.0002645833333333333,
                 "maxResolution": 1322.9166666666667
+            },{
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://www502.regione.toscana.it/wmsraster/com.rt.wms.RTmap/wms",
+                "visibility": false,
+                "name": "rt_ucs.iducs.10k.2016.rt.full",
+                "title": "Uso del Suolo 10K - 2016",
+                "description": "Scala di visibilita 1:1 - 1:5.000.000. Dataset 'Uso del Suolo 10K - Anno 2016 - Vestizione completa'. Lo strato riporta l'intera vestizione dell' uso suolo 2016 con tutti gli strati",
+                "params": {
+                    "map": "wmsucs",
+                    "map_resolution": 91
+                },
+                "bbox": {
+                    "crs": "EPSG:4326",
+                    "bounds": {
+                        "minx": 9.363,
+                        "miny": 42.079,
+                        "maxx": 12.7825,
+                        "maxy": 44.7022
+                    }
+                },
+                "minScaleDenominator": 1,
+                "maxScaleDenominator": 250000,
+                "group": "risorse.suolo_e_sottosuolo.uso_suolo",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                },
+                "minResolution": 0.0002645833333333333,
+                "maxResolution": 66.14583333333333
             },
             {
                 "type": "wms",
