@@ -23,7 +23,7 @@ import url from 'url';
 const { TOCPlugin: MSTOCPlugin, reducers, epics } = MSTOC;
 
 const ConnectedLayerNode = connect(() => ({
-    enableInlineRemove: node => !!(node?.group === 'Default' || node?.group === undefined)
+    enableInlineRemove: node => !!(node?.group === 'Default' || node?.group === undefined  || node?.group === 'Local shape')
 }), {
     onRemove: removeLayer
 })(LayerNode);
