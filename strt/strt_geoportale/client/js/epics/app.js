@@ -10,9 +10,13 @@ import { Observable } from 'rxjs';
 import { ADD_LAYER, REMOVE_LAYER, updateNode, removeNode } from '@mapstore/actions/layers';
 import find from 'lodash/find';
 import { groupsSelector, layersSelector } from '@mapstore/selectors/layers';
+import url from 'url';
+import { LOCATION_CHANGE } from 'connected-react-router';
+import { zoomToExtent, CHANGE_MAP_LIMITS } from '@mapstore/actions/map';
+import { isValidExtent } from '@mapstore/utils/CoordinatesUtils';
 
 const DEFAULT_GROUP_ID = 'Default';
-
+const LOCAL_SHAPE_GROUP_ID = 'Local shape';
 /*
 update the default group using the message id 'serapide.userLayers' from translations
 */
@@ -27,6 +31,12 @@ export const strtUpdateDefaultGroup = (action$, store) =>
             const defaultGroup = find(groups, ({ id }) => id === DEFAULT_GROUP_ID);
             if (defaultGroup && defaultGroup.title !== title) {
                 return Observable.of(updateNode(DEFAULT_GROUP_ID, 'groups', { title }));
+            }
+            const localShapeMessage = messages?.serapide?.localShapeLayers;
+            const localShapeTitle = localShapeMessage || 'Livelli Importati';
+            const localShapeGroup = find(groups, ({ id }) => id === LOCAL_SHAPE_GROUP_ID);
+            if (localShapeGroup && localShapeGroup.title !== localShapeTitle) {
+                return Observable.of(updateNode(LOCAL_SHAPE_GROUP_ID, 'groups', { title: localShapeTitle }));
             }
             return Observable.empty();
         });
@@ -43,7 +53,34 @@ export const strtRemoveDefaultGroup = (action$, store) =>
             return Observable.empty();
         });
 
+// override to ensure the share bbox param zoom to the correct extent
+export const strtReadQueryParamsOnMapEpic = (action$, store) =>
+    action$.ofType(LOCATION_CHANGE)
+        .switchMap(() =>
+            action$.ofType(CHANGE_MAP_LIMITS)
+                .take(1)
+                .switchMap(() => {
+                    const state = store.getState();
+                    const search = state?.router?.location?.search || '';
+                    const { query = {} } = url.parse(search, true) || {};
+                    const bbox = query?.bbox || '';
+                    const extent = bbox.split(',')
+                        .map(val => parseFloat(val))
+                        .filter((val, idx) => idx % 2 === 0
+                            ? val > -180.5 && val < 180.5
+                            : val >= -90 && val <= 90)
+                        .filter(val => !isNaN(val));
+                    if (extent && extent.length === 4 && isValidExtent(extent)) {
+                        return Observable.of(
+                            zoomToExtent(extent, 'EPSG:4326', undefined,  {nearest: true})
+                        );
+                    }
+                    return Observable.empty();
+                })
+        );
+
 export default {
     strtUpdateDefaultGroup,
-    strtRemoveDefaultGroup
+    strtRemoveDefaultGroup,
+    strtReadQueryParamsOnMapEpic
 };

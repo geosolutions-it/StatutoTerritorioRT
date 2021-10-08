@@ -160,7 +160,7 @@
                 "title": "DB Geomorfologico (Geoscopio)",
                 "autoload": false
               },
-              "DB_GEOMORFOLOGICO": {
+              "DB_PEDOLOGICO": {
                 "url": "http://www502.regione.toscana.it/ows2/com.rt.wms.RTmap/wms?map=owspedologia&map_resolution=91&",
                 "type": "wms",
                 "title": "DB Pedologico (Geoscopio)",
@@ -255,6 +255,8 @@
         "mobile": [{
           "name": "Map",
           "cfg": {
+              "shouldLoadFont": false,
+              "fonts": null,
               "mapOptions": {
                 "openlayers": {
                   "interactions": {
@@ -315,6 +317,8 @@
           {
             "name": "Map",
             "cfg": {
+              "shouldLoadFont": false,
+              "fonts": null,
               "mapOptions": {
                 "openlayers": {
                   "interactions": {
@@ -350,6 +354,11 @@
             {
               "name": "Share",
               "cfg": {
+                "showAPI": false,
+                "removeQueryParameters": false,
+                "embedOptions": {
+                  "showTOCToggle": false
+                },
                 "advancedSettings": {
                   "bbox": true
                 }
@@ -514,11 +523,15 @@
             },
             "WidgetsBuilder",
             "Widgets",
-            "WidgetsTray"
+            "WidgetsTray",
+            { "name": "MapImport" },
+            { "name": "LayerDownload" }
         ],
         "embedded": [{
                 "name": "Map",
                 "cfg": {
+                    "shouldLoadFont": false,
+                    "fonts": null,
                     "tools": [],
                     "mapOptions": {
                     "openlayers": {

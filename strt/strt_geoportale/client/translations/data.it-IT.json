@@ -5,6 +5,7 @@
         "noLayerInGroup": "Nessun livello disponibile...",
         "serapide": {
             "userLayers": "Livelli Utente",
+            "localShapeLayers": "Livelli Importati",
             "catalogTitle": "Serapide",
             "catalogFilterPlaceholder": "Filtra i piani per nome, comune o tipo",
             "noResultsAvailableTitle": "Nessun risultato disponibile",

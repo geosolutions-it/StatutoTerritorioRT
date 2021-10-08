@@ -87,6 +87,7 @@ import main from '@mapstore/product/main';
 import appEpics from '@js/epics/app';
 
 import { loadVersion } from '@mapstore/actions/version';
+import { setControlProperty } from '@mapstore/actions/controls';
 import Maps from '@mapstore/product/pages/Maps';
 import MapViewer from '@mapstore/product/pages/MapViewer';
 
@@ -113,6 +114,7 @@ main({
     ...cfg,
     enableExtensions: false,
     initialActions: [
-        loadVersion.bind(null, '/static/mapstore/version.txt')
+        loadVersion.bind(null, '/static/mapstore/version.txt'),
+        setControlProperty.bind(null, 'measure', 'showCoordinateEditor', false)
     ]
 }));

@@ -100,9 +100,11 @@
             "templateFormatDescription": "Customize feature info results format",
             "hideFormatTitle": "DISABLE IDENTIFY",
             "hideFormatDescription": "Disable the feature info for this layer",
+            "styleWarning": "Layer style editor for geometry type '{geometryType}' is not supported.",
             "templateFormatInfoAlert1": "Click on edit button to add a new template.",
             "templateFormatInfoAlert2": "Use ${ attribute } to wrap the properties you need to display",
-            "templateFormatInfoAlertExample": "The id of the feature is ${ properties }",
+            "templateFormatInfoAlertExample": "The id of the feature is <span style='white-space:nowrap'>${ properties.id }</span> or <span style='white-space:nowrap'>${ properties['data-value'] }</span>",
+            "templateError": "There was an error applying the template to the information returned by the server, please check the template",
             "templatePreview": "Template preview",
             "visibilityLimits": {
                 "title": "Visibility limits",
@@ -275,7 +277,7 @@
             "Examples": "Examples",
             "LinkedinGroup": "Mapstore Linkedin Group",
             "scrollTop": "Scroll to the top of the page",
-            "footerDescription": "<small>GeoSolutions S.a.s. | Via di Montramito 3/A, 55054 Massarosa (Lucca) - Italy info@geo-solutions.it | Tel: +39 0584 962313 | Fax: +39 0584 1660272</small>",
+            "footerDescription": "<strong>GeoSolutions</strong> <a href=\"mailto:info@geosolutionsgroup.com\">info@geosolutionsgroup.com</a> <strong>US</strong> +1 (301) 337-7055 -  <strong>Italy</strong>: +39 0584 962313",
             "ml": {
                 "title": "Keep in touch and stay up-to-date with the mailing lists",
                 "subscribe_users": "Subscribe Users Mailing List",
@@ -810,7 +812,7 @@
                 "single_layer": "Single Layer",
                 "no_info_description": "Identify panel will not show up on search",
                 "all_layers_description": "Identify panel will show up displaying information of all layers visible in map",
-                "single_layer_description": "Identify panel will show up with the data already available through the WFS search",
+                "single_layer_description": "Identify panel will show up displaying information only for this layer",
                 "openFeatureInfoButtonCheckbox": "Use button to open feature info",
                 "forceSearchLayerVisibility": "Force search layer visibility"
             },
@@ -1074,7 +1076,8 @@
                 "operation": "Operation",
                 "placeholder": "Select layer",
                 "errors": {
-                    "noCrossLayerAvailable": "Cross layer filtering is not available for the selected layer"
+                    "noCrossLayerAvailable": "Cross layer filtering is not available for the selected layer",
+                    "layersExcluded": "Only layers coming from the same source can be selected as target layer for this layer filter"
                 }
             },
             "changedFilter": "Filter Changed",
@@ -1325,6 +1328,7 @@
         },
         "mapImport": {
             "title": "Import",
+            "tooltip": "Import a map file or vector data",
             "dropZone": {
                 "heading": "<p><h4>Drop your map context or vector files here</h4><small>or</small></p>",
                 "selectFiles": "Select files...",
@@ -1338,7 +1342,8 @@
             }
         },
         "mapExport": {
-            "title": "Export map",
+            "title": "Export",
+            "tooltip": "Export the current map",
             "exportPanel": {
                 "title": "<p><h4>Select your format</h4></p>",
                 "exportButtonLabel": "Export"
@@ -1362,13 +1367,13 @@
             "end": "End date ",
             "notAvailable": "Not Available",
             "title": "Catalog",
+            "tooltip": "Add layers to the map",
             "autoload": "Search on service selection",
             "clearValueText": "Clear selection",
             "noResultsText": "No Result",
-            "tooltip": "Browse Catalog",
             "addToMap": "Add To Map",
             "getWMSLink": "Get WMS Link",
-            "error": "There was an error loading records from the catalog",
+            "error": "An error occurred while loading data",
             "pageInfo": "Results {start}-{end} of {total}",
             "resultInfo": "{total, plural, =0 {No items} =1 {{total} Item of {total}} other {{start}-{end} of {total}}}",
             "pageInfoInfinite": "{total, plural, =undefined {} =0 {No results} =1 {{total} of {total} matched} other {Loaded {loaded} of {total} matched}}",
@@ -1412,6 +1417,7 @@
             "showPreview": "Show preview",
             "advancedSettings": "Advanced settings",
             "templateMetadataAvailable": "Metadata available from Dublin Core format: abstract, boundingBox, contributor, creator, description, format, identifier, references, rights, source, subject, temporal, title, type, uri",
+            "invalidUrlHttpProtocol": "Thìs catalog cannot be added to the available ones because it uses an http protocol. Please provide a catalog url that uses https protocol",
             "notification": {
                 "errorTitle": "Error",
                 "errorSearchingRecords": "Some records have not been found: {records} Please check the query URL and its parameters.",
@@ -2499,7 +2505,9 @@
                     "pleaseLogin": "Please login",
                     "notAccessible": "This story is not accessible",
                     "geostoryNotAccessible": "You don't have permission to access this story. Please contact the resource owner",
-                    "geostoryDoesNotExist": "This story does not exist"
+                    "geostoryDoesNotExist": "This story does not exist",
+                    "video": "Sorry! An error has occurred, please try again later."
+
                 }
             },
             "mapEditor": {
@@ -2885,7 +2893,7 @@
                     "pluginDocumentation": "Open plugin configuration documentation",
                     "uploadPlugin": "Add an extension to MapStore",
                     "removePlugin": "Remove this extension from MapStore",
-                    "mapTemplatesConfig": "Configure templates"
+                    "mapTemplatesConfig": "Configure the map templates"
                 },
                 "tutorialPlugins": {
                     "availableTitle": "Available Plugin",
@@ -2899,30 +2907,30 @@
                 }
             },
             "configureTemplates": {
-                "title": "Configure Templates",
-                "availableTemplates": "Available Templates",
-                "enabledTemplates": "Enabled Templates",
-                "templatesFilterPlaceholder": "Filter templates by name...",
-                "availableTemplatesEmpty": "All available templates are enabled",
-                "enabledTemplatesEmpty": "Add templates to configuration from list of available templates",
-                "searchResultsEmpty": "No templates found that satisfy the search criteria",
+                "title": "Configure map templates",
+                "availableTemplates": "Available map templates",
+                "enabledTemplates": "Enabled map templates",
+                "templatesFilterPlaceholder": "Filter  map templates by name...",
+                "availableTemplatesEmpty": "All available  map templates are enabled",
+                "enabledTemplatesEmpty": "Add  map templates to configuration from list of available templates",
+                "searchResultsEmpty": "No  map templates found that satisfy the search criteria",
                 "fileDrop": {
-                    "label": "Template",
-                    "clear": "Drop or click to select a map template file (exported JSON MapStore maps or WMC files are supported)"
+                    "label": "Map template",
+                    "clear": "Drop or click to select a map file (exported JSON MapStore maps or WMC files are supported)"
                 },
                 "uploadDialog": {
-                    "title": "Upload Map Template",
+                    "title": "Upload map template",
                     "save": "Upload",
                     "jsonParsingError": "JSON parsing failed: \"{error}\"",
                     "fileReadError": "Unexpected file reading error occurred"
                 },
                 "tooltips": {
-                    "uploadTool": "Upload new template",
-                    "editTemplate": "Edit template properties",
-                    "deleteTemplate": "Delete template"
+                    "uploadTool": "Upload new map template",
+                    "editTemplate": "Edit map template properties",
+                    "deleteTemplate": "Delete map template"
                 },
-                "deleteError": "Couldn't delete the template, an error occurred",
-                "deleteConfirm": "Are you sure you want to delete template \"{templateName}\"?"
+                "deleteError": "Couldn't delete the map template, an error occurred",
+                "deleteConfirm": "Are you sure you want to delete this map template \"{templateName}\"?"
             },
             "configureMap": {
                 "label": "Configure Map",
@@ -2963,24 +2971,25 @@
           "removeExtension": "Remove Extension"
         },
         "mapTemplates": {
-            "title": "Map Templates",
+            "title": "Map templates",
             "favouritesTitle": "Favourites",
             "allTitle": "All",
-            "filterPlaceholder": "Filter map templates...",
-            "transfer": "Replace map with this template",
-            "merge": "Add this template to map",
+            "filterPlaceholder": "Filter map template...",
+            "transfer": "Replace map with this map template",
+            "merge": "Add this map template to the map",
             "favouriteAdd": "Add to favourites",
             "favouriteRemove": "Remove from favourites",
             "emptyTitle": "No Result",
-            "emptyDescription": "Entered filter does not match name or description of any of templates",
-            "noTemplatesTitle": "No templates found",
-            "noTemplatesDescription": "Current context contains no templates",
+            "emptyDescription": "Entered filter does not match name or description of any of map template",
+            "noTemplatesTitle": "No map template found",
+            "noTemplatesDescription": "Current context contains no map template",
             "confirmReplaceTitle": "Replace map content",
-            "confirmReplaceMessage": "You will replace all layers and map configuration with the selected template by clicking on replace button",
+            "confirmReplaceMessage": "You will replace all layers and map configuration with the selected map template by clicking on the 'Replace' button",
             "confirmReplaceConfirmButton": "Replace"
         },
         "mapCatalog": {
             "title": "Map Catalog",
+            "tooltip": "Browse and load maps",
             "filterPlaceholder": "Search maps...",
             "deleteConfirmContent": "Are you sure you want to delete \"{mapName}\" map?",
             "tooltips": {
@@ -3231,7 +3240,7 @@
                     },
                     "mapTemplatesTool": {
                         "title": "Plugin Tools: Map Templates",
-                        "text": "<p>Map Templates plugin also has a special tool that allows you to configure map templates that will be accessible within the context.</p>"
+                        "text": "<p>'Map templates' plugin also has a special tool that allows you to configure map template that will be accessible within the context.</p>"
                     },
                     "extensions": {
                         "title": "Extensions",

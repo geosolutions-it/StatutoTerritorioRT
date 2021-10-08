@@ -69,7 +69,7 @@ import LoginPlugin from '@mapstore/plugins/Login';
 import MapEditorPlugin from '@mapstore/plugins/MapEditor';
 // import MapExportPlugin from '@mapstore/plugins/MapExport';
 import MapFooterPlugin from '@mapstore/plugins/MapFooter';
-// import MapImportPlugin from '@mapstore/plugins/MapImport';
+import MapImportPlugin from '@mapstore/plugins/MapImport';
 import MapLoadingPlugin from '@mapstore/plugins/MapLoading';
 import MapPlugin from '@mapstore/plugins/Map';
 import MapSearchPlugin from '@mapstore/plugins/MapSearch';
@@ -98,7 +98,7 @@ import ScrollTopPlugin from '@mapstore/plugins/ScrollTop';
 import SearchPlugin from '@mapstore/plugins/Search';
 import SearchServicesConfigPlugin from '@mapstore/plugins/SearchServicesConfig';
 import SettingsPlugin from '@mapstore/plugins/Settings';
-import * as SharePlugin from '@mapstore/plugins/Share';
+import SharePlugin from '@js/plugins/Share';
 // import SnapshotPlugin from '@mapstore/plugins/Snapshot';
 import StyleEditorPlugin from '@mapstore/plugins/StyleEditor';
 import TOCItemsSettingsPlugin from '@mapstore/plugins/TOCItemsSettings';
@@ -168,6 +168,7 @@ export const plugins = {
     LoginPlugin,
     MapEditorPlugin,
     MapFooterPlugin,
+    MapImportPlugin,
     MapLoadingPlugin,
     MapPlugin,
     MapSearchPlugin,
