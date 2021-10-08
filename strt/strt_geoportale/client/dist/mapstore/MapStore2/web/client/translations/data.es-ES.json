@@ -100,6 +100,7 @@
             "templateFormatDescription": "Personalizar el formato de resultados de información de la capa",
             "hideFormatTitle": "DESACTIVAR IDENTIFICAR",
             "hideFormatDescription": "Deshabilite la información de la entidad para esta capa",
+            "styleWarning": "El editor de estilo de capa para el tipo de geometría '{geometryType}' no es compatible.",
             "templateFormatInfoAlert1": "Haga clic en el botón Editar para agregar una nueva plantilla.",
             "templateFormatInfoAlert2": "Use ${ attribute } para ajustar las propiedades que necesita visualizar",
             "visibilityLimits": {
@@ -141,7 +142,8 @@
               "legendHeight": "Altura",
               "legendPreview": "Avance"
             },
-            "templateFormatInfoAlertExample": "La identificación de la característica es ${ properties }",
+            "templateFormatInfoAlertExample": "La identificación de la característica es <span style='white-space:nowrap'>${ properties.datos }</span> ora <span style='white-space:nowrap'>${ properties['datos-valor'] }</span>",
+            "templateError": "Hubo un error al aplicar la plantilla a la información devuelta por el servidor, verifique la plantilla",
             "templatePreview": "Vista previa de la plantilla",
             "enableLocalizedLayerStyles": {
                 "label": "Habilitar estilo localizado",
@@ -275,7 +277,7 @@
             "Examples": "Ejemplos",
             "LinkedinGroup": "Grupo Linkedin de Mapstore",
             "scrollTop": "Volver al principio de la página",
-            "footerDescription": "<small>GeoSolutions S.a.s. | Via di Montramito 3/A, 55054 Massarosa (Lucca) - Italy info@geo-solutions.it | Tel: +39 0584 962313 | Fax: +39 0584 1660272</small>",
+            "footerDescription": "<strong>GeoSolutions</strong> <a href=\"mailto:info@geosolutionsgroup.com\">info@geosolutionsgroup.com</a> <strong>US</strong> +1 (301) 337-7055 -  <strong>Italy</strong>: +39 0584 962313",
             "ml": {
                 "title": "Esté informado a la última sobre los cambios en el desrrollo via listas de correo",
                 "subscribe_users": "Suscribirse a las listas de correo de usuarios",
@@ -810,7 +812,7 @@
                 "single_layer": "Una sola capa",
                 "no_info_description": "El panel de identificación no aparecerá en la búsqueda",
                 "all_layers_description": "El panel Identificar aparecerá mostrando información de todas las capas visibles en el mapa",
-                "single_layer_description": "El panel de identificación aparecerá con los datos ya disponibles a través de la búsqueda de WFS",
+                "single_layer_description": "El panel de identificación aparecerá mostrando información solo para esta capa",
                 "openFeatureInfoButtonCheckbox": "Use el botón para abrir la información de la función",
                 "forceSearchLayerVisibility": "Forzar la visibilidad de la capa de búsqueda"
             },
@@ -1074,7 +1076,8 @@
                 "operation": "Operación",
                 "placeholder": "Selecciona una capa",
                 "errors": {
-                    "noCrossLayerAvailable": "El filtro de capa no está disponible para la capa seleccionada"
+                    "noCrossLayerAvailable": "El filtro de capa no está disponible para la capa seleccionada",
+                    "layersExcluded": "Solo las capas que provienen de la misma fuente se pueden seleccionar como capa de destino para este filtro de capa"
                 }
             },
             "changedFilter": "Filtro cambiado",
@@ -1325,6 +1328,7 @@
         },
         "mapImport": {
             "title": "Importar",
+            "tooltip": "Importar un archivo de mapa o datos vectoriales",
             "dropZone": {
                 "heading": "<p> <h4> Suelta contextos de mapas o archivos vectoriales aquí </h4> <small> o </small> </p>",
                 "selectFiles": "Selecciona archivos...",
@@ -1338,7 +1342,8 @@
             }
         },
         "mapExport": {
-            "title": "Exportar el mapa",
+            "title": "Exportar",
+            "tooltip": "Exportar el mapa actual",
             "exportPanel": {
                 "title": "<p><h4>Seleccione su formato</h4></p>",
                 "exportButtonLabel": "Exportar"
@@ -1362,13 +1367,13 @@
             "end": "Fecha de finalización ",
             "notAvailable": "No disponible",
             "title": "Catálogo",
+            "tooltip": "agregar capas al mapa",
             "autoload": "Buscar en la selección de servicios",
             "clearValueText": "Borrar selección",
             "noResultsText": "No se encontraron resultados",
-            "tooltip": "Buscar en el catálogo",
             "addToMap": "Añadir al mapa",
             "getWMSLink": "Enlace WMS",
-            "error": "Ha ocurrido un error cargando los datos del catálogo",
+            "error": "Ha ocurrido un error al cargar los datos.",
             "pageInfo": "{start}-{end} resultados de {total}",
             "resultInfo": "{total, plural, =0 No hay artículos} =1 {{total} artículo de {total}} other {{start}-{end} de {total}}}",
             "pageInfoInfinite": "{total, plural, =undefined {} =0 {No hay resultados} =1 {{total} de {total} emparejados} other {Cargado {loaded} de {total} emparejados}}",
@@ -1412,6 +1417,7 @@
             "showPreview": "Mostrar vista previa",
             "advancedSettings": "Ajustes avanzados",
             "templateMetadataAvailable": "Metadatos disponibles en formato Dublin Core: abstract, boundingBox, contributor, creator, description, format, identifier, references, rights, source, subject, temporal, title, type, uri",
+            "invalidUrlHttpProtocol": "Este catálogo no se puede agregar a los disponibles porque usa un protocolo http. Proporcione una URL del catálogo que utilice el protocolo https",
             "notification": {
                 "errorTitle": "Error",
                 "errorSearchingRecords": "No se han encontrado algunos registros: {records} . Por favor revise la consulta param url",
@@ -2488,7 +2494,8 @@
                     "pleaseLogin": "Por favor Iniciar sesión",
                     "notAccessible": "Esta historia no es accesible.",
                     "geostoryNotAccessible": "No tienes permiso para acceder a esta historia. Por favor, póngase en contacto con el propietario del recurso",
-                    "geostoryDoesNotExist": "Esta historia no existe"
+                    "geostoryDoesNotExist": "Esta historia no existe",
+                    "video": "¡Perdón! Se ha producido un error, inténtelo de nuevo más tarde."
                 }
             },
             "mapEditor": {
@@ -2970,6 +2977,7 @@
         },
         "mapCatalog": {
             "title": "Catálogo de mapas",
+            "tooltip": "Examinar y cargar mapas",
             "filterPlaceholder": "Buscar mapas...",
             "deleteConfirmContent": "¿Estás seguro de que quieres eliminar el mapa \"{mapName}\"?",
             "tooltips": {

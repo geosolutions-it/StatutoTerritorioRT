@@ -10511,7 +10511,7 @@ structure .glyphicon-{iconName}-content
   display: flex;
   flex: 1 1 0%;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .Geoportale #share-container .coordinateRow .coordinate .input-group {
   flex: 1 1 0%;
@@ -13501,11 +13501,11 @@ structure .glyphicon-{iconName}-content
   justify-content: space-between;
   padding: 12px 0 12px 18px;
 }
-.Geoportale #measure-panel .measure-feature-selector .Select-input > input {
-  width: 100%!important;
+.Geoportale #measure-panel .measure-feature-selector .Select-input {
+  width: 200px !important;
 }
 .Geoportale #measure-panel .measure-feature-selector .Select-menu-outer {
-  z-index: 3;
+  z-index: 10;
 }
 .Geoportale #measure-panel .coordinates-row-container {
   flex: 1 1 auto;
@@ -13517,11 +13517,20 @@ structure .glyphicon-{iconName}-content
   display: table-cell;
   vertical-align: middle;
 }
+.Geoportale #measure-panel .coordinateRow.aeronautical .coordinate {
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.Geoportale #measure-panel .coordinateRow.decimal .coordinate {
+  flex-wrap: nowrap;
+}
 .Geoportale #measure-panel .coordinateRow .coordinate {
   display: flex;
   flex: 1 1 0%;
   justify-content: space-between;
-  flex-wrap: wrap;
+}
+.Geoportale #measure-panel .coordinateRow .coordinate .input-group-container {
+  width: 100%;
 }
 .Geoportale #measure-panel .coordinateRow .coordinate .input-group {
   flex: 1 1 0%;
@@ -13529,10 +13538,15 @@ structure .glyphicon-{iconName}-content
   margin-right: 8px;
 }
 .Geoportale #measure-panel .coordinateRow .coordinate .input-group .form-group .react-numeric-input {
+  width: 100%;
   font-size: 12px;
+}
+.Geoportale #measure-panel .coordinateRow .coordinate .input-group .form-group .react-numeric-input b {
+  z-index: 2;
 }
 .Geoportale #measure-panel .coordinateRow .coordinate .input-group .form-group .react-numeric-input #intl-numeric {
   float: unset;
+  width: 100%;
 }
 .Geoportale #measure-panel .coordinateRow .coordinate .input-group .form-group .degrees,
 .Geoportale #measure-panel .coordinateRow .coordinate .input-group .form-group .minutes {
@@ -17921,6 +17935,19 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale .mapstore-chart-advance-options .ms2-border-layout-body .mapstore-switch-panel .panel-title {
   font-weight: bold;
 }
+.Geoportale .ms-widget-empty-message {
+  position: absolute;
+  top: 0;
+  background-color: #ffffff;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Geoportale .mapstore-widget-card .ms2-border-layout-body {
+  position: relative;
+}
 .Geoportale .ms-wizard {
   position: absolute;
   width: 100%;
@@ -21117,6 +21144,7 @@ Ported to CodeMirror by Peter Kroon
 .Geoportale #mapstore-navbar .MapSearchBar,
 .Geoportale #mapstore-navbar .search-result-list {
   left: -460px;
+  width: 460px;
 }
 @media (min-width: 992px) {
   .Geoportale #mapstore-navbar .MapSearchBar,

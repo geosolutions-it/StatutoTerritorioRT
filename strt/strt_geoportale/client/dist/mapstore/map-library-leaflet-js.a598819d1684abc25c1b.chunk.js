@@ -1,1 +1,0 @@
-(self.webpackChunkGeoportale=self.webpackChunkGeoportale||[]).push([[161],{48507:(e,r,p)=>{"use strict";p.r(r),p.d(r,{default:()=>t});const t=function(){return p(35701),{Map:p(39726),Layer:p(52792).Z,Feature:p(44948),MeasurementSupport:p(42047),Overview:p(21975),ScaleBar:p(20564),DrawSupport:p(15264),PopupSupport:p(67465).Z}}}}]);

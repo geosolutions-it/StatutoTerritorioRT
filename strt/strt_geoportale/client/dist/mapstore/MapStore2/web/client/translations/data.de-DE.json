@@ -100,9 +100,12 @@
             "templateFormatDescription": "Passen Sie das Ergebnis der Feature-Informationen an",
             "hideFormatTitle": "IDENTIFIZIERUNG DEAKTIVIEREN",
             "hideFormatDescription": "Deaktivieren Sie die Funktionsinformationen für diese Ebene",
+            "styleWarning": "Ebenenstil-Editor für Geometrietyp '{geometryType}' wird nicht unterstützt.",
             "templateFormatInfoAlert1": "Klicken Sie auf Bearbeiten, um eine neue Vorlage hinzuzufügen.",
             "templateFormatInfoAlert2": "Verwenden Sie ${ attribute }, um Attribut-Werte anzuzeigen",
-            "templateFormatInfoAlertExample": "Die ID des Features lautet ${ properties }",
+
+            "templateFormatInfoAlertExample": "Die ID des Features lautet <span style='white-space:nowrap'>${ properties.daten }</span> oder <span style='white-space:nowrap'>${ properties['daten-wert'] }</span>",
+            "templateError": "Beim Anwenden der Vorlage auf die vom Server zurückgegebenen Informationen ist ein Fehler aufgetreten. Bitte überprüfen Sie die Vorlage",
             "templatePreview": "Vorschau template",
             "visibilityLimits": {
                 "title": "Sichtbarkeitsgrenzen",
@@ -275,7 +278,7 @@
             "Examples": "Beispiele",
             "LinkedinGroup": "Mapstore Linkedin Gruppe",
             "scrollTop": "An den Anfang der Seite scrollen",
-            "footerDescription": "<small>GeoSolutions S.a.s. | Via di Montramito 3/A, 55054 Massarosa (Lucca) - Italy info@geo-solutions.it | Tel: +39 0584 962313 | Fax: +39 0584 1660272</small>",
+            "footerDescription": "<strong>GeoSolutions</strong> <a href=\"mailto:info@geosolutionsgroup.com\">info@geosolutionsgroup.com</a> <strong>US</strong> +1 (301) 337-7055 -  <strong>Italy</strong>: +39 0584 962313",
             "ml": {
                 "title": "Bleibe in Verbindung und auf dem Laufenden mit der Mailing Liste",
                 "subscribe_users": "Abonniere die Benutzer Mailing Liste",
@@ -811,7 +814,7 @@
                 "single_layer": "Einzelne Ebene",
                 "no_info_description": "Das Identifizierungsfeld wird bei der Suche nicht angezeigt",
                 "all_layers_description": "Das Fenster Identifizieren zeigt Informationen zu allen in der Karte sichtbaren Layern an",
-                "single_layer_description": "Das Fenster Identifizieren wird mit den Daten angezeigt, die bereits über die WFS-Suche verfügbar sind",
+                "single_layer_description": "Im Bereich Identifizieren werden nur Informationen für diese Ebene angezeigt",
                 "openFeatureInfoButtonCheckbox": "Verwenden Sie die Schaltfläche, um Funktionsinformationen zu öffnen",
                 "forceSearchLayerVisibility": "Sichtbarkeit der Suchebene erzwingen"
             },
@@ -1075,7 +1078,8 @@
                 "operation": "Geometrische Operation",
                 "placeholder": "Wählen Sie eine Ebene aus",
                 "errors": {
-                    "noCrossLayerAvailable": "Ebenenfilter ist für die ausgewählte Ebene nicht verfügbar"
+                    "noCrossLayerAvailable": "Ebenenfilter ist für die ausgewählte Ebene nicht verfügbar",
+                    "layersExcluded": "Für diesen Ebenenfilter können nur Ebenen ausgewählt werden, die von derselben Quelle stammen"
                 }
             },
             "changedFilter": "Filter geändert",
@@ -1326,6 +1330,7 @@
         },
         "mapImport": {
                 "title": "Importieren",
+                "tooltip": "Importieren Sie eine Kartendatei oder Vektordaten",
                 "dropZone": {
                     "heading": "<p> <h4> Legen Sie hier Ihre Kartenkonfigurations- oder Vektordateien ab </h4> <small> oder nutzen Sie </small> </p>",
                     "selectFiles": "Dateien auswählen...",
@@ -1340,6 +1345,7 @@
             },
         "mapExport": {
             "title": "Karte exportieren",
+            "tooltip": "Exportieren Sie die aktuelle Karte",
             "exportPanel": {
                 "title": "<p><h4>Wählen Sie ein Format</h4></p>",
                 "exportButtonLabel": "Export"
@@ -1363,13 +1369,13 @@
             "end": "Enddatum ",
             "notAvailable": "Nicht verfügbar",
             "title": "Katalog",
+            "tooltip": "Fügen Sie der Karte Ebenen hinzu",
             "autoload": "Suche in Serviceauswahl",
             "clearValueText": "Auswahl aufheben",
             "noResultsText": "keine Ergebnisse gefunden",
-            "tooltip": "Katalog durchsuchen",
             "addToMap": "Zur Karte hinzufügen",
             "getWMSLink": "WMS Link erhalten",
-            "error": "Es gab einen Fehler beim Laden von Einträgen aus dem Katalog",
+            "error": "Beim Laden der Daten ist ein Fehler aufgetreten",
             "pageInfo": "Resultat {start}-{end} von {total}",
             "resultInfo": "{total, plural, =0 {Keine Gegenstände} =1 {{total} von {total} stimmt überein} other {{start}-{end} von {total}}}",
             "pageInfoInfinite": "{total, plural, =undefined {} =0 {Keine Ergebnisse} =1 {{total} von {total} stimmt überein} other {Geladen {loaded} von {total} übereinstimmend}",
@@ -1412,6 +1418,7 @@
             "showPreview": "Vorschau zeigen",
             "advancedSettings": "Erweiterte Einstellungen",
             "templateMetadataAvailable": "Metadaten im Dublin Core-Format verfügbar: abstract, boundingBox, contributor, creator, description, format, identifier, references, rights, source, subject, temporal, title, type, uri",
+            "invalidUrlHttpProtocol": "Dieser Katalog kann nicht zu den verfügbaren hinzugefügt werden, da er ein http-Protokoll verwendet. Bitte geben Sie eine Katalog-URL an, die das https-Protokoll verwendet.",
             "notification": {
                 "errorTitle": "Error",
                 "errorSearchingRecords": "Einige Datensätze wurden nicht gefunden: {records} . Bitte überprüfen Sie die URL des Abfrageparameters",
@@ -2488,7 +2495,8 @@
                     "pleaseLogin": "Bitte loggen Sie sich ein",
                     "notAccessible": "Diese Geschichte ist nicht zugänglich",
                     "geostoryNotAccessible": "Sie haben keine Berechtigung, auf diese Geschichte zuzugreifen. Bitte wenden Sie sich an den Eigentümer der Ressource",
-                    "geostoryDoesNotExist": "Diese Geschichte existiert nicht"
+                    "geostoryDoesNotExist": "Diese Geschichte existiert nicht",
+                    "video": "Es tut uns leid! Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
                 }
             },
             "mapEditor": {
@@ -2970,6 +2978,7 @@
         },
         "mapCatalog": {
             "title": "Kartenkatalog",
+            "tooltip": "Karten durchsuchen und laden",
             "filterPlaceholder": "Karten suchen...",
             "deleteConfirmContent": "Möchten Sie die Karte \"{mapName}\" wirklich löschen?",
             "tooltips": {
