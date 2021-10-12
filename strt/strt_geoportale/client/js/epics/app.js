@@ -12,7 +12,7 @@ import find from 'lodash/find';
 import { groupsSelector, layersSelector } from '@mapstore/selectors/layers';
 import url from 'url';
 import { LOCATION_CHANGE } from 'connected-react-router';
-import { zoomToExtent, CHANGE_MAP_LIMITS } from '@mapstore/actions/map';
+import { zoomToExtent, CHANGE_MAP_LIMITS, CHANGE_MAP_VIEW } from '@mapstore/actions/map';
 import { isValidExtent } from '@mapstore/utils/CoordinatesUtils';
 
 const DEFAULT_GROUP_ID = 'Default';
@@ -53,34 +53,39 @@ export const strtRemoveDefaultGroup = (action$, store) =>
             return Observable.empty();
         });
 
-// override to ensure the share bbox param zoom to the correct extent
-export const strtReadQueryParamsOnMapEpic = (action$, store) =>
+// override default share by bbox param zoom to the correct extent
+// IMPORTANT: we should restore the original epic if we want to use other query params
+export const readQueryParamsOnMapEpic = (action$, store) =>
     action$.ofType(LOCATION_CHANGE)
         .switchMap(() =>
             action$.ofType(CHANGE_MAP_LIMITS)
                 .take(1)
-                .switchMap(() => {
-                    const state = store.getState();
-                    const search = state?.router?.location?.search || '';
-                    const { query = {} } = url.parse(search, true) || {};
-                    const bbox = query?.bbox || '';
-                    const extent = bbox.split(',')
-                        .map(val => parseFloat(val))
-                        .filter((val, idx) => idx % 2 === 0
-                            ? val > -180.5 && val < 180.5
-                            : val >= -90 && val <= 90)
-                        .filter(val => !isNaN(val));
-                    if (extent && extent.length === 4 && isValidExtent(extent)) {
-                        return Observable.of(
-                            zoomToExtent(extent, 'EPSG:4326', undefined,  {nearest: true})
-                        );
-                    }
-                    return Observable.empty();
-                })
+                .switchMap(() =>
+                    action$.ofType(CHANGE_MAP_VIEW)
+                        .take(1)
+                        .switchMap(() => {
+                            const state = store.getState();
+                            const search = state?.router?.location?.search || '';
+                            const { query = {} } = url.parse(search, true) || {};
+                            const bbox = query?.bbox || '';
+                            const extent = bbox.split(',')
+                                .map(val => parseFloat(val))
+                                .filter((val, idx) => idx % 2 === 0
+                                    ? val > -180.5 && val < 180.5
+                                    : val >= -90 && val <= 90)
+                                .filter(val => !isNaN(val));
+                            if (extent && extent.length === 4 && isValidExtent(extent)) {
+                                return Observable.of(
+                                    zoomToExtent(extent, 'EPSG:4326', undefined,  {nearest: true})
+                                );
+                            }
+                            return Observable.empty();
+                        })
+                )
         );
 
 export default {
     strtUpdateDefaultGroup,
     strtRemoveDefaultGroup,
-    strtReadQueryParamsOnMapEpic
+    readQueryParamsOnMapEpic
 };
