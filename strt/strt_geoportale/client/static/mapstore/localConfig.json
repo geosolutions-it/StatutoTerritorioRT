@@ -2,9 +2,7 @@
     "proxyUrl": {
         "url": "/proxy/proxy/?url=",
         "useCORS": [
-          "https://nominatim.openstreetmap.org",
-          "http://dev.serapide.geo-solutions.it/geoserver",
-          "https://dev.serapide.geo-solutions.it/geoserver"
+          "https://nominatim.openstreetmap.org"
         ]
     },
     "serapideAPI": {
@@ -15,7 +13,7 @@
     "geoStoreUrl": "/static/mapstore/",
     "configurationFolder": "/static/mapstore/",
     "mailingList": "https://groups.google.com/forum/#!forum/mapstore-users",
-    "printUrl": "https://dev.serapide.geo-solutions.it/geoserver/pdf/info.json",
+    "printUrl": "/geoserver/pdf/info.json",
     "mapquestApiKey": "__API_KEY_MAPQUEST__",
     "initialMapFilter": "",
     "ignoreMobileCss": false,
