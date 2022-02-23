@@ -40,5 +40,5 @@ python-codicefiscale==0.3.4
 django-bootstrap-form
 Fiona==1.8.13.post1
 redis==3.5.3
-pygdal
+pygdal==3.0.4.10
 geoserver-restconfig==2.0.4.4
