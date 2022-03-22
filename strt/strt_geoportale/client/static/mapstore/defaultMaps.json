@@ -37,6 +37,11 @@
                     ]
                 },
                 {
+                    "id": "piani_autorita_bacino",
+                    "label": "Piani Autorità di Bacino",
+                    "include": ["piani_autorita_bacino"]
+                },
+                {
                     "id": "piani_strutturali",
                     "label": "Piani Strutturali",
                     "include": [
@@ -100,6 +105,11 @@
                         "Default",
                         "Local shape"
                     ]
+                },
+                {
+                    "id": "piani_autorita_bacino",
+                    "label": "Piani Autorità Bacino",
+                    "include": ["piani_autorita_bacino"]
                 },
                 {
                     "id": "piani_strutturali",

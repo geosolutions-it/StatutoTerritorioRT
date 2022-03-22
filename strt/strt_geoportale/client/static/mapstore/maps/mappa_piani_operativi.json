@@ -80,6 +80,29 @@
                 "useForElevation": false,
                 "hidden": false
             },
+{
+                "type": "wms",
+                "format": "image/png8",
+                "url": "/geoserver/wms",
+                "visibility": false,
+                "name": "pluto",
+                "title": "Pluto LaMMA",
+                "description": "Strato di esempio (Pluto)",
+                "bbox": {
+                    "crs": "EPSG:4326",
+                    "bounds": {
+                        "minx": 11.200828565644697,
+                        "miny": 43.77488840041194,
+                        "maxx": 11.242916614479164,
+                        "maxy": 43.8019159084222
+                    }
+                },
+                "group": "gruppo_pluto",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
             {
                 "type": "wms",
                 "format": "image/png; mode=8bit",
@@ -4818,6 +4841,19 @@
                 "minResolution": 0.0002645833333333333,
                 "maxResolution": 66.14583333333333
             },
+			{
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.GEOMORFOLOGIA",
+                "title": "Geomorgolofia (ADB APP. SETT.)",
+                "group": "risorse.suolo_e_sottosuolo.geomorfologia_adb",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
             {
                 "type": "wms",
                 "format": "image/png; mode=8bit",
@@ -5224,8 +5260,8 @@
                 "format": "image/png; mode=8bit",
                 "url": "/geoserver/wms",
                 "visibility": false,
-                "name": "risorse:fiumi_stato_ecologico_2010_2018",
-                "title": "Fiumi stato ecologico 2010-2018",
+                "name": "risorse:fiumi_stato_ecologico_2010_2020",
+                "title": "Fiumi stato ecologico 2010-2020",
                 "params": {},
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -5251,8 +5287,8 @@
                 "format": "image/png; mode=8bit",
                 "url": "/geoserver/wms",
                 "visibility": false,
-                "name": "risorse:fiumi_stato_chimico_2010_2018",
-                "title": "Fiumi stato chimico 2010-2018",
+                "name": "risorse:fiumi_stato_chimico_2010_2020",
+                "title": "Fiumi stato chimico 2010-2020",
                 "params": {},
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -6649,8 +6685,8 @@
                 "format": "image/png; mode=8bit",
                 "url": "/geoserver/wms",
                 "visibility": false,
-                "name": "risorse:pm10_superamenti_2007_2019",
-                "title": "PM10 superamenti 2007-2019",
+                "name": "risorse:pm10_superamenti_2007_2020",
+                "title": "PM10 superamenti 2007-2020",
                 "params": {},
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -6676,8 +6712,8 @@
                 "format": "image/png; mode=8bit",
                 "url": "/geoserver/wms",
                 "visibility": false,
-                "name": "risorse:no2_superamenti_2007_2019",
-                "title": "NO2 superamenti 2007-2019",
+                "name": "risorse:no2_superamenti_2007_2020",
+                "title": "NO2 superamenti 2007-2020",
                 "params": {},
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -6757,8 +6793,8 @@
                 "format": "image/png; mode=8bit",
                 "url": "/geoserver/wms",
                 "visibility": false,
-                "name": "risorse:benzoapirene_medie_2009_2019",
-                "title": "Benzoapirene medie 2009-2019",
+                "name": "risorse:benzoapirene_medie_2009_2020",
+                "title": "Benzoapirene medie 2009-2020",
                 "params": {},
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -6784,8 +6820,8 @@
                 "format": "image/png; mode=8bit",
                 "url": "/geoserver/wms",
                 "visibility": false,
-                "name": "risorse:benzene_medie_2009_2019",
-                "title": "Benzene medie 2009-2019",
+                "name": "risorse:benzene_medie_2009_2020",
+                "title": "Benzene medie 2009-2020",
                 "params": {},
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -6811,8 +6847,8 @@
                 "format": "image/png; mode=8bit",
                 "url": "/geoserver/wms",
                 "visibility": false,
-                "name": "risorse:pm25_medie_2007_2019",
-                "title": "PM25 medie 2007-2019",
+                "name": "risorse:pm25_medie_2007_2020",
+                "title": "PM25 medie 2007-2020",
                 "params": {},
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -6838,8 +6874,8 @@
                 "format": "image/png; mode=8bit",
                 "url": "/geoserver/wms",
                 "visibility": false,
-                "name": "risorse:no2_medie_2007_2019",
-                "title": "NO2 medie 2007-2019",
+                "name": "risorse:no2_medie_2007_2020",
+                "title": "NO2 medie 2007-2020",
                 "params": {},
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -6865,8 +6901,8 @@
                 "format": "image/png; mode=8bit",
                 "url": "/geoserver/wms",
                 "visibility": false,
-                "name": "risorse:pm10_medie_2007_2019",
-                "title": "PM10 medie 2007-2019",
+                "name": "risorse:pm10_medie_2007_2020",
+                "title": "PM10 medie 2007-2020",
                 "params": {},
                 "bbox": {
                     "crs": "EPSG:4326",
@@ -10863,6 +10899,136 @@
                 "featureInfo": {
                     "format": "PROPERTIES"
                 }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.PAI_PF234",
+                "title": "Pianificazione SIT PAI PF234",
+                "group": "piani_autorita_bacino.pai.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.PAI_PF12",
+                "title": "Pianificazione SIT PAI PF12",
+                "group": "piani_autorita_bacino.pai.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.PAIPF_BACINIREGIONALI_TOSCANA",
+                "title": "Pianificazione SIT PAI PF Bacini Regionali Toscana",
+                "group": "piani_autorita_bacino.pai.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.PSRI_interventi_strutturali",
+                "title": "Pianificazione SIT PSRI Interventi Strutturali",
+                "group": "piani_autorita_bacino.pgra.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.PGRA_ITC_FLUVIAL",
+                "title": "Pianificazione SIT PGRA ITC Fluviale",
+                "group": "piani_autorita_bacino.pgra.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.PGRA_ITC_COAST",
+                "title": "Pianificazione SIT PGRA ITC Coast",
+                "group": "piani_autorita_bacino.pgra.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.PGRA_MISUREPROTEZIONE_2021_POINT",
+                "title": "Pianificazione SIT PGRA Misure Protezione 2021 (Punti)",
+                "group": "piani_autorita_bacino.pgra.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.PGRA_MISUREPROTEZIONE_2021_LINE",
+                "title": "Pianificazione SIT PGRA Misure Protezione 2021 (Linee)",
+                "group": "piani_autorita_bacino.pgra.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.PGRA_MISUREPROTEZIONE_2021_POLY",
+                "title": "Pianificazione SIT PGRA Misure Protezione 2021 (Poligoni)",
+                "group": "piani_autorita_bacino.pgra.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
+            },
+            {
+                "type": "wms",
+                "format": "image/png; mode=8bit",
+                "url": "https://geodata.appenninosettentrionale.it/geoserver/wms",
+                "visibility": false,
+                "name": "PIANIFICAZIONE.SIT.FlashFloods_2018_Toscana",
+                "title": "Pianificazione SIT PGRA Flash Floods 2018",
+                "group": "piani_autorita_bacino.pgra.app_sett",
+                "tileSize": 512,
+                "featureInfo": {
+                    "format": "HTML"
+                }
             }
         ],
         "groups": [
@@ -10974,6 +11140,11 @@
             {
                 "id": "risorse.suolo_e_sottosuolo.db_geomorfologico",
                 "title": "DB geomorfologico",
+                "expanded": false
+            },
+			{
+                "id": "risorse.suolo_e_sottosuolo.geomorfologia_adb",
+                "title": "Geomorfologia (AdB)",
                 "expanded": false
             },
             {
@@ -11455,7 +11626,32 @@
                 "id": "piani_operativi.vicchio",
                 "title": "Vicchio",
                 "expanded": false
-            }
+            },
+            {
+                "id": "piani_autorita_bacino",
+                "title":"Piani Autorità di Bacino", 
+                "expanded":true
+            },
+            {
+                "id": "piani_autorita_bacino.pgra",
+                "title":"PGRA", 
+                "expanded":true
+            },
+            {
+                "id": "piani_autorita_bacino.pai",
+                "title":"PAI", 
+                "expanded":true
+            },
+            {
+                "id": "piani_autorita_bacino.pai.app_sett",
+                "title":"PAI APP. SETT.", 
+                "expanded":true
+            },
+            {
+                "id": "piani_autorita_bacino.pgra.app_sett",
+                "title":"PGRA APP. SETT.", 
+                "expanded":true
+            }      
         ]
     }
 }
